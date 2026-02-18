@@ -2,7 +2,11 @@
 
 package cmd
 
-import "github.com/theopenlane/core/common/enums"
+import (
+	"strings"
+
+	"github.com/theopenlane/core/common/enums"
+)
 
 // GetRoleEnum returns the Role if valid, otherwise returns an error
 func GetRoleEnum(role string) (enums.Role, error) {
@@ -24,4 +28,18 @@ func GetInviteStatusEnum(status string) (enums.InviteStatus, error) {
 	}
 
 	return *r, nil
+}
+
+// ParseIDList parses a comma-separated list of IDs into a string slice
+func ParseIDList(ids string) []string {
+	var result []string
+
+	for _, id := range strings.Split(ids, ",") {
+		id = strings.TrimSpace(id)
+		if id != "" {
+			result = append(result, id)
+		}
+	}
+
+	return result
 }

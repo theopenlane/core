@@ -67,3 +67,25 @@ func TestWithAuth_EnabledIntegrationRegistry(t *testing.T) {
 		t.Fatalf("expected integration registry to be initialized when enabled")
 	}
 }
+
+// TestWithAuth_EnabledIntegrationRegistry_GitHubApp ensures GitHub App settings enable the registry.
+func TestWithAuth_EnabledIntegrationRegistry_GitHubApp(t *testing.T) {
+	t.Parallel()
+
+	so := &ServerOptions{
+		Config: serverconfig.Config{
+			Settings: coreconfig.Config{
+				IntegrationGitHubApp: handlers.IntegrationGitHubAppConfig{
+					Enabled: true,
+				},
+			},
+			SessionConfig: &sessions.SessionConfig{},
+		},
+	}
+
+	WithAuth().apply(so)
+
+	if so.Config.Handler.IntegrationRegistry == nil {
+		t.Fatalf("expected integration registry to be initialized when GitHub App integration enabled")
+	}
+}

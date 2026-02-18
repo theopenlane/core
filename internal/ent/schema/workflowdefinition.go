@@ -9,6 +9,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
@@ -99,10 +100,10 @@ func (WorkflowDefinition) Fields() []ent.Field {
 			Default([]string{}),
 		field.Enum("approval_submission_mode").
 			Annotations(entgql.Skip()).
-			Comment("Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable").
+			Comment("Derived: AUTO_SUBMIT (default) or MANUAL_SUBMIT for approval domains; not user editable").
 			GoType(enums.WorkflowApprovalSubmissionMode("")).
 			Optional().
-			Default(string(enums.WorkflowApprovalSubmissionModeManualSubmit)),
+			Default(string(enums.WorkflowApprovalSubmissionModeAutoSubmit)),
 		field.JSON("definition_json", models.WorkflowDefinitionDocument{}).
 			Comment("Typed document describing triggers, conditions, and actions").
 			Optional(),
@@ -130,6 +131,19 @@ func (WorkflowDefinition) Edges() []ent.Edge {
 			edgeSchema: Group{},
 			comment:    "Groups this workflow targets for scoping",
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: WorkflowDefinition{},
+			edgeSchema: WorkflowInstance{},
+			name:       "workflow_instances",
+			ref:        "workflow_definition",
+			comment:    "Workflow instances created from this definition",
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+				entx.CascadeAnnotationField("WorkflowDefinitionID"),
+			},
+		}),
+		defaultEdgeToWithPagination(WorkflowDefinition{}, NotificationTemplate{}),
+		defaultEdgeToWithPagination(WorkflowDefinition{}, EmailTemplate{}),
 	}
 }
 

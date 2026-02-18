@@ -579,6 +579,70 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 	return res, err
 }
 
+// EmailBrandingHistories is the resolver for the emailBrandingHistories field.
+func (r *queryResolver) EmailBrandingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailBrandingHistoryOrder, where *historygenerated.EmailBrandingHistoryWhereInput) (*historygenerated.EmailBrandingHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.EmailBrandingHistoryOrder{
+			Field:     historygenerated.EmailBrandingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).EmailBrandingHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbrandinghistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithEmailBrandingHistoryOrder(orderBy),
+		historygenerated.WithEmailBrandingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbrandinghistory"})
+	}
+
+	return res, err
+}
+
+// EmailTemplateHistories is the resolver for the emailTemplateHistories field.
+func (r *queryResolver) EmailTemplateHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailTemplateHistoryOrder, where *historygenerated.EmailTemplateHistoryWhereInput) (*historygenerated.EmailTemplateHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.EmailTemplateHistoryOrder{
+			Field:     historygenerated.EmailTemplateHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).EmailTemplateHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplatehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithEmailTemplateHistoryOrder(orderBy),
+		historygenerated.WithEmailTemplateHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplatehistory"})
+	}
+
+	return res, err
+}
+
 // EntityHistories is the resolver for the entityHistories field.
 func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityHistoryOrder, where *historygenerated.EntityHistoryWhereInput) (*historygenerated.EntityHistoryConnection, error) {
 	// set page limit if nothing was set
@@ -1150,6 +1214,70 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 		historygenerated.WithNoteHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notehistory"})
+	}
+
+	return res, err
+}
+
+// NotificationPreferenceHistories is the resolver for the notificationPreferenceHistories field.
+func (r *queryResolver) NotificationPreferenceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationPreferenceHistoryOrder, where *historygenerated.NotificationPreferenceHistoryWhereInput) (*historygenerated.NotificationPreferenceHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.NotificationPreferenceHistoryOrder{
+			Field:     historygenerated.NotificationPreferenceHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).NotificationPreferenceHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationpreferencehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithNotificationPreferenceHistoryOrder(orderBy),
+		historygenerated.WithNotificationPreferenceHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationpreferencehistory"})
+	}
+
+	return res, err
+}
+
+// NotificationTemplateHistories is the resolver for the notificationTemplateHistories field.
+func (r *queryResolver) NotificationTemplateHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationTemplateHistoryOrder, where *historygenerated.NotificationTemplateHistoryWhereInput) (*historygenerated.NotificationTemplateHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.NotificationTemplateHistoryOrder{
+			Field:     historygenerated.NotificationTemplateHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).NotificationTemplateHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationtemplatehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithNotificationTemplateHistoryOrder(orderBy),
+		historygenerated.WithNotificationTemplateHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationtemplatehistory"})
 	}
 
 	return res, err

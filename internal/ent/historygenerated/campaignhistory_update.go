@@ -669,6 +669,46 @@ func (_u *CampaignHistoryUpdate) ClearMetadata() *CampaignHistoryUpdate {
 	return _u
 }
 
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_u *CampaignHistoryUpdate) SetEmailBrandingID(v string) *CampaignHistoryUpdate {
+	_u.mutation.SetEmailBrandingID(v)
+	return _u
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdate) SetNillableEmailBrandingID(v *string) *CampaignHistoryUpdate {
+	if v != nil {
+		_u.SetEmailBrandingID(*v)
+	}
+	return _u
+}
+
+// ClearEmailBrandingID clears the value of the "email_branding_id" field.
+func (_u *CampaignHistoryUpdate) ClearEmailBrandingID() *CampaignHistoryUpdate {
+	_u.mutation.ClearEmailBrandingID()
+	return _u
+}
+
+// SetEmailTemplateID sets the "email_template_id" field.
+func (_u *CampaignHistoryUpdate) SetEmailTemplateID(v string) *CampaignHistoryUpdate {
+	_u.mutation.SetEmailTemplateID(v)
+	return _u
+}
+
+// SetNillableEmailTemplateID sets the "email_template_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdate) SetNillableEmailTemplateID(v *string) *CampaignHistoryUpdate {
+	if v != nil {
+		_u.SetEmailTemplateID(*v)
+	}
+	return _u
+}
+
+// ClearEmailTemplateID clears the value of the "email_template_id" field.
+func (_u *CampaignHistoryUpdate) ClearEmailTemplateID() *CampaignHistoryUpdate {
+	_u.mutation.ClearEmailTemplateID()
+	return _u
+}
+
 // Mutation returns the CampaignHistoryMutation object of the builder.
 func (_u *CampaignHistoryUpdate) Mutation() *CampaignHistoryMutation {
 	return _u.mutation
@@ -967,6 +1007,18 @@ func (_u *CampaignHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaignhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailBrandingID, field.TypeString, value)
+	}
+	if _u.mutation.EmailBrandingIDCleared() {
+		_spec.ClearField(campaignhistory.FieldEmailBrandingID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EmailTemplateID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailTemplateID, field.TypeString, value)
+	}
+	if _u.mutation.EmailTemplateIDCleared() {
+		_spec.ClearField(campaignhistory.FieldEmailTemplateID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CampaignHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1625,6 +1677,46 @@ func (_u *CampaignHistoryUpdateOne) ClearMetadata() *CampaignHistoryUpdateOne {
 	return _u
 }
 
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_u *CampaignHistoryUpdateOne) SetEmailBrandingID(v string) *CampaignHistoryUpdateOne {
+	_u.mutation.SetEmailBrandingID(v)
+	return _u
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdateOne) SetNillableEmailBrandingID(v *string) *CampaignHistoryUpdateOne {
+	if v != nil {
+		_u.SetEmailBrandingID(*v)
+	}
+	return _u
+}
+
+// ClearEmailBrandingID clears the value of the "email_branding_id" field.
+func (_u *CampaignHistoryUpdateOne) ClearEmailBrandingID() *CampaignHistoryUpdateOne {
+	_u.mutation.ClearEmailBrandingID()
+	return _u
+}
+
+// SetEmailTemplateID sets the "email_template_id" field.
+func (_u *CampaignHistoryUpdateOne) SetEmailTemplateID(v string) *CampaignHistoryUpdateOne {
+	_u.mutation.SetEmailTemplateID(v)
+	return _u
+}
+
+// SetNillableEmailTemplateID sets the "email_template_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdateOne) SetNillableEmailTemplateID(v *string) *CampaignHistoryUpdateOne {
+	if v != nil {
+		_u.SetEmailTemplateID(*v)
+	}
+	return _u
+}
+
+// ClearEmailTemplateID clears the value of the "email_template_id" field.
+func (_u *CampaignHistoryUpdateOne) ClearEmailTemplateID() *CampaignHistoryUpdateOne {
+	_u.mutation.ClearEmailTemplateID()
+	return _u
+}
+
 // Mutation returns the CampaignHistoryMutation object of the builder.
 func (_u *CampaignHistoryUpdateOne) Mutation() *CampaignHistoryMutation {
 	return _u.mutation
@@ -1953,6 +2045,18 @@ func (_u *CampaignHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Campaig
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaignhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailBrandingID, field.TypeString, value)
+	}
+	if _u.mutation.EmailBrandingIDCleared() {
+		_spec.ClearField(campaignhistory.FieldEmailBrandingID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EmailTemplateID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailTemplateID, field.TypeString, value)
+	}
+	if _u.mutation.EmailTemplateIDCleared() {
+		_spec.ClearField(campaignhistory.FieldEmailTemplateID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CampaignHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

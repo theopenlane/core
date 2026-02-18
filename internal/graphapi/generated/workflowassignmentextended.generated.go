@@ -95,6 +95,8 @@ func (ec *executionContext) fieldContext_WorkflowAssignmentApprovePayload_workfl
 				return ec.fieldContext_WorkflowAssignment_actorGroupID(ctx, field)
 			case "notes":
 				return ec.fieldContext_WorkflowAssignment_notes(ctx, field)
+			case "dueAt":
+				return ec.fieldContext_WorkflowAssignment_dueAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowAssignment_owner(ctx, field)
 			case "workflowInstance":
@@ -180,6 +182,8 @@ func (ec *executionContext) fieldContext_WorkflowAssignmentRejectPayload_workflo
 				return ec.fieldContext_WorkflowAssignment_actorGroupID(ctx, field)
 			case "notes":
 				return ec.fieldContext_WorkflowAssignment_notes(ctx, field)
+			case "dueAt":
+				return ec.fieldContext_WorkflowAssignment_dueAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowAssignment_owner(ctx, field)
 			case "workflowInstance":

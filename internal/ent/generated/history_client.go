@@ -61,6 +61,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}
+	for _, hook := range history.Hooks[*EmailBrandingMutation]() {
+		c.EmailBranding.Use(hook)
+	}
+	for _, hook := range history.Hooks[*EmailTemplateMutation]() {
+		c.EmailTemplate.Use(hook)
+	}
 	for _, hook := range history.Hooks[*EntityMutation]() {
 		c.Entity.Use(hook)
 	}
@@ -114,6 +120,12 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*NoteMutation]() {
 		c.Note.Use(hook)
+	}
+	for _, hook := range history.Hooks[*NotificationPreferenceMutation]() {
+		c.NotificationPreference.Use(hook)
+	}
+	for _, hook := range history.Hooks[*NotificationTemplateMutation]() {
+		c.NotificationTemplate.Use(hook)
 	}
 	for _, hook := range history.Hooks[*OrgMembershipMutation]() {
 		c.OrgMembership.Use(hook)

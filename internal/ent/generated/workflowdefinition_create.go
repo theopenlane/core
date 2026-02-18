@@ -12,10 +12,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 )
 
 // WorkflowDefinitionCreate is the builder for creating a WorkflowDefinition entity.
@@ -400,6 +403,51 @@ func (_c *WorkflowDefinitionCreate) AddGroups(v ...*Group) *WorkflowDefinitionCr
 	return _c.AddGroupIDs(ids...)
 }
 
+// AddWorkflowInstanceIDs adds the "workflow_instances" edge to the WorkflowInstance entity by IDs.
+func (_c *WorkflowDefinitionCreate) AddWorkflowInstanceIDs(ids ...string) *WorkflowDefinitionCreate {
+	_c.mutation.AddWorkflowInstanceIDs(ids...)
+	return _c
+}
+
+// AddWorkflowInstances adds the "workflow_instances" edges to the WorkflowInstance entity.
+func (_c *WorkflowDefinitionCreate) AddWorkflowInstances(v ...*WorkflowInstance) *WorkflowDefinitionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowInstanceIDs(ids...)
+}
+
+// AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
+func (_c *WorkflowDefinitionCreate) AddNotificationTemplateIDs(ids ...string) *WorkflowDefinitionCreate {
+	_c.mutation.AddNotificationTemplateIDs(ids...)
+	return _c
+}
+
+// AddNotificationTemplates adds the "notification_templates" edges to the NotificationTemplate entity.
+func (_c *WorkflowDefinitionCreate) AddNotificationTemplates(v ...*NotificationTemplate) *WorkflowDefinitionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddNotificationTemplateIDs(ids...)
+}
+
+// AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
+func (_c *WorkflowDefinitionCreate) AddEmailTemplateIDs(ids ...string) *WorkflowDefinitionCreate {
+	_c.mutation.AddEmailTemplateIDs(ids...)
+	return _c
+}
+
+// AddEmailTemplates adds the "email_templates" edges to the EmailTemplate entity.
+func (_c *WorkflowDefinitionCreate) AddEmailTemplates(v ...*EmailTemplate) *WorkflowDefinitionCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEmailTemplateIDs(ids...)
+}
+
 // Mutation returns the WorkflowDefinitionMutation object of the builder.
 func (_c *WorkflowDefinitionCreate) Mutation() *WorkflowDefinitionMutation {
 	return _c.mutation
@@ -763,6 +811,57 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 			},
 		}
 		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowInstancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowdefinition.WorkflowInstancesTable,
+			Columns: []string{workflowdefinition.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.NotificationTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   workflowdefinition.NotificationTemplatesTable,
+			Columns: []string{workflowdefinition.NotificationTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.NotificationTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EmailTemplatesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   workflowdefinition.EmailTemplatesTable,
+			Columns: []string{workflowdefinition.EmailTemplatesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

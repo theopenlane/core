@@ -78,6 +78,24 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): BulkUpdateStatusPayload!
+    """
+    Delete multiple existing nda requests (soft-deletes them and removes FGA tuples)
+    """
+    deleteBulkTrustCenterNDARequest(
+        """
+        IDs of the nda requests to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterNDARequestBulkDeletePayload!
+    """
+    Create a new requestNewTrustCenterToken for users that have already signed an NDA
+    """
+    requestNewTrustCenterToken(
+        """
+        email address of the user already signed an NDA
+        """
+        email: String!
+    ): TrustCenterAccessTokenPayload!
 }
 
 """
@@ -88,6 +106,13 @@ type TrustCenterNDARequestCreatePayload {
     Created trustCenterNDARequest
     """
     trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for requestNewTrustCenterToken mutation
+"""
+type TrustCenterAccessTokenPayload {
+    success: Boolean!
 }
 
 """
@@ -128,4 +153,14 @@ type BulkUpdateStatusPayload {
     Updated nda request IDs
     """
     totalUpdated: Int!
+}
+
+"""
+Return response for deleteBulkTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestBulkDeletePayload {
+    """
+    Deleted trustCenterNDARequest IDs
+    """
+    deletedIDs: [ID!]!
 }

@@ -179,6 +179,13 @@ subscription:
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
+integrationgithubapp:
+    enabled: false
+    appid: ""
+    appslug: ""
+    privatekey: ""
+    webhooksecret: ""
+    successredirecturl: ""
 
 cloudflare:
     apitoken: ""

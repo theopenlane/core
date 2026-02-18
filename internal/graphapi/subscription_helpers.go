@@ -3,13 +3,11 @@ package graphapi
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -45,14 +43,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 
 	// Forward notifications from internal channel to GraphQL channel
 	go func() {
-		startTime := time.Now()
-		defer func() {
-			close(notifChan)
-
-			// Record subscription closed metric
-			connectionTime := time.Since(startTime).Seconds()
-			metrics.RecordSubscriptionClosed(connectionTime)
-		}()
+		defer close(notifChan)
 
 		// First, send all existing notifications
 		for _, existingNotif := range existingNotifications {

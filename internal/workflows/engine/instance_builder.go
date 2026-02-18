@@ -79,7 +79,7 @@ func wrapCreationError(err error) error {
 
 // ensureProposal creates or reuses a workflow proposal when needed
 func (e *WorkflowEngine) ensureProposal(ctx context.Context, tx *generated.Tx, def *generated.WorkflowDefinition, obj *workflows.Object, objRef *generated.WorkflowObjectRef, domain *workflows.DomainChanges) (string, error) {
-	if !workflows.DefinitionHasApprovalAction(def.DefinitionJSON) || domain == nil || len(domain.Changes) == 0 {
+	if !workflows.DefinitionUsesPreCommitApprovals(def.DefinitionJSON) || domain == nil || len(domain.Changes) == 0 {
 		return "", nil
 	}
 

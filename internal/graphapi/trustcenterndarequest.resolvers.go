@@ -166,6 +166,51 @@ func (r *mutationResolver) DenyNDARequests(ctx context.Context, ids []string) (*
 	}, nil
 }
 
+// DeleteBulkTrustCenterNDARequest is the resolver for the deleteBulkTrustCenterNDARequest field.
+func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, ids []string) (*model.TrustCenterNDARequestBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteTrustCenterNDARequest(ctx, ids)
+}
+
+// RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
+func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error) {
+	// check if the nda for the user and trust center combination is signed
+	anonReq, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
+	if !ok {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	existing, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(
+		trustcenterndarequest.And(
+			trustcenterndarequest.Email(email),
+			trustcenterndarequest.TrustCenterIDEQ(anonReq.TrustCenterID),
+		),
+	).Only(allowCtx)
+	if err == nil {
+		// do an create to the request to re-trigger any notifications or resend emails, this will follow-the same logic as creating a new request, but will be idempotent for users that have already signed the nda
+		if _, err = r.CreateTrustCenterNDARequest(ctx, generated.CreateTrustCenterNDARequestInput{
+			Email:         email,
+			FirstName:     existing.FirstName,
+			LastName:      existing.LastName,
+			TrustCenterID: &anonReq.TrustCenterID,
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create trust center nda request for existing nda, this may cause the user to not receive a notification email with their new token")
+
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndarequest"})
+
+		}
+	}
+
+	// return success even if there isn't a request found, this prevents information disclosure about who has signed the nda and who hasn't
+	return &model.TrustCenterAccessTokenPayload{
+		Success: true,
+	}, nil
+}
+
 // TrustCenterNDARequest is the resolver for the trustCenterNDARequest field.
 func (r *queryResolver) TrustCenterNDARequest(ctx context.Context, id string) (*generated.TrustCenterNDARequest, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(trustcenterndarequest.ID(id)).CollectFields(ctx)

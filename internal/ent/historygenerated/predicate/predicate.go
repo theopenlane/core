@@ -59,6 +59,12 @@ type DiscussionHistory func(*sql.Selector)
 // DocumentDataHistory is the predicate function for documentdatahistory builders.
 type DocumentDataHistory func(*sql.Selector)
 
+// EmailBrandingHistory is the predicate function for emailbrandinghistory builders.
+type EmailBrandingHistory func(*sql.Selector)
+
+// EmailTemplateHistory is the predicate function for emailtemplatehistory builders.
+type EmailTemplateHistory func(*sql.Selector)
+
 // EntityHistory is the predicate function for entityhistory builders.
 type EntityHistory func(*sql.Selector)
 
@@ -112,6 +118,12 @@ type NarrativeHistory func(*sql.Selector)
 
 // NoteHistory is the predicate function for notehistory builders.
 type NoteHistory func(*sql.Selector)
+
+// NotificationPreferenceHistory is the predicate function for notificationpreferencehistory builders.
+type NotificationPreferenceHistory func(*sql.Selector)
+
+// NotificationTemplateHistory is the predicate function for notificationtemplatehistory builders.
+type NotificationTemplateHistory func(*sql.Selector)
 
 // OrgMembershipHistory is the predicate function for orgmembershiphistory builders.
 type OrgMembershipHistory func(*sql.Selector)

@@ -24,10 +24,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *HandlerTestSuite) TestRegisterHandler() {
@@ -170,12 +172,29 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			suite.ClearTestData()
 
+			// Make "already registered" independent from subtest order by using a unique email
+			// and seeding the pre-existing user within the subtest.
+			email := tc.email
+			if tc.expectedErrorCode == handlers.UserExistsErrCode {
+				email = ulids.New().String() + "@theopenlane.io"
+				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+				exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(ctx)
+				require.NoError(t, err)
+				if !exists {
+					_ = suite.userBuilderWithInput(ctx, &userInput{
+						email:         email,
+						password:      tc.password,
+						confirmedUser: true,
+					})
+				}
+			}
+
 			var inviteToken *string
 
 			if tc.invitationType == "invitation" {
 				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 				invite := suite.db.Invite.Create().
-					SetRecipient(tc.email).
+					SetRecipient(email).
 					SetRole(enums.RoleMember).
 					SaveX(ctx)
 				inviteToken = &invite.Token
@@ -183,7 +202,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 				ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 				_ = suite.db.Invite.Create().
-					SetRecipient(tc.email).
+					SetRecipient(email).
 					SetRole(enums.RoleMember).
 					SaveX(ctx)
 
@@ -202,7 +221,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			registerJSON := models.RegisterRequest{
 				FirstName: tc.firstName,
 				LastName:  tc.lastName,
-				Email:     tc.email,
+				Email:     email,
 				Password:  tc.password,
 				Token:     inviteToken,
 			}
@@ -235,7 +254,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			assert.Equal(t, tc.expectedErrorCode, out.ErrorCode)
 
 			if tc.expectedStatus == http.StatusCreated {
-				assert.Equal(t, out.Email, tc.email)
+				assert.Equal(t, out.Email, email)
 				assert.NotEmpty(t, out.Message)
 				assert.NotEmpty(t, out.ID)
 

@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/cli
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/99designs/gqlgen v0.17.86
@@ -17,19 +17,18 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.6.2
-	github.com/theopenlane/core/common v1.0.6
-	github.com/theopenlane/go-client v0.7.6
+	github.com/theopenlane/core v1.9.8
+	github.com/theopenlane/core/common v1.0.9
+	github.com/theopenlane/go-client v0.8.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.7
+	github.com/theopenlane/iam v0.24.1
 	github.com/theopenlane/utils v0.6.2
-	golang.org/x/oauth2 v0.34.0
-	golang.org/x/term v0.39.0
+	golang.org/x/oauth2 v0.35.0
+	golang.org/x/term v0.40.0
 )
 
 require (
 	al.essio.dev/pkg/shellescape v1.6.0 // indirect
-	github.com/Yamashou/gqlgenc v0.33.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -56,13 +55,14 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
+	github.com/gqlgo/gqlgenc v0.33.1 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/invopop/jsonschema v0.13.0 // indirect
 	github.com/knadh/koanf/maps v0.1.2 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
-	github.com/lestrrat-go/httprc/v3 v3.0.3 // indirect
+	github.com/lestrrat-go/httprc/v3 v3.0.4 // indirect
 	github.com/lestrrat-go/jwx/v3 v3.0.13 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
 	github.com/mailru/easyjson v0.9.1 // indirect
@@ -94,14 +94,14 @@ require (
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/zalando/go-keyring v0.2.6 // indirect
-	github.com/zitadel/oidc/v3 v3.45.3 // indirect
+	github.com/zitadel/oidc/v3 v3.45.4 // indirect
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/crypto v0.47.0 // indirect
+	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
-	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
-	golang.org/x/text v0.33.0 // indirect
+	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/text v0.34.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

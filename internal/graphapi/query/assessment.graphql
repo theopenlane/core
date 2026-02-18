@@ -1,4 +1,3 @@
-
 mutation CreateAssessment($input: CreateAssessmentInput!) {
   createAssessment(input: $input) {
     assessment {
@@ -49,10 +48,21 @@ query GetAllAssessments {
         templateID
         updatedAt
         updatedBy
+        campaigns {
+          edges {
+            node {
+              id
+              name
+              status
+              displayID
+            }
+          }
+        }
       }
     }
   }
 }
+
 query GetAssessmentByID($assessmentId: ID!) {
   assessment(id: $assessmentId) {
     assessmentType
@@ -65,6 +75,16 @@ query GetAssessmentByID($assessmentId: ID!) {
     templateID
     updatedAt
     updatedBy
+    campaigns {
+      edges {
+        node {
+          id
+          name
+          status
+          displayID
+        }
+      }
+    }
   }
 }
 
@@ -89,10 +109,21 @@ query GetAssessments($first: Int, $last: Int, $where: AssessmentWhereInput) {
         templateID
         updatedAt
         updatedBy
+        campaigns {
+          edges {
+            node {
+              id
+              name
+              status
+              displayID
+            }
+          }
+        }
       }
     }
   }
 }
+
 mutation UpdateAssessment($updateAssessmentId: ID!, $input: UpdateAssessmentInput!) {
   updateAssessment(id: $updateAssessmentId, input: $input) {
     assessment {

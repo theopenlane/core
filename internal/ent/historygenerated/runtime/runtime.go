@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -43,6 +45,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -261,6 +265,10 @@ func init() {
 	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[27].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
+	// assessmentresponsehistoryDescIsDraft is the schema descriptor for is_draft field.
+	assessmentresponsehistoryDescIsDraft := assessmentresponsehistoryFields[31].Descriptor()
+	// assessmentresponsehistory.DefaultIsDraft holds the default value on creation for the is_draft field.
+	assessmentresponsehistory.DefaultIsDraft = assessmentresponsehistoryDescIsDraft.Default.(bool)
 	// assessmentresponsehistoryDescID is the schema descriptor for id field.
 	assessmentresponsehistoryDescID := assessmentresponsehistoryFields[9].Descriptor()
 	// assessmentresponsehistory.DefaultID holds the default value on creation for the id field.
@@ -831,6 +839,92 @@ func init() {
 	documentdatahistoryDescID := documentdatahistoryFields[9].Descriptor()
 	// documentdatahistory.DefaultID holds the default value on creation for the id field.
 	documentdatahistory.DefaultID = documentdatahistoryDescID.Default.(func() string)
+	emailbrandinghistory.Policy = privacy.NewPolicies(historyschema.EmailBrandingHistory{})
+	emailbrandinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := emailbrandinghistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	emailbrandinghistoryInters := historyschema.EmailBrandingHistory{}.Interceptors()
+	emailbrandinghistory.Interceptors[0] = emailbrandinghistoryInters[0]
+	emailbrandinghistoryFields := historyschema.EmailBrandingHistory{}.Fields()
+	_ = emailbrandinghistoryFields
+	// emailbrandinghistoryDescHistoryTime is the schema descriptor for history_time field.
+	emailbrandinghistoryDescHistoryTime := emailbrandinghistoryFields[0].Descriptor()
+	// emailbrandinghistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	emailbrandinghistory.DefaultHistoryTime = emailbrandinghistoryDescHistoryTime.Default.(func() time.Time)
+	// emailbrandinghistoryDescCreatedAt is the schema descriptor for created_at field.
+	emailbrandinghistoryDescCreatedAt := emailbrandinghistoryFields[3].Descriptor()
+	// emailbrandinghistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	emailbrandinghistory.DefaultCreatedAt = emailbrandinghistoryDescCreatedAt.Default.(func() time.Time)
+	// emailbrandinghistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	emailbrandinghistoryDescUpdatedAt := emailbrandinghistoryFields[4].Descriptor()
+	// emailbrandinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	emailbrandinghistory.DefaultUpdatedAt = emailbrandinghistoryDescUpdatedAt.Default.(func() time.Time)
+	// emailbrandinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	emailbrandinghistory.UpdateDefaultUpdatedAt = emailbrandinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// emailbrandinghistoryDescTags is the schema descriptor for tags field.
+	emailbrandinghistoryDescTags := emailbrandinghistoryFields[10].Descriptor()
+	// emailbrandinghistory.DefaultTags holds the default value on creation for the tags field.
+	emailbrandinghistory.DefaultTags = emailbrandinghistoryDescTags.Default.([]string)
+	// emailbrandinghistoryDescIsDefault is the schema descriptor for is_default field.
+	emailbrandinghistoryDescIsDefault := emailbrandinghistoryFields[23].Descriptor()
+	// emailbrandinghistory.DefaultIsDefault holds the default value on creation for the is_default field.
+	emailbrandinghistory.DefaultIsDefault = emailbrandinghistoryDescIsDefault.Default.(bool)
+	// emailbrandinghistoryDescID is the schema descriptor for id field.
+	emailbrandinghistoryDescID := emailbrandinghistoryFields[9].Descriptor()
+	// emailbrandinghistory.DefaultID holds the default value on creation for the id field.
+	emailbrandinghistory.DefaultID = emailbrandinghistoryDescID.Default.(func() string)
+	emailtemplatehistory.Policy = privacy.NewPolicies(historyschema.EmailTemplateHistory{})
+	emailtemplatehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := emailtemplatehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	emailtemplatehistoryInters := historyschema.EmailTemplateHistory{}.Interceptors()
+	emailtemplatehistory.Interceptors[0] = emailtemplatehistoryInters[0]
+	emailtemplatehistoryFields := historyschema.EmailTemplateHistory{}.Fields()
+	_ = emailtemplatehistoryFields
+	// emailtemplatehistoryDescHistoryTime is the schema descriptor for history_time field.
+	emailtemplatehistoryDescHistoryTime := emailtemplatehistoryFields[0].Descriptor()
+	// emailtemplatehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	emailtemplatehistory.DefaultHistoryTime = emailtemplatehistoryDescHistoryTime.Default.(func() time.Time)
+	// emailtemplatehistoryDescCreatedAt is the schema descriptor for created_at field.
+	emailtemplatehistoryDescCreatedAt := emailtemplatehistoryFields[3].Descriptor()
+	// emailtemplatehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	emailtemplatehistory.DefaultCreatedAt = emailtemplatehistoryDescCreatedAt.Default.(func() time.Time)
+	// emailtemplatehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	emailtemplatehistoryDescUpdatedAt := emailtemplatehistoryFields[4].Descriptor()
+	// emailtemplatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	emailtemplatehistory.DefaultUpdatedAt = emailtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
+	// emailtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	emailtemplatehistory.UpdateDefaultUpdatedAt = emailtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// emailtemplatehistoryDescSystemOwned is the schema descriptor for system_owned field.
+	emailtemplatehistoryDescSystemOwned := emailtemplatehistoryFields[11].Descriptor()
+	// emailtemplatehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	emailtemplatehistory.DefaultSystemOwned = emailtemplatehistoryDescSystemOwned.Default.(bool)
+	// emailtemplatehistoryDescLocale is the schema descriptor for locale field.
+	emailtemplatehistoryDescLocale := emailtemplatehistoryFields[18].Descriptor()
+	// emailtemplatehistory.DefaultLocale holds the default value on creation for the locale field.
+	emailtemplatehistory.DefaultLocale = emailtemplatehistoryDescLocale.Default.(string)
+	// emailtemplatehistoryDescActive is the schema descriptor for active field.
+	emailtemplatehistoryDescActive := emailtemplatehistoryFields[26].Descriptor()
+	// emailtemplatehistory.DefaultActive holds the default value on creation for the active field.
+	emailtemplatehistory.DefaultActive = emailtemplatehistoryDescActive.Default.(bool)
+	// emailtemplatehistoryDescVersion is the schema descriptor for version field.
+	emailtemplatehistoryDescVersion := emailtemplatehistoryFields[27].Descriptor()
+	// emailtemplatehistory.DefaultVersion holds the default value on creation for the version field.
+	emailtemplatehistory.DefaultVersion = emailtemplatehistoryDescVersion.Default.(int)
+	// emailtemplatehistoryDescID is the schema descriptor for id field.
+	emailtemplatehistoryDescID := emailtemplatehistoryFields[9].Descriptor()
+	// emailtemplatehistory.DefaultID holds the default value on creation for the id field.
+	emailtemplatehistory.DefaultID = emailtemplatehistoryDescID.Default.(func() string)
 	entityhistory.Policy = privacy.NewPolicies(historyschema.EntityHistory{})
 	entityhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -866,10 +960,6 @@ func init() {
 	entityhistoryDescSystemOwned := entityhistoryFields[19].Descriptor()
 	// entityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entityhistory.DefaultSystemOwned = entityhistoryDescSystemOwned.Default.(bool)
-	// entityhistoryDescStatus is the schema descriptor for status field.
-	entityhistoryDescStatus := entityhistoryFields[37].Descriptor()
-	// entityhistory.DefaultStatus holds the default value on creation for the status field.
-	entityhistory.DefaultStatus = entityhistoryDescStatus.Default.(string)
 	// entityhistoryDescApprovedForUse is the schema descriptor for approved_for_use field.
 	entityhistoryDescApprovedForUse := entityhistoryFields[38].Descriptor()
 	// entityhistory.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
@@ -1637,6 +1727,92 @@ func init() {
 	notehistoryDescID := notehistoryFields[9].Descriptor()
 	// notehistory.DefaultID holds the default value on creation for the id field.
 	notehistory.DefaultID = notehistoryDescID.Default.(func() string)
+	notificationpreferencehistory.Policy = privacy.NewPolicies(historyschema.NotificationPreferenceHistory{})
+	notificationpreferencehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := notificationpreferencehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	notificationpreferencehistoryInters := historyschema.NotificationPreferenceHistory{}.Interceptors()
+	notificationpreferencehistory.Interceptors[0] = notificationpreferencehistoryInters[0]
+	notificationpreferencehistoryFields := historyschema.NotificationPreferenceHistory{}.Fields()
+	_ = notificationpreferencehistoryFields
+	// notificationpreferencehistoryDescHistoryTime is the schema descriptor for history_time field.
+	notificationpreferencehistoryDescHistoryTime := notificationpreferencehistoryFields[0].Descriptor()
+	// notificationpreferencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	notificationpreferencehistory.DefaultHistoryTime = notificationpreferencehistoryDescHistoryTime.Default.(func() time.Time)
+	// notificationpreferencehistoryDescCreatedAt is the schema descriptor for created_at field.
+	notificationpreferencehistoryDescCreatedAt := notificationpreferencehistoryFields[3].Descriptor()
+	// notificationpreferencehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	notificationpreferencehistory.DefaultCreatedAt = notificationpreferencehistoryDescCreatedAt.Default.(func() time.Time)
+	// notificationpreferencehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	notificationpreferencehistoryDescUpdatedAt := notificationpreferencehistoryFields[4].Descriptor()
+	// notificationpreferencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	notificationpreferencehistory.DefaultUpdatedAt = notificationpreferencehistoryDescUpdatedAt.Default.(func() time.Time)
+	// notificationpreferencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	notificationpreferencehistory.UpdateDefaultUpdatedAt = notificationpreferencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationpreferencehistoryDescEnabled is the schema descriptor for enabled field.
+	notificationpreferencehistoryDescEnabled := notificationpreferencehistoryFields[17].Descriptor()
+	// notificationpreferencehistory.DefaultEnabled holds the default value on creation for the enabled field.
+	notificationpreferencehistory.DefaultEnabled = notificationpreferencehistoryDescEnabled.Default.(bool)
+	// notificationpreferencehistoryDescIsDefault is the schema descriptor for is_default field.
+	notificationpreferencehistoryDescIsDefault := notificationpreferencehistoryFields[27].Descriptor()
+	// notificationpreferencehistory.DefaultIsDefault holds the default value on creation for the is_default field.
+	notificationpreferencehistory.DefaultIsDefault = notificationpreferencehistoryDescIsDefault.Default.(bool)
+	// notificationpreferencehistoryDescID is the schema descriptor for id field.
+	notificationpreferencehistoryDescID := notificationpreferencehistoryFields[9].Descriptor()
+	// notificationpreferencehistory.DefaultID holds the default value on creation for the id field.
+	notificationpreferencehistory.DefaultID = notificationpreferencehistoryDescID.Default.(func() string)
+	notificationtemplatehistory.Policy = privacy.NewPolicies(historyschema.NotificationTemplateHistory{})
+	notificationtemplatehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := notificationtemplatehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	notificationtemplatehistoryInters := historyschema.NotificationTemplateHistory{}.Interceptors()
+	notificationtemplatehistory.Interceptors[0] = notificationtemplatehistoryInters[0]
+	notificationtemplatehistoryFields := historyschema.NotificationTemplateHistory{}.Fields()
+	_ = notificationtemplatehistoryFields
+	// notificationtemplatehistoryDescHistoryTime is the schema descriptor for history_time field.
+	notificationtemplatehistoryDescHistoryTime := notificationtemplatehistoryFields[0].Descriptor()
+	// notificationtemplatehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	notificationtemplatehistory.DefaultHistoryTime = notificationtemplatehistoryDescHistoryTime.Default.(func() time.Time)
+	// notificationtemplatehistoryDescCreatedAt is the schema descriptor for created_at field.
+	notificationtemplatehistoryDescCreatedAt := notificationtemplatehistoryFields[3].Descriptor()
+	// notificationtemplatehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	notificationtemplatehistory.DefaultCreatedAt = notificationtemplatehistoryDescCreatedAt.Default.(func() time.Time)
+	// notificationtemplatehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	notificationtemplatehistoryDescUpdatedAt := notificationtemplatehistoryFields[4].Descriptor()
+	// notificationtemplatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	notificationtemplatehistory.DefaultUpdatedAt = notificationtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
+	// notificationtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	notificationtemplatehistory.UpdateDefaultUpdatedAt = notificationtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationtemplatehistoryDescSystemOwned is the schema descriptor for system_owned field.
+	notificationtemplatehistoryDescSystemOwned := notificationtemplatehistoryFields[11].Descriptor()
+	// notificationtemplatehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	notificationtemplatehistory.DefaultSystemOwned = notificationtemplatehistoryDescSystemOwned.Default.(bool)
+	// notificationtemplatehistoryDescLocale is the schema descriptor for locale field.
+	notificationtemplatehistoryDescLocale := notificationtemplatehistoryFields[19].Descriptor()
+	// notificationtemplatehistory.DefaultLocale holds the default value on creation for the locale field.
+	notificationtemplatehistory.DefaultLocale = notificationtemplatehistoryDescLocale.Default.(string)
+	// notificationtemplatehistoryDescActive is the schema descriptor for active field.
+	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[31].Descriptor()
+	// notificationtemplatehistory.DefaultActive holds the default value on creation for the active field.
+	notificationtemplatehistory.DefaultActive = notificationtemplatehistoryDescActive.Default.(bool)
+	// notificationtemplatehistoryDescVersion is the schema descriptor for version field.
+	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[32].Descriptor()
+	// notificationtemplatehistory.DefaultVersion holds the default value on creation for the version field.
+	notificationtemplatehistory.DefaultVersion = notificationtemplatehistoryDescVersion.Default.(int)
+	// notificationtemplatehistoryDescID is the schema descriptor for id field.
+	notificationtemplatehistoryDescID := notificationtemplatehistoryFields[9].Descriptor()
+	// notificationtemplatehistory.DefaultID holds the default value on creation for the id field.
+	notificationtemplatehistory.DefaultID = notificationtemplatehistoryDescID.Default.(func() string)
 	orgmembershiphistory.Policy = privacy.NewPolicies(historyschema.OrgMembershipHistory{})
 	orgmembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -2787,19 +2963,19 @@ func init() {
 	// usersettinghistory.DefaultTags holds the default value on creation for the tags field.
 	usersettinghistory.DefaultTags = usersettinghistoryDescTags.Default.([]string)
 	// usersettinghistoryDescLocked is the schema descriptor for locked field.
-	usersettinghistoryDescLocked := usersettinghistoryFields[12].Descriptor()
+	usersettinghistoryDescLocked := usersettinghistoryFields[15].Descriptor()
 	// usersettinghistory.DefaultLocked holds the default value on creation for the locked field.
 	usersettinghistory.DefaultLocked = usersettinghistoryDescLocked.Default.(bool)
 	// usersettinghistoryDescEmailConfirmed is the schema descriptor for email_confirmed field.
-	usersettinghistoryDescEmailConfirmed := usersettinghistoryFields[16].Descriptor()
+	usersettinghistoryDescEmailConfirmed := usersettinghistoryFields[19].Descriptor()
 	// usersettinghistory.DefaultEmailConfirmed holds the default value on creation for the email_confirmed field.
 	usersettinghistory.DefaultEmailConfirmed = usersettinghistoryDescEmailConfirmed.Default.(bool)
 	// usersettinghistoryDescIsWebauthnAllowed is the schema descriptor for is_webauthn_allowed field.
-	usersettinghistoryDescIsWebauthnAllowed := usersettinghistoryFields[17].Descriptor()
+	usersettinghistoryDescIsWebauthnAllowed := usersettinghistoryFields[20].Descriptor()
 	// usersettinghistory.DefaultIsWebauthnAllowed holds the default value on creation for the is_webauthn_allowed field.
 	usersettinghistory.DefaultIsWebauthnAllowed = usersettinghistoryDescIsWebauthnAllowed.Default.(bool)
 	// usersettinghistoryDescIsTfaEnabled is the schema descriptor for is_tfa_enabled field.
-	usersettinghistoryDescIsTfaEnabled := usersettinghistoryFields[18].Descriptor()
+	usersettinghistoryDescIsTfaEnabled := usersettinghistoryFields[21].Descriptor()
 	// usersettinghistory.DefaultIsTfaEnabled holds the default value on creation for the is_tfa_enabled field.
 	usersettinghistory.DefaultIsTfaEnabled = usersettinghistoryDescIsTfaEnabled.Default.(bool)
 	// usersettinghistoryDescID is the schema descriptor for id field.
@@ -3122,6 +3298,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.6-0.20260108211107-2eb36418a02e"           // Version of ent codegen.
-	Sum     = "h1:7KEvbOmUkRoLWiDBq+CL46PM1C7SOw4XnGYmkRW8fYs=" // Sum of ent codegen.
+	Version = "v0.14.6-0.20260214061101-d056659140fa"           // Version of ent codegen.
+	Sum     = "h1:wMZsU7N59QIyi/ByFCi7VUVzFS2ARVpNVropq+D/cqE=" // Sum of ent codegen.
 )

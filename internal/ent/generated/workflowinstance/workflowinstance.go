@@ -100,6 +100,8 @@ const (
 	EdgeWorkflowAssignments = "workflow_assignments"
 	// EdgeWorkflowEvents holds the string denoting the workflow_events edge name in mutations.
 	EdgeWorkflowEvents = "workflow_events"
+	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
+	EdgeEmailTemplates = "email_templates"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the workflowinstance in the database.
@@ -209,6 +211,13 @@ const (
 	WorkflowEventsInverseTable = "workflow_events"
 	// WorkflowEventsColumn is the table column denoting the workflow_events relation/edge.
 	WorkflowEventsColumn = "workflow_instance_workflow_events"
+	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
+	EmailTemplatesTable = "email_templates"
+	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplatesInverseTable = "email_templates"
+	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
+	EmailTemplatesColumn = "workflow_instance_id"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -265,7 +274,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [8]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -544,6 +553,20 @@ func ByWorkflowEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByEmailTemplatesCount orders the results by email_templates count.
+func ByEmailTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailTemplatesStep(), opts...)
+	}
+}
+
+// ByEmailTemplates orders the results by email_templates terms.
+func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -660,6 +683,13 @@ func newWorkflowEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowEventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowEventsTable, WorkflowEventsColumn),
+	)
+}
+func newEmailTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

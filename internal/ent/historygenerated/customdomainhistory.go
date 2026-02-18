@@ -55,7 +55,9 @@ type CustomDomainHistory struct {
 	MappableDomainID string `json:"mappable_domain_id,omitempty"`
 	// The ID of the dns verification record
 	DNSVerificationID string `json:"dns_verification_id,omitempty"`
-	selectValues      sql.SelectValues
+	// the ID of the trust center the domain belongs to, if applicable
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -69,7 +71,7 @@ func (*CustomDomainHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case customdomainhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldInternalNotes, customdomainhistory.FieldSystemInternalID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID:
+		case customdomainhistory.FieldID, customdomainhistory.FieldRef, customdomainhistory.FieldCreatedBy, customdomainhistory.FieldUpdatedBy, customdomainhistory.FieldDeletedBy, customdomainhistory.FieldOwnerID, customdomainhistory.FieldInternalNotes, customdomainhistory.FieldSystemInternalID, customdomainhistory.FieldCnameRecord, customdomainhistory.FieldMappableDomainID, customdomainhistory.FieldDNSVerificationID, customdomainhistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case customdomainhistory.FieldHistoryTime, customdomainhistory.FieldCreatedAt, customdomainhistory.FieldUpdatedAt, customdomainhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -200,6 +202,12 @@ func (_m *CustomDomainHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.DNSVerificationID = value.String
 			}
+		case customdomainhistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -290,6 +298,9 @@ func (_m *CustomDomainHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dns_verification_id=")
 	builder.WriteString(_m.DNSVerificationID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

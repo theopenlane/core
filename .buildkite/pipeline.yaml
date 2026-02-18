@@ -125,9 +125,6 @@ steps:
         key: "helm_automation"
         depends_on: "generate_config"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -144,13 +141,10 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":arrows_counterclockwise: finalize config PRs"
+      - label: ":arrows_counterclockwise: close draft config PRs"
         key: "post_merge_automation"
         depends_on: "helm_automation"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -171,9 +165,6 @@ steps:
         key: "cleanup_draft_prs"
         depends_on: "post_merge_automation"
         if: build.branch == "main"
-        if_changed:
-          - config/configmap-config-file.yaml
-          - config/helm-values.yaml
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -186,7 +177,9 @@ steps:
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"
-        depends_on: "docker-build-and-tag"
+        depends_on:
+          - "docker-build-and-tag"
+          - "go_tests"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         plugins:
           - docker#v5.13.0:
@@ -204,12 +197,12 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-  - group: ":test_tube: Tests"
-    key: "tests"
+  - group: ":golangci-lint: Linter"
+    key: "linter"
     steps:
-      - label: ":golangci-lint: lint :lint-roller:"
+      - label: ":golangci-lint: lint graphapi package :lint-roller:"
         if_changed:
-          - "**.go"
+          - "internal/graphapi/**.go"
           - .golangci.yaml
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -217,11 +210,11 @@ steps:
           location: "NYC"
         cancel_on_build_failing: true
         timeout_in_minutes: 30
-        key: "lint"
+        key: "lint_graphapi"
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
-              command: ["task", "go:lint:ci"]
+              command: ["task", "go:lint:ci:graphapi"]
               always_pull: true
               propagate-environment: true
               volumes:
@@ -230,7 +223,60 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
-      - label: ":golang: go test graphapi"
+      - label: ":golangci-lint: lint handlers package :lint-roller:"
+        if_changed:
+          - "internal/httpserve/handlers/**.go"
+          - .golangci.yaml
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        cancel_on_build_failing: true
+        timeout_in_minutes: 30
+        key: "lint_handlers"
+        plugins:
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              command: ["task", "go:lint:ci:handlers"]
+              always_pull: true
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - "GOTOOLCHAIN=auto"
+      - label: ":golangci-lint: lint - non-api packages :lint-roller:"
+        if_changed:
+          include:
+            - "**.go"
+            - .golangci.yaml
+          exclude:
+            - internal/graphapi/**
+            - internal/httpserve/handlers/**
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        cancel_on_build_failing: true
+        timeout_in_minutes: 30
+        key: "lint_non_api"
+        plugins:
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              command: ["task", "go:lint:ci:no-api"]
+              always_pull: true
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - "GOTOOLCHAIN=auto"
+  - group: ":test_tube: Tests"
+    key: "go_tests"
+    steps:
+      - label: ":golang: go test - graphapi only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -267,7 +313,44 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
-      - label: ":golang: go test - all except graphapi"
+      - label: ":golang: go test - handlers only"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: "NYC"
+        key: "go_test_handlers"
+        cancel_on_build_failing: true
+        if_changed:
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude: # do not run tests if only cli files changed
+            - cli/**
+        env:
+          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+        matrix:
+          setup:
+            version:
+              - 17-alpine
+        plugins:
+          - docker#v5.13.0:
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
+              command: ["task", "go:testsum:ci:handlers"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - "/var/run/docker.sock:/var/run/docker.sock"
+              environment:
+                - "ANALYTICS_KEY"
+                - "GOMAXPROCS=16"
+                - "TEST_DB_URL"
+                - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
+                - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+        artifact_paths: ["coverage-handlers.out", "junit-handlers.xml"]
+      - label: ":golang: go test - all except api"
         if_changed:
           include:
             - "**.go"
@@ -278,7 +361,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
           location: "NYC"
-        key: "go_test_no_graph"
+        key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
@@ -303,7 +386,7 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-        artifact_paths: ["coverage-no-graph.out", "junit-no-graph.xml"]
+        artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
       - label: ":auth0: fga model test"
         if_changed:
           - "fga/**"
@@ -329,15 +412,16 @@ steps:
             - go.{mod,sum}
           exclude:
             - cli/**
-        depends_on: ["go_test_graph", "go_test_no_graph"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         commands: |
           #!/bin/bash
           curl \
             -X POST \
             --fail-with-body \
             -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
-            -F "data=@junit-no-graph.xml" \
+            -F "data=@junit-no-api.xml" \
             -F "data=@junit-graph.xml" \
+            -F "data=@junit-handlers.xml" \
             -F "format=junit" \
             -F "run_env[CI]=buildkite" \
             -F "run_env[key]=$BUILDKITE_BUILD_ID" \
@@ -353,8 +437,11 @@ steps:
               download: "junit-graph.xml"
               step: "go_test_graph"
           - artifacts#v1.9.4:
-              download: "junit-no-graph.xml"
-              step: "go_test_no_graph"
+              download: "junit-no-api.xml"
+              step: "go_test_no_api"
+          - artifacts#v1.9.4:
+              download: "junit-handlers.xml"
+              step: "go_test_handlers"
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
@@ -365,20 +452,27 @@ steps:
           exclude:
             - cli/**
         if: build.pull_request.id != null
-        depends_on: ["go_test_graph", "go_test_no_graph"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
           - artifacts#v1.9.4:
-              download: "coverage-no-graph.out"
-              step: "go_test_no_graph"
+              download: "coverage-handlers.out"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "coverage-no-api.out"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "coverage-graph.out"
               step: "go_test_graph"
           - artifacts#v1.9.4:
-              download: "junit-no-graph.xml"
-              step: "go_test_no_graph"
+              download: "junit-handlers.xml"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "junit-no-api.xml"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
+
           - docker#v5.13.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
@@ -400,17 +494,23 @@ steps:
             - cli/**
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
-        depends_on: ["go_test_graph", "go_test_no_graph"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
         plugins:
           - artifacts#v1.9.4:
-              download: "coverage-no-graph.out"
-              step: "go_test_no_graph"
+              download: "coverage-no-api.out"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "coverage-graph.out"
               step: "go_test_graph"
           - artifacts#v1.9.4:
-              download: "junit-no-graph.xml"
-              step: "go_test_no_graph"
+              download: "coverage-handlers.out"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "junit-handlers.xml"
+              step: "go_test_handlers"
+          - artifacts#v1.9.4:
+              download: "junit-no-api.xml"
+              step: "go_test_no_api"
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
@@ -629,8 +729,8 @@ steps:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
-              skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.67.0"
+              skip-files: "cosign.key,Dockerfile.dev,internal/graphapi/generated/*,internal/ent/generated/*,internal/ent/historygenerated/*"
+              trivy-version: "0.68.2"
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         cancel_on_build_failing: true
@@ -704,5 +804,10 @@ steps:
       - label: ":go: go-client schema update"
         trigger: go-client
         depends_on: "apollo-publish-schema"
+        if: build.tag != null
+        soft_fail: true
+      - label: ":docusaurus: update docs for release"
+        trigger: openlane-docs
+        depends_on: "image_tag_automation"
         if: build.tag != null
         soft_fail: true

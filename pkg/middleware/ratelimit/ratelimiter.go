@@ -1,6 +1,7 @@
 package ratelimit
 
 import (
+	"context"
 	"math"
 	"net"
 	"net/http"
@@ -179,7 +180,7 @@ func buildLimiters(conf *Config) []*RateLimiter {
 		}
 
 		limiters = append(limiters, New(
-			NewMapLimitStore(expiration, flush),
+			NewMapLimitStore(context.Background(), expiration, flush),
 			requests,
 			window,
 		))

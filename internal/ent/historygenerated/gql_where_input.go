@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
@@ -28,6 +30,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -46,6 +50,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -548,6 +554,27 @@ type ActionPlanHistoryWhereInput struct {
 	SourceNotNil       bool     `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tag_suggestions" JSON-string-array predicates.
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+
+	// "dismissed_tag_suggestions" JSON-string-array predicates.
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+
+	// "control_suggestions" JSON-string-array predicates.
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+
+	// "dismissed_control_suggestions" JSON-string-array predicates.
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+
+	// "improvement_suggestions" JSON-string-array predicates.
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+
+	// "dismissed_improvement_suggestions" JSON-string-array predicates.
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -1783,6 +1810,55 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 		predicates = append(predicates, actionplanhistory.SourceContainsFold(*i.SourceContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldTags, v))
+		})
+	}
+
+	if i.TagSuggestionsHas != nil {
+		v := *i.TagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldTagSuggestions, v))
+		})
+	}
+
+	if i.DismissedTagSuggestionsHas != nil {
+		v := *i.DismissedTagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldDismissedTagSuggestions, v))
+		})
+	}
+
+	if i.ControlSuggestionsHas != nil {
+		v := *i.ControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldControlSuggestions, v))
+		})
+	}
+
+	if i.DismissedControlSuggestionsHas != nil {
+		v := *i.DismissedControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldDismissedControlSuggestions, v))
+		})
+	}
+
+	if i.ImprovementSuggestionsHas != nil {
+		v := *i.ImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldImprovementSuggestions, v))
+		})
+	}
+
+	if i.DismissedImprovementSuggestionsHas != nil {
+		v := *i.DismissedImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(actionplanhistory.FieldDismissedImprovementSuggestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyActionPlanHistoryWhereInput
@@ -1969,6 +2045,9 @@ type AssessmentHistoryWhereInput struct {
 	ResponseDueDurationLTE    *int64  `json:"responseDueDurationLTE,omitempty"`
 	ResponseDueDurationIsNil  bool    `json:"responseDueDurationIsNil,omitempty"`
 	ResponseDueDurationNotNil bool    `json:"responseDueDurationNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -2475,6 +2554,13 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 		predicates = append(predicates, assessmenthistory.ResponseDueDurationNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(assessmenthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyAssessmentHistoryWhereInput
@@ -2828,6 +2914,10 @@ type AssessmentResponseHistoryWhereInput struct {
 	DueDateLTE    *time.Time  `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil bool        `json:"dueDateNotNil,omitempty"`
+
+	// "is_draft" field predicates.
+	IsDraft    *bool `json:"isDraft,omitempty"`
+	IsDraftNEQ *bool `json:"isDraftNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3750,6 +3840,12 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	if i.DueDateNotNil {
 		predicates = append(predicates, assessmentresponsehistory.DueDateNotNil())
 	}
+	if i.IsDraft != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsDraftEQ(*i.IsDraft))
+	}
+	if i.IsDraftNEQ != nil {
+		predicates = append(predicates, assessmentresponsehistory.IsDraftNEQ(*i.IsDraftNEQ))
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -4443,6 +4539,12 @@ type AssetHistoryWhereInput struct {
 	PurchaseDateLTE    *models.DateTime  `json:"purchaseDateLTE,omitempty"`
 	PurchaseDateIsNil  bool              `json:"purchaseDateIsNil,omitempty"`
 	PurchaseDateNotNil bool              `json:"purchaseDateNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "categories" JSON-string-array predicates.
+	CategoriesHas *string `json:"categoriesHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -6275,6 +6377,20 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 		predicates = append(predicates, assethistory.PurchaseDateNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(assethistory.FieldTags, v))
+		})
+	}
+
+	if i.CategoriesHas != nil {
+		v := *i.CategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(assethistory.FieldCategories, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyAssetHistoryWhereInput
@@ -6743,6 +6859,43 @@ type CampaignHistoryWhereInput struct {
 	AssessmentIDNotNil       bool     `json:"assessmentIDNotNil,omitempty"`
 	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
 	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
+
+	// "email_branding_id" field predicates.
+	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
+	EmailBrandingIDNEQ          *string  `json:"emailBrandingIDNEQ,omitempty"`
+	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
+	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
+	EmailBrandingIDGT           *string  `json:"emailBrandingIDGT,omitempty"`
+	EmailBrandingIDGTE          *string  `json:"emailBrandingIDGTE,omitempty"`
+	EmailBrandingIDLT           *string  `json:"emailBrandingIDLT,omitempty"`
+	EmailBrandingIDLTE          *string  `json:"emailBrandingIDLTE,omitempty"`
+	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
+	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
+	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
+	EmailBrandingIDIsNil        bool     `json:"emailBrandingIDIsNil,omitempty"`
+	EmailBrandingIDNotNil       bool     `json:"emailBrandingIDNotNil,omitempty"`
+	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
+	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
+
+	// "email_template_id" field predicates.
+	EmailTemplateID             *string  `json:"emailTemplateID,omitempty"`
+	EmailTemplateIDNEQ          *string  `json:"emailTemplateIDNEQ,omitempty"`
+	EmailTemplateIDIn           []string `json:"emailTemplateIDIn,omitempty"`
+	EmailTemplateIDNotIn        []string `json:"emailTemplateIDNotIn,omitempty"`
+	EmailTemplateIDGT           *string  `json:"emailTemplateIDGT,omitempty"`
+	EmailTemplateIDGTE          *string  `json:"emailTemplateIDGTE,omitempty"`
+	EmailTemplateIDLT           *string  `json:"emailTemplateIDLT,omitempty"`
+	EmailTemplateIDLTE          *string  `json:"emailTemplateIDLTE,omitempty"`
+	EmailTemplateIDContains     *string  `json:"emailTemplateIDContains,omitempty"`
+	EmailTemplateIDHasPrefix    *string  `json:"emailTemplateIDHasPrefix,omitempty"`
+	EmailTemplateIDHasSuffix    *string  `json:"emailTemplateIDHasSuffix,omitempty"`
+	EmailTemplateIDIsNil        bool     `json:"emailTemplateIDIsNil,omitempty"`
+	EmailTemplateIDNotNil       bool     `json:"emailTemplateIDNotNil,omitempty"`
+	EmailTemplateIDEqualFold    *string  `json:"emailTemplateIDEqualFold,omitempty"`
+	EmailTemplateIDContainsFold *string  `json:"emailTemplateIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -7955,6 +8108,103 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	}
 	if i.AssessmentIDContainsFold != nil {
 		predicates = append(predicates, campaignhistory.AssessmentIDContainsFold(*i.AssessmentIDContainsFold))
+	}
+	if i.EmailBrandingID != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDEQ(*i.EmailBrandingID))
+	}
+	if i.EmailBrandingIDNEQ != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDNEQ(*i.EmailBrandingIDNEQ))
+	}
+	if len(i.EmailBrandingIDIn) > 0 {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDIn(i.EmailBrandingIDIn...))
+	}
+	if len(i.EmailBrandingIDNotIn) > 0 {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDNotIn(i.EmailBrandingIDNotIn...))
+	}
+	if i.EmailBrandingIDGT != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDGT(*i.EmailBrandingIDGT))
+	}
+	if i.EmailBrandingIDGTE != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDGTE(*i.EmailBrandingIDGTE))
+	}
+	if i.EmailBrandingIDLT != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDLT(*i.EmailBrandingIDLT))
+	}
+	if i.EmailBrandingIDLTE != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDLTE(*i.EmailBrandingIDLTE))
+	}
+	if i.EmailBrandingIDContains != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDContains(*i.EmailBrandingIDContains))
+	}
+	if i.EmailBrandingIDHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDHasPrefix(*i.EmailBrandingIDHasPrefix))
+	}
+	if i.EmailBrandingIDHasSuffix != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDHasSuffix(*i.EmailBrandingIDHasSuffix))
+	}
+	if i.EmailBrandingIDIsNil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDIsNil())
+	}
+	if i.EmailBrandingIDNotNil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDNotNil())
+	}
+	if i.EmailBrandingIDEqualFold != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDEqualFold(*i.EmailBrandingIDEqualFold))
+	}
+	if i.EmailBrandingIDContainsFold != nil {
+		predicates = append(predicates, campaignhistory.EmailBrandingIDContainsFold(*i.EmailBrandingIDContainsFold))
+	}
+	if i.EmailTemplateID != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDEQ(*i.EmailTemplateID))
+	}
+	if i.EmailTemplateIDNEQ != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDNEQ(*i.EmailTemplateIDNEQ))
+	}
+	if len(i.EmailTemplateIDIn) > 0 {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDIn(i.EmailTemplateIDIn...))
+	}
+	if len(i.EmailTemplateIDNotIn) > 0 {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDNotIn(i.EmailTemplateIDNotIn...))
+	}
+	if i.EmailTemplateIDGT != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDGT(*i.EmailTemplateIDGT))
+	}
+	if i.EmailTemplateIDGTE != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDGTE(*i.EmailTemplateIDGTE))
+	}
+	if i.EmailTemplateIDLT != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDLT(*i.EmailTemplateIDLT))
+	}
+	if i.EmailTemplateIDLTE != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDLTE(*i.EmailTemplateIDLTE))
+	}
+	if i.EmailTemplateIDContains != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDContains(*i.EmailTemplateIDContains))
+	}
+	if i.EmailTemplateIDHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDHasPrefix(*i.EmailTemplateIDHasPrefix))
+	}
+	if i.EmailTemplateIDHasSuffix != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDHasSuffix(*i.EmailTemplateIDHasSuffix))
+	}
+	if i.EmailTemplateIDIsNil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDIsNil())
+	}
+	if i.EmailTemplateIDNotNil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDNotNil())
+	}
+	if i.EmailTemplateIDEqualFold != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDEqualFold(*i.EmailTemplateIDEqualFold))
+	}
+	if i.EmailTemplateIDContainsFold != nil {
+		predicates = append(predicates, campaignhistory.EmailTemplateIDContainsFold(*i.EmailTemplateIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(campaignhistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -9193,6 +9443,9 @@ type ContactHistoryWhereInput struct {
 	StatusNEQ   *enums.UserStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.UserStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -9855,6 +10108,13 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 		predicates = append(predicates, contacthistory.StatusNotIn(i.StatusNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(contacthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyContactHistoryWhereInput
@@ -10406,6 +10666,18 @@ type ControlHistoryWhereInput struct {
 	StandardIDNotNil       bool     `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "aliases" JSON-string-array predicates.
+	AliasesHas *string `json:"aliasesHas,omitempty"`
+
+	// "mapped_categories" JSON-string-array predicates.
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+
+	// "control_questions" JSON-string-array predicates.
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -11869,6 +12141,34 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 		predicates = append(predicates, controlhistory.StandardIDContainsFold(*i.StandardIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldTags, v))
+		})
+	}
+
+	if i.AliasesHas != nil {
+		v := *i.AliasesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldAliases, v))
+		})
+	}
+
+	if i.MappedCategoriesHas != nil {
+		v := *i.MappedCategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldMappedCategories, v))
+		})
+	}
+
+	if i.ControlQuestionsHas != nil {
+		v := *i.ControlQuestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlhistory.FieldControlQuestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyControlHistoryWhereInput
@@ -12100,6 +12400,9 @@ type ControlImplementationHistoryWhereInput struct {
 	DetailsNotNil       bool     `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12717,6 +13020,13 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 		predicates = append(predicates, controlimplementationhistory.DetailsContainsFold(*i.DetailsContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlimplementationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyControlImplementationHistoryWhereInput
@@ -13024,6 +13334,9 @@ type ControlObjectiveHistoryWhereInput struct {
 	SubcategoryNotNil       bool     `json:"subcategoryNotNil,omitempty"`
 	SubcategoryEqualFold    *string  `json:"subcategoryEqualFold,omitempty"`
 	SubcategoryContainsFold *string  `json:"subcategoryContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13845,6 +14158,13 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 		predicates = append(predicates, controlobjectivehistory.SubcategoryContainsFold(*i.SubcategoryContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(controlobjectivehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyControlObjectiveHistoryWhereInput
@@ -14068,6 +14388,26 @@ type CustomDomainHistoryWhereInput struct {
 	DNSVerificationIDNotNil       bool     `json:"dnsVerificationIDNotNil,omitempty"`
 	DNSVerificationIDEqualFold    *string  `json:"dnsVerificationIDEqualFold,omitempty"`
 	DNSVerificationIDContainsFold *string  `json:"dnsVerificationIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -14672,6 +15012,58 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	if i.DNSVerificationIDContainsFold != nil {
 		predicates = append(predicates, customdomainhistory.DNSVerificationIDContainsFold(*i.DNSVerificationIDContainsFold))
 	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, customdomainhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(customdomainhistory.FieldTags, v))
+		})
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -14934,6 +15326,9 @@ type DNSVerificationHistoryWhereInput struct {
 	AcmeChallengeStatusReasonNotNil       bool     `json:"acmeChallengeStatusReasonNotNil,omitempty"`
 	AcmeChallengeStatusReasonEqualFold    *string  `json:"acmeChallengeStatusReasonEqualFold,omitempty"`
 	AcmeChallengeStatusReasonContainsFold *string  `json:"acmeChallengeStatusReasonContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15635,6 +16030,13 @@ func (i *DNSVerificationHistoryWhereInput) P() (predicate.DNSVerificationHistory
 		predicates = append(predicates, dnsverificationhistory.AcmeChallengeStatusReasonContainsFold(*i.AcmeChallengeStatusReasonContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(dnsverificationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyDNSVerificationHistoryWhereInput
@@ -16126,6 +16528,9 @@ type DirectoryAccountHistoryWhereInput struct {
 	SourceVersionNotNil       bool     `json:"sourceVersionNotNil,omitempty"`
 	SourceVersionEqualFold    *string  `json:"sourceVersionEqualFold,omitempty"`
 	SourceVersionContainsFold *string  `json:"sourceVersionContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -17427,6 +17832,13 @@ func (i *DirectoryAccountHistoryWhereInput) P() (predicate.DirectoryAccountHisto
 		predicates = append(predicates, directoryaccounthistory.SourceVersionContainsFold(*i.SourceVersionContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(directoryaccounthistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyDirectoryAccountHistoryWhereInput
@@ -17797,6 +18209,9 @@ type DirectoryGroupHistoryWhereInput struct {
 	SourceVersionNotNil       bool     `json:"sourceVersionNotNil,omitempty"`
 	SourceVersionEqualFold    *string  `json:"sourceVersionEqualFold,omitempty"`
 	SourceVersionContainsFold *string  `json:"sourceVersionContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -18775,6 +19190,13 @@ func (i *DirectoryGroupHistoryWhereInput) P() (predicate.DirectoryGroupHistory, 
 	}
 	if i.SourceVersionContainsFold != nil {
 		predicates = append(predicates, directorygrouphistory.SourceVersionContainsFold(*i.SourceVersionContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(directorygrouphistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -20888,6 +21310,9 @@ type DocumentDataHistoryWhereInput struct {
 	TemplateIDNotNil       bool     `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -21493,6 +21918,13 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 		predicates = append(predicates, documentdatahistory.TemplateIDContainsFold(*i.TemplateIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(documentdatahistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyDocumentDataHistoryWhereInput
@@ -21500,6 +21932,2628 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 		return predicates[0], nil
 	default:
 		return documentdatahistory.And(predicates...), nil
+	}
+}
+
+// EmailBrandingHistoryWhereInput represents a where input for filtering EmailBrandingHistory queries.
+type EmailBrandingHistoryWhereInput struct {
+	Predicates []predicate.EmailBrandingHistory  `json:"-"`
+	Not        *EmailBrandingHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*EmailBrandingHistoryWhereInput `json:"or,omitempty"`
+	And        []*EmailBrandingHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "brand_name" field predicates.
+	BrandName             *string  `json:"brandName,omitempty"`
+	BrandNameNEQ          *string  `json:"brandNameNEQ,omitempty"`
+	BrandNameIn           []string `json:"brandNameIn,omitempty"`
+	BrandNameNotIn        []string `json:"brandNameNotIn,omitempty"`
+	BrandNameGT           *string  `json:"brandNameGT,omitempty"`
+	BrandNameGTE          *string  `json:"brandNameGTE,omitempty"`
+	BrandNameLT           *string  `json:"brandNameLT,omitempty"`
+	BrandNameLTE          *string  `json:"brandNameLTE,omitempty"`
+	BrandNameContains     *string  `json:"brandNameContains,omitempty"`
+	BrandNameHasPrefix    *string  `json:"brandNameHasPrefix,omitempty"`
+	BrandNameHasSuffix    *string  `json:"brandNameHasSuffix,omitempty"`
+	BrandNameIsNil        bool     `json:"brandNameIsNil,omitempty"`
+	BrandNameNotNil       bool     `json:"brandNameNotNil,omitempty"`
+	BrandNameEqualFold    *string  `json:"brandNameEqualFold,omitempty"`
+	BrandNameContainsFold *string  `json:"brandNameContainsFold,omitempty"`
+
+	// "logo_remote_url" field predicates.
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGT           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGTE          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLT           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLTE          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        bool     `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       bool     `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+
+	// "primary_color" field predicates.
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNEQ          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorGT           *string  `json:"primaryColorGT,omitempty"`
+	PrimaryColorGTE          *string  `json:"primaryColorGTE,omitempty"`
+	PrimaryColorLT           *string  `json:"primaryColorLT,omitempty"`
+	PrimaryColorLTE          *string  `json:"primaryColorLTE,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        bool     `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+
+	// "secondary_color" field predicates.
+	SecondaryColor             *string  `json:"secondaryColor,omitempty"`
+	SecondaryColorNEQ          *string  `json:"secondaryColorNEQ,omitempty"`
+	SecondaryColorIn           []string `json:"secondaryColorIn,omitempty"`
+	SecondaryColorNotIn        []string `json:"secondaryColorNotIn,omitempty"`
+	SecondaryColorGT           *string  `json:"secondaryColorGT,omitempty"`
+	SecondaryColorGTE          *string  `json:"secondaryColorGTE,omitempty"`
+	SecondaryColorLT           *string  `json:"secondaryColorLT,omitempty"`
+	SecondaryColorLTE          *string  `json:"secondaryColorLTE,omitempty"`
+	SecondaryColorContains     *string  `json:"secondaryColorContains,omitempty"`
+	SecondaryColorHasPrefix    *string  `json:"secondaryColorHasPrefix,omitempty"`
+	SecondaryColorHasSuffix    *string  `json:"secondaryColorHasSuffix,omitempty"`
+	SecondaryColorIsNil        bool     `json:"secondaryColorIsNil,omitempty"`
+	SecondaryColorNotNil       bool     `json:"secondaryColorNotNil,omitempty"`
+	SecondaryColorEqualFold    *string  `json:"secondaryColorEqualFold,omitempty"`
+	SecondaryColorContainsFold *string  `json:"secondaryColorContainsFold,omitempty"`
+
+	// "background_color" field predicates.
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNEQ          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorGT           *string  `json:"backgroundColorGT,omitempty"`
+	BackgroundColorGTE          *string  `json:"backgroundColorGTE,omitempty"`
+	BackgroundColorLT           *string  `json:"backgroundColorLT,omitempty"`
+	BackgroundColorLTE          *string  `json:"backgroundColorLTE,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        bool     `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       bool     `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+
+	// "text_color" field predicates.
+	TextColor             *string  `json:"textColor,omitempty"`
+	TextColorNEQ          *string  `json:"textColorNEQ,omitempty"`
+	TextColorIn           []string `json:"textColorIn,omitempty"`
+	TextColorNotIn        []string `json:"textColorNotIn,omitempty"`
+	TextColorGT           *string  `json:"textColorGT,omitempty"`
+	TextColorGTE          *string  `json:"textColorGTE,omitempty"`
+	TextColorLT           *string  `json:"textColorLT,omitempty"`
+	TextColorLTE          *string  `json:"textColorLTE,omitempty"`
+	TextColorContains     *string  `json:"textColorContains,omitempty"`
+	TextColorHasPrefix    *string  `json:"textColorHasPrefix,omitempty"`
+	TextColorHasSuffix    *string  `json:"textColorHasSuffix,omitempty"`
+	TextColorIsNil        bool     `json:"textColorIsNil,omitempty"`
+	TextColorNotNil       bool     `json:"textColorNotNil,omitempty"`
+	TextColorEqualFold    *string  `json:"textColorEqualFold,omitempty"`
+	TextColorContainsFold *string  `json:"textColorContainsFold,omitempty"`
+
+	// "button_color" field predicates.
+	ButtonColor             *string  `json:"buttonColor,omitempty"`
+	ButtonColorNEQ          *string  `json:"buttonColorNEQ,omitempty"`
+	ButtonColorIn           []string `json:"buttonColorIn,omitempty"`
+	ButtonColorNotIn        []string `json:"buttonColorNotIn,omitempty"`
+	ButtonColorGT           *string  `json:"buttonColorGT,omitempty"`
+	ButtonColorGTE          *string  `json:"buttonColorGTE,omitempty"`
+	ButtonColorLT           *string  `json:"buttonColorLT,omitempty"`
+	ButtonColorLTE          *string  `json:"buttonColorLTE,omitempty"`
+	ButtonColorContains     *string  `json:"buttonColorContains,omitempty"`
+	ButtonColorHasPrefix    *string  `json:"buttonColorHasPrefix,omitempty"`
+	ButtonColorHasSuffix    *string  `json:"buttonColorHasSuffix,omitempty"`
+	ButtonColorIsNil        bool     `json:"buttonColorIsNil,omitempty"`
+	ButtonColorNotNil       bool     `json:"buttonColorNotNil,omitempty"`
+	ButtonColorEqualFold    *string  `json:"buttonColorEqualFold,omitempty"`
+	ButtonColorContainsFold *string  `json:"buttonColorContainsFold,omitempty"`
+
+	// "button_text_color" field predicates.
+	ButtonTextColor             *string  `json:"buttonTextColor,omitempty"`
+	ButtonTextColorNEQ          *string  `json:"buttonTextColorNEQ,omitempty"`
+	ButtonTextColorIn           []string `json:"buttonTextColorIn,omitempty"`
+	ButtonTextColorNotIn        []string `json:"buttonTextColorNotIn,omitempty"`
+	ButtonTextColorGT           *string  `json:"buttonTextColorGT,omitempty"`
+	ButtonTextColorGTE          *string  `json:"buttonTextColorGTE,omitempty"`
+	ButtonTextColorLT           *string  `json:"buttonTextColorLT,omitempty"`
+	ButtonTextColorLTE          *string  `json:"buttonTextColorLTE,omitempty"`
+	ButtonTextColorContains     *string  `json:"buttonTextColorContains,omitempty"`
+	ButtonTextColorHasPrefix    *string  `json:"buttonTextColorHasPrefix,omitempty"`
+	ButtonTextColorHasSuffix    *string  `json:"buttonTextColorHasSuffix,omitempty"`
+	ButtonTextColorIsNil        bool     `json:"buttonTextColorIsNil,omitempty"`
+	ButtonTextColorNotNil       bool     `json:"buttonTextColorNotNil,omitempty"`
+	ButtonTextColorEqualFold    *string  `json:"buttonTextColorEqualFold,omitempty"`
+	ButtonTextColorContainsFold *string  `json:"buttonTextColorContainsFold,omitempty"`
+
+	// "link_color" field predicates.
+	LinkColor             *string  `json:"linkColor,omitempty"`
+	LinkColorNEQ          *string  `json:"linkColorNEQ,omitempty"`
+	LinkColorIn           []string `json:"linkColorIn,omitempty"`
+	LinkColorNotIn        []string `json:"linkColorNotIn,omitempty"`
+	LinkColorGT           *string  `json:"linkColorGT,omitempty"`
+	LinkColorGTE          *string  `json:"linkColorGTE,omitempty"`
+	LinkColorLT           *string  `json:"linkColorLT,omitempty"`
+	LinkColorLTE          *string  `json:"linkColorLTE,omitempty"`
+	LinkColorContains     *string  `json:"linkColorContains,omitempty"`
+	LinkColorHasPrefix    *string  `json:"linkColorHasPrefix,omitempty"`
+	LinkColorHasSuffix    *string  `json:"linkColorHasSuffix,omitempty"`
+	LinkColorIsNil        bool     `json:"linkColorIsNil,omitempty"`
+	LinkColorNotNil       bool     `json:"linkColorNotNil,omitempty"`
+	LinkColorEqualFold    *string  `json:"linkColorEqualFold,omitempty"`
+	LinkColorContainsFold *string  `json:"linkColorContainsFold,omitempty"`
+
+	// "font_family" field predicates.
+	FontFamily       *enums.Font  `json:"fontFamily,omitempty"`
+	FontFamilyNEQ    *enums.Font  `json:"fontFamilyNEQ,omitempty"`
+	FontFamilyIn     []enums.Font `json:"fontFamilyIn,omitempty"`
+	FontFamilyNotIn  []enums.Font `json:"fontFamilyNotIn,omitempty"`
+	FontFamilyIsNil  bool         `json:"fontFamilyIsNil,omitempty"`
+	FontFamilyNotNil bool         `json:"fontFamilyNotNil,omitempty"`
+
+	// "is_default" field predicates.
+	IsDefault       *bool `json:"isDefault,omitempty"`
+	IsDefaultNEQ    *bool `json:"isDefaultNEQ,omitempty"`
+	IsDefaultIsNil  bool  `json:"isDefaultIsNil,omitempty"`
+	IsDefaultNotNil bool  `json:"isDefaultNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *EmailBrandingHistoryWhereInput) AddPredicates(predicates ...predicate.EmailBrandingHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the EmailBrandingHistoryWhereInput filter on the EmailBrandingHistoryQuery builder.
+func (i *EmailBrandingHistoryWhereInput) Filter(q *EmailBrandingHistoryQuery) (*EmailBrandingHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyEmailBrandingHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyEmailBrandingHistoryWhereInput is returned in case the EmailBrandingHistoryWhereInput is empty.
+var ErrEmptyEmailBrandingHistoryWhereInput = errors.New("historygenerated: empty predicate EmailBrandingHistoryWhereInput")
+
+// P returns a predicate for filtering emailbrandinghistories.
+// An error is returned if the input is empty or invalid.
+func (i *EmailBrandingHistoryWhereInput) P() (predicate.EmailBrandingHistory, error) {
+	var predicates []predicate.EmailBrandingHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, emailbrandinghistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.EmailBrandingHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, emailbrandinghistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.EmailBrandingHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, emailbrandinghistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, emailbrandinghistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, emailbrandinghistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, emailbrandinghistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, emailbrandinghistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, emailbrandinghistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, emailbrandinghistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, emailbrandinghistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, emailbrandinghistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, emailbrandinghistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, emailbrandinghistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, emailbrandinghistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, emailbrandinghistory.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, emailbrandinghistory.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, emailbrandinghistory.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, emailbrandinghistory.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.BrandName != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameEQ(*i.BrandName))
+	}
+	if i.BrandNameNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameNEQ(*i.BrandNameNEQ))
+	}
+	if len(i.BrandNameIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.BrandNameIn(i.BrandNameIn...))
+	}
+	if len(i.BrandNameNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.BrandNameNotIn(i.BrandNameNotIn...))
+	}
+	if i.BrandNameGT != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameGT(*i.BrandNameGT))
+	}
+	if i.BrandNameGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameGTE(*i.BrandNameGTE))
+	}
+	if i.BrandNameLT != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameLT(*i.BrandNameLT))
+	}
+	if i.BrandNameLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameLTE(*i.BrandNameLTE))
+	}
+	if i.BrandNameContains != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameContains(*i.BrandNameContains))
+	}
+	if i.BrandNameHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameHasPrefix(*i.BrandNameHasPrefix))
+	}
+	if i.BrandNameHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameHasSuffix(*i.BrandNameHasSuffix))
+	}
+	if i.BrandNameIsNil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameIsNil())
+	}
+	if i.BrandNameNotNil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameNotNil())
+	}
+	if i.BrandNameEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameEqualFold(*i.BrandNameEqualFold))
+	}
+	if i.BrandNameContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.BrandNameContainsFold(*i.BrandNameContainsFold))
+	}
+	if i.LogoRemoteURL != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLEQ(*i.LogoRemoteURL))
+	}
+	if i.LogoRemoteURLNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLNEQ(*i.LogoRemoteURLNEQ))
+	}
+	if len(i.LogoRemoteURLIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLIn(i.LogoRemoteURLIn...))
+	}
+	if len(i.LogoRemoteURLNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLNotIn(i.LogoRemoteURLNotIn...))
+	}
+	if i.LogoRemoteURLGT != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLGT(*i.LogoRemoteURLGT))
+	}
+	if i.LogoRemoteURLGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLGTE(*i.LogoRemoteURLGTE))
+	}
+	if i.LogoRemoteURLLT != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLLT(*i.LogoRemoteURLLT))
+	}
+	if i.LogoRemoteURLLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLLTE(*i.LogoRemoteURLLTE))
+	}
+	if i.LogoRemoteURLContains != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLContains(*i.LogoRemoteURLContains))
+	}
+	if i.LogoRemoteURLHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLHasPrefix(*i.LogoRemoteURLHasPrefix))
+	}
+	if i.LogoRemoteURLHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLHasSuffix(*i.LogoRemoteURLHasSuffix))
+	}
+	if i.LogoRemoteURLIsNil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLIsNil())
+	}
+	if i.LogoRemoteURLNotNil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLNotNil())
+	}
+	if i.LogoRemoteURLEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLEqualFold(*i.LogoRemoteURLEqualFold))
+	}
+	if i.LogoRemoteURLContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.LogoRemoteURLContainsFold(*i.LogoRemoteURLContainsFold))
+	}
+	if i.PrimaryColor != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorEQ(*i.PrimaryColor))
+	}
+	if i.PrimaryColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorNEQ(*i.PrimaryColorNEQ))
+	}
+	if len(i.PrimaryColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorIn(i.PrimaryColorIn...))
+	}
+	if len(i.PrimaryColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorNotIn(i.PrimaryColorNotIn...))
+	}
+	if i.PrimaryColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorGT(*i.PrimaryColorGT))
+	}
+	if i.PrimaryColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorGTE(*i.PrimaryColorGTE))
+	}
+	if i.PrimaryColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorLT(*i.PrimaryColorLT))
+	}
+	if i.PrimaryColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorLTE(*i.PrimaryColorLTE))
+	}
+	if i.PrimaryColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorContains(*i.PrimaryColorContains))
+	}
+	if i.PrimaryColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorHasPrefix(*i.PrimaryColorHasPrefix))
+	}
+	if i.PrimaryColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorHasSuffix(*i.PrimaryColorHasSuffix))
+	}
+	if i.PrimaryColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorIsNil())
+	}
+	if i.PrimaryColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorNotNil())
+	}
+	if i.PrimaryColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorEqualFold(*i.PrimaryColorEqualFold))
+	}
+	if i.PrimaryColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
+	}
+	if i.SecondaryColor != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorEQ(*i.SecondaryColor))
+	}
+	if i.SecondaryColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorNEQ(*i.SecondaryColorNEQ))
+	}
+	if len(i.SecondaryColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorIn(i.SecondaryColorIn...))
+	}
+	if len(i.SecondaryColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorNotIn(i.SecondaryColorNotIn...))
+	}
+	if i.SecondaryColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorGT(*i.SecondaryColorGT))
+	}
+	if i.SecondaryColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorGTE(*i.SecondaryColorGTE))
+	}
+	if i.SecondaryColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorLT(*i.SecondaryColorLT))
+	}
+	if i.SecondaryColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorLTE(*i.SecondaryColorLTE))
+	}
+	if i.SecondaryColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorContains(*i.SecondaryColorContains))
+	}
+	if i.SecondaryColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorHasPrefix(*i.SecondaryColorHasPrefix))
+	}
+	if i.SecondaryColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorHasSuffix(*i.SecondaryColorHasSuffix))
+	}
+	if i.SecondaryColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorIsNil())
+	}
+	if i.SecondaryColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorNotNil())
+	}
+	if i.SecondaryColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorEqualFold(*i.SecondaryColorEqualFold))
+	}
+	if i.SecondaryColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.SecondaryColorContainsFold(*i.SecondaryColorContainsFold))
+	}
+	if i.BackgroundColor != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorEQ(*i.BackgroundColor))
+	}
+	if i.BackgroundColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorNEQ(*i.BackgroundColorNEQ))
+	}
+	if len(i.BackgroundColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorIn(i.BackgroundColorIn...))
+	}
+	if len(i.BackgroundColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorNotIn(i.BackgroundColorNotIn...))
+	}
+	if i.BackgroundColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorGT(*i.BackgroundColorGT))
+	}
+	if i.BackgroundColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorGTE(*i.BackgroundColorGTE))
+	}
+	if i.BackgroundColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorLT(*i.BackgroundColorLT))
+	}
+	if i.BackgroundColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorLTE(*i.BackgroundColorLTE))
+	}
+	if i.BackgroundColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorContains(*i.BackgroundColorContains))
+	}
+	if i.BackgroundColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorHasPrefix(*i.BackgroundColorHasPrefix))
+	}
+	if i.BackgroundColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorHasSuffix(*i.BackgroundColorHasSuffix))
+	}
+	if i.BackgroundColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorIsNil())
+	}
+	if i.BackgroundColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorNotNil())
+	}
+	if i.BackgroundColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorEqualFold(*i.BackgroundColorEqualFold))
+	}
+	if i.BackgroundColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.BackgroundColorContainsFold(*i.BackgroundColorContainsFold))
+	}
+	if i.TextColor != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorEQ(*i.TextColor))
+	}
+	if i.TextColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorNEQ(*i.TextColorNEQ))
+	}
+	if len(i.TextColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.TextColorIn(i.TextColorIn...))
+	}
+	if len(i.TextColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.TextColorNotIn(i.TextColorNotIn...))
+	}
+	if i.TextColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorGT(*i.TextColorGT))
+	}
+	if i.TextColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorGTE(*i.TextColorGTE))
+	}
+	if i.TextColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorLT(*i.TextColorLT))
+	}
+	if i.TextColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorLTE(*i.TextColorLTE))
+	}
+	if i.TextColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorContains(*i.TextColorContains))
+	}
+	if i.TextColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorHasPrefix(*i.TextColorHasPrefix))
+	}
+	if i.TextColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorHasSuffix(*i.TextColorHasSuffix))
+	}
+	if i.TextColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.TextColorIsNil())
+	}
+	if i.TextColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.TextColorNotNil())
+	}
+	if i.TextColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorEqualFold(*i.TextColorEqualFold))
+	}
+	if i.TextColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.TextColorContainsFold(*i.TextColorContainsFold))
+	}
+	if i.ButtonColor != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorEQ(*i.ButtonColor))
+	}
+	if i.ButtonColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorNEQ(*i.ButtonColorNEQ))
+	}
+	if len(i.ButtonColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorIn(i.ButtonColorIn...))
+	}
+	if len(i.ButtonColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorNotIn(i.ButtonColorNotIn...))
+	}
+	if i.ButtonColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorGT(*i.ButtonColorGT))
+	}
+	if i.ButtonColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorGTE(*i.ButtonColorGTE))
+	}
+	if i.ButtonColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorLT(*i.ButtonColorLT))
+	}
+	if i.ButtonColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorLTE(*i.ButtonColorLTE))
+	}
+	if i.ButtonColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorContains(*i.ButtonColorContains))
+	}
+	if i.ButtonColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorHasPrefix(*i.ButtonColorHasPrefix))
+	}
+	if i.ButtonColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorHasSuffix(*i.ButtonColorHasSuffix))
+	}
+	if i.ButtonColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorIsNil())
+	}
+	if i.ButtonColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorNotNil())
+	}
+	if i.ButtonColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorEqualFold(*i.ButtonColorEqualFold))
+	}
+	if i.ButtonColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonColorContainsFold(*i.ButtonColorContainsFold))
+	}
+	if i.ButtonTextColor != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorEQ(*i.ButtonTextColor))
+	}
+	if i.ButtonTextColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorNEQ(*i.ButtonTextColorNEQ))
+	}
+	if len(i.ButtonTextColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorIn(i.ButtonTextColorIn...))
+	}
+	if len(i.ButtonTextColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorNotIn(i.ButtonTextColorNotIn...))
+	}
+	if i.ButtonTextColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorGT(*i.ButtonTextColorGT))
+	}
+	if i.ButtonTextColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorGTE(*i.ButtonTextColorGTE))
+	}
+	if i.ButtonTextColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorLT(*i.ButtonTextColorLT))
+	}
+	if i.ButtonTextColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorLTE(*i.ButtonTextColorLTE))
+	}
+	if i.ButtonTextColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorContains(*i.ButtonTextColorContains))
+	}
+	if i.ButtonTextColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorHasPrefix(*i.ButtonTextColorHasPrefix))
+	}
+	if i.ButtonTextColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorHasSuffix(*i.ButtonTextColorHasSuffix))
+	}
+	if i.ButtonTextColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorIsNil())
+	}
+	if i.ButtonTextColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorNotNil())
+	}
+	if i.ButtonTextColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorEqualFold(*i.ButtonTextColorEqualFold))
+	}
+	if i.ButtonTextColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.ButtonTextColorContainsFold(*i.ButtonTextColorContainsFold))
+	}
+	if i.LinkColor != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorEQ(*i.LinkColor))
+	}
+	if i.LinkColorNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorNEQ(*i.LinkColorNEQ))
+	}
+	if len(i.LinkColorIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.LinkColorIn(i.LinkColorIn...))
+	}
+	if len(i.LinkColorNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.LinkColorNotIn(i.LinkColorNotIn...))
+	}
+	if i.LinkColorGT != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorGT(*i.LinkColorGT))
+	}
+	if i.LinkColorGTE != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorGTE(*i.LinkColorGTE))
+	}
+	if i.LinkColorLT != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorLT(*i.LinkColorLT))
+	}
+	if i.LinkColorLTE != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorLTE(*i.LinkColorLTE))
+	}
+	if i.LinkColorContains != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorContains(*i.LinkColorContains))
+	}
+	if i.LinkColorHasPrefix != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorHasPrefix(*i.LinkColorHasPrefix))
+	}
+	if i.LinkColorHasSuffix != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorHasSuffix(*i.LinkColorHasSuffix))
+	}
+	if i.LinkColorIsNil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorIsNil())
+	}
+	if i.LinkColorNotNil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorNotNil())
+	}
+	if i.LinkColorEqualFold != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorEqualFold(*i.LinkColorEqualFold))
+	}
+	if i.LinkColorContainsFold != nil {
+		predicates = append(predicates, emailbrandinghistory.LinkColorContainsFold(*i.LinkColorContainsFold))
+	}
+	if i.FontFamily != nil {
+		predicates = append(predicates, emailbrandinghistory.FontFamilyEQ(*i.FontFamily))
+	}
+	if i.FontFamilyNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.FontFamilyNEQ(*i.FontFamilyNEQ))
+	}
+	if len(i.FontFamilyIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.FontFamilyIn(i.FontFamilyIn...))
+	}
+	if len(i.FontFamilyNotIn) > 0 {
+		predicates = append(predicates, emailbrandinghistory.FontFamilyNotIn(i.FontFamilyNotIn...))
+	}
+	if i.FontFamilyIsNil {
+		predicates = append(predicates, emailbrandinghistory.FontFamilyIsNil())
+	}
+	if i.FontFamilyNotNil {
+		predicates = append(predicates, emailbrandinghistory.FontFamilyNotNil())
+	}
+	if i.IsDefault != nil {
+		predicates = append(predicates, emailbrandinghistory.IsDefaultEQ(*i.IsDefault))
+	}
+	if i.IsDefaultNEQ != nil {
+		predicates = append(predicates, emailbrandinghistory.IsDefaultNEQ(*i.IsDefaultNEQ))
+	}
+	if i.IsDefaultIsNil {
+		predicates = append(predicates, emailbrandinghistory.IsDefaultIsNil())
+	}
+	if i.IsDefaultNotNil {
+		predicates = append(predicates, emailbrandinghistory.IsDefaultNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(emailbrandinghistory.FieldTags, v))
+		})
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyEmailBrandingHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return emailbrandinghistory.And(predicates...), nil
+	}
+}
+
+// EmailTemplateHistoryWhereInput represents a where input for filtering EmailTemplateHistory queries.
+type EmailTemplateHistoryWhereInput struct {
+	Predicates []predicate.EmailTemplateHistory  `json:"-"`
+	Not        *EmailTemplateHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*EmailTemplateHistoryWhereInput `json:"or,omitempty"`
+	And        []*EmailTemplateHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
+	// "key" field predicates.
+	Key             *string  `json:"key,omitempty"`
+	KeyNEQ          *string  `json:"keyNEQ,omitempty"`
+	KeyIn           []string `json:"keyIn,omitempty"`
+	KeyNotIn        []string `json:"keyNotIn,omitempty"`
+	KeyGT           *string  `json:"keyGT,omitempty"`
+	KeyGTE          *string  `json:"keyGTE,omitempty"`
+	KeyLT           *string  `json:"keyLT,omitempty"`
+	KeyLTE          *string  `json:"keyLTE,omitempty"`
+	KeyContains     *string  `json:"keyContains,omitempty"`
+	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
+	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
+	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
+	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "format" field predicates.
+	Format      *enums.NotificationTemplateFormat  `json:"format,omitempty"`
+	FormatNEQ   *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
+	FormatIn    []enums.NotificationTemplateFormat `json:"formatIn,omitempty"`
+	FormatNotIn []enums.NotificationTemplateFormat `json:"formatNotIn,omitempty"`
+
+	// "locale" field predicates.
+	Locale             *string  `json:"locale,omitempty"`
+	LocaleNEQ          *string  `json:"localeNEQ,omitempty"`
+	LocaleIn           []string `json:"localeIn,omitempty"`
+	LocaleNotIn        []string `json:"localeNotIn,omitempty"`
+	LocaleGT           *string  `json:"localeGT,omitempty"`
+	LocaleGTE          *string  `json:"localeGTE,omitempty"`
+	LocaleLT           *string  `json:"localeLT,omitempty"`
+	LocaleLTE          *string  `json:"localeLTE,omitempty"`
+	LocaleContains     *string  `json:"localeContains,omitempty"`
+	LocaleHasPrefix    *string  `json:"localeHasPrefix,omitempty"`
+	LocaleHasSuffix    *string  `json:"localeHasSuffix,omitempty"`
+	LocaleEqualFold    *string  `json:"localeEqualFold,omitempty"`
+	LocaleContainsFold *string  `json:"localeContainsFold,omitempty"`
+
+	// "subject_template" field predicates.
+	SubjectTemplate             *string  `json:"subjectTemplate,omitempty"`
+	SubjectTemplateNEQ          *string  `json:"subjectTemplateNEQ,omitempty"`
+	SubjectTemplateIn           []string `json:"subjectTemplateIn,omitempty"`
+	SubjectTemplateNotIn        []string `json:"subjectTemplateNotIn,omitempty"`
+	SubjectTemplateGT           *string  `json:"subjectTemplateGT,omitempty"`
+	SubjectTemplateGTE          *string  `json:"subjectTemplateGTE,omitempty"`
+	SubjectTemplateLT           *string  `json:"subjectTemplateLT,omitempty"`
+	SubjectTemplateLTE          *string  `json:"subjectTemplateLTE,omitempty"`
+	SubjectTemplateContains     *string  `json:"subjectTemplateContains,omitempty"`
+	SubjectTemplateHasPrefix    *string  `json:"subjectTemplateHasPrefix,omitempty"`
+	SubjectTemplateHasSuffix    *string  `json:"subjectTemplateHasSuffix,omitempty"`
+	SubjectTemplateIsNil        bool     `json:"subjectTemplateIsNil,omitempty"`
+	SubjectTemplateNotNil       bool     `json:"subjectTemplateNotNil,omitempty"`
+	SubjectTemplateEqualFold    *string  `json:"subjectTemplateEqualFold,omitempty"`
+	SubjectTemplateContainsFold *string  `json:"subjectTemplateContainsFold,omitempty"`
+
+	// "preheader_template" field predicates.
+	PreheaderTemplate             *string  `json:"preheaderTemplate,omitempty"`
+	PreheaderTemplateNEQ          *string  `json:"preheaderTemplateNEQ,omitempty"`
+	PreheaderTemplateIn           []string `json:"preheaderTemplateIn,omitempty"`
+	PreheaderTemplateNotIn        []string `json:"preheaderTemplateNotIn,omitempty"`
+	PreheaderTemplateGT           *string  `json:"preheaderTemplateGT,omitempty"`
+	PreheaderTemplateGTE          *string  `json:"preheaderTemplateGTE,omitempty"`
+	PreheaderTemplateLT           *string  `json:"preheaderTemplateLT,omitempty"`
+	PreheaderTemplateLTE          *string  `json:"preheaderTemplateLTE,omitempty"`
+	PreheaderTemplateContains     *string  `json:"preheaderTemplateContains,omitempty"`
+	PreheaderTemplateHasPrefix    *string  `json:"preheaderTemplateHasPrefix,omitempty"`
+	PreheaderTemplateHasSuffix    *string  `json:"preheaderTemplateHasSuffix,omitempty"`
+	PreheaderTemplateIsNil        bool     `json:"preheaderTemplateIsNil,omitempty"`
+	PreheaderTemplateNotNil       bool     `json:"preheaderTemplateNotNil,omitempty"`
+	PreheaderTemplateEqualFold    *string  `json:"preheaderTemplateEqualFold,omitempty"`
+	PreheaderTemplateContainsFold *string  `json:"preheaderTemplateContainsFold,omitempty"`
+
+	// "body_template" field predicates.
+	BodyTemplate             *string  `json:"bodyTemplate,omitempty"`
+	BodyTemplateNEQ          *string  `json:"bodyTemplateNEQ,omitempty"`
+	BodyTemplateIn           []string `json:"bodyTemplateIn,omitempty"`
+	BodyTemplateNotIn        []string `json:"bodyTemplateNotIn,omitempty"`
+	BodyTemplateGT           *string  `json:"bodyTemplateGT,omitempty"`
+	BodyTemplateGTE          *string  `json:"bodyTemplateGTE,omitempty"`
+	BodyTemplateLT           *string  `json:"bodyTemplateLT,omitempty"`
+	BodyTemplateLTE          *string  `json:"bodyTemplateLTE,omitempty"`
+	BodyTemplateContains     *string  `json:"bodyTemplateContains,omitempty"`
+	BodyTemplateHasPrefix    *string  `json:"bodyTemplateHasPrefix,omitempty"`
+	BodyTemplateHasSuffix    *string  `json:"bodyTemplateHasSuffix,omitempty"`
+	BodyTemplateIsNil        bool     `json:"bodyTemplateIsNil,omitempty"`
+	BodyTemplateNotNil       bool     `json:"bodyTemplateNotNil,omitempty"`
+	BodyTemplateEqualFold    *string  `json:"bodyTemplateEqualFold,omitempty"`
+	BodyTemplateContainsFold *string  `json:"bodyTemplateContainsFold,omitempty"`
+
+	// "text_template" field predicates.
+	TextTemplate             *string  `json:"textTemplate,omitempty"`
+	TextTemplateNEQ          *string  `json:"textTemplateNEQ,omitempty"`
+	TextTemplateIn           []string `json:"textTemplateIn,omitempty"`
+	TextTemplateNotIn        []string `json:"textTemplateNotIn,omitempty"`
+	TextTemplateGT           *string  `json:"textTemplateGT,omitempty"`
+	TextTemplateGTE          *string  `json:"textTemplateGTE,omitempty"`
+	TextTemplateLT           *string  `json:"textTemplateLT,omitempty"`
+	TextTemplateLTE          *string  `json:"textTemplateLTE,omitempty"`
+	TextTemplateContains     *string  `json:"textTemplateContains,omitempty"`
+	TextTemplateHasPrefix    *string  `json:"textTemplateHasPrefix,omitempty"`
+	TextTemplateHasSuffix    *string  `json:"textTemplateHasSuffix,omitempty"`
+	TextTemplateIsNil        bool     `json:"textTemplateIsNil,omitempty"`
+	TextTemplateNotNil       bool     `json:"textTemplateNotNil,omitempty"`
+	TextTemplateEqualFold    *string  `json:"textTemplateEqualFold,omitempty"`
+	TextTemplateContainsFold *string  `json:"textTemplateContainsFold,omitempty"`
+
+	// "active" field predicates.
+	Active    *bool `json:"active,omitempty"`
+	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
+
+	// "version" field predicates.
+	Version      *int  `json:"version,omitempty"`
+	VersionNEQ   *int  `json:"versionNEQ,omitempty"`
+	VersionIn    []int `json:"versionIn,omitempty"`
+	VersionNotIn []int `json:"versionNotIn,omitempty"`
+	VersionGT    *int  `json:"versionGT,omitempty"`
+	VersionGTE   *int  `json:"versionGTE,omitempty"`
+	VersionLT    *int  `json:"versionLT,omitempty"`
+	VersionLTE   *int  `json:"versionLTE,omitempty"`
+
+	// "email_branding_id" field predicates.
+	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
+	EmailBrandingIDNEQ          *string  `json:"emailBrandingIDNEQ,omitempty"`
+	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
+	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
+	EmailBrandingIDGT           *string  `json:"emailBrandingIDGT,omitempty"`
+	EmailBrandingIDGTE          *string  `json:"emailBrandingIDGTE,omitempty"`
+	EmailBrandingIDLT           *string  `json:"emailBrandingIDLT,omitempty"`
+	EmailBrandingIDLTE          *string  `json:"emailBrandingIDLTE,omitempty"`
+	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
+	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
+	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
+	EmailBrandingIDIsNil        bool     `json:"emailBrandingIDIsNil,omitempty"`
+	EmailBrandingIDNotNil       bool     `json:"emailBrandingIDNotNil,omitempty"`
+	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
+	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
+
+	// "integration_id" field predicates.
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIDNEQ          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIDGT           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIDGTE          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIDLT           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIDLTE          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        bool     `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       bool     `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+
+	// "workflow_definition_id" field predicates.
+	WorkflowDefinitionID             *string  `json:"workflowDefinitionID,omitempty"`
+	WorkflowDefinitionIDNEQ          *string  `json:"workflowDefinitionIDNEQ,omitempty"`
+	WorkflowDefinitionIDIn           []string `json:"workflowDefinitionIDIn,omitempty"`
+	WorkflowDefinitionIDNotIn        []string `json:"workflowDefinitionIDNotIn,omitempty"`
+	WorkflowDefinitionIDGT           *string  `json:"workflowDefinitionIDGT,omitempty"`
+	WorkflowDefinitionIDGTE          *string  `json:"workflowDefinitionIDGTE,omitempty"`
+	WorkflowDefinitionIDLT           *string  `json:"workflowDefinitionIDLT,omitempty"`
+	WorkflowDefinitionIDLTE          *string  `json:"workflowDefinitionIDLTE,omitempty"`
+	WorkflowDefinitionIDContains     *string  `json:"workflowDefinitionIDContains,omitempty"`
+	WorkflowDefinitionIDHasPrefix    *string  `json:"workflowDefinitionIDHasPrefix,omitempty"`
+	WorkflowDefinitionIDHasSuffix    *string  `json:"workflowDefinitionIDHasSuffix,omitempty"`
+	WorkflowDefinitionIDIsNil        bool     `json:"workflowDefinitionIDIsNil,omitempty"`
+	WorkflowDefinitionIDNotNil       bool     `json:"workflowDefinitionIDNotNil,omitempty"`
+	WorkflowDefinitionIDEqualFold    *string  `json:"workflowDefinitionIDEqualFold,omitempty"`
+	WorkflowDefinitionIDContainsFold *string  `json:"workflowDefinitionIDContainsFold,omitempty"`
+
+	// "workflow_instance_id" field predicates.
+	WorkflowInstanceID             *string  `json:"workflowInstanceID,omitempty"`
+	WorkflowInstanceIDNEQ          *string  `json:"workflowInstanceIDNEQ,omitempty"`
+	WorkflowInstanceIDIn           []string `json:"workflowInstanceIDIn,omitempty"`
+	WorkflowInstanceIDNotIn        []string `json:"workflowInstanceIDNotIn,omitempty"`
+	WorkflowInstanceIDGT           *string  `json:"workflowInstanceIDGT,omitempty"`
+	WorkflowInstanceIDGTE          *string  `json:"workflowInstanceIDGTE,omitempty"`
+	WorkflowInstanceIDLT           *string  `json:"workflowInstanceIDLT,omitempty"`
+	WorkflowInstanceIDLTE          *string  `json:"workflowInstanceIDLTE,omitempty"`
+	WorkflowInstanceIDContains     *string  `json:"workflowInstanceIDContains,omitempty"`
+	WorkflowInstanceIDHasPrefix    *string  `json:"workflowInstanceIDHasPrefix,omitempty"`
+	WorkflowInstanceIDHasSuffix    *string  `json:"workflowInstanceIDHasSuffix,omitempty"`
+	WorkflowInstanceIDIsNil        bool     `json:"workflowInstanceIDIsNil,omitempty"`
+	WorkflowInstanceIDNotNil       bool     `json:"workflowInstanceIDNotNil,omitempty"`
+	WorkflowInstanceIDEqualFold    *string  `json:"workflowInstanceIDEqualFold,omitempty"`
+	WorkflowInstanceIDContainsFold *string  `json:"workflowInstanceIDContainsFold,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *EmailTemplateHistoryWhereInput) AddPredicates(predicates ...predicate.EmailTemplateHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the EmailTemplateHistoryWhereInput filter on the EmailTemplateHistoryQuery builder.
+func (i *EmailTemplateHistoryWhereInput) Filter(q *EmailTemplateHistoryQuery) (*EmailTemplateHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyEmailTemplateHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyEmailTemplateHistoryWhereInput is returned in case the EmailTemplateHistoryWhereInput is empty.
+var ErrEmptyEmailTemplateHistoryWhereInput = errors.New("historygenerated: empty predicate EmailTemplateHistoryWhereInput")
+
+// P returns a predicate for filtering emailtemplatehistories.
+// An error is returned if the input is empty or invalid.
+func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, error) {
+	var predicates []predicate.EmailTemplateHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, emailtemplatehistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.EmailTemplateHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, emailtemplatehistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.EmailTemplateHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, emailtemplatehistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, emailtemplatehistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, emailtemplatehistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, emailtemplatehistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, emailtemplatehistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, emailtemplatehistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, emailtemplatehistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, emailtemplatehistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, emailtemplatehistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, emailtemplatehistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, emailtemplatehistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, emailtemplatehistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
+	if i.Key != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyEQ(*i.Key))
+	}
+	if i.KeyNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyNEQ(*i.KeyNEQ))
+	}
+	if len(i.KeyIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.KeyIn(i.KeyIn...))
+	}
+	if len(i.KeyNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.KeyNotIn(i.KeyNotIn...))
+	}
+	if i.KeyGT != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyGT(*i.KeyGT))
+	}
+	if i.KeyGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyGTE(*i.KeyGTE))
+	}
+	if i.KeyLT != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyLT(*i.KeyLT))
+	}
+	if i.KeyLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyLTE(*i.KeyLTE))
+	}
+	if i.KeyContains != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyContains(*i.KeyContains))
+	}
+	if i.KeyHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyHasPrefix(*i.KeyHasPrefix))
+	}
+	if i.KeyHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyHasSuffix(*i.KeyHasSuffix))
+	}
+	if i.KeyEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyEqualFold(*i.KeyEqualFold))
+	}
+	if i.KeyContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.KeyContainsFold(*i.KeyContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, emailtemplatehistory.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, emailtemplatehistory.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, emailtemplatehistory.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, emailtemplatehistory.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.Format != nil {
+		predicates = append(predicates, emailtemplatehistory.FormatEQ(*i.Format))
+	}
+	if i.FormatNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.FormatNEQ(*i.FormatNEQ))
+	}
+	if len(i.FormatIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.FormatIn(i.FormatIn...))
+	}
+	if len(i.FormatNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.FormatNotIn(i.FormatNotIn...))
+	}
+	if i.Locale != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleEQ(*i.Locale))
+	}
+	if i.LocaleNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleNEQ(*i.LocaleNEQ))
+	}
+	if len(i.LocaleIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.LocaleIn(i.LocaleIn...))
+	}
+	if len(i.LocaleNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.LocaleNotIn(i.LocaleNotIn...))
+	}
+	if i.LocaleGT != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleGT(*i.LocaleGT))
+	}
+	if i.LocaleGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleGTE(*i.LocaleGTE))
+	}
+	if i.LocaleLT != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleLT(*i.LocaleLT))
+	}
+	if i.LocaleLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleLTE(*i.LocaleLTE))
+	}
+	if i.LocaleContains != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleContains(*i.LocaleContains))
+	}
+	if i.LocaleHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleHasPrefix(*i.LocaleHasPrefix))
+	}
+	if i.LocaleHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleHasSuffix(*i.LocaleHasSuffix))
+	}
+	if i.LocaleEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleEqualFold(*i.LocaleEqualFold))
+	}
+	if i.LocaleContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.LocaleContainsFold(*i.LocaleContainsFold))
+	}
+	if i.SubjectTemplate != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateEQ(*i.SubjectTemplate))
+	}
+	if i.SubjectTemplateNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateNEQ(*i.SubjectTemplateNEQ))
+	}
+	if len(i.SubjectTemplateIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateIn(i.SubjectTemplateIn...))
+	}
+	if len(i.SubjectTemplateNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateNotIn(i.SubjectTemplateNotIn...))
+	}
+	if i.SubjectTemplateGT != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateGT(*i.SubjectTemplateGT))
+	}
+	if i.SubjectTemplateGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateGTE(*i.SubjectTemplateGTE))
+	}
+	if i.SubjectTemplateLT != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateLT(*i.SubjectTemplateLT))
+	}
+	if i.SubjectTemplateLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateLTE(*i.SubjectTemplateLTE))
+	}
+	if i.SubjectTemplateContains != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateContains(*i.SubjectTemplateContains))
+	}
+	if i.SubjectTemplateHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateHasPrefix(*i.SubjectTemplateHasPrefix))
+	}
+	if i.SubjectTemplateHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateHasSuffix(*i.SubjectTemplateHasSuffix))
+	}
+	if i.SubjectTemplateIsNil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateIsNil())
+	}
+	if i.SubjectTemplateNotNil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateNotNil())
+	}
+	if i.SubjectTemplateEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateEqualFold(*i.SubjectTemplateEqualFold))
+	}
+	if i.SubjectTemplateContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.SubjectTemplateContainsFold(*i.SubjectTemplateContainsFold))
+	}
+	if i.PreheaderTemplate != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateEQ(*i.PreheaderTemplate))
+	}
+	if i.PreheaderTemplateNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateNEQ(*i.PreheaderTemplateNEQ))
+	}
+	if len(i.PreheaderTemplateIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateIn(i.PreheaderTemplateIn...))
+	}
+	if len(i.PreheaderTemplateNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateNotIn(i.PreheaderTemplateNotIn...))
+	}
+	if i.PreheaderTemplateGT != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateGT(*i.PreheaderTemplateGT))
+	}
+	if i.PreheaderTemplateGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateGTE(*i.PreheaderTemplateGTE))
+	}
+	if i.PreheaderTemplateLT != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateLT(*i.PreheaderTemplateLT))
+	}
+	if i.PreheaderTemplateLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateLTE(*i.PreheaderTemplateLTE))
+	}
+	if i.PreheaderTemplateContains != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateContains(*i.PreheaderTemplateContains))
+	}
+	if i.PreheaderTemplateHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateHasPrefix(*i.PreheaderTemplateHasPrefix))
+	}
+	if i.PreheaderTemplateHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateHasSuffix(*i.PreheaderTemplateHasSuffix))
+	}
+	if i.PreheaderTemplateIsNil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateIsNil())
+	}
+	if i.PreheaderTemplateNotNil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateNotNil())
+	}
+	if i.PreheaderTemplateEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateEqualFold(*i.PreheaderTemplateEqualFold))
+	}
+	if i.PreheaderTemplateContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.PreheaderTemplateContainsFold(*i.PreheaderTemplateContainsFold))
+	}
+	if i.BodyTemplate != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateEQ(*i.BodyTemplate))
+	}
+	if i.BodyTemplateNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateNEQ(*i.BodyTemplateNEQ))
+	}
+	if len(i.BodyTemplateIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateIn(i.BodyTemplateIn...))
+	}
+	if len(i.BodyTemplateNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateNotIn(i.BodyTemplateNotIn...))
+	}
+	if i.BodyTemplateGT != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateGT(*i.BodyTemplateGT))
+	}
+	if i.BodyTemplateGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateGTE(*i.BodyTemplateGTE))
+	}
+	if i.BodyTemplateLT != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateLT(*i.BodyTemplateLT))
+	}
+	if i.BodyTemplateLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateLTE(*i.BodyTemplateLTE))
+	}
+	if i.BodyTemplateContains != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateContains(*i.BodyTemplateContains))
+	}
+	if i.BodyTemplateHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateHasPrefix(*i.BodyTemplateHasPrefix))
+	}
+	if i.BodyTemplateHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateHasSuffix(*i.BodyTemplateHasSuffix))
+	}
+	if i.BodyTemplateIsNil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateIsNil())
+	}
+	if i.BodyTemplateNotNil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateNotNil())
+	}
+	if i.BodyTemplateEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateEqualFold(*i.BodyTemplateEqualFold))
+	}
+	if i.BodyTemplateContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.BodyTemplateContainsFold(*i.BodyTemplateContainsFold))
+	}
+	if i.TextTemplate != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateEQ(*i.TextTemplate))
+	}
+	if i.TextTemplateNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateNEQ(*i.TextTemplateNEQ))
+	}
+	if len(i.TextTemplateIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateIn(i.TextTemplateIn...))
+	}
+	if len(i.TextTemplateNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateNotIn(i.TextTemplateNotIn...))
+	}
+	if i.TextTemplateGT != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateGT(*i.TextTemplateGT))
+	}
+	if i.TextTemplateGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateGTE(*i.TextTemplateGTE))
+	}
+	if i.TextTemplateLT != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateLT(*i.TextTemplateLT))
+	}
+	if i.TextTemplateLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateLTE(*i.TextTemplateLTE))
+	}
+	if i.TextTemplateContains != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateContains(*i.TextTemplateContains))
+	}
+	if i.TextTemplateHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateHasPrefix(*i.TextTemplateHasPrefix))
+	}
+	if i.TextTemplateHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateHasSuffix(*i.TextTemplateHasSuffix))
+	}
+	if i.TextTemplateIsNil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateIsNil())
+	}
+	if i.TextTemplateNotNil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateNotNil())
+	}
+	if i.TextTemplateEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateEqualFold(*i.TextTemplateEqualFold))
+	}
+	if i.TextTemplateContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.TextTemplateContainsFold(*i.TextTemplateContainsFold))
+	}
+	if i.Active != nil {
+		predicates = append(predicates, emailtemplatehistory.ActiveEQ(*i.Active))
+	}
+	if i.ActiveNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.ActiveNEQ(*i.ActiveNEQ))
+	}
+	if i.Version != nil {
+		predicates = append(predicates, emailtemplatehistory.VersionEQ(*i.Version))
+	}
+	if i.VersionNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.VersionNEQ(*i.VersionNEQ))
+	}
+	if len(i.VersionIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.VersionIn(i.VersionIn...))
+	}
+	if len(i.VersionNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.VersionNotIn(i.VersionNotIn...))
+	}
+	if i.VersionGT != nil {
+		predicates = append(predicates, emailtemplatehistory.VersionGT(*i.VersionGT))
+	}
+	if i.VersionGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.VersionGTE(*i.VersionGTE))
+	}
+	if i.VersionLT != nil {
+		predicates = append(predicates, emailtemplatehistory.VersionLT(*i.VersionLT))
+	}
+	if i.VersionLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.VersionLTE(*i.VersionLTE))
+	}
+	if i.EmailBrandingID != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDEQ(*i.EmailBrandingID))
+	}
+	if i.EmailBrandingIDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDNEQ(*i.EmailBrandingIDNEQ))
+	}
+	if len(i.EmailBrandingIDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDIn(i.EmailBrandingIDIn...))
+	}
+	if len(i.EmailBrandingIDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDNotIn(i.EmailBrandingIDNotIn...))
+	}
+	if i.EmailBrandingIDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDGT(*i.EmailBrandingIDGT))
+	}
+	if i.EmailBrandingIDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDGTE(*i.EmailBrandingIDGTE))
+	}
+	if i.EmailBrandingIDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDLT(*i.EmailBrandingIDLT))
+	}
+	if i.EmailBrandingIDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDLTE(*i.EmailBrandingIDLTE))
+	}
+	if i.EmailBrandingIDContains != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDContains(*i.EmailBrandingIDContains))
+	}
+	if i.EmailBrandingIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDHasPrefix(*i.EmailBrandingIDHasPrefix))
+	}
+	if i.EmailBrandingIDHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDHasSuffix(*i.EmailBrandingIDHasSuffix))
+	}
+	if i.EmailBrandingIDIsNil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDIsNil())
+	}
+	if i.EmailBrandingIDNotNil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDNotNil())
+	}
+	if i.EmailBrandingIDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDEqualFold(*i.EmailBrandingIDEqualFold))
+	}
+	if i.EmailBrandingIDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.EmailBrandingIDContainsFold(*i.EmailBrandingIDContainsFold))
+	}
+	if i.IntegrationID != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDEQ(*i.IntegrationID))
+	}
+	if i.IntegrationIDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDNEQ(*i.IntegrationIDNEQ))
+	}
+	if len(i.IntegrationIDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDIn(i.IntegrationIDIn...))
+	}
+	if len(i.IntegrationIDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDNotIn(i.IntegrationIDNotIn...))
+	}
+	if i.IntegrationIDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDGT(*i.IntegrationIDGT))
+	}
+	if i.IntegrationIDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDGTE(*i.IntegrationIDGTE))
+	}
+	if i.IntegrationIDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDLT(*i.IntegrationIDLT))
+	}
+	if i.IntegrationIDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDLTE(*i.IntegrationIDLTE))
+	}
+	if i.IntegrationIDContains != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDContains(*i.IntegrationIDContains))
+	}
+	if i.IntegrationIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDHasPrefix(*i.IntegrationIDHasPrefix))
+	}
+	if i.IntegrationIDHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDHasSuffix(*i.IntegrationIDHasSuffix))
+	}
+	if i.IntegrationIDIsNil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDIsNil())
+	}
+	if i.IntegrationIDNotNil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDNotNil())
+	}
+	if i.IntegrationIDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDEqualFold(*i.IntegrationIDEqualFold))
+	}
+	if i.IntegrationIDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.IntegrationIDContainsFold(*i.IntegrationIDContainsFold))
+	}
+	if i.WorkflowDefinitionID != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDEQ(*i.WorkflowDefinitionID))
+	}
+	if i.WorkflowDefinitionIDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDNEQ(*i.WorkflowDefinitionIDNEQ))
+	}
+	if len(i.WorkflowDefinitionIDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDIn(i.WorkflowDefinitionIDIn...))
+	}
+	if len(i.WorkflowDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDNotIn(i.WorkflowDefinitionIDNotIn...))
+	}
+	if i.WorkflowDefinitionIDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDGT(*i.WorkflowDefinitionIDGT))
+	}
+	if i.WorkflowDefinitionIDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDGTE(*i.WorkflowDefinitionIDGTE))
+	}
+	if i.WorkflowDefinitionIDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDLT(*i.WorkflowDefinitionIDLT))
+	}
+	if i.WorkflowDefinitionIDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDLTE(*i.WorkflowDefinitionIDLTE))
+	}
+	if i.WorkflowDefinitionIDContains != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDContains(*i.WorkflowDefinitionIDContains))
+	}
+	if i.WorkflowDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDHasPrefix(*i.WorkflowDefinitionIDHasPrefix))
+	}
+	if i.WorkflowDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDHasSuffix(*i.WorkflowDefinitionIDHasSuffix))
+	}
+	if i.WorkflowDefinitionIDIsNil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDIsNil())
+	}
+	if i.WorkflowDefinitionIDNotNil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDNotNil())
+	}
+	if i.WorkflowDefinitionIDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDEqualFold(*i.WorkflowDefinitionIDEqualFold))
+	}
+	if i.WorkflowDefinitionIDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowDefinitionIDContainsFold(*i.WorkflowDefinitionIDContainsFold))
+	}
+	if i.WorkflowInstanceID != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDEQ(*i.WorkflowInstanceID))
+	}
+	if i.WorkflowInstanceIDNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDNEQ(*i.WorkflowInstanceIDNEQ))
+	}
+	if len(i.WorkflowInstanceIDIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDIn(i.WorkflowInstanceIDIn...))
+	}
+	if len(i.WorkflowInstanceIDNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDNotIn(i.WorkflowInstanceIDNotIn...))
+	}
+	if i.WorkflowInstanceIDGT != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDGT(*i.WorkflowInstanceIDGT))
+	}
+	if i.WorkflowInstanceIDGTE != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDGTE(*i.WorkflowInstanceIDGTE))
+	}
+	if i.WorkflowInstanceIDLT != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDLT(*i.WorkflowInstanceIDLT))
+	}
+	if i.WorkflowInstanceIDLTE != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDLTE(*i.WorkflowInstanceIDLTE))
+	}
+	if i.WorkflowInstanceIDContains != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDContains(*i.WorkflowInstanceIDContains))
+	}
+	if i.WorkflowInstanceIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDHasPrefix(*i.WorkflowInstanceIDHasPrefix))
+	}
+	if i.WorkflowInstanceIDHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDHasSuffix(*i.WorkflowInstanceIDHasSuffix))
+	}
+	if i.WorkflowInstanceIDIsNil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDIsNil())
+	}
+	if i.WorkflowInstanceIDNotNil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDNotNil())
+	}
+	if i.WorkflowInstanceIDEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDEqualFold(*i.WorkflowInstanceIDEqualFold))
+	}
+	if i.WorkflowInstanceIDContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.WorkflowInstanceIDContainsFold(*i.WorkflowInstanceIDContainsFold))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyEmailTemplateHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return emailtemplatehistory.And(predicates...), nil
 	}
 }
 
@@ -22006,21 +25060,12 @@ type EntityHistoryWhereInput struct {
 	EntityTypeIDContainsFold *string  `json:"entityTypeIDContainsFold,omitempty"`
 
 	// "status" field predicates.
-	Status             *string  `json:"status,omitempty"`
-	StatusNEQ          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGT           *string  `json:"statusGT,omitempty"`
-	StatusGTE          *string  `json:"statusGTE,omitempty"`
-	StatusLT           *string  `json:"statusLT,omitempty"`
-	StatusLTE          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        bool     `json:"statusIsNil,omitempty"`
-	StatusNotNil       bool     `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
+	Status       *enums.EntityStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.EntityStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.EntityStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.EntityStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                 `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                 `json:"statusNotNil,omitempty"`
 
 	// "approved_for_use" field predicates.
 	ApprovedForUse       *bool `json:"approvedForUse,omitempty"`
@@ -22263,6 +25308,21 @@ type EntityHistoryWhereInput struct {
 	ContractRenewalAtLTE    *models.DateTime  `json:"contractRenewalAtLTE,omitempty"`
 	ContractRenewalAtIsNil  bool              `json:"contractRenewalAtIsNil,omitempty"`
 	ContractRenewalAtNotNil bool              `json:"contractRenewalAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "domains" JSON-string-array predicates.
+	DomainsHas *string `json:"domainsHas,omitempty"`
+
+	// "linked_asset_ids" JSON-string-array predicates.
+	LinkedAssetIdsHas *string `json:"linkedAssetIdsHas,omitempty"`
+
+	// "provided_services" JSON-string-array predicates.
+	ProvidedServicesHas *string `json:"providedServicesHas,omitempty"`
+
+	// "links" JSON-string-array predicates.
+	LinksHas *string `json:"linksHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -23641,38 +26701,11 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, entityhistory.StatusNotIn(i.StatusNotIn...))
 	}
-	if i.StatusGT != nil {
-		predicates = append(predicates, entityhistory.StatusGT(*i.StatusGT))
-	}
-	if i.StatusGTE != nil {
-		predicates = append(predicates, entityhistory.StatusGTE(*i.StatusGTE))
-	}
-	if i.StatusLT != nil {
-		predicates = append(predicates, entityhistory.StatusLT(*i.StatusLT))
-	}
-	if i.StatusLTE != nil {
-		predicates = append(predicates, entityhistory.StatusLTE(*i.StatusLTE))
-	}
-	if i.StatusContains != nil {
-		predicates = append(predicates, entityhistory.StatusContains(*i.StatusContains))
-	}
-	if i.StatusHasPrefix != nil {
-		predicates = append(predicates, entityhistory.StatusHasPrefix(*i.StatusHasPrefix))
-	}
-	if i.StatusHasSuffix != nil {
-		predicates = append(predicates, entityhistory.StatusHasSuffix(*i.StatusHasSuffix))
-	}
 	if i.StatusIsNil {
 		predicates = append(predicates, entityhistory.StatusIsNil())
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, entityhistory.StatusNotNil())
-	}
-	if i.StatusEqualFold != nil {
-		predicates = append(predicates, entityhistory.StatusEqualFold(*i.StatusEqualFold))
-	}
-	if i.StatusContainsFold != nil {
-		predicates = append(predicates, entityhistory.StatusContainsFold(*i.StatusContainsFold))
 	}
 	if i.ApprovedForUse != nil {
 		predicates = append(predicates, entityhistory.ApprovedForUseEQ(*i.ApprovedForUse))
@@ -24275,6 +27308,41 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 		predicates = append(predicates, entityhistory.ContractRenewalAtNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldTags, v))
+		})
+	}
+
+	if i.DomainsHas != nil {
+		v := *i.DomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldDomains, v))
+		})
+	}
+
+	if i.LinkedAssetIdsHas != nil {
+		v := *i.LinkedAssetIdsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldLinkedAssetIds, v))
+		})
+	}
+
+	if i.ProvidedServicesHas != nil {
+		v := *i.ProvidedServicesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldProvidedServices, v))
+		})
+	}
+
+	if i.LinksHas != nil {
+		v := *i.LinksHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entityhistory.FieldLinks, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEntityHistoryWhereInput
@@ -24466,6 +27534,9 @@ type EntityTypeHistoryWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -24987,6 +28058,13 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 		predicates = append(predicates, entitytypehistory.NameContainsFold(*i.NameContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(entitytypehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEntityTypeHistoryWhereInput
@@ -25331,6 +28409,9 @@ type EvidenceHistoryWhereInput struct {
 	StatusNotIn  []enums.EvidenceStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  bool                   `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                   `json:"statusNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -26245,6 +29326,13 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 		predicates = append(predicates, evidencehistory.StatusNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(evidencehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyEvidenceHistoryWhereInput
@@ -26723,6 +29811,9 @@ type FileHistoryWhereInput struct {
 	LastAccessedAtLTE    *time.Time  `json:"lastAccessedAtLTE,omitempty"`
 	LastAccessedAtIsNil  bool        `json:"lastAccessedAtIsNil,omitempty"`
 	LastAccessedAtNotNil bool        `json:"lastAccessedAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -27995,6 +31086,13 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	}
 	if i.LastAccessedAtNotNil {
 		predicates = append(predicates, filehistory.LastAccessedAtNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(filehistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -29585,6 +32683,21 @@ type FindingHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "categories" JSON-string-array predicates.
+	CategoriesHas *string `json:"categoriesHas,omitempty"`
+
+	// "references" JSON-string-array predicates.
+	ReferencesHas *string `json:"referencesHas,omitempty"`
+
+	// "steps_to_reproduce" JSON-string-array predicates.
+	StepsToReproduceHas *string `json:"stepsToReproduceHas,omitempty"`
+
+	// "targets" JSON-string-array predicates.
+	TargetsHas *string `json:"targetsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -31351,6 +34464,41 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 		predicates = append(predicates, findinghistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldTags, v))
+		})
+	}
+
+	if i.CategoriesHas != nil {
+		v := *i.CategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldCategories, v))
+		})
+	}
+
+	if i.ReferencesHas != nil {
+		v := *i.ReferencesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldReferences, v))
+		})
+	}
+
+	if i.StepsToReproduceHas != nil {
+		v := *i.StepsToReproduceHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldStepsToReproduce, v))
+		})
+	}
+
+	if i.TargetsHas != nil {
+		v := *i.TargetsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(findinghistory.FieldTargets, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyFindingHistoryWhereInput
@@ -31595,6 +34743,9 @@ type GroupHistoryWhereInput struct {
 	ScimGroupMailingNotNil       bool     `json:"scimGroupMailingNotNil,omitempty"`
 	ScimGroupMailingEqualFold    *string  `json:"scimGroupMailingEqualFold,omitempty"`
 	ScimGroupMailingContainsFold *string  `json:"scimGroupMailingContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -32249,6 +35400,13 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.ScimGroupMailingContainsFold != nil {
 		predicates = append(predicates, grouphistory.ScimGroupMailingContainsFold(*i.ScimGroupMailingContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(grouphistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -34861,6 +38019,9 @@ type IdentityHolderHistoryWhereInput struct {
 	ExternalReferenceIDNotNil       bool     `json:"externalReferenceIDNotNil,omitempty"`
 	ExternalReferenceIDEqualFold    *string  `json:"externalReferenceIDEqualFold,omitempty"`
 	ExternalReferenceIDContainsFold *string  `json:"externalReferenceIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36237,6 +39398,13 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 		predicates = append(predicates, identityholderhistory.ExternalReferenceIDContainsFold(*i.ExternalReferenceIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(identityholderhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyIdentityHolderHistoryWhereInput
@@ -36530,6 +39698,9 @@ type IntegrationHistoryWhereInput struct {
 	IntegrationTypeNotNil       bool     `json:"integrationTypeNotNil,omitempty"`
 	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
 	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -37321,6 +40492,13 @@ func (i *IntegrationHistoryWhereInput) P() (predicate.IntegrationHistory, error)
 		predicates = append(predicates, integrationhistory.IntegrationTypeContainsFold(*i.IntegrationTypeContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(integrationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyIntegrationHistoryWhereInput
@@ -37771,6 +40949,27 @@ type InternalPolicyHistoryWhereInput struct {
 	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
 	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
 	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tag_suggestions" JSON-string-array predicates.
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+
+	// "dismissed_tag_suggestions" JSON-string-array predicates.
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+
+	// "control_suggestions" JSON-string-array predicates.
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+
+	// "dismissed_control_suggestions" JSON-string-array predicates.
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+
+	// "improvement_suggestions" JSON-string-array predicates.
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+
+	// "dismissed_improvement_suggestions" JSON-string-array predicates.
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -38961,6 +42160,55 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 		predicates = append(predicates, internalpolicyhistory.WorkflowEligibleMarkerNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldTags, v))
+		})
+	}
+
+	if i.TagSuggestionsHas != nil {
+		v := *i.TagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldTagSuggestions, v))
+		})
+	}
+
+	if i.DismissedTagSuggestionsHas != nil {
+		v := *i.DismissedTagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldDismissedTagSuggestions, v))
+		})
+	}
+
+	if i.ControlSuggestionsHas != nil {
+		v := *i.ControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldControlSuggestions, v))
+		})
+	}
+
+	if i.DismissedControlSuggestionsHas != nil {
+		v := *i.DismissedControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldDismissedControlSuggestions, v))
+		})
+	}
+
+	if i.ImprovementSuggestionsHas != nil {
+		v := *i.ImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldImprovementSuggestions, v))
+		})
+	}
+
+	if i.DismissedImprovementSuggestionsHas != nil {
+		v := *i.DismissedImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(internalpolicyhistory.FieldDismissedImprovementSuggestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyInternalPolicyHistoryWhereInput
@@ -39190,6 +42438,9 @@ type JobTemplateHistoryWhereInput struct {
 	PlatformNEQ   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
 	PlatformIn    []enums.JobPlatformType `json:"platformIn,omitempty"`
 	PlatformNotIn []enums.JobPlatformType `json:"platformNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39807,6 +43058,13 @@ func (i *JobTemplateHistoryWhereInput) P() (predicate.JobTemplateHistory, error)
 		predicates = append(predicates, jobtemplatehistory.PlatformNotIn(i.PlatformNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(jobtemplatehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyJobTemplateHistoryWhereInput
@@ -39956,6 +43214,9 @@ type MappableDomainHistoryWhereInput struct {
 	ZoneIDHasSuffix    *string  `json:"zoneIDHasSuffix,omitempty"`
 	ZoneIDEqualFold    *string  `json:"zoneIDEqualFold,omitempty"`
 	ZoneIDContainsFold *string  `json:"zoneIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -40369,6 +43630,13 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 		predicates = append(predicates, mappabledomainhistory.ZoneIDContainsFold(*i.ZoneIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(mappabledomainhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyMappableDomainHistoryWhereInput
@@ -40588,6 +43856,9 @@ type MappedControlHistoryWhereInput struct {
 	SourceNotIn  []enums.MappingSource `json:"sourceNotIn,omitempty"`
 	SourceIsNil  bool                  `json:"sourceIsNil,omitempty"`
 	SourceNotNil bool                  `json:"sourceNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -41175,6 +44446,13 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 		predicates = append(predicates, mappedcontrolhistory.SourceNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(mappedcontrolhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyMappedControlHistoryWhereInput
@@ -41415,6 +44693,9 @@ type NarrativeHistoryWhereInput struct {
 	DetailsNotNil       bool     `json:"detailsNotNil,omitempty"`
 	DetailsEqualFold    *string  `json:"detailsEqualFold,omitempty"`
 	DetailsContainsFold *string  `json:"detailsContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -42063,6 +45344,13 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	}
 	if i.DetailsContainsFold != nil {
 		predicates = append(predicates, narrativehistory.DetailsContainsFold(*i.DetailsContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(narrativehistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -42957,6 +46245,2634 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	}
 }
 
+// NotificationPreferenceHistoryWhereInput represents a where input for filtering NotificationPreferenceHistory queries.
+type NotificationPreferenceHistoryWhereInput struct {
+	Predicates []predicate.NotificationPreferenceHistory  `json:"-"`
+	Not        *NotificationPreferenceHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*NotificationPreferenceHistoryWhereInput `json:"or,omitempty"`
+	And        []*NotificationPreferenceHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "user_id" field predicates.
+	UserID             *string  `json:"userID,omitempty"`
+	UserIDNEQ          *string  `json:"userIDNEQ,omitempty"`
+	UserIDIn           []string `json:"userIDIn,omitempty"`
+	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
+	UserIDGT           *string  `json:"userIDGT,omitempty"`
+	UserIDGTE          *string  `json:"userIDGTE,omitempty"`
+	UserIDLT           *string  `json:"userIDLT,omitempty"`
+	UserIDLTE          *string  `json:"userIDLTE,omitempty"`
+	UserIDContains     *string  `json:"userIDContains,omitempty"`
+	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
+	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
+	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
+	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
+
+	// "channel" field predicates.
+	Channel      *enums.Channel  `json:"channel,omitempty"`
+	ChannelNEQ   *enums.Channel  `json:"channelNEQ,omitempty"`
+	ChannelIn    []enums.Channel `json:"channelIn,omitempty"`
+	ChannelNotIn []enums.Channel `json:"channelNotIn,omitempty"`
+
+	// "status" field predicates.
+	Status      *enums.NotificationChannelStatus  `json:"status,omitempty"`
+	StatusNEQ   *enums.NotificationChannelStatus  `json:"statusNEQ,omitempty"`
+	StatusIn    []enums.NotificationChannelStatus `json:"statusIn,omitempty"`
+	StatusNotIn []enums.NotificationChannelStatus `json:"statusNotIn,omitempty"`
+
+	// "provider" field predicates.
+	Provider             *string  `json:"provider,omitempty"`
+	ProviderNEQ          *string  `json:"providerNEQ,omitempty"`
+	ProviderIn           []string `json:"providerIn,omitempty"`
+	ProviderNotIn        []string `json:"providerNotIn,omitempty"`
+	ProviderGT           *string  `json:"providerGT,omitempty"`
+	ProviderGTE          *string  `json:"providerGTE,omitempty"`
+	ProviderLT           *string  `json:"providerLT,omitempty"`
+	ProviderLTE          *string  `json:"providerLTE,omitempty"`
+	ProviderContains     *string  `json:"providerContains,omitempty"`
+	ProviderHasPrefix    *string  `json:"providerHasPrefix,omitempty"`
+	ProviderHasSuffix    *string  `json:"providerHasSuffix,omitempty"`
+	ProviderIsNil        bool     `json:"providerIsNil,omitempty"`
+	ProviderNotNil       bool     `json:"providerNotNil,omitempty"`
+	ProviderEqualFold    *string  `json:"providerEqualFold,omitempty"`
+	ProviderContainsFold *string  `json:"providerContainsFold,omitempty"`
+
+	// "destination" field predicates.
+	Destination             *string  `json:"destination,omitempty"`
+	DestinationNEQ          *string  `json:"destinationNEQ,omitempty"`
+	DestinationIn           []string `json:"destinationIn,omitempty"`
+	DestinationNotIn        []string `json:"destinationNotIn,omitempty"`
+	DestinationGT           *string  `json:"destinationGT,omitempty"`
+	DestinationGTE          *string  `json:"destinationGTE,omitempty"`
+	DestinationLT           *string  `json:"destinationLT,omitempty"`
+	DestinationLTE          *string  `json:"destinationLTE,omitempty"`
+	DestinationContains     *string  `json:"destinationContains,omitempty"`
+	DestinationHasPrefix    *string  `json:"destinationHasPrefix,omitempty"`
+	DestinationHasSuffix    *string  `json:"destinationHasSuffix,omitempty"`
+	DestinationIsNil        bool     `json:"destinationIsNil,omitempty"`
+	DestinationNotNil       bool     `json:"destinationNotNil,omitempty"`
+	DestinationEqualFold    *string  `json:"destinationEqualFold,omitempty"`
+	DestinationContainsFold *string  `json:"destinationContainsFold,omitempty"`
+
+	// "enabled" field predicates.
+	Enabled    *bool `json:"enabled,omitempty"`
+	EnabledNEQ *bool `json:"enabledNEQ,omitempty"`
+
+	// "cadence" field predicates.
+	Cadence      *enums.NotificationCadence  `json:"cadence,omitempty"`
+	CadenceNEQ   *enums.NotificationCadence  `json:"cadenceNEQ,omitempty"`
+	CadenceIn    []enums.NotificationCadence `json:"cadenceIn,omitempty"`
+	CadenceNotIn []enums.NotificationCadence `json:"cadenceNotIn,omitempty"`
+
+	// "priority" field predicates.
+	Priority       *enums.Priority  `json:"priority,omitempty"`
+	PriorityNEQ    *enums.Priority  `json:"priorityNEQ,omitempty"`
+	PriorityIn     []enums.Priority `json:"priorityIn,omitempty"`
+	PriorityNotIn  []enums.Priority `json:"priorityNotIn,omitempty"`
+	PriorityIsNil  bool             `json:"priorityIsNil,omitempty"`
+	PriorityNotNil bool             `json:"priorityNotNil,omitempty"`
+
+	// "template_id" field predicates.
+	TemplateID             *string  `json:"templateID,omitempty"`
+	TemplateIDNEQ          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
+	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
+	TemplateIDGT           *string  `json:"templateIDGT,omitempty"`
+	TemplateIDGTE          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIDLT           *string  `json:"templateIDLT,omitempty"`
+	TemplateIDLTE          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
+	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
+	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        bool     `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       bool     `json:"templateIDNotNil,omitempty"`
+	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
+	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+
+	// "mute_until" field predicates.
+	MuteUntil       *time.Time  `json:"muteUntil,omitempty"`
+	MuteUntilNEQ    *time.Time  `json:"muteUntilNEQ,omitempty"`
+	MuteUntilIn     []time.Time `json:"muteUntilIn,omitempty"`
+	MuteUntilNotIn  []time.Time `json:"muteUntilNotIn,omitempty"`
+	MuteUntilGT     *time.Time  `json:"muteUntilGT,omitempty"`
+	MuteUntilGTE    *time.Time  `json:"muteUntilGTE,omitempty"`
+	MuteUntilLT     *time.Time  `json:"muteUntilLT,omitempty"`
+	MuteUntilLTE    *time.Time  `json:"muteUntilLTE,omitempty"`
+	MuteUntilIsNil  bool        `json:"muteUntilIsNil,omitempty"`
+	MuteUntilNotNil bool        `json:"muteUntilNotNil,omitempty"`
+
+	// "quiet_hours_start" field predicates.
+	QuietHoursStart             *string  `json:"quietHoursStart,omitempty"`
+	QuietHoursStartNEQ          *string  `json:"quietHoursStartNEQ,omitempty"`
+	QuietHoursStartIn           []string `json:"quietHoursStartIn,omitempty"`
+	QuietHoursStartNotIn        []string `json:"quietHoursStartNotIn,omitempty"`
+	QuietHoursStartGT           *string  `json:"quietHoursStartGT,omitempty"`
+	QuietHoursStartGTE          *string  `json:"quietHoursStartGTE,omitempty"`
+	QuietHoursStartLT           *string  `json:"quietHoursStartLT,omitempty"`
+	QuietHoursStartLTE          *string  `json:"quietHoursStartLTE,omitempty"`
+	QuietHoursStartContains     *string  `json:"quietHoursStartContains,omitempty"`
+	QuietHoursStartHasPrefix    *string  `json:"quietHoursStartHasPrefix,omitempty"`
+	QuietHoursStartHasSuffix    *string  `json:"quietHoursStartHasSuffix,omitempty"`
+	QuietHoursStartIsNil        bool     `json:"quietHoursStartIsNil,omitempty"`
+	QuietHoursStartNotNil       bool     `json:"quietHoursStartNotNil,omitempty"`
+	QuietHoursStartEqualFold    *string  `json:"quietHoursStartEqualFold,omitempty"`
+	QuietHoursStartContainsFold *string  `json:"quietHoursStartContainsFold,omitempty"`
+
+	// "quiet_hours_end" field predicates.
+	QuietHoursEnd             *string  `json:"quietHoursEnd,omitempty"`
+	QuietHoursEndNEQ          *string  `json:"quietHoursEndNEQ,omitempty"`
+	QuietHoursEndIn           []string `json:"quietHoursEndIn,omitempty"`
+	QuietHoursEndNotIn        []string `json:"quietHoursEndNotIn,omitempty"`
+	QuietHoursEndGT           *string  `json:"quietHoursEndGT,omitempty"`
+	QuietHoursEndGTE          *string  `json:"quietHoursEndGTE,omitempty"`
+	QuietHoursEndLT           *string  `json:"quietHoursEndLT,omitempty"`
+	QuietHoursEndLTE          *string  `json:"quietHoursEndLTE,omitempty"`
+	QuietHoursEndContains     *string  `json:"quietHoursEndContains,omitempty"`
+	QuietHoursEndHasPrefix    *string  `json:"quietHoursEndHasPrefix,omitempty"`
+	QuietHoursEndHasSuffix    *string  `json:"quietHoursEndHasSuffix,omitempty"`
+	QuietHoursEndIsNil        bool     `json:"quietHoursEndIsNil,omitempty"`
+	QuietHoursEndNotNil       bool     `json:"quietHoursEndNotNil,omitempty"`
+	QuietHoursEndEqualFold    *string  `json:"quietHoursEndEqualFold,omitempty"`
+	QuietHoursEndContainsFold *string  `json:"quietHoursEndContainsFold,omitempty"`
+
+	// "timezone" field predicates.
+	Timezone             *string  `json:"timezone,omitempty"`
+	TimezoneNEQ          *string  `json:"timezoneNEQ,omitempty"`
+	TimezoneIn           []string `json:"timezoneIn,omitempty"`
+	TimezoneNotIn        []string `json:"timezoneNotIn,omitempty"`
+	TimezoneGT           *string  `json:"timezoneGT,omitempty"`
+	TimezoneGTE          *string  `json:"timezoneGTE,omitempty"`
+	TimezoneLT           *string  `json:"timezoneLT,omitempty"`
+	TimezoneLTE          *string  `json:"timezoneLTE,omitempty"`
+	TimezoneContains     *string  `json:"timezoneContains,omitempty"`
+	TimezoneHasPrefix    *string  `json:"timezoneHasPrefix,omitempty"`
+	TimezoneHasSuffix    *string  `json:"timezoneHasSuffix,omitempty"`
+	TimezoneIsNil        bool     `json:"timezoneIsNil,omitempty"`
+	TimezoneNotNil       bool     `json:"timezoneNotNil,omitempty"`
+	TimezoneEqualFold    *string  `json:"timezoneEqualFold,omitempty"`
+	TimezoneContainsFold *string  `json:"timezoneContainsFold,omitempty"`
+
+	// "is_default" field predicates.
+	IsDefault    *bool `json:"isDefault,omitempty"`
+	IsDefaultNEQ *bool `json:"isDefaultNEQ,omitempty"`
+
+	// "verified_at" field predicates.
+	VerifiedAt       *time.Time  `json:"verifiedAt,omitempty"`
+	VerifiedAtNEQ    *time.Time  `json:"verifiedAtNEQ,omitempty"`
+	VerifiedAtIn     []time.Time `json:"verifiedAtIn,omitempty"`
+	VerifiedAtNotIn  []time.Time `json:"verifiedAtNotIn,omitempty"`
+	VerifiedAtGT     *time.Time  `json:"verifiedAtGT,omitempty"`
+	VerifiedAtGTE    *time.Time  `json:"verifiedAtGTE,omitempty"`
+	VerifiedAtLT     *time.Time  `json:"verifiedAtLT,omitempty"`
+	VerifiedAtLTE    *time.Time  `json:"verifiedAtLTE,omitempty"`
+	VerifiedAtIsNil  bool        `json:"verifiedAtIsNil,omitempty"`
+	VerifiedAtNotNil bool        `json:"verifiedAtNotNil,omitempty"`
+
+	// "last_used_at" field predicates.
+	LastUsedAt       *time.Time  `json:"lastUsedAt,omitempty"`
+	LastUsedAtNEQ    *time.Time  `json:"lastUsedAtNEQ,omitempty"`
+	LastUsedAtIn     []time.Time `json:"lastUsedAtIn,omitempty"`
+	LastUsedAtNotIn  []time.Time `json:"lastUsedAtNotIn,omitempty"`
+	LastUsedAtGT     *time.Time  `json:"lastUsedAtGT,omitempty"`
+	LastUsedAtGTE    *time.Time  `json:"lastUsedAtGTE,omitempty"`
+	LastUsedAtLT     *time.Time  `json:"lastUsedAtLT,omitempty"`
+	LastUsedAtLTE    *time.Time  `json:"lastUsedAtLTE,omitempty"`
+	LastUsedAtIsNil  bool        `json:"lastUsedAtIsNil,omitempty"`
+	LastUsedAtNotNil bool        `json:"lastUsedAtNotNil,omitempty"`
+
+	// "last_error" field predicates.
+	LastError             *string  `json:"lastError,omitempty"`
+	LastErrorNEQ          *string  `json:"lastErrorNEQ,omitempty"`
+	LastErrorIn           []string `json:"lastErrorIn,omitempty"`
+	LastErrorNotIn        []string `json:"lastErrorNotIn,omitempty"`
+	LastErrorGT           *string  `json:"lastErrorGT,omitempty"`
+	LastErrorGTE          *string  `json:"lastErrorGTE,omitempty"`
+	LastErrorLT           *string  `json:"lastErrorLT,omitempty"`
+	LastErrorLTE          *string  `json:"lastErrorLTE,omitempty"`
+	LastErrorContains     *string  `json:"lastErrorContains,omitempty"`
+	LastErrorHasPrefix    *string  `json:"lastErrorHasPrefix,omitempty"`
+	LastErrorHasSuffix    *string  `json:"lastErrorHasSuffix,omitempty"`
+	LastErrorIsNil        bool     `json:"lastErrorIsNil,omitempty"`
+	LastErrorNotNil       bool     `json:"lastErrorNotNil,omitempty"`
+	LastErrorEqualFold    *string  `json:"lastErrorEqualFold,omitempty"`
+	LastErrorContainsFold *string  `json:"lastErrorContainsFold,omitempty"`
+
+	// "topic_patterns" JSON-string-array predicates.
+	TopicPatternsHas *string `json:"topicPatternsHas,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *NotificationPreferenceHistoryWhereInput) AddPredicates(predicates ...predicate.NotificationPreferenceHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the NotificationPreferenceHistoryWhereInput filter on the NotificationPreferenceHistoryQuery builder.
+func (i *NotificationPreferenceHistoryWhereInput) Filter(q *NotificationPreferenceHistoryQuery) (*NotificationPreferenceHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyNotificationPreferenceHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyNotificationPreferenceHistoryWhereInput is returned in case the NotificationPreferenceHistoryWhereInput is empty.
+var ErrEmptyNotificationPreferenceHistoryWhereInput = errors.New("historygenerated: empty predicate NotificationPreferenceHistoryWhereInput")
+
+// P returns a predicate for filtering notificationpreferencehistories.
+// An error is returned if the input is empty or invalid.
+func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPreferenceHistory, error) {
+	var predicates []predicate.NotificationPreferenceHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, notificationpreferencehistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.NotificationPreferenceHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, notificationpreferencehistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.NotificationPreferenceHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, notificationpreferencehistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, notificationpreferencehistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, notificationpreferencehistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, notificationpreferencehistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.UserID != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDEQ(*i.UserID))
+	}
+	if i.UserIDNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDNEQ(*i.UserIDNEQ))
+	}
+	if len(i.UserIDIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.UserIDIn(i.UserIDIn...))
+	}
+	if len(i.UserIDNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.UserIDNotIn(i.UserIDNotIn...))
+	}
+	if i.UserIDGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDGT(*i.UserIDGT))
+	}
+	if i.UserIDGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDGTE(*i.UserIDGTE))
+	}
+	if i.UserIDLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDLT(*i.UserIDLT))
+	}
+	if i.UserIDLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDLTE(*i.UserIDLTE))
+	}
+	if i.UserIDContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDContains(*i.UserIDContains))
+	}
+	if i.UserIDHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDHasPrefix(*i.UserIDHasPrefix))
+	}
+	if i.UserIDHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDHasSuffix(*i.UserIDHasSuffix))
+	}
+	if i.UserIDEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDEqualFold(*i.UserIDEqualFold))
+	}
+	if i.UserIDContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.UserIDContainsFold(*i.UserIDContainsFold))
+	}
+	if i.Channel != nil {
+		predicates = append(predicates, notificationpreferencehistory.ChannelEQ(*i.Channel))
+	}
+	if i.ChannelNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.ChannelNEQ(*i.ChannelNEQ))
+	}
+	if len(i.ChannelIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.ChannelIn(i.ChannelIn...))
+	}
+	if len(i.ChannelNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.ChannelNotIn(i.ChannelNotIn...))
+	}
+	if i.Status != nil {
+		predicates = append(predicates, notificationpreferencehistory.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.Provider != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderEQ(*i.Provider))
+	}
+	if i.ProviderNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderNEQ(*i.ProviderNEQ))
+	}
+	if len(i.ProviderIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.ProviderIn(i.ProviderIn...))
+	}
+	if len(i.ProviderNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.ProviderNotIn(i.ProviderNotIn...))
+	}
+	if i.ProviderGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderGT(*i.ProviderGT))
+	}
+	if i.ProviderGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderGTE(*i.ProviderGTE))
+	}
+	if i.ProviderLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderLT(*i.ProviderLT))
+	}
+	if i.ProviderLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderLTE(*i.ProviderLTE))
+	}
+	if i.ProviderContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderContains(*i.ProviderContains))
+	}
+	if i.ProviderHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderHasPrefix(*i.ProviderHasPrefix))
+	}
+	if i.ProviderHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderHasSuffix(*i.ProviderHasSuffix))
+	}
+	if i.ProviderIsNil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderIsNil())
+	}
+	if i.ProviderNotNil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderNotNil())
+	}
+	if i.ProviderEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderEqualFold(*i.ProviderEqualFold))
+	}
+	if i.ProviderContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.ProviderContainsFold(*i.ProviderContainsFold))
+	}
+	if i.Destination != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationEQ(*i.Destination))
+	}
+	if i.DestinationNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationNEQ(*i.DestinationNEQ))
+	}
+	if len(i.DestinationIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.DestinationIn(i.DestinationIn...))
+	}
+	if len(i.DestinationNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.DestinationNotIn(i.DestinationNotIn...))
+	}
+	if i.DestinationGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationGT(*i.DestinationGT))
+	}
+	if i.DestinationGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationGTE(*i.DestinationGTE))
+	}
+	if i.DestinationLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationLT(*i.DestinationLT))
+	}
+	if i.DestinationLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationLTE(*i.DestinationLTE))
+	}
+	if i.DestinationContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationContains(*i.DestinationContains))
+	}
+	if i.DestinationHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationHasPrefix(*i.DestinationHasPrefix))
+	}
+	if i.DestinationHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationHasSuffix(*i.DestinationHasSuffix))
+	}
+	if i.DestinationIsNil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationIsNil())
+	}
+	if i.DestinationNotNil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationNotNil())
+	}
+	if i.DestinationEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationEqualFold(*i.DestinationEqualFold))
+	}
+	if i.DestinationContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.DestinationContainsFold(*i.DestinationContainsFold))
+	}
+	if i.Enabled != nil {
+		predicates = append(predicates, notificationpreferencehistory.EnabledEQ(*i.Enabled))
+	}
+	if i.EnabledNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.EnabledNEQ(*i.EnabledNEQ))
+	}
+	if i.Cadence != nil {
+		predicates = append(predicates, notificationpreferencehistory.CadenceEQ(*i.Cadence))
+	}
+	if i.CadenceNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.CadenceNEQ(*i.CadenceNEQ))
+	}
+	if len(i.CadenceIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.CadenceIn(i.CadenceIn...))
+	}
+	if len(i.CadenceNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.CadenceNotIn(i.CadenceNotIn...))
+	}
+	if i.Priority != nil {
+		predicates = append(predicates, notificationpreferencehistory.PriorityEQ(*i.Priority))
+	}
+	if i.PriorityNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.PriorityNEQ(*i.PriorityNEQ))
+	}
+	if len(i.PriorityIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.PriorityIn(i.PriorityIn...))
+	}
+	if len(i.PriorityNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.PriorityNotIn(i.PriorityNotIn...))
+	}
+	if i.PriorityIsNil {
+		predicates = append(predicates, notificationpreferencehistory.PriorityIsNil())
+	}
+	if i.PriorityNotNil {
+		predicates = append(predicates, notificationpreferencehistory.PriorityNotNil())
+	}
+	if i.TemplateID != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDEQ(*i.TemplateID))
+	}
+	if i.TemplateIDNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDNEQ(*i.TemplateIDNEQ))
+	}
+	if len(i.TemplateIDIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDIn(i.TemplateIDIn...))
+	}
+	if len(i.TemplateIDNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDNotIn(i.TemplateIDNotIn...))
+	}
+	if i.TemplateIDGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDGT(*i.TemplateIDGT))
+	}
+	if i.TemplateIDGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDGTE(*i.TemplateIDGTE))
+	}
+	if i.TemplateIDLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDLT(*i.TemplateIDLT))
+	}
+	if i.TemplateIDLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDLTE(*i.TemplateIDLTE))
+	}
+	if i.TemplateIDContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDContains(*i.TemplateIDContains))
+	}
+	if i.TemplateIDHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDHasPrefix(*i.TemplateIDHasPrefix))
+	}
+	if i.TemplateIDHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDHasSuffix(*i.TemplateIDHasSuffix))
+	}
+	if i.TemplateIDIsNil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDIsNil())
+	}
+	if i.TemplateIDNotNil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDNotNil())
+	}
+	if i.TemplateIDEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDEqualFold(*i.TemplateIDEqualFold))
+	}
+	if i.TemplateIDContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.TemplateIDContainsFold(*i.TemplateIDContainsFold))
+	}
+	if i.MuteUntil != nil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilEQ(*i.MuteUntil))
+	}
+	if i.MuteUntilNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilNEQ(*i.MuteUntilNEQ))
+	}
+	if len(i.MuteUntilIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilIn(i.MuteUntilIn...))
+	}
+	if len(i.MuteUntilNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilNotIn(i.MuteUntilNotIn...))
+	}
+	if i.MuteUntilGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilGT(*i.MuteUntilGT))
+	}
+	if i.MuteUntilGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilGTE(*i.MuteUntilGTE))
+	}
+	if i.MuteUntilLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilLT(*i.MuteUntilLT))
+	}
+	if i.MuteUntilLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilLTE(*i.MuteUntilLTE))
+	}
+	if i.MuteUntilIsNil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilIsNil())
+	}
+	if i.MuteUntilNotNil {
+		predicates = append(predicates, notificationpreferencehistory.MuteUntilNotNil())
+	}
+	if i.QuietHoursStart != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartEQ(*i.QuietHoursStart))
+	}
+	if i.QuietHoursStartNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartNEQ(*i.QuietHoursStartNEQ))
+	}
+	if len(i.QuietHoursStartIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartIn(i.QuietHoursStartIn...))
+	}
+	if len(i.QuietHoursStartNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartNotIn(i.QuietHoursStartNotIn...))
+	}
+	if i.QuietHoursStartGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartGT(*i.QuietHoursStartGT))
+	}
+	if i.QuietHoursStartGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartGTE(*i.QuietHoursStartGTE))
+	}
+	if i.QuietHoursStartLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartLT(*i.QuietHoursStartLT))
+	}
+	if i.QuietHoursStartLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartLTE(*i.QuietHoursStartLTE))
+	}
+	if i.QuietHoursStartContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartContains(*i.QuietHoursStartContains))
+	}
+	if i.QuietHoursStartHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartHasPrefix(*i.QuietHoursStartHasPrefix))
+	}
+	if i.QuietHoursStartHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartHasSuffix(*i.QuietHoursStartHasSuffix))
+	}
+	if i.QuietHoursStartIsNil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartIsNil())
+	}
+	if i.QuietHoursStartNotNil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartNotNil())
+	}
+	if i.QuietHoursStartEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartEqualFold(*i.QuietHoursStartEqualFold))
+	}
+	if i.QuietHoursStartContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursStartContainsFold(*i.QuietHoursStartContainsFold))
+	}
+	if i.QuietHoursEnd != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndEQ(*i.QuietHoursEnd))
+	}
+	if i.QuietHoursEndNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndNEQ(*i.QuietHoursEndNEQ))
+	}
+	if len(i.QuietHoursEndIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndIn(i.QuietHoursEndIn...))
+	}
+	if len(i.QuietHoursEndNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndNotIn(i.QuietHoursEndNotIn...))
+	}
+	if i.QuietHoursEndGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndGT(*i.QuietHoursEndGT))
+	}
+	if i.QuietHoursEndGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndGTE(*i.QuietHoursEndGTE))
+	}
+	if i.QuietHoursEndLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndLT(*i.QuietHoursEndLT))
+	}
+	if i.QuietHoursEndLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndLTE(*i.QuietHoursEndLTE))
+	}
+	if i.QuietHoursEndContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndContains(*i.QuietHoursEndContains))
+	}
+	if i.QuietHoursEndHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndHasPrefix(*i.QuietHoursEndHasPrefix))
+	}
+	if i.QuietHoursEndHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndHasSuffix(*i.QuietHoursEndHasSuffix))
+	}
+	if i.QuietHoursEndIsNil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndIsNil())
+	}
+	if i.QuietHoursEndNotNil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndNotNil())
+	}
+	if i.QuietHoursEndEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndEqualFold(*i.QuietHoursEndEqualFold))
+	}
+	if i.QuietHoursEndContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.QuietHoursEndContainsFold(*i.QuietHoursEndContainsFold))
+	}
+	if i.Timezone != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneEQ(*i.Timezone))
+	}
+	if i.TimezoneNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneNEQ(*i.TimezoneNEQ))
+	}
+	if len(i.TimezoneIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneIn(i.TimezoneIn...))
+	}
+	if len(i.TimezoneNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneNotIn(i.TimezoneNotIn...))
+	}
+	if i.TimezoneGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneGT(*i.TimezoneGT))
+	}
+	if i.TimezoneGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneGTE(*i.TimezoneGTE))
+	}
+	if i.TimezoneLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneLT(*i.TimezoneLT))
+	}
+	if i.TimezoneLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneLTE(*i.TimezoneLTE))
+	}
+	if i.TimezoneContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneContains(*i.TimezoneContains))
+	}
+	if i.TimezoneHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneHasPrefix(*i.TimezoneHasPrefix))
+	}
+	if i.TimezoneHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneHasSuffix(*i.TimezoneHasSuffix))
+	}
+	if i.TimezoneIsNil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneIsNil())
+	}
+	if i.TimezoneNotNil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneNotNil())
+	}
+	if i.TimezoneEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneEqualFold(*i.TimezoneEqualFold))
+	}
+	if i.TimezoneContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.TimezoneContainsFold(*i.TimezoneContainsFold))
+	}
+	if i.IsDefault != nil {
+		predicates = append(predicates, notificationpreferencehistory.IsDefaultEQ(*i.IsDefault))
+	}
+	if i.IsDefaultNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.IsDefaultNEQ(*i.IsDefaultNEQ))
+	}
+	if i.VerifiedAt != nil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtEQ(*i.VerifiedAt))
+	}
+	if i.VerifiedAtNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtNEQ(*i.VerifiedAtNEQ))
+	}
+	if len(i.VerifiedAtIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtIn(i.VerifiedAtIn...))
+	}
+	if len(i.VerifiedAtNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtNotIn(i.VerifiedAtNotIn...))
+	}
+	if i.VerifiedAtGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtGT(*i.VerifiedAtGT))
+	}
+	if i.VerifiedAtGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtGTE(*i.VerifiedAtGTE))
+	}
+	if i.VerifiedAtLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtLT(*i.VerifiedAtLT))
+	}
+	if i.VerifiedAtLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtLTE(*i.VerifiedAtLTE))
+	}
+	if i.VerifiedAtIsNil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtIsNil())
+	}
+	if i.VerifiedAtNotNil {
+		predicates = append(predicates, notificationpreferencehistory.VerifiedAtNotNil())
+	}
+	if i.LastUsedAt != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtEQ(*i.LastUsedAt))
+	}
+	if i.LastUsedAtNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtNEQ(*i.LastUsedAtNEQ))
+	}
+	if len(i.LastUsedAtIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtIn(i.LastUsedAtIn...))
+	}
+	if len(i.LastUsedAtNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtNotIn(i.LastUsedAtNotIn...))
+	}
+	if i.LastUsedAtGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtGT(*i.LastUsedAtGT))
+	}
+	if i.LastUsedAtGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtGTE(*i.LastUsedAtGTE))
+	}
+	if i.LastUsedAtLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtLT(*i.LastUsedAtLT))
+	}
+	if i.LastUsedAtLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtLTE(*i.LastUsedAtLTE))
+	}
+	if i.LastUsedAtIsNil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtIsNil())
+	}
+	if i.LastUsedAtNotNil {
+		predicates = append(predicates, notificationpreferencehistory.LastUsedAtNotNil())
+	}
+	if i.LastError != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorEQ(*i.LastError))
+	}
+	if i.LastErrorNEQ != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorNEQ(*i.LastErrorNEQ))
+	}
+	if len(i.LastErrorIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorIn(i.LastErrorIn...))
+	}
+	if len(i.LastErrorNotIn) > 0 {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorNotIn(i.LastErrorNotIn...))
+	}
+	if i.LastErrorGT != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorGT(*i.LastErrorGT))
+	}
+	if i.LastErrorGTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorGTE(*i.LastErrorGTE))
+	}
+	if i.LastErrorLT != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorLT(*i.LastErrorLT))
+	}
+	if i.LastErrorLTE != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorLTE(*i.LastErrorLTE))
+	}
+	if i.LastErrorContains != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorContains(*i.LastErrorContains))
+	}
+	if i.LastErrorHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorHasPrefix(*i.LastErrorHasPrefix))
+	}
+	if i.LastErrorHasSuffix != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorHasSuffix(*i.LastErrorHasSuffix))
+	}
+	if i.LastErrorIsNil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorIsNil())
+	}
+	if i.LastErrorNotNil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorNotNil())
+	}
+	if i.LastErrorEqualFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorEqualFold(*i.LastErrorEqualFold))
+	}
+	if i.LastErrorContainsFold != nil {
+		predicates = append(predicates, notificationpreferencehistory.LastErrorContainsFold(*i.LastErrorContainsFold))
+	}
+
+	if i.TopicPatternsHas != nil {
+		v := *i.TopicPatternsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(notificationpreferencehistory.FieldTopicPatterns, v))
+		})
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyNotificationPreferenceHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return notificationpreferencehistory.And(predicates...), nil
+	}
+}
+
+// NotificationTemplateHistoryWhereInput represents a where input for filtering NotificationTemplateHistory queries.
+type NotificationTemplateHistoryWhereInput struct {
+	Predicates []predicate.NotificationTemplateHistory  `json:"-"`
+	Not        *NotificationTemplateHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*NotificationTemplateHistoryWhereInput `json:"or,omitempty"`
+	And        []*NotificationTemplateHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
+	// "key" field predicates.
+	Key             *string  `json:"key,omitempty"`
+	KeyNEQ          *string  `json:"keyNEQ,omitempty"`
+	KeyIn           []string `json:"keyIn,omitempty"`
+	KeyNotIn        []string `json:"keyNotIn,omitempty"`
+	KeyGT           *string  `json:"keyGT,omitempty"`
+	KeyGTE          *string  `json:"keyGTE,omitempty"`
+	KeyLT           *string  `json:"keyLT,omitempty"`
+	KeyLTE          *string  `json:"keyLTE,omitempty"`
+	KeyContains     *string  `json:"keyContains,omitempty"`
+	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
+	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
+	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
+	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "channel" field predicates.
+	Channel      *enums.Channel  `json:"channel,omitempty"`
+	ChannelNEQ   *enums.Channel  `json:"channelNEQ,omitempty"`
+	ChannelIn    []enums.Channel `json:"channelIn,omitempty"`
+	ChannelNotIn []enums.Channel `json:"channelNotIn,omitempty"`
+
+	// "format" field predicates.
+	Format      *enums.NotificationTemplateFormat  `json:"format,omitempty"`
+	FormatNEQ   *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
+	FormatIn    []enums.NotificationTemplateFormat `json:"formatIn,omitempty"`
+	FormatNotIn []enums.NotificationTemplateFormat `json:"formatNotIn,omitempty"`
+
+	// "locale" field predicates.
+	Locale             *string  `json:"locale,omitempty"`
+	LocaleNEQ          *string  `json:"localeNEQ,omitempty"`
+	LocaleIn           []string `json:"localeIn,omitempty"`
+	LocaleNotIn        []string `json:"localeNotIn,omitempty"`
+	LocaleGT           *string  `json:"localeGT,omitempty"`
+	LocaleGTE          *string  `json:"localeGTE,omitempty"`
+	LocaleLT           *string  `json:"localeLT,omitempty"`
+	LocaleLTE          *string  `json:"localeLTE,omitempty"`
+	LocaleContains     *string  `json:"localeContains,omitempty"`
+	LocaleHasPrefix    *string  `json:"localeHasPrefix,omitempty"`
+	LocaleHasSuffix    *string  `json:"localeHasSuffix,omitempty"`
+	LocaleEqualFold    *string  `json:"localeEqualFold,omitempty"`
+	LocaleContainsFold *string  `json:"localeContainsFold,omitempty"`
+
+	// "topic_pattern" field predicates.
+	TopicPattern             *string  `json:"topicPattern,omitempty"`
+	TopicPatternNEQ          *string  `json:"topicPatternNEQ,omitempty"`
+	TopicPatternIn           []string `json:"topicPatternIn,omitempty"`
+	TopicPatternNotIn        []string `json:"topicPatternNotIn,omitempty"`
+	TopicPatternGT           *string  `json:"topicPatternGT,omitempty"`
+	TopicPatternGTE          *string  `json:"topicPatternGTE,omitempty"`
+	TopicPatternLT           *string  `json:"topicPatternLT,omitempty"`
+	TopicPatternLTE          *string  `json:"topicPatternLTE,omitempty"`
+	TopicPatternContains     *string  `json:"topicPatternContains,omitempty"`
+	TopicPatternHasPrefix    *string  `json:"topicPatternHasPrefix,omitempty"`
+	TopicPatternHasSuffix    *string  `json:"topicPatternHasSuffix,omitempty"`
+	TopicPatternEqualFold    *string  `json:"topicPatternEqualFold,omitempty"`
+	TopicPatternContainsFold *string  `json:"topicPatternContainsFold,omitempty"`
+
+	// "integration_id" field predicates.
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIDNEQ          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIDGT           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIDGTE          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIDLT           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIDLTE          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        bool     `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       bool     `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+
+	// "workflow_definition_id" field predicates.
+	WorkflowDefinitionID             *string  `json:"workflowDefinitionID,omitempty"`
+	WorkflowDefinitionIDNEQ          *string  `json:"workflowDefinitionIDNEQ,omitempty"`
+	WorkflowDefinitionIDIn           []string `json:"workflowDefinitionIDIn,omitempty"`
+	WorkflowDefinitionIDNotIn        []string `json:"workflowDefinitionIDNotIn,omitempty"`
+	WorkflowDefinitionIDGT           *string  `json:"workflowDefinitionIDGT,omitempty"`
+	WorkflowDefinitionIDGTE          *string  `json:"workflowDefinitionIDGTE,omitempty"`
+	WorkflowDefinitionIDLT           *string  `json:"workflowDefinitionIDLT,omitempty"`
+	WorkflowDefinitionIDLTE          *string  `json:"workflowDefinitionIDLTE,omitempty"`
+	WorkflowDefinitionIDContains     *string  `json:"workflowDefinitionIDContains,omitempty"`
+	WorkflowDefinitionIDHasPrefix    *string  `json:"workflowDefinitionIDHasPrefix,omitempty"`
+	WorkflowDefinitionIDHasSuffix    *string  `json:"workflowDefinitionIDHasSuffix,omitempty"`
+	WorkflowDefinitionIDIsNil        bool     `json:"workflowDefinitionIDIsNil,omitempty"`
+	WorkflowDefinitionIDNotNil       bool     `json:"workflowDefinitionIDNotNil,omitempty"`
+	WorkflowDefinitionIDEqualFold    *string  `json:"workflowDefinitionIDEqualFold,omitempty"`
+	WorkflowDefinitionIDContainsFold *string  `json:"workflowDefinitionIDContainsFold,omitempty"`
+
+	// "email_template_id" field predicates.
+	EmailTemplateID             *string  `json:"emailTemplateID,omitempty"`
+	EmailTemplateIDNEQ          *string  `json:"emailTemplateIDNEQ,omitempty"`
+	EmailTemplateIDIn           []string `json:"emailTemplateIDIn,omitempty"`
+	EmailTemplateIDNotIn        []string `json:"emailTemplateIDNotIn,omitempty"`
+	EmailTemplateIDGT           *string  `json:"emailTemplateIDGT,omitempty"`
+	EmailTemplateIDGTE          *string  `json:"emailTemplateIDGTE,omitempty"`
+	EmailTemplateIDLT           *string  `json:"emailTemplateIDLT,omitempty"`
+	EmailTemplateIDLTE          *string  `json:"emailTemplateIDLTE,omitempty"`
+	EmailTemplateIDContains     *string  `json:"emailTemplateIDContains,omitempty"`
+	EmailTemplateIDHasPrefix    *string  `json:"emailTemplateIDHasPrefix,omitempty"`
+	EmailTemplateIDHasSuffix    *string  `json:"emailTemplateIDHasSuffix,omitempty"`
+	EmailTemplateIDIsNil        bool     `json:"emailTemplateIDIsNil,omitempty"`
+	EmailTemplateIDNotNil       bool     `json:"emailTemplateIDNotNil,omitempty"`
+	EmailTemplateIDEqualFold    *string  `json:"emailTemplateIDEqualFold,omitempty"`
+	EmailTemplateIDContainsFold *string  `json:"emailTemplateIDContainsFold,omitempty"`
+
+	// "title_template" field predicates.
+	TitleTemplate             *string  `json:"titleTemplate,omitempty"`
+	TitleTemplateNEQ          *string  `json:"titleTemplateNEQ,omitempty"`
+	TitleTemplateIn           []string `json:"titleTemplateIn,omitempty"`
+	TitleTemplateNotIn        []string `json:"titleTemplateNotIn,omitempty"`
+	TitleTemplateGT           *string  `json:"titleTemplateGT,omitempty"`
+	TitleTemplateGTE          *string  `json:"titleTemplateGTE,omitempty"`
+	TitleTemplateLT           *string  `json:"titleTemplateLT,omitempty"`
+	TitleTemplateLTE          *string  `json:"titleTemplateLTE,omitempty"`
+	TitleTemplateContains     *string  `json:"titleTemplateContains,omitempty"`
+	TitleTemplateHasPrefix    *string  `json:"titleTemplateHasPrefix,omitempty"`
+	TitleTemplateHasSuffix    *string  `json:"titleTemplateHasSuffix,omitempty"`
+	TitleTemplateIsNil        bool     `json:"titleTemplateIsNil,omitempty"`
+	TitleTemplateNotNil       bool     `json:"titleTemplateNotNil,omitempty"`
+	TitleTemplateEqualFold    *string  `json:"titleTemplateEqualFold,omitempty"`
+	TitleTemplateContainsFold *string  `json:"titleTemplateContainsFold,omitempty"`
+
+	// "subject_template" field predicates.
+	SubjectTemplate             *string  `json:"subjectTemplate,omitempty"`
+	SubjectTemplateNEQ          *string  `json:"subjectTemplateNEQ,omitempty"`
+	SubjectTemplateIn           []string `json:"subjectTemplateIn,omitempty"`
+	SubjectTemplateNotIn        []string `json:"subjectTemplateNotIn,omitempty"`
+	SubjectTemplateGT           *string  `json:"subjectTemplateGT,omitempty"`
+	SubjectTemplateGTE          *string  `json:"subjectTemplateGTE,omitempty"`
+	SubjectTemplateLT           *string  `json:"subjectTemplateLT,omitempty"`
+	SubjectTemplateLTE          *string  `json:"subjectTemplateLTE,omitempty"`
+	SubjectTemplateContains     *string  `json:"subjectTemplateContains,omitempty"`
+	SubjectTemplateHasPrefix    *string  `json:"subjectTemplateHasPrefix,omitempty"`
+	SubjectTemplateHasSuffix    *string  `json:"subjectTemplateHasSuffix,omitempty"`
+	SubjectTemplateIsNil        bool     `json:"subjectTemplateIsNil,omitempty"`
+	SubjectTemplateNotNil       bool     `json:"subjectTemplateNotNil,omitempty"`
+	SubjectTemplateEqualFold    *string  `json:"subjectTemplateEqualFold,omitempty"`
+	SubjectTemplateContainsFold *string  `json:"subjectTemplateContainsFold,omitempty"`
+
+	// "body_template" field predicates.
+	BodyTemplate             *string  `json:"bodyTemplate,omitempty"`
+	BodyTemplateNEQ          *string  `json:"bodyTemplateNEQ,omitempty"`
+	BodyTemplateIn           []string `json:"bodyTemplateIn,omitempty"`
+	BodyTemplateNotIn        []string `json:"bodyTemplateNotIn,omitempty"`
+	BodyTemplateGT           *string  `json:"bodyTemplateGT,omitempty"`
+	BodyTemplateGTE          *string  `json:"bodyTemplateGTE,omitempty"`
+	BodyTemplateLT           *string  `json:"bodyTemplateLT,omitempty"`
+	BodyTemplateLTE          *string  `json:"bodyTemplateLTE,omitempty"`
+	BodyTemplateContains     *string  `json:"bodyTemplateContains,omitempty"`
+	BodyTemplateHasPrefix    *string  `json:"bodyTemplateHasPrefix,omitempty"`
+	BodyTemplateHasSuffix    *string  `json:"bodyTemplateHasSuffix,omitempty"`
+	BodyTemplateIsNil        bool     `json:"bodyTemplateIsNil,omitempty"`
+	BodyTemplateNotNil       bool     `json:"bodyTemplateNotNil,omitempty"`
+	BodyTemplateEqualFold    *string  `json:"bodyTemplateEqualFold,omitempty"`
+	BodyTemplateContainsFold *string  `json:"bodyTemplateContainsFold,omitempty"`
+
+	// "active" field predicates.
+	Active    *bool `json:"active,omitempty"`
+	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
+
+	// "version" field predicates.
+	Version      *int  `json:"version,omitempty"`
+	VersionNEQ   *int  `json:"versionNEQ,omitempty"`
+	VersionIn    []int `json:"versionIn,omitempty"`
+	VersionNotIn []int `json:"versionNotIn,omitempty"`
+	VersionGT    *int  `json:"versionGT,omitempty"`
+	VersionGTE   *int  `json:"versionGTE,omitempty"`
+	VersionLT    *int  `json:"versionLT,omitempty"`
+	VersionLTE   *int  `json:"versionLTE,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *NotificationTemplateHistoryWhereInput) AddPredicates(predicates ...predicate.NotificationTemplateHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the NotificationTemplateHistoryWhereInput filter on the NotificationTemplateHistoryQuery builder.
+func (i *NotificationTemplateHistoryWhereInput) Filter(q *NotificationTemplateHistoryQuery) (*NotificationTemplateHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyNotificationTemplateHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyNotificationTemplateHistoryWhereInput is returned in case the NotificationTemplateHistoryWhereInput is empty.
+var ErrEmptyNotificationTemplateHistoryWhereInput = errors.New("historygenerated: empty predicate NotificationTemplateHistoryWhereInput")
+
+// P returns a predicate for filtering notificationtemplatehistories.
+// An error is returned if the input is empty or invalid.
+func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTemplateHistory, error) {
+	var predicates []predicate.NotificationTemplateHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, notificationtemplatehistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.NotificationTemplateHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, notificationtemplatehistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.NotificationTemplateHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, notificationtemplatehistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, notificationtemplatehistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, notificationtemplatehistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, notificationtemplatehistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, notificationtemplatehistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, notificationtemplatehistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
+	}
+	if i.Key != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyEQ(*i.Key))
+	}
+	if i.KeyNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyNEQ(*i.KeyNEQ))
+	}
+	if len(i.KeyIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.KeyIn(i.KeyIn...))
+	}
+	if len(i.KeyNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.KeyNotIn(i.KeyNotIn...))
+	}
+	if i.KeyGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyGT(*i.KeyGT))
+	}
+	if i.KeyGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyGTE(*i.KeyGTE))
+	}
+	if i.KeyLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyLT(*i.KeyLT))
+	}
+	if i.KeyLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyLTE(*i.KeyLTE))
+	}
+	if i.KeyContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyContains(*i.KeyContains))
+	}
+	if i.KeyHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyHasPrefix(*i.KeyHasPrefix))
+	}
+	if i.KeyHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyHasSuffix(*i.KeyHasSuffix))
+	}
+	if i.KeyEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyEqualFold(*i.KeyEqualFold))
+	}
+	if i.KeyContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.KeyContainsFold(*i.KeyContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.Channel != nil {
+		predicates = append(predicates, notificationtemplatehistory.ChannelEQ(*i.Channel))
+	}
+	if i.ChannelNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.ChannelNEQ(*i.ChannelNEQ))
+	}
+	if len(i.ChannelIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.ChannelIn(i.ChannelIn...))
+	}
+	if len(i.ChannelNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.ChannelNotIn(i.ChannelNotIn...))
+	}
+	if i.Format != nil {
+		predicates = append(predicates, notificationtemplatehistory.FormatEQ(*i.Format))
+	}
+	if i.FormatNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.FormatNEQ(*i.FormatNEQ))
+	}
+	if len(i.FormatIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.FormatIn(i.FormatIn...))
+	}
+	if len(i.FormatNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.FormatNotIn(i.FormatNotIn...))
+	}
+	if i.Locale != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleEQ(*i.Locale))
+	}
+	if i.LocaleNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleNEQ(*i.LocaleNEQ))
+	}
+	if len(i.LocaleIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.LocaleIn(i.LocaleIn...))
+	}
+	if len(i.LocaleNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.LocaleNotIn(i.LocaleNotIn...))
+	}
+	if i.LocaleGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleGT(*i.LocaleGT))
+	}
+	if i.LocaleGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleGTE(*i.LocaleGTE))
+	}
+	if i.LocaleLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleLT(*i.LocaleLT))
+	}
+	if i.LocaleLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleLTE(*i.LocaleLTE))
+	}
+	if i.LocaleContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleContains(*i.LocaleContains))
+	}
+	if i.LocaleHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleHasPrefix(*i.LocaleHasPrefix))
+	}
+	if i.LocaleHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleHasSuffix(*i.LocaleHasSuffix))
+	}
+	if i.LocaleEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleEqualFold(*i.LocaleEqualFold))
+	}
+	if i.LocaleContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.LocaleContainsFold(*i.LocaleContainsFold))
+	}
+	if i.TopicPattern != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternEQ(*i.TopicPattern))
+	}
+	if i.TopicPatternNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternNEQ(*i.TopicPatternNEQ))
+	}
+	if len(i.TopicPatternIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternIn(i.TopicPatternIn...))
+	}
+	if len(i.TopicPatternNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternNotIn(i.TopicPatternNotIn...))
+	}
+	if i.TopicPatternGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternGT(*i.TopicPatternGT))
+	}
+	if i.TopicPatternGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternGTE(*i.TopicPatternGTE))
+	}
+	if i.TopicPatternLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternLT(*i.TopicPatternLT))
+	}
+	if i.TopicPatternLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternLTE(*i.TopicPatternLTE))
+	}
+	if i.TopicPatternContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternContains(*i.TopicPatternContains))
+	}
+	if i.TopicPatternHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternHasPrefix(*i.TopicPatternHasPrefix))
+	}
+	if i.TopicPatternHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternHasSuffix(*i.TopicPatternHasSuffix))
+	}
+	if i.TopicPatternEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternEqualFold(*i.TopicPatternEqualFold))
+	}
+	if i.TopicPatternContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.TopicPatternContainsFold(*i.TopicPatternContainsFold))
+	}
+	if i.IntegrationID != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDEQ(*i.IntegrationID))
+	}
+	if i.IntegrationIDNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDNEQ(*i.IntegrationIDNEQ))
+	}
+	if len(i.IntegrationIDIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDIn(i.IntegrationIDIn...))
+	}
+	if len(i.IntegrationIDNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDNotIn(i.IntegrationIDNotIn...))
+	}
+	if i.IntegrationIDGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDGT(*i.IntegrationIDGT))
+	}
+	if i.IntegrationIDGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDGTE(*i.IntegrationIDGTE))
+	}
+	if i.IntegrationIDLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDLT(*i.IntegrationIDLT))
+	}
+	if i.IntegrationIDLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDLTE(*i.IntegrationIDLTE))
+	}
+	if i.IntegrationIDContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDContains(*i.IntegrationIDContains))
+	}
+	if i.IntegrationIDHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDHasPrefix(*i.IntegrationIDHasPrefix))
+	}
+	if i.IntegrationIDHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDHasSuffix(*i.IntegrationIDHasSuffix))
+	}
+	if i.IntegrationIDIsNil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDIsNil())
+	}
+	if i.IntegrationIDNotNil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDNotNil())
+	}
+	if i.IntegrationIDEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDEqualFold(*i.IntegrationIDEqualFold))
+	}
+	if i.IntegrationIDContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.IntegrationIDContainsFold(*i.IntegrationIDContainsFold))
+	}
+	if i.WorkflowDefinitionID != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDEQ(*i.WorkflowDefinitionID))
+	}
+	if i.WorkflowDefinitionIDNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDNEQ(*i.WorkflowDefinitionIDNEQ))
+	}
+	if len(i.WorkflowDefinitionIDIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDIn(i.WorkflowDefinitionIDIn...))
+	}
+	if len(i.WorkflowDefinitionIDNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDNotIn(i.WorkflowDefinitionIDNotIn...))
+	}
+	if i.WorkflowDefinitionIDGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDGT(*i.WorkflowDefinitionIDGT))
+	}
+	if i.WorkflowDefinitionIDGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDGTE(*i.WorkflowDefinitionIDGTE))
+	}
+	if i.WorkflowDefinitionIDLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDLT(*i.WorkflowDefinitionIDLT))
+	}
+	if i.WorkflowDefinitionIDLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDLTE(*i.WorkflowDefinitionIDLTE))
+	}
+	if i.WorkflowDefinitionIDContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDContains(*i.WorkflowDefinitionIDContains))
+	}
+	if i.WorkflowDefinitionIDHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDHasPrefix(*i.WorkflowDefinitionIDHasPrefix))
+	}
+	if i.WorkflowDefinitionIDHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDHasSuffix(*i.WorkflowDefinitionIDHasSuffix))
+	}
+	if i.WorkflowDefinitionIDIsNil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDIsNil())
+	}
+	if i.WorkflowDefinitionIDNotNil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDNotNil())
+	}
+	if i.WorkflowDefinitionIDEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDEqualFold(*i.WorkflowDefinitionIDEqualFold))
+	}
+	if i.WorkflowDefinitionIDContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.WorkflowDefinitionIDContainsFold(*i.WorkflowDefinitionIDContainsFold))
+	}
+	if i.EmailTemplateID != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDEQ(*i.EmailTemplateID))
+	}
+	if i.EmailTemplateIDNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDNEQ(*i.EmailTemplateIDNEQ))
+	}
+	if len(i.EmailTemplateIDIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDIn(i.EmailTemplateIDIn...))
+	}
+	if len(i.EmailTemplateIDNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDNotIn(i.EmailTemplateIDNotIn...))
+	}
+	if i.EmailTemplateIDGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDGT(*i.EmailTemplateIDGT))
+	}
+	if i.EmailTemplateIDGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDGTE(*i.EmailTemplateIDGTE))
+	}
+	if i.EmailTemplateIDLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDLT(*i.EmailTemplateIDLT))
+	}
+	if i.EmailTemplateIDLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDLTE(*i.EmailTemplateIDLTE))
+	}
+	if i.EmailTemplateIDContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDContains(*i.EmailTemplateIDContains))
+	}
+	if i.EmailTemplateIDHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDHasPrefix(*i.EmailTemplateIDHasPrefix))
+	}
+	if i.EmailTemplateIDHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDHasSuffix(*i.EmailTemplateIDHasSuffix))
+	}
+	if i.EmailTemplateIDIsNil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDIsNil())
+	}
+	if i.EmailTemplateIDNotNil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDNotNil())
+	}
+	if i.EmailTemplateIDEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDEqualFold(*i.EmailTemplateIDEqualFold))
+	}
+	if i.EmailTemplateIDContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.EmailTemplateIDContainsFold(*i.EmailTemplateIDContainsFold))
+	}
+	if i.TitleTemplate != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateEQ(*i.TitleTemplate))
+	}
+	if i.TitleTemplateNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateNEQ(*i.TitleTemplateNEQ))
+	}
+	if len(i.TitleTemplateIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateIn(i.TitleTemplateIn...))
+	}
+	if len(i.TitleTemplateNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateNotIn(i.TitleTemplateNotIn...))
+	}
+	if i.TitleTemplateGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateGT(*i.TitleTemplateGT))
+	}
+	if i.TitleTemplateGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateGTE(*i.TitleTemplateGTE))
+	}
+	if i.TitleTemplateLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateLT(*i.TitleTemplateLT))
+	}
+	if i.TitleTemplateLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateLTE(*i.TitleTemplateLTE))
+	}
+	if i.TitleTemplateContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateContains(*i.TitleTemplateContains))
+	}
+	if i.TitleTemplateHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateHasPrefix(*i.TitleTemplateHasPrefix))
+	}
+	if i.TitleTemplateHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateHasSuffix(*i.TitleTemplateHasSuffix))
+	}
+	if i.TitleTemplateIsNil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateIsNil())
+	}
+	if i.TitleTemplateNotNil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateNotNil())
+	}
+	if i.TitleTemplateEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateEqualFold(*i.TitleTemplateEqualFold))
+	}
+	if i.TitleTemplateContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.TitleTemplateContainsFold(*i.TitleTemplateContainsFold))
+	}
+	if i.SubjectTemplate != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateEQ(*i.SubjectTemplate))
+	}
+	if i.SubjectTemplateNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateNEQ(*i.SubjectTemplateNEQ))
+	}
+	if len(i.SubjectTemplateIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateIn(i.SubjectTemplateIn...))
+	}
+	if len(i.SubjectTemplateNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateNotIn(i.SubjectTemplateNotIn...))
+	}
+	if i.SubjectTemplateGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateGT(*i.SubjectTemplateGT))
+	}
+	if i.SubjectTemplateGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateGTE(*i.SubjectTemplateGTE))
+	}
+	if i.SubjectTemplateLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateLT(*i.SubjectTemplateLT))
+	}
+	if i.SubjectTemplateLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateLTE(*i.SubjectTemplateLTE))
+	}
+	if i.SubjectTemplateContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateContains(*i.SubjectTemplateContains))
+	}
+	if i.SubjectTemplateHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateHasPrefix(*i.SubjectTemplateHasPrefix))
+	}
+	if i.SubjectTemplateHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateHasSuffix(*i.SubjectTemplateHasSuffix))
+	}
+	if i.SubjectTemplateIsNil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateIsNil())
+	}
+	if i.SubjectTemplateNotNil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateNotNil())
+	}
+	if i.SubjectTemplateEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateEqualFold(*i.SubjectTemplateEqualFold))
+	}
+	if i.SubjectTemplateContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.SubjectTemplateContainsFold(*i.SubjectTemplateContainsFold))
+	}
+	if i.BodyTemplate != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateEQ(*i.BodyTemplate))
+	}
+	if i.BodyTemplateNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateNEQ(*i.BodyTemplateNEQ))
+	}
+	if len(i.BodyTemplateIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateIn(i.BodyTemplateIn...))
+	}
+	if len(i.BodyTemplateNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateNotIn(i.BodyTemplateNotIn...))
+	}
+	if i.BodyTemplateGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateGT(*i.BodyTemplateGT))
+	}
+	if i.BodyTemplateGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateGTE(*i.BodyTemplateGTE))
+	}
+	if i.BodyTemplateLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateLT(*i.BodyTemplateLT))
+	}
+	if i.BodyTemplateLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateLTE(*i.BodyTemplateLTE))
+	}
+	if i.BodyTemplateContains != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateContains(*i.BodyTemplateContains))
+	}
+	if i.BodyTemplateHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateHasPrefix(*i.BodyTemplateHasPrefix))
+	}
+	if i.BodyTemplateHasSuffix != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateHasSuffix(*i.BodyTemplateHasSuffix))
+	}
+	if i.BodyTemplateIsNil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateIsNil())
+	}
+	if i.BodyTemplateNotNil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateNotNil())
+	}
+	if i.BodyTemplateEqualFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateEqualFold(*i.BodyTemplateEqualFold))
+	}
+	if i.BodyTemplateContainsFold != nil {
+		predicates = append(predicates, notificationtemplatehistory.BodyTemplateContainsFold(*i.BodyTemplateContainsFold))
+	}
+	if i.Active != nil {
+		predicates = append(predicates, notificationtemplatehistory.ActiveEQ(*i.Active))
+	}
+	if i.ActiveNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.ActiveNEQ(*i.ActiveNEQ))
+	}
+	if i.Version != nil {
+		predicates = append(predicates, notificationtemplatehistory.VersionEQ(*i.Version))
+	}
+	if i.VersionNEQ != nil {
+		predicates = append(predicates, notificationtemplatehistory.VersionNEQ(*i.VersionNEQ))
+	}
+	if len(i.VersionIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.VersionIn(i.VersionIn...))
+	}
+	if len(i.VersionNotIn) > 0 {
+		predicates = append(predicates, notificationtemplatehistory.VersionNotIn(i.VersionNotIn...))
+	}
+	if i.VersionGT != nil {
+		predicates = append(predicates, notificationtemplatehistory.VersionGT(*i.VersionGT))
+	}
+	if i.VersionGTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.VersionGTE(*i.VersionGTE))
+	}
+	if i.VersionLT != nil {
+		predicates = append(predicates, notificationtemplatehistory.VersionLT(*i.VersionLT))
+	}
+	if i.VersionLTE != nil {
+		predicates = append(predicates, notificationtemplatehistory.VersionLTE(*i.VersionLTE))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyNotificationTemplateHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return notificationtemplatehistory.And(predicates...), nil
+	}
+}
+
 // OrgMembershipHistoryWhereInput represents a where input for filtering OrgMembershipHistory queries.
 type OrgMembershipHistoryWhereInput struct {
 	Predicates []predicate.OrgMembershipHistory  `json:"-"`
@@ -43742,6 +49658,9 @@ type OrgSubscriptionHistoryWhereInput struct {
 	DaysUntilDueNotNil       bool     `json:"daysUntilDueNotNil,omitempty"`
 	DaysUntilDueEqualFold    *string  `json:"daysUntilDueEqualFold,omitempty"`
 	DaysUntilDueContainsFold *string  `json:"daysUntilDueContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -44323,6 +50242,13 @@ func (i *OrgSubscriptionHistoryWhereInput) P() (predicate.OrgSubscriptionHistory
 		predicates = append(predicates, orgsubscriptionhistory.DaysUntilDueContainsFold(*i.DaysUntilDueContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(orgsubscriptionhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrgSubscriptionHistoryWhereInput
@@ -44526,6 +50452,9 @@ type OrganizationHistoryWhereInput struct {
 	AvatarUpdatedAtLTE    *time.Time  `json:"avatarUpdatedAtLTE,omitempty"`
 	AvatarUpdatedAtIsNil  bool        `json:"avatarUpdatedAtIsNil,omitempty"`
 	AvatarUpdatedAtNotNil bool        `json:"avatarUpdatedAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -45077,6 +51006,13 @@ func (i *OrganizationHistoryWhereInput) P() (predicate.OrganizationHistory, erro
 		predicates = append(predicates, organizationhistory.AvatarUpdatedAtNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrganizationHistoryWhereInput
@@ -45474,6 +51410,15 @@ type OrganizationSettingHistoryWhereInput struct {
 	ComplianceWebhookTokenNotNil       bool     `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "domains" JSON-string-array predicates.
+	DomainsHas *string `json:"domainsHas,omitempty"`
+
+	// "allowed_email_domains" JSON-string-array predicates.
+	AllowedEmailDomainsHas *string `json:"allowedEmailDomainsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -46517,6 +52462,27 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenContainsFold(*i.ComplianceWebhookTokenContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationsettinghistory.FieldTags, v))
+		})
+	}
+
+	if i.DomainsHas != nil {
+		v := *i.DomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationsettinghistory.FieldDomains, v))
+		})
+	}
+
+	if i.AllowedEmailDomainsHas != nil {
+		v := *i.AllowedEmailDomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(organizationsettinghistory.FieldAllowedEmailDomains, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyOrganizationSettingHistoryWhereInput
@@ -47343,6 +53309,9 @@ type PlatformHistoryWhereInput struct {
 	ExternalReferenceIDNotNil       bool     `json:"externalReferenceIDNotNil,omitempty"`
 	ExternalReferenceIDEqualFold    *string  `json:"externalReferenceIDEqualFold,omitempty"`
 	ExternalReferenceIDContainsFold *string  `json:"externalReferenceIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -49529,6 +55498,13 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 		predicates = append(predicates, platformhistory.ExternalReferenceIDContainsFold(*i.ExternalReferenceIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(platformhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyPlatformHistoryWhereInput
@@ -49979,6 +55955,27 @@ type ProcedureHistoryWhereInput struct {
 	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
 	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
 	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tag_suggestions" JSON-string-array predicates.
+	TagSuggestionsHas *string `json:"tagSuggestionsHas,omitempty"`
+
+	// "dismissed_tag_suggestions" JSON-string-array predicates.
+	DismissedTagSuggestionsHas *string `json:"dismissedTagSuggestionsHas,omitempty"`
+
+	// "control_suggestions" JSON-string-array predicates.
+	ControlSuggestionsHas *string `json:"controlSuggestionsHas,omitempty"`
+
+	// "dismissed_control_suggestions" JSON-string-array predicates.
+	DismissedControlSuggestionsHas *string `json:"dismissedControlSuggestionsHas,omitempty"`
+
+	// "improvement_suggestions" JSON-string-array predicates.
+	ImprovementSuggestionsHas *string `json:"improvementSuggestionsHas,omitempty"`
+
+	// "dismissed_improvement_suggestions" JSON-string-array predicates.
+	DismissedImprovementSuggestionsHas *string `json:"dismissedImprovementSuggestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -51169,6 +57166,55 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 		predicates = append(predicates, procedurehistory.WorkflowEligibleMarkerNotNil())
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldTags, v))
+		})
+	}
+
+	if i.TagSuggestionsHas != nil {
+		v := *i.TagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldTagSuggestions, v))
+		})
+	}
+
+	if i.DismissedTagSuggestionsHas != nil {
+		v := *i.DismissedTagSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldDismissedTagSuggestions, v))
+		})
+	}
+
+	if i.ControlSuggestionsHas != nil {
+		v := *i.ControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldControlSuggestions, v))
+		})
+	}
+
+	if i.DismissedControlSuggestionsHas != nil {
+		v := *i.DismissedControlSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldDismissedControlSuggestions, v))
+		})
+	}
+
+	if i.ImprovementSuggestionsHas != nil {
+		v := *i.ImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldImprovementSuggestions, v))
+		})
+	}
+
+	if i.DismissedImprovementSuggestionsHas != nil {
+		v := *i.DismissedImprovementSuggestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(procedurehistory.FieldDismissedImprovementSuggestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyProcedureHistoryWhereInput
@@ -51513,6 +57559,9 @@ type ProgramHistoryWhereInput struct {
 	ProgramOwnerIDNotNil       bool     `json:"programOwnerIDNotNil,omitempty"`
 	ProgramOwnerIDEqualFold    *string  `json:"programOwnerIDEqualFold,omitempty"`
 	ProgramOwnerIDContainsFold *string  `json:"programOwnerIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -52419,6 +58468,13 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.ProgramOwnerIDContainsFold != nil {
 		predicates = append(predicates, programhistory.ProgramOwnerIDContainsFold(*i.ProgramOwnerIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(programhistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -53551,6 +59607,9 @@ type RemediationHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -55017,6 +61076,13 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 		predicates = append(predicates, remediationhistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(remediationhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyRemediationHistoryWhereInput
@@ -55505,6 +61571,9 @@ type ReviewHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -56803,6 +62872,13 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 		predicates = append(predicates, reviewhistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(reviewhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyReviewHistoryWhereInput
@@ -57226,6 +63302,9 @@ type RiskHistoryWhereInput struct {
 	DelegateIDNotNil       bool     `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -58353,6 +64432,13 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 		predicates = append(predicates, riskhistory.DelegateIDContainsFold(*i.DelegateIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(riskhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyRiskHistoryWhereInput
@@ -58778,6 +64864,12 @@ type ScanHistoryWhereInput struct {
 	StatusNEQ   *enums.ScanStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ScanStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ScanStatus `json:"statusNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "vulnerability_ids" JSON-string-array predicates.
+	VulnerabilityIdsHas *string `json:"vulnerabilityIdsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -59911,6 +66003,20 @@ func (i *ScanHistoryWhereInput) P() (predicate.ScanHistory, error) {
 		predicates = append(predicates, scanhistory.StatusNotIn(i.StatusNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(scanhistory.FieldTags, v))
+		})
+	}
+
+	if i.VulnerabilityIdsHas != nil {
+		v := *i.VulnerabilityIdsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(scanhistory.FieldVulnerabilityIds, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyScanHistoryWhereInput
@@ -60988,6 +67094,12 @@ type StandardHistoryWhereInput struct {
 	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
 	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
 	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "domains" JSON-string-array predicates.
+	DomainsHas *string `json:"domainsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -62001,6 +68113,20 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 		predicates = append(predicates, standardhistory.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(standardhistory.FieldTags, v))
+		})
+	}
+
+	if i.DomainsHas != nil {
+		v := *i.DomainsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(standardhistory.FieldDomains, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyStandardHistoryWhereInput
@@ -62482,6 +68608,18 @@ type SubcontrolHistoryWhereInput struct {
 	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
 	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
 	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "aliases" JSON-string-array predicates.
+	AliasesHas *string `json:"aliasesHas,omitempty"`
+
+	// "mapped_categories" JSON-string-array predicates.
+	MappedCategoriesHas *string `json:"mappedCategoriesHas,omitempty"`
+
+	// "control_questions" JSON-string-array predicates.
+	ControlQuestionsHas *string `json:"controlQuestionsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -63759,6 +69897,34 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 		predicates = append(predicates, subcontrolhistory.ControlIDContainsFold(*i.ControlIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldTags, v))
+		})
+	}
+
+	if i.AliasesHas != nil {
+		v := *i.AliasesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldAliases, v))
+		})
+	}
+
+	if i.MappedCategoriesHas != nil {
+		v := *i.MappedCategoriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldMappedCategories, v))
+		})
+	}
+
+	if i.ControlQuestionsHas != nil {
+		v := *i.ControlQuestionsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subcontrolhistory.FieldControlQuestions, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptySubcontrolHistoryWhereInput
@@ -64001,6 +70167,9 @@ type SubprocessorHistoryWhereInput struct {
 	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
 	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
 	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -64657,6 +70826,13 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 		predicates = append(predicates, subprocessorhistory.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(subprocessorhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptySubprocessorHistoryWhereInput
@@ -65044,6 +71220,12 @@ type TaskHistoryWhereInput struct {
 	ParentTaskIDNotNil       bool     `json:"parentTaskIDNotNil,omitempty"`
 	ParentTaskIDEqualFold    *string  `json:"parentTaskIDEqualFold,omitempty"`
 	ParentTaskIDContainsFold *string  `json:"parentTaskIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "external_reference_url" JSON-string-array predicates.
+	ExternalReferenceURLHas *string `json:"externalReferenceURLHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -66075,6 +72257,20 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 		predicates = append(predicates, taskhistory.ParentTaskIDContainsFold(*i.ParentTaskIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(taskhistory.FieldTags, v))
+		})
+	}
+
+	if i.ExternalReferenceURLHas != nil {
+		v := *i.ExternalReferenceURLHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(taskhistory.FieldExternalReferenceURL, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTaskHistoryWhereInput
@@ -66382,6 +72578,9 @@ type TemplateHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -67203,6 +73402,13 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 		predicates = append(predicates, templatehistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(templatehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTemplateHistoryWhereInput
@@ -67354,6 +73560,9 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -67773,6 +73982,13 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 		predicates = append(predicates, trustcentercompliancehistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcentercompliancehistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterComplianceHistoryWhereInput
@@ -68031,6 +74247,9 @@ type TrustCenterDocHistoryWhereInput struct {
 	StandardIDNotNil       bool     `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -68721,6 +74940,13 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	}
 	if i.StandardIDContainsFold != nil {
 		predicates = append(predicates, trustcenterdochistory.StandardIDContainsFold(*i.StandardIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcenterdochistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -69680,6 +75906,9 @@ type TrustCenterHistoryWhereInput struct {
 	SubprocessorURLNotNil       bool     `json:"subprocessorURLNotNil,omitempty"`
 	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
 	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -70393,6 +76622,13 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 		predicates = append(predicates, trustcenterhistory.SubprocessorURLContainsFold(*i.SubprocessorURLContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcenterhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterHistoryWhereInput
@@ -70699,6 +76935,9 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	FileIDNotNil       bool     `json:"fileIDNotNil,omitempty"`
 	FileIDEqualFold    *string  `json:"fileIDEqualFold,omitempty"`
 	FileIDContainsFold *string  `json:"fileIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -71515,6 +77754,13 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	}
 	if i.FileIDContainsFold != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.FileIDContainsFold(*i.FileIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcenterndarequesthistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -73422,6 +79668,9 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "countries" JSON-string-array predicates.
+	CountriesHas *string `json:"countriesHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -73929,6 +80178,13 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	}
 	if i.TrustCenterIDContainsFold != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+
+	if i.CountriesHas != nil {
+		v := *i.CountriesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(trustcentersubprocessorhistory.FieldCountries, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -75251,6 +81507,9 @@ type UserHistoryWhereInput struct {
 	ScimLocaleNotNil       bool     `json:"scimLocaleNotNil,omitempty"`
 	ScimLocaleEqualFold    *string  `json:"scimLocaleEqualFold,omitempty"`
 	ScimLocaleContainsFold *string  `json:"scimLocaleContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -76273,6 +82532,13 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 		predicates = append(predicates, userhistory.ScimLocaleContainsFold(*i.ScimLocaleContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(userhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyUserHistoryWhereInput
@@ -76410,6 +82676,47 @@ type UserSettingHistoryWhereInput struct {
 	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
 	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
 
+	// "delegate_user_id" field predicates.
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIDNEQ          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIDGT           *string  `json:"delegateUserIDGT,omitempty"`
+	DelegateUserIDGTE          *string  `json:"delegateUserIDGTE,omitempty"`
+	DelegateUserIDLT           *string  `json:"delegateUserIDLT,omitempty"`
+	DelegateUserIDLTE          *string  `json:"delegateUserIDLTE,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        bool     `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       bool     `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+
+	// "delegate_start_at" field predicates.
+	DelegateStartAt       *time.Time  `json:"delegateStartAt,omitempty"`
+	DelegateStartAtNEQ    *time.Time  `json:"delegateStartAtNEQ,omitempty"`
+	DelegateStartAtIn     []time.Time `json:"delegateStartAtIn,omitempty"`
+	DelegateStartAtNotIn  []time.Time `json:"delegateStartAtNotIn,omitempty"`
+	DelegateStartAtGT     *time.Time  `json:"delegateStartAtGT,omitempty"`
+	DelegateStartAtGTE    *time.Time  `json:"delegateStartAtGTE,omitempty"`
+	DelegateStartAtLT     *time.Time  `json:"delegateStartAtLT,omitempty"`
+	DelegateStartAtLTE    *time.Time  `json:"delegateStartAtLTE,omitempty"`
+	DelegateStartAtIsNil  bool        `json:"delegateStartAtIsNil,omitempty"`
+	DelegateStartAtNotNil bool        `json:"delegateStartAtNotNil,omitempty"`
+
+	// "delegate_end_at" field predicates.
+	DelegateEndAt       *time.Time  `json:"delegateEndAt,omitempty"`
+	DelegateEndAtNEQ    *time.Time  `json:"delegateEndAtNEQ,omitempty"`
+	DelegateEndAtIn     []time.Time `json:"delegateEndAtIn,omitempty"`
+	DelegateEndAtNotIn  []time.Time `json:"delegateEndAtNotIn,omitempty"`
+	DelegateEndAtGT     *time.Time  `json:"delegateEndAtGT,omitempty"`
+	DelegateEndAtGTE    *time.Time  `json:"delegateEndAtGTE,omitempty"`
+	DelegateEndAtLT     *time.Time  `json:"delegateEndAtLT,omitempty"`
+	DelegateEndAtLTE    *time.Time  `json:"delegateEndAtLTE,omitempty"`
+	DelegateEndAtIsNil  bool        `json:"delegateEndAtIsNil,omitempty"`
+	DelegateEndAtNotNil bool        `json:"delegateEndAtNotNil,omitempty"`
+
 	// "locked" field predicates.
 	Locked    *bool `json:"locked,omitempty"`
 	LockedNEQ *bool `json:"lockedNEQ,omitempty"`
@@ -76453,6 +82760,9 @@ type UserSettingHistoryWhereInput struct {
 	IsTfaEnabledNEQ    *bool `json:"isTfaEnabledNEQ,omitempty"`
 	IsTfaEnabledIsNil  bool  `json:"isTfaEnabledIsNil,omitempty"`
 	IsTfaEnabledNotNil bool  `json:"isTfaEnabledNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -76832,6 +83142,111 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	if i.UserIDContainsFold != nil {
 		predicates = append(predicates, usersettinghistory.UserIDContainsFold(*i.UserIDContainsFold))
 	}
+	if i.DelegateUserID != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDEQ(*i.DelegateUserID))
+	}
+	if i.DelegateUserIDNEQ != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDNEQ(*i.DelegateUserIDNEQ))
+	}
+	if len(i.DelegateUserIDIn) > 0 {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDIn(i.DelegateUserIDIn...))
+	}
+	if len(i.DelegateUserIDNotIn) > 0 {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDNotIn(i.DelegateUserIDNotIn...))
+	}
+	if i.DelegateUserIDGT != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDGT(*i.DelegateUserIDGT))
+	}
+	if i.DelegateUserIDGTE != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDGTE(*i.DelegateUserIDGTE))
+	}
+	if i.DelegateUserIDLT != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDLT(*i.DelegateUserIDLT))
+	}
+	if i.DelegateUserIDLTE != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDLTE(*i.DelegateUserIDLTE))
+	}
+	if i.DelegateUserIDContains != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDContains(*i.DelegateUserIDContains))
+	}
+	if i.DelegateUserIDHasPrefix != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDHasPrefix(*i.DelegateUserIDHasPrefix))
+	}
+	if i.DelegateUserIDHasSuffix != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDHasSuffix(*i.DelegateUserIDHasSuffix))
+	}
+	if i.DelegateUserIDIsNil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDIsNil())
+	}
+	if i.DelegateUserIDNotNil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDNotNil())
+	}
+	if i.DelegateUserIDEqualFold != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDEqualFold(*i.DelegateUserIDEqualFold))
+	}
+	if i.DelegateUserIDContainsFold != nil {
+		predicates = append(predicates, usersettinghistory.DelegateUserIDContainsFold(*i.DelegateUserIDContainsFold))
+	}
+	if i.DelegateStartAt != nil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtEQ(*i.DelegateStartAt))
+	}
+	if i.DelegateStartAtNEQ != nil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtNEQ(*i.DelegateStartAtNEQ))
+	}
+	if len(i.DelegateStartAtIn) > 0 {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtIn(i.DelegateStartAtIn...))
+	}
+	if len(i.DelegateStartAtNotIn) > 0 {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtNotIn(i.DelegateStartAtNotIn...))
+	}
+	if i.DelegateStartAtGT != nil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtGT(*i.DelegateStartAtGT))
+	}
+	if i.DelegateStartAtGTE != nil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtGTE(*i.DelegateStartAtGTE))
+	}
+	if i.DelegateStartAtLT != nil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtLT(*i.DelegateStartAtLT))
+	}
+	if i.DelegateStartAtLTE != nil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtLTE(*i.DelegateStartAtLTE))
+	}
+	if i.DelegateStartAtIsNil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtIsNil())
+	}
+	if i.DelegateStartAtNotNil {
+		predicates = append(predicates, usersettinghistory.DelegateStartAtNotNil())
+	}
+	if i.DelegateEndAt != nil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtEQ(*i.DelegateEndAt))
+	}
+	if i.DelegateEndAtNEQ != nil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtNEQ(*i.DelegateEndAtNEQ))
+	}
+	if len(i.DelegateEndAtIn) > 0 {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtIn(i.DelegateEndAtIn...))
+	}
+	if len(i.DelegateEndAtNotIn) > 0 {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtNotIn(i.DelegateEndAtNotIn...))
+	}
+	if i.DelegateEndAtGT != nil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtGT(*i.DelegateEndAtGT))
+	}
+	if i.DelegateEndAtGTE != nil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtGTE(*i.DelegateEndAtGTE))
+	}
+	if i.DelegateEndAtLT != nil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtLT(*i.DelegateEndAtLT))
+	}
+	if i.DelegateEndAtLTE != nil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtLTE(*i.DelegateEndAtLTE))
+	}
+	if i.DelegateEndAtIsNil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtIsNil())
+	}
+	if i.DelegateEndAtNotNil {
+		predicates = append(predicates, usersettinghistory.DelegateEndAtNotNil())
+	}
 	if i.Locked != nil {
 		predicates = append(predicates, usersettinghistory.LockedEQ(*i.Locked))
 	}
@@ -76927,6 +83342,13 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	}
 	if i.IsTfaEnabledNotNil {
 		predicates = append(predicates, usersettinghistory.IsTfaEnabledNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(usersettinghistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {
@@ -77521,6 +83943,15 @@ type VulnerabilityHistoryWhereInput struct {
 	ExternalURINotNil       bool     `json:"externalURINotNil,omitempty"`
 	ExternalURIEqualFold    *string  `json:"externalURIEqualFold,omitempty"`
 	ExternalURIContainsFold *string  `json:"externalURIContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "references" JSON-string-array predicates.
+	ReferencesHas *string `json:"referencesHas,omitempty"`
+
+	// "impacts" JSON-string-array predicates.
+	ImpactsHas *string `json:"impactsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -79071,6 +85502,27 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 		predicates = append(predicates, vulnerabilityhistory.ExternalURIContainsFold(*i.ExternalURIContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(vulnerabilityhistory.FieldTags, v))
+		})
+	}
+
+	if i.ReferencesHas != nil {
+		v := *i.ReferencesHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(vulnerabilityhistory.FieldReferences, v))
+		})
+	}
+
+	if i.ImpactsHas != nil {
+		v := *i.ImpactsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(vulnerabilityhistory.FieldImpacts, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyVulnerabilityHistoryWhereInput
@@ -79357,6 +85809,21 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	NotesNotNil       bool     `json:"notesNotNil,omitempty"`
 	NotesEqualFold    *string  `json:"notesEqualFold,omitempty"`
 	NotesContainsFold *string  `json:"notesContainsFold,omitempty"`
+
+	// "due_at" field predicates.
+	DueAt       *time.Time  `json:"dueAt,omitempty"`
+	DueAtNEQ    *time.Time  `json:"dueAtNEQ,omitempty"`
+	DueAtIn     []time.Time `json:"dueAtIn,omitempty"`
+	DueAtNotIn  []time.Time `json:"dueAtNotIn,omitempty"`
+	DueAtGT     *time.Time  `json:"dueAtGT,omitempty"`
+	DueAtGTE    *time.Time  `json:"dueAtGTE,omitempty"`
+	DueAtLT     *time.Time  `json:"dueAtLT,omitempty"`
+	DueAtLTE    *time.Time  `json:"dueAtLTE,omitempty"`
+	DueAtIsNil  bool        `json:"dueAtIsNil,omitempty"`
+	DueAtNotNil bool        `json:"dueAtNotNil,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -80120,6 +86587,43 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 	if i.NotesContainsFold != nil {
 		predicates = append(predicates, workflowassignmenthistory.NotesContainsFold(*i.NotesContainsFold))
 	}
+	if i.DueAt != nil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtEQ(*i.DueAt))
+	}
+	if i.DueAtNEQ != nil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtNEQ(*i.DueAtNEQ))
+	}
+	if len(i.DueAtIn) > 0 {
+		predicates = append(predicates, workflowassignmenthistory.DueAtIn(i.DueAtIn...))
+	}
+	if len(i.DueAtNotIn) > 0 {
+		predicates = append(predicates, workflowassignmenthistory.DueAtNotIn(i.DueAtNotIn...))
+	}
+	if i.DueAtGT != nil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtGT(*i.DueAtGT))
+	}
+	if i.DueAtGTE != nil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtGTE(*i.DueAtGTE))
+	}
+	if i.DueAtLT != nil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtLT(*i.DueAtLT))
+	}
+	if i.DueAtLTE != nil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtLTE(*i.DueAtLTE))
+	}
+	if i.DueAtIsNil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtIsNil())
+	}
+	if i.DueAtNotNil {
+		predicates = append(predicates, workflowassignmenthistory.DueAtNotNil())
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowassignmenthistory.FieldTags, v))
+		})
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -80344,6 +86848,9 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	ResolverKeyNotNil       bool     `json:"resolverKeyNotNil,omitempty"`
 	ResolverKeyEqualFold    *string  `json:"resolverKeyEqualFold,omitempty"`
 	ResolverKeyContainsFold *string  `json:"resolverKeyContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -80949,6 +87456,13 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 		predicates = append(predicates, workflowassignmenttargethistory.ResolverKeyContainsFold(*i.ResolverKeyContainsFold))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowassignmenttargethistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowAssignmentTargetHistoryWhereInput
@@ -81237,6 +87751,12 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	// "active" field predicates.
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "tracked_fields" JSON-string-array predicates.
+	TrackedFieldsHas *string `json:"trackedFieldsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -81989,6 +88509,20 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 		predicates = append(predicates, workflowdefinitionhistory.ActiveNEQ(*i.ActiveNEQ))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowdefinitionhistory.FieldTags, v))
+		})
+	}
+
+	if i.TrackedFieldsHas != nil {
+		v := *i.TrackedFieldsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowdefinitionhistory.FieldTrackedFields, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowDefinitionHistoryWhereInput
@@ -82161,6 +88695,9 @@ type WorkflowEventHistoryWhereInput struct {
 	EventTypeNEQ   *enums.WorkflowEventType  `json:"eventTypeNEQ,omitempty"`
 	EventTypeIn    []enums.WorkflowEventType `json:"eventTypeIn,omitempty"`
 	EventTypeNotIn []enums.WorkflowEventType `json:"eventTypeNotIn,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -82631,6 +89168,13 @@ func (i *WorkflowEventHistoryWhereInput) P() (predicate.WorkflowEventHistory, er
 		predicates = append(predicates, workfloweventhistory.EventTypeNotIn(i.EventTypeNotIn...))
 	}
 
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workfloweventhistory.FieldTags, v))
+		})
+	}
+
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyWorkflowEventHistoryWhereInput
@@ -83012,6 +89556,9 @@ type WorkflowInstanceHistoryWhereInput struct {
 	PlatformIDNotNil       bool     `json:"platformIDNotNil,omitempty"`
 	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
 	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -84029,6 +90576,13 @@ func (i *WorkflowInstanceHistoryWhereInput) P() (predicate.WorkflowInstanceHisto
 	}
 	if i.PlatformIDContainsFold != nil {
 		predicates = append(predicates, workflowinstancehistory.PlatformIDContainsFold(*i.PlatformIDContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(workflowinstancehistory.FieldTags, v))
+		})
 	}
 
 	switch len(predicates) {

@@ -37,7 +37,9 @@ func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if status != enums.WorkflowAssignmentStatusApproved && status != enums.WorkflowAssignmentStatusRejected {
+			if status != enums.WorkflowAssignmentStatusApproved &&
+				status != enums.WorkflowAssignmentStatusRejected &&
+				status != enums.WorkflowAssignmentStatusChangesRequested {
 				return next.Mutate(ctx, m)
 			}
 

@@ -56,6 +56,28 @@
       "title": "ApprovalActionParams",
       "description": "Parameters for REQUEST_APPROVAL actions that require user or group approval"
     },
+    "CreateObjectActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/create-object-action-params",
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "description": "The schema type to create (e.g., Task, Review, Finding, Vulnerability)"
+        },
+        "fields": {
+          "type": "object",
+          "description": "Field values to apply to the new object"
+        },
+        "link_to_trigger": {
+          "type": "boolean",
+          "description": "Whether to attach the created object to the triggering object when supported"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "CreateObjectActionParams",
+      "description": "Parameters for CREATE_OBJECT actions that create new objects"
+    },
     "FieldUpdateActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://github.com/theopenlane/core/internal/workflows/field-update-action-params",
@@ -147,12 +169,19 @@
             "enum": [
               "IN_APP",
               "SLACK",
+              "TEAMS",
               "EMAIL"
             ],
             "description": "Notification delivery channel"
           },
           "type": "array",
           "description": "Notification delivery channels (IN_APP, SLACK, EMAIL)"
+        },
+        "template_id": {
+          "type": "string"
+        },
+        "template_key": {
+          "type": "string"
         },
         "topic": {
           "type": "string",
@@ -175,6 +204,53 @@
       "type": "object",
       "title": "NotificationActionParams",
       "description": "Parameters for NOTIFY actions that send notifications to users"
+    },
+    "ReviewActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/review-action-params",
+      "properties": {
+        "targets": {
+          "items": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "USER",
+                  "GROUP",
+                  "ROLE",
+                  "RESOLVER"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "resolver_key": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array",
+          "description": "List of users, groups, roles, or resolvers who can review"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this review is required for workflow completion (defaults to true)"
+        },
+        "label": {
+          "type": "string",
+          "description": "Optional display label for the review action"
+        },
+        "required_count": {
+          "type": "integer",
+          "description": "Number of reviews needed (quorum threshold); 0 means all targets must review"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "ReviewActionParams",
+      "description": "Parameters for REQUEST_REVIEW actions that require user or group review"
     },
     "TargetConfig": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -223,9 +299,8 @@
           "type": "object",
           "description": "Additional HTTP headers to include in the request"
         },
-        "payload": {
-          "type": "object",
-          "description": "Additional data to merge into the webhook payload"
+        "payload_expr": {
+          "type": "string"
         },
         "timeout_ms": {
           "type": "integer",
@@ -262,7 +337,11 @@
             "NOTIFY",
             "WEBHOOK",
             "UPDATE_FIELD",
-            "INTEGRATION"
+            "INTEGRATION",
+            "REASSIGN_APPROVAL",
+            "SEND_EMAIL",
+            "REQUEST_REVIEW",
+            "CREATE_OBJECT"
           ],
           "description": "Action type: REQUEST_APPROVAL, NOTIFY, WEBHOOK, UPDATE_FIELD, or INTEGRATION"
         },
@@ -336,6 +415,9 @@
         "operation": {
           "type": "string"
         },
+        "interval": {
+          "type": "string"
+        },
         "objectType": {
           "type": "string",
           "enum": [
@@ -400,6 +482,13 @@
       "enum": [
         "MANUAL_SUBMIT",
         "AUTO_SUBMIT"
+      ]
+    },
+    "approvalTiming": {
+      "type": "string",
+      "enum": [
+        "PRE_COMMIT",
+        "POST_COMMIT"
       ]
     },
     "version": {

@@ -2,7 +2,6 @@ package graphapi
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"maps"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // CSV reference sentinel errors for field access.
@@ -468,17 +468,7 @@ func csvRowStateFromValue(value reflect.Value) (*csvRowState, error) {
 
 // csvStructToMap marshals a struct to a JSON map.
 func csvStructToMap(input any) (map[string]any, error) {
-	payload, err := json.Marshal(input)
-	if err != nil {
-		return nil, err
-	}
-
-	var data map[string]any
-	if err := json.Unmarshal(payload, &data); err != nil {
-		return nil, err
-	}
-
-	return data, nil
+	return jsonx.ToMap(input)
 }
 
 // csvMapToStruct unmarshals a JSON map back into a struct pointer.
@@ -486,12 +476,7 @@ func csvMapToStruct(data map[string]any, target any) error {
 	if target == nil {
 		return nil
 	}
-	payload, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(payload, target)
+	return jsonx.RoundTrip(data, target)
 }
 
 // csvMapFieldStrings extracts string values for a single top-level JSON key.

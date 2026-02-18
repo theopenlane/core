@@ -265,8 +265,9 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 				assert.Equal(t, tc.expectedOrgID, claims["org"])
 
+				// Module ordering is not guaranteed; assert as a set to avoid flakiness.
 				if tc.expectedModules != nil {
-					assert.Equal(t, tc.expectedModules, claims["modules"])
+					assert.ElementsMatch(t, tc.expectedModules, claims["modules"])
 				} else {
 					assert.Empty(t, claims["modules"])
 				}

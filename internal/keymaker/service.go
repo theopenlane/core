@@ -9,7 +9,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/integrations"
+	"github.com/theopenlane/core/internal/integrations"
 )
 
 // defaultSessionTTL is the duration that OAuth sessions remain valid if no custom TTL is configured

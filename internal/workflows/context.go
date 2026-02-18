@@ -14,6 +14,10 @@ import (
 // Used to bypass workflow approval checks during system operations (e.g., applying approved changes)
 type WorkflowBypassContextKey struct{}
 
+// WorkflowAllowEventEmissionKey allows workflow event handlers to run even when bypass is set.
+// This is useful for applying approved changes while still triggering post-commit workflows.
+type WorkflowAllowEventEmissionKey struct{}
+
 // skipEventEmissionFlag is used to share a mutable skip flag across hook layers.
 type skipEventEmissionFlag struct {
 	skip bool
@@ -34,6 +38,31 @@ func FromContext(ctx context.Context) (WorkflowBypassContextKey, bool) {
 // Used by workflow interceptors to skip approval routing for system operations
 func IsWorkflowBypass(ctx context.Context) bool {
 	_, ok := FromContext(ctx)
+
+	return ok
+}
+
+// WithAllowWorkflowEventEmission marks the context to allow workflow event emission even when bypass is set.
+func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
+	if ctx == nil {
+		return ctx
+	}
+
+	if _, ok := contextx.From[WorkflowAllowEventEmissionKey](ctx); ok {
+		return ctx
+	}
+
+	return contextx.With(ctx, WorkflowAllowEventEmissionKey{})
+}
+
+// AllowWorkflowEventEmission reports whether workflow events should be emitted even when bypass is set.
+func AllowWorkflowEventEmission(ctx context.Context) bool {
+	if ctx == nil {
+		return false
+	}
+
+	_, ok := contextx.From[WorkflowAllowEventEmissionKey](ctx)
+
 	return ok
 }
 
@@ -43,9 +72,11 @@ func WithSkipEventEmission(ctx context.Context) context.Context {
 	if ctx == nil {
 		return ctx
 	}
+
 	if existing, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && existing != nil {
 		return ctx
 	}
+
 	return contextx.With(ctx, &skipEventEmissionFlag{})
 }
 
@@ -64,9 +95,11 @@ func ShouldSkipEventEmission(ctx context.Context) bool {
 	if ctx == nil {
 		return false
 	}
+
 	if flag, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && flag != nil {
 		return flag.skip
 	}
+
 	return false
 }
 
@@ -79,6 +112,11 @@ func AllowContext(ctx context.Context) context.Context {
 // AllowBypassContext sets workflow bypass and allow decision for internal workflow operations.
 func AllowBypassContext(ctx context.Context) context.Context {
 	return WithContext(AllowContext(ctx))
+}
+
+// AllowBypassContextWithEvents sets workflow bypass, allow decision, and preserves workflow event emission.
+func AllowBypassContextWithEvents(ctx context.Context) context.Context {
+	return WithAllowWorkflowEventEmission(AllowBypassContext(ctx))
 }
 
 // AllowContextWithOrg returns an allow context plus the organization ID.
@@ -99,5 +137,6 @@ func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, str
 	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+
 	return allowCtx, orgID, err
 }

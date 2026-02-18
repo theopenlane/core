@@ -29,6 +29,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -55,6 +57,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -97,6 +101,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // Noder wraps the basic Node method.
@@ -203,6 +208,16 @@ var documentdataImplementors = []string{"DocumentData", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*DocumentData) IsNode() {}
+
+var emailbrandingImplementors = []string{"EmailBranding", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*EmailBranding) IsNode() {}
+
+var emailtemplateImplementors = []string{"EmailTemplate", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*EmailTemplate) IsNode() {}
 
 var entityImplementors = []string{"Entity", "Node"}
 
@@ -333,6 +348,16 @@ var notificationImplementors = []string{"Notification", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Notification) IsNode() {}
+
+var notificationpreferenceImplementors = []string{"NotificationPreference", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*NotificationPreference) IsNode() {}
+
+var notificationtemplateImplementors = []string{"NotificationTemplate", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*NotificationTemplate) IsNode() {}
 
 var onboardingImplementors = []string{"Onboarding", "Node"}
 
@@ -543,6 +568,11 @@ var workflowobjectrefImplementors = []string{"WorkflowObjectRef", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*WorkflowObjectRef) IsNode() {}
+
+var workflowproposalImplementors = []string{"WorkflowProposal", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowProposal) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -782,6 +812,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case emailbranding.Table:
+		query := c.EmailBranding.Query().
+			Where(emailbranding.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, emailbrandingImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case emailtemplate.Table:
+		query := c.EmailTemplate.Query().
+			Where(emailtemplate.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, emailtemplateImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case entity.Table:
 		query := c.Entity.Query().
 			Where(entity.ID(id))
@@ -1012,6 +1060,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(notification.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case notificationpreference.Table:
+		query := c.NotificationPreference.Query().
+			Where(notificationpreference.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationpreferenceImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case notificationtemplate.Table:
+		query := c.NotificationTemplate.Query().
+			Where(notificationtemplate.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationtemplateImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1390,6 +1456,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(workflowobjectref.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowobjectrefImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowproposal.Table:
+		query := c.WorkflowProposal.Query().
+			Where(workflowproposal.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowproposalImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1775,6 +1850,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.DocumentData.Query().
 			Where(documentdata.IDIn(ids...))
 		query, err := query.CollectFields(ctx, documentdataImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case emailbranding.Table:
+		query := c.EmailBranding.Query().
+			Where(emailbranding.IDIn(ids...))
+		query, err := query.CollectFields(ctx, emailbrandingImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case emailtemplate.Table:
+		query := c.EmailTemplate.Query().
+			Where(emailtemplate.IDIn(ids...))
+		query, err := query.CollectFields(ctx, emailtemplateImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2191,6 +2298,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Notification.Query().
 			Where(notification.IDIn(ids...))
 		query, err := query.CollectFields(ctx, notificationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case notificationpreference.Table:
+		query := c.NotificationPreference.Query().
+			Where(notificationpreference.IDIn(ids...))
+		query, err := query.CollectFields(ctx, notificationpreferenceImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case notificationtemplate.Table:
+		query := c.NotificationTemplate.Query().
+			Where(notificationtemplate.IDIn(ids...))
+		query, err := query.CollectFields(ctx, notificationtemplateImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2863,6 +3002,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.WorkflowObjectRef.Query().
 			Where(workflowobjectref.IDIn(ids...))
 		query, err := query.CollectFields(ctx, workflowobjectrefImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowproposal.Table:
+		query := c.WorkflowProposal.Query().
+			Where(workflowproposal.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowproposalImplementors...)
 		if err != nil {
 			return nil, err
 		}

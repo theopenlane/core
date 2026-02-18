@@ -14,12 +14,13 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/utils/rout"
 )
 
 // IdentityHolder holds the schema definition for the IdentityHolder entity
@@ -281,6 +282,7 @@ func (IdentityHolder) Modules() []models.OrgModule {
 func (IdentityHolder) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 

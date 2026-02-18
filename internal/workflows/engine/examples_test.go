@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -301,6 +302,87 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 		s.Require().NoError(err)
 		s.Len(assignments, 0)
 	})
+}
+
+// TestNotificationWorkflowOnCreate verifies CREATE triggers execute NOTIFICATION workflows
+// and fire webhook actions without creating approval assignments.
+func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
+	_, orgID, userCtx := s.SetupTestUser()
+
+	webhookCalled := make(chan struct{}, 1)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		webhookCalled <- struct{}{}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	webhookParams := workflows.WebhookActionParams{
+		URL: server.URL,
+	}
+	webhookParamsBytes, err := json.Marshal(webhookParams)
+	s.Require().NoError(err)
+
+	doc := models.WorkflowDefinitionDocument{
+		Triggers: []models.WorkflowTrigger{
+			{Operation: "CREATE"},
+		},
+		Conditions: []models.WorkflowCondition{
+			{Expression: "true"},
+		},
+		Actions: []models.WorkflowAction{
+			{
+				Type:   enums.WorkflowActionTypeWebhook.String(),
+				Key:    "create_webhook",
+				Params: webhookParamsBytes,
+			},
+		},
+	}
+
+	operations, fields := workflows.DeriveTriggerPrefilter(doc)
+
+	def, err := s.client.WorkflowDefinition.Create().
+		SetName("Create Notification Workflow " + ulid.Make().String()).
+		SetWorkflowKind(enums.WorkflowKindNotification).
+		SetSchemaType("Control").
+		SetActive(true).
+		SetDraft(false).
+		SetOwnerID(orgID).
+		SetTriggerOperations(operations).
+		SetTriggerFields(fields).
+		SetDefinitionJSON(doc).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-CREATE-WEBHOOK-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	s.WaitForEvents()
+
+	select {
+	case <-webhookCalled:
+	case <-time.After(5 * time.Second):
+		s.FailNow("webhook not received")
+	}
+
+	instance, err := s.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
+			workflowinstance.OwnerIDEQ(orgID),
+			workflowinstance.ControlIDEQ(control.ID),
+		).
+		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
+		First(userCtx)
+	s.Require().NoError(err)
+	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
+
+	assignments, err := s.client.WorkflowAssignment.Query().
+		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
+		All(userCtx)
+	s.Require().NoError(err)
+	s.Len(assignments, 0)
 }
 
 // TestMultiStepParallelApprovals verifies that a single workflow can contain multiple approval
@@ -701,6 +783,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 		s.Require().NoError(err)
 		s.Require().NotNil(instance)
 
+		// Wait for the trigger event chain to complete (assignments created, instance paused)
+		s.WaitForEvents()
+
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
@@ -808,6 +893,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalStatusBasedNotifications() {
 		})
 		s.Require().NoError(err)
 		s.Require().NotNil(instance)
+
+		// Wait for the trigger event chain to complete (assignments created, instance paused)
+		s.WaitForEvents()
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
@@ -965,6 +1053,9 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 		s.Require().NoError(err)
 		s.Require().NotNil(instance)
 
+		// Wait for the trigger event chain to complete (assignment created, instance paused)
+		s.WaitForEvents()
+
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
@@ -974,8 +1065,12 @@ func (s *WorkflowEngineTestSuite) TestApprovalWithWebhook() {
 		err = wfEngine.CompleteAssignment(userCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
 		s.Require().NoError(err)
 
-		payload := <-webhookCalled
-		s.Equal(instance.ID, payload["instance_id"])
+		select {
+		case payload := <-webhookCalled:
+			s.Equal(instance.ID, payload["instance_id"])
+		case <-time.After(10 * time.Second):
+			s.Fail("timed out waiting for webhook callback")
+		}
 
 		s.WaitForEvents()
 
@@ -1168,6 +1263,9 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 		})
 		s.Require().NoError(err)
 
+		// Wait for the trigger event chain to complete (assignment created, instance paused)
+		s.WaitForEvents()
+
 		// Instance should be paused waiting for approval
 		pausedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 		s.Require().NoError(err)
@@ -1213,6 +1311,9 @@ func (s *WorkflowEngineTestSuite) TestTriggerExistingInstanceResumes() {
 			ChangedFields: []string{"status"},
 		})
 		s.Require().NoError(err)
+
+		// Wait for the trigger event chain to complete
+		s.WaitForEvents()
 
 		// Instance completes immediately since no actions
 		completedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
@@ -1883,6 +1984,9 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 		})
 		s.Require().NoError(err)
 
+		// Wait for the trigger event chain to complete (assignment created, instance paused)
+		s.WaitForEvents()
+
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
@@ -1917,6 +2021,9 @@ func (s *WorkflowEngineTestSuite) TestResolveAssignmentStateTransitions() {
 			ProposedChanges: map[string]any{"status": enums.ControlStatusApproved.String()},
 		})
 		s.Require().NoError(err)
+
+		// Wait for the trigger event chain to complete (assignment created, instance paused)
+		s.WaitForEvents()
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).

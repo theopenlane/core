@@ -43,9 +43,7 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "payload": {
-          "text": "Evidence review completed for {{object_id}}"
-        },
+        "payload_expr": "{\"text\": \"Evidence review completed for \" + object.id}",
         "timeout_ms": 5000
       }
     }

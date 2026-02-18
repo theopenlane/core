@@ -39,6 +39,13 @@ tests:
           can_create_trust_center_subprocessor: true
           can_create_campaign: true
           can_create_campaign_target: true
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: true
+          can_create_identity_holder: true
           can_create_workflow_object_ref: false # system-driven, only services can create
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create
@@ -76,6 +83,13 @@ tests:
           can_create_trust_center_subprocessor: false
           can_create_campaign: false
           can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: false
+          can_create_scan: false
+          can_create_platform: false
+          can_create_identity_holder: false
           can_create_workflow_object_ref: false
           can_create_workflow_assignment_target: false
           can_create_workflow_event: false
@@ -111,6 +125,13 @@ tests:
           can_create_trust_center_subprocessor: true
           can_create_campaign: true
           can_create_campaign_target: true
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: true
+          can_create_identity_holder: true
           can_create_workflow_object_ref: true
           can_create_workflow_assignment_target: true
           can_create_workflow_event: true
@@ -146,6 +167,13 @@ tests:
           can_create_trust_center_subprocessor: false
           can_create_campaign: false
           can_create_campaign_target: false
+          can_create_finding: false
+          can_create_vulnerability: false
+          can_create_remediation: false
+          can_create_review: false
+          can_create_scan: false
+          can_create_platform: false
+          can_create_identity_holder: false
           can_create_workflow_object_ref: false
           can_create_workflow_assignment_target: false
           can_create_workflow_event: false
@@ -182,6 +210,13 @@ tests:
           can_create_trust_center_subprocessor: true
           can_create_campaign: true
           can_create_campaign_target: true
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: true
+          can_create_identity_holder: true
           can_create_workflow_object_ref: false # system-driven, only services can create
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create
@@ -231,6 +266,13 @@ tests:
           can_create_trust_center_subprocessor: true
           can_create_campaign: true
           can_create_campaign_target: true
+          can_create_finding: true
+          can_create_vulnerability: true
+          can_create_remediation: true
+          can_create_review: true
+          can_create_scan: true
+          can_create_platform: true
+          can_create_identity_holder: true
           can_create_workflow_object_ref: false # system-driven, only services can create
           can_create_workflow_assignment_target: false # system-driven, only services can create
           can_create_workflow_event: false # system-driven, only services can create
@@ -365,7 +407,7 @@ tests:
         object: group:cat-lovers
         assertions:
           admin: true
-          member: false
+          member: true
           can_delete: true
           can_edit: true
           can_view: true
@@ -402,7 +444,7 @@ tests:
         object: group:cat-haters
         assertions:
           admin: true
-          member: false
+          member: true
           can_delete: true
           can_edit: true
           can_view: true
@@ -785,6 +827,18 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+      - user: user:ulid-of-owner # org owner has access to asset with platform parent
+        object: asset:asset-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner # org owner has access to asset with entity parent
+        object: asset:asset-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: entity
     description: entities are always assigned to an organization and permissions are inherited from the organization
     tuple_file: tuples/entities.yaml
@@ -890,6 +944,148 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+  - name: remediation
+    description: remediations can be associated with organizations or findings and permissions are inherited accordingly
+    tuple_file: tuples/remediations.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: remediation:remediation-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: remediation:remediation-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: remediation:remediation-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: remediation:remediation-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # org owner has full access to finding-associated remediation
+        object: remediation:remediation-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+  - name: scan
+    description: scans can be associated with organizations or platforms and permissions are inherited accordingly
+    tuple_file: tuples/scans.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: scan:scan-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: scan:scan-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: scan:scan-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: scan:scan-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # org owner has full access to platform-associated scan
+        object: scan:scan-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+  - name: platform
+    description: platforms are associated with organizations and permissions are inherited accordingly
+    tuple_file: tuples/platforms.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: platform:platform-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: platform:platform-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: platform:platform-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: platform:platform-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+  - name: identity_holder
+    description: identity_holders are associated with organizations or platforms and permissions are inherited accordingly
+    tuple_file: tuples/identity_holders.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: identity_holder:identity_holder-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: identity_holder:identity_holder-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: identity_holder:identity_holder-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: identity_holder:identity_holder-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # org owner has full access to platform-associated identity_holder
+        object: identity_holder:identity_holder-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: evidence
     description: evidence are always with an organization, and can be linked to many objects within the system
     tuple_file: tuples/evidence.yaml
@@ -969,6 +1165,12 @@ tests:
           can_edit: false
           can_delete: false
       - user: user:ulid-group-control-1-editor
+        object: control:control-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-admin-control-1-editor
         object: control:control-1
         assertions:
           can_view: true
@@ -1738,7 +1940,7 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
-      - user: user:tc-manager-tc-2  
+      - user: user:tc-manager-tc-2
         object: trust_center:tc-2
         context:
           email_domain: "example.com"
@@ -1856,5 +2058,5 @@ tests:
         object: file:logo-file-1
         assertions:
           can_view: true
-          can_edit: false 
+          can_edit: false
           can_delete: false

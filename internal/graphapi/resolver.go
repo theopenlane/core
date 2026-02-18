@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
@@ -42,6 +43,7 @@ type Resolver struct {
 	isDevelopment     bool
 	complexityLimit   int
 	maxResultLimit    *int
+	workflowsConfig   workflows.Config
 
 	// subscription settings
 	subscriptionSettings
@@ -76,9 +78,11 @@ type subscriptionSettings struct {
 
 // NewResolver returns a resolver configured with the given ent client
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
+	defaultWorkflows := workflows.NewDefaultConfig()
 	return &Resolver{
-		db:       db,
-		uploader: u,
+		db:              db,
+		uploader:        u,
+		workflowsConfig: *defaultWorkflows,
 		subscriptionSettings: subscriptionSettings{
 			websocketPingInterval: defaultWebsocketPingInterval,
 			sseKeepAliveInterval:  defaultSSEKeepAliveInterval,

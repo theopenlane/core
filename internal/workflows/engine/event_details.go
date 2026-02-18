@@ -9,8 +9,13 @@ import (
 
 const (
 	approvalRejectedMessage   = "approval rejected"
+	approvalChangesRequested  = "changes requested"
 	approvalQuorumNotMet      = "approval quorum not met"
 	approvalFailedMessage     = "approval failed"
+	reviewRejectedMessage     = "review rejected"
+	reviewChangesRequested    = "changes requested"
+	reviewQuorumNotMet        = "review quorum not met"
+	reviewFailedMessage       = "review failed"
 	actionExecutionFailedMsg  = "action execution failed"
 	actionIndexOutOfBoundsMsg = "action index out of bounds"
 )
@@ -107,6 +112,7 @@ func actionFailureDetails(actionKey string, actionIndex int, actionType enums.Wo
 	if details.ErrorMessage == "" {
 		details.ErrorMessage = actionExecutionFailedMsg
 	}
+
 	return details
 }
 
@@ -123,12 +129,12 @@ func actionIndexOutOfBoundsDetails(payload soiree.WorkflowActionStartedPayload) 
 	}
 }
 
-// assignmentCreatedDetailsForApproval builds assignment created details for approval actions
-func assignmentCreatedDetailsForApproval(action models.WorkflowAction, actionIndex int, obj *workflows.Object, assignmentIDs, targetUserIDs []string, required bool, requiredCount int, label string) assignmentCreatedDetails {
+// assignmentCreatedDetailsForAction builds assignment created details for approval or review actions
+func assignmentCreatedDetailsForAction(action models.WorkflowAction, actionType enums.WorkflowActionType, actionIndex int, obj *workflows.Object, assignmentIDs, targetUserIDs []string, required bool, requiredCount int, label string) assignmentCreatedDetails {
 	details := assignmentCreatedDetails{
 		ActionKey:     action.Key,
 		ActionIndex:   actionIndex,
-		ActionType:    enums.WorkflowActionTypeApproval,
+		ActionType:    actionType,
 		AssignmentIDs: assignmentIDs,
 		TargetUserIDs: targetUserIDs,
 		Required:      required,
@@ -139,6 +145,7 @@ func assignmentCreatedDetailsForApproval(action models.WorkflowAction, actionInd
 		details.ObjectID = obj.ID
 		details.ObjectType = obj.Type
 	}
+
 	return details
 }
 
@@ -165,16 +172,63 @@ func approvalCompletedDetails(action models.WorkflowAction, actionIndex int, obj
 	if !success {
 		details.ErrorMessage = approvalFailureMessage(counts, requiredCount)
 	}
+
 	return details
 }
 
 // approvalFailureMessage returns a user-facing failure message for approvals
 func approvalFailureMessage(counts AssignmentStatusCounts, requiredCount int) string {
+	if counts.ChangesRequestedRequired {
+		return approvalChangesRequested
+	}
 	if counts.RejectedRequired {
 		return approvalRejectedMessage
 	}
 	if requiredCount > 0 && counts.Approved < requiredCount && counts.Pending == 0 {
 		return approvalQuorumNotMet
 	}
+
 	return approvalFailedMessage
+}
+
+// reviewCompletedDetails builds action completion details for review actions
+func reviewCompletedDetails(action models.WorkflowAction, actionIndex int, obj *workflows.Object, counts AssignmentStatusCounts, requiredCount int, assignmentIDs, targetUserIDs []string, success bool, label string, required bool) actionCompletedDetails {
+	details := actionCompletedDetails{
+		ActionKey:     action.Key,
+		ActionIndex:   actionIndex,
+		ActionType:    enums.WorkflowActionTypeReview,
+		Success:       success,
+		AssignmentIDs: assignmentIDs,
+		TargetUserIDs: targetUserIDs,
+		ApprovedCount: counts.Approved,
+		RejectedCount: counts.Rejected + counts.ChangesRequested,
+		PendingCount:  counts.Pending,
+		RequiredCount: requiredCount,
+		Required:      required,
+		Label:         label,
+	}
+	if obj != nil {
+		details.ObjectID = obj.ID
+		details.ObjectType = obj.Type
+	}
+	if !success {
+		details.ErrorMessage = reviewFailureMessage(counts, requiredCount)
+	}
+
+	return details
+}
+
+// reviewFailureMessage returns a user-facing failure message for reviews
+func reviewFailureMessage(counts AssignmentStatusCounts, requiredCount int) string {
+	if counts.ChangesRequestedRequired {
+		return reviewChangesRequested
+	}
+	if counts.RejectedRequired {
+		return reviewRejectedMessage
+	}
+	if requiredCount > 0 && counts.Approved < requiredCount && counts.Pending == 0 {
+		return reviewQuorumNotMet
+	}
+
+	return reviewFailedMessage
 }

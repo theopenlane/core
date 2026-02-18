@@ -86,9 +86,10 @@ func (Entity) Fields() []ent.Field {
 		field.String("entity_type_id").
 			Comment("The type of the entity").
 			Optional(),
-		field.String("status").
+		field.Enum("status").
 			Comment("status of the entity").
-			Default("active").
+			GoType(enums.EntityStatus("")).
+			Default(enums.EntityStatusActive.String()).
 			Annotations(
 				entgql.OrderField("status"),
 			).
@@ -329,6 +330,9 @@ func (e Entity) Edges() []ent.Edge {
 			fromSchema: e,
 			edgeSchema: EntityType{},
 			field:      "entity_type_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }
@@ -364,6 +368,7 @@ func (e Entity) Policy() ent.Policy {
 func (e Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 

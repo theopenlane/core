@@ -15,7 +15,7 @@ import (
 )
 
 // emitAssignmentCreated emits assignment created events and records enqueue failures
-func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *generated.WorkflowInstance, obj *workflows.Object, assignmentID string, userID string) {
+func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *generated.WorkflowInstance, obj *workflows.Object, assignmentID string, userID string, actionType enums.WorkflowActionType) {
 	payload := soiree.WorkflowAssignmentCreatedPayload{
 		AssignmentID: assignmentID,
 		InstanceID:   instance.ID,
@@ -31,7 +31,7 @@ func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *ge
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
-	emitEngineEvent(ctx, e, observability.OpExecuteAction, enums.WorkflowActionTypeApproval.String(), instance, meta, soiree.WorkflowAssignmentCreatedTopic, payload, observability.Fields{
+	emitEngineEvent(ctx, e, observability.OpExecuteAction, actionType.String(), instance, meta, soiree.WorkflowAssignmentCreatedTopic, payload, observability.Fields{
 		workflowassignmenttarget.FieldTargetUserID: userID,
 	})
 }

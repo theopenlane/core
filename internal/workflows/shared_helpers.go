@@ -2,7 +2,6 @@ package workflows
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -79,8 +79,7 @@ func DefinitionMatchesTrigger(doc models.WorkflowDefinitionDocument, eventType s
 			return true
 		}
 
-		allFields := append([]string(nil), trigger.Fields...)
-		allFields = append(allFields, trigger.Edges...)
+		allFields := lo.Flatten([][]string{trigger.Fields, trigger.Edges})
 		if len(allFields) == 0 {
 			return true
 		}
@@ -224,10 +223,9 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 		return proposal, nil
 	}
 
-	stateGroups := make([][]enums.WorkflowProposalState, 0, len(priorityStates)+1)
-	for _, state := range priorityStates {
-		stateGroups = append(stateGroups, []enums.WorkflowProposalState{state})
-	}
+	stateGroups := lo.Map(priorityStates, func(state enums.WorkflowProposalState, _ int) []enums.WorkflowProposalState {
+		return []enums.WorkflowProposalState{state}
+	})
 	stateGroups = append(stateGroups, states)
 
 	for _, group := range stateGroups {
@@ -243,9 +241,10 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 	return nil, nil
 }
 
-// ValidateCELExpression ensures the expression compiles against the standard workflow CEL environment.
-func ValidateCELExpression(expression string) error {
-	env, err := NewCELEnvWithConfig(NewDefaultConfig())
+// ValidateCELExpression ensures the expression compiles against a CEL environment
+// configured with the provided workflow config and scope.
+func ValidateCELExpression(cfg *Config, scope CELExpressionScope, expression string) error {
+	env, err := NewCELEnv(cfg, scope)
 	if err != nil {
 		return err
 	}
@@ -285,16 +284,11 @@ func GetObjectUpdatedBy(obj *Object) string {
 		return ""
 	}
 
-	data, err := json.Marshal(obj.Node)
-	if err != nil {
-		return ""
-	}
-
 	var fields struct {
 		UpdatedBy string `json:"updated_by"`
 	}
 
-	if err := json.Unmarshal(data, &fields); err != nil {
+	if err := jsonx.RoundTrip(obj.Node, &fields); err != nil {
 		return ""
 	}
 
@@ -306,10 +300,24 @@ func GetObjectUpdatedBy(obj *Object) string {
 type MutationPayload struct {
 	// Mutation is the raw ent mutation that triggered the event
 	Mutation ent.Mutation
+	// MutationType is the ent schema type that emitted the mutation
+	MutationType string
 	// Operation is the string representation of the mutation operation
 	Operation string
 	// EntityID is the ID of the entity that was mutated
 	EntityID string
+	// ChangedFields captures updated/cleared fields for the mutation
+	ChangedFields []string
+	// ClearedFields captures fields explicitly cleared in the mutation
+	ClearedFields []string
+	// ChangedEdges captures changed edge names for workflow-eligible edges
+	ChangedEdges []string
+	// AddedIDs captures edge IDs added by edge name
+	AddedIDs map[string][]string
+	// RemovedIDs captures edge IDs removed by edge name
+	RemovedIDs map[string][]string
+	// ProposedChanges captures field-level proposed values (including nil for clears)
+	ProposedChanges map[string]any
 	// Client is the ent client that can be used to perform additional queries or mutations
 	Client *generated.Client
 }

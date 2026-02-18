@@ -66,6 +66,12 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
+			case "delegateUserID":
+				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
+			case "delegateStartAt":
+				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
+			case "delegateEndAt":
+				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
 			case "locked":
 				return ec.fieldContext_UserSetting_locked(ctx, field)
 			case "silencedAt":
@@ -158,6 +164,12 @@ func (ec *executionContext) fieldContext_UserSettingBulkUpdatePayload_userSettin
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
+			case "delegateUserID":
+				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
+			case "delegateStartAt":
+				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
+			case "delegateEndAt":
+				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
 			case "locked":
 				return ec.fieldContext_UserSetting_locked(ctx, field)
 			case "silencedAt":
@@ -250,6 +262,12 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
+			case "delegateUserID":
+				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
+			case "delegateStartAt":
+				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
+			case "delegateEndAt":
+				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
 			case "locked":
 				return ec.fieldContext_UserSetting_locked(ctx, field)
 			case "silencedAt":
@@ -313,6 +331,12 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_tags(ctx, field)
 			case "userID":
 				return ec.fieldContext_UserSetting_userID(ctx, field)
+			case "delegateUserID":
+				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
+			case "delegateStartAt":
+				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
+			case "delegateEndAt":
+				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
 			case "locked":
 				return ec.fieldContext_UserSetting_locked(ctx, field)
 			case "silencedAt":

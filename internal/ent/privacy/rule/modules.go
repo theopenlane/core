@@ -268,7 +268,7 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 // DenyIfMissingAllModules acts as a prerequisite check - denies if features missing, Allows if present
 func DenyIfMissingAllModules() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		if mut, ok := m.(interface{ Client() *generated.Client }); ok {
+		if mut, ok := m.(utils.MutationClient); ok {
 			if !utils.ModulesEnabled(mut.Client()) {
 				return privacy.Skip
 			}

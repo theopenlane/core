@@ -52,6 +52,12 @@ type APITokenUpdatePayload struct {
 	APIToken *generated.APIToken `json:"apiToken"`
 }
 
+// Return response for markNotificationsAsRead mutation
+type ActionNotificationsReadPayload struct {
+	// Updated notification IDs
+	ReadIDs []*string `json:"readIDs"`
+}
+
 // Return response for createBulkActionPlan mutation
 type ActionPlanBulkCreatePayload struct {
 	// Created actionPlans
@@ -848,6 +854,82 @@ type DocumentDataUpdatePayload struct {
 	DocumentData *generated.DocumentData `json:"documentData"`
 }
 
+// Return response for createBulkEmailBranding mutation
+type EmailBrandingBulkCreatePayload struct {
+	// Created emailBrandings
+	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
+}
+
+// Return response for deleteBulkEmailBranding mutation
+type EmailBrandingBulkDeletePayload struct {
+	// Deleted emailBranding IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEmailBranding mutation
+type EmailBrandingBulkUpdatePayload struct {
+	// Updated emailBrandings
+	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
+	// IDs of the updated emailBrandings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createEmailBranding mutation
+type EmailBrandingCreatePayload struct {
+	// Created emailBranding
+	EmailBranding *generated.EmailBranding `json:"emailBranding"`
+}
+
+// Return response for deleteEmailBranding mutation
+type EmailBrandingDeletePayload struct {
+	// Deleted emailBranding ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateEmailBranding mutation
+type EmailBrandingUpdatePayload struct {
+	// Updated emailBranding
+	EmailBranding *generated.EmailBranding `json:"emailBranding"`
+}
+
+// Return response for createBulkEmailTemplate mutation
+type EmailTemplateBulkCreatePayload struct {
+	// Created emailTemplates
+	EmailTemplates []*generated.EmailTemplate `json:"emailTemplates,omitempty"`
+}
+
+// Return response for deleteBulkEmailTemplate mutation
+type EmailTemplateBulkDeletePayload struct {
+	// Deleted emailTemplate IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEmailTemplate mutation
+type EmailTemplateBulkUpdatePayload struct {
+	// Updated emailTemplates
+	EmailTemplates []*generated.EmailTemplate `json:"emailTemplates,omitempty"`
+	// IDs of the updated emailTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createEmailTemplate mutation
+type EmailTemplateCreatePayload struct {
+	// Created emailTemplate
+	EmailTemplate *generated.EmailTemplate `json:"emailTemplate"`
+}
+
+// Return response for deleteEmailTemplate mutation
+type EmailTemplateDeletePayload struct {
+	// Deleted emailTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateEmailTemplate mutation
+type EmailTemplateUpdatePayload struct {
+	// Updated emailTemplate
+	EmailTemplate *generated.EmailTemplate `json:"emailTemplate"`
+}
+
 // Return response for createBulkEntity mutation
 type EntityBulkCreatePayload struct {
 	// Created entities
@@ -1346,6 +1428,20 @@ type IdentityHolderBulkCreatePayload struct {
 	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
 }
 
+// Return response for deleteBulkIdentityHolder mutation
+type IdentityHolderBulkDeletePayload struct {
+	// Deleted identityHolder IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkIdentityHolder mutation
+type IdentityHolderBulkUpdatePayload struct {
+	// Updated identityHolders
+	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
+	// IDs of the updated identityHolders
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createIdentityHolder mutation
 type IdentityHolderCreatePayload struct {
 	// Created identityHolder
@@ -1686,6 +1782,82 @@ type NoteDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkNotificationPreference mutation
+type NotificationPreferenceBulkCreatePayload struct {
+	// Created notificationPreferences
+	NotificationPreferences []*generated.NotificationPreference `json:"notificationPreferences,omitempty"`
+}
+
+// Return response for deleteBulkNotificationPreference mutation
+type NotificationPreferenceBulkDeletePayload struct {
+	// Deleted notificationPreference IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNotificationPreference mutation
+type NotificationPreferenceBulkUpdatePayload struct {
+	// Updated notificationPreferences
+	NotificationPreferences []*generated.NotificationPreference `json:"notificationPreferences,omitempty"`
+	// IDs of the updated notificationPreferences
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createNotificationPreference mutation
+type NotificationPreferenceCreatePayload struct {
+	// Created notificationPreference
+	NotificationPreference *generated.NotificationPreference `json:"notificationPreference"`
+}
+
+// Return response for deleteNotificationPreference mutation
+type NotificationPreferenceDeletePayload struct {
+	// Deleted notificationPreference ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateNotificationPreference mutation
+type NotificationPreferenceUpdatePayload struct {
+	// Updated notificationPreference
+	NotificationPreference *generated.NotificationPreference `json:"notificationPreference"`
+}
+
+// Return response for createBulkNotificationTemplate mutation
+type NotificationTemplateBulkCreatePayload struct {
+	// Created notificationTemplates
+	NotificationTemplates []*generated.NotificationTemplate `json:"notificationTemplates,omitempty"`
+}
+
+// Return response for deleteBulkNotificationTemplate mutation
+type NotificationTemplateBulkDeletePayload struct {
+	// Deleted notificationTemplate IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkNotificationTemplate mutation
+type NotificationTemplateBulkUpdatePayload struct {
+	// Updated notificationTemplates
+	NotificationTemplates []*generated.NotificationTemplate `json:"notificationTemplates,omitempty"`
+	// IDs of the updated notificationTemplates
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createNotificationTemplate mutation
+type NotificationTemplateCreatePayload struct {
+	// Created notificationTemplate
+	NotificationTemplate *generated.NotificationTemplate `json:"notificationTemplate"`
+}
+
+// Return response for deleteNotificationTemplate mutation
+type NotificationTemplateDeletePayload struct {
+	// Deleted notificationTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateNotificationTemplate mutation
+type NotificationTemplateUpdatePayload struct {
+	// Updated notificationTemplate
+	NotificationTemplate *generated.NotificationTemplate `json:"notificationTemplate"`
+}
+
 // Return response for updateNotification mutation
 type NotificationUpdatePayload struct {
 	// Updated notification
@@ -1975,6 +2147,14 @@ type ProgramUpdatePayload struct {
 	Program *generated.Program `json:"program"`
 }
 
+// Input for adminReassignWorkflowAssignment mutation
+type ReassignWorkflowAssignmentInput struct {
+	// ID of the workflow assignment to reassign
+	ID string `json:"id"`
+	// New targets for the assignment
+	Targets []*WorkflowAssignmentTargetInput `json:"targets"`
+}
+
 // Return response for createBulkRemediation mutation
 type RemediationBulkCreatePayload struct {
 	// Created remediations
@@ -2005,6 +2185,24 @@ type ResendCampaignIncompleteInput struct {
 	CampaignID string `json:"campaignID"`
 	// Optional time to schedule the resend for incomplete targets
 	ScheduledAt *models.DateTime `json:"scheduledAt,omitempty"`
+}
+
+// Input for resolving a vulnerability
+type ResolveVulnerabilityInput struct {
+	// status to set on the vulnerability (resolved, dismissed, fixed, etc.)
+	Status string `json:"status"`
+	// optional reason for the resolution (false_positive, wont_fix, etc.)
+	Reason *string `json:"reason,omitempty"`
+	// optional notes or context for the resolution
+	Details *string `json:"details,omitempty"`
+	// when true, create a Review record linked to the vulnerability
+	CreateReview *bool `json:"createReview,omitempty"`
+	// optional review title override
+	ReviewTitle *string `json:"reviewTitle,omitempty"`
+	// optional review category override (defaults to resolution)
+	ReviewCategory *string `json:"reviewCategory,omitempty"`
+	// optional review state override (defaults to the resolution status)
+	ReviewState *string `json:"reviewState,omitempty"`
 }
 
 // Return response for createBulkReview mutation
@@ -2167,45 +2365,49 @@ type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
 	// Identifies the total count of items in the connection.
-	TotalCount          int                                     `json:"totalCount"`
-	ActionPlans         *generated.ActionPlanConnection         `json:"actionPlans,omitempty"`
-	Assessments         *generated.AssessmentConnection         `json:"assessments,omitempty"`
-	AssessmentResponses *generated.AssessmentResponseConnection `json:"assessmentResponses,omitempty"`
-	Assets              *generated.AssetConnection              `json:"assets,omitempty"`
-	Campaigns           *generated.CampaignConnection           `json:"campaigns,omitempty"`
-	CampaignTargets     *generated.CampaignTargetConnection     `json:"campaignTargets,omitempty"`
-	Contacts            *generated.ContactConnection            `json:"contacts,omitempty"`
-	Controls            *generated.ControlConnection            `json:"controls,omitempty"`
-	ControlObjectives   *generated.ControlObjectiveConnection   `json:"controlObjectives,omitempty"`
-	CustomTypeEnums     *generated.CustomTypeEnumConnection     `json:"customTypeEnums,omitempty"`
-	Entities            *generated.EntityConnection             `json:"entities,omitempty"`
-	Evidences           *generated.EvidenceConnection           `json:"evidences,omitempty"`
-	Findings            *generated.FindingConnection            `json:"findings,omitempty"`
-	Groups              *generated.GroupConnection              `json:"groups,omitempty"`
-	IdentityHolders     *generated.IdentityHolderConnection     `json:"identityHolders,omitempty"`
-	InternalPolicies    *generated.InternalPolicyConnection     `json:"internalPolicies,omitempty"`
-	Invites             *generated.InviteConnection             `json:"invites,omitempty"`
-	JobRunners          *generated.JobRunnerConnection          `json:"jobRunners,omitempty"`
-	JobTemplates        *generated.JobTemplateConnection        `json:"jobTemplates,omitempty"`
-	Narratives          *generated.NarrativeConnection          `json:"narratives,omitempty"`
-	Organizations       *generated.OrganizationConnection       `json:"organizations,omitempty"`
-	Platforms           *generated.PlatformConnection           `json:"platforms,omitempty"`
-	Procedures          *generated.ProcedureConnection          `json:"procedures,omitempty"`
-	Programs            *generated.ProgramConnection            `json:"programs,omitempty"`
-	Remediations        *generated.RemediationConnection        `json:"remediations,omitempty"`
-	Reviews             *generated.ReviewConnection             `json:"reviews,omitempty"`
-	Risks               *generated.RiskConnection               `json:"risks,omitempty"`
-	Scans               *generated.ScanConnection               `json:"scans,omitempty"`
-	Standards           *generated.StandardConnection           `json:"standards,omitempty"`
-	Subcontrols         *generated.SubcontrolConnection         `json:"subcontrols,omitempty"`
-	Subprocessors       *generated.SubprocessorConnection       `json:"subprocessors,omitempty"`
-	Subscribers         *generated.SubscriberConnection         `json:"subscribers,omitempty"`
-	TagDefinitions      *generated.TagDefinitionConnection      `json:"tagDefinitions,omitempty"`
-	Tasks               *generated.TaskConnection               `json:"tasks,omitempty"`
-	Templates           *generated.TemplateConnection           `json:"templates,omitempty"`
-	TrustCenterEntities *generated.TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
-	Vulnerabilities     *generated.VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
-	SearchContext       []*models.SearchContext                 `json:"searchContext,omitempty"`
+	TotalCount            int                                       `json:"totalCount"`
+	ActionPlans           *generated.ActionPlanConnection           `json:"actionPlans,omitempty"`
+	Assessments           *generated.AssessmentConnection           `json:"assessments,omitempty"`
+	AssessmentResponses   *generated.AssessmentResponseConnection   `json:"assessmentResponses,omitempty"`
+	Assets                *generated.AssetConnection                `json:"assets,omitempty"`
+	Campaigns             *generated.CampaignConnection             `json:"campaigns,omitempty"`
+	CampaignTargets       *generated.CampaignTargetConnection       `json:"campaignTargets,omitempty"`
+	Contacts              *generated.ContactConnection              `json:"contacts,omitempty"`
+	Controls              *generated.ControlConnection              `json:"controls,omitempty"`
+	ControlObjectives     *generated.ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
+	CustomTypeEnums       *generated.CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
+	EmailBrandings        *generated.EmailBrandingConnection        `json:"emailBrandings,omitempty"`
+	EmailTemplates        *generated.EmailTemplateConnection        `json:"emailTemplates,omitempty"`
+	Entities              *generated.EntityConnection               `json:"entities,omitempty"`
+	Evidences             *generated.EvidenceConnection             `json:"evidences,omitempty"`
+	Findings              *generated.FindingConnection              `json:"findings,omitempty"`
+	Groups                *generated.GroupConnection                `json:"groups,omitempty"`
+	IdentityHolders       *generated.IdentityHolderConnection       `json:"identityHolders,omitempty"`
+	Integrations          *generated.IntegrationConnection          `json:"integrations,omitempty"`
+	InternalPolicies      *generated.InternalPolicyConnection       `json:"internalPolicies,omitempty"`
+	Invites               *generated.InviteConnection               `json:"invites,omitempty"`
+	JobRunners            *generated.JobRunnerConnection            `json:"jobRunners,omitempty"`
+	JobTemplates          *generated.JobTemplateConnection          `json:"jobTemplates,omitempty"`
+	Narratives            *generated.NarrativeConnection            `json:"narratives,omitempty"`
+	NotificationTemplates *generated.NotificationTemplateConnection `json:"notificationTemplates,omitempty"`
+	Organizations         *generated.OrganizationConnection         `json:"organizations,omitempty"`
+	Platforms             *generated.PlatformConnection             `json:"platforms,omitempty"`
+	Procedures            *generated.ProcedureConnection            `json:"procedures,omitempty"`
+	Programs              *generated.ProgramConnection              `json:"programs,omitempty"`
+	Remediations          *generated.RemediationConnection          `json:"remediations,omitempty"`
+	Reviews               *generated.ReviewConnection               `json:"reviews,omitempty"`
+	Risks                 *generated.RiskConnection                 `json:"risks,omitempty"`
+	Scans                 *generated.ScanConnection                 `json:"scans,omitempty"`
+	Standards             *generated.StandardConnection             `json:"standards,omitempty"`
+	Subcontrols           *generated.SubcontrolConnection           `json:"subcontrols,omitempty"`
+	Subprocessors         *generated.SubprocessorConnection         `json:"subprocessors,omitempty"`
+	Subscribers           *generated.SubscriberConnection           `json:"subscribers,omitempty"`
+	TagDefinitions        *generated.TagDefinitionConnection        `json:"tagDefinitions,omitempty"`
+	Tasks                 *generated.TaskConnection                 `json:"tasks,omitempty"`
+	Templates             *generated.TemplateConnection             `json:"templates,omitempty"`
+	TrustCenterEntities   *generated.TrustCenterEntityConnection    `json:"trustCenterEntities,omitempty"`
+	Vulnerabilities       *generated.VulnerabilityConnection        `json:"vulnerabilities,omitempty"`
+	SearchContext         []*models.SearchContext                   `json:"searchContext,omitempty"`
 }
 
 // Input for sendCampaignTestEmail mutation
@@ -2471,6 +2673,11 @@ type TemplateUpdatePayload struct {
 	Template *generated.Template `json:"template"`
 }
 
+// Return response for requestNewTrustCenterToken mutation
+type TrustCenterAccessTokenPayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createBulkTrustCenterCompliance mutation
 type TrustCenterComplianceBulkCreatePayload struct {
 	// Created trustCenterCompliances
@@ -2596,6 +2803,12 @@ type TrustCenterNDACreatePayload struct {
 type TrustCenterNDARequestBulkCreatePayload struct {
 	// Created trustCenterNDARequests
 	TrustCenterNDARequests []*generated.TrustCenterNDARequest `json:"trustCenterNDARequests,omitempty"`
+}
+
+// Return response for deleteBulkTrustCenterNDARequest mutation
+type TrustCenterNDARequestBulkDeletePayload struct {
+	// Deleted trustCenterNDARequest IDs
+	DeletedIDs []string `json:"deletedIDs"`
 }
 
 // Return response for createTrustCenterNDARequest mutation
@@ -2725,6 +2938,14 @@ type UpdateDiscussionsInput struct {
 	Input *generated.UpdateDiscussionInput `json:"input"`
 }
 
+// Input for updateWorkflowProposalChanges mutation
+type UpdateWorkflowProposalChangesInput struct {
+	// ID of the workflow proposal to update
+	ID string `json:"id"`
+	// New proposed changes for the approval domain
+	Changes map[string]any `json:"changes"`
+}
+
 // Return response for createBulkUser mutation
 type UserBulkCreatePayload struct {
 	// Created users
@@ -2799,6 +3020,34 @@ type VulnerabilityDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for resolveVulnerability mutation
+type VulnerabilityResolvePayload struct {
+	// Resolved vulnerability
+	Vulnerability *generated.Vulnerability `json:"vulnerability"`
+	// Review record created for the resolution, if requested
+	Review *generated.Review `json:"review,omitempty"`
+}
+
+// Aggregated vulnerability summary for dashboards.
+type VulnerabilitySummary struct {
+	// Total vulnerabilities matching the filter.
+	Total int `json:"total"`
+	// Counts grouped by severity.
+	BySeverity []*VulnerabilitySummaryBucket `json:"bySeverity"`
+	// Counts grouped by source.
+	BySource []*VulnerabilitySummaryBucket `json:"bySource"`
+	// Counts grouped by status.
+	ByStatus []*VulnerabilitySummaryBucket `json:"byStatus"`
+}
+
+// Summary bucket for vulnerability groupings.
+type VulnerabilitySummaryBucket struct {
+	// Bucket label such as severity or source.
+	Key string `json:"key"`
+	// Count of vulnerabilities in this bucket.
+	Count int `json:"count"`
+}
+
 // Return response for updateVulnerability mutation
 type VulnerabilityUpdatePayload struct {
 	// Updated vulnerability
@@ -2817,10 +3066,26 @@ type WorkflowAssignmentApprovePayload struct {
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
 }
 
+// Return response for adminReassignWorkflowAssignment mutation
+type WorkflowAssignmentReassignPayload struct {
+	// Updated workflow assignment
+	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
+}
+
 // Return response for rejectWorkflowAssignment mutation
 type WorkflowAssignmentRejectPayload struct {
 	// Rejected workflow assignment
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
+}
+
+// Input target for reassigning workflow assignments
+type WorkflowAssignmentTargetInput struct {
+	// Target type (USER, GROUP, ROLE, RESOLVER)
+	Type enums.WorkflowTargetType `json:"type"`
+	// Target ID for USER/GROUP/ROLE targets
+	ID *string `json:"id,omitempty"`
+	// Resolver key for RESOLVER targets
+	ResolverKey *string `json:"resolverKey,omitempty"`
 }
 
 // Return response for createBulkWorkflowDefinition mutation
@@ -2873,6 +3138,18 @@ type WorkflowFieldMetadata struct {
 	Type string `json:"type"`
 }
 
+// Return response for workflow instance admin operations
+type WorkflowInstanceAdminPayload struct {
+	// Updated workflow instance
+	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
+}
+
+// Return response for bulk workflow instance admin operations
+type WorkflowInstanceBulkAdminPayload struct {
+	// IDs of workflow instances updated
+	UpdatedIDs []string `json:"updatedIDs"`
+}
+
 // Workflow metadata including supported object types and their fields
 type WorkflowMetadata struct {
 	// Available workflow object types
@@ -2889,6 +3166,8 @@ type WorkflowObjectTypeMetadata struct {
 	Description string `json:"description"`
 	// List of fields that can be tracked in workflows for this type
 	EligibleFields []*WorkflowFieldMetadata `json:"eligibleFields"`
+	// List of edges that can be tracked in workflows for this type
+	EligibleEdges []string `json:"eligibleEdges"`
 	// Available resolver keys for this object type
 	ResolverKeys []string `json:"resolverKeys"`
 }
@@ -2911,6 +3190,24 @@ type WorkflowProposalPreview struct {
 	CurrentValues map[string]any `json:"currentValues,omitempty"`
 	// Field-level diffs for the proposed changes
 	Diffs []*WorkflowFieldDiff `json:"diffs"`
+}
+
+// Return response for submitWorkflowProposal mutation
+type WorkflowProposalSubmitPayload struct {
+	// Submitted workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+}
+
+// Return response for updateWorkflowProposalChanges mutation
+type WorkflowProposalUpdatePayload struct {
+	// Updated workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
+}
+
+// Return response for withdrawWorkflowProposal mutation
+type WorkflowProposalWithdrawPayload struct {
+	// Withdrawn workflow proposal
+	WorkflowProposal *generated.WorkflowProposal `json:"workflowProposal"`
 }
 
 // Properties by which ControlCategory connections can be ordered.

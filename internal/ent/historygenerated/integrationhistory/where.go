@@ -1522,6 +1522,36 @@ func IntegrationTypeContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldIntegrationType, v))
 }
 
+// ProviderMetadataIsNil applies the IsNil predicate on the "provider_metadata" field.
+func ProviderMetadataIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldProviderMetadata))
+}
+
+// ProviderMetadataNotNil applies the NotNil predicate on the "provider_metadata" field.
+func ProviderMetadataNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldProviderMetadata))
+}
+
+// ConfigIsNil applies the IsNil predicate on the "config" field.
+func ConfigIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldConfig))
+}
+
+// ConfigNotNil applies the NotNil predicate on the "config" field.
+func ConfigNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldConfig))
+}
+
+// ProviderStateIsNil applies the IsNil predicate on the "provider_state" field.
+func ProviderStateIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldProviderState))
+}
+
+// ProviderStateNotNil applies the NotNil predicate on the "provider_state" field.
+func ProviderStateNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldProviderState))
+}
+
 // MetadataIsNil applies the IsNil predicate on the "metadata" field.
 func MetadataIsNil() predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldIsNull(FieldMetadata))

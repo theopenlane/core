@@ -78,6 +78,20 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 // EvaluateActionWhen evaluates an action's When expression with assignment context.
 // This is used for re-evaluating NOTIFY actions when assignment status changes.
 func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression string, instance *generated.WorkflowInstance, obj *workflows.Object) (bool, error) {
+	vars, err := e.buildActionCELVars(ctx, instance, obj)
+	if err != nil {
+		return false, err
+	}
+
+	return e.celEvaluator.Evaluate(ctx, expression, vars)
+}
+
+// buildActionCELVars assembles CEL variables for action evaluation (including assignment context).
+func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *generated.WorkflowInstance, obj *workflows.Object) (map[string]any, error) {
+	if instance == nil {
+		return nil, ErrInstanceNotFound
+	}
+
 	// Use proposed changes from instance context (set when workflow was triggered)
 	proposedChanges := instance.Context.TriggerProposedChanges
 
@@ -85,15 +99,15 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 	if obj != nil && obj.Node == nil {
 		allowCtx := workflows.AllowContext(ctx)
 		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
-			return false, err
+			return nil, err
 		}
 	}
 
 	// Fallback to loading from proposal if instance context doesn't have proposed changes
-	if len(proposedChanges) == 0 && instance != nil && instance.WorkflowProposalID != "" {
+	if len(proposedChanges) == 0 && instance.WorkflowProposalID != "" {
 		allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
 		if err != nil {
-			return false, err
+			return nil, err
 		}
 
 		proposal, err := e.client.WorkflowProposal.Query().
@@ -123,7 +137,7 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 	allowCtx := workflows.AllowContext(ctx)
 	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	if assignmentCtx != nil {
@@ -135,7 +149,7 @@ func (e *WorkflowEngine) EvaluateActionWhen(ctx context.Context, expression stri
 		vars["initiator"] = ""
 	}
 
-	return e.celEvaluator.Evaluate(ctx, expression, vars)
+	return vars, nil
 }
 
 // FindMatchingDefinitions returns all active workflow definitions that match the criteria
@@ -158,7 +172,10 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 			workflowdefinition.SchemaTypeEQ(schemaType),
 			workflowdefinition.ActiveEQ(true),
 			workflowdefinition.DraftEQ(false),
-			workflowdefinition.OwnerIDEQ(orgID),
+			workflowdefinition.Or(
+				workflowdefinition.OwnerIDEQ(orgID),
+				workflowdefinition.SystemOwnedEQ(true),
+			),
 		)
 
 	if eventType != "" {

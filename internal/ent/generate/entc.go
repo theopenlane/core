@@ -6,7 +6,9 @@ package main
 
 import (
 	"embed"
+	"errors"
 	"os"
+	"sync"
 
 	"github.com/rs/zerolog/log"
 
@@ -26,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
@@ -70,6 +73,7 @@ const (
 	entGeneratedAuthzPath    = "internal/ent/authzgenerated"
 	entGeneratedWorkflowPath = "internal/ent/workflowgenerated"
 	csvGeneratedPath         = "internal/ent/csvgenerated"
+	integrationGeneratedPath = "internal/ent/integrationgenerated"
 
 	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
 	historyInputChecksumFile = "./internal/ent/checksum/.history_schema_checksum"
@@ -126,16 +130,27 @@ func main() {
 		hasChanges = true
 	}
 
+	var capturedGraph *gen.Graph
+
 	if hasChanges {
-		schemaGenerate(getEntfgaExtension(hasChanges), getEntGqlExtension(), getHistoryExtension(hasChanges))
+		capturedGraph = schemaGenerate(getEntfgaExtension(hasChanges), getEntGqlExtension(), getHistoryExtension(hasChanges))
 	} else {
 		log.Info().Msg("no schema changes detected, skipping main schema codegen")
+	}
+
+	// run independent post-generation hooks in parallel using the captured ent graph;
+	// these produce output (CSV mappings, integration mappings, access maps, enums,
+	// workflow hooks, exportable validation, feature maps) that does not depend on
+	// each other or on the graphql generation step
+	if capturedGraph != nil {
+		runParallelPostGenHooks(capturedGraph)
 	}
 
 	// only run if there were changes to the internal/ent/generated or internal/ent/schema directories
 	hasChangesForHistory, err := genhelpers.HasSchemaChanges(historyInputChecksumFile, historySchemaInputPaths...)
 	if err != nil {
 		log.Warn().Err(err).Msg("failed to check for schema changes, running history generation anyway")
+
 		hasChangesForHistory = true
 	}
 
@@ -143,13 +158,6 @@ func main() {
 		historySchemaGenerate(getEntHistoryGqlExtension())
 	} else {
 		log.Info().Msg("no schema changes detected, skipping history generation")
-	}
-
-	log.Info().Msg("generating module per schema for entitlements")
-	if hasChanges {
-		if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir); err != nil {
-			log.Fatal().Err(err).Msg("generating module per schema")
-		}
 	}
 
 	log.Info().Msg("ent codegen completed successfully, setting new schema checksums")
@@ -217,6 +225,8 @@ func getEntGqlExtension() *entgql.Extension {
 	}
 
 	schemaHooks = append(schemaHooks, dExt.SchemaHooks()...)
+
+	schemaHooks = append(schemaHooks, genhooks.WithStringSliceWhereOps())
 
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
@@ -289,22 +299,105 @@ func exportableSchema() {
 	}
 }
 
-func schemaGenerate(extensions ...entc.Extension) {
+// runParallelPostGenHooks executes independent code generation hooks concurrently
+// using a captured ent graph. These hooks produce output (CSV mappings, integration
+// mappings, access maps, enum exports, workflow hooks) that does not depend on each
+// other or on the graphql generation step. Each hook receives its own shallow copy
+// of the graph with a deep-copied Config to avoid data races on mutable fields like
+// Package, while sharing the read-only Nodes slice
+func runParallelPostGenHooks(g *gen.Graph) {
+	log.Info().Msg("running parallel post-generation hooks")
+
 	accessMapExt := accessmap.New(
 		accessmap.WithSchemaPath(schemaPath),
 		accessmap.WithGeneratedDir(entGeneratedAuthzPath),
 		accessmap.WithPackageName("authzgenerated"),
 	)
+
 	workflowGenExt := workflowgen.New(
 		workflowgen.WithHooksOutputDir(entGeneratedWorkflowPath),
 		workflowgen.WithHooksPackageName("workflowgenerated"),
 		workflowgen.WithEnumsOutputDir(enumsDir),
 		workflowgen.WithEnumsPackageName("enums"),
 	)
+
+	hooks := []gen.Hook{
+		genhooks.GenCSVSchema(
+			genhooks.WithCSVOutputDir(csvGeneratedPath),
+			genhooks.WithCSVPackageName("csvgenerated"),
+			genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
+			genhooks.WithCSVGenerateAllWrappers(true)),
+		genhooks.GenIntegrationMappingSchema(
+			genhooks.WithIntegrationMappingOutputDir(integrationGeneratedPath),
+			genhooks.WithIntegrationMappingPackageName("integrationgenerated"),
+		),
+		accessMapExt.Hook(),
+		exportenums.New().Hook(),
+		workflowGenExt.Hook(),
+	}
+
+	noopGen := gen.GenerateFunc(func(*gen.Graph) error { return nil })
+
+	var wg sync.WaitGroup
+
+	hookErrs := make([]error, len(hooks))
+
+	for i, hook := range hooks {
+		wg.Go(func() {
+			// shallow copy the graph with a deep-copied Config to isolate
+			// mutable fields (e.g. Package) while sharing read-only Nodes
+			graphCopy := *g
+			cfgCopy := *g.Config
+			graphCopy.Config = &cfgCopy
+
+			hookErrs[i] = hook(noopGen).Generate(&graphCopy)
+		})
+	}
+
+	// run standalone generators in parallel with hooks
+	wg.Go(func() {
+		log.Info().Msg("generating exportable schema validation")
+
+		exportableSchema()
+	})
+
+	wg.Go(func() {
+		log.Info().Msg("generating module per schema for entitlements")
+
+		if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir); err != nil {
+			log.Fatal().Err(err).Msg("generating module per schema")
+		}
+	})
+
+	wg.Wait()
+
+	if err := errors.Join(hookErrs...); err != nil {
+		log.Fatal().Err(err).Msg("running parallel post-generation hooks")
+	}
+
+	log.Info().Msg("parallel post-generation hooks completed")
+}
+
+// schemaGenerate runs the core ent code generation with pipeline hooks that produce
+// graphql schema files needed by downstream generation. It returns the captured
+// *gen.Graph for use by runParallelPostGenHooks
+func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
+	var capturedGraph *gen.Graph
+
+	// captureGraphHook stores a reference to the generated graph for use
+	// by parallel post-generation hooks that run after entc.Generate returns
+	captureGraphHook := func(next gen.Generator) gen.Generator {
+		return gen.GenerateFunc(func(g *gen.Graph) error {
+			capturedGraph = g
+			return next.Generate(g)
+		})
+	}
+
 	if err := entc.Generate(schemaPath, &gen.Config{
 		Target: "./" + entGeneratedPath,
 		Header: "// Code generated by ent, DO NOT EDIT.\n",
 		Hooks: []gen.Hook{
+			// pipeline hooks - produce graphql schema files needed by generate:graphql:smart
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
 			genhooks.GenWorkflowSchema(graphSchemaDir),
@@ -314,14 +407,8 @@ func schemaGenerate(extensions ...entc.Extension) {
 				genhooks.WithGraphQueryDir(graphQueryDir),
 				genhooks.WithGraphSchemaDir(graphSchemaDir),
 				genhooks.WithIncludeAdminSearch(false)),
-			genhooks.GenCSVSchema(
-				genhooks.WithCSVOutputDir(csvGeneratedPath),
-				genhooks.WithCSVPackageName("csvgenerated"),
-				genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
-				genhooks.WithCSVGenerateAllWrappers(true)),
-			accessMapExt.Hook(),
-			exportenums.New().Hook(),
-			workflowGenExt.Hook(),
+			// capture graph reference for parallel post-generation hooks
+			captureGraphHook,
 		},
 		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
 		Features:   enabledFeatures,
@@ -372,6 +459,10 @@ func schemaGenerate(extensions ...entc.Extension) {
 			entc.DependencyType(&summarizer.Client{}),
 		),
 		entc.Dependency(
+			entc.DependencyName("Shortlinks"),
+			entc.DependencyType(&shortlinks.Client{}),
+		),
+		entc.Dependency(
 			entc.DependencyName("Pool"),
 			entc.DependencyType(&soiree.Pool{}),
 		),
@@ -386,9 +477,7 @@ func schemaGenerate(extensions ...entc.Extension) {
 		log.Fatal().Err(err).Msg("running ent codegen")
 	}
 
-	// generate exportable schema validation
-	log.Info().Msg("generating exportable schema validation")
-	exportableSchema()
+	return capturedGraph
 }
 
 func historySchemaGenerate(extensions ...entc.Extension) {

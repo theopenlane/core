@@ -17,14 +17,9 @@ import (
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
-// genericMutation is an interface for getting a mutation ID and type
-type genericMutation interface {
-	ID() (id string, exists bool)
-	IDs(ctx context.Context) ([]string, error)
+// ownerMutation is a minimal mutation contract used to resolve organization ownership.
+type ownerMutation interface {
 	OwnerID() (id string, exists bool)
-	Type() string
-	Op() ent.Op
-	Client() *generated.Client
 }
 
 // CheckCurrentOrgAccess checks if the authenticated user has access to the organization
@@ -49,7 +44,7 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 	}
 
 	// else we need to get the object id from the mutation and get the owner id, this should only happen on deletes when using personal access tokens
-	mut, ok := m.(genericMutation)
+	mut, ok := m.(ownerMutation)
 	if ok {
 		orgID, ok = mut.OwnerID()
 		if ok && orgID != "" {

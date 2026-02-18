@@ -198,7 +198,7 @@ func WorkflowKindValidator(wk enums.WorkflowKind) error {
 	}
 }
 
-const DefaultApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode = "MANUAL_SUBMIT"
+const DefaultApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode = "AUTO_SUBMIT"
 
 // ApprovalSubmissionModeValidator is a validator for the "approval_submission_mode" field enum values. It is called by the builders before save.
 func ApprovalSubmissionModeValidator(asm enums.WorkflowApprovalSubmissionMode) error {

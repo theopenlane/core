@@ -23,6 +23,10 @@ func TestToChannel(t *testing.T) {
 			expected: enums.ChannelSlack,
 		},
 		{
+			input:    "teams",
+			expected: enums.ChannelTeams,
+		},
+		{
 			input:    "email",
 			expected: enums.ChannelEmail,
 		},
@@ -33,6 +37,10 @@ func TestToChannel(t *testing.T) {
 		{
 			input:    "Slack",
 			expected: enums.ChannelSlack,
+		},
+		{
+			input:    "Teams",
+			expected: enums.ChannelTeams,
 		},
 		{
 			input:    "invalid",

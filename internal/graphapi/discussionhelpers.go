@@ -2,11 +2,11 @@ package graphapi
 
 import (
 	"context"
-	"encoding/json"
 	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
@@ -87,16 +87,9 @@ func setParentObjectIDInInput(ctx context.Context, dataInput *generated.CreateNo
 
 // convertToMap converts a generic input struct to a map[string]any
 func convertToMap[T any](ctx context.Context, input T) (map[string]any, error) {
-	byteInput, err := json.Marshal(input)
+	mapInput, err := jsonx.ToMap(input)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to marshal input to set parent ID")
-
-		return nil, err
-	}
-
-	var mapInput map[string]any
-	if err := json.Unmarshal(byteInput, &mapInput); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal input to set parent ID")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to convert input to map to set parent ID")
 
 		return nil, err
 	}
@@ -106,15 +99,8 @@ func convertToMap[T any](ctx context.Context, input T) (map[string]any, error) {
 
 // convertToInput converts a map[string]any to a generic input struct
 func convertToInput[T any](ctx context.Context, mapInput map[string]any, output T) error {
-	byteInput, err := json.Marshal(mapInput)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to marshal map input to set parent ID")
-
-		return err
-	}
-
-	if err := json.Unmarshal(byteInput, output); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal map input to set parent ID")
+	if err := jsonx.RoundTrip(mapInput, output); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to convert map input to struct to set parent ID")
 
 		return err
 	}

@@ -26,13 +26,15 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
@@ -74,8 +76,10 @@ func CheckRegistrationModeWithResponse(ctx echo.Context) error {
 
 // OpenAPIContext holds the OpenAPI operation and schema registry for automatic registration
 type OpenAPIContext struct {
+	// Operation is the OpenAPI operation metadata for the handler.
 	Operation *openapi3.Operation
-	Registry  SchemaRegistry
+	// Registry provides schema registration and lookup for OpenAPI models.
+	Registry SchemaRegistry
 }
 
 // Handler contains configuration options for handlers
@@ -102,6 +106,8 @@ type Handler struct {
 	OauthProvider OauthProviderConfig
 	// IntegrationOauthProvider contains the configuration settings for integration Oauth2 providers
 	IntegrationOauthProvider IntegrationOauthProviderConfig
+	// IntegrationGitHubApp contains the configuration settings for GitHub App integrations
+	IntegrationGitHubApp IntegrationGitHubAppConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints
@@ -131,14 +137,20 @@ type Handler struct {
 	IntegrationClients *keystore.ClientPoolManager
 	// IntegrationOperations standardizes executing provider operations
 	IntegrationOperations *keystore.OperationManager
-	// KeymakerService orchestrates integration activation flows
-	KeymakerService *keymaker.Service
+	// IntegrationIngestEmitter publishes webhook ingest events (dedicated pool).
+	IntegrationIngestEmitter soiree.Emitter
+	// EventEmitter publishes asynchronous integration events
+	EventEmitter soiree.Emitter
+	// IntegrationActivation orchestrates integration activation flows
+	IntegrationActivation *activation.Service
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
 	// CampaignWebhook contains the configuration for campaign-related email webhooks
 	CampaignWebhook CampaignWebhookConfig
 	// CloudflareConfig contains the configuration for Cloudflare integration
 	CloudflareConfig CloudflareConfig
+	// ShortlinksClient provides URL shortening functionality
+	ShortlinksClient *shortlinks.Client
 }
 
 // CampaignWebhookConfig contains webhook configuration for campaign-related email providers.

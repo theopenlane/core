@@ -64,6 +64,8 @@ const (
 	FieldActorGroupID = "actor_group_id"
 	// FieldNotes holds the string denoting the notes field in the database.
 	FieldNotes = "notes"
+	// FieldDueAt holds the string denoting the due_at field in the database.
+	FieldDueAt = "due_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeWorkflowInstance holds the string denoting the workflow_instance edge name in mutations.
@@ -139,6 +141,7 @@ var Columns = []string{
 	FieldActorUserID,
 	FieldActorGroupID,
 	FieldNotes,
+	FieldDueAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "workflow_assignments"
@@ -200,7 +203,7 @@ const DefaultStatus enums.WorkflowAssignmentStatus = "PENDING"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.WorkflowAssignmentStatus) error {
 	switch s.String() {
-	case "PENDING", "APPROVED", "REJECTED":
+	case "PENDING", "APPROVED", "REJECTED", "CHANGES_REQUESTED":
 		return nil
 	default:
 		return fmt.Errorf("workflowassignment: invalid enum value for status field: %q", s)
@@ -303,6 +306,11 @@ func ByActorGroupID(opts ...sql.OrderTermOption) OrderOption {
 // ByNotes orders the results by the notes field.
 func ByNotes(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNotes, opts...).ToFunc()
+}
+
+// ByDueAt orders the results by the due_at field.
+func ByDueAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDueAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

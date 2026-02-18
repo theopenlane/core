@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
@@ -21,6 +20,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -290,7 +290,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	completedAt := time.Now().Add(-1 * time.Hour)
 
 	anonUser := &auth.AnonymousQuestionnaireUser{
-		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", uuid.New().String()),
+		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()),
 		SubjectEmail:   testEmail,
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
@@ -339,7 +339,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		Save(allowCtx)
 	require.NoError(t, err)
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", uuid.New().String())
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -378,6 +378,162 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	suite.db.DocumentData.DeleteOneID(documentData.ID).Exec(ctx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
 	suite.db.Template.DeleteOneID(template.ID).Exec(ctx)
+}
+
+func (suite *HandlerTestSuite) TestGetQuestionnaireReturnsDraftData() {
+	t := suite.T()
+
+	submitOp := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", submitOp, suite.h.SubmitQuestionnaire)
+
+	getOp := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", getOp, suite.h.GetQuestionnaire)
+
+	ec := echocontext.NewTestEchoContext().Request().Context()
+	ctx := privacy.DecisionContext(ec, privacy.Allow)
+
+	jsonConfig := map[string]any{
+		"title": "Draft Fetch Test",
+		"questions": []map[string]any{
+			{"id": "q1", "question": "Name?", "type": "text"},
+			{"id": "q2", "question": "Role?", "type": "text"},
+		},
+	}
+
+	template, err := suite.db.Template.Create().
+		SetName("Draft Fetch Template").
+		SetTemplateType(enums.Document).
+		SetJsonconfig(jsonConfig).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetName("Draft Fetch Assessment").
+		SetTemplateID(template.ID).
+		SetAssessmentType(enums.AssessmentTypeExternal).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	testEmail := "draftfetch@example.com"
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
+
+	anonUser := &auth.AnonymousQuestionnaireUser{
+		SubjectID:      anonUserID,
+		SubjectEmail:   testEmail,
+		OrganizationID: testUser1.OrganizationID,
+		AssessmentID:   assessment.ID,
+	}
+
+	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
+	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
+	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
+		SubjectID:      anonUser.SubjectID,
+		OrganizationID: anonUser.OrganizationID,
+	})
+
+	assessmentResponse, err := suite.db.AssessmentResponse.Create().
+		SetAssessmentID(assessment.ID).
+		SetEmail(testEmail).
+		SetOwnerID(testUser1.OrganizationID).
+		SetStatus(enums.AssessmentResponseStatusSent).
+		Save(questionnaireCtx)
+	require.NoError(t, err)
+
+	claims := &tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: anonUserID,
+		},
+		UserID:       anonUserID,
+		OrgID:        assessment.OwnerID,
+		AssessmentID: assessment.ID,
+		Email:        testEmail,
+	}
+
+	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(claims)
+	require.NoError(t, err)
+
+	// fetch before any draft - no saved data
+	t.Run("no saved data before draft", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/questionnaire", nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.GetQuestionnaireResponse
+		err := json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.NotNil(t, out.Jsonconfig)
+		assert.Equal(t, "Draft Fetch Test", out.Jsonconfig["title"])
+		assert.Nil(t, out.SavedData)
+	})
+
+	// save a draft
+	var documentDataID string
+
+	t.Run("save draft", func(t *testing.T) {
+		draftReq := models.SubmitQuestionnaireRequest{
+			Data:    map[string]any{"q1": "Alice", "q2": "Engineer"},
+			IsDraft: true,
+		}
+
+		bodyBytes, err := json.Marshal(draftReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		require.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.SubmitQuestionnaireResponse
+		err = json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.Equal(t, "DRAFT", out.Status)
+
+		documentDataID = out.DocumentDataID
+	})
+
+	// fetch after draft - saved data returned alongside form config
+	t.Run("saved data returned after draft", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/questionnaire", nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.GetQuestionnaireResponse
+		err := json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.NotNil(t, out.Jsonconfig)
+		assert.Equal(t, "Draft Fetch Test", out.Jsonconfig["title"])
+
+		require.NotNil(t, out.SavedData)
+		assert.Equal(t, "Alice", out.SavedData["q1"])
+		assert.Equal(t, "Engineer", out.SavedData["q2"])
+	})
+
+	if documentDataID != "" {
+		suite.db.DocumentData.DeleteOneID(documentDataID).Exec(questionnaireCtx)
+	}
+
+	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(questionnaireCtx)
+	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(questionnaireCtx)
+	suite.db.Template.DeleteOneID(template.ID).Exec(questionnaireCtx)
 }
 
 func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
@@ -425,7 +581,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 
 	testEmail := "test@example.com"
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", uuid.New().String())
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -620,7 +776,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	completedAt := time.Now().Add(-1 * time.Hour)
 
 	anonUser := &auth.AnonymousQuestionnaireUser{
-		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", uuid.New().String()),
+		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()),
 		SubjectEmail:   testEmail,
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
@@ -665,7 +821,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		Save(allowCtx)
 	require.NoError(t, err)
 
-	anonUserID := fmt.Sprintf("anon_questionnaire_%s", uuid.New().String())
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", ulids.New().String())
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
@@ -881,4 +1037,219 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAuthenticatedUser() {
 	require.NoError(t, err)
 	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
 	require.NoError(t, err)
+}
+
+func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", operation, suite.h.SubmitQuestionnaire)
+
+	getOperation := suite.createImpersonationOperation("GetQuestionnaire", "Get questionnaire template configuration")
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", getOperation, suite.h.GetQuestionnaire)
+
+	ec := echocontext.NewTestEchoContext().Request().Context()
+	ctx := privacy.DecisionContext(ec, privacy.Allow)
+
+	template, err := suite.db.Template.Create().
+		SetName("Test Assessment Template Draft").
+		SetTemplateType(enums.Document).
+		SetJsonconfig(map[string]any{"title": "Draft Test"}).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetName("Test Assessment Draft").
+		SetTemplateID(template.ID).
+		SetAssessmentType(enums.AssessmentTypeExternal).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	testEmail := "draft@example.com"
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
+
+	anonUser := &auth.AnonymousQuestionnaireUser{
+		SubjectID:      anonUserID,
+		SubjectEmail:   testEmail,
+		OrganizationID: testUser1.OrganizationID,
+		AssessmentID:   assessment.ID,
+	}
+
+	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
+	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
+	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
+		SubjectID:      anonUser.SubjectID,
+		OrganizationID: anonUser.OrganizationID,
+	})
+
+	assessmentResponse, err := suite.db.AssessmentResponse.Create().
+		SetAssessmentID(assessment.ID).
+		SetEmail(testEmail).
+		SetOwnerID(testUser1.OrganizationID).
+		SetStatus(enums.AssessmentResponseStatusSent).
+		Save(questionnaireCtx)
+	require.NoError(t, err)
+
+	claims := &tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: anonUserID,
+		},
+		UserID:       anonUserID,
+		OrgID:        assessment.OwnerID,
+		AssessmentID: assessment.ID,
+		Email:        testEmail,
+	}
+
+	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(claims)
+	require.NoError(t, err)
+
+	var documentDataID string
+
+	t.Run("save draft", func(t *testing.T) {
+		draftReq := models.SubmitQuestionnaireRequest{
+			Data:    map[string]any{"q1": "partial answer"},
+			IsDraft: true,
+		}
+
+		bodyBytes, err := json.Marshal(draftReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.SubmitQuestionnaireResponse
+		err = json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.NotEmpty(t, out.DocumentDataID)
+		assert.Equal(t, "DRAFT", out.Status)
+		assert.Empty(t, out.CompletedAt)
+
+		documentDataID = out.DocumentDataID
+
+		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, assessmentResponse.ID)
+		require.NoError(t, err)
+		assert.Equal(t, enums.AssessmentResponseStatusDraft, updated.Status)
+		assert.Equal(t, documentDataID, updated.DocumentDataID)
+	})
+
+	t.Run("update draft with new data", func(t *testing.T) {
+		draftReq := models.SubmitQuestionnaireRequest{
+			Data:    map[string]any{"q1": "updated partial answer", "q2": "new field"},
+			IsDraft: true,
+		}
+
+		bodyBytes, err := json.Marshal(draftReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.SubmitQuestionnaireResponse
+		err = json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.Equal(t, documentDataID, out.DocumentDataID)
+		assert.Equal(t, "DRAFT", out.Status)
+
+		docData, err := suite.db.DocumentData.Get(questionnaireCtx, documentDataID)
+		require.NoError(t, err)
+		assert.Equal(t, "updated partial answer", docData.Data["q1"])
+		assert.Equal(t, "new field", docData.Data["q2"])
+	})
+
+	t.Run("get questionnaire returns saved draft data", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/questionnaire", nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.GetQuestionnaireResponse
+		err = json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.NotNil(t, out.SavedData)
+		assert.Equal(t, "updated partial answer", out.SavedData["q1"])
+		assert.Equal(t, "new field", out.SavedData["q2"])
+	})
+
+	t.Run("complete from draft", func(t *testing.T) {
+		submitReq := models.SubmitQuestionnaireRequest{
+			Data: map[string]any{"q1": "final answer", "q2": "final field"},
+		}
+
+		bodyBytes, err := json.Marshal(submitReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.SubmitQuestionnaireResponse
+		err = json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.Equal(t, documentDataID, out.DocumentDataID)
+		assert.Equal(t, "COMPLETED", out.Status)
+		assert.NotEmpty(t, out.CompletedAt)
+
+		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, assessmentResponse.ID)
+		require.NoError(t, err)
+		assert.Equal(t, enums.AssessmentResponseStatusCompleted, updated.Status)
+		assert.NotZero(t, updated.CompletedAt)
+
+		docData, err := suite.db.DocumentData.Get(questionnaireCtx, documentDataID)
+		require.NoError(t, err)
+		assert.Equal(t, "final answer", docData.Data["q1"])
+	})
+
+	t.Run("cannot draft after completed", func(t *testing.T) {
+		draftReq := models.SubmitQuestionnaireRequest{
+			Data:    map[string]any{"q1": "should fail"},
+			IsDraft: true,
+		}
+
+		bodyBytes, err := json.Marshal(draftReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+	})
+
+	if documentDataID != "" {
+		suite.db.DocumentData.DeleteOneID(documentDataID).Exec(questionnaireCtx)
+	}
+
+	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(questionnaireCtx)
+	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(questionnaireCtx)
+	suite.db.Template.DeleteOneID(template.ID).Exec(questionnaireCtx)
 }

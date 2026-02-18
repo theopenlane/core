@@ -26,9 +26,11 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
+|[**integrationgithubapp**](#integrationgithubapp)|`object`|IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.<br/>||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
+|[**shortlinks**](#shortlinks)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -135,11 +137,14 @@ Config contains the configuration for the core server
     "keywatcher": {},
     "slack": {},
     "integrationoauthprovider": {},
+    "integrationgithubapp": {},
     "workflows": {
-        "cel": {}
+        "cel": {},
+        "gala": {}
     },
     "campaignwebhook": {},
-    "cloudflare": {}
+    "cloudflare": {},
+    "shortlinks": {}
 }
 ```
 
@@ -694,6 +699,7 @@ Auth settings including oauth2 providers and token configuration
 |[**redis**](#authtokenredis)|`object`||no|
 |[**apitokens**](#authtokenapitokens)|`object`||no|
 |**assessmentaccessduration**|`integer`||no|
+|**trustcenterndarequestaccessduration**|`integer`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1682,6 +1688,24 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
 
 **Additional Properties:** not allowed  
+<a name="integrationgithubapp"></a>
+## integrationgithubapp: object
+
+IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles the GitHub App integration handlers.<br/>||
+|**appid**|`string`|AppID is the GitHub App ID used for JWT signing.<br/>||
+|**appslug**|`string`|AppSlug is the GitHub App slug used for the install URL.<br/>||
+|**privatekey**|`string`|PrivateKey is the PEM-encoded GitHub App private key.<br/>||
+|**webhooksecret**|`string`|WebhookSecret is the shared secret used to validate GitHub webhooks.<br/>||
+|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful installation.<br/>||
+
+**Additional Properties:** not allowed  
 <a name="workflows"></a>
 ## workflows: object
 
@@ -1691,13 +1715,15 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |[**cel**](#workflowscel)|`object`|||
+|[**gala**](#workflowsgala)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "cel": {}
+    "cel": {},
+    "gala": {}
 }
 ```
 
@@ -1721,6 +1747,20 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**macrocalltracking**|`boolean`|||
 |**evaloptimize**|`boolean`|||
 |**trackstate**|`boolean`|||
+
+**Additional Properties:** not allowed  
+<a name="workflowsgala"></a>
+### workflows\.gala: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**workercount**|`integer`|||
+|**maxretries**|`integer`|||
+|**failonenqueueerror**|`boolean`|||
+|**queuename**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="campaignwebhook"></a>
@@ -1753,6 +1793,19 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**accountid**|`string`|AccountID is the Cloudflare account ID to use for snapshot operations<br/>||
 |**clientid**|`string`|ClientID is the Cloudflare Access client ID for shortlink API requests<br/>||
 |**clientsecret**|`string`|ClientSecret is the Cloudflare Access client secret for shortlink API requests<br/>||
+
+**Additional Properties:** not allowed  
+<a name="shortlinks"></a>
+## shortlinks: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**endpointurl**|`string`|||
 
 **Additional Properties:** not allowed  
 

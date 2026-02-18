@@ -309,6 +309,14 @@ input APITokenWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for scopesHas to contain a specific value
+  """
+  scopesHas: String
 }
 type ActionPlan implements Node {
   id: ID!
@@ -1557,6 +1565,34 @@ input ActionPlanWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for tagSuggestionsHas to contain a specific value
+  """
+  tagSuggestionsHas: String
+  """
+  Filter for dismissedTagSuggestionsHas to contain a specific value
+  """
+  dismissedTagSuggestionsHas: String
+  """
+  Filter for controlSuggestionsHas to contain a specific value
+  """
+  controlSuggestionsHas: String
+  """
+  Filter for dismissedControlSuggestionsHas to contain a specific value
+  """
+  dismissedControlSuggestionsHas: String
+  """
+  Filter for improvementSuggestionsHas to contain a specific value
+  """
+  improvementSuggestionsHas: String
+  """
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
+  """
+  dismissedImprovementSuggestionsHas: String
 }
 type Assessment implements Node {
   id: ID!
@@ -1963,6 +1999,10 @@ type AssessmentResponse implements Node {
   the document containing the user's response data
   """
   documentDataID: ID
+  """
+  is this a draft response? can the user resume from where they left?
+  """
+  isDraft: Boolean!
   owner: Organization
   assessment: Assessment!
   campaign: Campaign
@@ -1978,6 +2018,7 @@ enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theo
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -2041,6 +2082,7 @@ enum AssessmentResponseOrderField {
   started_at
   completed_at
   due_date
+  is_draft
 }
 """
 AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -2379,6 +2421,11 @@ input AssessmentResponseWhereInput {
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
   """
+  is_draft field predicates
+  """
+  isDraft: Boolean
+  isDraftNEQ: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -2609,6 +2656,10 @@ input AssessmentWhereInput {
   """
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Asset implements Node {
   id: ID!
@@ -4014,6 +4065,14 @@ input AssetWhereInput {
   """
   hasConnectedFrom: Boolean
   hasConnectedFromWith: [AssetWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for categoriesHas to contain a specific value
+  """
+  categoriesHas: String
 }
 type Campaign implements Node {
   id: ID!
@@ -4145,6 +4204,14 @@ type Campaign implements Node {
   additional metadata about the campaign
   """
   metadata: Map
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: ID
+  """
+  the email template associated with the campaign
+  """
+  emailTemplateID: ID
   owner: Organization
   blockedGroups(
     """
@@ -4243,6 +4310,8 @@ type Campaign implements Node {
   internalOwnerGroup: Group
   assessment: Assessment
   template: Template
+  emailBranding: EmailBranding
+  emailTemplate: EmailTemplate
   entity: Entity
   campaignTargets(
     """
@@ -4659,6 +4728,7 @@ enum CampaignTargetAssessmentResponseStatus @goModel(model: "github.com/theopenl
   SENT
   COMPLETED
   OVERDUE
+  DRAFT
 }
 """
 A connection to a list of items.
@@ -5452,6 +5522,42 @@ input CampaignWhereInput {
   assessmentIDEqualFold: ID
   assessmentIDContainsFold: ID
   """
+  email_branding_id field predicates
+  """
+  emailBrandingID: ID
+  emailBrandingIDNEQ: ID
+  emailBrandingIDIn: [ID!]
+  emailBrandingIDNotIn: [ID!]
+  emailBrandingIDGT: ID
+  emailBrandingIDGTE: ID
+  emailBrandingIDLT: ID
+  emailBrandingIDLTE: ID
+  emailBrandingIDContains: ID
+  emailBrandingIDHasPrefix: ID
+  emailBrandingIDHasSuffix: ID
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: ID
+  emailBrandingIDContainsFold: ID
+  """
+  email_template_id field predicates
+  """
+  emailTemplateID: ID
+  emailTemplateIDNEQ: ID
+  emailTemplateIDIn: [ID!]
+  emailTemplateIDNotIn: [ID!]
+  emailTemplateIDGT: ID
+  emailTemplateIDGTE: ID
+  emailTemplateIDLT: ID
+  emailTemplateIDLTE: ID
+  emailTemplateIDContains: ID
+  emailTemplateIDHasPrefix: ID
+  emailTemplateIDHasSuffix: ID
+  emailTemplateIDIsNil: Boolean
+  emailTemplateIDNotNil: Boolean
+  emailTemplateIDEqualFold: ID
+  emailTemplateIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -5492,6 +5598,16 @@ input CampaignWhereInput {
   hasTemplate: Boolean
   hasTemplateWith: [TemplateWhereInput!]
   """
+  email_branding edge predicates
+  """
+  hasEmailBranding: Boolean
+  hasEmailBrandingWith: [EmailBrandingWhereInput!]
+  """
+  email_template edge predicates
+  """
+  hasEmailTemplate: Boolean
+  hasEmailTemplateWith: [EmailTemplateWhereInput!]
+  """
   entity edge predicates
   """
   hasEntity: Boolean
@@ -5531,6 +5647,10 @@ input CampaignWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Contact implements Node {
   id: ID!
@@ -6006,6 +6126,10 @@ input ContactWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Control implements Node {
   id: ID!
@@ -7465,6 +7589,10 @@ input ControlImplementationWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type ControlObjective implements Node {
   id: ID!
@@ -8329,6 +8457,10 @@ input ControlObjectiveWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 Ordering options for Control connections
@@ -9053,6 +9185,22 @@ input ControlWhereInput {
   """
   hasControlMappings: Boolean
   hasControlMappingsWith: [FindingControlWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for aliasesHas to contain a specific value
+  """
+  aliasesHas: String
+  """
+  Filter for mappedCategoriesHas to contain a specific value
+  """
+  mappedCategoriesHas: String
+  """
+  Filter for controlQuestionsHas to contain a specific value
+  """
+  controlQuestionsHas: String
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -9571,6 +9719,8 @@ input CreateCampaignInput {
   internalOwnerGroupID: ID
   assessmentID: ID
   templateID: ID
+  emailBrandingID: ID
+  emailTemplateID: ID
   entityID: ID
   campaignTargetIDs: [ID!]
   assessmentResponseIDs: [ID!]
@@ -9955,6 +10105,10 @@ input CreateCustomDomainInput {
   the name of the custom domain
   """
   cnameRecord: String!
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
   ownerID: ID
   mappableDomainID: ID!
   dnsVerificationID: ID
@@ -10378,6 +10532,147 @@ input CreateDocumentDataInput {
   fileIDs: [ID!]
 }
 """
+CreateEmailBrandingInput is used for create EmailBranding object.
+Input was generated by ent.
+"""
+input CreateEmailBrandingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  friendly name for this email branding configuration
+  """
+  name: String!
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  """
+  text color for emails
+  """
+  textColor: String
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  """
+  link color for emails
+  """
+  linkColor: String
+  """
+  font family for emails
+  """
+  fontFamily: EmailBrandingFont
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  campaignIDs: [ID!]
+  emailTemplateIDs: [ID!]
+}
+"""
+CreateEmailTemplateInput is used for create EmailTemplate object.
+Input was generated by ent.
+"""
+input CreateEmailTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  template format for rendering
+  """
+  format: EmailTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  ownerID: ID
+  emailBrandingID: ID
+  integrationID: ID
+  workflowDefinitionID: ID
+  workflowInstanceID: ID
+  campaignIDs: [ID!]
+  notificationTemplateIDs: [ID!]
+}
+"""
 CreateEntityInput is used for create Entity object.
 Input was generated by ent.
 """
@@ -10445,7 +10740,7 @@ input CreateEntityInput {
   """
   status of the entity
   """
-  status: String
+  status: EntityEntityStatus
   """
   whether the entity is approved for use
   """
@@ -11820,6 +12115,175 @@ input CreateNotificationInput {
   """
   topic: NotificationNotificationTopic
   ownerID: ID
+  notificationTemplateID: ID
+}
+"""
+CreateNotificationPreferenceInput is used for create NotificationPreference object.
+Input was generated by ent.
+"""
+input CreateNotificationPreferenceInput {
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceChannel!
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceNotificationChannelStatus
+  """
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+  """
+  provider: String
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  """
+  channel configuration payload
+  """
+  config: Map
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceNotificationCadence
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferencePriority
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  """
+  additional preference metadata
+  """
+  metadata: Map
+  ownerID: ID
+  userID: ID!
+  notificationTemplateID: ID
+}
+"""
+CreateNotificationTemplateInput is used for create NotificationTemplate object.
+Input was generated by ent.
+"""
+input CreateNotificationTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateChannel!
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String!
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  ownerID: ID
+  integrationID: ID
+  workflowDefinitionID: ID
+  emailTemplateID: ID
+  notificationIDs: [ID!]
 }
 """
 CreateOnboardingInput is used for create Onboarding object.
@@ -11920,6 +12384,10 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
+  emailBrandingIDs: [ID!]
+  emailTemplateIDs: [ID!]
+  notificationPreferenceIDs: [ID!]
+  notificationTemplateIDs: [ID!]
   fileIDs: [ID!]
   eventIDs: [ID!]
   secretIDs: [ID!]
@@ -13817,6 +14285,18 @@ input CreateUserSettingInput {
   """
   tags: [String!]
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean
@@ -14074,6 +14554,8 @@ input CreateWorkflowDefinitionInput {
   ownerID: ID
   tagDefinitionIDs: [ID!]
   groupIDs: [ID!]
+  notificationTemplateIDs: [ID!]
+  emailTemplateIDs: [ID!]
 }
 """
 Define a Relay Cursor type:
@@ -14118,6 +14600,10 @@ type CustomDomain implements Node {
   The ID of the dns verification record
   """
   dnsVerificationID: ID
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -14368,6 +14854,24 @@ input CustomDomainWhereInput {
   dnsVerificationIDEqualFold: ID
   dnsVerificationIDContainsFold: ID
   """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -14382,6 +14886,10 @@ input CustomDomainWhereInput {
   """
   hasDNSVerification: Boolean
   hasDNSVerificationWith: [DNSVerificationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type CustomTypeEnum implements Node {
   id: ID!
@@ -15521,6 +16029,10 @@ input DNSVerificationWhereInput {
   """
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type DirectoryAccount implements Node {
   id: ID!
@@ -16345,6 +16857,10 @@ input DirectoryAccountWhereInput {
   """
   hasMemberships: Boolean
   hasMembershipsWith: [DirectoryMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type DirectoryGroup implements Node {
   id: ID!
@@ -17007,6 +17523,10 @@ input DirectoryGroupWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [DirectoryMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type DirectoryMembership implements Node {
   id: ID!
@@ -18655,6 +19175,1268 @@ input DocumentDataWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
+type EmailBranding implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  friendly name for this email branding configuration
+  """
+  name: String!
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  """
+  text color for emails
+  """
+  textColor: String
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  """
+  link color for emails
+  """
+  linkColor: String
+  """
+  font family for emails
+  """
+  fontFamily: EmailBrandingFont
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
+}
+"""
+A connection to a list of items.
+"""
+type EmailBrandingConnection {
+  """
+  A list of edges.
+  """
+  edges: [EmailBrandingEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EmailBrandingEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EmailBranding
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EmailBrandingFont is enum for the field font_family
+"""
+enum EmailBrandingFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
+  COURIER
+  COURIER_BOLD
+  COURIER_BOLDOBLIQUE
+  COURIER_OBLIQUE
+  HELVETICA
+  HELVETICA_BOLD
+  HELVETICA_BOLDOBLIQUE
+  HELVETICA_OBLIQUE
+  SYMBOL
+  TIMES_BOLD
+  TIMES_BOLDITALIC
+  TIMES_ITALIC
+  TIMES_ROMAN
+}
+"""
+Ordering options for EmailBranding connections
+"""
+input EmailBrandingOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EmailBrandings.
+  """
+  field: EmailBrandingOrderField!
+}
+"""
+Properties by which EmailBranding connections can be ordered.
+"""
+enum EmailBrandingOrderField {
+  created_at
+  updated_at
+  name
+}
+"""
+EmailBrandingWhereInput is used for filtering EmailBranding objects.
+Input was generated by ent.
+"""
+input EmailBrandingWhereInput {
+  not: EmailBrandingWhereInput
+  and: [EmailBrandingWhereInput!]
+  or: [EmailBrandingWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  brand_name field predicates
+  """
+  brandName: String
+  brandNameNEQ: String
+  brandNameIn: [String!]
+  brandNameNotIn: [String!]
+  brandNameGT: String
+  brandNameGTE: String
+  brandNameLT: String
+  brandNameLTE: String
+  brandNameContains: String
+  brandNameHasPrefix: String
+  brandNameHasSuffix: String
+  brandNameIsNil: Boolean
+  brandNameNotNil: Boolean
+  brandNameEqualFold: String
+  brandNameContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  secondary_color field predicates
+  """
+  secondaryColor: String
+  secondaryColorNEQ: String
+  secondaryColorIn: [String!]
+  secondaryColorNotIn: [String!]
+  secondaryColorGT: String
+  secondaryColorGTE: String
+  secondaryColorLT: String
+  secondaryColorLTE: String
+  secondaryColorContains: String
+  secondaryColorHasPrefix: String
+  secondaryColorHasSuffix: String
+  secondaryColorIsNil: Boolean
+  secondaryColorNotNil: Boolean
+  secondaryColorEqualFold: String
+  secondaryColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  text_color field predicates
+  """
+  textColor: String
+  textColorNEQ: String
+  textColorIn: [String!]
+  textColorNotIn: [String!]
+  textColorGT: String
+  textColorGTE: String
+  textColorLT: String
+  textColorLTE: String
+  textColorContains: String
+  textColorHasPrefix: String
+  textColorHasSuffix: String
+  textColorIsNil: Boolean
+  textColorNotNil: Boolean
+  textColorEqualFold: String
+  textColorContainsFold: String
+  """
+  button_color field predicates
+  """
+  buttonColor: String
+  buttonColorNEQ: String
+  buttonColorIn: [String!]
+  buttonColorNotIn: [String!]
+  buttonColorGT: String
+  buttonColorGTE: String
+  buttonColorLT: String
+  buttonColorLTE: String
+  buttonColorContains: String
+  buttonColorHasPrefix: String
+  buttonColorHasSuffix: String
+  buttonColorIsNil: Boolean
+  buttonColorNotNil: Boolean
+  buttonColorEqualFold: String
+  buttonColorContainsFold: String
+  """
+  button_text_color field predicates
+  """
+  buttonTextColor: String
+  buttonTextColorNEQ: String
+  buttonTextColorIn: [String!]
+  buttonTextColorNotIn: [String!]
+  buttonTextColorGT: String
+  buttonTextColorGTE: String
+  buttonTextColorLT: String
+  buttonTextColorLTE: String
+  buttonTextColorContains: String
+  buttonTextColorHasPrefix: String
+  buttonTextColorHasSuffix: String
+  buttonTextColorIsNil: Boolean
+  buttonTextColorNotNil: Boolean
+  buttonTextColorEqualFold: String
+  buttonTextColorContainsFold: String
+  """
+  link_color field predicates
+  """
+  linkColor: String
+  linkColorNEQ: String
+  linkColorIn: [String!]
+  linkColorNotIn: [String!]
+  linkColorGT: String
+  linkColorGTE: String
+  linkColorLT: String
+  linkColorLTE: String
+  linkColorContains: String
+  linkColorHasPrefix: String
+  linkColorHasSuffix: String
+  linkColorIsNil: Boolean
+  linkColorNotNil: Boolean
+  linkColorEqualFold: String
+  linkColorContainsFold: String
+  """
+  font_family field predicates
+  """
+  fontFamily: EmailBrandingFont
+  fontFamilyNEQ: EmailBrandingFont
+  fontFamilyIn: [EmailBrandingFont!]
+  fontFamilyNotIn: [EmailBrandingFont!]
+  fontFamilyIsNil: Boolean
+  fontFamilyNotNil: Boolean
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  isDefaultIsNil: Boolean
+  isDefaultNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
+type EmailTemplate implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  template format for rendering
+  """
+  format: EmailTemplateNotificationTemplateFormat!
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String!
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean!
+  """
+  template version
+  """
+  version: Int!
+  """
+  email branding configuration to apply for this template
+  """
+  emailBrandingID: ID
+  """
+  integration used to deliver emails for this template
+  """
+  integrationID: ID
+  """
+  workflow definition associated with this template
+  """
+  workflowDefinitionID: ID
+  """
+  workflow instance associated with this template
+  """
+  workflowInstanceID: ID
+  owner: Organization
+  emailBranding: EmailBranding
+  integration: Integration
+  workflowDefinition: WorkflowDefinition
+  workflowInstance: WorkflowInstance
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
+}
+"""
+A connection to a list of items.
+"""
+type EmailTemplateConnection {
+  """
+  A list of edges.
+  """
+  edges: [EmailTemplateEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type EmailTemplateEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: EmailTemplate
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+EmailTemplateNotificationTemplateFormat is enum for the field format
+"""
+enum EmailTemplateNotificationTemplateFormat @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTemplateFormat") {
+  TEXT
+  MARKDOWN
+  HTML
+  JSON
+}
+"""
+Ordering options for EmailTemplate connections
+"""
+input EmailTemplateOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order EmailTemplates.
+  """
+  field: EmailTemplateOrderField!
+}
+"""
+Properties by which EmailTemplate connections can be ordered.
+"""
+enum EmailTemplateOrderField {
+  created_at
+  updated_at
+  KEY
+  NAME
+  FORMAT
+  LOCALE
+  ACTIVE
+  VERSION
+}
+"""
+EmailTemplateWhereInput is used for filtering EmailTemplate objects.
+Input was generated by ent.
+"""
+input EmailTemplateWhereInput {
+  not: EmailTemplateWhereInput
+  and: [EmailTemplateWhereInput!]
+  or: [EmailTemplateWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  key field predicates
+  """
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  format field predicates
+  """
+  format: EmailTemplateNotificationTemplateFormat
+  formatNEQ: EmailTemplateNotificationTemplateFormat
+  formatIn: [EmailTemplateNotificationTemplateFormat!]
+  formatNotIn: [EmailTemplateNotificationTemplateFormat!]
+  """
+  locale field predicates
+  """
+  locale: String
+  localeNEQ: String
+  localeIn: [String!]
+  localeNotIn: [String!]
+  localeGT: String
+  localeGTE: String
+  localeLT: String
+  localeLTE: String
+  localeContains: String
+  localeHasPrefix: String
+  localeHasSuffix: String
+  localeEqualFold: String
+  localeContainsFold: String
+  """
+  subject_template field predicates
+  """
+  subjectTemplate: String
+  subjectTemplateNEQ: String
+  subjectTemplateIn: [String!]
+  subjectTemplateNotIn: [String!]
+  subjectTemplateGT: String
+  subjectTemplateGTE: String
+  subjectTemplateLT: String
+  subjectTemplateLTE: String
+  subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
+  subjectTemplateHasSuffix: String
+  subjectTemplateIsNil: Boolean
+  subjectTemplateNotNil: Boolean
+  subjectTemplateEqualFold: String
+  subjectTemplateContainsFold: String
+  """
+  preheader_template field predicates
+  """
+  preheaderTemplate: String
+  preheaderTemplateNEQ: String
+  preheaderTemplateIn: [String!]
+  preheaderTemplateNotIn: [String!]
+  preheaderTemplateGT: String
+  preheaderTemplateGTE: String
+  preheaderTemplateLT: String
+  preheaderTemplateLTE: String
+  preheaderTemplateContains: String
+  preheaderTemplateHasPrefix: String
+  preheaderTemplateHasSuffix: String
+  preheaderTemplateIsNil: Boolean
+  preheaderTemplateNotNil: Boolean
+  preheaderTemplateEqualFold: String
+  preheaderTemplateContainsFold: String
+  """
+  body_template field predicates
+  """
+  bodyTemplate: String
+  bodyTemplateNEQ: String
+  bodyTemplateIn: [String!]
+  bodyTemplateNotIn: [String!]
+  bodyTemplateGT: String
+  bodyTemplateGTE: String
+  bodyTemplateLT: String
+  bodyTemplateLTE: String
+  bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
+  bodyTemplateHasSuffix: String
+  bodyTemplateIsNil: Boolean
+  bodyTemplateNotNil: Boolean
+  bodyTemplateEqualFold: String
+  bodyTemplateContainsFold: String
+  """
+  text_template field predicates
+  """
+  textTemplate: String
+  textTemplateNEQ: String
+  textTemplateIn: [String!]
+  textTemplateNotIn: [String!]
+  textTemplateGT: String
+  textTemplateGTE: String
+  textTemplateLT: String
+  textTemplateLTE: String
+  textTemplateContains: String
+  textTemplateHasPrefix: String
+  textTemplateHasSuffix: String
+  textTemplateIsNil: Boolean
+  textTemplateNotNil: Boolean
+  textTemplateEqualFold: String
+  textTemplateContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  version field predicates
+  """
+  version: Int
+  versionNEQ: Int
+  versionIn: [Int!]
+  versionNotIn: [Int!]
+  versionGT: Int
+  versionGTE: Int
+  versionLT: Int
+  versionLTE: Int
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: ID
+  emailBrandingIDNEQ: ID
+  emailBrandingIDIn: [ID!]
+  emailBrandingIDNotIn: [ID!]
+  emailBrandingIDGT: ID
+  emailBrandingIDGTE: ID
+  emailBrandingIDLT: ID
+  emailBrandingIDLTE: ID
+  emailBrandingIDContains: ID
+  emailBrandingIDHasPrefix: ID
+  emailBrandingIDHasSuffix: ID
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: ID
+  emailBrandingIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: ID
+  workflowDefinitionIDNEQ: ID
+  workflowDefinitionIDIn: [ID!]
+  workflowDefinitionIDNotIn: [ID!]
+  workflowDefinitionIDGT: ID
+  workflowDefinitionIDGTE: ID
+  workflowDefinitionIDLT: ID
+  workflowDefinitionIDLTE: ID
+  workflowDefinitionIDContains: ID
+  workflowDefinitionIDHasPrefix: ID
+  workflowDefinitionIDHasSuffix: ID
+  workflowDefinitionIDIsNil: Boolean
+  workflowDefinitionIDNotNil: Boolean
+  workflowDefinitionIDEqualFold: ID
+  workflowDefinitionIDContainsFold: ID
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: ID
+  workflowInstanceIDNEQ: ID
+  workflowInstanceIDIn: [ID!]
+  workflowInstanceIDNotIn: [ID!]
+  workflowInstanceIDGT: ID
+  workflowInstanceIDGTE: ID
+  workflowInstanceIDLT: ID
+  workflowInstanceIDLTE: ID
+  workflowInstanceIDContains: ID
+  workflowInstanceIDHasPrefix: ID
+  workflowInstanceIDHasSuffix: ID
+  workflowInstanceIDIsNil: Boolean
+  workflowInstanceIDNotNil: Boolean
+  workflowInstanceIDEqualFold: ID
+  workflowInstanceIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  email_branding edge predicates
+  """
+  hasEmailBranding: Boolean
+  hasEmailBrandingWith: [EmailBrandingWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  workflow_definition edge predicates
+  """
+  hasWorkflowDefinition: Boolean
+  hasWorkflowDefinitionWith: [WorkflowDefinitionWhereInput!]
+  """
+  workflow_instance edge predicates
+  """
+  hasWorkflowInstance: Boolean
+  hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
 }
 type Entity implements Node {
   id: ID!
@@ -18773,7 +20555,7 @@ type Entity implements Node {
   """
   status of the entity
   """
-  status: String
+  status: EntityEntityStatus
   """
   whether the entity is approved for use
   """
@@ -19506,6 +21288,20 @@ type EntityEdge {
   cursor: Cursor!
 }
 """
+EntityEntityStatus is enum for the field status
+"""
+enum EntityEntityStatus @goModel(model: "github.com/theopenlane/core/common/enums.EntityStatus") {
+  DRAFT
+  UNDER_REVIEW
+  APPROVED
+  RESTRICTED
+  REJECTED
+  ACTIVE
+  SUSPENDED
+  OFFBOARDING
+  TERMINATED
+}
+"""
 EntityFrequency is enum for the field review_frequency
 """
 enum EntityFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
@@ -19845,6 +21641,10 @@ input EntityTypeWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 EntityWhereInput is used for filtering Entity objects.
@@ -20348,21 +22148,12 @@ input EntityWhereInput {
   """
   status field predicates
   """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
+  status: EntityEntityStatus
+  statusNEQ: EntityEntityStatus
+  statusIn: [EntityEntityStatus!]
+  statusNotIn: [EntityEntityStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   approved_for_use field predicates
   """
@@ -20776,6 +22567,26 @@ input EntityWhereInput {
   """
   hasEntityType: Boolean
   hasEntityTypeWith: [EntityTypeWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
+  """
+  Filter for linkedAssetIdsHas to contain a specific value
+  """
+  linkedAssetIdsHas: String
+  """
+  Filter for providedServicesHas to contain a specific value
+  """
+  providedServicesHas: String
+  """
+  Filter for linksHas to contain a specific value
+  """
+  linksHas: String
 }
 type Event implements Node {
   id: ID!
@@ -21409,6 +23220,10 @@ input EventWhereInput {
   """
   hasOrgSubscriptions: Boolean
   hasOrgSubscriptionsWith: [OrgSubscriptionWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Evidence implements Node {
   id: ID!
@@ -22289,6 +24104,10 @@ input EvidenceWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Export implements Node {
   id: ID!
@@ -22441,10 +24260,13 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enum
 ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
+  ASSET
   CONTROL
   DIRECTORY_MEMBERSHIP
+  ENTITY
   EVIDENCE
   FINDING
+  IDENTITY_HOLDER
   INTERNAL_POLICY
   PROCEDURE
   REMEDIATION
@@ -22670,6 +24492,10 @@ input ExportWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for fieldsHas to contain a specific value
+  """
+  fieldsHas: String
 }
 type File implements Node {
   id: ID!
@@ -23552,6 +25378,10 @@ input FileWhereInput {
   """
   hasOriginalTrustCenterDoc: Boolean
   hasOriginalTrustCenterDocWith: [TrustCenterDocWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Finding implements Node {
   id: ID!
@@ -25482,6 +27312,26 @@ input FindingWhereInput {
   """
   hasControlMappings: Boolean
   hasControlMappingsWith: [FindingControlWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for categoriesHas to contain a specific value
+  """
+  categoriesHas: String
+  """
+  Filter for referencesHas to contain a specific value
+  """
+  referencesHas: String
+  """
+  Filter for stepsToReproduceHas to contain a specific value
+  """
+  stepsToReproduceHas: String
+  """
+  Filter for targetsHas to contain a specific value
+  """
+  targetsHas: String
 }
 type Group implements Node {
   id: ID!
@@ -27900,6 +29750,10 @@ input GroupWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [GroupMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Hush implements Node {
   id: ID!
@@ -29578,6 +31432,10 @@ input IdentityHolderWhereInput {
   """
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Integration implements Node {
   id: ID!
@@ -30047,6 +31905,68 @@ type Integration implements Node {
     """
     where: DirectorySyncRunWhereInput
   ): DirectorySyncRunConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -30481,10 +32401,24 @@ input IntegrationWhereInput {
   hasDirectorySyncRuns: Boolean
   hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
   """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
   entities edge predicates
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type InternalPolicy implements Node {
   id: ID!
@@ -31681,6 +33615,34 @@ input InternalPolicyWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for tagSuggestionsHas to contain a specific value
+  """
+  tagSuggestionsHas: String
+  """
+  Filter for dismissedTagSuggestionsHas to contain a specific value
+  """
+  dismissedTagSuggestionsHas: String
+  """
+  Filter for controlSuggestionsHas to contain a specific value
+  """
+  controlSuggestionsHas: String
+  """
+  Filter for dismissedControlSuggestionsHas to contain a specific value
+  """
+  dismissedControlSuggestionsHas: String
+  """
+  Filter for improvementSuggestionsHas to contain a specific value
+  """
+  improvementSuggestionsHas: String
+  """
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
+  """
+  dismissedImprovementSuggestionsHas: String
 }
 type Invite implements Node {
   id: ID!
@@ -32725,6 +34687,10 @@ input JobRunnerRegistrationTokenWhereInput {
   """
   hasJobRunner: Boolean
   hasJobRunnerWith: [JobRunnerWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type JobRunnerToken implements Node {
   id: ID!
@@ -33040,6 +35006,10 @@ input JobRunnerTokenWhereInput {
   """
   hasJobRunners: Boolean
   hasJobRunnersWith: [JobRunnerWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 JobRunnerWhereInput is used for filtering JobRunner objects.
@@ -33301,6 +35271,10 @@ input JobRunnerWhereInput {
   """
   hasJobRunnerTokens: Boolean
   hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type JobTemplate implements Node {
   id: ID!
@@ -33659,6 +35633,10 @@ input JobTemplateWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 The builtin Map type
@@ -33885,6 +35863,10 @@ input MappableDomainWhereInput {
   """
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type MappedControl implements Node {
   id: ID!
@@ -34412,6 +36394,10 @@ input MappedControlWhereInput {
   """
   hasToSubcontrols: Boolean
   hasToSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Narrative implements Node {
   id: ID!
@@ -34977,6 +36963,10 @@ input NarrativeWhereInput {
   """
   hasProcedures: Boolean
   hasProceduresWith: [ProcedureWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 An object with an ID.
@@ -35427,6 +37417,10 @@ type Notification implements Node {
   """
   data: Map
   """
+  optional template used for external channel rendering
+  """
+  templateID: ID
+  """
   the time the notification was read
   """
   readAt: DateTime
@@ -35439,6 +37433,37 @@ type Notification implements Node {
   """
   topic: NotificationNotificationTopic
   owner: Organization
+  notificationTemplate: NotificationTemplate
+}
+"""
+A connection to a list of items.
+"""
+type NotificationConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Notification
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
 }
 """
 NotificationNotificationTopic is enum for the field topic
@@ -35455,6 +37480,1147 @@ NotificationNotificationType is enum for the field notification_type
 enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/common/enums.NotificationType") {
   ORGANIZATION
   USER
+}
+"""
+Ordering options for Notification connections
+"""
+input NotificationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Notifications.
+  """
+  field: NotificationOrderField!
+}
+"""
+Properties by which Notification connections can be ordered.
+"""
+enum NotificationOrderField {
+  created_at
+  updated_at
+}
+type NotificationPreference implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the user this preference applies to
+  """
+  userID: ID!
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceChannel!
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceNotificationChannelStatus!
+  """
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+  """
+  provider: String
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  """
+  channel configuration payload
+  """
+  config: Map
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean!
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceNotificationCadence!
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferencePriority
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  """
+  optional template to use by default for this preference (external channels only)
+  """
+  templateID: ID
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean!
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  """
+  additional preference metadata
+  """
+  metadata: Map
+  owner: Organization
+  user: User!
+  notificationTemplate: NotificationTemplate
+}
+"""
+NotificationPreferenceChannel is enum for the field channel
+"""
+enum NotificationPreferenceChannel @goModel(model: "github.com/theopenlane/core/common/enums.Channel") {
+  IN_APP
+  SLACK
+  TEAMS
+  EMAIL
+}
+"""
+A connection to a list of items.
+"""
+type NotificationPreferenceConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationPreferenceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationPreferenceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: NotificationPreference
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+NotificationPreferenceNotificationCadence is enum for the field cadence
+"""
+enum NotificationPreferenceNotificationCadence @goModel(model: "github.com/theopenlane/core/common/enums.NotificationCadence") {
+  IMMEDIATE
+  DAILY_DIGEST
+  WEEKLY_DIGEST
+  MONTHLY_DIGEST
+  MUTE
+}
+"""
+NotificationPreferenceNotificationChannelStatus is enum for the field status
+"""
+enum NotificationPreferenceNotificationChannelStatus @goModel(model: "github.com/theopenlane/core/common/enums.NotificationChannelStatus") {
+  ENABLED
+  DISABLED
+  PENDING
+  VERIFIED
+  ERROR
+}
+"""
+Ordering options for NotificationPreference connections
+"""
+input NotificationPreferenceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NotificationPreferences.
+  """
+  field: NotificationPreferenceOrderField!
+}
+"""
+Properties by which NotificationPreference connections can be ordered.
+"""
+enum NotificationPreferenceOrderField {
+  created_at
+  updated_at
+  CHANNEL
+  STATUS
+  ENABLED
+}
+"""
+NotificationPreferencePriority is enum for the field priority
+"""
+enum NotificationPreferencePriority @goModel(model: "github.com/theopenlane/core/common/enums.Priority") {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+"""
+NotificationPreferenceWhereInput is used for filtering NotificationPreference objects.
+Input was generated by ent.
+"""
+input NotificationPreferenceWhereInput {
+  not: NotificationPreferenceWhereInput
+  and: [NotificationPreferenceWhereInput!]
+  or: [NotificationPreferenceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDGT: ID
+  userIDGTE: ID
+  userIDLT: ID
+  userIDLTE: ID
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  channel field predicates
+  """
+  channel: NotificationPreferenceChannel
+  channelNEQ: NotificationPreferenceChannel
+  channelIn: [NotificationPreferenceChannel!]
+  channelNotIn: [NotificationPreferenceChannel!]
+  """
+  status field predicates
+  """
+  status: NotificationPreferenceNotificationChannelStatus
+  statusNEQ: NotificationPreferenceNotificationChannelStatus
+  statusIn: [NotificationPreferenceNotificationChannelStatus!]
+  statusNotIn: [NotificationPreferenceNotificationChannelStatus!]
+  """
+  provider field predicates
+  """
+  provider: String
+  providerNEQ: String
+  providerIn: [String!]
+  providerNotIn: [String!]
+  providerGT: String
+  providerGTE: String
+  providerLT: String
+  providerLTE: String
+  providerContains: String
+  providerHasPrefix: String
+  providerHasSuffix: String
+  providerIsNil: Boolean
+  providerNotNil: Boolean
+  providerEqualFold: String
+  providerContainsFold: String
+  """
+  destination field predicates
+  """
+  destination: String
+  destinationNEQ: String
+  destinationIn: [String!]
+  destinationNotIn: [String!]
+  destinationGT: String
+  destinationGTE: String
+  destinationLT: String
+  destinationLTE: String
+  destinationContains: String
+  destinationHasPrefix: String
+  destinationHasSuffix: String
+  destinationIsNil: Boolean
+  destinationNotNil: Boolean
+  destinationEqualFold: String
+  destinationContainsFold: String
+  """
+  enabled field predicates
+  """
+  enabled: Boolean
+  enabledNEQ: Boolean
+  """
+  cadence field predicates
+  """
+  cadence: NotificationPreferenceNotificationCadence
+  cadenceNEQ: NotificationPreferenceNotificationCadence
+  cadenceIn: [NotificationPreferenceNotificationCadence!]
+  cadenceNotIn: [NotificationPreferenceNotificationCadence!]
+  """
+  priority field predicates
+  """
+  priority: NotificationPreferencePriority
+  priorityNEQ: NotificationPreferencePriority
+  priorityIn: [NotificationPreferencePriority!]
+  priorityNotIn: [NotificationPreferencePriority!]
+  priorityIsNil: Boolean
+  priorityNotNil: Boolean
+  """
+  template_id field predicates
+  """
+  templateID: ID
+  templateIDNEQ: ID
+  templateIDIn: [ID!]
+  templateIDNotIn: [ID!]
+  templateIDGT: ID
+  templateIDGTE: ID
+  templateIDLT: ID
+  templateIDLTE: ID
+  templateIDContains: ID
+  templateIDHasPrefix: ID
+  templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: ID
+  templateIDContainsFold: ID
+  """
+  mute_until field predicates
+  """
+  muteUntil: Time
+  muteUntilNEQ: Time
+  muteUntilIn: [Time!]
+  muteUntilNotIn: [Time!]
+  muteUntilGT: Time
+  muteUntilGTE: Time
+  muteUntilLT: Time
+  muteUntilLTE: Time
+  muteUntilIsNil: Boolean
+  muteUntilNotNil: Boolean
+  """
+  quiet_hours_start field predicates
+  """
+  quietHoursStart: String
+  quietHoursStartNEQ: String
+  quietHoursStartIn: [String!]
+  quietHoursStartNotIn: [String!]
+  quietHoursStartGT: String
+  quietHoursStartGTE: String
+  quietHoursStartLT: String
+  quietHoursStartLTE: String
+  quietHoursStartContains: String
+  quietHoursStartHasPrefix: String
+  quietHoursStartHasSuffix: String
+  quietHoursStartIsNil: Boolean
+  quietHoursStartNotNil: Boolean
+  quietHoursStartEqualFold: String
+  quietHoursStartContainsFold: String
+  """
+  quiet_hours_end field predicates
+  """
+  quietHoursEnd: String
+  quietHoursEndNEQ: String
+  quietHoursEndIn: [String!]
+  quietHoursEndNotIn: [String!]
+  quietHoursEndGT: String
+  quietHoursEndGTE: String
+  quietHoursEndLT: String
+  quietHoursEndLTE: String
+  quietHoursEndContains: String
+  quietHoursEndHasPrefix: String
+  quietHoursEndHasSuffix: String
+  quietHoursEndIsNil: Boolean
+  quietHoursEndNotNil: Boolean
+  quietHoursEndEqualFold: String
+  quietHoursEndContainsFold: String
+  """
+  timezone field predicates
+  """
+  timezone: String
+  timezoneNEQ: String
+  timezoneIn: [String!]
+  timezoneNotIn: [String!]
+  timezoneGT: String
+  timezoneGTE: String
+  timezoneLT: String
+  timezoneLTE: String
+  timezoneContains: String
+  timezoneHasPrefix: String
+  timezoneHasSuffix: String
+  timezoneIsNil: Boolean
+  timezoneNotNil: Boolean
+  timezoneEqualFold: String
+  timezoneContainsFold: String
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  """
+  verified_at field predicates
+  """
+  verifiedAt: Time
+  verifiedAtNEQ: Time
+  verifiedAtIn: [Time!]
+  verifiedAtNotIn: [Time!]
+  verifiedAtGT: Time
+  verifiedAtGTE: Time
+  verifiedAtLT: Time
+  verifiedAtLTE: Time
+  verifiedAtIsNil: Boolean
+  verifiedAtNotNil: Boolean
+  """
+  last_used_at field predicates
+  """
+  lastUsedAt: Time
+  lastUsedAtNEQ: Time
+  lastUsedAtIn: [Time!]
+  lastUsedAtNotIn: [Time!]
+  lastUsedAtGT: Time
+  lastUsedAtGTE: Time
+  lastUsedAtLT: Time
+  lastUsedAtLTE: Time
+  lastUsedAtIsNil: Boolean
+  lastUsedAtNotNil: Boolean
+  """
+  last_error field predicates
+  """
+  lastError: String
+  lastErrorNEQ: String
+  lastErrorIn: [String!]
+  lastErrorNotIn: [String!]
+  lastErrorGT: String
+  lastErrorGTE: String
+  lastErrorLT: String
+  lastErrorLTE: String
+  lastErrorContains: String
+  lastErrorHasPrefix: String
+  lastErrorHasSuffix: String
+  lastErrorIsNil: Boolean
+  lastErrorNotNil: Boolean
+  lastErrorEqualFold: String
+  lastErrorContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  notification_template edge predicates
+  """
+  hasNotificationTemplate: Boolean
+  hasNotificationTemplateWith: [NotificationTemplateWhereInput!]
+  """
+  Filter for topicPatternsHas to contain a specific value
+  """
+  topicPatternsHas: String
+}
+type NotificationTemplate implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  stable identifier for the template
+  """
+  key: String!
+  """
+  display name for the template
+  """
+  name: String!
+  """
+  description of the template
+  """
+  description: String
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateChannel!
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateNotificationTemplateFormat!
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String!
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String!
+  """
+  integration associated with this template
+  """
+  integrationID: ID
+  """
+  workflow definition associated with this template
+  """
+  workflowDefinitionID: ID
+  """
+  optional email template used for branded email delivery
+  """
+  emailTemplateID: ID
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  """
+  additional template metadata
+  """
+  metadata: Map
+  """
+  whether the template is active
+  """
+  active: Boolean!
+  """
+  template version
+  """
+  version: Int!
+  owner: Organization
+  integration: Integration
+  workflowDefinition: WorkflowDefinition
+  emailTemplate: EmailTemplate
+  notifications(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notifications returned from the connection.
+    """
+    orderBy: NotificationOrder
+  ): NotificationConnection!
+}
+"""
+NotificationTemplateChannel is enum for the field channel
+"""
+enum NotificationTemplateChannel @goModel(model: "github.com/theopenlane/core/common/enums.Channel") {
+  IN_APP
+  SLACK
+  TEAMS
+  EMAIL
+}
+"""
+A connection to a list of items.
+"""
+type NotificationTemplateConnection {
+  """
+  A list of edges.
+  """
+  edges: [NotificationTemplateEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type NotificationTemplateEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: NotificationTemplate
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+NotificationTemplateNotificationTemplateFormat is enum for the field format
+"""
+enum NotificationTemplateNotificationTemplateFormat @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTemplateFormat") {
+  TEXT
+  MARKDOWN
+  HTML
+  JSON
+}
+"""
+Ordering options for NotificationTemplate connections
+"""
+input NotificationTemplateOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order NotificationTemplates.
+  """
+  field: NotificationTemplateOrderField!
+}
+"""
+Properties by which NotificationTemplate connections can be ordered.
+"""
+enum NotificationTemplateOrderField {
+  created_at
+  updated_at
+  KEY
+  NAME
+  CHANNEL
+  FORMAT
+  LOCALE
+  TOPIC_PATTERN
+  ACTIVE
+  VERSION
+}
+"""
+NotificationTemplateWhereInput is used for filtering NotificationTemplate objects.
+Input was generated by ent.
+"""
+input NotificationTemplateWhereInput {
+  not: NotificationTemplateWhereInput
+  and: [NotificationTemplateWhereInput!]
+  or: [NotificationTemplateWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  key field predicates
+  """
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  channel field predicates
+  """
+  channel: NotificationTemplateChannel
+  channelNEQ: NotificationTemplateChannel
+  channelIn: [NotificationTemplateChannel!]
+  channelNotIn: [NotificationTemplateChannel!]
+  """
+  format field predicates
+  """
+  format: NotificationTemplateNotificationTemplateFormat
+  formatNEQ: NotificationTemplateNotificationTemplateFormat
+  formatIn: [NotificationTemplateNotificationTemplateFormat!]
+  formatNotIn: [NotificationTemplateNotificationTemplateFormat!]
+  """
+  locale field predicates
+  """
+  locale: String
+  localeNEQ: String
+  localeIn: [String!]
+  localeNotIn: [String!]
+  localeGT: String
+  localeGTE: String
+  localeLT: String
+  localeLTE: String
+  localeContains: String
+  localeHasPrefix: String
+  localeHasSuffix: String
+  localeEqualFold: String
+  localeContainsFold: String
+  """
+  topic_pattern field predicates
+  """
+  topicPattern: String
+  topicPatternNEQ: String
+  topicPatternIn: [String!]
+  topicPatternNotIn: [String!]
+  topicPatternGT: String
+  topicPatternGTE: String
+  topicPatternLT: String
+  topicPatternLTE: String
+  topicPatternContains: String
+  topicPatternHasPrefix: String
+  topicPatternHasSuffix: String
+  topicPatternEqualFold: String
+  topicPatternContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: ID
+  workflowDefinitionIDNEQ: ID
+  workflowDefinitionIDIn: [ID!]
+  workflowDefinitionIDNotIn: [ID!]
+  workflowDefinitionIDGT: ID
+  workflowDefinitionIDGTE: ID
+  workflowDefinitionIDLT: ID
+  workflowDefinitionIDLTE: ID
+  workflowDefinitionIDContains: ID
+  workflowDefinitionIDHasPrefix: ID
+  workflowDefinitionIDHasSuffix: ID
+  workflowDefinitionIDIsNil: Boolean
+  workflowDefinitionIDNotNil: Boolean
+  workflowDefinitionIDEqualFold: ID
+  workflowDefinitionIDContainsFold: ID
+  """
+  email_template_id field predicates
+  """
+  emailTemplateID: ID
+  emailTemplateIDNEQ: ID
+  emailTemplateIDIn: [ID!]
+  emailTemplateIDNotIn: [ID!]
+  emailTemplateIDGT: ID
+  emailTemplateIDGTE: ID
+  emailTemplateIDLT: ID
+  emailTemplateIDLTE: ID
+  emailTemplateIDContains: ID
+  emailTemplateIDHasPrefix: ID
+  emailTemplateIDHasSuffix: ID
+  emailTemplateIDIsNil: Boolean
+  emailTemplateIDNotNil: Boolean
+  emailTemplateIDEqualFold: ID
+  emailTemplateIDContainsFold: ID
+  """
+  title_template field predicates
+  """
+  titleTemplate: String
+  titleTemplateNEQ: String
+  titleTemplateIn: [String!]
+  titleTemplateNotIn: [String!]
+  titleTemplateGT: String
+  titleTemplateGTE: String
+  titleTemplateLT: String
+  titleTemplateLTE: String
+  titleTemplateContains: String
+  titleTemplateHasPrefix: String
+  titleTemplateHasSuffix: String
+  titleTemplateIsNil: Boolean
+  titleTemplateNotNil: Boolean
+  titleTemplateEqualFold: String
+  titleTemplateContainsFold: String
+  """
+  subject_template field predicates
+  """
+  subjectTemplate: String
+  subjectTemplateNEQ: String
+  subjectTemplateIn: [String!]
+  subjectTemplateNotIn: [String!]
+  subjectTemplateGT: String
+  subjectTemplateGTE: String
+  subjectTemplateLT: String
+  subjectTemplateLTE: String
+  subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
+  subjectTemplateHasSuffix: String
+  subjectTemplateIsNil: Boolean
+  subjectTemplateNotNil: Boolean
+  subjectTemplateEqualFold: String
+  subjectTemplateContainsFold: String
+  """
+  body_template field predicates
+  """
+  bodyTemplate: String
+  bodyTemplateNEQ: String
+  bodyTemplateIn: [String!]
+  bodyTemplateNotIn: [String!]
+  bodyTemplateGT: String
+  bodyTemplateGTE: String
+  bodyTemplateLT: String
+  bodyTemplateLTE: String
+  bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
+  bodyTemplateHasSuffix: String
+  bodyTemplateIsNil: Boolean
+  bodyTemplateNotNil: Boolean
+  bodyTemplateEqualFold: String
+  bodyTemplateContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  version field predicates
+  """
+  version: Int
+  versionNEQ: Int
+  versionIn: [Int!]
+  versionNotIn: [Int!]
+  versionGT: Int
+  versionGTE: Int
+  versionLT: Int
+  versionLTE: Int
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  workflow_definition edge predicates
+  """
+  hasWorkflowDefinition: Boolean
+  hasWorkflowDefinitionWith: [WorkflowDefinitionWhereInput!]
+  """
+  email_template edge predicates
+  """
+  hasEmailTemplate: Boolean
+  hasEmailTemplateWith: [EmailTemplateWhereInput!]
 }
 type Onboarding implements Node {
   id: ID!
@@ -35541,6 +38707,10 @@ input OnboardingWhereInput {
   """
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
 }
 """
 Possible directions in which to order a list of items when provided an `orderBy` argument.
@@ -36070,6 +39240,10 @@ input OrgSubscriptionWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Organization implements Node {
   id: ID!
@@ -36863,6 +40037,130 @@ type Organization implements Node {
     """
     where: APITokenWhereInput
   ): APITokenConnection!
+  emailBrandings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailBrandings returned from the connection.
+    """
+    orderBy: [EmailBrandingOrder!]
+
+    """
+    Filtering options for EmailBrandings returned from the connection.
+    """
+    where: EmailBrandingWhereInput
+  ): EmailBrandingConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
+  notificationPreferences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationPreferences returned from the connection.
+    """
+    orderBy: [NotificationPreferenceOrder!]
+
+    """
+    Filtering options for NotificationPreferences returned from the connection.
+    """
+    where: NotificationPreferenceWhereInput
+  ): NotificationPreferenceConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -39601,6 +42899,18 @@ input OrganizationSettingWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
+  """
+  Filter for allowedEmailDomainsHas to contain a specific value
+  """
+  allowedEmailDomainsHas: String
 }
 """
 OrganizationWhereInput is used for filtering Organization objects.
@@ -39905,6 +43215,26 @@ input OrganizationWhereInput {
   """
   hasAPITokens: Boolean
   hasAPITokensWith: [APITokenWhereInput!]
+  """
+  email_brandings edge predicates
+  """
+  hasEmailBrandings: Boolean
+  hasEmailBrandingsWith: [EmailBrandingWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  notification_preferences edge predicates
+  """
+  hasNotificationPreferences: Boolean
+  hasNotificationPreferencesWith: [NotificationPreferenceWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
   """
   users edge predicates
   """
@@ -40250,6 +43580,10 @@ input OrganizationWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [OrgMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 Information about pagination in a connection.
@@ -40632,6 +43966,14 @@ input PersonalAccessTokenWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for scopesHas to contain a specific value
+  """
+  scopesHas: String
 }
 type Platform implements Node {
   id: ID!
@@ -42586,6 +45928,10 @@ input PlatformWhereInput {
   """
   hasPlatformOwner: Boolean
   hasPlatformOwnerWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Procedure implements Node {
   id: ID!
@@ -43710,6 +47056,34 @@ input ProcedureWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for tagSuggestionsHas to contain a specific value
+  """
+  tagSuggestionsHas: String
+  """
+  Filter for dismissedTagSuggestionsHas to contain a specific value
+  """
+  dismissedTagSuggestionsHas: String
+  """
+  Filter for controlSuggestionsHas to contain a specific value
+  """
+  controlSuggestionsHas: String
+  """
+  Filter for dismissedControlSuggestionsHas to contain a specific value
+  """
+  dismissedControlSuggestionsHas: String
+  """
+  Filter for improvementSuggestionsHas to contain a specific value
+  """
+  improvementSuggestionsHas: String
+  """
+  Filter for dismissedImprovementSuggestionsHas to contain a specific value
+  """
+  dismissedImprovementSuggestionsHas: String
 }
 type Program implements Node {
   id: ID!
@@ -44972,6 +48346,10 @@ input ProgramWhereInput {
   """
   hasMembers: Boolean
   hasMembersWith: [ProgramMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Query {
   """
@@ -45612,6 +48990,68 @@ type Query {
     """
     where: DocumentDataWhereInput
   ): DocumentDataConnection!
+  emailBrandings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailBrandings returned from the connection.
+    """
+    orderBy: [EmailBrandingOrder!]
+
+    """
+    Filtering options for EmailBrandings returned from the connection.
+    """
+    where: EmailBrandingWhereInput
+  ): EmailBrandingConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -46387,6 +49827,68 @@ type Query {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  notificationPreferences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationPreferences returned from the connection.
+    """
+    orderBy: [NotificationPreferenceOrder!]
+
+    """
+    Filtering options for NotificationPreferences returned from the connection.
+    """
+    where: NotificationPreferenceWhereInput
+  ): NotificationPreferenceConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
   orgMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -49043,6 +52545,10 @@ input RemediationWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Review implements Node {
   id: ID!
@@ -50328,6 +53834,10 @@ input ReviewWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Risk implements Node {
   id: ID!
@@ -51550,6 +55060,10 @@ input RiskWhereInput {
   """
   hasDiscussions: Boolean
   hasDiscussionsWith: [DiscussionWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Scan implements Node {
   id: ID!
@@ -52663,6 +56177,14 @@ input ScanWhereInput {
   """
   hasPerformedByGroup: Boolean
   hasPerformedByGroupWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for vulnerabilityIdsHas to contain a specific value
+  """
+  vulnerabilityIdsHas: String
 }
 type ScheduledJob implements Node {
   id: ID!
@@ -53943,6 +57465,14 @@ input StandardWhereInput {
   """
   hasLogoFile: Boolean
   hasLogoFileWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for domainsHas to contain a specific value
+  """
+  domainsHas: String
 }
 type Subcontrol implements Node {
   id: ID!
@@ -55158,6 +58688,22 @@ input SubcontrolWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for aliasesHas to contain a specific value
+  """
+  aliasesHas: String
+  """
+  Filter for mappedCategoriesHas to contain a specific value
+  """
+  mappedCategoriesHas: String
+  """
+  Filter for controlQuestionsHas to contain a specific value
+  """
+  controlQuestionsHas: String
 }
 type Subprocessor implements Node {
   id: ID!
@@ -55551,6 +59097,10 @@ input SubprocessorWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Subscriber implements Node {
   id: ID!
@@ -55857,6 +59407,10 @@ input SubscriberWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type TFASetting implements Node {
   id: ID!
@@ -56340,6 +59894,10 @@ input TagDefinitionWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  Filter for aliasesHas to contain a specific value
+  """
+  aliasesHas: String
 }
 type Task implements Node {
   id: ID!
@@ -57489,6 +61047,14 @@ input TaskWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for externalReferenceUrlHas to contain a specific value
+  """
+  externalReferenceUrlHas: String
 }
 type Template implements Node {
   id: ID!
@@ -58116,6 +61682,10 @@ input TemplateWhereInput {
   """
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 The builtin Time type
@@ -58723,6 +62293,10 @@ input TrustCenterComplianceWhereInput {
   """
   hasStandard: Boolean
   hasStandardWith: [StandardWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 A connection to a list of items.
@@ -59200,6 +62774,10 @@ input TrustCenterDocWhereInput {
   """
   hasOriginalFile: Boolean
   hasOriginalFileWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 An edge in a connection.
@@ -60081,6 +63659,10 @@ input TrustCenterNDARequestWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 Ordering options for TrustCenter connections
@@ -61127,6 +64709,10 @@ input TrustCenterSubprocessorWhereInput {
   """
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
+  """
+  Filter for countriesHas to contain a specific value
+  """
+  countriesHas: String
 }
 """
 TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
@@ -61886,6 +65472,10 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterNdaRequests: Boolean
   hasTrustCenterNdaRequestsWith: [TrustCenterNDARequestWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -62541,6 +66131,10 @@ input UpdateCampaignInput {
   clearAssessment: Boolean
   templateID: ID
   clearTemplate: Boolean
+  emailBrandingID: ID
+  clearEmailBranding: Boolean
+  emailTemplateID: ID
+  clearEmailTemplate: Boolean
   entityID: ID
   clearEntity: Boolean
   addCampaignTargetIDs: [ID!]
@@ -63108,6 +66702,11 @@ input UpdateCustomDomainInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  the ID of the trust center the domain belongs to, if applicable
+  """
+  trustCenterID: String
+  clearTrustCenterID: Boolean
   ownerID: ID
   clearOwner: Boolean
   dnsVerificationID: ID
@@ -63612,6 +67211,186 @@ input UpdateDocumentDataInput {
   clearFiles: Boolean
 }
 """
+UpdateEmailBrandingInput is used for update EmailBranding object.
+Input was generated by ent.
+"""
+input UpdateEmailBrandingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  friendly name for this email branding configuration
+  """
+  name: String
+  """
+  brand name displayed in templates
+  """
+  brandName: String
+  clearBrandName: Boolean
+  """
+  URL of the brand logo for emails
+  """
+  logoRemoteURL: String
+  clearLogoRemoteURL: Boolean
+  """
+  primary brand color for emails
+  """
+  primaryColor: String
+  clearPrimaryColor: Boolean
+  """
+  secondary brand color for emails
+  """
+  secondaryColor: String
+  clearSecondaryColor: Boolean
+  """
+  background color for emails
+  """
+  backgroundColor: String
+  clearBackgroundColor: Boolean
+  """
+  text color for emails
+  """
+  textColor: String
+  clearTextColor: Boolean
+  """
+  button background color for emails
+  """
+  buttonColor: String
+  clearButtonColor: Boolean
+  """
+  button text color for emails
+  """
+  buttonTextColor: String
+  clearButtonTextColor: Boolean
+  """
+  link color for emails
+  """
+  linkColor: String
+  clearLinkColor: Boolean
+  """
+  font family for emails
+  """
+  fontFamily: EmailBrandingFont
+  clearFontFamily: Boolean
+  """
+  whether this is the default email branding for the organization
+  """
+  isDefault: Boolean
+  clearIsDefault: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
+}
+"""
+UpdateEmailTemplateInput is used for update EmailTemplate object.
+Input was generated by ent.
+"""
+input UpdateEmailTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  stable identifier for the template
+  """
+  key: String
+  """
+  display name for the template
+  """
+  name: String
+  """
+  description of the template
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  template format for rendering
+  """
+  format: EmailTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  clearSubjectTemplate: Boolean
+  """
+  preheader/preview text template for email notifications
+  """
+  preheaderTemplate: String
+  clearPreheaderTemplate: Boolean
+  """
+  body template for the email
+  """
+  bodyTemplate: String
+  clearBodyTemplate: Boolean
+  """
+  plain text fallback template for the email
+  """
+  textTemplate: String
+  clearTextTemplate: Boolean
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  clearJsonconfig: Boolean
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  clearUischema: Boolean
+  """
+  additional template metadata
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  emailBrandingID: ID
+  clearEmailBranding: Boolean
+  integrationID: ID
+  clearIntegration: Boolean
+  workflowDefinitionID: ID
+  clearWorkflowDefinition: Boolean
+  workflowInstanceID: ID
+  clearWorkflowInstance: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addNotificationTemplateIDs: [ID!]
+  removeNotificationTemplateIDs: [ID!]
+  clearNotificationTemplates: Boolean
+}
+"""
 UpdateEntityInput is used for update Entity object.
 Input was generated by ent.
 """
@@ -63696,7 +67475,7 @@ input UpdateEntityInput {
   """
   status of the entity
   """
-  status: String
+  status: EntityEntityStatus
   clearStatus: Boolean
   """
   whether the entity is approved for use
@@ -65632,6 +69411,204 @@ input UpdateNotificationInput {
   clearOwner: Boolean
 }
 """
+UpdateNotificationPreferenceInput is used for update NotificationPreference object.
+Input was generated by ent.
+"""
+input UpdateNotificationPreferenceInput {
+  """
+  the channel this preference applies to
+  """
+  channel: NotificationPreferenceChannel
+  """
+  status of the channel configuration
+  """
+  status: NotificationPreferenceNotificationChannelStatus
+  """
+  provider service for the channel, e.g. sendgrid, mailgun for email or workspace name for slack
+  """
+  provider: String
+  clearProvider: Boolean
+  """
+  destination address or endpoint for the channel
+  """
+  destination: String
+  clearDestination: Boolean
+  """
+  channel configuration payload
+  """
+  config: Map
+  clearConfig: Boolean
+  """
+  whether this preference is enabled
+  """
+  enabled: Boolean
+  """
+  delivery cadence for this preference
+  """
+  cadence: NotificationPreferenceNotificationCadence
+  """
+  optional priority override for this preference
+  """
+  priority: NotificationPreferencePriority
+  clearPriority: Boolean
+  """
+  soiree topic names or wildcard patterns this preference applies to; empty means all
+  """
+  topicPatterns: [String!]
+  appendTopicPatterns: [String!]
+  clearTopicPatterns: Boolean
+  """
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  """
+  topicOverrides: Map
+  clearTopicOverrides: Boolean
+  """
+  mute notifications until this time
+  """
+  muteUntil: Time
+  clearMuteUntil: Boolean
+  """
+  start of quiet hours in HH:MM
+  """
+  quietHoursStart: String
+  clearQuietHoursStart: Boolean
+  """
+  end of quiet hours in HH:MM
+  """
+  quietHoursEnd: String
+  clearQuietHoursEnd: Boolean
+  """
+  timezone for quiet hours and digests
+  """
+  timezone: String
+  clearTimezone: Boolean
+  """
+  whether this is the default config for the channel
+  """
+  isDefault: Boolean
+  """
+  when the channel config was verified
+  """
+  verifiedAt: Time
+  clearVerifiedAt: Boolean
+  """
+  last time the channel config was used
+  """
+  lastUsedAt: Time
+  clearLastUsedAt: Boolean
+  """
+  last error encountered while using the channel
+  """
+  lastError: String
+  clearLastError: Boolean
+  """
+  additional preference metadata
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  notificationTemplateID: ID
+  clearNotificationTemplate: Boolean
+}
+"""
+UpdateNotificationTemplateInput is used for update NotificationTemplate object.
+Input was generated by ent.
+"""
+input UpdateNotificationTemplateInput {
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  stable identifier for the template
+  """
+  key: String
+  """
+  display name for the template
+  """
+  name: String
+  """
+  description of the template
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  channel this template is intended for
+  """
+  channel: NotificationTemplateChannel
+  """
+  template format for rendering
+  """
+  format: NotificationTemplateNotificationTemplateFormat
+  """
+  locale for the template, e.g. en-US
+  """
+  locale: String
+  """
+  soiree topic name or wildcard pattern this template targets
+  """
+  topicPattern: String
+  """
+  title template for external channel messages
+  """
+  titleTemplate: String
+  clearTitleTemplate: Boolean
+  """
+  subject template for email notifications
+  """
+  subjectTemplate: String
+  clearSubjectTemplate: Boolean
+  """
+  body template for the notification
+  """
+  bodyTemplate: String
+  clearBodyTemplate: Boolean
+  """
+  structured blocks for channels like Slack or Teams
+  """
+  blocks: Map
+  clearBlocks: Boolean
+  """
+  jsonschema for template data requirements
+  """
+  jsonconfig: Map
+  clearJsonconfig: Boolean
+  """
+  uischema for a template builder
+  """
+  uischema: Map
+  clearUischema: Boolean
+  """
+  additional template metadata
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  whether the template is active
+  """
+  active: Boolean
+  """
+  template version
+  """
+  version: Int
+  integrationID: ID
+  clearIntegration: Boolean
+  workflowDefinitionID: ID
+  clearWorkflowDefinition: Boolean
+  emailTemplateID: ID
+  clearEmailTemplate: Boolean
+  addNotificationIDs: [ID!]
+  removeNotificationIDs: [ID!]
+  clearNotifications: Boolean
+}
+"""
 UpdateOrgMembershipInput is used for update OrgMembership object.
 Input was generated by ent.
 """
@@ -65746,6 +69723,18 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
+  addEmailBrandingIDs: [ID!]
+  removeEmailBrandingIDs: [ID!]
+  clearEmailBrandings: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
+  addNotificationPreferenceIDs: [ID!]
+  removeNotificationPreferenceIDs: [ID!]
+  clearNotificationPreferences: Boolean
+  addNotificationTemplateIDs: [ID!]
+  removeNotificationTemplateIDs: [ID!]
+  clearNotificationTemplates: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -68576,6 +72565,21 @@ input UpdateUserSettingInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  clearDelegateUserID: Boolean
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  clearDelegateStartAt: Boolean
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  clearDelegateEndAt: Boolean
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean
@@ -68923,6 +72927,12 @@ input UpdateWorkflowDefinitionInput {
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
+  addNotificationTemplateIDs: [ID!]
+  removeNotificationTemplateIDs: [ID!]
+  clearNotificationTemplates: Boolean
+  addEmailTemplateIDs: [ID!]
+  removeEmailTemplateIDs: [ID!]
+  clearEmailTemplates: Boolean
 }
 type User implements Node {
   id: ID!
@@ -69672,6 +73682,18 @@ type UserSetting implements Node {
   tags: [String!]
   userID: ID
   """
+  user id to delegate workflow approvals to
+  """
+  delegateUserID: String
+  """
+  when delegation becomes active
+  """
+  delegateStartAt: Time
+  """
+  when delegation ends
+  """
+  delegateEndAt: Time
+  """
   user account is locked if unconfirmed or explicitly locked
   """
   locked: Boolean!
@@ -69867,6 +73889,50 @@ input UserSettingWhereInput {
   userIDEqualFold: ID
   userIDContainsFold: ID
   """
+  delegate_user_id field predicates
+  """
+  delegateUserID: String
+  delegateUserIDNEQ: String
+  delegateUserIDIn: [String!]
+  delegateUserIDNotIn: [String!]
+  delegateUserIDGT: String
+  delegateUserIDGTE: String
+  delegateUserIDLT: String
+  delegateUserIDLTE: String
+  delegateUserIDContains: String
+  delegateUserIDHasPrefix: String
+  delegateUserIDHasSuffix: String
+  delegateUserIDIsNil: Boolean
+  delegateUserIDNotNil: Boolean
+  delegateUserIDEqualFold: String
+  delegateUserIDContainsFold: String
+  """
+  delegate_start_at field predicates
+  """
+  delegateStartAt: Time
+  delegateStartAtNEQ: Time
+  delegateStartAtIn: [Time!]
+  delegateStartAtNotIn: [Time!]
+  delegateStartAtGT: Time
+  delegateStartAtGTE: Time
+  delegateStartAtLT: Time
+  delegateStartAtLTE: Time
+  delegateStartAtIsNil: Boolean
+  delegateStartAtNotNil: Boolean
+  """
+  delegate_end_at field predicates
+  """
+  delegateEndAt: Time
+  delegateEndAtNEQ: Time
+  delegateEndAtIn: [Time!]
+  delegateEndAtNotIn: [Time!]
+  delegateEndAtGT: Time
+  delegateEndAtGTE: Time
+  delegateEndAtLT: Time
+  delegateEndAtLTE: Time
+  delegateEndAtIsNil: Boolean
+  delegateEndAtNotNil: Boolean
+  """
   locked field predicates
   """
   locked: Boolean
@@ -69926,6 +73992,10 @@ input UserSettingWhereInput {
   """
   hasDefaultOrg: Boolean
   hasDefaultOrgWith: [OrganizationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 UserWhereInput is used for filtering User objects.
@@ -70383,6 +74453,10 @@ input UserWhereInput {
   """
   hasProgramMemberships: Boolean
   hasProgramMembershipsWith: [ProgramMembershipWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type Vulnerability implements Node {
   id: ID!
@@ -71858,6 +75932,18 @@ input VulnerabilityWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for referencesHas to contain a specific value
+  """
+  referencesHas: String
+  """
+  Filter for impactsHas to contain a specific value
+  """
+  impactsHas: String
 }
 type Webauthn implements Node {
   id: ID!
@@ -72021,6 +76107,10 @@ input WebauthnWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 type WorkflowAssignment implements Node {
   id: ID!
@@ -72096,6 +76186,10 @@ type WorkflowAssignment implements Node {
   Optional notes about the assignment
   """
   notes: String
+  """
+  Timestamp when the assignment is due for delegation or escalation checks
+  """
+  dueAt: Time
   owner: Organization
   """
   Instance this assignment belongs to
@@ -72507,6 +76601,10 @@ input WorkflowAssignmentTargetWhereInput {
   """
   hasGroup: Boolean
   hasGroupWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowAssignmentTargetWorkflowTargetType is enum for the field target_type
@@ -72780,6 +76878,19 @@ input WorkflowAssignmentWhereInput {
   notesEqualFold: String
   notesContainsFold: String
   """
+  due_at field predicates
+  """
+  dueAt: Time
+  dueAtNEQ: Time
+  dueAtIn: [Time!]
+  dueAtNotIn: [Time!]
+  dueAtGT: Time
+  dueAtGTE: Time
+  dueAtLT: Time
+  dueAtLTE: Time
+  dueAtIsNil: Boolean
+  dueAtNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -72804,6 +76915,10 @@ input WorkflowAssignmentWhereInput {
   """
   hasGroup: Boolean
   hasGroupWith: [GroupWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowAssignmentWorkflowAssignmentStatus is enum for the field status
@@ -72812,6 +76927,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   PENDING
   APPROVED
   REJECTED
+  CHANGES_REQUESTED
 }
 type WorkflowDefinition implements Node {
   id: ID!
@@ -72954,6 +77070,68 @@ type WorkflowDefinition implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  notificationTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for NotificationTemplates returned from the connection.
+    """
+    orderBy: [NotificationTemplateOrder!]
+
+    """
+    Filtering options for NotificationTemplates returned from the connection.
+    """
+    where: NotificationTemplateWhereInput
+  ): NotificationTemplateConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
 }
 """
 A connection to a list of items.
@@ -73287,6 +77465,24 @@ input WorkflowDefinitionWhereInput {
   """
   hasGroups: Boolean
   hasGroupsWith: [GroupWhereInput!]
+  """
+  notification_templates edge predicates
+  """
+  hasNotificationTemplates: Boolean
+  hasNotificationTemplatesWith: [NotificationTemplateWhereInput!]
+  """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+  """
+  Filter for trackedFieldsHas to contain a specific value
+  """
+  trackedFieldsHas: String
 }
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
@@ -73529,6 +77725,10 @@ input WorkflowEventWhereInput {
   """
   hasWorkflowInstance: Boolean
   hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowEventWorkflowEventType is enum for the field event_type
@@ -73746,6 +77946,37 @@ type WorkflowInstance implements Node {
     """
     where: WorkflowEventWhereInput
   ): WorkflowEventConnection!
+  emailTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for EmailTemplates returned from the connection.
+    """
+    orderBy: [EmailTemplateOrder!]
+
+    """
+    Filtering options for EmailTemplates returned from the connection.
+    """
+    where: EmailTemplateWhereInput
+  ): EmailTemplateConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -74261,10 +78492,19 @@ input WorkflowInstanceWhereInput {
   hasWorkflowEvents: Boolean
   hasWorkflowEventsWith: [WorkflowEventWhereInput!]
   """
+  email_templates edge predicates
+  """
+  hasEmailTemplates: Boolean
+  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
   workflow_object_refs edge predicates
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 WorkflowInstanceWorkflowInstanceState is enum for the field state
@@ -74957,4 +79197,66 @@ input WorkflowObjectRefWhereInput {
   """
   hasPlatform: Boolean
   hasPlatformWith: [PlatformWhereInput!]
+}
+type WorkflowProposal implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  WorkflowObjectRef record that identifies the target object for this proposal
+  """
+  workflowObjectRefID: ID!
+  """
+  Stable key representing the approval domain for this proposal
+  """
+  domainKey: String!
+  """
+  Current state of the proposal
+  """
+  state: WorkflowProposalWorkflowProposalState!
+  """
+  Monotonic revision counter; incremented on edits
+  """
+  revision: Int!
+  """
+  Staged field updates for this domain; applied only after approval
+  """
+  changes: Map
+  """
+  Hash of the current proposed changes for approval verification
+  """
+  proposedHash: String
+  """
+  Hash of the proposed changes that satisfied approvals (what was approved)
+  """
+  approvedHash: String
+  """
+  Timestamp when this proposal was submitted for approval
+  """
+  submittedAt: Time
+  """
+  User who submitted this proposal for approval
+  """
+  submittedByUserID: ID
+  owner: Organization
+}
+"""
+WorkflowProposalWorkflowProposalState is enum for the field state
+"""
+enum WorkflowProposalWorkflowProposalState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowProposalState") {
+  DRAFT
+  SUBMITTED
+  APPLIED
+  REJECTED
+  SUPERSEDED
 }

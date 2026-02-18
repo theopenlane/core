@@ -31,6 +31,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -49,6 +51,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -161,6 +165,8 @@ func checkColumn(t, c string) error {
 			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
 			discussionhistory.Table:                 discussionhistory.ValidColumn,
 			documentdatahistory.Table:               documentdatahistory.ValidColumn,
+			emailbrandinghistory.Table:              emailbrandinghistory.ValidColumn,
+			emailtemplatehistory.Table:              emailtemplatehistory.ValidColumn,
 			entityhistory.Table:                     entityhistory.ValidColumn,
 			entitytypehistory.Table:                 entitytypehistory.ValidColumn,
 			evidencehistory.Table:                   evidencehistory.ValidColumn,
@@ -179,6 +185,8 @@ func checkColumn(t, c string) error {
 			mappedcontrolhistory.Table:              mappedcontrolhistory.ValidColumn,
 			narrativehistory.Table:                  narrativehistory.ValidColumn,
 			notehistory.Table:                       notehistory.ValidColumn,
+			notificationpreferencehistory.Table:     notificationpreferencehistory.ValidColumn,
+			notificationtemplatehistory.Table:       notificationtemplatehistory.ValidColumn,
 			orgmembershiphistory.Table:              orgmembershiphistory.ValidColumn,
 			orgsubscriptionhistory.Table:            orgsubscriptionhistory.ValidColumn,
 			organizationhistory.Table:               organizationhistory.ValidColumn,

@@ -280,6 +280,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "template",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "email_branding": {
+	ObjectType:      "email_branding",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "email_template": {
+	ObjectType:      "email_template",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "entity": {
 	ObjectType:      "entity",
 	SkipEditCheck:   true,
@@ -823,6 +831,60 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "email_branding": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "email_templates": {
+	ObjectType:      "email_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "email_template": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "email_branding": {
+	ObjectType:      "email_branding",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "workflow_definition": {
+	ObjectType:      "workflow_definition",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "workflow_instance": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "notification_templates": {
+	ObjectType:      "notification_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
 }, "email_verification_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -945,9 +1007,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "entity_type": {
-	ObjectType:      "entity_type",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "entity_type": {"owner": {
 	ObjectType:      "owner",
@@ -1659,10 +1721,56 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "notification_templates": {
+	ObjectType:      "notification_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "email_templates": {
+	ObjectType:      "email_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integration_webhooks": {
+	ObjectType:      "integration_webhook",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integration_runs": {
+	ObjectType:      "integration_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "entities": {
 	ObjectType:      "entity",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+},
+}, "integration_run": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "request_file": {
+	ObjectType:      "request_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "response_file": {
+	ObjectType:      "response_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "event": {
+	ObjectType:      "event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "integration_webhook": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "internal_policy": {"owner": {
 	ObjectType:      "owner",
@@ -1931,6 +2039,44 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "user",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "notification_template": {
+	ObjectType:      "notification_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "notification_preference": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "notification_template": {
+	ObjectType:      "notification_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "notification_template": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "workflow_definition": {
+	ObjectType:      "workflow_definition",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "email_template": {
+	ObjectType:      "email_template",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "notifications": {
+	ObjectType:      "notification",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "onboarding": {"organization": {
 	ObjectType:      "organization",
@@ -2124,6 +2270,30 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "api_tokens": {
 	ObjectType:      "api_token",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "email_brandings": {
+	ObjectType:      "email_branding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "email_templates": {
+	ObjectType:      "email_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integration_webhooks": {
+	ObjectType:      "integration_webhook",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integration_runs": {
+	ObjectType:      "integration_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "notification_preferences": {
+	ObjectType:      "notification_preference",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "notification_templates": {
+	ObjectType:      "notification_template",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "users": {
@@ -3918,6 +4088,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "workflow_instances": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "notification_templates": {
+	ObjectType:      "notification_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "email_templates": {
+	ObjectType:      "email_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "workflow_event": {"owner": {
 	ObjectType:      "owner",
@@ -3986,6 +4168,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "workflow_events": {
 	ObjectType:      "workflow_event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "email_templates": {
+	ObjectType:      "email_template",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "workflow_object_refs": {

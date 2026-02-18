@@ -1377,6 +1377,36 @@ func IntegrationTypeContainsFold(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldContainsFold(FieldIntegrationType, v))
 }
 
+// ProviderMetadataIsNil applies the IsNil predicate on the "provider_metadata" field.
+func ProviderMetadataIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldProviderMetadata))
+}
+
+// ProviderMetadataNotNil applies the NotNil predicate on the "provider_metadata" field.
+func ProviderMetadataNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldProviderMetadata))
+}
+
+// ConfigIsNil applies the IsNil predicate on the "config" field.
+func ConfigIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldConfig))
+}
+
+// ConfigNotNil applies the NotNil predicate on the "config" field.
+func ConfigNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldConfig))
+}
+
+// ProviderStateIsNil applies the IsNil predicate on the "provider_state" field.
+func ProviderStateIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldProviderState))
+}
+
+// ProviderStateNotNil applies the NotNil predicate on the "provider_state" field.
+func ProviderStateNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldProviderState))
+}
+
 // MetadataIsNil applies the IsNil predicate on the "metadata" field.
 func MetadataIsNil() predicate.Integration {
 	return predicate.Integration(sql.FieldIsNull(FieldMetadata))
@@ -1843,6 +1873,122 @@ func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Int
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectorySyncRun
 		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNotificationTemplates applies the HasEdge predicate on the "notification_templates" edge.
+func HasNotificationTemplates() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, NotificationTemplatesTable, NotificationTemplatesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNotificationTemplatesWith applies the HasEdge predicate on the "notification_templates" edge with a given conditions (other predicates).
+func HasNotificationTemplatesWith(preds ...predicate.NotificationTemplate) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newNotificationTemplatesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEmailTemplates applies the HasEdge predicate on the "email_templates" edge.
+func HasEmailTemplates() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEmailTemplatesWith applies the HasEdge predicate on the "email_templates" edge with a given conditions (other predicates).
+func HasEmailTemplatesWith(preds ...predicate.EmailTemplate) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newEmailTemplatesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIntegrationWebhooks applies the HasEdge predicate on the "integration_webhooks" edge.
+func HasIntegrationWebhooks() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationWebhooksTable, IntegrationWebhooksColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IntegrationWebhook
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationWebhooksWith applies the HasEdge predicate on the "integration_webhooks" edge with a given conditions (other predicates).
+func HasIntegrationWebhooksWith(preds ...predicate.IntegrationWebhook) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newIntegrationWebhooksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IntegrationWebhook
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIntegrationRuns applies the HasEdge predicate on the "integration_runs" edge.
+func HasIntegrationRuns() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IntegrationRun
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationRunsWith applies the HasEdge predicate on the "integration_runs" edge with a given conditions (other predicates).
+func HasIntegrationRunsWith(preds ...predicate.IntegrationRun) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newIntegrationRunsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IntegrationRun
+		step.Edge.Schema = schemaConfig.IntegrationRun
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

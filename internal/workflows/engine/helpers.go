@@ -113,8 +113,12 @@ type AssignmentStatusCounts struct {
 	Pending int
 	// Rejected is the count of rejected assignments
 	Rejected int
+	// ChangesRequested is the count of changes requested assignments
+	ChangesRequested int
 	// RejectedRequired indicates if any required assignment was rejected
 	RejectedRequired bool
+	// ChangesRequestedRequired indicates if any required assignment requested changes
+	ChangesRequestedRequired bool
 }
 
 // approvalResolution captures how approvals should advance a workflow
@@ -144,10 +148,20 @@ func CountAssignmentStatus(assignments []*generated.WorkflowAssignment) Assignme
 			if a.Required {
 				counts.RejectedRequired = true
 			}
+		case enums.WorkflowAssignmentStatusChangesRequested:
+			counts.ChangesRequested++
+			if a.Required {
+				counts.ChangesRequestedRequired = true
+			}
 		}
 	}
 
 	return counts
+}
+
+// isGatedActionType returns true if the action type requires approval gating
+func isGatedActionType(actionType enums.WorkflowActionType) bool {
+	return actionType == enums.WorkflowActionTypeApproval || actionType == enums.WorkflowActionTypeReview
 }
 
 // actionIndexForKey returns the index of the action matching the key
@@ -163,7 +177,7 @@ func actionIndexForKey(actions []models.WorkflowAction, key string) int {
 
 // resolveApproval determines whether approvals are pending, satisfied, or failed
 func resolveApproval(requiredCount int, statusCounts AssignmentStatusCounts) approvalResolution {
-	if statusCounts.RejectedRequired {
+	if statusCounts.RejectedRequired || statusCounts.ChangesRequestedRequired {
 		return approvalFailed
 	}
 

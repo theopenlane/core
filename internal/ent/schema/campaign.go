@@ -235,6 +235,12 @@ func (Campaign) Fields() []ent.Field {
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the campaign").
 			Optional(),
+		field.String("email_branding_id").
+			Comment("the email branding associated with the campaign").
+			Optional(),
+		field.String("email_template_id").
+			Comment("the email template associated with the campaign").
+			Optional(),
 	}
 }
 
@@ -271,6 +277,22 @@ func (c Campaign) Edges() []ent.Edge {
 			field:      "template_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Template{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: EmailBranding{},
+			field:      "email_branding_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(EmailBranding{}.Name()),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: EmailTemplate{},
+			field:      "email_template_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(EmailTemplate{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{

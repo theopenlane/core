@@ -92,6 +92,10 @@ const (
 	FieldAssessmentID = "assessment_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
+	FieldEmailBrandingID = "email_branding_id"
+	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
+	FieldEmailTemplateID = "email_template_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -108,6 +112,10 @@ const (
 	EdgeAssessment = "assessment"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
+	// EdgeEmailBranding holds the string denoting the email_branding edge name in mutations.
+	EdgeEmailBranding = "email_branding"
+	// EdgeEmailTemplate holds the string denoting the email_template edge name in mutations.
+	EdgeEmailTemplate = "email_template"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
 	EdgeEntity = "entity"
 	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
@@ -176,6 +184,20 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
+	// EmailBrandingTable is the table that holds the email_branding relation/edge.
+	EmailBrandingTable = "campaigns"
+	// EmailBrandingInverseTable is the table name for the EmailBranding entity.
+	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
+	EmailBrandingInverseTable = "email_brandings"
+	// EmailBrandingColumn is the table column denoting the email_branding relation/edge.
+	EmailBrandingColumn = "email_branding_id"
+	// EmailTemplateTable is the table that holds the email_template relation/edge.
+	EmailTemplateTable = "campaigns"
+	// EmailTemplateInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplateInverseTable = "email_templates"
+	// EmailTemplateColumn is the table column denoting the email_template relation/edge.
+	EmailTemplateColumn = "email_template_id"
 	// EntityTable is the table that holds the entity relation/edge.
 	EntityTable = "campaigns"
 	// EntityInverseTable is the table name for the Entity entity.
@@ -266,6 +288,8 @@ var Columns = []string{
 	FieldEntityID,
 	FieldAssessmentID,
 	FieldMetadata,
+	FieldEmailBrandingID,
+	FieldEmailTemplateID,
 }
 
 var (
@@ -562,6 +586,16 @@ func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
 }
 
+// ByEmailBrandingID orders the results by the email_branding_id field.
+func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
+}
+
+// ByEmailTemplateID orders the results by the email_template_id field.
+func ByEmailTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailTemplateID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -636,6 +670,20 @@ func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTemplateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEmailBrandingField orders the results by email_branding field.
+func ByEmailBrandingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEmailTemplateField orders the results by email_template field.
+func ByEmailTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -797,6 +845,20 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
+	)
+}
+func newEmailBrandingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailBrandingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+	)
+}
+func newEmailTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EmailTemplateTable, EmailTemplateColumn),
 	)
 }
 func newEntityStep() *sqlgraph.Step {

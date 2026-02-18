@@ -36,11 +36,11 @@ import (
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/integrations/registry"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -50,6 +50,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 )
 
@@ -192,7 +193,8 @@ func WithAuth() ServerOption {
 
 		// add oauth providers for integrations (separate config)
 		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
-		if s.Config.Settings.IntegrationOauthProvider.Enabled && s.Config.Handler.IntegrationRegistry == nil {
+		s.Config.Handler.IntegrationGitHubApp = s.Config.Settings.IntegrationGitHubApp
+		if (s.Config.Settings.IntegrationOauthProvider.Enabled || s.Config.Settings.IntegrationGitHubApp.Enabled) && s.Config.Handler.IntegrationRegistry == nil {
 			registry, err := registry.NewRegistry(context.Background())
 			if err != nil {
 				log.Panic().Err(err).Msg("failed to build integration provider registry")
@@ -279,6 +281,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithDevelopment(s.Config.Settings.Server.Dev).
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
+			WithWorkflowsConfig(s.Config.Settings.Workflows).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).
@@ -630,5 +633,22 @@ func WithCampaignWebhookConfig() ServerOption {
 func WithCloudflareConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.CloudflareConfig = s.Config.Settings.Cloudflare
+	})
+}
+
+// WithShortlinks sets up the shortlinks client for URL shortening
+func WithShortlinks() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if !s.Config.Settings.Shortlinks.Enabled {
+			return
+		}
+
+		client, err := shortlinks.NewClientFromConfig(s.Config.Settings.Shortlinks)
+		if err != nil {
+			log.Warn().Err(err).Msg("failed to create shortlinks client, URL shortening will be disabled")
+			return
+		}
+
+		s.Config.Handler.ShortlinksClient = client
 	})
 }

@@ -18,17 +18,20 @@ type WorkflowDefinitionDocument struct {
 	WorkflowKind enums.WorkflowKind `json:"workflowKind,omitempty"`
 	// ApprovalSubmissionMode controls draft vs auto-submit behavior for approval domains.
 	ApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionMode,omitempty"`
-	Version                string                               `json:"version,omitempty"`
-	Targets                WorkflowSelector                     `json:"targets,omitempty"`
-	Triggers               []WorkflowTrigger                    `json:"triggers,omitempty"`
-	Conditions             []WorkflowCondition                  `json:"conditions,omitempty"`
-	Actions                []WorkflowAction                     `json:"actions,omitempty"`
-	Metadata               map[string]any                       `json:"metadata,omitempty"`
+	// ApprovalTiming controls whether approvals block changes or happen after commit.
+	ApprovalTiming enums.WorkflowApprovalTiming `json:"approvalTiming,omitempty"`
+	Version        string                       `json:"version,omitempty"`
+	Targets        WorkflowSelector             `json:"targets,omitempty"`
+	Triggers       []WorkflowTrigger            `json:"triggers,omitempty"`
+	Conditions     []WorkflowCondition          `json:"conditions,omitempty"`
+	Actions        []WorkflowAction             `json:"actions,omitempty"`
+	Metadata       map[string]any               `json:"metadata,omitempty"`
 }
 
 // WorkflowTrigger describes when to run a workflow.
 type WorkflowTrigger struct {
 	Operation   string                   `json:"operation,omitempty"`   // e.g. CREATE, UPDATE, DELETE
+	Interval    string                   `json:"interval,omitempty"`    // schedule interval for periodic triggers (e.g. "1h")
 	ObjectType  enums.WorkflowObjectType `json:"objectType,omitempty"`  // schema/object type the trigger targets
 	Fields      []string                 `json:"fields,omitempty"`      // specific fields that should trigger evaluation
 	Edges       []string                 `json:"edges,omitempty"`       // specific edges (relationships) that should trigger evaluation
@@ -146,6 +149,8 @@ type WorkflowAssignmentRejection struct {
 	RejectedByUserID string `json:"invalidated_by_user_id,omitempty"`
 	// RejectedHash is the hash that was rejected (encapsulating the changes that were not merged)
 	RejectedHash string `json:"approved_hash,omitempty"`
+	// ChangeRequestInputs stores optional structured inputs for change requests
+	ChangeRequestInputs map[string]any `json:"change_request_inputs,omitempty"`
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen.

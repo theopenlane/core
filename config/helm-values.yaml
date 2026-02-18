@@ -250,6 +250,7 @@ coreConfiguration:
         delimiter: "."  # @schema type:string; default:.
         prefix: ""  # @schema type:string
       assessmentaccessduration: "1h0m0s"  # @schema type:integer; default:1h
+      trustcenterndarequestaccessduration: "1h0m0s"  # @schema type:integer; default:1h
     # -- SupportedProviders are the supported oauth providers that have been configured
     supportedproviders: []
     # -- Providers contains supported oauth2 providers configuration
@@ -555,6 +556,14 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
     successredirecturl: ""  # @schema type:string
+  # -- IntegrationGitHubApp contains configuration for GitHub App integrations
+  integrationgithubapp:
+    # -- Enabled toggles the GitHub App integration handlers.
+    enabled: false  # @schema type:boolean; default:false
+    # -- AppSlug is the GitHub App slug used for the install URL.
+    appslug: ""  # @schema type:string
+    # -- SuccessRedirectURL is the URL to redirect to after successful installation.
+    successredirecturl: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -572,6 +581,12 @@ coreConfiguration:
       macrocalltracking: false  # @schema type:boolean; default:false
       evaloptimize: true  # @schema type:boolean; default:true
       trackstate: false  # @schema type:boolean; default:false
+    gala:
+      enabled: false  # @schema type:boolean; default:false
+      workercount: 10  # @schema type:integer; default:10
+      maxretries: 5  # @schema type:integer; default:5
+      failonenqueueerror: false  # @schema type:boolean; default:false
+      queuename: "events"  # @schema type:string; default:events
   # -- CampaignWebhook contains webhook configuration for campaign-related email providers
   campaignwebhook:
     # -- Enabled toggles the campaign webhook handler
@@ -580,6 +595,11 @@ coreConfiguration:
   cloudflare:
     # -- Enabled toggles the Cloudflare snapshot handler
     enabled: false  # @schema type:boolean; default:false
+  # -- Shortlinks contains configuration for the URL shortening service
+  shortlinks:
+    enabled: false  # @schema type:boolean; default:false
+    clientid: "d5d5babbdd4ba64d59ae543ac3b6a74d.access"  # @schema type:string; default:d5d5babbdd4ba64d59ae543ac3b6a74d.access
+    endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
 
 # -- External Secrets configuration
 externalSecrets:
@@ -891,6 +911,30 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
+    # -- core-integrationgithubapp-appid secret configuration
+    core-integrationgithubapp-appid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationgithubapp.appid
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_APPID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-appid"  # @schema type:string
+    # -- core-integrationgithubapp-privatekey secret configuration
+    core-integrationgithubapp-privatekey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationgithubapp.privatekey
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_PRIVATEKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-privatekey"  # @schema type:string
+    # -- core-integrationgithubapp-webhooksecret secret configuration
+    core-integrationgithubapp-webhooksecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrationgithubapp.webhooksecret
+      secretKey: "CORE_INTEGRATIONGITHUBAPP_WEBHOOKSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrationgithubapp-webhooksecret"  # @schema type:string
     # -- core-campaignwebhook-resendapikey secret configuration
     core-campaignwebhook-resendapikey:
       # -- Enable this external secret
@@ -939,3 +983,11 @@ externalSecrets:
       secretKey: "CORE_CLOUDFLARE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-cloudflare-clientsecret"  # @schema type:string
+    # -- core-shortlinks-clientsecret secret configuration
+    core-shortlinks-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for shortlinks.clientsecret
+      secretKey: "CORE_SHORTLINKS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-shortlinks-clientsecret"  # @schema type:string

@@ -81,7 +81,7 @@ type WorkflowDefinitionHistory struct {
 	ApprovalFields []string `json:"approval_fields,omitempty"`
 	// Derived: edges that are approval-gated for this definition; not user editable
 	ApprovalEdges []string `json:"approval_edges,omitempty"`
-	// Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
+	// Derived: AUTO_SUBMIT (default) or MANUAL_SUBMIT for approval domains; not user editable
 	ApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode `json:"approval_submission_mode,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON models.WorkflowDefinitionDocument `json:"definition_json,omitempty"`

@@ -91,6 +91,9 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 	if reason != nil {
 		rejectionMeta.RejectionReason = *reason
 	}
+	if rejectionMeta.ActionKey == "" {
+		rejectionMeta.ActionKey = resolveAssignmentActionKey(assignment)
+	}
 
 	// Use allow context for the update since we've already validated the user is an authorized target
 	allowCtx := workflows.AllowContext(ctx)
@@ -122,8 +125,128 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 	}, nil
 }
 
+// RequestChangesWorkflowAssignment is the resolver for the requestChangesWorkflowAssignment field.
+func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context, id string, reason *string, inputs map[string]any) (*model.WorkflowAssignmentRejectPayload, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
+	decisionCtx, err := r.validateAssignmentDecision(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	assignment := decisionCtx.Assignment
+	decidedAt := time.Now()
+
+	metadata := assignment.Metadata
+	if metadata == nil {
+		metadata = map[string]any{}
+	}
+	metadata["change_requested_at"] = decidedAt.Format(time.RFC3339)
+	metadata["change_requested_by"] = decisionCtx.UserID
+	if reason != nil && *reason != "" {
+		metadata["change_reason"] = *reason
+	}
+	if len(inputs) > 0 {
+		metadata["change_inputs"] = inputs
+	}
+
+	rejectionMeta := assignment.RejectionMetadata
+	rejectionMeta.RejectedAt = decidedAt.Format(time.RFC3339)
+	rejectionMeta.RejectedByUserID = decisionCtx.UserID
+	if reason != nil && *reason != "" {
+		rejectionMeta.RejectionReason = *reason
+	}
+	if len(inputs) > 0 {
+		rejectionMeta.ChangeRequestInputs = inputs
+	}
+	if rejectionMeta.ActionKey == "" {
+		rejectionMeta.ActionKey = resolveAssignmentActionKey(assignment)
+	}
+
+	allowCtx := workflows.AllowContext(ctx)
+
+	update := withTransactionalMutation(ctx).WorkflowAssignment.Update().
+		Where(
+			workflowassignment.ID(assignment.ID),
+			workflowassignment.StatusEQ(enums.WorkflowAssignmentStatusPending),
+		).
+		SetStatus(enums.WorkflowAssignmentStatusChangesRequested).
+		SetMetadata(metadata).
+		SetRejectionMetadata(rejectionMeta).
+		SetDecidedAt(decidedAt).
+		SetActorUserID(decisionCtx.UserID)
+
+	if reason != nil && *reason != "" {
+		update.SetNotes(*reason)
+	}
+
+	updatedCount, err := update.Save(allowCtx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
+	}
+	if updatedCount == 0 {
+		return nil, rout.ErrPermissionDenied
+	}
+
+	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(allowCtx, assignment.ID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
+	}
+
+	return &model.WorkflowAssignmentRejectPayload{
+		WorkflowAssignment: updated,
+	}, nil
+}
+
+// ReassignWorkflowAssignment is the resolver for the reassignWorkflowAssignment field.
+func (r *mutationResolver) ReassignWorkflowAssignment(ctx context.Context, id string, targetUserID string) (*generated.WorkflowAssignment, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
+	if id == "" {
+		return nil, rout.NewMissingRequiredFieldError("id")
+	}
+	if targetUserID == "" {
+		return nil, rout.NewMissingRequiredFieldError("targetUserID")
+	}
+
+	decisionCtx, err := r.validateAssignmentDecision(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	assignment := decisionCtx.Assignment
+	allowCtx := workflows.AllowContext(ctx)
+
+	create := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Create().
+		SetWorkflowAssignmentID(assignment.ID).
+		SetTargetType(enums.WorkflowTargetTypeUser).
+		SetTargetUserID(targetUserID)
+	if assignment.OwnerID != "" {
+		create.SetOwnerID(assignment.OwnerID)
+	}
+
+	if err := create.Exec(allowCtx); err != nil && !generated.IsConstraintError(err) {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
+	}
+
+	updated, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(allowCtx, assignment.ID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
+	}
+
+	return updated, nil
+}
+
 // MyWorkflowAssignments is the resolver for the myWorkflowAssignments field.
 func (r *queryResolver) MyWorkflowAssignments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) (*generated.WorkflowAssignmentConnection, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 

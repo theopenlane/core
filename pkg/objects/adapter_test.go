@@ -38,32 +38,32 @@ func TestNewGenericMutationAdapter(t *testing.T) {
 
 func TestGenericMutationAdapter_ID(t *testing.T) {
 	tests := []struct {
-		name        string
-		id          string
-		idExists    bool
-		expectID    string
-		expectError error
+		name         string
+		id           string
+		idExists     bool
+		expectedID   string
+		expectedBool bool
 	}{
 		{
-			name:        "ID exists",
-			id:          "test-id-123",
-			idExists:    true,
-			expectID:    "test-id-123",
-			expectError: nil,
+			name:         "ID exists",
+			id:           "test-id-123",
+			idExists:     true,
+			expectedID:   "test-id-123",
+			expectedBool: true,
 		},
 		{
-			name:        "ID does not exist",
-			id:          "",
-			idExists:    false,
-			expectID:    "",
-			expectError: ErrMutationIDNotFound,
+			name:         "ID does not exist",
+			id:           "",
+			idExists:     false,
+			expectedID:   "",
+			expectedBool: false,
 		},
 		{
-			name:        "empty ID but exists flag is true",
-			id:          "",
-			idExists:    true,
-			expectID:    "",
-			expectError: nil,
+			name:         "empty ID but exists flag is true",
+			id:           "",
+			idExists:     true,
+			expectedID:   "",
+			expectedBool: true,
 		},
 	}
 
@@ -85,14 +85,9 @@ func TestGenericMutationAdapter_ID(t *testing.T) {
 
 			adapter := NewGenericMutationAdapter(mutation, idFunc, typeFunc)
 
-			id, err := adapter.ID()
-
-			if tt.expectError != nil {
-				assert.ErrorIs(t, err, tt.expectError)
-			} else {
-				assert.NoError(t, err)
-				assert.Equal(t, tt.expectID, id)
-			}
+			id, exists := adapter.ID()
+			assert.Equal(t, tt.expectedID, id)
+			assert.Equal(t, tt.expectedBool, exists)
 		})
 	}
 }
@@ -147,12 +142,12 @@ func TestGenericMutationAdapter_Type(t *testing.T) {
 func TestGenericMutationAdapter_WithMock(t *testing.T) {
 	mockMutation := mocks.NewMockMutation(t)
 
-	mockMutation.EXPECT().ID().Return("mock-id", nil)
+	mockMutation.EXPECT().ID().Return("mock-id", true)
 	mockMutation.EXPECT().Type().Return("MockType")
 
-	id, err := mockMutation.ID()
-	require.NoError(t, err)
+	id, exists := mockMutation.ID()
 	assert.Equal(t, "mock-id", id)
+	assert.True(t, exists)
 
 	typeName := mockMutation.Type()
 	assert.Equal(t, "MockType", typeName)
@@ -172,9 +167,9 @@ func TestGenericMutationAdapter_WithDifferentTypes(t *testing.T) {
 
 		adapter := NewGenericMutationAdapter(stringMutation, idFunc, typeFunc)
 
-		id, err := adapter.ID()
-		require.NoError(t, err)
+		id, exists := adapter.ID()
 		assert.Equal(t, "string-id", id)
+		assert.True(t, exists)
 
 		typeName := adapter.Type()
 		assert.Equal(t, "String", typeName)
@@ -193,9 +188,9 @@ func TestGenericMutationAdapter_WithDifferentTypes(t *testing.T) {
 
 		adapter := NewGenericMutationAdapter(intMutation, idFunc, typeFunc)
 
-		id, err := adapter.ID()
-		require.NoError(t, err)
+		id, exists := adapter.ID()
 		assert.Equal(t, "42", id)
+		assert.True(t, exists)
 
 		typeName := adapter.Type()
 		assert.Equal(t, "Integer", typeName)

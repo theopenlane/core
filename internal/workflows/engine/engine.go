@@ -28,6 +28,16 @@ type WorkflowEngine struct {
 	client *generated.Client
 	// emitter is the event emitter for workflow events
 	emitter soiree.Emitter
+	// integrationEmitter is the event bus dedicated to integration operations
+	integrationEmitter *soiree.EventBus
+	// integrationRegistry provides provider operation descriptors (optional)
+	integrationRegistry IntegrationRegistry
+	// integrationStore ensures integration records exist
+	integrationStore IntegrationStore
+	// integrationOperations executes integration operations
+	integrationOperations IntegrationOperations
+	// integrationListenersRegistered tracks whether integration listeners are registered
+	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing
 	observer *observability.Observer
 	// config is the workflow configuration
@@ -57,7 +67,7 @@ func NewWorkflowEngineWithConfig(client *generated.Client, emitter soiree.Emitte
 		config = workflows.NewDefaultConfig()
 	}
 
-	env, err := workflows.NewCELEnvWithConfig(config)
+	env, err := workflows.NewCELEnv(config, workflows.CELScopeAction)
 	if err != nil {
 		return nil, err
 	}
@@ -171,9 +181,9 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 		return err
 	}
 
-	// For approval workflows, guard per (object, domain) to allow multiple concurrent instances
-	// for different approval domains on the same object
-	if workflows.DefinitionHasApprovalAction(def.DefinitionJSON) && domain != nil && len(domain.Fields) > 0 {
+	// For PRE_COMMIT approval workflows, guard per (object, domain) to allow multiple concurrent instances
+	// for different approval domains on the same object. POST_COMMIT approvals behave like reviews.
+	if workflows.DefinitionUsesPreCommitApprovals(def.DefinitionJSON) && domain != nil && len(domain.Fields) > 0 {
 		return e.guardTriggerPerDomain(ctx, def, obj, domain.Fields)
 	}
 
@@ -251,9 +261,17 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 		return nil
 	}
 
-	// Check for active instances linked to any proposal in this domain
+	// Compute cooldown cutoff once if needed
+	var cooldownCutoff time.Time
+	checkCooldown := def.CooldownSeconds > 0
+	if checkCooldown {
+		cooldownCutoff = time.Now().Add(-time.Duration(def.CooldownSeconds) * time.Second)
+	}
+
+	// Check for active instances and cooldown in a single pass
 	for _, proposalID := range proposals {
-		exists, err := e.client.WorkflowInstance.Query().
+		// Check for running/paused instances
+		activeExists, err := e.client.WorkflowInstance.Query().
 			Where(
 				workflowinstance.WorkflowProposalIDEQ(proposalID),
 				workflowinstance.StateIn(enums.WorkflowInstanceStateRunning, enums.WorkflowInstanceStatePaused),
@@ -263,26 +281,23 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 		if err != nil {
 			return fmt.Errorf("failed to check for active instances: %w", err)
 		}
-		if exists {
+		if activeExists {
 			return workflows.ErrWorkflowAlreadyActive
 		}
-	}
 
-	// Check cooldown if configured
-	if def.CooldownSeconds > 0 {
-		cutoff := time.Now().Add(-time.Duration(def.CooldownSeconds) * time.Second)
-		for _, proposalID := range proposals {
-			exists, err := e.client.WorkflowInstance.Query().
+		// Check cooldown if configured
+		if checkCooldown {
+			recentExists, err := e.client.WorkflowInstance.Query().
 				Where(
 					workflowinstance.WorkflowProposalIDEQ(proposalID),
-					workflowinstance.CreatedAtGTE(cutoff),
+					workflowinstance.CreatedAtGTE(cooldownCutoff),
 					workflowinstance.OwnerIDEQ(orgID),
 				).
 				Exist(ctx)
 			if err != nil {
 				return fmt.Errorf("failed to check cooldown: %w", err)
 			}
-			if exists {
+			if recentExists {
 				return workflows.ErrWorkflowAlreadyActive
 			}
 		}
@@ -325,7 +340,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Approval actions pause the workflow until decisions arrive
-	if actionType != nil && *actionType == enums.WorkflowActionTypeApproval {
+	if actionType != nil && isGatedActionType(*actionType) {
 		allowCtx := workflows.AllowContext(ctx)
 		if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 			SetState(enums.WorkflowInstanceStatePaused).
@@ -372,11 +387,16 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		if approvalMetadata != nil {
 			update.SetApprovalMetadata(*approvalMetadata)
 		}
-	case enums.WorkflowAssignmentStatusRejected:
+	case enums.WorkflowAssignmentStatusRejected, enums.WorkflowAssignmentStatusChangesRequested:
 		if rejectionMetadata != nil {
 			update.SetRejectionMetadata(*rejectionMetadata)
 		}
 	}
+
+	// CompleteAssignment emits workflow-assignment-completed explicitly below
+	// Mark this mutation to skip hook-based mutation emission so we don't re-enter completion logic
+	allowCtx = workflows.WithSkipEventEmission(allowCtx)
+	workflows.MarkSkipEventEmission(allowCtx)
 
 	if err = update.Exec(allowCtx); err != nil {
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)
@@ -426,7 +446,12 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 
 // serializeDefinition converts a workflow definition to the storage format
 func (e *WorkflowEngine) serializeDefinition(def *generated.WorkflowDefinition) models.WorkflowDefinitionDocument {
-	return def.DefinitionJSON
+	doc := def.DefinitionJSON
+	if workflows.DefinitionUsesPostCommitApprovals(doc) {
+		doc = workflows.ConvertApprovalActionsToReview(doc)
+	}
+
+	return doc
 }
 
 // approvalDomainForTrigger picks the first matching approval domain for a trigger event

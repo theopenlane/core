@@ -4,6 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strconv"
 	"sync/atomic"
@@ -26,6 +27,35 @@ import (
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _ActionNotificationsReadPayload_readIDs(ctx context.Context, field graphql.CollectedField, obj *model.ActionNotificationsReadPayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActionNotificationsReadPayload_readIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.ReadIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕᚖstring,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActionNotificationsReadPayload_readIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionNotificationsReadPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _NotificationUpdatePayload_notification(ctx context.Context, field graphql.CollectedField, obj *model.NotificationUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
@@ -77,6 +107,8 @@ func (ec *executionContext) fieldContext_NotificationUpdatePayload_notification(
 				return ec.fieldContext_Notification_body(ctx, field)
 			case "data":
 				return ec.fieldContext_Notification_data(ctx, field)
+			case "templateID":
+				return ec.fieldContext_Notification_templateID(ctx, field)
 			case "readAt":
 				return ec.fieldContext_Notification_readAt(ctx, field)
 			case "channels":
@@ -85,6 +117,8 @@ func (ec *executionContext) fieldContext_NotificationUpdatePayload_notification(
 				return ec.fieldContext_Notification_topic(ctx, field)
 			case "owner":
 				return ec.fieldContext_Notification_owner(ctx, field)
+			case "notificationTemplate":
+				return ec.fieldContext_Notification_notificationTemplate(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},
@@ -103,6 +137,45 @@ func (ec *executionContext) fieldContext_NotificationUpdatePayload_notification(
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
+
+var actionNotificationsReadPayloadImplementors = []string{"ActionNotificationsReadPayload"}
+
+func (ec *executionContext) _ActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, obj *model.ActionNotificationsReadPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, actionNotificationsReadPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ActionNotificationsReadPayload")
+		case "readIDs":
+			out.Values[i] = ec._ActionNotificationsReadPayload_readIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
 
 var notificationUpdatePayloadImplementors = []string{"NotificationUpdatePayload"}
 
@@ -146,6 +219,20 @@ func (ec *executionContext) _NotificationUpdatePayload(ctx context.Context, sel 
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) marshalNActionNotificationsReadPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v model.ActionNotificationsReadPayload) graphql.Marshaler {
+	return ec._ActionNotificationsReadPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNActionNotificationsReadPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionNotificationsReadPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ActionNotificationsReadPayload(ctx, sel, v)
+}
 
 func (ec *executionContext) marshalNNotificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationUpdatePayload) graphql.Marshaler {
 	return ec._NotificationUpdatePayload(ctx, sel, &v)

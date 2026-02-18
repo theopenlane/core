@@ -43,6 +43,8 @@ const (
 	FieldMappableDomainID = "mappable_domain_id"
 	// FieldDNSVerificationID holds the string denoting the dns_verification_id field in the database.
 	FieldDNSVerificationID = "dns_verification_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeMappableDomain holds the string denoting the mappable_domain edge name in mutations.
@@ -91,6 +93,7 @@ var Columns = []string{
 	FieldCnameRecord,
 	FieldMappableDomainID,
 	FieldDNSVerificationID,
+	FieldTrustCenterID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "custom_domains"
@@ -213,6 +216,11 @@ func ByMappableDomainID(opts ...sql.OrderTermOption) OrderOption {
 // ByDNSVerificationID orders the results by the dns_verification_id field.
 func ByDNSVerificationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDNSVerificationID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

@@ -800,6 +800,37 @@
       "type": "object",
       "description": "CloudflareConfig contains configuration for Cloudflare integration."
     },
+    "handlers.IntegrationGitHubAppConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles the GitHub App integration handlers."
+        },
+        "appid": {
+          "type": "string",
+          "description": "AppID is the GitHub App ID used for JWT signing."
+        },
+        "appslug": {
+          "type": "string",
+          "description": "AppSlug is the GitHub App slug used for the install URL."
+        },
+        "privatekey": {
+          "type": "string",
+          "description": "PrivateKey is the PEM-encoded GitHub App private key."
+        },
+        "webhooksecret": {
+          "type": "string",
+          "description": "WebhookSecret is the shared secret used to validate GitHub webhooks."
+        },
+        "successredirecturl": {
+          "type": "string",
+          "description": "SuccessRedirectURL is the URL to redirect to after successful installation."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration."
+    },
     "handlers.IntegrationOauthProviderConfig": {
       "properties": {
         "enabled": {
@@ -1255,6 +1286,24 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "shortlinks.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "endpointurl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "slog.Logger": {
       "properties": {},
       "additionalProperties": false,
@@ -1573,6 +1622,9 @@
         },
         "assessmentaccessduration": {
           "type": "integer"
+        },
+        "trustcenterndarequestaccessduration": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
@@ -1759,6 +1811,30 @@
         },
         "cel": {
           "$ref": "#/$defs/workflows.CELConfig"
+        },
+        "gala": {
+          "$ref": "#/$defs/workflows.GalaConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "workflows.GalaConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "workercount": {
+          "type": "integer"
+        },
+        "maxretries": {
+          "type": "integer"
+        },
+        "failonenqueueerror": {
+          "type": "boolean"
+        },
+        "queuename": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1842,6 +1918,10 @@
       "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
       "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
     },
+    "integrationgithubapp": {
+      "$ref": "#/$defs/handlers.IntegrationGitHubAppConfig",
+      "description": "IntegrationGitHubApp contains configuration for GitHub App integrations"
+    },
     "workflows": {
       "$ref": "#/$defs/workflows.Config",
       "description": "Workflows contains the configuration for the workflows engine"
@@ -1853,6 +1933,10 @@
     "cloudflare": {
       "$ref": "#/$defs/handlers.CloudflareConfig",
       "description": "Cloudflare contains configuration for Cloudflare integration"
+    },
+    "shortlinks": {
+      "$ref": "#/$defs/shortlinks.Config",
+      "description": "Shortlinks contains configuration for the URL shortening service"
     }
   },
   "additionalProperties": false,

@@ -415,6 +415,16 @@ func TestMutationCreateEvidence(t *testing.T) {
 			ctx:         testUser1.UserCtx,
 			expectedErr: "time cannot be in the future",
 		},
+		{
+			name: "renewal date in the past",
+			request: testclient.CreateEvidenceInput{
+				Name:        "Test Evidence",
+				RenewalDate: lo.ToPtr(time.Now().Add(-time.Hour)),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "time cannot be in the past",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -674,6 +684,15 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         adminUser.UserCtx,
 			expectedErr: "time cannot be in the future",
+		},
+		{
+			name: "update not allowed, renewal date is in the past",
+			request: testclient.UpdateEvidenceInput{
+				RenewalDate: lo.ToPtr(time.Now().Add(-time.Hour)),
+			},
+			client:      suite.client.api,
+			ctx:         adminUser.UserCtx,
+			expectedErr: "time cannot be in the past",
 		},
 	}
 

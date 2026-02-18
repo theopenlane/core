@@ -89,6 +89,10 @@ var (
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
 	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
 	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
+	// ErrGalaRuntimeUnavailable is returned when gala dual emit is enabled but runtime is unavailable
+	ErrGalaRuntimeUnavailable = errors.New("gala runtime unavailable")
+	// ErrGalaMutationEnqueueFailed is returned when gala mutation enqueue fails.
+	ErrGalaMutationEnqueueFailed = errors.New("gala mutation enqueue failed")
 	// ErrNotSingularTrustCenter is returned when an org is trying to create multiple trust centers
 	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 	// ErrStatusApprovedNotAllowed is returned when a user attempts to set status to APPROVED without being in the approver or delegate group
@@ -189,6 +193,8 @@ var (
 	ErrFailedToResumeWorkflowInstance = errors.New("failed to resume workflow instance")
 	// ErrFailedToTriggerWorkflow is returned when a workflow cannot be triggered
 	ErrFailedToTriggerWorkflow = errors.New("failed to trigger workflow")
+	// ErrMissingIDForTrustCenterNDARequest is returned when a mutation for trust center nda request is missing the ID field, which is required to determine the trust center and send the appropriate email
+	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

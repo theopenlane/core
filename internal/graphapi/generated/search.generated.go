@@ -466,6 +466,80 @@ func (ec *executionContext) fieldContext_SearchResults_customTypeEnums(_ context
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_emailBrandings(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_emailBrandings,
+		func(ctx context.Context) (any, error) {
+			return obj.EmailBrandings, nil
+		},
+		nil,
+		ec.marshalOEmailBrandingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailBrandingConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_emailBrandings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_EmailBrandingConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_EmailBrandingConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_EmailBrandingConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EmailBrandingConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_emailTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_emailTemplates,
+		func(ctx context.Context) (any, error) {
+			return obj.EmailTemplates, nil
+		},
+		nil,
+		ec.marshalOEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_emailTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_EmailTemplateConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_EmailTemplateConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_EmailTemplateConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EmailTemplateConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_entities(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -651,6 +725,43 @@ func (ec *executionContext) fieldContext_SearchResults_identityHolders(_ context
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_integrations(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_integrations,
+		func(ctx context.Context) (any, error) {
+			return obj.Integrations, nil
+		},
+		nil,
+		ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIntegrationConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_integrations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_IntegrationConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_IntegrationConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_IntegrationConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type IntegrationConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -831,6 +942,43 @@ func (ec *executionContext) fieldContext_SearchResults_narratives(_ context.Cont
 				return ec.fieldContext_NarrativeConnection_totalCount(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NarrativeConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_notificationTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_notificationTemplates,
+		func(ctx context.Context) (any, error) {
+			return obj.NotificationTemplates, nil
+		},
+		nil,
+		ec.marshalONotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_notificationTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_NotificationTemplateConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_NotificationTemplateConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_NotificationTemplateConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateConnection", field.Name)
 		},
 	}
 	return fc, nil
@@ -1557,6 +1705,10 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_controlObjectives(ctx, field, obj)
 		case "customTypeEnums":
 			out.Values[i] = ec._SearchResults_customTypeEnums(ctx, field, obj)
+		case "emailBrandings":
+			out.Values[i] = ec._SearchResults_emailBrandings(ctx, field, obj)
+		case "emailTemplates":
+			out.Values[i] = ec._SearchResults_emailTemplates(ctx, field, obj)
 		case "entities":
 			out.Values[i] = ec._SearchResults_entities(ctx, field, obj)
 		case "evidences":
@@ -1567,6 +1719,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_groups(ctx, field, obj)
 		case "identityHolders":
 			out.Values[i] = ec._SearchResults_identityHolders(ctx, field, obj)
+		case "integrations":
+			out.Values[i] = ec._SearchResults_integrations(ctx, field, obj)
 		case "internalPolicies":
 			out.Values[i] = ec._SearchResults_internalPolicies(ctx, field, obj)
 		case "invites":
@@ -1577,6 +1731,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_jobTemplates(ctx, field, obj)
 		case "narratives":
 			out.Values[i] = ec._SearchResults_narratives(ctx, field, obj)
+		case "notificationTemplates":
+			out.Values[i] = ec._SearchResults_notificationTemplates(ctx, field, obj)
 		case "organizations":
 			out.Values[i] = ec._SearchResults_organizations(ctx, field, obj)
 		case "platforms":

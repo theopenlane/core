@@ -119,6 +119,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Organization{}.Name()),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -128,6 +129,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Organization{}.Name()),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -157,13 +159,13 @@ func (t TrustCenter) Edges() []ent.Edge {
 			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema:    t,
-			name:          "subprocessors",
-			edgeSchema:    TrustCenterSubprocessor{},
-			cascadeDelete: "TrustCenter",
+			fromSchema: t,
+			name:       "subprocessors",
+			edgeSchema: TrustCenterSubprocessor{},
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
+			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,

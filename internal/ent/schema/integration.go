@@ -3,12 +3,16 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/models"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -45,6 +49,7 @@ func (Integration) Fields() []ent.Field {
 			Comment("the name of the integration").
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 			),
 		field.String("description").
@@ -57,6 +62,7 @@ func (Integration) Fields() []ent.Field {
 			Comment("the kind of integration, such as github, slack, s3 etc.").
 			Optional().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("kind"),
 			),
 		field.String("integration_type").
@@ -65,9 +71,33 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("integration_type"),
 			),
+		field.JSON("provider_metadata", openapi.IntegrationProviderMetadata{}).
+			Comment("cached provider metadata for UI and registry access").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
+		field.JSON("config", openapi.IntegrationConfig{}).
+			Comment("runtime configuration for operations, scheduling, and mappings").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
+		field.JSON("provider_state", openapi.IntegrationProviderState{}).
+			Comment("provider-specific integration state captured during auth/config").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the integration").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 	}
 }
 
@@ -95,7 +125,31 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, DirectoryGroup{}),
 		defaultEdgeToWithPagination(i, DirectoryMembership{}),
 		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
+		defaultEdgeToWithPagination(i, NotificationTemplate{}),
+		defaultEdgeToWithPagination(i, EmailTemplate{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: IntegrationWebhook{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: IntegrationRun{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
 		defaultEdgeFromWithPagination(i, Entity{}),
+	}
+}
+
+// Indexes of the Integration
+func (Integration) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields(ownerFieldName, "kind").
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

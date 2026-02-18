@@ -61,6 +61,8 @@ type SchemaConfig struct {
 	Discussion                         string // Discussion table.
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
+	EmailBranding                      string // EmailBranding table.
+	EmailTemplate                      string // EmailTemplate table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.
 	EntityBlockedGroups                string // Entity-blocked_groups->Group table.
@@ -112,6 +114,8 @@ type SchemaConfig struct {
 	IntegrationReviews                 string // Integration-reviews->Review table.
 	IntegrationRemediations            string // Integration-remediations->Remediation table.
 	IntegrationActionPlans             string // Integration-action_plans->ActionPlan table.
+	IntegrationRun                     string // IntegrationRun table.
+	IntegrationWebhook                 string // IntegrationWebhook table.
 	InternalPolicy                     string // InternalPolicy table.
 	InternalPolicyBlockedGroups        string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyEditors              string // InternalPolicy-editors->Group table.
@@ -145,6 +149,8 @@ type SchemaConfig struct {
 	NarrativeViewers                   string // Narrative-viewers->Group table.
 	Note                               string // Note table.
 	Notification                       string // Notification table.
+	NotificationPreference             string // NotificationPreference table.
+	NotificationTemplate               string // NotificationTemplate table.
 	Onboarding                         string // Onboarding table.
 	OrgMembership                      string // OrgMembership table.
 	OrgMembershipEvents                string // OrgMembership-events->Event table.

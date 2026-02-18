@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -46,14 +47,14 @@ func NewWorkflowListeners(client *generated.Client, engine *WorkflowEngine, emit
 
 // HandleWorkflowMutation triggers matching workflows for workflow-eligible mutations.
 func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if workflows.IsWorkflowBypass(ctx.Context()) {
+	if workflows.IsWorkflowBypass(ctx.Context()) && !workflows.AllowWorkflowEventEmission(ctx.Context()) {
 		return nil
 	}
 	if workflows.ShouldSkipEventEmission(ctx.Context()) {
 		return nil
 	}
 
-	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() {
+	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() && payload.Operation != ent.OpCreate.String() {
 		return nil
 	}
 
@@ -62,10 +63,14 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 		return nil
 	}
 
+	eventType := workflowEventTypeFromEntOperation(payload.Operation)
 	changedFields := workflows.CollectChangedFields(mut)
+	if eventType == "CREATE" {
+		changedFields = workflows.CollectAllChangedFields(mut)
+	}
 	changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(payload.Mutation)
 
-	if len(changedFields) == 0 && len(changedEdges) == 0 {
+	if len(changedFields) == 0 && len(changedEdges) == 0 && eventType != "CREATE" {
 		return nil
 	}
 
@@ -85,22 +90,24 @@ func (l *WorkflowListeners) HandleWorkflowMutation(ctx *soiree.EventContext, pay
 		return nil
 	}
 
-	obj, err := loadWorkflowObject(ctx.Context(), client, payload.Mutation.Type(), entityID)
+	allowCtx := workflows.AllowContext(ctx.Context())
+	obj, err := loadWorkflowObject(allowCtx, client, payload.Mutation.Type(), entityID)
 	if err != nil {
 		return nil
 	}
 
-	eventType := workflowEventTypeFromEntOperation(payload.Operation)
-
 	proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
 
-	allowCtx := workflows.AllowContext(ctx.Context())
 	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, payload.Mutation.Type(), eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil
 	}
 
 	for _, def := range definitions {
+		if workflows.DefinitionUsesPreCommitApprovals(def.DefinitionJSON) {
+			continue
+		}
+
 		_, err := l.engine.TriggerWorkflow(ctx.Context(), def, obj, TriggerInput{
 			EventType:       eventType,
 			ChangedFields:   changedFields,
@@ -205,17 +212,18 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 		return nil
 	}
 
-	// Find all approval actions with When conditions and start those that match concurrently
-	type approvalStart struct {
-		action models.WorkflowAction
-		index  int
-		obj    *workflows.Object
+	// Find all gated actions with When conditions and start those that match concurrently
+	type gatedStart struct {
+		action     models.WorkflowAction
+		index      int
+		obj        *workflows.Object
+		actionType enums.WorkflowActionType
 	}
 
-	approvalsToStart := make([]approvalStart, 0)
+	gatedToStart := make([]gatedStart, 0)
 	for i, action := range def.Actions {
 		actionType := enums.ToWorkflowActionType(action.Type)
-		if actionType == nil || *actionType != enums.WorkflowActionTypeApproval || action.When == "" {
+		if actionType == nil || !isGatedActionType(*actionType) || action.When == "" {
 			continue
 		}
 
@@ -225,21 +233,23 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 			continue
 		}
 
-		approvalsToStart = append(approvalsToStart, approvalStart{
-			action: action,
-			index:  i,
-			obj:    loadedObj,
+		gatedToStart = append(gatedToStart, gatedStart{
+			action:     action,
+			index:      i,
+			obj:        loadedObj,
+			actionType: *actionType,
 		})
 	}
 
-	if len(approvalsToStart) > 0 {
-		keys := lo.Map(approvalsToStart, func(item approvalStart, _ int) string {
+	if len(gatedToStart) > 0 {
+		keys := lo.Map(gatedToStart, func(item gatedStart, _ int) string {
 			return item.action.Key
 		})
 		keys = workflows.NormalizeStrings(keys)
 		if len(keys) > 0 {
 			allowCtx := workflows.AllowContext(scopeCtx)
 			contextData := instance.Context
+			// ParallelApprovalKeys includes review actions as well.
 			contextData.ParallelApprovalKeys = keys
 			if err := l.client.WorkflowInstance.UpdateOneID(instance.ID).
 				SetContext(contextData).
@@ -248,8 +258,8 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx *soiree.EventContext, pa
 			}
 		}
 
-		for _, start := range approvalsToStart {
-			l.emitActionStarted(scope, instance, start.action.Key, start.index, enums.WorkflowActionTypeApproval, start.obj)
+		for _, start := range gatedToStart {
+			l.emitActionStarted(scope, instance, start.action.Key, start.index, start.actionType, start.obj)
 		}
 
 		return nil
@@ -312,7 +322,10 @@ func (l *WorkflowListeners) HandleActionStarted(ctx *soiree.EventContext, payloa
 
 	// Execute action
 	execErr := l.engine.ProcessAction(scopeCtx, instance, action)
-	if errors.Is(execErr, ErrApprovalNoTargets) {
+	if errors.Is(execErr, ErrIntegrationActionQueued) {
+		return nil
+	}
+	if errors.Is(execErr, ErrApprovalNoTargets) || errors.Is(execErr, ErrReviewNoTargets) {
 		if err := l.removeParallelApprovalKey(scopeCtx, instance, action.Key); err != nil {
 			scope.RecordError(err, nil)
 		}
@@ -349,7 +362,7 @@ func (l *WorkflowListeners) HandleActionCompleted(ctx *soiree.EventContext, payl
 		scope.WithFields(observability.ActionFields(actionKey, nil))
 	}
 
-	recordable := payload.ActionType != enums.WorkflowActionTypeApproval || payload.Skipped || !payload.Success
+	recordable := !isGatedActionType(payload.ActionType) || payload.Skipped || !payload.Success
 	if recordable {
 		l.recordActionResult(scope, instance, actionKey, payload)
 	}
@@ -359,20 +372,20 @@ func (l *WorkflowListeners) HandleActionCompleted(ctx *soiree.EventContext, payl
 		return l.failInstance(scope, instance, obj, nil, nil)
 	}
 
-	if payload.ActionType == enums.WorkflowActionTypeApproval && payload.Skipped {
+	if isGatedActionType(payload.ActionType) && payload.Skipped {
 		if len(instance.Context.ParallelApprovalKeys) > 0 {
 			return nil
 		}
 
-		hasRemainingApproval := false
+		hasRemainingGated := false
 		for i := payload.ActionIndex + 1; i < len(def.Actions); i++ {
 			actionType := enums.ToWorkflowActionType(def.Actions[i].Type)
-			if actionType != nil && *actionType == enums.WorkflowActionTypeApproval {
-				hasRemainingApproval = true
+			if actionType != nil && isGatedActionType(*actionType) {
+				hasRemainingGated = true
 				break
 			}
 		}
-		if !hasRemainingApproval && instance.WorkflowProposalID != "" {
+		if !hasRemainingGated && instance.WorkflowProposalID != "" {
 			if err := l.engine.proposalManager.Apply(scope, instance.WorkflowProposalID, obj); err != nil {
 				return l.failInstance(scope, instance, obj, err, observability.Fields{
 					workflowinstance.FieldWorkflowProposalID: instance.WorkflowProposalID,
@@ -383,7 +396,7 @@ func (l *WorkflowListeners) HandleActionCompleted(ctx *soiree.EventContext, payl
 
 	// If approval action, workflow pauses (listener on assignment completed will resume).
 	// Skipped approval actions should advance immediately.
-	if payload.ActionType == enums.WorkflowActionTypeApproval && !payload.Skipped {
+	if isGatedActionType(payload.ActionType) && !payload.Skipped {
 		return nil
 	}
 
@@ -427,6 +440,13 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		workflowassignment.FieldStatus:        assignment.Status.String(),
 	})
 
+	if isChangeRequestAssignment(assignment) {
+		scope.Skip("change_request_assignment", observability.Fields{
+			workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
+		})
+		return nil
+	}
+
 	instance, err := loadWorkflowInstance(scopeCtx, l.client, assignment.WorkflowInstanceID, orgID)
 	if err != nil {
 		return scope.Fail(err, nil)
@@ -456,7 +476,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 
 	// determine which action this assignment corresponds to
 	approvalMeta := assignment.ApprovalMetadata
-	actionIndex := approvalActionIndex(def.Actions, assignment.AssignmentKey, approvalMeta.ActionKey)
+	actionIndex := assignmentActionIndex(def.Actions, assignment.AssignmentKey, approvalMeta.ActionKey)
 
 	if actionIndex == -1 {
 		var errFields observability.Fields
@@ -469,6 +489,8 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 
 	scope.WithFields(observability.ActionFields(def.Actions[actionIndex].Key, nil))
 
+	action := def.Actions[actionIndex]
+
 	allAssignments, err := l.client.WorkflowAssignment.Query().
 		Where(
 			workflowassignment.WorkflowInstanceIDEQ(instance.ID),
@@ -479,62 +501,19 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		return scope.Fail(err, nil)
 	}
 
-	expectedKeys := workflows.NormalizeStrings(instance.Context.ParallelApprovalKeys)
-	expectedIndices := make(map[int]struct{})
-	for _, key := range expectedKeys {
-		if idx := actionIndexForKey(def.Actions, key); idx >= 0 {
-			expectedIndices[idx] = struct{}{}
-		}
-	}
-	useExpected := len(expectedIndices) > 0
-	if useExpected {
-		if _, ok := expectedIndices[actionIndex]; !ok {
-			useExpected = false
-		}
-	}
-
-	assignmentsByAction := make(map[int][]*generated.WorkflowAssignment)
-	maxActionIndex := -1
-	for _, a := range allAssignments {
-		idx := approvalActionIndex(def.Actions, a.AssignmentKey, a.ApprovalMetadata.ActionKey)
-		if idx == -1 {
-			continue
-		}
-		if useExpected {
-			if _, ok := expectedIndices[idx]; !ok {
-				continue
-			}
-		}
-		assignmentsByAction[idx] = append(assignmentsByAction[idx], a)
-		if idx > maxActionIndex {
-			maxActionIndex = idx
-		}
-	}
-
+	expectedIndices, useExpected := resolveExpectedActionIndices(def.Actions, instance.Context.ParallelApprovalKeys, actionIndex)
+	assignmentsByAction, maxActionIndex := groupAssignmentsByAction(def.Actions, allAssignments, expectedIndices, useExpected, actionIndex)
 	assignments := assignmentsByAction[actionIndex]
 	if len(assignments) == 0 {
-		scope.RecordError(ErrAssignmentActionNotFound, observability.ActionFields(def.Actions[actionIndex].Key, nil))
+		scope.RecordError(ErrAssignmentActionNotFound, observability.ActionFields(action.Key, nil))
 		return nil
 	}
-	if useExpected {
-		for idx := range expectedIndices {
-			if idx > maxActionIndex {
-				maxActionIndex = idx
-			}
-		}
-	} else if maxActionIndex == -1 {
-		maxActionIndex = actionIndex
-	}
 
-	requiredCount := requiredApprovalCount(def.Actions[actionIndex], approvalMeta, assignment.Required)
+	requiredCount := requiredApprovalCount(action, approvalMeta, assignment.Required)
 
 	statusCounts := CountAssignmentStatus(assignments)
 	resolution := resolveApproval(requiredCount, statusCounts)
-	assignmentIDs := make([]string, 0, len(assignments))
-
-	for _, a := range assignments {
-		assignmentIDs = append(assignmentIDs, a.ID)
-	}
+	assignmentIDs := collectAssignmentIDs(assignments)
 
 	targetUserIDs, targetErr := assignmentTargetUserIDs(scopeCtx, l.client, assignmentIDs, orgID)
 	if targetErr != nil {
@@ -543,15 +522,35 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		})
 	}
 
+	if assignment.Status == enums.WorkflowAssignmentStatusChangesRequested {
+		if err := l.createChangeRequestAssignment(scope, instance, assignment, action, obj, orgID); err != nil {
+			scope.Warn(err, observability.Fields{
+				workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
+			})
+		}
+	}
+
+	if assignment.Status == enums.WorkflowAssignmentStatusChangesRequested {
+		if err := l.closePendingApprovalsForChangeRequest(scope, assignmentsByAction, expectedIndices, actionIndex, useExpected, assignment, approvalMeta.ActionKey); err != nil {
+			scope.Warn(err, observability.Fields{
+				workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
+			})
+		}
+
+		label := approvalMeta.Label
+		l.recordApprovalEvent(scope, instance, action, actionIndex, obj, statusCounts, requiredCount, assignmentIDs, targetUserIDs, false, label, assignment.Required)
+
+		return nil
+	}
+
 	if resolution != approvalPending {
 		label := approvalMeta.Label
-		details := approvalCompletedDetails(def.Actions[actionIndex], actionIndex, obj, statusCounts, requiredCount, assignmentIDs, targetUserIDs, resolution == approvalSatisfied, label, assignment.Required)
-		l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, def.Actions[actionIndex].Key, details)
+		l.recordApprovalEvent(scope, instance, action, actionIndex, obj, statusCounts, requiredCount, assignmentIDs, targetUserIDs, resolution == approvalSatisfied, label, assignment.Required)
 	}
 
 	switch resolution {
 	case approvalFailed:
-		if statusCounts.RejectedRequired {
+		if statusCounts.RejectedRequired || statusCounts.ChangesRequestedRequired {
 			scope.Info(observability.ActionFields(def.Actions[actionIndex].Key, nil))
 		}
 		return l.failInstance(scope, instance, obj, nil, nil)
@@ -559,46 +558,9 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 		return nil
 	}
 
-	allResolved := true
-	if useExpected {
-		for idx := range expectedIndices {
-			grouped := assignmentsByAction[idx]
-			if len(grouped) == 0 {
-				allResolved = false
-				continue
-			}
-
-			groupMeta := grouped[0].ApprovalMetadata
-			groupRequired := requiredApprovalCount(def.Actions[idx], groupMeta, grouped[0].Required)
-			groupCounts := CountAssignmentStatus(grouped)
-			groupResolution := resolveApproval(groupRequired, groupCounts)
-
-			if groupResolution == approvalFailed {
-				return l.failInstance(scope, instance, obj, nil, nil)
-			}
-
-			if groupResolution == approvalPending {
-				allResolved = false
-			}
-		}
-	} else {
-		for idx, grouped := range assignmentsByAction {
-			if len(grouped) == 0 {
-				continue
-			}
-			groupMeta := grouped[0].ApprovalMetadata
-			groupRequired := requiredApprovalCount(def.Actions[idx], groupMeta, grouped[0].Required)
-			groupCounts := CountAssignmentStatus(grouped)
-			groupResolution := resolveApproval(groupRequired, groupCounts)
-
-			if groupResolution == approvalFailed {
-				return l.failInstance(scope, instance, obj, nil, nil)
-			}
-
-			if groupResolution == approvalPending {
-				allResolved = false
-			}
-		}
+	allResolved, failed := evaluateApprovalGroups(def.Actions, assignmentsByAction, expectedIndices, useExpected)
+	if failed {
+		return l.failInstance(scope, instance, obj, nil, nil)
 	}
 
 	if !allResolved {
@@ -618,6 +580,199 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx *soiree.EventContext, 
 	clearParallel := len(expectedIndices) > 0
 	if err := l.resumeWorkflowAfterApproval(scope, instance, orgID, maxActionIndex, obj, def, clearParallel); err != nil {
 		return l.failInstance(scope, instance, obj, err, nil)
+	}
+
+	return nil
+}
+
+func isChangeRequestAssignment(assignment *generated.WorkflowAssignment) bool {
+	return strings.HasPrefix(assignment.AssignmentKey, "change_request_") || assignment.Role == "REQUESTER"
+}
+
+func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys []string, actionIndex int) (map[int]struct{}, bool) {
+	expectedKeys := workflows.NormalizeStrings(parallelKeys)
+	expectedIndices := make(map[int]struct{})
+	for _, key := range expectedKeys {
+		if idx := actionIndexForKey(actions, key); idx >= 0 {
+			expectedIndices[idx] = struct{}{}
+		}
+	}
+
+	useExpected := len(expectedIndices) > 0
+	if useExpected {
+		if _, ok := expectedIndices[actionIndex]; !ok {
+			useExpected = false
+		}
+	}
+
+	return expectedIndices, useExpected
+}
+
+func groupAssignmentsByAction(actions []models.WorkflowAction, allAssignments []*generated.WorkflowAssignment, expectedIndices map[int]struct{}, useExpected bool, actionIndex int) (map[int][]*generated.WorkflowAssignment, int) {
+	assignmentsByAction := make(map[int][]*generated.WorkflowAssignment)
+	maxActionIndex := -1
+
+	for _, a := range allAssignments {
+		idx := assignmentActionIndex(actions, a.AssignmentKey, a.ApprovalMetadata.ActionKey)
+		if idx == -1 {
+			continue
+		}
+		if useExpected {
+			if _, ok := expectedIndices[idx]; !ok {
+				continue
+			}
+		}
+		assignmentsByAction[idx] = append(assignmentsByAction[idx], a)
+		if idx > maxActionIndex {
+			maxActionIndex = idx
+		}
+	}
+
+	if useExpected {
+		for idx := range expectedIndices {
+			if idx > maxActionIndex {
+				maxActionIndex = idx
+			}
+		}
+	} else if maxActionIndex == -1 {
+		maxActionIndex = actionIndex
+	}
+
+	return assignmentsByAction, maxActionIndex
+}
+
+func collectAssignmentIDs(assignments []*generated.WorkflowAssignment) []string {
+	return lo.Map(assignments, func(a *generated.WorkflowAssignment, _ int) string { return a.ID })
+}
+
+func (l *WorkflowListeners) recordApprovalEvent(
+	scope *observability.Scope,
+	instance *generated.WorkflowInstance,
+	action models.WorkflowAction,
+	actionIndex int,
+	obj *workflows.Object,
+	statusCounts AssignmentStatusCounts,
+	requiredCount int,
+	assignmentIDs []string,
+	targetUserIDs []string,
+	satisfied bool,
+	label string,
+	required bool,
+) {
+	actionType := enums.ToWorkflowActionType(action.Type)
+	if actionType != nil && *actionType == enums.WorkflowActionTypeReview {
+		details := reviewCompletedDetails(action, actionIndex, obj, statusCounts, requiredCount, assignmentIDs, targetUserIDs, satisfied, label, required)
+		l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, action.Key, details)
+		return
+	}
+
+	details := approvalCompletedDetails(action, actionIndex, obj, statusCounts, requiredCount, assignmentIDs, targetUserIDs, satisfied, label, required)
+	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, action.Key, details)
+}
+
+func evaluateApprovalGroups(actions []models.WorkflowAction, assignmentsByAction map[int][]*generated.WorkflowAssignment, expectedIndices map[int]struct{}, useExpected bool) (bool, bool) {
+	allResolved := true
+
+	checkGroup := func(idx int, grouped []*generated.WorkflowAssignment) (bool, bool) {
+		if len(grouped) == 0 {
+			return false, false
+		}
+		groupMeta := grouped[0].ApprovalMetadata
+		groupRequired := requiredApprovalCount(actions[idx], groupMeta, grouped[0].Required)
+		groupCounts := CountAssignmentStatus(grouped)
+		groupResolution := resolveApproval(groupRequired, groupCounts)
+
+		if groupResolution == approvalFailed {
+			return false, true
+		}
+
+		if groupResolution == approvalPending {
+			return false, false
+		}
+
+		return true, false
+	}
+
+	if useExpected {
+		for idx := range expectedIndices {
+			resolved, failed := checkGroup(idx, assignmentsByAction[idx])
+			if failed {
+				return false, true
+			}
+			if !resolved {
+				allResolved = false
+			}
+		}
+		return allResolved, false
+	}
+
+	for idx, grouped := range assignmentsByAction {
+		resolved, failed := checkGroup(idx, grouped)
+		if failed {
+			return false, true
+		}
+		if !resolved {
+			allResolved = false
+		}
+	}
+
+	return allResolved, false
+}
+
+// closePendingApprovalsForChangeRequest closes any outstanding approvals when theres a change request submitted
+func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observability.Scope, assignmentsByAction map[int][]*generated.WorkflowAssignment, expectedIndices map[int]struct{}, actionIndex int, useExpected bool, requesterAssignment *generated.WorkflowAssignment, actionKey string) error {
+	if requesterAssignment == nil {
+		return nil
+	}
+
+	allowCtx := workflows.AllowContext(scope.Context())
+	requesterID := requesterAssignment.ActorUserID
+	decidedAt := time.Now().UTC()
+
+	indices := make([]int, 0, len(expectedIndices))
+	if useExpected {
+		for idx := range expectedIndices {
+			indices = append(indices, idx)
+		}
+	} else {
+		indices = append(indices, actionIndex)
+	}
+
+	for _, idx := range indices {
+		assignments := assignmentsByAction[idx]
+		for _, a := range assignments {
+			if a == nil || a.ID == requesterAssignment.ID {
+				continue
+			}
+			if a.Status != enums.WorkflowAssignmentStatusPending {
+				continue
+			}
+
+			rejection := models.WorkflowAssignmentRejection{
+				ActionKey:        actionKey,
+				RejectionReason:  "changes requested",
+				RejectedAt:       decidedAt.Format(time.RFC3339),
+				RejectedByUserID: requesterID,
+			}
+			if rejection.ActionKey == "" {
+				rejection.ActionKey = a.ApprovalMetadata.ActionKey
+			}
+
+			update := l.client.WorkflowAssignment.UpdateOneID(a.ID).
+				SetStatus(enums.WorkflowAssignmentStatusRejected).
+				SetRejectionMetadata(rejection).
+				SetDecidedAt(decidedAt)
+
+			if requesterID != "" {
+				update.SetActorUserID(requesterID)
+			}
+
+			if err := update.Exec(allowCtx); err != nil {
+				return err
+			}
+
+			a.Status = enums.WorkflowAssignmentStatusRejected
+		}
 	}
 
 	return nil
@@ -745,10 +900,13 @@ func (l *WorkflowListeners) advanceWorkflow(scope *observability.Scope, instance
 	return nil
 }
 
-// approvalActionIndex returns the action index associated with an approval assignment
-func approvalActionIndex(actions []models.WorkflowAction, assignmentKey, actionKey string) int {
+// assignmentActionIndex returns the action index associated with a gated assignment
+func assignmentActionIndex(actions []models.WorkflowAction, assignmentKey, actionKey string) int {
 	_, index, ok := lo.FindIndexOf(actions, func(action models.WorkflowAction) bool {
 		if strings.HasPrefix(assignmentKey, fmt.Sprintf("approval_%s_", action.Key)) {
+			return true
+		}
+		if strings.HasPrefix(assignmentKey, fmt.Sprintf("review_%s_", action.Key)) {
 			return true
 		}
 		return actionKey != "" && actionKey == action.Key
@@ -757,6 +915,119 @@ func approvalActionIndex(actions []models.WorkflowAction, assignmentKey, actionK
 		return -1
 	}
 	return index
+}
+
+// createChangeRequestAssignment creates a new assignment for the requester to address change requests
+func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.Scope, instance *generated.WorkflowInstance, assignment *generated.WorkflowAssignment, action models.WorkflowAction, obj *workflows.Object, orgID string) error {
+	if instance == nil || assignment == nil {
+		return nil
+	}
+
+	requesterID := instance.Context.TriggerUserID
+	if requesterID == "" {
+		return nil
+	}
+
+	actionKey := action.Key
+	if actionKey == "" {
+		actionKey = assignment.ApprovalMetadata.ActionKey
+	}
+	if actionKey == "" {
+		actionKey = "unknown"
+	}
+
+	assignmentKey := fmt.Sprintf("change_request_%s_%s", actionKey, requesterID)
+	label := "Changes requested"
+
+	metadata := map[string]any{
+		"change_request_for_assignment_id": assignment.ID,
+		"change_request_action_key":        actionKey,
+		"change_request_action_type":       action.Type,
+	}
+	if assignment.ActorUserID != "" {
+		metadata["change_requested_by_user_id"] = assignment.ActorUserID
+	}
+	if assignment.RejectionMetadata.RejectionReason != "" {
+		metadata["change_request_reason"] = assignment.RejectionMetadata.RejectionReason
+	}
+	if len(assignment.RejectionMetadata.ChangeRequestInputs) > 0 {
+		metadata["change_request_inputs"] = assignment.RejectionMetadata.ChangeRequestInputs
+	}
+	if assignment.RejectionMetadata.RejectedAt != "" {
+		metadata["change_requested_at"] = assignment.RejectionMetadata.RejectedAt
+	}
+
+	allowCtx := workflows.AllowContext(scope.Context())
+
+	create := l.client.WorkflowAssignment.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetAssignmentKey(assignmentKey).
+		SetStatus(enums.WorkflowAssignmentStatusPending).
+		SetRequired(false).
+		SetRole("REQUESTER").
+		SetLabel(label).
+		SetMetadata(metadata)
+	create.SetOwnerID(orgID)
+	if assignment.RejectionMetadata.RejectionReason != "" {
+		create.SetNotes(assignment.RejectionMetadata.RejectionReason)
+	}
+
+	assignmentCreated := true
+	requesterAssignment, err := create.Save(allowCtx)
+	if err != nil && generated.IsConstraintError(err) {
+		assignmentCreated = false
+		requesterAssignment, err = l.client.WorkflowAssignment.Query().
+			Where(
+				workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+				workflowassignment.AssignmentKeyEQ(assignmentKey),
+				workflowassignment.OwnerIDEQ(orgID),
+			).
+			Only(allowCtx)
+	}
+	if err != nil {
+		return err
+	}
+
+	if requesterAssignment != nil && !assignmentCreated {
+		update := l.client.WorkflowAssignment.UpdateOneID(requesterAssignment.ID).
+			SetStatus(enums.WorkflowAssignmentStatusPending).
+			SetRole("REQUESTER").
+			SetRequired(false).
+			SetLabel(label).
+			SetMetadata(metadata).
+			ClearDecidedAt().
+			ClearActorUserID().
+			ClearActorGroupID()
+		if assignment.RejectionMetadata.RejectionReason != "" {
+			update.SetNotes(assignment.RejectionMetadata.RejectionReason)
+		}
+		if _, updateErr := update.Save(allowCtx); updateErr != nil {
+			scope.Warn(updateErr, observability.Fields{
+				workflowassignment.FieldAssignmentKey: assignmentKey,
+			})
+		}
+	}
+
+	if requesterAssignment != nil {
+		targetCreate := l.client.WorkflowAssignmentTarget.
+			Create().
+			SetWorkflowAssignmentID(requesterAssignment.ID).
+			SetTargetType(enums.WorkflowTargetTypeUser).
+			SetTargetUserID(requesterID).
+			SetOwnerID(orgID)
+		if err := targetCreate.Exec(allowCtx); err != nil && !generated.IsConstraintError(err) {
+			return err
+		}
+	}
+
+	if assignmentCreated && requesterAssignment != nil && obj != nil {
+		actionType := enums.ToWorkflowActionType(action.Type)
+		if actionType != nil {
+			l.engine.emitAssignmentCreated(allowCtx, instance, obj, requesterAssignment.ID, requesterID, *actionType)
+		}
+	}
+
+	return nil
 }
 
 // requiredApprovalCount resolves the approval quorum requirement for an action

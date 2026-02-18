@@ -177,6 +177,213 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 	return fc, nil
 }
 
+func (ec *executionContext) _IdentityHolderBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_IdentityHolderBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_IdentityHolderBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "IdentityHolderBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _IdentityHolderBulkUpdatePayload_identityHolders(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_IdentityHolderBulkUpdatePayload_identityHolders,
+		func(ctx context.Context) (any, error) {
+			return obj.IdentityHolders, nil
+		},
+		nil,
+		ec.marshalOIdentityHolder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identityHolders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "IdentityHolderBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_IdentityHolder_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_IdentityHolder_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_IdentityHolder_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_IdentityHolder_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_IdentityHolder_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_IdentityHolder_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_IdentityHolder_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_IdentityHolder_ownerID(ctx, field)
+			case "internalOwner":
+				return ec.fieldContext_IdentityHolder_internalOwner(ctx, field)
+			case "internalOwnerUserID":
+				return ec.fieldContext_IdentityHolder_internalOwnerUserID(ctx, field)
+			case "internalOwnerGroupID":
+				return ec.fieldContext_IdentityHolder_internalOwnerGroupID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_IdentityHolder_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_IdentityHolder_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_IdentityHolder_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_IdentityHolder_scopeID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_IdentityHolder_workflowEligibleMarker(ctx, field)
+			case "fullName":
+				return ec.fieldContext_IdentityHolder_fullName(ctx, field)
+			case "email":
+				return ec.fieldContext_IdentityHolder_email(ctx, field)
+			case "alternateEmail":
+				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
+			case "phoneNumber":
+				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
+			case "isOpenlaneUser":
+				return ec.fieldContext_IdentityHolder_isOpenlaneUser(ctx, field)
+			case "userID":
+				return ec.fieldContext_IdentityHolder_userID(ctx, field)
+			case "identityHolderType":
+				return ec.fieldContext_IdentityHolder_identityHolderType(ctx, field)
+			case "status":
+				return ec.fieldContext_IdentityHolder_status(ctx, field)
+			case "isActive":
+				return ec.fieldContext_IdentityHolder_isActive(ctx, field)
+			case "title":
+				return ec.fieldContext_IdentityHolder_title(ctx, field)
+			case "department":
+				return ec.fieldContext_IdentityHolder_department(ctx, field)
+			case "team":
+				return ec.fieldContext_IdentityHolder_team(ctx, field)
+			case "location":
+				return ec.fieldContext_IdentityHolder_location(ctx, field)
+			case "startDate":
+				return ec.fieldContext_IdentityHolder_startDate(ctx, field)
+			case "endDate":
+				return ec.fieldContext_IdentityHolder_endDate(ctx, field)
+			case "employerEntityID":
+				return ec.fieldContext_IdentityHolder_employerEntityID(ctx, field)
+			case "externalUserID":
+				return ec.fieldContext_IdentityHolder_externalUserID(ctx, field)
+			case "externalReferenceID":
+				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
+			case "metadata":
+				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_IdentityHolder_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_IdentityHolder_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
+			case "internalOwnerUser":
+				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
+			case "internalOwnerGroup":
+				return ec.fieldContext_IdentityHolder_internalOwnerGroup(ctx, field)
+			case "environment":
+				return ec.fieldContext_IdentityHolder_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_IdentityHolder_scope(ctx, field)
+			case "employer":
+				return ec.fieldContext_IdentityHolder_employer(ctx, field)
+			case "assessmentResponses":
+				return ec.fieldContext_IdentityHolder_assessmentResponses(ctx, field)
+			case "assessments":
+				return ec.fieldContext_IdentityHolder_assessments(ctx, field)
+			case "templates":
+				return ec.fieldContext_IdentityHolder_templates(ctx, field)
+			case "assets":
+				return ec.fieldContext_IdentityHolder_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_IdentityHolder_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
+			case "tasks":
+				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
+			case "accessPlatforms":
+				return ec.fieldContext_IdentityHolder_accessPlatforms(ctx, field)
+			case "user":
+				return ec.fieldContext_IdentityHolder_user(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
+			case "hasWorkflowHistory":
+				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
+			case "activeWorkflowInstances":
+				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
+			case "workflowTimeline":
+				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _IdentityHolderBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_IdentityHolderBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "IdentityHolderBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _IdentityHolderCreatePayload_identityHolder(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -552,6 +759,83 @@ func (ec *executionContext) _IdentityHolderBulkCreatePayload(ctx context.Context
 	return out
 }
 
+var identityHolderBulkDeletePayloadImplementors = []string{"IdentityHolderBulkDeletePayload"}
+
+func (ec *executionContext) _IdentityHolderBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.IdentityHolderBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, identityHolderBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("IdentityHolderBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._IdentityHolderBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var identityHolderBulkUpdatePayloadImplementors = []string{"IdentityHolderBulkUpdatePayload"}
+
+func (ec *executionContext) _IdentityHolderBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.IdentityHolderBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, identityHolderBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("IdentityHolderBulkUpdatePayload")
+		case "identityHolders":
+			out.Values[i] = ec._IdentityHolderBulkUpdatePayload_identityHolders(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._IdentityHolderBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var identityHolderCreatePayloadImplementors = []string{"IdentityHolderCreatePayload"}
 
 func (ec *executionContext) _IdentityHolderCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.IdentityHolderCreatePayload) graphql.Marshaler {
@@ -685,6 +969,34 @@ func (ec *executionContext) marshalNIdentityHolderBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._IdentityHolderBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNIdentityHolderBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderBulkDeletePayload) graphql.Marshaler {
+	return ec._IdentityHolderBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNIdentityHolderBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._IdentityHolderBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNIdentityHolderBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderBulkUpdatePayload) graphql.Marshaler {
+	return ec._IdentityHolderBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNIdentityHolderBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._IdentityHolderBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNIdentityHolderCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderCreatePayload) graphql.Marshaler {

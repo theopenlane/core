@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -58,11 +59,13 @@ type WorkflowInstanceQuery struct {
 	withWorkflowProposal         *WorkflowProposalQuery
 	withWorkflowAssignments      *WorkflowAssignmentQuery
 	withWorkflowEvents           *WorkflowEventQuery
+	withEmailTemplates           *EmailTemplateQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
 	loadTotal                    []func(context.Context, []*WorkflowInstance) error
 	modifiers                    []func(*sql.Selector)
 	withNamedWorkflowAssignments map[string]*WorkflowAssignmentQuery
 	withNamedWorkflowEvents      map[string]*WorkflowEventQuery
+	withNamedEmailTemplates      map[string]*EmailTemplateQuery
 	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -475,6 +478,31 @@ func (_q *WorkflowInstanceQuery) QueryWorkflowEvents() *WorkflowEventQuery {
 	return query
 }
 
+// QueryEmailTemplates chains the current query on the "email_templates" edge.
+func (_q *WorkflowInstanceQuery) QueryEmailTemplates() *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowinstance.EmailTemplatesTable, workflowinstance.EmailTemplatesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
 func (_q *WorkflowInstanceQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
@@ -707,6 +735,7 @@ func (_q *WorkflowInstanceQuery) Clone() *WorkflowInstanceQuery {
 		withWorkflowProposal:    _q.withWorkflowProposal.Clone(),
 		withWorkflowAssignments: _q.withWorkflowAssignments.Clone(),
 		withWorkflowEvents:      _q.withWorkflowEvents.Clone(),
+		withEmailTemplates:      _q.withEmailTemplates.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -880,6 +909,17 @@ func (_q *WorkflowInstanceQuery) WithWorkflowEvents(opts ...func(*WorkflowEventQ
 	return _q
 }
 
+// WithEmailTemplates tells the query-builder to eager-load the nodes that are connected to
+// the "email_templates" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithEmailTemplates(opts ...func(*EmailTemplateQuery)) *WorkflowInstanceQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEmailTemplates = query
+	return _q
+}
+
 // WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
 // the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *WorkflowInstanceQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *WorkflowInstanceQuery {
@@ -975,7 +1015,7 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*WorkflowInstance{}
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [17]bool{
 			_q.withOwner != nil,
 			_q.withWorkflowDefinition != nil,
 			_q.withControl != nil,
@@ -991,6 +1031,7 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			_q.withWorkflowProposal != nil,
 			_q.withWorkflowAssignments != nil,
 			_q.withWorkflowEvents != nil,
+			_q.withEmailTemplates != nil,
 			_q.withWorkflowObjectRefs != nil,
 		}
 	)
@@ -1113,6 +1154,15 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			return nil, err
 		}
 	}
+	if query := _q.withEmailTemplates; query != nil {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *WorkflowInstance) { n.Edges.EmailTemplates = []*EmailTemplate{} },
+			func(n *WorkflowInstance, e *EmailTemplate) {
+				n.Edges.EmailTemplates = append(n.Edges.EmailTemplates, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withWorkflowObjectRefs; query != nil {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *WorkflowInstance) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
@@ -1133,6 +1183,13 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		if err := _q.loadWorkflowEvents(ctx, query, nodes,
 			func(n *WorkflowInstance) { n.appendNamedWorkflowEvents(name) },
 			func(n *WorkflowInstance, e *WorkflowEvent) { n.appendNamedWorkflowEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEmailTemplates {
+		if err := _q.loadEmailTemplates(ctx, query, nodes,
+			func(n *WorkflowInstance) { n.appendNamedEmailTemplates(name) },
+			func(n *WorkflowInstance, e *EmailTemplate) { n.appendNamedEmailTemplates(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1590,6 +1647,36 @@ func (_q *WorkflowInstanceQuery) loadWorkflowEvents(ctx context.Context, query *
 	}
 	return nil
 }
+func (_q *WorkflowInstanceQuery) loadEmailTemplates(ctx context.Context, query *EmailTemplateQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *EmailTemplate)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*WorkflowInstance)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(emailtemplate.FieldWorkflowInstanceID)
+	}
+	query.Where(predicate.EmailTemplate(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(workflowinstance.EmailTemplatesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.WorkflowInstanceID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "workflow_instance_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *WorkflowInstanceQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *WorkflowObjectRef)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*WorkflowInstance)
@@ -1784,6 +1871,20 @@ func (_q *WorkflowInstanceQuery) WithNamedWorkflowEvents(name string, opts ...fu
 		_q.withNamedWorkflowEvents = make(map[string]*WorkflowEventQuery)
 	}
 	_q.withNamedWorkflowEvents[name] = query
+	return _q
+}
+
+// WithNamedEmailTemplates tells the query-builder to eager-load the nodes that are connected to the "email_templates"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithNamedEmailTemplates(name string, opts ...func(*EmailTemplateQuery)) *WorkflowInstanceQuery {
+	query := (&EmailTemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEmailTemplates == nil {
+		_q.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery)
+	}
+	_q.withNamedEmailTemplates[name] = query
 	return _q
 }
 

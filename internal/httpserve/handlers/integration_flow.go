@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
@@ -21,9 +22,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/integrations"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -54,14 +55,11 @@ func (h *Handler) setOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig, v
 }
 
 func (h *Handler) clearOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	writer := ctx.Response().Writer
-	for _, name := range []string{
+	clearCookies(ctx.Response().Writer, cfg, []string{
 		oauthStateCookieName,
 		oauthOrgIDCookieName,
 		oauthUserIDCookieName,
-	} {
-		sessions.RemoveCookie(writer, name, cfg)
-	}
+	})
 }
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration.
@@ -95,11 +93,18 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
+	if h.IntegrationActivation == nil {
+		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
+	}
+
 	integration, err := h.IntegrationStore.EnsureIntegration(userCtx, user.OrganizationID, providerType)
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Str("org_id", user.OrganizationID).Str("provider", string(providerType)).Msg("failed to ensure integration record")
 
 		return h.InternalServerError(ctx, err, openapiCtx)
+	}
+	if err := h.updateIntegrationProviderMetadata(userCtx, integration.ID, providerType); err != nil {
+		logx.FromContext(userCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
 	}
 
 	state, err := h.generateOAuthState(user.OrganizationID, string(providerType))
@@ -111,7 +116,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	scopes := mergeScopes(spec, in.Scopes)
 
-	begin, err := h.KeymakerService.BeginAuthorization(userCtx, keymaker.BeginRequest{
+	begin, err := h.IntegrationActivation.BeginOAuth(userCtx, activation.BeginOAuthRequest{
 		OrgID:         user.OrganizationID,
 		IntegrationID: integration.ID,
 		Provider:      providerType,
@@ -150,21 +155,20 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return nil
 	}
 
-	if h.KeymakerService == nil {
-		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
+	if h.IntegrationActivation == nil {
+		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
 	}
 
 	reqCtx := ctx.Request().Context()
 
 	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
-	if err != nil || stateCookie.Value == "" || stateCookie.Value != in.State {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("oauth state cookie mismatch")
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("payload_state", in.State).Msg("oauth state cookie not found")
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
-	if in.State != stateCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
-
+	if stateCookie.Value == "" || stateCookie.Value != in.State {
+		logx.FromContext(reqCtx).Error().Str("payload_state", in.State).Str("cookie_state", stateCookie.Value).Msg("oauth state cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
@@ -197,7 +201,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	result, err := h.KeymakerService.CompleteAuthorization(systemCtx, keymaker.CompleteRequest{
+	result, err := h.IntegrationActivation.CompleteOAuth(systemCtx, activation.CompleteOAuthRequest{
 		State: in.State,
 		Code:  in.Code,
 	})
@@ -262,13 +266,7 @@ func mergeScopes(spec config.ProviderSpec, requested []string) []string {
 		return nil
 	}
 
-	out := make([]string, 0, len(values))
-
-	for scope := range values {
-		out = append(out, scope)
-	}
-
-	return out
+	return lo.Keys(values)
 }
 
 func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) string {

@@ -12,6 +12,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/integrations/state"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -307,6 +309,48 @@ func (_c *IntegrationHistoryCreate) SetNillableIntegrationType(v *string) *Integ
 	return _c
 }
 
+// SetProviderMetadata sets the "provider_metadata" field.
+func (_c *IntegrationHistoryCreate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationHistoryCreate {
+	_c.mutation.SetProviderMetadata(v)
+	return _c
+}
+
+// SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetProviderMetadata(*v)
+	}
+	return _c
+}
+
+// SetConfig sets the "config" field.
+func (_c *IntegrationHistoryCreate) SetConfig(v openapi.IntegrationConfig) *IntegrationHistoryCreate {
+	_c.mutation.SetConfig(v)
+	return _c
+}
+
+// SetNillableConfig sets the "config" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetConfig(*v)
+	}
+	return _c
+}
+
+// SetProviderState sets the "provider_state" field.
+func (_c *IntegrationHistoryCreate) SetProviderState(v state.IntegrationProviderState) *IntegrationHistoryCreate {
+	_c.mutation.SetProviderState(v)
+	return _c
+}
+
+// SetNillableProviderState sets the "provider_state" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetProviderState(*v)
+	}
+	return _c
+}
+
 // SetMetadata sets the "metadata" field.
 func (_c *IntegrationHistoryCreate) SetMetadata(v map[string]interface{}) *IntegrationHistoryCreate {
 	_c.mutation.SetMetadata(v)
@@ -542,6 +586,18 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.IntegrationType(); ok {
 		_spec.SetField(integrationhistory.FieldIntegrationType, field.TypeString, value)
 		_node.IntegrationType = value
+	}
+	if value, ok := _c.mutation.ProviderMetadata(); ok {
+		_spec.SetField(integrationhistory.FieldProviderMetadata, field.TypeJSON, value)
+		_node.ProviderMetadata = value
+	}
+	if value, ok := _c.mutation.Config(); ok {
+		_spec.SetField(integrationhistory.FieldConfig, field.TypeJSON, value)
+		_node.Config = value
+	}
+	if value, ok := _c.mutation.ProviderState(); ok {
+		_spec.SetField(integrationhistory.FieldProviderState, field.TypeJSON, value)
+		_node.ProviderState = value
 	}
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)

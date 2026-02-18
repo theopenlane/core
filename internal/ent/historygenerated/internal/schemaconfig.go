@@ -26,6 +26,8 @@ type SchemaConfig struct {
 	DirectoryMembershipHistory        string // DirectoryMembershipHistory table.
 	DiscussionHistory                 string // DiscussionHistory table.
 	DocumentDataHistory               string // DocumentDataHistory table.
+	EmailBrandingHistory              string // EmailBrandingHistory table.
+	EmailTemplateHistory              string // EmailTemplateHistory table.
 	EntityHistory                     string // EntityHistory table.
 	EntityTypeHistory                 string // EntityTypeHistory table.
 	EvidenceHistory                   string // EvidenceHistory table.
@@ -44,6 +46,8 @@ type SchemaConfig struct {
 	MappedControlHistory              string // MappedControlHistory table.
 	NarrativeHistory                  string // NarrativeHistory table.
 	NoteHistory                       string // NoteHistory table.
+	NotificationPreferenceHistory     string // NotificationPreferenceHistory table.
+	NotificationTemplateHistory       string // NotificationTemplateHistory table.
 	OrgMembershipHistory              string // OrgMembershipHistory table.
 	OrgSubscriptionHistory            string // OrgSubscriptionHistory table.
 	OrganizationHistory               string // OrganizationHistory table.

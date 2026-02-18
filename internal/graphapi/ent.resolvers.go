@@ -717,6 +717,74 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// EmailBrandings is the resolver for the emailBrandings field.
+func (r *queryResolver) EmailBrandings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) (*generated.EmailBrandingConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EmailBrandingOrder{
+			{
+				Field:     generated.EmailBrandingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).EmailBranding.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbranding"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEmailBrandingOrder(orderBy),
+		generated.WithEmailBrandingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbranding"})
+	}
+
+	return res, err
+}
+
+// EmailTemplates is the resolver for the emailTemplates field.
+func (r *queryResolver) EmailTemplates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) (*generated.EmailTemplateConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.EmailTemplateOrder{
+			{
+				Field:     generated.EmailTemplateOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).EmailTemplate.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplate"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEmailTemplateOrder(orderBy),
+		generated.WithEmailTemplateFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailtemplate"})
+	}
+
+	return res, err
+}
+
 // Entities is the resolver for the entities field.
 func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
 	// set page limit if nothing was set
@@ -1562,6 +1630,74 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithNoteFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "note"})
+	}
+
+	return res, err
+}
+
+// NotificationPreferences is the resolver for the notificationPreferences field.
+func (r *queryResolver) NotificationPreferences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationPreferenceOrder, where *generated.NotificationPreferenceWhereInput) (*generated.NotificationPreferenceConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.NotificationPreferenceOrder{
+			{
+				Field:     generated.NotificationPreferenceOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).NotificationPreference.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationpreference"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithNotificationPreferenceOrder(orderBy),
+		generated.WithNotificationPreferenceFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationpreference"})
+	}
+
+	return res, err
+}
+
+// NotificationTemplates is the resolver for the notificationTemplates field.
+func (r *queryResolver) NotificationTemplates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) (*generated.NotificationTemplateConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.NotificationTemplateOrder{
+			{
+				Field:     generated.NotificationTemplateOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).NotificationTemplate.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationtemplate"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithNotificationTemplateOrder(orderBy),
+		generated.WithNotificationTemplateFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notificationtemplate"})
 	}
 
 	return res, err
@@ -3043,6 +3179,11 @@ func (r *Resolver) WorkflowInstance() gqlgenerated.WorkflowInstanceResolver {
 	return &workflowInstanceResolver{r}
 }
 
+// WorkflowProposal returns gqlgenerated.WorkflowProposalResolver implementation.
+func (r *Resolver) WorkflowProposal() gqlgenerated.WorkflowProposalResolver {
+	return &workflowProposalResolver{r}
+}
+
 // CreateDiscussionInput returns gqlgenerated.CreateDiscussionInputResolver implementation.
 func (r *Resolver) CreateDiscussionInput() gqlgenerated.CreateDiscussionInputResolver {
 	return &createDiscussionInputResolver{r}
@@ -3182,6 +3323,7 @@ type procedureResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type subcontrolResolver struct{ *Resolver }
 type workflowInstanceResolver struct{ *Resolver }
+type workflowProposalResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }

@@ -148,6 +148,8 @@ func (ec *executionContext) fieldContext_WorkflowMetadata_objectTypes(_ context.
 				return ec.fieldContext_WorkflowObjectTypeMetadata_description(ctx, field)
 			case "eligibleFields":
 				return ec.fieldContext_WorkflowObjectTypeMetadata_eligibleFields(ctx, field)
+			case "eligibleEdges":
+				return ec.fieldContext_WorkflowObjectTypeMetadata_eligibleEdges(ctx, field)
 			case "resolverKeys":
 				return ec.fieldContext_WorkflowObjectTypeMetadata_resolverKeys(ctx, field)
 			}
@@ -276,6 +278,35 @@ func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_eligibleFiel
 				return ec.fieldContext_WorkflowFieldMetadata_type(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowFieldMetadata", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _WorkflowObjectTypeMetadata_eligibleEdges(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_WorkflowObjectTypeMetadata_eligibleEdges,
+		func(ctx context.Context) (any, error) {
+			return obj.EligibleEdges, nil
+		},
+		nil,
+		ec.marshalNString2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_WorkflowObjectTypeMetadata_eligibleEdges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "WorkflowObjectTypeMetadata",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -438,6 +469,11 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata(ctx context.Context, sel
 			}
 		case "eligibleFields":
 			out.Values[i] = ec._WorkflowObjectTypeMetadata_eligibleFields(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "eligibleEdges":
+			out.Values[i] = ec._WorkflowObjectTypeMetadata_eligibleEdges(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

@@ -39,6 +39,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -56,6 +58,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -68,6 +72,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -120,6 +126,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -180,6 +187,10 @@ type Client struct {
 	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
+	// EmailBranding is the client for interacting with the EmailBranding builders.
+	EmailBranding *EmailBrandingClient
+	// EmailTemplate is the client for interacting with the EmailTemplate builders.
+	EmailTemplate *EmailTemplateClient
 	// EmailVerificationToken is the client for interacting with the EmailVerificationToken builders.
 	EmailVerificationToken *EmailVerificationTokenClient
 	// Entity is the client for interacting with the Entity builders.
@@ -214,6 +225,10 @@ type Client struct {
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
+	// IntegrationRun is the client for interacting with the IntegrationRun builders.
+	IntegrationRun *IntegrationRunClient
+	// IntegrationWebhook is the client for interacting with the IntegrationWebhook builders.
+	IntegrationWebhook *IntegrationWebhookClient
 	// InternalPolicy is the client for interacting with the InternalPolicy builders.
 	InternalPolicy *InternalPolicyClient
 	// Invite is the client for interacting with the Invite builders.
@@ -238,6 +253,10 @@ type Client struct {
 	Note *NoteClient
 	// Notification is the client for interacting with the Notification builders.
 	Notification *NotificationClient
+	// NotificationPreference is the client for interacting with the NotificationPreference builders.
+	NotificationPreference *NotificationPreferenceClient
+	// NotificationTemplate is the client for interacting with the NotificationTemplate builders.
+	NotificationTemplate *NotificationTemplateClient
 	// Onboarding is the client for interacting with the Onboarding builders.
 	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
@@ -372,6 +391,8 @@ func (c *Client) init() {
 	c.DirectorySyncRun = NewDirectorySyncRunClient(c.config)
 	c.Discussion = NewDiscussionClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
+	c.EmailBranding = NewEmailBrandingClient(c.config)
+	c.EmailTemplate = NewEmailTemplateClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
 	c.Entity = NewEntityClient(c.config)
 	c.EntityType = NewEntityTypeClient(c.config)
@@ -389,6 +410,8 @@ func (c *Client) init() {
 	c.IdentityHolder = NewIdentityHolderClient(c.config)
 	c.ImpersonationEvent = NewImpersonationEventClient(c.config)
 	c.Integration = NewIntegrationClient(c.config)
+	c.IntegrationRun = NewIntegrationRunClient(c.config)
+	c.IntegrationWebhook = NewIntegrationWebhookClient(c.config)
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
 	c.Invite = NewInviteClient(c.config)
 	c.JobResult = NewJobResultClient(c.config)
@@ -401,6 +424,8 @@ func (c *Client) init() {
 	c.Narrative = NewNarrativeClient(c.config)
 	c.Note = NewNoteClient(c.config)
 	c.Notification = NewNotificationClient(c.config)
+	c.NotificationPreference = NewNotificationPreferenceClient(c.config)
+	c.NotificationTemplate = NewNotificationTemplateClient(c.config)
 	c.Onboarding = NewOnboardingClient(c.config)
 	c.OrgMembership = NewOrgMembershipClient(c.config)
 	c.OrgModule = NewOrgModuleClient(c.config)
@@ -474,6 +499,7 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
+		Shortlinks         *shortlinks.Client
 		Pool               *soiree.Pool
 		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
@@ -604,6 +630,13 @@ func Summarizer(v *summarizer.Client) Option {
 	}
 }
 
+// Shortlinks configures the Shortlinks.
+func Shortlinks(v *shortlinks.Client) Option {
+	return func(c *config) {
+		c.Shortlinks = v
+	}
+}
+
 // Pool configures the Pool.
 func Pool(v *soiree.Pool) Option {
 	return func(c *config) {
@@ -672,6 +705,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		DirectorySyncRun:           NewDirectorySyncRunClient(cfg),
 		Discussion:                 NewDiscussionClient(cfg),
 		DocumentData:               NewDocumentDataClient(cfg),
+		EmailBranding:              NewEmailBrandingClient(cfg),
+		EmailTemplate:              NewEmailTemplateClient(cfg),
 		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
 		Entity:                     NewEntityClient(cfg),
 		EntityType:                 NewEntityTypeClient(cfg),
@@ -689,6 +724,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		IdentityHolder:             NewIdentityHolderClient(cfg),
 		ImpersonationEvent:         NewImpersonationEventClient(cfg),
 		Integration:                NewIntegrationClient(cfg),
+		IntegrationRun:             NewIntegrationRunClient(cfg),
+		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
 		Invite:                     NewInviteClient(cfg),
 		JobResult:                  NewJobResultClient(cfg),
@@ -701,6 +738,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Narrative:                  NewNarrativeClient(cfg),
 		Note:                       NewNoteClient(cfg),
 		Notification:               NewNotificationClient(cfg),
+		NotificationPreference:     NewNotificationPreferenceClient(cfg),
+		NotificationTemplate:       NewNotificationTemplateClient(cfg),
 		Onboarding:                 NewOnboardingClient(cfg),
 		OrgMembership:              NewOrgMembershipClient(cfg),
 		OrgModule:                  NewOrgModuleClient(cfg),
@@ -787,6 +826,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		DirectorySyncRun:           NewDirectorySyncRunClient(cfg),
 		Discussion:                 NewDiscussionClient(cfg),
 		DocumentData:               NewDocumentDataClient(cfg),
+		EmailBranding:              NewEmailBrandingClient(cfg),
+		EmailTemplate:              NewEmailTemplateClient(cfg),
 		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
 		Entity:                     NewEntityClient(cfg),
 		EntityType:                 NewEntityTypeClient(cfg),
@@ -804,6 +845,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		IdentityHolder:             NewIdentityHolderClient(cfg),
 		ImpersonationEvent:         NewImpersonationEventClient(cfg),
 		Integration:                NewIntegrationClient(cfg),
+		IntegrationRun:             NewIntegrationRunClient(cfg),
+		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
 		Invite:                     NewInviteClient(cfg),
 		JobResult:                  NewJobResultClient(cfg),
@@ -816,6 +859,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Narrative:                  NewNarrativeClient(cfg),
 		Note:                       NewNoteClient(cfg),
 		Notification:               NewNotificationClient(cfg),
+		NotificationPreference:     NewNotificationPreferenceClient(cfg),
+		NotificationTemplate:       NewNotificationTemplateClient(cfg),
 		Onboarding:                 NewOnboardingClient(cfg),
 		OrgMembership:              NewOrgMembershipClient(cfg),
 		OrgModule:                  NewOrgModuleClient(cfg),
@@ -896,15 +941,17 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Campaign, c.CampaignTarget, c.Contact, c.Control, c.ControlImplementation,
 		c.ControlObjective, c.CustomDomain, c.CustomTypeEnum, c.DNSVerification,
 		c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailVerificationToken,
-		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
-		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
-		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailBranding,
+		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
+		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
+		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
+		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
 		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
 		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
+		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
 		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
@@ -927,15 +974,17 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Campaign, c.CampaignTarget, c.Contact, c.Control, c.ControlImplementation,
 		c.ControlObjective, c.CustomDomain, c.CustomTypeEnum, c.DNSVerification,
 		c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailVerificationToken,
-		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
-		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
-		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailBranding,
+		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
+		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
+		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
+		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
 		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
 		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
+		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
 		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
@@ -1065,6 +1114,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Discussion.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
+	case *EmailBrandingMutation:
+		return c.EmailBranding.mutate(ctx, m)
+	case *EmailTemplateMutation:
+		return c.EmailTemplate.mutate(ctx, m)
 	case *EmailVerificationTokenMutation:
 		return c.EmailVerificationToken.mutate(ctx, m)
 	case *EntityMutation:
@@ -1099,6 +1152,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ImpersonationEvent.mutate(ctx, m)
 	case *IntegrationMutation:
 		return c.Integration.mutate(ctx, m)
+	case *IntegrationRunMutation:
+		return c.IntegrationRun.mutate(ctx, m)
+	case *IntegrationWebhookMutation:
+		return c.IntegrationWebhook.mutate(ctx, m)
 	case *InternalPolicyMutation:
 		return c.InternalPolicy.mutate(ctx, m)
 	case *InviteMutation:
@@ -1123,6 +1180,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Note.mutate(ctx, m)
 	case *NotificationMutation:
 		return c.Notification.mutate(ctx, m)
+	case *NotificationPreferenceMutation:
+		return c.NotificationPreference.mutate(ctx, m)
+	case *NotificationTemplateMutation:
+		return c.NotificationTemplate.mutate(ctx, m)
 	case *OnboardingMutation:
 		return c.Onboarding.mutate(ctx, m)
 	case *OrgMembershipMutation:
@@ -3252,6 +3313,44 @@ func (c *CampaignClient) QueryTemplate(_m *Campaign) *TemplateQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailBranding queries the email_branding edge of a Campaign.
+func (c *CampaignClient) QueryEmailBranding(_m *Campaign) *EmailBrandingQuery {
+	query := (&EmailBrandingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EmailBrandingTable, campaign.EmailBrandingColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplate queries the email_template edge of a Campaign.
+func (c *CampaignClient) QueryEmailTemplate(_m *Campaign) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EmailTemplateTable, campaign.EmailTemplateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
 		step.Edge.Schema = schemaConfig.Campaign
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -7681,6 +7780,523 @@ func (c *DocumentDataClient) mutate(ctx context.Context, m *DocumentDataMutation
 		return (&DocumentDataDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown DocumentData mutation op: %q", m.Op())
+	}
+}
+
+// EmailBrandingClient is a client for the EmailBranding schema.
+type EmailBrandingClient struct {
+	config
+}
+
+// NewEmailBrandingClient returns a client for the EmailBranding from the given config.
+func NewEmailBrandingClient(c config) *EmailBrandingClient {
+	return &EmailBrandingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `emailbranding.Hooks(f(g(h())))`.
+func (c *EmailBrandingClient) Use(hooks ...Hook) {
+	c.hooks.EmailBranding = append(c.hooks.EmailBranding, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `emailbranding.Intercept(f(g(h())))`.
+func (c *EmailBrandingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EmailBranding = append(c.inters.EmailBranding, interceptors...)
+}
+
+// Create returns a builder for creating a EmailBranding entity.
+func (c *EmailBrandingClient) Create() *EmailBrandingCreate {
+	mutation := newEmailBrandingMutation(c.config, OpCreate)
+	return &EmailBrandingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EmailBranding entities.
+func (c *EmailBrandingClient) CreateBulk(builders ...*EmailBrandingCreate) *EmailBrandingCreateBulk {
+	return &EmailBrandingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EmailBrandingClient) MapCreateBulk(slice any, setFunc func(*EmailBrandingCreate, int)) *EmailBrandingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EmailBrandingCreateBulk{err: fmt.Errorf("calling to EmailBrandingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EmailBrandingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EmailBrandingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EmailBranding.
+func (c *EmailBrandingClient) Update() *EmailBrandingUpdate {
+	mutation := newEmailBrandingMutation(c.config, OpUpdate)
+	return &EmailBrandingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EmailBrandingClient) UpdateOne(_m *EmailBranding) *EmailBrandingUpdateOne {
+	mutation := newEmailBrandingMutation(c.config, OpUpdateOne, withEmailBranding(_m))
+	return &EmailBrandingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EmailBrandingClient) UpdateOneID(id string) *EmailBrandingUpdateOne {
+	mutation := newEmailBrandingMutation(c.config, OpUpdateOne, withEmailBrandingID(id))
+	return &EmailBrandingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EmailBranding.
+func (c *EmailBrandingClient) Delete() *EmailBrandingDelete {
+	mutation := newEmailBrandingMutation(c.config, OpDelete)
+	return &EmailBrandingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EmailBrandingClient) DeleteOne(_m *EmailBranding) *EmailBrandingDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EmailBrandingClient) DeleteOneID(id string) *EmailBrandingDeleteOne {
+	builder := c.Delete().Where(emailbranding.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EmailBrandingDeleteOne{builder}
+}
+
+// Query returns a query builder for EmailBranding.
+func (c *EmailBrandingClient) Query() *EmailBrandingQuery {
+	return &EmailBrandingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEmailBranding},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EmailBranding entity by its id.
+func (c *EmailBrandingClient) Get(ctx context.Context, id string) (*EmailBranding, error) {
+	return c.Query().Where(emailbranding.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EmailBrandingClient) GetX(ctx context.Context, id string) *EmailBranding {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a EmailBranding.
+func (c *EmailBrandingClient) QueryOwner(_m *EmailBranding) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailbranding.OwnerTable, emailbranding.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.EmailBranding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a EmailBranding.
+func (c *EmailBrandingClient) QueryBlockedGroups(_m *EmailBranding) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.BlockedGroupsTable, emailbranding.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a EmailBranding.
+func (c *EmailBrandingClient) QueryEditors(_m *EmailBranding) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.EditorsTable, emailbranding.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a EmailBranding.
+func (c *EmailBrandingClient) QueryViewers(_m *EmailBranding) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.ViewersTable, emailbranding.ViewersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a EmailBranding.
+func (c *EmailBrandingClient) QueryCampaigns(_m *EmailBranding) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.CampaignsTable, emailbranding.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates queries the email_templates edge of a EmailBranding.
+func (c *EmailBrandingClient) QueryEmailTemplates(_m *EmailBranding) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.EmailTemplatesTable, emailbranding.EmailTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EmailBrandingClient) Hooks() []Hook {
+	hooks := c.hooks.EmailBranding
+	return append(hooks[:len(hooks):len(hooks)], emailbranding.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *EmailBrandingClient) Interceptors() []Interceptor {
+	inters := c.inters.EmailBranding
+	return append(inters[:len(inters):len(inters)], emailbranding.Interceptors[:]...)
+}
+
+func (c *EmailBrandingClient) mutate(ctx context.Context, m *EmailBrandingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EmailBrandingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EmailBrandingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EmailBrandingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EmailBrandingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown EmailBranding mutation op: %q", m.Op())
+	}
+}
+
+// EmailTemplateClient is a client for the EmailTemplate schema.
+type EmailTemplateClient struct {
+	config
+}
+
+// NewEmailTemplateClient returns a client for the EmailTemplate from the given config.
+func NewEmailTemplateClient(c config) *EmailTemplateClient {
+	return &EmailTemplateClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `emailtemplate.Hooks(f(g(h())))`.
+func (c *EmailTemplateClient) Use(hooks ...Hook) {
+	c.hooks.EmailTemplate = append(c.hooks.EmailTemplate, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `emailtemplate.Intercept(f(g(h())))`.
+func (c *EmailTemplateClient) Intercept(interceptors ...Interceptor) {
+	c.inters.EmailTemplate = append(c.inters.EmailTemplate, interceptors...)
+}
+
+// Create returns a builder for creating a EmailTemplate entity.
+func (c *EmailTemplateClient) Create() *EmailTemplateCreate {
+	mutation := newEmailTemplateMutation(c.config, OpCreate)
+	return &EmailTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of EmailTemplate entities.
+func (c *EmailTemplateClient) CreateBulk(builders ...*EmailTemplateCreate) *EmailTemplateCreateBulk {
+	return &EmailTemplateCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EmailTemplateClient) MapCreateBulk(slice any, setFunc func(*EmailTemplateCreate, int)) *EmailTemplateCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EmailTemplateCreateBulk{err: fmt.Errorf("calling to EmailTemplateClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EmailTemplateCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EmailTemplateCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for EmailTemplate.
+func (c *EmailTemplateClient) Update() *EmailTemplateUpdate {
+	mutation := newEmailTemplateMutation(c.config, OpUpdate)
+	return &EmailTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EmailTemplateClient) UpdateOne(_m *EmailTemplate) *EmailTemplateUpdateOne {
+	mutation := newEmailTemplateMutation(c.config, OpUpdateOne, withEmailTemplate(_m))
+	return &EmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EmailTemplateClient) UpdateOneID(id string) *EmailTemplateUpdateOne {
+	mutation := newEmailTemplateMutation(c.config, OpUpdateOne, withEmailTemplateID(id))
+	return &EmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for EmailTemplate.
+func (c *EmailTemplateClient) Delete() *EmailTemplateDelete {
+	mutation := newEmailTemplateMutation(c.config, OpDelete)
+	return &EmailTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EmailTemplateClient) DeleteOne(_m *EmailTemplate) *EmailTemplateDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EmailTemplateClient) DeleteOneID(id string) *EmailTemplateDeleteOne {
+	builder := c.Delete().Where(emailtemplate.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EmailTemplateDeleteOne{builder}
+}
+
+// Query returns a query builder for EmailTemplate.
+func (c *EmailTemplateClient) Query() *EmailTemplateQuery {
+	return &EmailTemplateQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEmailTemplate},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a EmailTemplate entity by its id.
+func (c *EmailTemplateClient) Get(ctx context.Context, id string) (*EmailTemplate, error) {
+	return c.Query().Where(emailtemplate.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EmailTemplateClient) GetX(ctx context.Context, id string) *EmailTemplate {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryOwner(_m *EmailTemplate) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.OwnerTable, emailtemplate.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailBranding queries the email_branding edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryEmailBranding(_m *EmailTemplate) *EmailBrandingQuery {
+	query := (&EmailBrandingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryIntegration(_m *EmailTemplate) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.IntegrationTable, emailtemplate.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowDefinition queries the workflow_definition edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryWorkflowDefinition(_m *EmailTemplate) *WorkflowDefinitionQuery {
+	query := (&WorkflowDefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(workflowdefinition.Table, workflowdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.WorkflowDefinitionTable, emailtemplate.WorkflowDefinitionColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstance queries the workflow_instance edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryWorkflowInstance(_m *EmailTemplate) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, emailtemplate.WorkflowInstanceTable, emailtemplate.WorkflowInstanceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryCampaigns(_m *EmailTemplate) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.CampaignsTable, emailtemplate.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationTemplates queries the notification_templates edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryNotificationTemplates(_m *EmailTemplate) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.NotificationTemplatesTable, emailtemplate.NotificationTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EmailTemplateClient) Hooks() []Hook {
+	hooks := c.hooks.EmailTemplate
+	return append(hooks[:len(hooks):len(hooks)], emailtemplate.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *EmailTemplateClient) Interceptors() []Interceptor {
+	inters := c.inters.EmailTemplate
+	return append(inters[:len(inters):len(inters)], emailtemplate.Interceptors[:]...)
+}
+
+func (c *EmailTemplateClient) mutate(ctx context.Context, m *EmailTemplateMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EmailTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EmailTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EmailTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EmailTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown EmailTemplate mutation op: %q", m.Op())
 	}
 }
 
@@ -13845,6 +14461,82 @@ func (c *IntegrationClient) QueryDirectorySyncRuns(_m *Integration) *DirectorySy
 	return query
 }
 
+// QueryNotificationTemplates queries the notification_templates edge of a Integration.
+func (c *IntegrationClient) QueryNotificationTemplates(_m *Integration) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.NotificationTemplatesTable, integration.NotificationTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates queries the email_templates edge of a Integration.
+func (c *IntegrationClient) QueryEmailTemplates(_m *Integration) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.EmailTemplatesTable, integration.EmailTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrationWebhooks queries the integration_webhooks edge of a Integration.
+func (c *IntegrationClient) QueryIntegrationWebhooks(_m *Integration) *IntegrationWebhookQuery {
+	query := (&IntegrationWebhookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(integrationwebhook.Table, integrationwebhook.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.IntegrationWebhooksTable, integration.IntegrationWebhooksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationWebhook
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a Integration.
+func (c *IntegrationClient) QueryIntegrationRuns(_m *Integration) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.IntegrationRunsTable, integration.IntegrationRunsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationRun
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEntities queries the entities edge of a Integration.
 func (c *IntegrationClient) QueryEntities(_m *Integration) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
@@ -13888,6 +14580,409 @@ func (c *IntegrationClient) mutate(ctx context.Context, m *IntegrationMutation) 
 		return (&IntegrationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Integration mutation op: %q", m.Op())
+	}
+}
+
+// IntegrationRunClient is a client for the IntegrationRun schema.
+type IntegrationRunClient struct {
+	config
+}
+
+// NewIntegrationRunClient returns a client for the IntegrationRun from the given config.
+func NewIntegrationRunClient(c config) *IntegrationRunClient {
+	return &IntegrationRunClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `integrationrun.Hooks(f(g(h())))`.
+func (c *IntegrationRunClient) Use(hooks ...Hook) {
+	c.hooks.IntegrationRun = append(c.hooks.IntegrationRun, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `integrationrun.Intercept(f(g(h())))`.
+func (c *IntegrationRunClient) Intercept(interceptors ...Interceptor) {
+	c.inters.IntegrationRun = append(c.inters.IntegrationRun, interceptors...)
+}
+
+// Create returns a builder for creating a IntegrationRun entity.
+func (c *IntegrationRunClient) Create() *IntegrationRunCreate {
+	mutation := newIntegrationRunMutation(c.config, OpCreate)
+	return &IntegrationRunCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of IntegrationRun entities.
+func (c *IntegrationRunClient) CreateBulk(builders ...*IntegrationRunCreate) *IntegrationRunCreateBulk {
+	return &IntegrationRunCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *IntegrationRunClient) MapCreateBulk(slice any, setFunc func(*IntegrationRunCreate, int)) *IntegrationRunCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &IntegrationRunCreateBulk{err: fmt.Errorf("calling to IntegrationRunClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*IntegrationRunCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &IntegrationRunCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for IntegrationRun.
+func (c *IntegrationRunClient) Update() *IntegrationRunUpdate {
+	mutation := newIntegrationRunMutation(c.config, OpUpdate)
+	return &IntegrationRunUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IntegrationRunClient) UpdateOne(_m *IntegrationRun) *IntegrationRunUpdateOne {
+	mutation := newIntegrationRunMutation(c.config, OpUpdateOne, withIntegrationRun(_m))
+	return &IntegrationRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IntegrationRunClient) UpdateOneID(id string) *IntegrationRunUpdateOne {
+	mutation := newIntegrationRunMutation(c.config, OpUpdateOne, withIntegrationRunID(id))
+	return &IntegrationRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for IntegrationRun.
+func (c *IntegrationRunClient) Delete() *IntegrationRunDelete {
+	mutation := newIntegrationRunMutation(c.config, OpDelete)
+	return &IntegrationRunDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IntegrationRunClient) DeleteOne(_m *IntegrationRun) *IntegrationRunDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *IntegrationRunClient) DeleteOneID(id string) *IntegrationRunDeleteOne {
+	builder := c.Delete().Where(integrationrun.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IntegrationRunDeleteOne{builder}
+}
+
+// Query returns a query builder for IntegrationRun.
+func (c *IntegrationRunClient) Query() *IntegrationRunQuery {
+	return &IntegrationRunQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeIntegrationRun},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a IntegrationRun entity by its id.
+func (c *IntegrationRunClient) Get(ctx context.Context, id string) (*IntegrationRun, error) {
+	return c.Query().Where(integrationrun.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IntegrationRunClient) GetX(ctx context.Context, id string) *IntegrationRun {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryOwner(_m *IntegrationRun) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, integrationrun.OwnerTable, integrationrun.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryIntegration(_m *IntegrationRun) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, integrationrun.IntegrationTable, integrationrun.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRequestFile queries the request_file edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryRequestFile(_m *IntegrationRun) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.RequestFileTable, integrationrun.RequestFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryResponseFile queries the response_file edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryResponseFile(_m *IntegrationRun) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.ResponseFileTable, integrationrun.ResponseFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvent queries the event edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryEvent(_m *IntegrationRun) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.EventTable, integrationrun.EventColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *IntegrationRunClient) Hooks() []Hook {
+	hooks := c.hooks.IntegrationRun
+	return append(hooks[:len(hooks):len(hooks)], integrationrun.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *IntegrationRunClient) Interceptors() []Interceptor {
+	inters := c.inters.IntegrationRun
+	return append(inters[:len(inters):len(inters)], integrationrun.Interceptors[:]...)
+}
+
+func (c *IntegrationRunClient) mutate(ctx context.Context, m *IntegrationRunMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&IntegrationRunCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&IntegrationRunUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&IntegrationRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&IntegrationRunDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown IntegrationRun mutation op: %q", m.Op())
+	}
+}
+
+// IntegrationWebhookClient is a client for the IntegrationWebhook schema.
+type IntegrationWebhookClient struct {
+	config
+}
+
+// NewIntegrationWebhookClient returns a client for the IntegrationWebhook from the given config.
+func NewIntegrationWebhookClient(c config) *IntegrationWebhookClient {
+	return &IntegrationWebhookClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `integrationwebhook.Hooks(f(g(h())))`.
+func (c *IntegrationWebhookClient) Use(hooks ...Hook) {
+	c.hooks.IntegrationWebhook = append(c.hooks.IntegrationWebhook, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `integrationwebhook.Intercept(f(g(h())))`.
+func (c *IntegrationWebhookClient) Intercept(interceptors ...Interceptor) {
+	c.inters.IntegrationWebhook = append(c.inters.IntegrationWebhook, interceptors...)
+}
+
+// Create returns a builder for creating a IntegrationWebhook entity.
+func (c *IntegrationWebhookClient) Create() *IntegrationWebhookCreate {
+	mutation := newIntegrationWebhookMutation(c.config, OpCreate)
+	return &IntegrationWebhookCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of IntegrationWebhook entities.
+func (c *IntegrationWebhookClient) CreateBulk(builders ...*IntegrationWebhookCreate) *IntegrationWebhookCreateBulk {
+	return &IntegrationWebhookCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *IntegrationWebhookClient) MapCreateBulk(slice any, setFunc func(*IntegrationWebhookCreate, int)) *IntegrationWebhookCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &IntegrationWebhookCreateBulk{err: fmt.Errorf("calling to IntegrationWebhookClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*IntegrationWebhookCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &IntegrationWebhookCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for IntegrationWebhook.
+func (c *IntegrationWebhookClient) Update() *IntegrationWebhookUpdate {
+	mutation := newIntegrationWebhookMutation(c.config, OpUpdate)
+	return &IntegrationWebhookUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IntegrationWebhookClient) UpdateOne(_m *IntegrationWebhook) *IntegrationWebhookUpdateOne {
+	mutation := newIntegrationWebhookMutation(c.config, OpUpdateOne, withIntegrationWebhook(_m))
+	return &IntegrationWebhookUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IntegrationWebhookClient) UpdateOneID(id string) *IntegrationWebhookUpdateOne {
+	mutation := newIntegrationWebhookMutation(c.config, OpUpdateOne, withIntegrationWebhookID(id))
+	return &IntegrationWebhookUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for IntegrationWebhook.
+func (c *IntegrationWebhookClient) Delete() *IntegrationWebhookDelete {
+	mutation := newIntegrationWebhookMutation(c.config, OpDelete)
+	return &IntegrationWebhookDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IntegrationWebhookClient) DeleteOne(_m *IntegrationWebhook) *IntegrationWebhookDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *IntegrationWebhookClient) DeleteOneID(id string) *IntegrationWebhookDeleteOne {
+	builder := c.Delete().Where(integrationwebhook.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IntegrationWebhookDeleteOne{builder}
+}
+
+// Query returns a query builder for IntegrationWebhook.
+func (c *IntegrationWebhookClient) Query() *IntegrationWebhookQuery {
+	return &IntegrationWebhookQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeIntegrationWebhook},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a IntegrationWebhook entity by its id.
+func (c *IntegrationWebhookClient) Get(ctx context.Context, id string) (*IntegrationWebhook, error) {
+	return c.Query().Where(integrationwebhook.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IntegrationWebhookClient) GetX(ctx context.Context, id string) *IntegrationWebhook {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a IntegrationWebhook.
+func (c *IntegrationWebhookClient) QueryOwner(_m *IntegrationWebhook) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationwebhook.Table, integrationwebhook.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, integrationwebhook.OwnerTable, integrationwebhook.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a IntegrationWebhook.
+func (c *IntegrationWebhookClient) QueryIntegration(_m *IntegrationWebhook) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationwebhook.Table, integrationwebhook.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, integrationwebhook.IntegrationTable, integrationwebhook.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *IntegrationWebhookClient) Hooks() []Hook {
+	hooks := c.hooks.IntegrationWebhook
+	return append(hooks[:len(hooks):len(hooks)], integrationwebhook.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *IntegrationWebhookClient) Interceptors() []Interceptor {
+	inters := c.inters.IntegrationWebhook
+	return append(inters[:len(inters):len(inters)], integrationwebhook.Interceptors[:]...)
+}
+
+func (c *IntegrationWebhookClient) mutate(ctx context.Context, m *IntegrationWebhookMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&IntegrationWebhookCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&IntegrationWebhookUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&IntegrationWebhookUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&IntegrationWebhookDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown IntegrationWebhook mutation op: %q", m.Op())
 	}
 }
 
@@ -16700,6 +17795,25 @@ func (c *NotificationClient) QueryUser(_m *Notification) *UserQuery {
 	return query
 }
 
+// QueryNotificationTemplate queries the notification_template edge of a Notification.
+func (c *NotificationClient) QueryNotificationTemplate(_m *Notification) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notification.NotificationTemplateTable, notification.NotificationTemplateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *NotificationClient) Hooks() []Hook {
 	hooks := c.hooks.Notification
@@ -16724,6 +17838,428 @@ func (c *NotificationClient) mutate(ctx context.Context, m *NotificationMutation
 		return (&NotificationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Notification mutation op: %q", m.Op())
+	}
+}
+
+// NotificationPreferenceClient is a client for the NotificationPreference schema.
+type NotificationPreferenceClient struct {
+	config
+}
+
+// NewNotificationPreferenceClient returns a client for the NotificationPreference from the given config.
+func NewNotificationPreferenceClient(c config) *NotificationPreferenceClient {
+	return &NotificationPreferenceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `notificationpreference.Hooks(f(g(h())))`.
+func (c *NotificationPreferenceClient) Use(hooks ...Hook) {
+	c.hooks.NotificationPreference = append(c.hooks.NotificationPreference, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `notificationpreference.Intercept(f(g(h())))`.
+func (c *NotificationPreferenceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.NotificationPreference = append(c.inters.NotificationPreference, interceptors...)
+}
+
+// Create returns a builder for creating a NotificationPreference entity.
+func (c *NotificationPreferenceClient) Create() *NotificationPreferenceCreate {
+	mutation := newNotificationPreferenceMutation(c.config, OpCreate)
+	return &NotificationPreferenceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of NotificationPreference entities.
+func (c *NotificationPreferenceClient) CreateBulk(builders ...*NotificationPreferenceCreate) *NotificationPreferenceCreateBulk {
+	return &NotificationPreferenceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NotificationPreferenceClient) MapCreateBulk(slice any, setFunc func(*NotificationPreferenceCreate, int)) *NotificationPreferenceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NotificationPreferenceCreateBulk{err: fmt.Errorf("calling to NotificationPreferenceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NotificationPreferenceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NotificationPreferenceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for NotificationPreference.
+func (c *NotificationPreferenceClient) Update() *NotificationPreferenceUpdate {
+	mutation := newNotificationPreferenceMutation(c.config, OpUpdate)
+	return &NotificationPreferenceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NotificationPreferenceClient) UpdateOne(_m *NotificationPreference) *NotificationPreferenceUpdateOne {
+	mutation := newNotificationPreferenceMutation(c.config, OpUpdateOne, withNotificationPreference(_m))
+	return &NotificationPreferenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NotificationPreferenceClient) UpdateOneID(id string) *NotificationPreferenceUpdateOne {
+	mutation := newNotificationPreferenceMutation(c.config, OpUpdateOne, withNotificationPreferenceID(id))
+	return &NotificationPreferenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for NotificationPreference.
+func (c *NotificationPreferenceClient) Delete() *NotificationPreferenceDelete {
+	mutation := newNotificationPreferenceMutation(c.config, OpDelete)
+	return &NotificationPreferenceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NotificationPreferenceClient) DeleteOne(_m *NotificationPreference) *NotificationPreferenceDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NotificationPreferenceClient) DeleteOneID(id string) *NotificationPreferenceDeleteOne {
+	builder := c.Delete().Where(notificationpreference.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NotificationPreferenceDeleteOne{builder}
+}
+
+// Query returns a query builder for NotificationPreference.
+func (c *NotificationPreferenceClient) Query() *NotificationPreferenceQuery {
+	return &NotificationPreferenceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNotificationPreference},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a NotificationPreference entity by its id.
+func (c *NotificationPreferenceClient) Get(ctx context.Context, id string) (*NotificationPreference, error) {
+	return c.Query().Where(notificationpreference.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NotificationPreferenceClient) GetX(ctx context.Context, id string) *NotificationPreference {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a NotificationPreference.
+func (c *NotificationPreferenceClient) QueryOwner(_m *NotificationPreference) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationpreference.Table, notificationpreference.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notificationpreference.OwnerTable, notificationpreference.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.NotificationPreference
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a NotificationPreference.
+func (c *NotificationPreferenceClient) QueryUser(_m *NotificationPreference) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationpreference.Table, notificationpreference.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, notificationpreference.UserTable, notificationpreference.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.NotificationPreference
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationTemplate queries the notification_template edge of a NotificationPreference.
+func (c *NotificationPreferenceClient) QueryNotificationTemplate(_m *NotificationPreference) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationpreference.Table, notificationpreference.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, notificationpreference.NotificationTemplateTable, notificationpreference.NotificationTemplateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationPreference
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *NotificationPreferenceClient) Hooks() []Hook {
+	hooks := c.hooks.NotificationPreference
+	return append(hooks[:len(hooks):len(hooks)], notificationpreference.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *NotificationPreferenceClient) Interceptors() []Interceptor {
+	inters := c.inters.NotificationPreference
+	return append(inters[:len(inters):len(inters)], notificationpreference.Interceptors[:]...)
+}
+
+func (c *NotificationPreferenceClient) mutate(ctx context.Context, m *NotificationPreferenceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NotificationPreferenceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NotificationPreferenceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NotificationPreferenceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NotificationPreferenceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown NotificationPreference mutation op: %q", m.Op())
+	}
+}
+
+// NotificationTemplateClient is a client for the NotificationTemplate schema.
+type NotificationTemplateClient struct {
+	config
+}
+
+// NewNotificationTemplateClient returns a client for the NotificationTemplate from the given config.
+func NewNotificationTemplateClient(c config) *NotificationTemplateClient {
+	return &NotificationTemplateClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `notificationtemplate.Hooks(f(g(h())))`.
+func (c *NotificationTemplateClient) Use(hooks ...Hook) {
+	c.hooks.NotificationTemplate = append(c.hooks.NotificationTemplate, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `notificationtemplate.Intercept(f(g(h())))`.
+func (c *NotificationTemplateClient) Intercept(interceptors ...Interceptor) {
+	c.inters.NotificationTemplate = append(c.inters.NotificationTemplate, interceptors...)
+}
+
+// Create returns a builder for creating a NotificationTemplate entity.
+func (c *NotificationTemplateClient) Create() *NotificationTemplateCreate {
+	mutation := newNotificationTemplateMutation(c.config, OpCreate)
+	return &NotificationTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of NotificationTemplate entities.
+func (c *NotificationTemplateClient) CreateBulk(builders ...*NotificationTemplateCreate) *NotificationTemplateCreateBulk {
+	return &NotificationTemplateCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NotificationTemplateClient) MapCreateBulk(slice any, setFunc func(*NotificationTemplateCreate, int)) *NotificationTemplateCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NotificationTemplateCreateBulk{err: fmt.Errorf("calling to NotificationTemplateClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NotificationTemplateCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NotificationTemplateCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for NotificationTemplate.
+func (c *NotificationTemplateClient) Update() *NotificationTemplateUpdate {
+	mutation := newNotificationTemplateMutation(c.config, OpUpdate)
+	return &NotificationTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NotificationTemplateClient) UpdateOne(_m *NotificationTemplate) *NotificationTemplateUpdateOne {
+	mutation := newNotificationTemplateMutation(c.config, OpUpdateOne, withNotificationTemplate(_m))
+	return &NotificationTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NotificationTemplateClient) UpdateOneID(id string) *NotificationTemplateUpdateOne {
+	mutation := newNotificationTemplateMutation(c.config, OpUpdateOne, withNotificationTemplateID(id))
+	return &NotificationTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for NotificationTemplate.
+func (c *NotificationTemplateClient) Delete() *NotificationTemplateDelete {
+	mutation := newNotificationTemplateMutation(c.config, OpDelete)
+	return &NotificationTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NotificationTemplateClient) DeleteOne(_m *NotificationTemplate) *NotificationTemplateDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NotificationTemplateClient) DeleteOneID(id string) *NotificationTemplateDeleteOne {
+	builder := c.Delete().Where(notificationtemplate.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NotificationTemplateDeleteOne{builder}
+}
+
+// Query returns a query builder for NotificationTemplate.
+func (c *NotificationTemplateClient) Query() *NotificationTemplateQuery {
+	return &NotificationTemplateQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNotificationTemplate},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a NotificationTemplate entity by its id.
+func (c *NotificationTemplateClient) Get(ctx context.Context, id string) (*NotificationTemplate, error) {
+	return c.Query().Where(notificationtemplate.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NotificationTemplateClient) GetX(ctx context.Context, id string) *NotificationTemplate {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a NotificationTemplate.
+func (c *NotificationTemplateClient) QueryOwner(_m *NotificationTemplate) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationtemplate.Table, notificationtemplate.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notificationtemplate.OwnerTable, notificationtemplate.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a NotificationTemplate.
+func (c *NotificationTemplateClient) QueryIntegration(_m *NotificationTemplate) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationtemplate.Table, notificationtemplate.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notificationtemplate.IntegrationTable, notificationtemplate.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowDefinition queries the workflow_definition edge of a NotificationTemplate.
+func (c *NotificationTemplateClient) QueryWorkflowDefinition(_m *NotificationTemplate) *WorkflowDefinitionQuery {
+	query := (&WorkflowDefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationtemplate.Table, notificationtemplate.FieldID, id),
+			sqlgraph.To(workflowdefinition.Table, workflowdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notificationtemplate.WorkflowDefinitionTable, notificationtemplate.WorkflowDefinitionColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplate queries the email_template edge of a NotificationTemplate.
+func (c *NotificationTemplateClient) QueryEmailTemplate(_m *NotificationTemplate) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationtemplate.Table, notificationtemplate.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notificationtemplate.EmailTemplateTable, notificationtemplate.EmailTemplateColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotifications queries the notifications edge of a NotificationTemplate.
+func (c *NotificationTemplateClient) QueryNotifications(_m *NotificationTemplate) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notificationtemplate.Table, notificationtemplate.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, notificationtemplate.NotificationsTable, notificationtemplate.NotificationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *NotificationTemplateClient) Hooks() []Hook {
+	hooks := c.hooks.NotificationTemplate
+	return append(hooks[:len(hooks):len(hooks)], notificationtemplate.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *NotificationTemplateClient) Interceptors() []Interceptor {
+	inters := c.inters.NotificationTemplate
+	return append(inters[:len(inters):len(inters)], notificationtemplate.Interceptors[:]...)
+}
+
+func (c *NotificationTemplateClient) mutate(ctx context.Context, m *NotificationTemplateMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NotificationTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NotificationTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NotificationTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NotificationTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown NotificationTemplate mutation op: %q", m.Op())
 	}
 }
 
@@ -18532,6 +20068,120 @@ func (c *OrganizationClient) QueryAPITokens(_m *Organization) *APITokenQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailBrandings queries the email_brandings edge of a Organization.
+func (c *OrganizationClient) QueryEmailBrandings(_m *Organization) *EmailBrandingQuery {
+	query := (&EmailBrandingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailBrandingsTable, organization.EmailBrandingsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.EmailBranding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates queries the email_templates edge of a Organization.
+func (c *OrganizationClient) QueryEmailTemplates(_m *Organization) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailTemplatesTable, organization.EmailTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrationWebhooks queries the integration_webhooks edge of a Organization.
+func (c *OrganizationClient) QueryIntegrationWebhooks(_m *Organization) *IntegrationWebhookQuery {
+	query := (&IntegrationWebhookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(integrationwebhook.Table, integrationwebhook.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationWebhooksTable, organization.IntegrationWebhooksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationWebhook
+		step.Edge.Schema = schemaConfig.IntegrationWebhook
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a Organization.
+func (c *OrganizationClient) QueryIntegrationRuns(_m *Organization) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationRunsTable, organization.IntegrationRunsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationRun
+		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationPreferences queries the notification_preferences edge of a Organization.
+func (c *OrganizationClient) QueryNotificationPreferences(_m *Organization) *NotificationPreferenceQuery {
+	query := (&NotificationPreferenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(notificationpreference.Table, notificationpreference.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationPreferencesTable, organization.NotificationPreferencesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationPreference
+		step.Edge.Schema = schemaConfig.NotificationPreference
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationTemplates queries the notification_templates edge of a Organization.
+func (c *OrganizationClient) QueryNotificationTemplates(_m *Organization) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationTemplatesTable, organization.NotificationTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -31739,6 +33389,63 @@ func (c *WorkflowDefinitionClient) QueryGroups(_m *WorkflowDefinition) *GroupQue
 	return query
 }
 
+// QueryWorkflowInstances queries the workflow_instances edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryWorkflowInstances(_m *WorkflowDefinition) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, workflowdefinition.WorkflowInstancesTable, workflowdefinition.WorkflowInstancesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotificationTemplates queries the notification_templates edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryNotificationTemplates(_m *WorkflowDefinition) *NotificationTemplateQuery {
+	query := (&NotificationTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.NotificationTemplatesTable, workflowdefinition.NotificationTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.NotificationTemplate
+		step.Edge.Schema = schemaConfig.NotificationTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates queries the email_templates edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryEmailTemplates(_m *WorkflowDefinition) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.EmailTemplatesTable, workflowdefinition.EmailTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *WorkflowDefinitionClient) Hooks() []Hook {
 	hooks := c.hooks.WorkflowDefinition
@@ -32326,6 +34033,25 @@ func (c *WorkflowInstanceClient) QueryWorkflowEvents(_m *WorkflowInstance) *Work
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.WorkflowEvent
 		step.Edge.Schema = schemaConfig.WorkflowEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEmailTemplates queries the email_templates edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryEmailTemplates(_m *WorkflowInstance) *EmailTemplateQuery {
+	query := (&EmailTemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowinstance.EmailTemplatesTable, workflowinstance.EmailTemplatesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.EmailTemplate
+		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -33073,13 +34799,14 @@ type (
 		CampaignTarget, Contact, Control, ControlImplementation, ControlObjective,
 		CustomDomain, CustomTypeEnum, DNSVerification, DirectoryAccount,
 		DirectoryGroup, DirectoryMembership, DirectorySyncRun, Discussion,
-		DocumentData, EmailVerificationToken, Entity, EntityType, Event, Evidence,
-		Export, File, FileDownloadToken, Finding, FindingControl, Group,
-		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
-		Integration, InternalPolicy, Invite, JobResult, JobRunner,
-		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, MappableDomain,
-		MappedControl, Narrative, Note, Notification, Onboarding, OrgMembership,
-		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
+		DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken, Entity,
+		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
+		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
+		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
+		JobRunnerToken, JobTemplate, MappableDomain, MappedControl, Narrative, Note,
+		Notification, NotificationPreference, NotificationTemplate, Onboarding,
+		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
 		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
@@ -33095,13 +34822,14 @@ type (
 		CampaignTarget, Contact, Control, ControlImplementation, ControlObjective,
 		CustomDomain, CustomTypeEnum, DNSVerification, DirectoryAccount,
 		DirectoryGroup, DirectoryMembership, DirectorySyncRun, Discussion,
-		DocumentData, EmailVerificationToken, Entity, EntityType, Event, Evidence,
-		Export, File, FileDownloadToken, Finding, FindingControl, Group,
-		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
-		Integration, InternalPolicy, Invite, JobResult, JobRunner,
-		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, MappableDomain,
-		MappedControl, Narrative, Note, Notification, Onboarding, OrgMembership,
-		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
+		DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken, Entity,
+		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
+		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
+		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
+		JobRunnerToken, JobTemplate, MappableDomain, MappedControl, Narrative, Note,
+		Notification, NotificationPreference, NotificationTemplate, Onboarding,
+		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
 		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,

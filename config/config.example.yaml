@@ -61,6 +61,7 @@ auth:
         refreshaudience: ""
         refreshduration: 7200000000000
         refreshoverlap: -900000000000
+        trustcenterndarequestaccessduration: 3600000000000
 authz:
     createnewmodel: false
     credentials:
@@ -164,6 +165,13 @@ entconfig:
             provider: none
         maximumsentences: 10
         type: lexrank
+integrationgithubapp:
+    appid: ""
+    appslug: ""
+    enabled: false
+    privatekey: ""
+    successredirecturl: ""
+    webhooksecret: ""
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
@@ -375,6 +383,11 @@ sessions:
     samesite: Strict
     secure: true
     signingkey: my-signing-secret
+shortlinks:
+    clientid: d5d5babbdd4ba64d59ae543ac3b6a74d.access
+    clientsecret: ""
+    enabled: false
+    endpointurl: https://admin.s.theopenlane.io/api/links
 slack:
     newsubscribermessagefile: ""
     newusermessagefile: ""
@@ -430,3 +443,9 @@ workflows:
         timeout: 100000000
         trackstate: false
     enabled: false
+    gala:
+        enabled: false
+        failonenqueueerror: false
+        maxretries: 5
+        queuename: events
+        workercount: 10

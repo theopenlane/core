@@ -26,6 +26,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -43,6 +45,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -55,6 +59,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -511,6 +517,10 @@ func init() {
 	assessmentresponseDescStartedAt := assessmentresponseFields[16].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(time.Time)
+	// assessmentresponseDescIsDraft is the schema descriptor for is_draft field.
+	assessmentresponseDescIsDraft := assessmentresponseFields[20].Descriptor()
+	// assessmentresponse.DefaultIsDraft holds the default value on creation for the is_draft field.
+	assessmentresponse.DefaultIsDraft = assessmentresponseDescIsDraft.Default.(bool)
 	// assessmentresponseDescID is the schema descriptor for id field.
 	assessmentresponseDescID := assessmentresponseMixinFields2[0].Descriptor()
 	// assessmentresponse.DefaultID holds the default value on creation for the id field.
@@ -1939,6 +1949,229 @@ func init() {
 	documentdataDescID := documentdataMixinFields2[0].Descriptor()
 	// documentdata.DefaultID holds the default value on creation for the id field.
 	documentdata.DefaultID = documentdataDescID.Default.(func() string)
+	emailbrandingMixin := schema.EmailBranding{}.Mixin()
+	emailbranding.Policy = privacy.NewPolicies(schema.EmailBranding{})
+	emailbranding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := emailbranding.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	emailbrandingMixinHooks0 := emailbrandingMixin[0].Hooks()
+	emailbrandingMixinHooks1 := emailbrandingMixin[1].Hooks()
+	emailbrandingMixinHooks3 := emailbrandingMixin[3].Hooks()
+	emailbrandingMixinHooks5 := emailbrandingMixin[5].Hooks()
+	emailbrandingMixinHooks6 := emailbrandingMixin[6].Hooks()
+
+	emailbranding.Hooks[1] = emailbrandingMixinHooks0[0]
+
+	emailbranding.Hooks[2] = emailbrandingMixinHooks1[0]
+
+	emailbranding.Hooks[3] = emailbrandingMixinHooks3[0]
+
+	emailbranding.Hooks[4] = emailbrandingMixinHooks5[0]
+
+	emailbranding.Hooks[5] = emailbrandingMixinHooks5[1]
+
+	emailbranding.Hooks[6] = emailbrandingMixinHooks6[0]
+
+	emailbranding.Hooks[7] = emailbrandingMixinHooks6[1]
+
+	emailbranding.Hooks[8] = emailbrandingMixinHooks6[2]
+	emailbrandingMixinInters1 := emailbrandingMixin[1].Interceptors()
+	emailbrandingMixinInters5 := emailbrandingMixin[5].Interceptors()
+	emailbranding.Interceptors[0] = emailbrandingMixinInters1[0]
+	emailbranding.Interceptors[1] = emailbrandingMixinInters5[0]
+	emailbranding.Interceptors[2] = emailbrandingMixinInters5[1]
+	emailbrandingMixinFields0 := emailbrandingMixin[0].Fields()
+	_ = emailbrandingMixinFields0
+	emailbrandingMixinFields2 := emailbrandingMixin[2].Fields()
+	_ = emailbrandingMixinFields2
+	emailbrandingMixinFields3 := emailbrandingMixin[3].Fields()
+	_ = emailbrandingMixinFields3
+	emailbrandingMixinFields5 := emailbrandingMixin[5].Fields()
+	_ = emailbrandingMixinFields5
+	emailbrandingFields := schema.EmailBranding{}.Fields()
+	_ = emailbrandingFields
+	// emailbrandingDescCreatedAt is the schema descriptor for created_at field.
+	emailbrandingDescCreatedAt := emailbrandingMixinFields0[0].Descriptor()
+	// emailbranding.DefaultCreatedAt holds the default value on creation for the created_at field.
+	emailbranding.DefaultCreatedAt = emailbrandingDescCreatedAt.Default.(func() time.Time)
+	// emailbrandingDescUpdatedAt is the schema descriptor for updated_at field.
+	emailbrandingDescUpdatedAt := emailbrandingMixinFields0[1].Descriptor()
+	// emailbranding.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	emailbranding.DefaultUpdatedAt = emailbrandingDescUpdatedAt.Default.(func() time.Time)
+	// emailbranding.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	emailbranding.UpdateDefaultUpdatedAt = emailbrandingDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// emailbrandingDescTags is the schema descriptor for tags field.
+	emailbrandingDescTags := emailbrandingMixinFields3[0].Descriptor()
+	// emailbranding.DefaultTags holds the default value on creation for the tags field.
+	emailbranding.DefaultTags = emailbrandingDescTags.Default.([]string)
+	// emailbrandingDescOwnerID is the schema descriptor for owner_id field.
+	emailbrandingDescOwnerID := emailbrandingMixinFields5[0].Descriptor()
+	// emailbranding.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	emailbranding.OwnerIDValidator = emailbrandingDescOwnerID.Validators[0].(func(string) error)
+	// emailbrandingDescName is the schema descriptor for name field.
+	emailbrandingDescName := emailbrandingFields[0].Descriptor()
+	// emailbranding.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	emailbranding.NameValidator = func() func(string) error {
+		validators := emailbrandingDescName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(name string) error {
+			for _, fn := range fns {
+				if err := fn(name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// emailbrandingDescBrandName is the schema descriptor for brand_name field.
+	emailbrandingDescBrandName := emailbrandingFields[1].Descriptor()
+	// emailbranding.BrandNameValidator is a validator for the "brand_name" field. It is called by the builders before save.
+	emailbranding.BrandNameValidator = emailbrandingDescBrandName.Validators[0].(func(string) error)
+	// emailbrandingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
+	emailbrandingDescLogoRemoteURL := emailbrandingFields[2].Descriptor()
+	// emailbranding.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	emailbranding.LogoRemoteURLValidator = func() func(string) error {
+		validators := emailbrandingDescLogoRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(logo_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(logo_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// emailbrandingDescPrimaryColor is the schema descriptor for primary_color field.
+	emailbrandingDescPrimaryColor := emailbrandingFields[3].Descriptor()
+	// emailbranding.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
+	emailbranding.PrimaryColorValidator = emailbrandingDescPrimaryColor.Validators[0].(func(string) error)
+	// emailbrandingDescSecondaryColor is the schema descriptor for secondary_color field.
+	emailbrandingDescSecondaryColor := emailbrandingFields[4].Descriptor()
+	// emailbranding.SecondaryColorValidator is a validator for the "secondary_color" field. It is called by the builders before save.
+	emailbranding.SecondaryColorValidator = emailbrandingDescSecondaryColor.Validators[0].(func(string) error)
+	// emailbrandingDescBackgroundColor is the schema descriptor for background_color field.
+	emailbrandingDescBackgroundColor := emailbrandingFields[5].Descriptor()
+	// emailbranding.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
+	emailbranding.BackgroundColorValidator = emailbrandingDescBackgroundColor.Validators[0].(func(string) error)
+	// emailbrandingDescTextColor is the schema descriptor for text_color field.
+	emailbrandingDescTextColor := emailbrandingFields[6].Descriptor()
+	// emailbranding.TextColorValidator is a validator for the "text_color" field. It is called by the builders before save.
+	emailbranding.TextColorValidator = emailbrandingDescTextColor.Validators[0].(func(string) error)
+	// emailbrandingDescButtonColor is the schema descriptor for button_color field.
+	emailbrandingDescButtonColor := emailbrandingFields[7].Descriptor()
+	// emailbranding.ButtonColorValidator is a validator for the "button_color" field. It is called by the builders before save.
+	emailbranding.ButtonColorValidator = emailbrandingDescButtonColor.Validators[0].(func(string) error)
+	// emailbrandingDescButtonTextColor is the schema descriptor for button_text_color field.
+	emailbrandingDescButtonTextColor := emailbrandingFields[8].Descriptor()
+	// emailbranding.ButtonTextColorValidator is a validator for the "button_text_color" field. It is called by the builders before save.
+	emailbranding.ButtonTextColorValidator = emailbrandingDescButtonTextColor.Validators[0].(func(string) error)
+	// emailbrandingDescLinkColor is the schema descriptor for link_color field.
+	emailbrandingDescLinkColor := emailbrandingFields[9].Descriptor()
+	// emailbranding.LinkColorValidator is a validator for the "link_color" field. It is called by the builders before save.
+	emailbranding.LinkColorValidator = emailbrandingDescLinkColor.Validators[0].(func(string) error)
+	// emailbrandingDescIsDefault is the schema descriptor for is_default field.
+	emailbrandingDescIsDefault := emailbrandingFields[11].Descriptor()
+	// emailbranding.DefaultIsDefault holds the default value on creation for the is_default field.
+	emailbranding.DefaultIsDefault = emailbrandingDescIsDefault.Default.(bool)
+	// emailbrandingDescID is the schema descriptor for id field.
+	emailbrandingDescID := emailbrandingMixinFields2[0].Descriptor()
+	// emailbranding.DefaultID holds the default value on creation for the id field.
+	emailbranding.DefaultID = emailbrandingDescID.Default.(func() string)
+	emailtemplateMixin := schema.EmailTemplate{}.Mixin()
+	emailtemplate.Policy = privacy.NewPolicies(emailtemplateMixin[5], schema.EmailTemplate{})
+	emailtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := emailtemplate.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	emailtemplateMixinHooks0 := emailtemplateMixin[0].Hooks()
+	emailtemplateMixinHooks1 := emailtemplateMixin[1].Hooks()
+	emailtemplateMixinHooks4 := emailtemplateMixin[4].Hooks()
+	emailtemplateMixinHooks5 := emailtemplateMixin[5].Hooks()
+
+	emailtemplate.Hooks[1] = emailtemplateMixinHooks0[0]
+
+	emailtemplate.Hooks[2] = emailtemplateMixinHooks1[0]
+
+	emailtemplate.Hooks[3] = emailtemplateMixinHooks4[0]
+
+	emailtemplate.Hooks[4] = emailtemplateMixinHooks4[1]
+
+	emailtemplate.Hooks[5] = emailtemplateMixinHooks5[0]
+
+	emailtemplate.Hooks[6] = emailtemplateMixinHooks5[1]
+	emailtemplateMixinInters1 := emailtemplateMixin[1].Interceptors()
+	emailtemplateMixinInters4 := emailtemplateMixin[4].Interceptors()
+	emailtemplate.Interceptors[0] = emailtemplateMixinInters1[0]
+	emailtemplate.Interceptors[1] = emailtemplateMixinInters4[0]
+	emailtemplate.Interceptors[2] = emailtemplateMixinInters4[1]
+	emailtemplateMixinFields0 := emailtemplateMixin[0].Fields()
+	_ = emailtemplateMixinFields0
+	emailtemplateMixinFields2 := emailtemplateMixin[2].Fields()
+	_ = emailtemplateMixinFields2
+	emailtemplateMixinFields4 := emailtemplateMixin[4].Fields()
+	_ = emailtemplateMixinFields4
+	emailtemplateMixinFields5 := emailtemplateMixin[5].Fields()
+	_ = emailtemplateMixinFields5
+	emailtemplateFields := schema.EmailTemplate{}.Fields()
+	_ = emailtemplateFields
+	// emailtemplateDescCreatedAt is the schema descriptor for created_at field.
+	emailtemplateDescCreatedAt := emailtemplateMixinFields0[0].Descriptor()
+	// emailtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
+	emailtemplate.DefaultCreatedAt = emailtemplateDescCreatedAt.Default.(func() time.Time)
+	// emailtemplateDescUpdatedAt is the schema descriptor for updated_at field.
+	emailtemplateDescUpdatedAt := emailtemplateMixinFields0[1].Descriptor()
+	// emailtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	emailtemplate.DefaultUpdatedAt = emailtemplateDescUpdatedAt.Default.(func() time.Time)
+	// emailtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	emailtemplate.UpdateDefaultUpdatedAt = emailtemplateDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// emailtemplateDescOwnerID is the schema descriptor for owner_id field.
+	emailtemplateDescOwnerID := emailtemplateMixinFields4[0].Descriptor()
+	// emailtemplate.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	emailtemplate.OwnerIDValidator = emailtemplateDescOwnerID.Validators[0].(func(string) error)
+	// emailtemplateDescSystemOwned is the schema descriptor for system_owned field.
+	emailtemplateDescSystemOwned := emailtemplateMixinFields5[0].Descriptor()
+	// emailtemplate.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	emailtemplate.DefaultSystemOwned = emailtemplateDescSystemOwned.Default.(bool)
+	// emailtemplateDescKey is the schema descriptor for key field.
+	emailtemplateDescKey := emailtemplateFields[0].Descriptor()
+	// emailtemplate.KeyValidator is a validator for the "key" field. It is called by the builders before save.
+	emailtemplate.KeyValidator = emailtemplateDescKey.Validators[0].(func(string) error)
+	// emailtemplateDescName is the schema descriptor for name field.
+	emailtemplateDescName := emailtemplateFields[1].Descriptor()
+	// emailtemplate.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	emailtemplate.NameValidator = emailtemplateDescName.Validators[0].(func(string) error)
+	// emailtemplateDescLocale is the schema descriptor for locale field.
+	emailtemplateDescLocale := emailtemplateFields[4].Descriptor()
+	// emailtemplate.DefaultLocale holds the default value on creation for the locale field.
+	emailtemplate.DefaultLocale = emailtemplateDescLocale.Default.(string)
+	// emailtemplateDescActive is the schema descriptor for active field.
+	emailtemplateDescActive := emailtemplateFields[12].Descriptor()
+	// emailtemplate.DefaultActive holds the default value on creation for the active field.
+	emailtemplate.DefaultActive = emailtemplateDescActive.Default.(bool)
+	// emailtemplateDescVersion is the schema descriptor for version field.
+	emailtemplateDescVersion := emailtemplateFields[13].Descriptor()
+	// emailtemplate.DefaultVersion holds the default value on creation for the version field.
+	emailtemplate.DefaultVersion = emailtemplateDescVersion.Default.(int)
+	// emailtemplateDescID is the schema descriptor for id field.
+	emailtemplateDescID := emailtemplateMixinFields2[0].Descriptor()
+	// emailtemplate.DefaultID holds the default value on creation for the id field.
+	emailtemplate.DefaultID = emailtemplateDescID.Default.(func() string)
 	emailverificationtokenMixin := schema.EmailVerificationToken{}.Mixin()
 	emailverificationtoken.Policy = privacy.NewPolicies(schema.EmailVerificationToken{})
 	emailverificationtoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -2144,10 +2377,6 @@ func init() {
 	entityDescDomains := entityFields[3].Descriptor()
 	// entity.DomainsValidator is a validator for the "domains" field. It is called by the builders before save.
 	entity.DomainsValidator = entityDescDomains.Validators[0].(func([]string) error)
-	// entityDescStatus is the schema descriptor for status field.
-	entityDescStatus := entityFields[5].Descriptor()
-	// entity.DefaultStatus holds the default value on creation for the status field.
-	entity.DefaultStatus = entityDescStatus.Default.(string)
 	// entityDescApprovedForUse is the schema descriptor for approved_for_use field.
 	entityDescApprovedForUse := entityFields[6].Descriptor()
 	// entity.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
@@ -3246,6 +3475,126 @@ func init() {
 	integrationDescID := integrationMixinFields2[0].Descriptor()
 	// integration.DefaultID holds the default value on creation for the id field.
 	integration.DefaultID = integrationDescID.Default.(func() string)
+	integrationrunMixin := schema.IntegrationRun{}.Mixin()
+	integrationrun.Policy = privacy.NewPolicies(schema.IntegrationRun{})
+	integrationrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := integrationrun.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	integrationrunMixinHooks0 := integrationrunMixin[0].Hooks()
+	integrationrunMixinHooks1 := integrationrunMixin[1].Hooks()
+	integrationrunMixinHooks3 := integrationrunMixin[3].Hooks()
+
+	integrationrun.Hooks[1] = integrationrunMixinHooks0[0]
+
+	integrationrun.Hooks[2] = integrationrunMixinHooks1[0]
+
+	integrationrun.Hooks[3] = integrationrunMixinHooks3[0]
+
+	integrationrun.Hooks[4] = integrationrunMixinHooks3[1]
+	integrationrunMixinInters1 := integrationrunMixin[1].Interceptors()
+	integrationrunMixinInters3 := integrationrunMixin[3].Interceptors()
+	integrationrun.Interceptors[0] = integrationrunMixinInters1[0]
+	integrationrun.Interceptors[1] = integrationrunMixinInters3[0]
+	integrationrun.Interceptors[2] = integrationrunMixinInters3[1]
+	integrationrunMixinFields0 := integrationrunMixin[0].Fields()
+	_ = integrationrunMixinFields0
+	integrationrunMixinFields2 := integrationrunMixin[2].Fields()
+	_ = integrationrunMixinFields2
+	integrationrunMixinFields3 := integrationrunMixin[3].Fields()
+	_ = integrationrunMixinFields3
+	integrationrunFields := schema.IntegrationRun{}.Fields()
+	_ = integrationrunFields
+	// integrationrunDescCreatedAt is the schema descriptor for created_at field.
+	integrationrunDescCreatedAt := integrationrunMixinFields0[0].Descriptor()
+	// integrationrun.DefaultCreatedAt holds the default value on creation for the created_at field.
+	integrationrun.DefaultCreatedAt = integrationrunDescCreatedAt.Default.(func() time.Time)
+	// integrationrunDescUpdatedAt is the schema descriptor for updated_at field.
+	integrationrunDescUpdatedAt := integrationrunMixinFields0[1].Descriptor()
+	// integrationrun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	integrationrun.DefaultUpdatedAt = integrationrunDescUpdatedAt.Default.(func() time.Time)
+	// integrationrun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	integrationrun.UpdateDefaultUpdatedAt = integrationrunDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// integrationrunDescOwnerID is the schema descriptor for owner_id field.
+	integrationrunDescOwnerID := integrationrunMixinFields3[0].Descriptor()
+	// integrationrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	integrationrun.OwnerIDValidator = integrationrunDescOwnerID.Validators[0].(func(string) error)
+	// integrationrunDescStartedAt is the schema descriptor for started_at field.
+	integrationrunDescStartedAt := integrationrunFields[7].Descriptor()
+	// integrationrun.DefaultStartedAt holds the default value on creation for the started_at field.
+	integrationrun.DefaultStartedAt = integrationrunDescStartedAt.Default.(func() time.Time)
+	// integrationrunDescID is the schema descriptor for id field.
+	integrationrunDescID := integrationrunMixinFields2[0].Descriptor()
+	// integrationrun.DefaultID holds the default value on creation for the id field.
+	integrationrun.DefaultID = integrationrunDescID.Default.(func() string)
+	integrationwebhookMixin := schema.IntegrationWebhook{}.Mixin()
+	integrationwebhook.Policy = privacy.NewPolicies(schema.IntegrationWebhook{})
+	integrationwebhook.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := integrationwebhook.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	integrationwebhookMixinHooks0 := integrationwebhookMixin[0].Hooks()
+	integrationwebhookMixinHooks1 := integrationwebhookMixin[1].Hooks()
+	integrationwebhookMixinHooks3 := integrationwebhookMixin[3].Hooks()
+
+	integrationwebhook.Hooks[1] = integrationwebhookMixinHooks0[0]
+
+	integrationwebhook.Hooks[2] = integrationwebhookMixinHooks1[0]
+
+	integrationwebhook.Hooks[3] = integrationwebhookMixinHooks3[0]
+
+	integrationwebhook.Hooks[4] = integrationwebhookMixinHooks3[1]
+	integrationwebhookMixinInters1 := integrationwebhookMixin[1].Interceptors()
+	integrationwebhookMixinInters3 := integrationwebhookMixin[3].Interceptors()
+	integrationwebhook.Interceptors[0] = integrationwebhookMixinInters1[0]
+	integrationwebhook.Interceptors[1] = integrationwebhookMixinInters3[0]
+	integrationwebhook.Interceptors[2] = integrationwebhookMixinInters3[1]
+	integrationwebhookMixinFields0 := integrationwebhookMixin[0].Fields()
+	_ = integrationwebhookMixinFields0
+	integrationwebhookMixinFields2 := integrationwebhookMixin[2].Fields()
+	_ = integrationwebhookMixinFields2
+	integrationwebhookMixinFields3 := integrationwebhookMixin[3].Fields()
+	_ = integrationwebhookMixinFields3
+	integrationwebhookFields := schema.IntegrationWebhook{}.Fields()
+	_ = integrationwebhookFields
+	// integrationwebhookDescCreatedAt is the schema descriptor for created_at field.
+	integrationwebhookDescCreatedAt := integrationwebhookMixinFields0[0].Descriptor()
+	// integrationwebhook.DefaultCreatedAt holds the default value on creation for the created_at field.
+	integrationwebhook.DefaultCreatedAt = integrationwebhookDescCreatedAt.Default.(func() time.Time)
+	// integrationwebhookDescUpdatedAt is the schema descriptor for updated_at field.
+	integrationwebhookDescUpdatedAt := integrationwebhookMixinFields0[1].Descriptor()
+	// integrationwebhook.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	integrationwebhook.DefaultUpdatedAt = integrationwebhookDescUpdatedAt.Default.(func() time.Time)
+	// integrationwebhook.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	integrationwebhook.UpdateDefaultUpdatedAt = integrationwebhookDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// integrationwebhookDescOwnerID is the schema descriptor for owner_id field.
+	integrationwebhookDescOwnerID := integrationwebhookMixinFields3[0].Descriptor()
+	// integrationwebhook.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	integrationwebhook.OwnerIDValidator = integrationwebhookDescOwnerID.Validators[0].(func(string) error)
+	// integrationwebhookDescProvider is the schema descriptor for provider field.
+	integrationwebhookDescProvider := integrationwebhookFields[1].Descriptor()
+	// integrationwebhook.ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
+	integrationwebhook.ProviderValidator = integrationwebhookDescProvider.Validators[0].(func(string) error)
+	// integrationwebhookDescEndpointURL is the schema descriptor for endpoint_url field.
+	integrationwebhookDescEndpointURL := integrationwebhookFields[4].Descriptor()
+	// integrationwebhook.EndpointURLValidator is a validator for the "endpoint_url" field. It is called by the builders before save.
+	integrationwebhook.EndpointURLValidator = integrationwebhookDescEndpointURL.Validators[0].(func(string) error)
+	// integrationwebhookDescSecretToken is the schema descriptor for secret_token field.
+	integrationwebhookDescSecretToken := integrationwebhookFields[5].Descriptor()
+	// integrationwebhook.DefaultSecretToken holds the default value on creation for the secret_token field.
+	integrationwebhook.DefaultSecretToken = integrationwebhookDescSecretToken.Default.(func() string)
+	// integrationwebhookDescID is the schema descriptor for id field.
+	integrationwebhookDescID := integrationwebhookMixinFields2[0].Descriptor()
+	// integrationwebhook.DefaultID holds the default value on creation for the id field.
+	integrationwebhook.DefaultID = integrationwebhookDescID.Default.(func() string)
 	internalpolicyMixin := schema.InternalPolicy{}.Mixin()
 	internalpolicy.Policy = privacy.NewPolicies(internalpolicyMixin[7], schema.InternalPolicy{})
 	internalpolicy.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -4152,6 +4501,8 @@ func init() {
 	note.Hooks[6] = noteHooks[0]
 
 	note.Hooks[7] = noteHooks[1]
+
+	note.Hooks[8] = noteHooks[2]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters4 := noteMixin[4].Interceptors()
 	note.Interceptors[0] = noteMixinInters1[0]
@@ -4267,6 +4618,154 @@ func init() {
 	notificationDescID := notificationMixinFields1[0].Descriptor()
 	// notification.DefaultID holds the default value on creation for the id field.
 	notification.DefaultID = notificationDescID.Default.(func() string)
+	notificationpreferenceMixin := schema.NotificationPreference{}.Mixin()
+	notificationpreference.Policy = privacy.NewPolicies(schema.NotificationPreference{})
+	notificationpreference.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := notificationpreference.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	notificationpreferenceMixinHooks0 := notificationpreferenceMixin[0].Hooks()
+	notificationpreferenceMixinHooks1 := notificationpreferenceMixin[1].Hooks()
+	notificationpreferenceMixinHooks4 := notificationpreferenceMixin[4].Hooks()
+
+	notificationpreference.Hooks[1] = notificationpreferenceMixinHooks0[0]
+
+	notificationpreference.Hooks[2] = notificationpreferenceMixinHooks1[0]
+
+	notificationpreference.Hooks[3] = notificationpreferenceMixinHooks4[0]
+	notificationpreferenceMixinInters1 := notificationpreferenceMixin[1].Interceptors()
+	notificationpreferenceMixinInters4 := notificationpreferenceMixin[4].Interceptors()
+	notificationpreference.Interceptors[0] = notificationpreferenceMixinInters1[0]
+	notificationpreference.Interceptors[1] = notificationpreferenceMixinInters4[0]
+	notificationpreferenceMixinFields0 := notificationpreferenceMixin[0].Fields()
+	_ = notificationpreferenceMixinFields0
+	notificationpreferenceMixinFields2 := notificationpreferenceMixin[2].Fields()
+	_ = notificationpreferenceMixinFields2
+	notificationpreferenceMixinFields4 := notificationpreferenceMixin[4].Fields()
+	_ = notificationpreferenceMixinFields4
+	notificationpreferenceFields := schema.NotificationPreference{}.Fields()
+	_ = notificationpreferenceFields
+	// notificationpreferenceDescCreatedAt is the schema descriptor for created_at field.
+	notificationpreferenceDescCreatedAt := notificationpreferenceMixinFields0[0].Descriptor()
+	// notificationpreference.DefaultCreatedAt holds the default value on creation for the created_at field.
+	notificationpreference.DefaultCreatedAt = notificationpreferenceDescCreatedAt.Default.(func() time.Time)
+	// notificationpreferenceDescUpdatedAt is the schema descriptor for updated_at field.
+	notificationpreferenceDescUpdatedAt := notificationpreferenceMixinFields0[1].Descriptor()
+	// notificationpreference.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	notificationpreference.DefaultUpdatedAt = notificationpreferenceDescUpdatedAt.Default.(func() time.Time)
+	// notificationpreference.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	notificationpreference.UpdateDefaultUpdatedAt = notificationpreferenceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationpreferenceDescOwnerID is the schema descriptor for owner_id field.
+	notificationpreferenceDescOwnerID := notificationpreferenceMixinFields4[0].Descriptor()
+	// notificationpreference.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	notificationpreference.OwnerIDValidator = notificationpreferenceDescOwnerID.Validators[0].(func(string) error)
+	// notificationpreferenceDescEnabled is the schema descriptor for enabled field.
+	notificationpreferenceDescEnabled := notificationpreferenceFields[6].Descriptor()
+	// notificationpreference.DefaultEnabled holds the default value on creation for the enabled field.
+	notificationpreference.DefaultEnabled = notificationpreferenceDescEnabled.Default.(bool)
+	// notificationpreferenceDescTimezone is the schema descriptor for timezone field.
+	notificationpreferenceDescTimezone := notificationpreferenceFields[15].Descriptor()
+	// notificationpreference.TimezoneValidator is a validator for the "timezone" field. It is called by the builders before save.
+	notificationpreference.TimezoneValidator = notificationpreferenceDescTimezone.Validators[0].(func(string) error)
+	// notificationpreferenceDescIsDefault is the schema descriptor for is_default field.
+	notificationpreferenceDescIsDefault := notificationpreferenceFields[16].Descriptor()
+	// notificationpreference.DefaultIsDefault holds the default value on creation for the is_default field.
+	notificationpreference.DefaultIsDefault = notificationpreferenceDescIsDefault.Default.(bool)
+	// notificationpreferenceDescID is the schema descriptor for id field.
+	notificationpreferenceDescID := notificationpreferenceMixinFields2[0].Descriptor()
+	// notificationpreference.DefaultID holds the default value on creation for the id field.
+	notificationpreference.DefaultID = notificationpreferenceDescID.Default.(func() string)
+	notificationtemplateMixin := schema.NotificationTemplate{}.Mixin()
+	notificationtemplate.Policy = privacy.NewPolicies(notificationtemplateMixin[5], schema.NotificationTemplate{})
+	notificationtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := notificationtemplate.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	notificationtemplateMixinHooks0 := notificationtemplateMixin[0].Hooks()
+	notificationtemplateMixinHooks1 := notificationtemplateMixin[1].Hooks()
+	notificationtemplateMixinHooks4 := notificationtemplateMixin[4].Hooks()
+	notificationtemplateMixinHooks5 := notificationtemplateMixin[5].Hooks()
+
+	notificationtemplate.Hooks[1] = notificationtemplateMixinHooks0[0]
+
+	notificationtemplate.Hooks[2] = notificationtemplateMixinHooks1[0]
+
+	notificationtemplate.Hooks[3] = notificationtemplateMixinHooks4[0]
+
+	notificationtemplate.Hooks[4] = notificationtemplateMixinHooks4[1]
+
+	notificationtemplate.Hooks[5] = notificationtemplateMixinHooks5[0]
+
+	notificationtemplate.Hooks[6] = notificationtemplateMixinHooks5[1]
+	notificationtemplateMixinInters1 := notificationtemplateMixin[1].Interceptors()
+	notificationtemplateMixinInters4 := notificationtemplateMixin[4].Interceptors()
+	notificationtemplate.Interceptors[0] = notificationtemplateMixinInters1[0]
+	notificationtemplate.Interceptors[1] = notificationtemplateMixinInters4[0]
+	notificationtemplate.Interceptors[2] = notificationtemplateMixinInters4[1]
+	notificationtemplateMixinFields0 := notificationtemplateMixin[0].Fields()
+	_ = notificationtemplateMixinFields0
+	notificationtemplateMixinFields2 := notificationtemplateMixin[2].Fields()
+	_ = notificationtemplateMixinFields2
+	notificationtemplateMixinFields4 := notificationtemplateMixin[4].Fields()
+	_ = notificationtemplateMixinFields4
+	notificationtemplateMixinFields5 := notificationtemplateMixin[5].Fields()
+	_ = notificationtemplateMixinFields5
+	notificationtemplateFields := schema.NotificationTemplate{}.Fields()
+	_ = notificationtemplateFields
+	// notificationtemplateDescCreatedAt is the schema descriptor for created_at field.
+	notificationtemplateDescCreatedAt := notificationtemplateMixinFields0[0].Descriptor()
+	// notificationtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
+	notificationtemplate.DefaultCreatedAt = notificationtemplateDescCreatedAt.Default.(func() time.Time)
+	// notificationtemplateDescUpdatedAt is the schema descriptor for updated_at field.
+	notificationtemplateDescUpdatedAt := notificationtemplateMixinFields0[1].Descriptor()
+	// notificationtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	notificationtemplate.DefaultUpdatedAt = notificationtemplateDescUpdatedAt.Default.(func() time.Time)
+	// notificationtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	notificationtemplate.UpdateDefaultUpdatedAt = notificationtemplateDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationtemplateDescOwnerID is the schema descriptor for owner_id field.
+	notificationtemplateDescOwnerID := notificationtemplateMixinFields4[0].Descriptor()
+	// notificationtemplate.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	notificationtemplate.OwnerIDValidator = notificationtemplateDescOwnerID.Validators[0].(func(string) error)
+	// notificationtemplateDescSystemOwned is the schema descriptor for system_owned field.
+	notificationtemplateDescSystemOwned := notificationtemplateMixinFields5[0].Descriptor()
+	// notificationtemplate.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	notificationtemplate.DefaultSystemOwned = notificationtemplateDescSystemOwned.Default.(bool)
+	// notificationtemplateDescKey is the schema descriptor for key field.
+	notificationtemplateDescKey := notificationtemplateFields[0].Descriptor()
+	// notificationtemplate.KeyValidator is a validator for the "key" field. It is called by the builders before save.
+	notificationtemplate.KeyValidator = notificationtemplateDescKey.Validators[0].(func(string) error)
+	// notificationtemplateDescName is the schema descriptor for name field.
+	notificationtemplateDescName := notificationtemplateFields[1].Descriptor()
+	// notificationtemplate.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	notificationtemplate.NameValidator = notificationtemplateDescName.Validators[0].(func(string) error)
+	// notificationtemplateDescLocale is the schema descriptor for locale field.
+	notificationtemplateDescLocale := notificationtemplateFields[5].Descriptor()
+	// notificationtemplate.DefaultLocale holds the default value on creation for the locale field.
+	notificationtemplate.DefaultLocale = notificationtemplateDescLocale.Default.(string)
+	// notificationtemplateDescTopicPattern is the schema descriptor for topic_pattern field.
+	notificationtemplateDescTopicPattern := notificationtemplateFields[6].Descriptor()
+	// notificationtemplate.TopicPatternValidator is a validator for the "topic_pattern" field. It is called by the builders before save.
+	notificationtemplate.TopicPatternValidator = notificationtemplateDescTopicPattern.Validators[0].(func(string) error)
+	// notificationtemplateDescActive is the schema descriptor for active field.
+	notificationtemplateDescActive := notificationtemplateFields[17].Descriptor()
+	// notificationtemplate.DefaultActive holds the default value on creation for the active field.
+	notificationtemplate.DefaultActive = notificationtemplateDescActive.Default.(bool)
+	// notificationtemplateDescVersion is the schema descriptor for version field.
+	notificationtemplateDescVersion := notificationtemplateFields[18].Descriptor()
+	// notificationtemplate.DefaultVersion holds the default value on creation for the version field.
+	notificationtemplate.DefaultVersion = notificationtemplateDescVersion.Default.(int)
+	// notificationtemplateDescID is the schema descriptor for id field.
+	notificationtemplateDescID := notificationtemplateMixinFields2[0].Descriptor()
+	// notificationtemplate.DefaultID holds the default value on creation for the id field.
+	notificationtemplate.DefaultID = notificationtemplateDescID.Default.(func() string)
 	onboardingMixin := schema.Onboarding{}.Mixin()
 	onboarding.Policy = privacy.NewPolicies(schema.Onboarding{})
 	onboarding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -7554,19 +8053,19 @@ func init() {
 	// usersetting.DefaultTags holds the default value on creation for the tags field.
 	usersetting.DefaultTags = usersettingDescTags.Default.([]string)
 	// usersettingDescLocked is the schema descriptor for locked field.
-	usersettingDescLocked := usersettingFields[1].Descriptor()
+	usersettingDescLocked := usersettingFields[4].Descriptor()
 	// usersetting.DefaultLocked holds the default value on creation for the locked field.
 	usersetting.DefaultLocked = usersettingDescLocked.Default.(bool)
 	// usersettingDescEmailConfirmed is the schema descriptor for email_confirmed field.
-	usersettingDescEmailConfirmed := usersettingFields[5].Descriptor()
+	usersettingDescEmailConfirmed := usersettingFields[8].Descriptor()
 	// usersetting.DefaultEmailConfirmed holds the default value on creation for the email_confirmed field.
 	usersetting.DefaultEmailConfirmed = usersettingDescEmailConfirmed.Default.(bool)
 	// usersettingDescIsWebauthnAllowed is the schema descriptor for is_webauthn_allowed field.
-	usersettingDescIsWebauthnAllowed := usersettingFields[6].Descriptor()
+	usersettingDescIsWebauthnAllowed := usersettingFields[9].Descriptor()
 	// usersetting.DefaultIsWebauthnAllowed holds the default value on creation for the is_webauthn_allowed field.
 	usersetting.DefaultIsWebauthnAllowed = usersettingDescIsWebauthnAllowed.Default.(bool)
 	// usersettingDescIsTfaEnabled is the schema descriptor for is_tfa_enabled field.
-	usersettingDescIsTfaEnabled := usersettingFields[7].Descriptor()
+	usersettingDescIsTfaEnabled := usersettingFields[10].Descriptor()
 	// usersetting.DefaultIsTfaEnabled holds the default value on creation for the is_tfa_enabled field.
 	usersetting.DefaultIsTfaEnabled = usersettingDescIsTfaEnabled.Default.(bool)
 	// usersettingDescID is the schema descriptor for id field.
@@ -8119,6 +8618,7 @@ func init() {
 	workflowinstanceMixinHooks2 := workflowinstanceMixin[2].Hooks()
 	workflowinstanceMixinHooks3 := workflowinstanceMixin[3].Hooks()
 	workflowinstanceMixinHooks5 := workflowinstanceMixin[5].Hooks()
+	workflowinstanceHooks := schema.WorkflowInstance{}.Hooks()
 
 	workflowinstance.Hooks[1] = workflowinstanceMixinHooks0[0]
 
@@ -8131,6 +8631,8 @@ func init() {
 	workflowinstance.Hooks[5] = workflowinstanceMixinHooks5[0]
 
 	workflowinstance.Hooks[6] = workflowinstanceMixinHooks5[1]
+
+	workflowinstance.Hooks[7] = workflowinstanceHooks[0]
 	workflowinstanceMixinInters1 := workflowinstanceMixin[1].Interceptors()
 	workflowinstanceMixinInters5 := workflowinstanceMixin[5].Interceptors()
 	workflowinstance.Interceptors[0] = workflowinstanceMixinInters1[0]
@@ -8301,6 +8803,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.6-0.20260108211107-2eb36418a02e"           // Version of ent codegen.
-	Sum     = "h1:7KEvbOmUkRoLWiDBq+CL46PM1C7SOw4XnGYmkRW8fYs=" // Sum of ent codegen.
+	Version = "v0.14.6-0.20260214061101-d056659140fa"           // Version of ent codegen.
+	Sum     = "h1:wMZsU7N59QIyi/ByFCi7VUVzFS2ARVpNVropq+D/cqE=" // Sum of ent codegen.
 )

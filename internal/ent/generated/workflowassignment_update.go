@@ -370,6 +370,26 @@ func (_u *WorkflowAssignmentUpdate) ClearNotes() *WorkflowAssignmentUpdate {
 	return _u
 }
 
+// SetDueAt sets the "due_at" field.
+func (_u *WorkflowAssignmentUpdate) SetDueAt(v time.Time) *WorkflowAssignmentUpdate {
+	_u.mutation.SetDueAt(v)
+	return _u
+}
+
+// SetNillableDueAt sets the "due_at" field if the given value is not nil.
+func (_u *WorkflowAssignmentUpdate) SetNillableDueAt(v *time.Time) *WorkflowAssignmentUpdate {
+	if v != nil {
+		_u.SetDueAt(*v)
+	}
+	return _u
+}
+
+// ClearDueAt clears the value of the "due_at" field.
+func (_u *WorkflowAssignmentUpdate) ClearDueAt() *WorkflowAssignmentUpdate {
+	_u.mutation.ClearDueAt()
+	return _u
+}
+
 // SetWorkflowInstance sets the "workflow_instance" edge to the WorkflowInstance entity.
 func (_u *WorkflowAssignmentUpdate) SetWorkflowInstance(v *WorkflowInstance) *WorkflowAssignmentUpdate {
 	return _u.SetWorkflowInstanceID(v.ID)
@@ -649,6 +669,12 @@ func (_u *WorkflowAssignmentUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(workflowassignment.FieldNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.DueAt(); ok {
+		_spec.SetField(workflowassignment.FieldDueAt, field.TypeTime, value)
+	}
+	if _u.mutation.DueAtCleared() {
+		_spec.ClearField(workflowassignment.FieldDueAt, field.TypeTime)
 	}
 	if _u.mutation.WorkflowInstanceCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1147,6 +1173,26 @@ func (_u *WorkflowAssignmentUpdateOne) ClearNotes() *WorkflowAssignmentUpdateOne
 	return _u
 }
 
+// SetDueAt sets the "due_at" field.
+func (_u *WorkflowAssignmentUpdateOne) SetDueAt(v time.Time) *WorkflowAssignmentUpdateOne {
+	_u.mutation.SetDueAt(v)
+	return _u
+}
+
+// SetNillableDueAt sets the "due_at" field if the given value is not nil.
+func (_u *WorkflowAssignmentUpdateOne) SetNillableDueAt(v *time.Time) *WorkflowAssignmentUpdateOne {
+	if v != nil {
+		_u.SetDueAt(*v)
+	}
+	return _u
+}
+
+// ClearDueAt clears the value of the "due_at" field.
+func (_u *WorkflowAssignmentUpdateOne) ClearDueAt() *WorkflowAssignmentUpdateOne {
+	_u.mutation.ClearDueAt()
+	return _u
+}
+
 // SetWorkflowInstance sets the "workflow_instance" edge to the WorkflowInstance entity.
 func (_u *WorkflowAssignmentUpdateOne) SetWorkflowInstance(v *WorkflowInstance) *WorkflowAssignmentUpdateOne {
 	return _u.SetWorkflowInstanceID(v.ID)
@@ -1456,6 +1502,12 @@ func (_u *WorkflowAssignmentUpdateOne) sqlSave(ctx context.Context) (_node *Work
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(workflowassignment.FieldNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.DueAt(); ok {
+		_spec.SetField(workflowassignment.FieldDueAt, field.TypeTime, value)
+	}
+	if _u.mutation.DueAtCleared() {
+		_spec.ClearField(workflowassignment.FieldDueAt, field.TypeTime)
 	}
 	if _u.mutation.WorkflowInstanceCleared() {
 		edge := &sqlgraph.EdgeSpec{

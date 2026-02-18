@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// TestFSLoader_LoadSupportsYAML verifies YAML provider specs are loaded correctly
 func TestFSLoader_LoadSupportsYAML(t *testing.T) {
 	fsys := fstest.MapFS{
 		"providers/github.yaml": {
@@ -37,6 +38,7 @@ oauth:
 	}
 }
 
+// TestFSLoader_LoadUnsupportedSchemaVersion verifies unsupported schema versions fail
 func TestFSLoader_LoadUnsupportedSchemaVersion(t *testing.T) {
 	fsys := fstest.MapFS{
 		"providers/github.json": {
@@ -61,6 +63,7 @@ func TestFSLoader_LoadUnsupportedSchemaVersion(t *testing.T) {
 	}
 }
 
+// TestToProviderConfigs verifies provider specs are converted into provider configs
 func TestToProviderConfigs(t *testing.T) {
 	specs := map[types.ProviderType]ProviderSpec{
 		types.ProviderType("github"): {

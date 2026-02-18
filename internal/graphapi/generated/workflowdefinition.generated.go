@@ -104,6 +104,10 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionBulkCreatePayload_wor
 				return ec.fieldContext_WorkflowDefinition_tagDefinitions(ctx, field)
 			case "groups":
 				return ec.fieldContext_WorkflowDefinition_groups(ctx, field)
+			case "notificationTemplates":
+				return ec.fieldContext_WorkflowDefinition_notificationTemplates(ctx, field)
+			case "emailTemplates":
+				return ec.fieldContext_WorkflowDefinition_emailTemplates(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowDefinition", field.Name)
 		},
@@ -187,6 +191,10 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionCreatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_tagDefinitions(ctx, field)
 			case "groups":
 				return ec.fieldContext_WorkflowDefinition_groups(ctx, field)
+			case "notificationTemplates":
+				return ec.fieldContext_WorkflowDefinition_notificationTemplates(ctx, field)
+			case "emailTemplates":
+				return ec.fieldContext_WorkflowDefinition_emailTemplates(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowDefinition", field.Name)
 		},
@@ -299,6 +307,10 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionUpdatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_tagDefinitions(ctx, field)
 			case "groups":
 				return ec.fieldContext_WorkflowDefinition_groups(ctx, field)
+			case "notificationTemplates":
+				return ec.fieldContext_WorkflowDefinition_notificationTemplates(ctx, field)
+			case "emailTemplates":
+				return ec.fieldContext_WorkflowDefinition_emailTemplates(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowDefinition", field.Name)
 		},

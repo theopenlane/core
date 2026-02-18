@@ -12,6 +12,7 @@ Schema for Openlane workflow definitions
 |**schemaType**|`string`|||
 |**workflowKind**|`string`|Enum: `"APPROVAL"`, `"LIFECYCLE"`, `"NOTIFICATION"`<br/>||
 |**approvalSubmissionMode**|`string`|Enum: `"MANUAL_SUBMIT"`, `"AUTO_SUBMIT"`<br/>||
+|**approvalTiming**|`string`|Enum: `"PRE_COMMIT"`, `"POST_COMMIT"`<br/>||
 |**version**|`string`|||
 |[**targets**](#targets)|`object`|||
 |[**triggers**](#triggers)|`array`|||

@@ -23,7 +23,11 @@ import (
 
 // CreateWorkflowDefinition is the resolver for the createWorkflowDefinition field.
 func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionCreatePayload, error) {
-	if err := validateWorkflowDefinitionInput(input.SchemaType, input.DefinitionJSON); err != nil {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
+	if err := validateWorkflowDefinitionInput(input.SchemaType, input.DefinitionJSON, nil); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
@@ -32,6 +36,10 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 		ownerID = *input.OwnerID
 	} else if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil {
 		ownerID = orgID
+	}
+
+	if err := validateWorkflowDefinitionTemplateRefs(ctx, withTransactionalMutation(ctx), input.DefinitionJSON, ownerID); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
 	active := true
@@ -73,6 +81,10 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 
 // CreateBulkWorkflowDefinition is the resolver for the createBulkWorkflowDefinition field.
 func (r *mutationResolver) CreateBulkWorkflowDefinition(ctx context.Context, input []*generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionBulkCreatePayload, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
@@ -90,6 +102,10 @@ func (r *mutationResolver) CreateBulkWorkflowDefinition(ctx context.Context, inp
 
 // CreateBulkCSVWorkflowDefinition is the resolver for the createBulkCSVWorkflowDefinition field.
 func (r *mutationResolver) CreateBulkCSVWorkflowDefinition(ctx context.Context, input graphql.Upload) (*model.WorkflowDefinitionBulkCreatePayload, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	data, err := common.UnmarshalBulkData[csvgenerated.WorkflowDefinitionCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -127,6 +143,10 @@ func (r *mutationResolver) CreateBulkCSVWorkflowDefinition(ctx context.Context, 
 
 // UpdateWorkflowDefinition is the resolver for the updateWorkflowDefinition field.
 func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id string, input generated.UpdateWorkflowDefinitionInput) (*model.WorkflowDefinitionUpdatePayload, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	res, err := withTransactionalMutation(ctx).WorkflowDefinition.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
@@ -145,7 +165,11 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 		doc = input.DefinitionJSON
 	}
 
-	if err := validateWorkflowDefinitionInput(res.SchemaType, doc); err != nil {
+	if err := validateWorkflowDefinitionInput(res.SchemaType, doc, &r.workflowsConfig); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
+	}
+
+	if err := validateWorkflowDefinitionTemplateRefs(ctx, withTransactionalMutation(ctx), doc, res.OwnerID); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowdefinition"})
 	}
 
@@ -189,6 +213,10 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 
 // DeleteWorkflowDefinition is the resolver for the deleteWorkflowDefinition field.
 func (r *mutationResolver) DeleteWorkflowDefinition(ctx context.Context, id string) (*model.WorkflowDefinitionDeletePayload, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	if err := withTransactionalMutation(ctx).WorkflowDefinition.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowdefinition"})
 	}
@@ -204,6 +232,10 @@ func (r *mutationResolver) DeleteWorkflowDefinition(ctx context.Context, id stri
 
 // WorkflowDefinition is the resolver for the workflowDefinition field.
 func (r *queryResolver) WorkflowDefinition(ctx context.Context, id string) (*generated.WorkflowDefinition, error) {
+	if !workflowsEnabled(r.db) {
+		return nil, ErrWorkflowsDisabled
+	}
+
 	query, err := withTransactionalMutation(ctx).WorkflowDefinition.Query().Where(workflowdefinition.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowdefinition"})

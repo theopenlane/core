@@ -12,6 +12,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/integrations/state"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -65,6 +67,12 @@ type IntegrationHistory struct {
 	Kind string `json:"kind,omitempty"`
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType string `json:"integration_type,omitempty"`
+	// cached provider metadata for UI and registry access
+	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
+	// runtime configuration for operations, scheduling, and mappings
+	Config openapi.IntegrationConfig `json:"config,omitempty"`
+	// provider-specific integration state captured during auth/config
+	ProviderState state.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata     map[string]interface{} `json:"metadata,omitempty"`
 	selectValues sql.SelectValues
@@ -75,7 +83,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integrationhistory.FieldTags, integrationhistory.FieldMetadata:
+		case integrationhistory.FieldTags, integrationhistory.FieldProviderMetadata, integrationhistory.FieldConfig, integrationhistory.FieldProviderState, integrationhistory.FieldMetadata:
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -242,6 +250,30 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.IntegrationType = value.String
 			}
+		case integrationhistory.FieldProviderMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provider_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProviderMetadata); err != nil {
+					return fmt.Errorf("unmarshal field provider_metadata: %w", err)
+				}
+			}
+		case integrationhistory.FieldConfig:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field config", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Config); err != nil {
+					return fmt.Errorf("unmarshal field config: %w", err)
+				}
+			}
+		case integrationhistory.FieldProviderState:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provider_state", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProviderState); err != nil {
+					return fmt.Errorf("unmarshal field provider_state: %w", err)
+				}
+			}
 		case integrationhistory.FieldMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field metadata", values[i])
@@ -355,6 +387,15 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_type=")
 	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("provider_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadata))
+	builder.WriteString(", ")
+	builder.WriteString("config=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Config))
+	builder.WriteString(", ")
+	builder.WriteString("provider_state=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProviderState))
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))

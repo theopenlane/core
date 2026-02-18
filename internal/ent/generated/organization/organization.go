@@ -101,6 +101,18 @@ const (
 	EdgePersonalAccessTokens = "personal_access_tokens"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
+	// EdgeEmailBrandings holds the string denoting the email_brandings edge name in mutations.
+	EdgeEmailBrandings = "email_brandings"
+	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
+	EdgeEmailTemplates = "email_templates"
+	// EdgeIntegrationWebhooks holds the string denoting the integration_webhooks edge name in mutations.
+	EdgeIntegrationWebhooks = "integration_webhooks"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
+	// EdgeNotificationPreferences holds the string denoting the notification_preferences edge name in mutations.
+	EdgeNotificationPreferences = "notification_preferences"
+	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
+	EdgeNotificationTemplates = "notification_templates"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -427,6 +439,48 @@ const (
 	APITokensInverseTable = "api_tokens"
 	// APITokensColumn is the table column denoting the api_tokens relation/edge.
 	APITokensColumn = "owner_id"
+	// EmailBrandingsTable is the table that holds the email_brandings relation/edge.
+	EmailBrandingsTable = "email_brandings"
+	// EmailBrandingsInverseTable is the table name for the EmailBranding entity.
+	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
+	EmailBrandingsInverseTable = "email_brandings"
+	// EmailBrandingsColumn is the table column denoting the email_brandings relation/edge.
+	EmailBrandingsColumn = "owner_id"
+	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
+	EmailTemplatesTable = "email_templates"
+	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "emailtemplate" package.
+	EmailTemplatesInverseTable = "email_templates"
+	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
+	EmailTemplatesColumn = "owner_id"
+	// IntegrationWebhooksTable is the table that holds the integration_webhooks relation/edge.
+	IntegrationWebhooksTable = "integration_webhooks"
+	// IntegrationWebhooksInverseTable is the table name for the IntegrationWebhook entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationwebhook" package.
+	IntegrationWebhooksInverseTable = "integration_webhooks"
+	// IntegrationWebhooksColumn is the table column denoting the integration_webhooks relation/edge.
+	IntegrationWebhooksColumn = "owner_id"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
+	IntegrationRunsTable = "integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
+	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
+	IntegrationRunsColumn = "owner_id"
+	// NotificationPreferencesTable is the table that holds the notification_preferences relation/edge.
+	NotificationPreferencesTable = "notification_preferences"
+	// NotificationPreferencesInverseTable is the table name for the NotificationPreference entity.
+	// It exists in this package in order to avoid circular dependency with the "notificationpreference" package.
+	NotificationPreferencesInverseTable = "notification_preferences"
+	// NotificationPreferencesColumn is the table column denoting the notification_preferences relation/edge.
+	NotificationPreferencesColumn = "owner_id"
+	// NotificationTemplatesTable is the table that holds the notification_templates relation/edge.
+	NotificationTemplatesTable = "notification_templates"
+	// NotificationTemplatesInverseTable is the table name for the NotificationTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "notificationtemplate" package.
+	NotificationTemplatesInverseTable = "notification_templates"
+	// NotificationTemplatesColumn is the table column denoting the notification_templates relation/edge.
+	NotificationTemplatesColumn = "owner_id"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "org_memberships"
 	// UsersInverseTable is the table name for the User entity.
@@ -1467,6 +1521,90 @@ func ByAPITokensCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAPITokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAPITokensStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmailBrandingsCount orders the results by email_brandings count.
+func ByEmailBrandingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailBrandingsStep(), opts...)
+	}
+}
+
+// ByEmailBrandings orders the results by email_brandings terms.
+func ByEmailBrandings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmailTemplatesCount orders the results by email_templates count.
+func ByEmailTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailTemplatesStep(), opts...)
+	}
+}
+
+// ByEmailTemplates orders the results by email_templates terms.
+func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationWebhooksCount orders the results by integration_webhooks count.
+func ByIntegrationWebhooksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationWebhooksStep(), opts...)
+	}
+}
+
+// ByIntegrationWebhooks orders the results by integration_webhooks terms.
+func ByIntegrationWebhooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationWebhooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByNotificationPreferencesCount orders the results by notification_preferences count.
+func ByNotificationPreferencesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationPreferencesStep(), opts...)
+	}
+}
+
+// ByNotificationPreferences orders the results by notification_preferences terms.
+func ByNotificationPreferences(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationPreferencesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByNotificationTemplatesCount orders the results by notification_templates count.
+func ByNotificationTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationTemplatesStep(), opts...)
+	}
+}
+
+// ByNotificationTemplates orders the results by notification_templates terms.
+func ByNotificationTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2692,6 +2830,48 @@ func newAPITokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(APITokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, APITokensTable, APITokensColumn),
+	)
+}
+func newEmailBrandingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailBrandingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EmailBrandingsTable, EmailBrandingsColumn),
+	)
+}
+func newEmailTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+	)
+}
+func newIntegrationWebhooksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationWebhooksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationWebhooksTable, IntegrationWebhooksColumn),
+	)
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+	)
+}
+func newNotificationPreferencesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationPreferencesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationPreferencesTable, NotificationPreferencesColumn),
+	)
+}
+func newNotificationTemplatesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationTemplatesTable, NotificationTemplatesColumn),
 	)
 }
 func newUsersStep() *sqlgraph.Step {

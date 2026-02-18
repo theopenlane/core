@@ -959,6 +959,13 @@
               addButton("Refresh Token", "outline-warning", () => handleRefresh(provider.name));
             }
 
+            if (provider.authType === "github_app" || provider.name === "github_app") {
+              addButton("Start GitHub App Install", "dark", () => handleGitHubAppInstall(provider.name));
+              addButton("Run GitHub App Health", "outline-success", () =>
+                handleOperation(provider.name, "health.default", "", false),
+              );
+            }
+
             addButton("Check Status", "outline-secondary", () => handleStatus(provider.name));
             addButton("Disconnect Integration", "outline-danger", () => handleDisconnect(provider.name));
           });
@@ -995,6 +1002,22 @@
           window.location.href = data.authUrl;
         } catch (err) {
           log(`OAuth start failed: ${err.message}`, "error");
+        }
+      }
+
+      async function handleGitHubAppInstall(provider) {
+        try {
+          log(`Starting GitHub App install for ${provider}`, "info");
+          const response = await makeRequest("/v1/integrations/github/app/install", {
+            method: "POST",
+            body: JSON.stringify({}),
+          });
+          if (!response.ok) throw new Error(await response.text());
+          const data = await response.json();
+          if (!data?.installUrl) throw new Error("Install URL missing from response");
+          window.location.href = data.installUrl;
+        } catch (err) {
+          log(`GitHub App install failed: ${err.message}`, "error");
         }
       }
 

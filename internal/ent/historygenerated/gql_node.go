@@ -28,6 +28,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
@@ -46,6 +48,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
@@ -173,6 +177,16 @@ var documentdatahistoryImplementors = []string{"DocumentDataHistory", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*DocumentDataHistory) IsNode() {}
 
+var emailbrandinghistoryImplementors = []string{"EmailBrandingHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*EmailBrandingHistory) IsNode() {}
+
+var emailtemplatehistoryImplementors = []string{"EmailTemplateHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*EmailTemplateHistory) IsNode() {}
+
 var entityhistoryImplementors = []string{"EntityHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -262,6 +276,16 @@ var notehistoryImplementors = []string{"NoteHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*NoteHistory) IsNode() {}
+
+var notificationpreferencehistoryImplementors = []string{"NotificationPreferenceHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*NotificationPreferenceHistory) IsNode() {}
+
+var notificationtemplatehistoryImplementors = []string{"NotificationTemplateHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*NotificationTemplateHistory) IsNode() {}
 
 var orgmembershiphistoryImplementors = []string{"OrgMembershipHistory", "Node"}
 
@@ -649,6 +673,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case emailbrandinghistory.Table:
+		query := c.EmailBrandingHistory.Query().
+			Where(emailbrandinghistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, emailbrandinghistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case emailtemplatehistory.Table:
+		query := c.EmailTemplateHistory.Query().
+			Where(emailtemplatehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, emailtemplatehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case entityhistory.Table:
 		query := c.EntityHistory.Query().
 			Where(entityhistory.ID(id))
@@ -807,6 +849,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(notehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case notificationpreferencehistory.Table:
+		query := c.NotificationPreferenceHistory.Query().
+			Where(notificationpreferencehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationpreferencehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case notificationtemplatehistory.Table:
+		query := c.NotificationTemplateHistory.Query().
+			Where(notificationtemplatehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationtemplatehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1471,6 +1531,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case emailbrandinghistory.Table:
+		query := c.EmailBrandingHistory.Query().
+			Where(emailbrandinghistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, emailbrandinghistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case emailtemplatehistory.Table:
+		query := c.EmailTemplateHistory.Query().
+			Where(emailtemplatehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, emailtemplatehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case entityhistory.Table:
 		query := c.EntityHistory.Query().
 			Where(entityhistory.IDIn(ids...))
@@ -1747,6 +1839,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.NoteHistory.Query().
 			Where(notehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, notehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case notificationpreferencehistory.Table:
+		query := c.NotificationPreferenceHistory.Query().
+			Where(notificationpreferencehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, notificationpreferencehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case notificationtemplatehistory.Table:
+		query := c.NotificationTemplateHistory.Query().
+			Where(notificationtemplatehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, notificationtemplatehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

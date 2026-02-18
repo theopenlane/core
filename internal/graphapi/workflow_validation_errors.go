@@ -71,6 +71,8 @@ var (
 	ErrWebhookURLRequired = errors.New("webhook action requires url")
 	// ErrWebhookURLInvalid is returned when webhook URL is invalid
 	ErrWebhookURLInvalid = errors.New("invalid webhook url")
+	// ErrWebhookPayloadUnsupported is returned when legacy webhook payloads are provided
+	ErrWebhookPayloadUnsupported = errors.New("webhook payload is not supported; use payload_expr")
 	// ErrFieldUpdateParamsRequired is returned when field update params are required but not provided
 	ErrFieldUpdateParamsRequired = errors.New("field update params required")
 	// ErrFieldUpdateUpdatesRequired is returned when field update updates are required
@@ -81,10 +83,34 @@ var (
 	ErrIntegrationConfigRequired = errors.New("integration action requires integration or {provider, operation}")
 	// ErrApprovalSubmissionModeInvalid is returned when approval submission mode is invalid
 	ErrApprovalSubmissionModeInvalid = errors.New("invalid approval submission mode")
+	// ErrApprovalTimingInvalid is returned when approval timing is invalid
+	ErrApprovalTimingInvalid = errors.New("invalid approval timing")
 	// ErrManualSubmitModeNotSupported is returned when MANUAL_SUBMIT mode is specified but not yet supported
 	ErrManualSubmitModeNotSupported = errors.New("manual submit mode is not yet supported; use AUTO_SUBMIT or omit the field")
 	// ErrFailedToQueryDefinitions is returned when workflow definitions cannot be queried
 	ErrFailedToQueryDefinitions = errors.New("failed to query workflow definitions")
 	// ErrInvalidWorkflowSchema is returned when a workflow schema is invalid
 	ErrInvalidWorkflowSchema = errors.New("invalid workflow schema")
+	// ErrReviewParamsRequired is returned when review params are required but not provided
+	ErrReviewParamsRequired = errors.New("review params required")
+	// ErrReviewTargetsRequired is returned when review targets are required
+	ErrReviewTargetsRequired = errors.New("review action requires targets")
+	// ErrCreateObjectParamsRequired is returned when create object params are required but not provided
+	ErrCreateObjectParamsRequired = errors.New("create_object params required")
+	// ErrCreateObjectTypeRequired is returned when create object type is required
+	ErrCreateObjectTypeRequired = errors.New("create_object requires object_type")
+	// ErrCreateObjectTypeInvalid is returned when create object type is invalid
+	ErrCreateObjectTypeInvalid = errors.New("create_object has invalid object_type")
+	// ErrCreateObjectFieldsRequired is returned when create object fields are required
+	ErrCreateObjectFieldsRequired = errors.New("create_object requires fields")
+	// ErrNotificationTemplateBothIDAndKey is returned when both template_id and template_key are set
+	ErrNotificationTemplateBothIDAndKey = errors.New("template_id and template_key cannot both be set")
+	// ErrIntegrationOperationRequired is returned when integration operation is required
+	ErrIntegrationOperationRequired = errors.New("integration action requires operation")
+	// ErrOwnerIDRequired is returned when owner_id is required for validation
+	ErrOwnerIDRequired = errors.New("owner_id required for notification template validation")
+	// ErrNotificationTemplateNotFound is returned when a notification template is not found
+	ErrNotificationTemplateNotFound = errors.New("notification template not found")
+	// ErrNotificationTemplateKeyNotFound is returned when a notification template key is not found
+	ErrNotificationTemplateKeyNotFound = errors.New("notification template key not found")
 )

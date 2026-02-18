@@ -6,8 +6,8 @@ import (
 	"context"
 	"os"
 
-	"github.com/Yamashou/gqlgenc/config"
-	"github.com/Yamashou/gqlgenc/generator"
+	"github.com/gqlgo/gqlgenc/config"
+	"github.com/gqlgo/gqlgenc/generator"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/genhelpers"

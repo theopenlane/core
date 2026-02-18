@@ -4,40 +4,43 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"sync"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/common/types"
 
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/celx"
 )
 
 // CELEvaluator handles CEL expression compilation and evaluation with caching
 type CELEvaluator struct {
-	// env is the CEL environment for compiling expressions
-	env *cel.Env
-	// config contains CEL configuration options
-	config *workflows.Config
-	// programCache stores compiled CEL programs for reuse
-	programCache sync.Map
+	// evaluator handles CEL compilation and evaluation with caching
+	evaluator *celx.Evaluator
 }
 
 // NewCELEvaluator creates a new CEL evaluator with the provided environment and configuration
 func NewCELEvaluator(env *cel.Env, config *workflows.Config) *CELEvaluator {
+	evalCfg := celx.EvalConfig{
+		Timeout:                 config.CEL.Timeout,
+		CostLimit:               config.CEL.CostLimit,
+		InterruptCheckFrequency: config.CEL.InterruptCheckFrequency,
+		EvalOptimize:            config.CEL.EvalOptimize,
+		TrackState:              config.CEL.TrackState,
+	}
+
 	return &CELEvaluator{
-		env:    env,
-		config: config,
+		evaluator: celx.NewEvaluator(env, evalCfg),
 	}
 }
 
 // Validate validates that a CEL expression compiles successfully
 func (e *CELEvaluator) Validate(expression string) error {
-	ast, issues := e.env.Compile(expression)
+	ast, issues := e.evaluator.Compile(expression)
 	if issues != nil && issues.Err() != nil {
 		return fmt.Errorf("%w: %w", ErrCELCompilationFailed, issues.Err())
 	}
 
-	if _, err := e.env.Program(ast); err != nil {
+	if _, err := e.evaluator.Program(ast); err != nil {
 		return fmt.Errorf("%w: %w", ErrCELProgramCreationFailed, err)
 	}
 
@@ -46,21 +49,9 @@ func (e *CELEvaluator) Validate(expression string) error {
 
 // Evaluate evaluates a CEL expression with the given variables, using caching and timeout
 func (e *CELEvaluator) Evaluate(ctx context.Context, expression string, vars map[string]any) (bool, error) {
-	prg, err := e.getOrCompileProgram(expression)
-	if err != nil {
-		return false, err
-	}
-
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
-	evalCtx, cancel := context.WithTimeout(ctx, e.config.CEL.Timeout)
-	defer cancel()
-
-	out, _, evalErr := prg.ContextEval(evalCtx, vars)
+	out, _, evalErr := e.evaluator.Evaluate(ctx, expression, vars)
 	if evalErr != nil {
-		if errors.Is(evalErr, context.DeadlineExceeded) || errors.Is(evalErr, context.Canceled) || evalCtx.Err() != nil {
+		if errors.Is(evalErr, context.DeadlineExceeded) || errors.Is(evalErr, context.Canceled) {
 			return false, ErrEvaluationTimeout
 		}
 
@@ -83,52 +74,30 @@ func (e *CELEvaluator) Evaluate(ctx context.Context, expression string, vars map
 	return result, nil
 }
 
-// getOrCompileProgram retrieves a compiled CEL program from cache or compiles it
-func (e *CELEvaluator) getOrCompileProgram(expression string) (cel.Program, error) {
-	if cached, ok := e.programCache.Load(expression); ok {
-		return cached.(cel.Program), nil
+// EvaluateJSONMap evaluates a CEL expression and converts the result to a JSON object map.
+func (e *CELEvaluator) EvaluateJSONMap(ctx context.Context, expression string, vars map[string]any) (map[string]any, error) {
+	out, evalErr := e.evaluator.EvaluateJSONMap(ctx, expression, vars)
+	if evalErr != nil {
+		if errors.Is(evalErr, context.DeadlineExceeded) || errors.Is(evalErr, context.Canceled) {
+			return nil, ErrEvaluationTimeout
+		}
+
+		return nil, evalErr
 	}
 
-	ast, issues := e.env.Compile(expression)
-	if issues != nil && issues.Err() != nil {
-		return nil, fmt.Errorf("%w: %v", ErrCELCompilationFailed, issues.Err())
-	}
-
-	opts := []cel.ProgramOption{
-		cel.InterruptCheckFrequency(e.config.CEL.InterruptCheckFrequency),
-	}
-
-	if e.config.CEL.CostLimit > 0 {
-		opts = append(opts, cel.CostLimit(e.config.CEL.CostLimit))
-	}
-
-	opts = append(opts, e.buildEvalOptions()...)
-
-	prg, err := e.env.Program(ast, opts...)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrCELProgramCreationFailed, err)
-	}
-
-	e.programCache.Store(expression, prg)
-
-	return prg, nil
+	return out, nil
 }
 
-// buildEvalOptions constructs CEL evaluation options from configuration
-func (e *CELEvaluator) buildEvalOptions() []cel.ProgramOption {
-	var evalOpts []cel.EvalOption
+// EvaluateValue evaluates a CEL expression and returns the JSON-compatible value.
+func (e *CELEvaluator) EvaluateValue(ctx context.Context, expression string, vars map[string]any) (any, error) {
+	out, _, evalErr := e.evaluator.Evaluate(ctx, expression, vars)
+	if evalErr != nil {
+		if errors.Is(evalErr, context.DeadlineExceeded) || errors.Is(evalErr, context.Canceled) {
+			return nil, ErrEvaluationTimeout
+		}
 
-	if e.config.CEL.EvalOptimize {
-		evalOpts = append(evalOpts, cel.OptOptimize)
+		return nil, evalErr
 	}
 
-	if e.config.CEL.TrackState {
-		evalOpts = append(evalOpts, cel.OptTrackState)
-	}
-
-	if len(evalOpts) == 0 {
-		return nil
-	}
-
-	return []cel.ProgramOption{cel.EvalOptions(evalOpts...)}
+	return celx.ToJSON(out)
 }

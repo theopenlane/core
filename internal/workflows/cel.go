@@ -2,17 +2,22 @@ package workflows
 
 import (
 	"github.com/google/cel-go/cel"
+
+	"github.com/theopenlane/core/pkg/celx"
 )
 
-// NewCelEnv builds the workflow CEL environment using the provided options parameters
-func NewCelEnv(opts ...ConfigOpts) (*cel.Env, error) {
-	cfg := NewDefaultConfig(opts...)
+// CELExpressionScope determines which variables are available when compiling CEL expressions
+type CELExpressionScope int
 
-	return NewCELEnvWithConfig(cfg)
-}
+const (
+	// CELScopeBase includes the base workflow variables only
+	CELScopeBase CELExpressionScope = iota
+	// CELScopeAction includes action-specific variables (assignments, instance, initiator)
+	CELScopeAction
+)
 
-// NewCELEnv builds the workflow CEL environment using the provided config
-func NewCELEnvWithConfig(cfg *Config) (*cel.Env, error) {
+// NewCELEnv builds the workflow CEL environment using the provided config and scope
+func NewCELEnv(cfg *Config, scope CELExpressionScope) (*cel.Env, error) {
 	if cfg == nil {
 		cfg = NewDefaultConfig()
 	}
@@ -25,37 +30,41 @@ func NewCELEnvWithConfig(cfg *Config) (*cel.Env, error) {
 		cel.Variable("added_ids", cel.MapType(cel.StringType, cel.ListType(cel.StringType))),
 		cel.Variable("removed_ids", cel.MapType(cel.StringType, cel.ListType(cel.StringType))),
 		cel.Variable("event_type", cel.StringType),
-		cel.Variable("assignments", cel.DynType),
-		cel.Variable("instance", cel.DynType),
-		cel.Variable("initiator", cel.StringType),
 		cel.Variable("proposed_changes", cel.DynType),
-		// its safe not to check these because NewConfig sets defaults
-		cel.ParserRecursionLimit(cfg.CEL.ParserRecursionLimit),
-		cel.ParserExpressionSizeLimit(cfg.CEL.ParserExpressionSizeLimit),
-		cel.ASTValidators(cel.ValidateComprehensionNestingLimit(cfg.CEL.ComprehensionNestingLimit)),
-		cel.CrossTypeNumericComparisons(cfg.CEL.CrossTypeNumericComparisons),
+		cel.Variable("instance_id", cel.StringType),
+		cel.Variable("definition_id", cel.StringType),
+		cel.Variable("object_id", cel.StringType),
+		cel.Variable("object_type", cel.StringType),
+		cel.Variable("action_key", cel.StringType),
+		cel.Variable("data", cel.DynType),
 	}
 
-	if cfg.CEL.IdentifierEscapeSyntax {
-		envOpts = append(envOpts, cel.EnableIdentifierEscapeSyntax())
+	if scope == CELScopeAction {
+		envOpts = append(envOpts,
+			cel.Variable("assignments", cel.DynType),
+			cel.Variable("instance", cel.DynType),
+			cel.Variable("initiator", cel.StringType),
+		)
 	}
 
-	if cfg.CEL.ExtendedValidations {
-		envOpts = append(envOpts, cel.ExtendedValidations())
-	}
-
-	if cfg.CEL.OptionalTypes {
-		envOpts = append(envOpts, cel.OptionalTypes())
-	}
-
-	if cfg.CEL.MacroCallTracking {
-		envOpts = append(envOpts, cel.EnableMacroCallTracking())
-	}
-
-	env, err := cel.NewEnv(envOpts...)
+	env, err := celx.NewEnv(envConfigFrom(cfg), envOpts...)
 	if err != nil {
 		return nil, ErrFailedToBuildCELEnv
 	}
 
 	return env, nil
+}
+
+// envConfigFrom converts a workflows Config to a celx EnvConfig
+func envConfigFrom(cfg *Config) celx.EnvConfig {
+	return celx.EnvConfig{
+		ParserRecursionLimit:        cfg.CEL.ParserRecursionLimit,
+		ParserExpressionSizeLimit:   cfg.CEL.ParserExpressionSizeLimit,
+		ComprehensionNestingLimit:   cfg.CEL.ComprehensionNestingLimit,
+		ExtendedValidations:         cfg.CEL.ExtendedValidations,
+		OptionalTypes:               cfg.CEL.OptionalTypes,
+		IdentifierEscapeSyntax:      cfg.CEL.IdentifierEscapeSyntax,
+		CrossTypeNumericComparisons: cfg.CEL.CrossTypeNumericComparisons,
+		MacroCallTracking:           cfg.CEL.MacroCallTracking,
+	}
 }
