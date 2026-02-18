@@ -77,7 +77,7 @@ require (
 	github.com/pressly/goose/v3 v3.26.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
-	github.com/redis/go-redis/v9 v9.17.3
+	github.com/redis/go-redis/v9 v9.18.0
 	github.com/riverqueue/river v0.30.2
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.2
 	github.com/riverqueue/river/rivertype v0.30.2
@@ -133,6 +133,7 @@ require (
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/term v0.40.0 // indirect
 )
