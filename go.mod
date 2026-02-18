@@ -24,7 +24,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.8
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.8
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.21.1
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/brianvoe/gofakeit/v7 v7.14.0
 	github.com/cenkalti/backoff/v5 v5.0.3
@@ -58,7 +58,7 @@ require (
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.1
 	github.com/knadh/koanf/v2 v2.3.2
-	github.com/labstack/echo-contrib v0.17.4
+	github.com/labstack/echo-contrib v0.50.1
 	github.com/labstack/echo/v4 v4.15.0
 	github.com/labstack/gommon v0.4.2
 	github.com/lestrrat-go/httprc/v3 v3.0.4
@@ -75,7 +75,8 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/pressly/goose/v3 v3.26.0
 	github.com/prometheus/client_golang v1.23.2
-	github.com/redis/go-redis/v9 v9.17.3
+	github.com/ravilushqa/otelgqlgen v0.19.0
+	github.com/redis/go-redis/v9 v9.18.0
 	github.com/riverqueue/river v0.30.2
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.2
 	github.com/riverqueue/river/rivertype v0.30.2
@@ -130,6 +131,7 @@ require (
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/term v0.40.0 // indirect
 )
