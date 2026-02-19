@@ -407,6 +407,8 @@ var (
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
+		{Name: "is_trust_center_control", Type: field.TypeBool, Nullable: true, Default: false},
 	}
 	// ControlHistoryTable holds the schema information for the "control_history" table.
 	ControlHistoryTable = &schema.Table{

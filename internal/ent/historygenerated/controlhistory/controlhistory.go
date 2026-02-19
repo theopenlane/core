@@ -118,6 +118,10 @@ const (
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
 	FieldStandardID = "standard_id"
+	// FieldTrustCenterVisibility holds the string denoting the trust_center_visibility field in the database.
+	FieldTrustCenterVisibility = "trust_center_visibility"
+	// FieldIsTrustCenterControl holds the string denoting the is_trust_center_control field in the database.
+	FieldIsTrustCenterControl = "is_trust_center_control"
 	// Table holds the table name of the controlhistory in the database.
 	Table = "control_history"
 )
@@ -174,6 +178,8 @@ var Columns = []string{
 	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldStandardID,
+	FieldTrustCenterVisibility,
+	FieldIsTrustCenterControl,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -209,6 +215,8 @@ var (
 	DefaultSystemOwned bool
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
+	// DefaultIsTrustCenterControl holds the default value on creation for the "is_trust_center_control" field.
+	DefaultIsTrustCenterControl bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -244,6 +252,18 @@ func SourceValidator(s enums.ControlSource) error {
 		return nil
 	default:
 		return fmt.Errorf("controlhistory: invalid enum value for source field: %q", s)
+	}
+}
+
+const DefaultTrustCenterVisibility enums.TrustCenterDocumentVisibility = "NOT_VISIBLE"
+
+// TrustCenterVisibilityValidator is a validator for the "trust_center_visibility" field enum values. It is called by the builders before save.
+func TrustCenterVisibilityValidator(tcv enums.TrustCenterDocumentVisibility) error {
+	switch tcv.String() {
+	case "PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE":
+		return nil
+	default:
+		return fmt.Errorf("controlhistory: invalid enum value for trust_center_visibility field: %q", tcv)
 	}
 }
 
@@ -440,6 +460,16 @@ func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
 }
 
+// ByTrustCenterVisibility orders the results by the trust_center_visibility field.
+func ByTrustCenterVisibility(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterVisibility, opts...).ToFunc()
+}
+
+// ByIsTrustCenterControl orders the results by the is_trust_center_control field.
+func ByIsTrustCenterControl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsTrustCenterControl, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -459,4 +489,11 @@ var (
 	_ graphql.Marshaler = (*enums.ControlSource)(nil)
 	// enums.ControlSource must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
+)
+
+var (
+	// enums.TrustCenterDocumentVisibility must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterDocumentVisibility)(nil)
+	// enums.TrustCenterDocumentVisibility must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterDocumentVisibility)(nil)
 )

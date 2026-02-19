@@ -9163,6 +9163,16 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldStandardID)
 				fieldSeen[control.FieldStandardID] = struct{}{}
 			}
+		case "trustCenterVisibility":
+			if _, ok := fieldSeen[control.FieldTrustCenterVisibility]; !ok {
+				selectedFields = append(selectedFields, control.FieldTrustCenterVisibility)
+				fieldSeen[control.FieldTrustCenterVisibility] = struct{}{}
+			}
+		case "isTrustCenterControl":
+			if _, ok := fieldSeen[control.FieldIsTrustCenterControl]; !ok {
+				selectedFields = append(selectedFields, control.FieldIsTrustCenterControl)
+				fieldSeen[control.FieldIsTrustCenterControl] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

@@ -1985,6 +1985,16 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldStandardID)
 				fieldSeen[controlhistory.FieldStandardID] = struct{}{}
 			}
+		case "trustCenterVisibility":
+			if _, ok := fieldSeen[controlhistory.FieldTrustCenterVisibility]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldTrustCenterVisibility)
+				fieldSeen[controlhistory.FieldTrustCenterVisibility] = struct{}{}
+			}
+		case "isTrustCenterControl":
+			if _, ok := fieldSeen[controlhistory.FieldIsTrustCenterControl]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldIsTrustCenterControl)
+				fieldSeen[controlhistory.FieldIsTrustCenterControl] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

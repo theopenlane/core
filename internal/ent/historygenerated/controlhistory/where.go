@@ -238,6 +238,11 @@ func StandardID(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldStandardID, v))
 }
 
+// IsTrustCenterControl applies equality check predicate on the "is_trust_center_control" field. It's identical to IsTrustCenterControlEQ.
+func IsTrustCenterControl(v bool) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldIsTrustCenterControl, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2766,6 +2771,66 @@ func StandardIDEqualFold(v string) predicate.ControlHistory {
 // StandardIDContainsFold applies the ContainsFold predicate on the "standard_id" field.
 func StandardIDContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldStandardID, v))
+}
+
+// TrustCenterVisibilityEQ applies the EQ predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityEQ(v enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+	vc := v
+	return predicate.ControlHistory(sql.FieldEQ(FieldTrustCenterVisibility, vc))
+}
+
+// TrustCenterVisibilityNEQ applies the NEQ predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityNEQ(v enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+	vc := v
+	return predicate.ControlHistory(sql.FieldNEQ(FieldTrustCenterVisibility, vc))
+}
+
+// TrustCenterVisibilityIn applies the In predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityIn(vs ...enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlHistory(sql.FieldIn(FieldTrustCenterVisibility, v...))
+}
+
+// TrustCenterVisibilityNotIn applies the NotIn predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityNotIn(vs ...enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ControlHistory(sql.FieldNotIn(FieldTrustCenterVisibility, v...))
+}
+
+// TrustCenterVisibilityIsNil applies the IsNil predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldTrustCenterVisibility))
+}
+
+// TrustCenterVisibilityNotNil applies the NotNil predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldTrustCenterVisibility))
+}
+
+// IsTrustCenterControlEQ applies the EQ predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlEQ(v bool) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldIsTrustCenterControl, v))
+}
+
+// IsTrustCenterControlNEQ applies the NEQ predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlNEQ(v bool) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldIsTrustCenterControl, v))
+}
+
+// IsTrustCenterControlIsNil applies the IsNil predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldIsTrustCenterControl))
+}
+
+// IsTrustCenterControlNotNil applies the NotNil predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldIsTrustCenterControl))
 }
 
 // And groups predicates with the AND operator between them.

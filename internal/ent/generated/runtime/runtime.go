@@ -967,15 +967,19 @@ func init() {
 	control.Hooks[16] = controlMixinHooks12[0]
 
 	control.Hooks[17] = controlHooks[0]
+
+	control.Hooks[18] = controlHooks[1]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters5 := controlMixin[5].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
 	controlMixinInters8 := controlMixin[8].Interceptors()
+	controlInters := schema.Control{}.Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
 	control.Interceptors[1] = controlMixinInters5[0]
 	control.Interceptors[2] = controlMixinInters6[0]
 	control.Interceptors[3] = controlMixinInters6[1]
 	control.Interceptors[4] = controlMixinInters8[0]
+	control.Interceptors[5] = controlInters[0]
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields2 := controlMixin[2].Fields()
@@ -1030,6 +1034,10 @@ func init() {
 	controlDescRefCode := controlFields[0].Descriptor()
 	// control.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
 	control.RefCodeValidator = controlDescRefCode.Validators[0].(func(string) error)
+	// controlDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
+	controlDescIsTrustCenterControl := controlFields[3].Descriptor()
+	// control.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
+	control.DefaultIsTrustCenterControl = controlDescIsTrustCenterControl.Default.(bool)
 	// controlDescID is the schema descriptor for id field.
 	controlDescID := controlMixinFields2[0].Descriptor()
 	// control.DefaultID holds the default value on creation for the id field.

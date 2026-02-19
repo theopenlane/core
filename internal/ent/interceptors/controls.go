@@ -4,10 +4,53 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/iam/auth"
+	"github.com/vektah/gqlparser/v2/ast"
+
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/intercept"
 )
+
+// InterceptorTrustCenterControl is middleware that filters control queries for anonymous
+// trust center users to only return controls marked as trust center controls with public visibility
+func InterceptorTrustCenterControl() ent.Interceptor {
+	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		if hasOpCtx := graphql.HasOperationContext(ctx); !hasOpCtx {
+			return nil
+		}
+
+		// skip mutations
+		opCtx := graphql.GetOperationContext(ctx)
+		if opCtx.Operation.Operation == ast.Mutation {
+			return nil
+		}
+
+		if auth.IsSystemAdminFromContext(ctx) {
+			return nil
+		}
+
+		// only apply filtering for anonymous trust center users
+		if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); !ok {
+			return nil
+		}
+
+		// anonymous trust center users can only see controls that are:
+		// 1. marked as trust center controls (cloned from the trust center standard)
+		// 2. have public visibility
+		q.WhereP(
+			sql.FieldEQ(control.FieldIsTrustCenterControl, true),
+			sql.FieldEQ(control.FieldTrustCenterVisibility, enums.TrustCenterDocumentVisibilityPubliclyVisible),
+		)
+
+		return nil
+	})
+}
 
 // InterceptorControlFieldSort sorts the custom model slice fields
 // on controls and subcontrols to ensure consistent order of results

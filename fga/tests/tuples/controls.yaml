@@ -53,6 +53,30 @@
 - user: user:ulid-group-control-owner-1
   relation: member
   object: group:control-owner-1
+## trust center org and user setup
+- user: user:tc-owner-1
+  relation: _self
+  object: user:tc-owner-1
+- user: user:tc-owner-1
+  relation: owner
+  object: organization:tc-org-1
+## trust center controls (publicly visible on trust center)
+- user: organization:tc-org-1
+  relation: parent
+  object: control:ots-01.1
+- user: standard:standard-trust-center
+  relation: parent
+  object: control:ots-01.1
+- user: user:*
+  relation: can_view
+  object: control:ots-01.1
+## trust center controls (not visible on trust center)
+- user: organization:tc-org-1
+  relation: parent
+  object: control:ots-01.2
+- user: standard:standard-trust-center
+  relation: parent
+  object: control:ots-01.2
 ## mapped controls
 - user: organization:openlane
   relation: parent

@@ -863,6 +863,8 @@ var (
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "ref_code", Type: field.TypeString},
+		{Name: "trust_center_visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
+		{Name: "is_trust_center_control", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
@@ -884,73 +886,73 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "controls_groups_control_owner",
-				Columns:    []*schema.Column{ControlsColumns[39]},
+				Columns:    []*schema.Column{ControlsColumns[41]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_groups_delegate",
-				Columns:    []*schema.Column{ControlsColumns[40]},
+				Columns:    []*schema.Column{ControlsColumns[42]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_entities_responsible_party",
-				Columns:    []*schema.Column{ControlsColumns[41]},
+				Columns:    []*schema.Column{ControlsColumns[43]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_custom_type_enums_control_kind",
-				Columns:    []*schema.Column{ControlsColumns[42]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_custom_type_enums_environment",
-				Columns:    []*schema.Column{ControlsColumns[43]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "controls_custom_type_enums_scope",
 				Columns:    []*schema.Column{ControlsColumns[44]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_custom_type_enums_controls",
+				Symbol:     "controls_custom_type_enums_environment",
 				Columns:    []*schema.Column{ControlsColumns[45]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_organizations_controls",
+				Symbol:     "controls_custom_type_enums_scope",
 				Columns:    []*schema.Column{ControlsColumns[46]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_custom_type_enums_controls",
+				Columns:    []*schema.Column{ControlsColumns[47]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_organizations_controls",
+				Columns:    []*schema.Column{ControlsColumns[48]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_remediations_controls",
-				Columns:    []*schema.Column{ControlsColumns[47]},
+				Columns:    []*schema.Column{ControlsColumns[49]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_reviews_controls",
-				Columns:    []*schema.Column{ControlsColumns[48]},
+				Columns:    []*schema.Column{ControlsColumns[50]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[49]},
+				Columns:    []*schema.Column{ControlsColumns[51]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_vulnerabilities_controls",
-				Columns:    []*schema.Column{ControlsColumns[50]},
+				Columns:    []*schema.Column{ControlsColumns[52]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -959,12 +961,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[48]},
 			},
 			{
 				Name:    "control_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[48]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -972,7 +974,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[49], ControlsColumns[38]},
+				Columns: []*schema.Column{ControlsColumns[51], ControlsColumns[38]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -980,7 +982,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[49], ControlsColumns[38], ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[51], ControlsColumns[38], ControlsColumns[48]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL",
 				},
@@ -988,7 +990,7 @@ var (
 			{
 				Name:    "control_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[38], ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[38], ControlsColumns[48]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
 				},
@@ -996,17 +998,17 @@ var (
 			{
 				Name:    "control_standard_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[49], ControlsColumns[5], ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[51], ControlsColumns[5], ControlsColumns[48]},
 			},
 			{
 				Name:    "control_reference_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[13], ControlsColumns[5], ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[13], ControlsColumns[5], ControlsColumns[48]},
 			},
 			{
 				Name:    "control_auditor_reference_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[14], ControlsColumns[5], ControlsColumns[46]},
+				Columns: []*schema.Column{ControlsColumns[14], ControlsColumns[5], ControlsColumns[48]},
 			},
 		},
 	}

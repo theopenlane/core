@@ -12,6 +12,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -2876,4 +2877,116 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlTrustCenterVisibility(t *testing.T) {
+	// create a trust center for the anonymous context
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+
+	// create a trust center control that is publicly visible
+	publicControl, err := suite.client.db.Control.Create().
+		SetRefCode("OTS-TEST-" + ulids.New().String()).
+		SetTitle("Trust Center Public Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetTrustCenterVisibility(enums.TrustCenterDocumentVisibilityPubliclyVisible).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// create a trust center control that is not visible
+	hiddenControl, err := suite.client.db.Control.Create().
+		SetRefCode("OTS-TEST-" + ulids.New().String()).
+		SetTitle("Trust Center Hidden Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetTrustCenterVisibility(enums.TrustCenterDocumentVisibilityNotVisible).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// create a regular control (not a trust center control)
+	regularControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// add wildcard viewer tuple for the publicly visible control (simulates what the hook does)
+	wildcardTuples := fgax.CreateWildcardViewerTuple(publicControl.ID, "control")
+	_, err = suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, wildcardTuples, nil)
+	assert.NilError(t, err)
+
+	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+
+	testCases := []struct {
+		name            string
+		client          *testclient.TestClient
+		ctx             context.Context
+		queryID         string
+		errorMsg        string
+		expectedResults int // for list queries, -1 means use queryID for get
+	}{
+		{
+			name:            "anonymous user can view publicly visible trust center control",
+			client:          suite.client.api,
+			ctx:             anonCtx,
+			queryID:         publicControl.ID,
+			expectedResults: -1,
+		},
+		{
+			name:            "anonymous user cannot view hidden trust center control",
+			client:          suite.client.api,
+			ctx:             anonCtx,
+			queryID:         hiddenControl.ID,
+			errorMsg:        notFoundErrorMsg,
+			expectedResults: -1,
+		},
+		{
+			name:            "anonymous user cannot view regular control",
+			client:          suite.client.api,
+			ctx:             anonCtx,
+			queryID:         regularControl.ID,
+			errorMsg:        notFoundErrorMsg,
+			expectedResults: -1,
+		},
+		{
+			name:            "authenticated user can view all their controls",
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			queryID:         publicControl.ID,
+			expectedResults: -1,
+		},
+		{
+			name:            "authenticated user can view hidden trust center control",
+			client:          suite.client.api,
+			ctx:             testUser1.UserCtx,
+			queryID:         hiddenControl.ID,
+			expectedResults: -1,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlByID(tc.ctx, tc.queryID)
+
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+			assert.Check(t, is.Equal(tc.queryID, resp.Control.ID))
+		})
+	}
+
+	// test list query: anonymous user should only see the publicly visible trust center control
+	t.Run("anonymous user list query returns only public trust center controls", func(t *testing.T) {
+		resp, err := suite.client.api.GetAllControls(anonCtx)
+		assert.NilError(t, err)
+		assert.Check(t, resp != nil)
+		assert.Check(t, is.Equal(1, len(resp.Controls.Edges)))
+		assert.Check(t, is.Equal(publicControl.ID, resp.Controls.Edges[0].Node.ID))
+	})
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

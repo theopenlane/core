@@ -142,6 +142,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -360,6 +364,10 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -578,6 +586,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":
@@ -796,6 +808,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
 				return ec.fieldContext_Control_standardID(ctx, field)
+			case "trustCenterVisibility":
+				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
+			case "isTrustCenterControl":
+				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Control_evidence(ctx, field)
 			case "controlObjectives":

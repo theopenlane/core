@@ -580,6 +580,34 @@ func (_c *ControlCreate) SetNillableStandardID(v *string) *ControlCreate {
 	return _c
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_c *ControlCreate) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlCreate {
+	_c.mutation.SetTrustCenterVisibility(v)
+	return _c
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlCreate {
+	if v != nil {
+		_c.SetTrustCenterVisibility(*v)
+	}
+	return _c
+}
+
+// SetIsTrustCenterControl sets the "is_trust_center_control" field.
+func (_c *ControlCreate) SetIsTrustCenterControl(v bool) *ControlCreate {
+	_c.mutation.SetIsTrustCenterControl(v)
+	return _c
+}
+
+// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableIsTrustCenterControl(v *bool) *ControlCreate {
+	if v != nil {
+		_c.SetIsTrustCenterControl(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ControlCreate) SetID(v string) *ControlCreate {
 	_c.mutation.SetID(v)
@@ -1065,6 +1093,14 @@ func (_c *ControlCreate) defaults() error {
 		v := control.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
+	if _, ok := _c.mutation.TrustCenterVisibility(); !ok {
+		v := control.DefaultTrustCenterVisibility
+		_c.mutation.SetTrustCenterVisibility(v)
+	}
+	if _, ok := _c.mutation.IsTrustCenterControl(); !ok {
+		v := control.DefaultIsTrustCenterControl
+		_c.mutation.SetIsTrustCenterControl(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if control.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultID (forgotten import generated/runtime?)")
@@ -1111,6 +1147,11 @@ func (_c *ControlCreate) check() error {
 	if v, ok := _c.mutation.RefCode(); ok {
 		if err := control.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.TrustCenterVisibility(); ok {
+		if err := control.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`generated: validator failed for field "Control.trust_center_visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -1300,6 +1341,14 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
 		_node.RefCode = value
+	}
+	if value, ok := _c.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(control.FieldTrustCenterVisibility, field.TypeEnum, value)
+		_node.TrustCenterVisibility = value
+	}
+	if value, ok := _c.mutation.IsTrustCenterControl(); ok {
+		_spec.SetField(control.FieldIsTrustCenterControl, field.TypeBool, value)
+		_node.IsTrustCenterControl = value
 	}
 	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

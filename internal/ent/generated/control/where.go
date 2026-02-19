@@ -228,6 +228,11 @@ func StandardID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldStandardID, v))
 }
 
+// IsTrustCenterControl applies equality check predicate on the "is_trust_center_control" field. It's identical to IsTrustCenterControlEQ.
+func IsTrustCenterControl(v bool) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldIsTrustCenterControl, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldCreatedAt, v))
@@ -2621,6 +2626,66 @@ func StandardIDEqualFold(v string) predicate.Control {
 // StandardIDContainsFold applies the ContainsFold predicate on the "standard_id" field.
 func StandardIDContainsFold(v string) predicate.Control {
 	return predicate.Control(sql.FieldContainsFold(FieldStandardID, v))
+}
+
+// TrustCenterVisibilityEQ applies the EQ predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityEQ(v enums.TrustCenterDocumentVisibility) predicate.Control {
+	vc := v
+	return predicate.Control(sql.FieldEQ(FieldTrustCenterVisibility, vc))
+}
+
+// TrustCenterVisibilityNEQ applies the NEQ predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityNEQ(v enums.TrustCenterDocumentVisibility) predicate.Control {
+	vc := v
+	return predicate.Control(sql.FieldNEQ(FieldTrustCenterVisibility, vc))
+}
+
+// TrustCenterVisibilityIn applies the In predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityIn(vs ...enums.TrustCenterDocumentVisibility) predicate.Control {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Control(sql.FieldIn(FieldTrustCenterVisibility, v...))
+}
+
+// TrustCenterVisibilityNotIn applies the NotIn predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityNotIn(vs ...enums.TrustCenterDocumentVisibility) predicate.Control {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Control(sql.FieldNotIn(FieldTrustCenterVisibility, v...))
+}
+
+// TrustCenterVisibilityIsNil applies the IsNil predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldTrustCenterVisibility))
+}
+
+// TrustCenterVisibilityNotNil applies the NotNil predicate on the "trust_center_visibility" field.
+func TrustCenterVisibilityNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldTrustCenterVisibility))
+}
+
+// IsTrustCenterControlEQ applies the EQ predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlEQ(v bool) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldIsTrustCenterControl, v))
+}
+
+// IsTrustCenterControlNEQ applies the NEQ predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlNEQ(v bool) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldIsTrustCenterControl, v))
+}
+
+// IsTrustCenterControlIsNil applies the IsNil predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldIsTrustCenterControl))
+}
+
+// IsTrustCenterControlNotNil applies the NotNil predicate on the "is_trust_center_control" field.
+func IsTrustCenterControlNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldIsTrustCenterControl))
 }
 
 // HasEvidence applies the HasEdge predicate on the "evidence" edge.

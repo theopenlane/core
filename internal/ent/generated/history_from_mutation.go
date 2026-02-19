@@ -3111,6 +3111,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStandardID(standardID)
 	}
 
+	if trustCenterVisibility, exists := m.TrustCenterVisibility(); exists {
+		create = create.SetTrustCenterVisibility(trustCenterVisibility)
+	}
+
+	if isTrustCenterControl, exists := m.IsTrustCenterControl(); exists {
+		create = create.SetIsTrustCenterControl(isTrustCenterControl)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -3418,6 +3426,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStandardID(control.StandardID)
 		}
 
+		if trustCenterVisibility, exists := m.TrustCenterVisibility(); exists {
+			create = create.SetTrustCenterVisibility(trustCenterVisibility)
+		} else {
+			create = create.SetTrustCenterVisibility(control.TrustCenterVisibility)
+		}
+
+		if isTrustCenterControl, exists := m.IsTrustCenterControl(); exists {
+			create = create.SetIsTrustCenterControl(isTrustCenterControl)
+		} else {
+			create = create.SetIsTrustCenterControl(control.IsTrustCenterControl)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -3499,6 +3519,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetWorkflowEligibleMarker(control.WorkflowEligibleMarker).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
+			SetTrustCenterVisibility(control.TrustCenterVisibility).
+			SetIsTrustCenterControl(control.IsTrustCenterControl).
 			Save(ctx)
 		if err != nil {
 			return err

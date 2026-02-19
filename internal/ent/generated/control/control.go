@@ -110,6 +110,10 @@ const (
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
 	FieldStandardID = "standard_id"
+	// FieldTrustCenterVisibility holds the string denoting the trust_center_visibility field in the database.
+	FieldTrustCenterVisibility = "trust_center_visibility"
+	// FieldIsTrustCenterControl holds the string denoting the is_trust_center_control field in the database.
+	FieldIsTrustCenterControl = "is_trust_center_control"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
@@ -413,6 +417,8 @@ var Columns = []string{
 	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldStandardID,
+	FieldTrustCenterVisibility,
+	FieldIsTrustCenterControl,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "controls"
@@ -505,8 +511,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
-	Interceptors [5]ent.Interceptor
+	Hooks        [19]ent.Hook
+	Interceptors [6]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -528,6 +534,8 @@ var (
 	DefaultWorkflowEligibleMarker bool
 	// RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
 	RefCodeValidator func(string) error
+	// DefaultIsTrustCenterControl holds the default value on creation for the "is_trust_center_control" field.
+	DefaultIsTrustCenterControl bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -553,6 +561,18 @@ func SourceValidator(s enums.ControlSource) error {
 		return nil
 	default:
 		return fmt.Errorf("control: invalid enum value for source field: %q", s)
+	}
+}
+
+const DefaultTrustCenterVisibility enums.TrustCenterDocumentVisibility = "NOT_VISIBLE"
+
+// TrustCenterVisibilityValidator is a validator for the "trust_center_visibility" field enum values. It is called by the builders before save.
+func TrustCenterVisibilityValidator(tcv enums.TrustCenterDocumentVisibility) error {
+	switch tcv.String() {
+	case "PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE":
+		return nil
+	default:
+		return fmt.Errorf("control: invalid enum value for trust_center_visibility field: %q", tcv)
 	}
 }
 
@@ -732,6 +752,16 @@ func ByRefCode(opts ...sql.OrderTermOption) OrderOption {
 // ByStandardID orders the results by the standard_id field.
 func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
+}
+
+// ByTrustCenterVisibility orders the results by the trust_center_visibility field.
+func ByTrustCenterVisibility(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterVisibility, opts...).ToFunc()
+}
+
+// ByIsTrustCenterControl orders the results by the is_trust_center_control field.
+func ByIsTrustCenterControl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsTrustCenterControl, opts...).ToFunc()
 }
 
 // ByEvidenceCount orders the results by evidence count.
@@ -1362,4 +1392,11 @@ var (
 	_ graphql.Marshaler = (*enums.ControlSource)(nil)
 	// enums.ControlSource must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
+)
+
+var (
+	// enums.TrustCenterDocumentVisibility must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterDocumentVisibility)(nil)
+	// enums.TrustCenterDocumentVisibility must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterDocumentVisibility)(nil)
 )

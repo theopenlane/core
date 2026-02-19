@@ -120,8 +120,12 @@ type ControlHistory struct {
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the standard that the control belongs to, if applicable
-	StandardID   string `json:"standard_id,omitempty"`
-	selectValues sql.SelectValues
+	StandardID string `json:"standard_id,omitempty"`
+	// visibility of the control on the trust center, controls the publishing state for trust center display
+	TrustCenterVisibility enums.TrustCenterDocumentVisibility `json:"trust_center_visibility,omitempty"`
+	// indicates the control is derived from the trust center standard, set by the system during control clone
+	IsTrustCenterControl bool `json:"is_trust_center_control,omitempty"`
+	selectValues         sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -133,9 +137,9 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker:
+		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker, controlhistory.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -483,6 +487,18 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StandardID = value.String
 			}
+		case controlhistory.FieldTrustCenterVisibility:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_visibility", values[i])
+			} else if value.Valid {
+				_m.TrustCenterVisibility = enums.TrustCenterDocumentVisibility(value.String)
+			}
+		case controlhistory.FieldIsTrustCenterControl:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_trust_center_control", values[i])
+			} else if value.Valid {
+				_m.IsTrustCenterControl = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -675,6 +691,12 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("standard_id=")
 	builder.WriteString(_m.StandardID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_visibility=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TrustCenterVisibility))
+	builder.WriteString(", ")
+	builder.WriteString("is_trust_center_control=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTrustCenterControl))
 	builder.WriteByte(')')
 	return builder.String()
 }

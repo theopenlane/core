@@ -501,6 +501,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: control.FieldWorkflowEligibleMarker},
 			control.FieldRefCode:                    {Type: field.TypeString, Column: control.FieldRefCode},
 			control.FieldStandardID:                 {Type: field.TypeString, Column: control.FieldStandardID},
+			control.FieldTrustCenterVisibility:      {Type: field.TypeEnum, Column: control.FieldTrustCenterVisibility},
+			control.FieldIsTrustCenterControl:       {Type: field.TypeBool, Column: control.FieldIsTrustCenterControl},
 		},
 	}
 	graph.Nodes[9] = &sqlgraph.Node{
@@ -19133,6 +19135,16 @@ func (f *ControlFilter) WhereRefCode(p entql.StringP) {
 // WhereStandardID applies the entql string predicate on the standard_id field.
 func (f *ControlFilter) WhereStandardID(p entql.StringP) {
 	f.Where(p.Field(control.FieldStandardID))
+}
+
+// WhereTrustCenterVisibility applies the entql string predicate on the trust_center_visibility field.
+func (f *ControlFilter) WhereTrustCenterVisibility(p entql.StringP) {
+	f.Where(p.Field(control.FieldTrustCenterVisibility))
+}
+
+// WhereIsTrustCenterControl applies the entql bool predicate on the is_trust_center_control field.
+func (f *ControlFilter) WhereIsTrustCenterControl(p entql.BoolP) {
+	f.Where(p.Field(control.FieldIsTrustCenterControl))
 }
 
 // WhereHasEvidence applies a predicate to check if query has an edge evidence.

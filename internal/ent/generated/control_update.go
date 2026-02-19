@@ -841,6 +841,46 @@ func (_u *ControlUpdate) ClearStandardID() *ControlUpdate {
 	return _u
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_u *ControlUpdate) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlUpdate {
+	_u.mutation.SetTrustCenterVisibility(v)
+	return _u
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlUpdate {
+	if v != nil {
+		_u.SetTrustCenterVisibility(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterVisibility clears the value of the "trust_center_visibility" field.
+func (_u *ControlUpdate) ClearTrustCenterVisibility() *ControlUpdate {
+	_u.mutation.ClearTrustCenterVisibility()
+	return _u
+}
+
+// SetIsTrustCenterControl sets the "is_trust_center_control" field.
+func (_u *ControlUpdate) SetIsTrustCenterControl(v bool) *ControlUpdate {
+	_u.mutation.SetIsTrustCenterControl(v)
+	return _u
+}
+
+// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableIsTrustCenterControl(v *bool) *ControlUpdate {
+	if v != nil {
+		_u.SetIsTrustCenterControl(*v)
+	}
+	return _u
+}
+
+// ClearIsTrustCenterControl clears the value of the "is_trust_center_control" field.
+func (_u *ControlUpdate) ClearIsTrustCenterControl() *ControlUpdate {
+	_u.mutation.ClearIsTrustCenterControl()
+	return _u
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *ControlUpdate) AddEvidenceIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -1851,6 +1891,11 @@ func (_u *ControlUpdate) check() error {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TrustCenterVisibility(); ok {
+		if err := control.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`generated: validator failed for field "Control.trust_center_visibility": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2141,6 +2186,18 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(control.FieldTrustCenterVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.TrustCenterVisibilityCleared() {
+		_spec.ClearField(control.FieldTrustCenterVisibility, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.IsTrustCenterControl(); ok {
+		_spec.SetField(control.FieldIsTrustCenterControl, field.TypeBool, value)
+	}
+	if _u.mutation.IsTrustCenterControlCleared() {
+		_spec.ClearField(control.FieldIsTrustCenterControl, field.TypeBool)
 	}
 	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4338,6 +4395,46 @@ func (_u *ControlUpdateOne) ClearStandardID() *ControlUpdateOne {
 	return _u
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_u *ControlUpdateOne) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlUpdateOne {
+	_u.mutation.SetTrustCenterVisibility(v)
+	return _u
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterVisibility(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterVisibility clears the value of the "trust_center_visibility" field.
+func (_u *ControlUpdateOne) ClearTrustCenterVisibility() *ControlUpdateOne {
+	_u.mutation.ClearTrustCenterVisibility()
+	return _u
+}
+
+// SetIsTrustCenterControl sets the "is_trust_center_control" field.
+func (_u *ControlUpdateOne) SetIsTrustCenterControl(v bool) *ControlUpdateOne {
+	_u.mutation.SetIsTrustCenterControl(v)
+	return _u
+}
+
+// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableIsTrustCenterControl(v *bool) *ControlUpdateOne {
+	if v != nil {
+		_u.SetIsTrustCenterControl(*v)
+	}
+	return _u
+}
+
+// ClearIsTrustCenterControl clears the value of the "is_trust_center_control" field.
+func (_u *ControlUpdateOne) ClearIsTrustCenterControl() *ControlUpdateOne {
+	_u.mutation.ClearIsTrustCenterControl()
+	return _u
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *ControlUpdateOne) AddEvidenceIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -5361,6 +5458,11 @@ func (_u *ControlUpdateOne) check() error {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TrustCenterVisibility(); ok {
+		if err := control.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`generated: validator failed for field "Control.trust_center_visibility": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -5668,6 +5770,18 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(control.FieldTrustCenterVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.TrustCenterVisibilityCleared() {
+		_spec.ClearField(control.FieldTrustCenterVisibility, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.IsTrustCenterControl(); ok {
+		_spec.SetField(control.FieldIsTrustCenterControl, field.TypeBool, value)
+	}
+	if _u.mutation.IsTrustCenterControlCleared() {
+		_spec.ClearField(control.FieldIsTrustCenterControl, field.TypeBool)
 	}
 	if _u.mutation.EvidenceCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -6921,6 +6921,14 @@ type Control implements Node {
 	the id of the standard that the control belongs to, if applicable
 	"""
 	standardID: ID
+	"""
+	visibility of the control on the trust center, controls the publishing state for trust center display
+	"""
+	trustCenterVisibility: ControlTrustCenterDocumentVisibility
+	"""
+	indicates the control is derived from the trust center standard, set by the system during control clone
+	"""
+	isTrustCenterControl: Boolean
 	evidence(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -9359,6 +9367,14 @@ enum ControlOrderField {
 	RESPONSIBLE_PARTY_name
 }
 """
+ControlTrustCenterDocumentVisibility is enum for the field trust_center_visibility
+"""
+enum ControlTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterDocumentVisibility") {
+	PUBLICLY_VISIBLE
+	PROTECTED
+	NOT_VISIBLE
+}
+"""
 Return response for updateControl mutation
 """
 type ControlUpdatePayload {
@@ -9910,6 +9926,22 @@ input ControlWhereInput {
 	standardIDNotNil: Boolean
 	standardIDEqualFold: ID
 	standardIDContainsFold: ID
+	"""
+	trust_center_visibility field predicates
+	"""
+	trustCenterVisibility: ControlTrustCenterDocumentVisibility
+	trustCenterVisibilityNEQ: ControlTrustCenterDocumentVisibility
+	trustCenterVisibilityIn: [ControlTrustCenterDocumentVisibility!]
+	trustCenterVisibilityNotIn: [ControlTrustCenterDocumentVisibility!]
+	trustCenterVisibilityIsNil: Boolean
+	trustCenterVisibilityNotNil: Boolean
+	"""
+	is_trust_center_control field predicates
+	"""
+	isTrustCenterControl: Boolean
+	isTrustCenterControlNEQ: Boolean
+	isTrustCenterControlIsNil: Boolean
+	isTrustCenterControlNotNil: Boolean
 	"""
 	evidence edge predicates
 	"""
@@ -10875,6 +10907,10 @@ input CreateControlInput {
 	the unique reference code for the control
 	"""
 	refCode: String! @externalReadOnly(source: FRAMEWORK)
+	"""
+	visibility of the control on the trust center, controls the publishing state for trust center display
+	"""
+	trustCenterVisibility: ControlTrustCenterDocumentVisibility
 	evidenceIDs: [ID!]
 	controlObjectiveIDs: [ID!]
 	taskIDs: [ID!]
@@ -79961,6 +79997,11 @@ input UpdateControlInput {
 	the unique reference code for the control
 	"""
 	refCode: String @externalReadOnly(source: FRAMEWORK)
+	"""
+	visibility of the control on the trust center, controls the publishing state for trust center display
+	"""
+	trustCenterVisibility: ControlTrustCenterDocumentVisibility
+	clearTrustCenterVisibility: Boolean
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
