@@ -10,20 +10,17 @@ import (
 // emitTyped emits a typed payload through Gala, recording emit errors with operation metadata
 func emitTyped[T any](ctx context.Context, observer *Observer, runtime *gala.Gala, topic gala.TopicName, payload T, op Operation, fields Fields) error {
 	if runtime == nil {
-		return nil
+		return ErrEmitNoRuntime
 	}
 
 	fields = lo.Assign(Fields{FieldPayload: payload}, fields)
 	receipt := runtime.EmitWithHeaders(ctx, topic, payload, gala.Headers{})
 
-	errCh := make(chan error, 1)
 	if receipt.Err != nil {
-		errCh <- receipt.Err
+		observer.handleEmitError(ctx, op, fields, string(topic), receipt.Err)
 	}
 
-	close(errCh)
-
-	return observer.handleEmit(ctx, op, fields, string(topic), errCh)
+	return receipt.Err
 }
 
 // emitTypedFromScope emits a typed payload, recording emit errors against the supplied scope

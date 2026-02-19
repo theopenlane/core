@@ -37,7 +37,7 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 
 			op := getOperation(ctx, mutation)
 
-			if op != SoftDeleteOne && reflect.TypeOf(retVal).Kind() == reflect.Int {
+			if op != SoftDeleteOne && retVal != nil && reflect.TypeOf(retVal).Kind() == reflect.Int {
 				return retVal, err
 			}
 
@@ -57,18 +57,22 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 					return
 				}
 
-				eventID := &EventID{}
+				var (
+					eventID  *EventID
+					parseErr error
+				)
+
 				if op == SoftDeleteOne {
-					eventID, err = parseSoftDeleteEventID(ctx, mutation)
-					if err != nil {
-						logx.FromContext(ctx).Info().Err(err).Msg("failed to parse event ID for soft delete, skipping gala emission")
+					eventID, parseErr = parseSoftDeleteEventID(ctx, mutation)
+					if parseErr != nil {
+						logx.FromContext(ctx).Info().Err(parseErr).Msg("failed to parse event ID for soft delete, skipping gala emission")
 
 						return
 					}
 				} else {
-					eventID, err = parseEventID(retVal)
-					if err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("failed to parse event ID, skipping gala emission")
+					eventID, parseErr = parseEventID(retVal)
+					if parseErr != nil {
+						logx.FromContext(ctx).Error().Err(parseErr).Msg("failed to parse event ID, skipping gala emission")
 
 						return
 					}

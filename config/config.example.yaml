@@ -423,7 +423,9 @@ workflows:
         timeout: 100000000
         trackstate: false
     enabled: false
-    eventingenabled: false
-    eventingmaxretries: 5
-    eventingqueuename: events
-    eventingworkercount: 10
+    gala:
+        enabled: false
+        failonenqueueerror: false
+        maxretries: 5
+        queuename: events
+        workercount: 10

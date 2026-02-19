@@ -65,18 +65,7 @@ func workflowProposalDomainFields(domainKey string) (string, []string, error) {
 		return objectType, nil, fmt.Errorf("%w: proposal domain key missing fields", rout.ErrBadRequest)
 	}
 
-	rawFields := strings.Split(fieldsPart, ",")
-	fields := make([]string, 0, len(rawFields))
-	for _, field := range rawFields {
-		trimmedField := strings.TrimSpace(field)
-		if trimmedField == "" {
-			continue
-		}
-
-		fields = append(fields, trimmedField)
-	}
-
-	fields = mutations.NormalizeStrings(fields)
+	fields := mutations.NormalizeStrings(strings.Split(fieldsPart, ","))
 	if len(fields) == 0 {
 		return objectType, nil, fmt.Errorf("%w: proposal domain key missing fields", rout.ErrBadRequest)
 	}

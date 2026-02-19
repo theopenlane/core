@@ -1175,6 +1175,79 @@ func TestInMemoryDispatchUsesPoolWorkerLimit(t *testing.T) {
 	}
 }
 
+func TestInMemoryEmitReturnsBeforeListenerCompletes(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+		WorkerCount:  1,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.inmemory.async")}
+	if err := RegisterTopic(runtime.Registry(), Registration[runtimeTestPayload]{
+		Topic: topic,
+		Codec: JSONCodec[runtimeTestPayload]{},
+	}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	started := make(chan struct{})
+	release := make(chan struct{})
+	done := make(chan struct{})
+
+	if _, err := AttachListener(runtime.Registry(), Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.inmemory.async.listener",
+		Handle: func(_ HandlerContext, _ runtimeTestPayload) error {
+			close(started)
+			<-release
+			close(done)
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	receiptCh := make(chan EmitReceipt, 1)
+	go func() {
+		receiptCh <- runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "async"}, Headers{})
+	}()
+
+	select {
+	case <-started:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("expected listener to start")
+	}
+
+	select {
+	case receipt := <-receiptCh:
+		if receipt.Err != nil {
+			t.Fatalf("unexpected emit error: %v", receipt.Err)
+		}
+	case <-time.After(200 * time.Millisecond): //nolint:mnd
+		t.Fatalf("expected emit to return before listener completion")
+	}
+
+	select {
+	case <-done:
+		t.Fatalf("expected listener to remain blocked until release")
+	default:
+	}
+
+	close(release)
+
+	select {
+	case <-done:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("expected listener to complete after release")
+	}
+}
+
 func TestBuildQueueConfigIncludesAdditionalQueues(t *testing.T) {
 	queues := buildQueueConfig("events", 10, map[string]int{
 		"integrations": 4,

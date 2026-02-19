@@ -69,7 +69,9 @@ func TestChangeSetClone(t *testing.T) {
 			"edge": {"id2"},
 		},
 		ProposedChanges: map[string]any{
-			"name": "value",
+			"name":   "value",
+			"nested": map[string]any{"inner": "original"},
+			"tags":   []any{"tag1", "tag2"},
 		},
 	}
 
@@ -80,7 +82,25 @@ func TestChangeSetClone(t *testing.T) {
 	cloned.AddedIDs["edge"][0] = "mutated"
 	cloned.ProposedChanges["name"] = "mutated"
 
+	// verify nested map isolation
+	nestedCloned, ok := cloned.ProposedChanges["nested"].(map[string]any)
+	require.True(t, ok)
+	nestedCloned["inner"] = "mutated"
+
+	// verify nested slice isolation
+	tagsCloned, ok := cloned.ProposedChanges["tags"].([]any)
+	require.True(t, ok)
+	tagsCloned[0] = "mutated"
+
 	assert.Equal(t, "a", original.ChangedFields[0])
 	assert.Equal(t, "id1", original.AddedIDs["edge"][0])
 	assert.Equal(t, "value", original.ProposedChanges["name"])
+
+	nestedOriginal, ok := original.ProposedChanges["nested"].(map[string]any)
+	require.True(t, ok)
+	assert.Equal(t, "original", nestedOriginal["inner"])
+
+	tagsOriginal, ok := original.ProposedChanges["tags"].([]any)
+	require.True(t, ok)
+	assert.Equal(t, "tag1", tagsOriginal[0])
 }

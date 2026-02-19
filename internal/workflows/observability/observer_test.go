@@ -13,6 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -76,17 +77,11 @@ func TestHandleEmitRecordsError(t *testing.T) {
 	topic := "workflow.emit.test"
 
 	before := testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
-	errCh := make(chan error, 1)
-	errCh <- errors.New("emit failed")
-	close(errCh)
 
-	if err := observer.handleEmit(ctx, op, Fields{"k": "v"}, topic, errCh); err != nil {
-		t.Fatalf("expected nil error, got %v", err)
-	}
+	observer.handleEmitError(ctx, op, Fields{"k": "v"}, topic, errors.New("emit failed"))
 
-	waitForMetric(t, func() float64 {
-		return testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
-	}, before+1)
+	after := testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
+	require.Equal(t, before+1, after)
 }
 
 func TestBeginListenerTopicAppliesSpec(t *testing.T) {
@@ -151,19 +146,6 @@ func findLogEntry(t *testing.T, buf *bytes.Buffer, msg string) map[string]any {
 	return nil
 }
 
-func waitForMetric(t *testing.T, read func() float64, want float64) {
-	t.Helper()
-
-	deadline := time.Now().Add(500 * time.Millisecond)
-	for time.Now().Before(deadline) {
-		if got := read(); got == want {
-			return
-		}
-		time.Sleep(10 * time.Millisecond)
-	}
-
-	t.Fatalf("timed out waiting for metric, got %v want %v", read(), want)
-}
 
 func TestScopeSkipMarksSkippedAndLogsDebug(t *testing.T) {
 	var buf bytes.Buffer
