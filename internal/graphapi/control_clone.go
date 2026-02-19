@@ -673,57 +673,29 @@ func (r *mutationResolver) updateControlsOnRevisionChange(ctx context.Context, c
 			standardRevision = &cu.sourceControl.Edges.Standard.Revision
 		}
 
-		var newSubcontrols []*generated.CreateSubcontrolInput
-
 		for _, sc := range cu.sourceControl.Edges.Subcontrols {
 			existingID, ok := existingByRefCode[sc.RefCode]
-			if ok {
-				scInput := createSubcontrolRevisionUpdateInput(sc, standardRevision)
-				if err := txClient.Subcontrol.UpdateOneID(existingID).
-					SetInput(scInput).
-					Exec(ctx); err != nil {
-					logger.Error().Err(err).Str("subcontrol_id", existingID).Msg("error updating subcontrol on revision change")
-					return err
-				}
+			if !ok {
+				continue
+			}
 
-			} else {
-				var refFramework *string
-				if cu.sourceControl.Edges.Standard != nil {
-					refFramework = &cu.sourceControl.Edges.Standard.ShortName
-				}
-
-				newSubcontrols = append(newSubcontrols, &generated.CreateSubcontrolInput{
-					RefCode:                    sc.RefCode,
-					Title:                      &sc.Title,
-					Description:                &sc.Description,
-					Source:                     &sc.Source,
-					ControlID:                  cu.existingControlID,
-					Category:                   &sc.Category,
-					CategoryID:                 &sc.CategoryID,
-					Subcategory:                &sc.Subcategory,
-					MappedCategories:           sc.MappedCategories,
-					AssessmentObjectives:       sc.AssessmentObjectives,
-					AssessmentMethods:          sc.AssessmentMethods,
-					ControlQuestions:           sc.ControlQuestions,
-					ImplementationGuidance:     sc.ImplementationGuidance,
-					ExampleEvidence:            sc.ExampleEvidence,
-					TestingProcedures:          sc.TestingProcedures,
-					EvidenceRequests:           sc.EvidenceRequests,
-					References:                 sc.References,
-					Status:                     &enums.ControlStatusNotImplemented,
-					ReferenceFramework:         refFramework,
-					ReferenceFrameworkRevision: standardRevision,
-					OwnerID:                    &orgID,
-					ControlOwnerID:             lo.ToPtr(""),
-				})
+			scInput := createSubcontrolRevisionUpdateInput(sc, standardRevision)
+			if err := txClient.Subcontrol.UpdateOneID(existingID).
+				SetInput(scInput).
+				Exec(ctx); err != nil {
+				logger.Error().Err(err).Str("subcontrol_id", existingID).Msg("error updating subcontrol on revision change")
+				return err
 			}
 		}
 
-		if len(newSubcontrols) > 0 {
-			if err := r.bulkCreateSubcontrolNoTransaction(ctx, newSubcontrols); err != nil {
-				logger.Error().Err(err).Str("control_id", cu.existingControlID).Msg("error creating new subcontrols on revision change")
-				return err
-			}
+		if err := r.cloneSubcontrols(ctx, []subcontrolToCreate{
+			{
+				newControlID: cu.existingControlID,
+				refControl:   cu.sourceControl,
+			},
+		}); err != nil {
+			logger.Error().Err(err).Str("control_id", cu.existingControlID).Msg("error creating new subcontrols on revision change")
+			return err
 		}
 	}
 
