@@ -5,12 +5,11 @@ import (
 	"errors"
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
 // enqueueGalaMutation builds and dispatches a durable gala envelope for a mutation event
-func enqueueGalaMutation(ctx context.Context, g *gala.Gala, topic string, payload *events.MutationPayload, metadata eventqueue.MutationGalaMetadata) error {
+func enqueueGalaMutation(ctx context.Context, g *gala.Gala, topic string, payload eventqueue.MutationGalaPayload, metadata eventqueue.MutationGalaMetadata) error {
 	if g == nil {
 		return ErrGalaRuntimeUnavailable
 	}

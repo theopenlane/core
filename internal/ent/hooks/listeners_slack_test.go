@@ -200,25 +200,25 @@ func (r *slackWebhookRecorder) Close() {
 	r.server.Close()
 }
 
-// TestMutationEmailFromGala verifies proposed-change precedence with property fallback.
-func TestMutationEmailFromGala(t *testing.T) {
+// TestMutationStringValuePreferPayload verifies proposed-change precedence with property fallback semantics used by Slack listeners.
+func TestMutationStringValuePreferPayload(t *testing.T) {
 	payload := eventqueue.MutationGalaPayload{
 		ProposedChanges: map[string]any{
 			user.FieldEmail: "proposed@example.com",
 		},
 	}
 
-	resolved := mutationEmailFromGala(payload, map[string]string{
+	resolved := eventqueue.MutationStringValuePreferPayload(payload, map[string]string{
 		user.FieldEmail: "header@example.com",
 	}, user.FieldEmail)
 	assert.Equal(t, "proposed@example.com", resolved)
 
-	resolved = mutationEmailFromGala(eventqueue.MutationGalaPayload{}, map[string]string{
+	resolved = eventqueue.MutationStringValuePreferPayload(eventqueue.MutationGalaPayload{}, map[string]string{
 		user.FieldEmail: "header@example.com",
 	}, user.FieldEmail)
 	assert.Equal(t, "header@example.com", resolved)
 
-	resolved = mutationEmailFromGala(eventqueue.MutationGalaPayload{
+	resolved = eventqueue.MutationStringValuePreferPayload(eventqueue.MutationGalaPayload{
 		ProposedChanges: map[string]any{
 			user.FieldEmail: strings.Repeat(" ", 3),
 		},

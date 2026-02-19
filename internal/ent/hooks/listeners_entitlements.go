@@ -28,7 +28,7 @@ import (
 func RegisterGalaEntitlementListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: mutationGalaTopic(entgen.TypeOrganization),
+			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeOrganization),
 			Name:  "entitlements.organization",
 			Operations: []string{
 				ent.OpCreate.String(),
@@ -39,7 +39,7 @@ func RegisterGalaEntitlementListeners(registry *gala.Registry) ([]gala.ListenerI
 			Handle: handleOrganizationMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: mutationGalaTopic(entgen.TypeOrganizationSetting),
+			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeOrganizationSetting),
 			Name:  "entitlements.organization_setting",
 			Operations: []string{
 				ent.OpUpdate.String(),
@@ -125,7 +125,7 @@ func handleOrganizationSettingsUpdateOneGala(ctx gala.HandlerContext, payload ev
 
 	orgSettingID := inv.entityID
 	if orgSettingID == "" {
-		if id, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties); ok {
+		if id, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties); ok {
 			orgSettingID = id
 		}
 	}
@@ -199,8 +199,8 @@ func softDeleteAllowContext(ctx context.Context) context.Context {
 
 // newEntitlementInvocation gathers prerequisites for entitlement mutation handling.
 func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue.MutationGalaPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
-	client := mutationClientFromGala(handlerCtx)
-	if client == nil || client.EntitlementManager == nil {
+	client, ok := eventqueue.ClientFromHandler(handlerCtx)
+	if !ok || client.EntitlementManager == nil {
 		return nil, false
 	}
 
@@ -210,7 +210,7 @@ func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue
 
 	allowCtx := allow(handlerCtx.Context)
 
-	entityID, ok := mutationEntityIDFromGala(payload, handlerCtx.Envelope.Headers.Properties)
+	entityID, ok := eventqueue.MutationEntityID(payload, handlerCtx.Envelope.Headers.Properties)
 	if !ok {
 		return nil, false
 	}
@@ -243,7 +243,7 @@ func mutationTouches(payload eventqueue.MutationGalaPayload, fields ...string) b
 	}
 
 	return lo.SomeBy(fields, func(field string) bool {
-		return mutationFieldChanged(payload, field)
+		return eventqueue.MutationFieldChanged(payload, field)
 	})
 }
 

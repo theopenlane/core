@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"sync"
 	"testing"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/samber/do/v2"
@@ -1075,12 +1076,102 @@ func TestNewGalaInMemoryModeDoesNotRequireRiverConnection(t *testing.T) {
 		t.Fatalf("expected in-memory gala registry to be initialized")
 	}
 
+	if runtime.inMemoryPool == nil {
+		t.Fatalf("expected in-memory gala pool to be initialized")
+	}
+
 	if err := runtime.StartWorkers(context.Background()); err != nil {
 		t.Fatalf("expected StartWorkers to be a no-op in in-memory mode, got %v", err)
 	}
 
 	if err := runtime.StopWorkers(context.Background()); err != nil {
 		t.Fatalf("expected StopWorkers to be a no-op in in-memory mode, got %v", err)
+	}
+}
+
+func TestInMemoryDispatchUsesPoolWorkerLimit(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+		WorkerCount:  1,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.inmemory.pool")}
+	if err := RegisterTopic(runtime.Registry(), Registration[runtimeTestPayload]{
+		Topic: topic,
+		Codec: JSONCodec[runtimeTestPayload]{},
+	}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	firstStarted := make(chan struct{})
+	secondStarted := make(chan struct{})
+	releaseFirst := make(chan struct{})
+
+	callCount := 0
+	callMu := sync.Mutex{}
+	if _, err := AttachListener(runtime.Registry(), Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.inmemory.pool.listener",
+		Handle: func(_ HandlerContext, _ runtimeTestPayload) error {
+			callMu.Lock()
+			callCount++
+			current := callCount
+			callMu.Unlock()
+
+			if current == 1 {
+				close(firstStarted)
+				<-releaseFirst
+				return nil
+			}
+
+			if current == 2 {
+				close(secondStarted)
+			}
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	errs := make(chan error, 2)
+	go func() {
+		receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "one"}, Headers{})
+		errs <- receipt.Err
+	}()
+
+	<-firstStarted
+
+	go func() {
+		receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "two"}, Headers{})
+		errs <- receipt.Err
+	}()
+
+	select {
+	case <-secondStarted:
+		t.Fatalf("expected second listener execution to wait for in-memory pool worker availability")
+	case <-time.After(100 * time.Millisecond): //nolint:mnd
+	}
+
+	close(releaseFirst)
+
+	for i := 0; i < 2; i++ {
+		if emitErr := <-errs; emitErr != nil {
+			t.Fatalf("unexpected emit error: %v", emitErr)
+		}
+	}
+
+	select {
+	case <-secondStarted:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("expected second listener execution after first completed")
 	}
 }
 

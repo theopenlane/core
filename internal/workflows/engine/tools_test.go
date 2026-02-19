@@ -246,7 +246,7 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
 
 	s.Require().True(
-		runtime.Registry().InterestedIn(eventqueue.WorkflowMutationTopicName(generated.TypeControl), ent.OpCreate.String()),
+		runtime.Registry().InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
 		"mutation listeners not registered",
 	)
 
@@ -587,7 +587,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
 		s.Require().NoError(err, "failed to parse approval action params")
-		fields := workflows.NormalizeStrings(params.Fields)
+		fields := eventqueue.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
 		}

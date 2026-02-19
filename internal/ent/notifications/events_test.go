@@ -167,12 +167,12 @@ func TestRegisterGalaListeners(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, ids, 6)
 
-	assert.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(generated.TypeTask), "create"))
-	assert.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(generated.TypeInternalPolicy), "update"))
-	assert.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(generated.TypeRisk), "delete"))
-	assert.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(generated.TypeProcedure), "update_one"))
-	assert.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(generated.TypeNote), "create"))
-	assert.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(generated.TypeExport), "update"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeTask), "create"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeRisk), "delete"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProcedure), "update_one"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeNote), "create"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeExport), "update"))
 }
 
 func TestErrorConstants(t *testing.T) {

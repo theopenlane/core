@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
@@ -103,7 +104,7 @@ func (e *WorkflowEngine) getObjectTags(ctx context.Context, obj *workflows.Objec
 	if err != nil {
 		return nil, err
 	}
-	tags = workflows.NormalizeStrings(tags)
+	tags = eventqueue.NormalizeStrings(tags)
 	if len(tags) == 0 {
 		return nil, nil
 	}

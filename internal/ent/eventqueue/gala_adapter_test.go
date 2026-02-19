@@ -8,13 +8,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// galaAdapterTestActor is a fixture context value for snapshot capture validation.
+// galaAdapterTestActor is a fixture context value for snapshot capture validation
 type galaAdapterTestActor struct {
+	// ID identifies the fixture actor stored in context snapshots
 	ID string `json:"id"`
 }
 
@@ -23,53 +22,17 @@ type galaAdapterRuntime struct {
 	contextManager *gala.ContextManager
 }
 
+// Registry returns the fixture registry for envelope encoding and decoding
 func (r galaAdapterRuntime) Registry() *gala.Registry {
 	return r.registry
 }
 
+// ContextManager returns the fixture context manager for snapshot capture and restore
 func (r galaAdapterRuntime) ContextManager() *gala.ContextManager {
 	return r.contextManager
 }
 
-// TestNewMutationGalaPayload verifies mutation payload conversion into JSON-safe gala payload fields.
-func TestNewMutationGalaPayload(t *testing.T) {
-	t.Parallel()
-
-	payload := &events.MutationPayload{
-		MutationType:  "organization",
-		Operation:     "UPDATE",
-		EntityID:      "org_123",
-		ChangedFields: []string{"name"},
-		ClearedFields: []string{"description"},
-		ChangedEdges:  []string{"delegate"},
-		AddedIDs: map[string][]string{
-			"delegate": {"user_1"},
-		},
-		RemovedIDs: map[string][]string{
-			"delegate": {"user_2"},
-		},
-		ProposedChanges: map[string]any{
-			"name":        "Acme",
-			"description": nil,
-		},
-	}
-
-	converted := NewMutationGalaPayload(payload)
-
-	require.Equal(t, payload.MutationType, converted.MutationType)
-	require.Equal(t, payload.Operation, converted.Operation)
-	require.Equal(t, payload.EntityID, converted.EntityID)
-	require.Equal(t, payload.ChangedFields, converted.ChangedFields)
-	require.Equal(t, payload.ClearedFields, converted.ClearedFields)
-	require.Equal(t, payload.ChangedEdges, converted.ChangedEdges)
-	require.Equal(t, payload.AddedIDs, converted.AddedIDs)
-	require.Equal(t, payload.RemovedIDs, converted.RemovedIDs)
-	require.Equal(t, payload.ProposedChanges["name"], converted.ProposedChanges["name"])
-	require.Contains(t, converted.ProposedChanges, "description")
-	require.Nil(t, converted.ProposedChanges["description"])
-}
-
-// TestNewMutationGalaEnvelope verifies envelope creation from legacy mutation emit inputs.
+// TestNewMutationGalaEnvelope verifies envelope creation from legacy mutation emit inputs
 func TestNewMutationGalaEnvelope(t *testing.T) {
 	t.Parallel()
 
@@ -91,7 +54,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	payload := &events.MutationPayload{
+	payload := MutationGalaPayload{
 		MutationType:  "organization",
 		Operation:     "UPDATE",
 		EntityID:      "org_123",
@@ -102,8 +65,8 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 		},
 	}
 
-	emitCtx := workflows.WithContext(context.Background())
-	emitCtx = workflows.WithAllowWorkflowEventEmission(emitCtx)
+	emitCtx := gala.WithFlag(context.Background(), gala.ContextFlagWorkflowBypass)
+	emitCtx = gala.WithFlag(emitCtx, gala.ContextFlagWorkflowAllowEventEmission)
 	emitCtx = contextx.With(emitCtx, galaAdapterTestActor{ID: "actor_123"})
 	emitCtx = auth.WithAuthenticatedUser(emitCtx, &auth.AuthenticatedUser{
 		SubjectID:          "subject_123",
@@ -121,6 +84,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	require.Equal(t, "evt_123", envelope.Headers.IdempotencyKey)
 	require.Equal(t, "name", envelope.Headers.Properties["mutation_field"])
 	require.Equal(t, "7", envelope.Headers.Properties["count"])
+	require.Equal(t, payload.EntityID, envelope.Headers.Properties[MutationPropertyEntityID])
 	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowBypass])
 	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowAllowEventEmission])
 	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("adapter_actor"))
@@ -143,7 +107,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	require.Equal(t, payload.Operation, decoded.Operation)
 }
 
-// TestNewGalaHeadersFromMutationMetadata verifies property normalization for gala headers.
+// TestNewGalaHeadersFromMutationMetadata verifies property normalization for gala headers
 func TestNewGalaHeadersFromMutationMetadata(t *testing.T) {
 	t.Parallel()
 

@@ -8,7 +8,6 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/workflows"
@@ -146,9 +145,9 @@ func resolveGalaRuntimes(providers []func() *gala.Gala) []*gala.Gala {
 
 func mutationDispatchTopics(schemaType string) []gala.TopicName {
 	topics := []gala.TopicName{
-		gala.TopicName(schemaType),
-		eventqueue.WorkflowMutationTopicName(schemaType),
-		eventqueue.NotificationMutationTopicName(schemaType),
+		eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, schemaType),
+		eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, schemaType),
+		eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, schemaType),
 	}
 
 	seen := map[gala.TopicName]struct{}{}
@@ -215,13 +214,12 @@ func mutationDispatchTargets(runtimes []*gala.Gala, topics []gala.TopicName, ope
 }
 
 // newMutationPayloadForDispatch builds shared mutation payload metadata for asynchronous dispatch hooks.
-func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID string) *events.MutationPayload {
+func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID string) eventqueue.MutationGalaPayload {
 	changedFields, clearedFields := mutationChangedAndClearedFields(mutation)
 	changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(mutation)
-	proposedChanges := mutationProposedChanges(mutation, changedFields, clearedFields)
+	proposedChanges := workflows.BuildProposedChanges(mutation, changedFields)
 
-	return &events.MutationPayload{
-		Mutation:        mutation,
+	return eventqueue.MutationGalaPayload{
 		MutationType:    mutation.Type(),
 		Operation:       operation,
 		EntityID:        entityID,
@@ -244,44 +242,6 @@ func mutationChangedAndClearedFields(mutation ent.Mutation) ([]string, []string)
 	changedFields := append(append([]string(nil), mutation.Fields()...), clearedFields...)
 
 	return uniqueStrings(changedFields), clearedFields
-}
-
-// mutationProposedChanges materializes field values (including explicit clears as nil).
-func mutationProposedChanges(mutation ent.Mutation, changedFields, clearedFields []string) map[string]any {
-	if mutation == nil || len(changedFields) == 0 {
-		return nil
-	}
-
-	clearedSet := make(map[string]struct{}, len(clearedFields))
-	lo.ForEach(clearedFields, func(field string, _ int) {
-		if field == "" {
-			return
-		}
-
-		clearedSet[field] = struct{}{}
-	})
-
-	proposed := make(map[string]any, len(changedFields))
-	lo.ForEach(changedFields, func(field string, _ int) {
-		if field == "" {
-			return
-		}
-
-		if val, ok := mutation.Field(field); ok {
-			proposed[field] = val
-			return
-		}
-
-		if _, ok := clearedSet[field]; ok {
-			proposed[field] = nil
-		}
-	})
-
-	if len(proposed) == 0 {
-		return nil
-	}
-
-	return proposed
 }
 
 // uniqueStrings returns distinct non-empty values while preserving first-seen order.

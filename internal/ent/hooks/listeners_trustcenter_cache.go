@@ -15,7 +15,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	notegen "github.com/theopenlane/core/internal/ent/generated/note"
@@ -35,47 +34,47 @@ import (
 func RegisterGalaTrustCenterCacheListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeTrustCenterDoc),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterDoc),
 			Name:   "trustcenter.cache.doc",
 			Handle: handleTrustCenterDocMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeNote),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeNote),
 			Name:   "trustcenter.cache.note",
 			Handle: handleNoteMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeTrustCenterEntity),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterEntity),
 			Name:   "trustcenter.cache.entity",
 			Handle: handleTrustCenterEntityMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeTrustCenterSubprocessor),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterSubprocessor),
 			Name:   "trustcenter.cache.trustcenter_subprocessor",
 			Handle: handleTrustCenterSubprocessorMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeTrustCenterCompliance),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterCompliance),
 			Name:   "trustcenter.cache.compliance",
 			Handle: handleTrustCenterComplianceMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeSubprocessor),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeSubprocessor),
 			Name:   "trustcenter.cache.subprocessor",
 			Handle: handleSubprocessorMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeStandard),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeStandard),
 			Name:   "trustcenter.cache.standard",
 			Handle: handleStandardMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeTrustCenterSetting),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterSetting),
 			Name:   "trustcenter.cache.setting",
 			Handle: handleTrustCenterSettingMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationGalaTopic(entgen.TypeTrustCenter),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenter),
 			Name:   "trustcenter.cache.trust_center",
 			Handle: handleTrustCenterMutationGala,
 		},
@@ -84,8 +83,8 @@ func RegisterGalaTrustCenterCacheListeners(registry *gala.Registry) ([]gala.List
 
 // handleTrustCenterDocMutationGala processes TrustCenterDoc mutations and invalidates cache when needed.
 func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
@@ -95,7 +94,7 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		shouldClearCache = true
 	case ent.OpCreate.String():
-		visibility, ok := events.ParseEnum(
+		visibility, ok := eventqueue.ParseEnum(
 			payload.ProposedChanges[trustcenterdoc.FieldVisibility],
 			enums.ToTrustCenterDocumentVisibility,
 			enums.TrustCenterDocumentVisibilityInvalid,
@@ -107,7 +106,7 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 			}
 		}
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		if mutationFieldChanged(payload, trustcenterdoc.FieldVisibility) {
+		if eventqueue.MutationFieldChanged(payload, trustcenterdoc.FieldVisibility) {
 			shouldClearCache = true
 		}
 	}
@@ -116,9 +115,9 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 		return nil
 	}
 
-	trustCenterID, _ := mutationStringValue(payload, trustcenterdoc.FieldTrustCenterID)
+	trustCenterID, _ := eventqueue.MutationStringValue(payload, trustcenterdoc.FieldTrustCenterID)
 	if trustCenterID == "" {
-		docID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+		docID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && docID != "" {
 			doc, err := client.TrustCenterDoc.Query().
 				Where(trustcenterdoc.ID(docID)).
@@ -139,19 +138,19 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 
 // handleNoteMutationGala processes Note mutations and invalidates cache when trust center linkage changes.
 func handleNoteMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
-	if !mutationFieldChanged(payload, notegen.FieldTrustCenterID) {
+	if !eventqueue.MutationFieldChanged(payload, notegen.FieldTrustCenterID) {
 		return nil
 	}
 
-	tcIDs := mutationStringSliceValue(payload, notegen.FieldTrustCenterID)
+	tcIDs := eventqueue.MutationStringSliceValue(payload, notegen.FieldTrustCenterID)
 
 	if len(tcIDs) == 0 {
-		noteID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+		noteID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && noteID != "" {
 			note, err := client.Note.Query().
 				Where(notegen.ID(noteID)).
@@ -178,14 +177,14 @@ func handleNoteMutationGala(ctx gala.HandlerContext, payload eventqueue.Mutation
 
 // handleTrustCenterEntityMutationGala processes TrustCenterEntity mutations and invalidates cache.
 func handleTrustCenterEntityMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
-	trustCenterID, _ := mutationStringValue(payload, trustcenterentity.FieldTrustCenterID)
+	trustCenterID, _ := eventqueue.MutationStringValue(payload, trustcenterentity.FieldTrustCenterID)
 	if trustCenterID == "" {
-		entityID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+		entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && entityID != "" {
 			entity, err := client.TrustCenterEntity.Get(ctx.Context, entityID)
 			if err == nil && entity != nil {
@@ -203,14 +202,14 @@ func handleTrustCenterEntityMutationGala(ctx gala.HandlerContext, payload eventq
 
 // handleTrustCenterSubprocessorMutationGala processes TrustCenterSubprocessor mutations and invalidates cache.
 func handleTrustCenterSubprocessorMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
-	trustCenterID, _ := mutationStringValue(payload, trustcentersubprocessor.FieldTrustCenterID)
+	trustCenterID, _ := eventqueue.MutationStringValue(payload, trustcentersubprocessor.FieldTrustCenterID)
 	if trustCenterID == "" {
-		entityID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+		entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && entityID != "" {
 			entity, err := client.TrustCenterSubprocessor.Get(ctx.Context, entityID)
 			if err == nil && entity != nil {
@@ -228,14 +227,14 @@ func handleTrustCenterSubprocessorMutationGala(ctx gala.HandlerContext, payload 
 
 // handleTrustCenterComplianceMutationGala processes TrustCenterCompliance mutations and invalidates cache.
 func handleTrustCenterComplianceMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
-	trustCenterID, _ := mutationStringValue(payload, trustcentercompliance.FieldTrustCenterID)
+	trustCenterID, _ := eventqueue.MutationStringValue(payload, trustcentercompliance.FieldTrustCenterID)
 	if trustCenterID == "" {
-		entityID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+		entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && entityID != "" {
 			entity, err := client.TrustCenterCompliance.Get(ctx.Context, entityID)
 			if err == nil && entity != nil {
@@ -253,8 +252,8 @@ func handleTrustCenterComplianceMutationGala(ctx gala.HandlerContext, payload ev
 
 // handleSubprocessorMutationGala processes Subprocessor mutations and invalidates related trust center cache.
 func handleSubprocessorMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
@@ -262,7 +261,7 @@ func handleSubprocessorMutationGala(ctx gala.HandlerContext, payload eventqueue.
 		return nil
 	}
 
-	subprocessorID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+	subprocessorID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok || subprocessorID == "" {
 		return nil
 	}
@@ -295,8 +294,8 @@ func handleSubprocessorMutationGala(ctx gala.HandlerContext, payload eventqueue.
 
 // handleStandardMutationGala processes Standard mutations and invalidates related trust center cache.
 func handleStandardMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
@@ -304,7 +303,7 @@ func handleStandardMutationGala(ctx gala.HandlerContext, payload eventqueue.Muta
 		return nil
 	}
 
-	standardID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+	standardID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok || standardID == "" {
 		return nil
 	}
@@ -337,14 +336,14 @@ func handleStandardMutationGala(ctx gala.HandlerContext, payload eventqueue.Muta
 
 // handleTrustCenterSettingMutationGala processes TrustCenterSetting mutations and refreshes cache.
 func handleTrustCenterSettingMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
-	trustCenterID, _ := mutationStringValue(payload, trustcentersetting.FieldTrustCenterID)
+	trustCenterID, _ := eventqueue.MutationStringValue(payload, trustcentersetting.FieldTrustCenterID)
 	if trustCenterID == "" {
-		settingID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+		settingID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && settingID != "" {
 			setting, err := client.TrustCenterSetting.Get(ctx.Context, settingID)
 			if err == nil && setting != nil {
@@ -362,8 +361,8 @@ func handleTrustCenterSettingMutationGala(ctx gala.HandlerContext, payload event
 
 // handleTrustCenterMutationGala processes TrustCenter mutations and refreshes cache.
 func handleTrustCenterMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client := mutationClientFromGala(ctx)
-	if client == nil {
+	client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
 		return nil
 	}
 
@@ -372,7 +371,7 @@ func handleTrustCenterMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 		return nil
 	}
 
-	trustCenterID, ok := mutationEntityIDFromGala(payload, ctx.Envelope.Headers.Properties)
+	trustCenterID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok || trustCenterID == "" {
 		return nil
 	}
@@ -384,9 +383,9 @@ func handleTrustCenterMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 func shouldInvalidateCacheForSubprocessor(payload eventqueue.MutationGalaPayload) bool {
 	switch strings.TrimSpace(payload.Operation) {
 	case ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		return mutationFieldChanged(payload, subprocessor.FieldName) ||
-			mutationFieldChanged(payload, subprocessor.FieldLogoFileID) ||
-			mutationFieldChanged(payload, subprocessor.FieldLogoRemoteURL)
+		return eventqueue.MutationFieldChanged(payload, subprocessor.FieldName) ||
+			eventqueue.MutationFieldChanged(payload, subprocessor.FieldLogoFileID) ||
+			eventqueue.MutationFieldChanged(payload, subprocessor.FieldLogoRemoteURL)
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		return true
 	}
@@ -398,8 +397,8 @@ func shouldInvalidateCacheForSubprocessor(payload eventqueue.MutationGalaPayload
 func shouldInvalidateCacheForStandard(payload eventqueue.MutationGalaPayload) bool {
 	switch strings.TrimSpace(payload.Operation) {
 	case ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		return mutationFieldChanged(payload, standard.FieldName) ||
-			mutationFieldChanged(payload, standard.FieldLogoFileID)
+		return eventqueue.MutationFieldChanged(payload, standard.FieldName) ||
+			eventqueue.MutationFieldChanged(payload, standard.FieldLogoFileID)
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		return true
 	}
