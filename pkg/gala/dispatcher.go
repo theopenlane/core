@@ -3,6 +3,7 @@ package gala
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
@@ -91,7 +92,20 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 		return err
 	}
 
-	if _, err = d.jobClient.Insert(ctx, args, &river.InsertOpts{Queue: d.defaultQueue}); err != nil {
+	queueName := strings.TrimSpace(envelope.Headers.Queue)
+	if queueName == "" {
+		queueName = d.defaultQueue
+	}
+
+	insertOpts := &river.InsertOpts{
+		Queue: queueName,
+	}
+
+	if envelope.Headers.MaxAttempts > 0 {
+		insertOpts.MaxAttempts = envelope.Headers.MaxAttempts
+	}
+
+	if _, err = d.jobClient.Insert(ctx, args, insertOpts); err != nil {
 		return ErrRiverDispatchInsertFailed
 	}
 

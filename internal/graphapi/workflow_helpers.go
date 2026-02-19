@@ -6,12 +6,14 @@ import (
 	"sync"
 	"time"
 
+	"github.com/samber/do/v2"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
@@ -63,15 +65,15 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 	return result, ErrTimedOutWaitingForCondition
 }
 
-// WorkflowTestSetup contains the workflow engine and eventer for tests
+// WorkflowTestSetup contains the workflow engine and gala runtime for tests.
 type WorkflowTestSetup struct {
 	Engine  *engine.WorkflowEngine
-	Eventer *hooks.Eventer
+	Runtime *gala.Gala
 }
 
-// SetupWorkflowEngine creates a workflow engine with a real eventer for integration tests.
-// This wires up event listeners so that assignment completions and other workflow events
-// are processed through the actual event-driven flow used in production.
+// SetupWorkflowEngine creates a workflow engine with an in-memory Gala runtime for integration tests.
+// This wires workflow listeners and mutation hooks so assignment completions and related workflow
+// events are processed through the same listener graph as production.
 func SetupWorkflowEngine(client *generated.Client) (*WorkflowTestSetup, error) {
 	if client == nil {
 		return nil, ErrClientRequired
@@ -86,23 +88,34 @@ func SetupWorkflowEngine(client *generated.Client) (*WorkflowTestSetup, error) {
 		return existing, nil
 	}
 
-	eventer := hooks.NewEventerPool(client)
-	hooks.RegisterGlobalHooks(client, eventer)
-
-	if err := hooks.RegisterListeners(eventer); err != nil {
-		return nil, err
-	}
-
-	wfEngine, err := engine.NewWorkflowEngine(client, eventer.Emitter)
+	runtime, err := gala.NewInMemory()
 	if err != nil {
 		return nil, err
 	}
+
+	hooks.RegisterGlobalHooks(client)
+	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
+		return runtime
+	}))
+
+	if _, err := hooks.RegisterGalaWorkflowListeners(runtime.Registry()); err != nil {
+		return nil, err
+	}
+
+	wfEngine, err := engine.NewWorkflowEngine(client, runtime)
+	if err != nil {
+		return nil, err
+	}
+
+	do.ProvideValue(runtime.Injector(), runtime)
+	do.ProvideValue(runtime.Injector(), client)
+	do.ProvideValue(runtime.Injector(), wfEngine)
 
 	client.WorkflowEngine = wfEngine
 
 	setup := &WorkflowTestSetup{
 		Engine:  wfEngine,
-		Eventer: eventer,
+		Runtime: runtime,
 	}
 
 	workflowTestSetups[client] = setup

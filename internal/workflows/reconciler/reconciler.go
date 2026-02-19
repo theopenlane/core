@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 const defaultMaxEmitAttempts = 3
@@ -45,19 +46,19 @@ func WithMaxAttempts(maxRetries int) Option {
 // Reconciler re-emits workflow events that failed to enqueue
 type Reconciler struct {
 	client      *generated.Client
-	emitter     soiree.Emitter
+	gala        *gala.Gala
 	maxAttempts int
 }
 
 // New constructs a workflow reconciler
-func New(client *generated.Client, emitter soiree.Emitter, opts ...Option) (*Reconciler, error) {
+func New(client *generated.Client, runtime *gala.Gala, opts ...Option) (*Reconciler, error) {
 	if client == nil {
 		return nil, ErrNilClient
 	}
 
 	r := &Reconciler{
 		client:      client,
-		emitter:     emitter,
+		gala:        runtime,
 		maxAttempts: defaultMaxEmitAttempts,
 	}
 
@@ -159,14 +160,25 @@ func (r *Reconciler) processEmitFailure(ctx context.Context, evt *generated.Work
 
 // reemit builds an event from stored details and emits it through the configured emitter
 func (r *Reconciler) reemit(ctx context.Context, details *workflows.EmitFailureDetails) workflows.EmitReceipt {
-	event := soiree.NewBaseEvent(details.Topic, json.RawMessage(details.Payload))
-	props := event.Properties()
-	if details.EventID != "" {
-		props[soiree.PropertyEventID] = details.EventID
-		event.SetProperties(props)
+	envelope := gala.Envelope{
+		Topic:      gala.TopicName(details.Topic),
+		OccurredAt: time.Now().UTC(),
+		Headers: gala.Headers{
+			IdempotencyKey: details.EventID,
+		},
+		Payload: details.Payload,
 	}
 
-	return workflows.EmitWorkflowEventWithEvent(ctx, r.emitter, details.Topic, event, r.client)
+	if details.EventID != "" {
+		envelope.ID = gala.EventID(details.EventID)
+	}
+
+	if envelope.ID == "" {
+		envelope.ID = gala.NewEventID()
+		envelope.Headers.IdempotencyKey = string(envelope.ID)
+	}
+
+	return workflows.EmitWorkflowEnvelope(ctx, r.gala, envelope)
 }
 
 // markTerminal marks a failure event as terminal and updates the workflow instance state

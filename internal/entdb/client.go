@@ -55,14 +55,11 @@ type client struct {
 // options for creating the ent client
 type Option func(*ent.Client)
 
-// WithEventer adds the eventer hooks and listeners to the ent client.
-// If workflowConfig is provided and enabled, it also creates and sets the WorkflowEngine on the client.
-func WithEventer(eventer *hooks.Eventer, workflowConfig *workflows.Config) Option {
+// WithWorkflows wires workflow-related hooks and optionally configures the workflow engine.
+func WithWorkflows(workflowConfig *workflows.Config) Option {
 	return func(c *ent.Client) {
-		eventer.Initialize(c)
-
 		if workflowConfig != nil && workflowConfig.Enabled {
-			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, eventer.Emitter, workflowConfig)
+			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, nil, workflowConfig)
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to create workflow engine")
 			}
@@ -70,11 +67,7 @@ func WithEventer(eventer *hooks.Eventer, workflowConfig *workflows.Config) Optio
 			c.WorkflowEngine = wfEngine
 		}
 
-		hooks.RegisterGlobalHooks(c, eventer)
-
-		if err := hooks.RegisterListeners(eventer); err != nil {
-			log.Fatal().Err(err).Msg("failed registering listeners")
-		}
+		hooks.RegisterGlobalHooks(c)
 	}
 }
 
@@ -429,8 +422,8 @@ func NewTestFixture() *testutils.TestFixture {
 		testutils.WithMaxConn(200)) //nolint:mnd
 }
 
-// NewTestClient creates a entdb client that can be used for TEST purposes ONLY.
-// clientOpts allows passing entdb options like WithEventer; pass nil if not needed.
+// NewTestClient creates an entdb client that can be used for TEST purposes ONLY.
+// clientOpts allows passing entdb options like WithWorkflows; pass nil if not needed.
 func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, clientOpts []Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
 		Debug:           true,

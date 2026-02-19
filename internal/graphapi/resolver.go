@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // This file will not be regenerated automatically.
@@ -36,7 +36,7 @@ const (
 // Resolver provides a graph response resolver
 type Resolver struct {
 	db                *ent.Client
-	pool              *soiree.Pool
+	pool              *gala.Pool
 	extensionsEnabled bool
 	uploader          *objects.Service
 	isDevelopment     bool

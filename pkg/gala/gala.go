@@ -13,8 +13,20 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 )
 
+// DispatchMode controls whether envelopes are dispatched durably or in-memory.
+type DispatchMode string
+
+const (
+	// DispatchModeDurable persists envelopes in River before worker execution.
+	DispatchModeDurable DispatchMode = "durable"
+	// DispatchModeInMemory dispatches envelopes immediately in-process.
+	DispatchModeInMemory DispatchMode = "in_memory"
+)
+
 // Config configures cohesive Gala startup
 type Config struct {
+	// DispatchMode controls whether events are dispatched durably (River) or in-memory.
+	DispatchMode DispatchMode
 	// Enabled toggles Gala worker startup and dispatch support when true
 	Enabled bool
 	// ConnectionURI is the database connection URI used for the dedicated gala river client
@@ -23,6 +35,8 @@ type Config struct {
 	QueueName string
 	// WorkerCount is the max worker concurrency for the gala queue
 	WorkerCount int
+	// QueueWorkers configures additional queue worker concurrency by queue name.
+	QueueWorkers map[string]int
 	// MaxRetries sets max attempts for gala dispatch jobs when greater than zero
 	MaxRetries int
 	// RunMigrations enables River schema migrations on startup (use for tests only)
@@ -48,12 +62,18 @@ type Gala struct {
 	contextManager *ContextManager
 	// jobClient is the dedicated River client used for durable dispatch
 	jobClient *riverqueue.Client
+	// dispatchMode captures the runtime dispatch mode.
+	dispatchMode DispatchMode
 }
 
 // NewGala initializes your gala, initializes dependencies, and starts workers
 func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	if err := config.validate(); err != nil {
 		return nil, err
+	}
+
+	if config.DispatchMode == DispatchModeInMemory {
+		return newInMemoryGala()
 	}
 
 	app = &Gala{}
@@ -67,9 +87,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 
 	riverConf := river.Config{
 		Workers: workers,
-		Queues: map[string]river.QueueConfig{
-			config.QueueName: {MaxWorkers: config.WorkerCount},
-		},
+		Queues:  buildQueueConfig(config.QueueName, config.WorkerCount, config.QueueWorkers),
 	}
 
 	if config.MaxRetries > 0 {
@@ -110,7 +128,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		return nil, err
 	}
 
-	if err := app.initialize(dispatcher); err != nil {
+	if err := app.initialize(dispatcher, DispatchModeDurable); err != nil {
 		return nil, err
 	}
 
@@ -121,7 +139,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 
 // initialize sets Gala core dependencies and default runtime services
 // future expansion / features may necessitate passing in additional dependencies or a more complex runtime config object but avoiding pre-optimization
-func (g *Gala) initialize(dispatcher Dispatcher) error {
+func (g *Gala) initialize(dispatcher Dispatcher, dispatchMode DispatchMode) error {
 	contextManager, err := NewContextManager(NewContextCodec())
 	if err != nil {
 		return err
@@ -131,14 +149,21 @@ func (g *Gala) initialize(dispatcher Dispatcher) error {
 	g.injector = do.New()
 	g.dispatcher = dispatcher
 	g.contextManager = contextManager
+	g.dispatchMode = dispatchMode
 
 	return nil
 }
 
 // validate normalizes config defaults and validates required fields
 func (c *Config) validate() error {
-	if c.ConnectionURI == "" {
-		return ErrRiverConnectionURIRequired
+	if c.DispatchMode == "" {
+		c.DispatchMode = DispatchModeDurable
+	}
+
+	switch c.DispatchMode {
+	case DispatchModeDurable, DispatchModeInMemory:
+	default:
+		return ErrDispatchModeInvalid
 	}
 
 	if c.QueueName == "" {
@@ -149,7 +174,29 @@ func (c *Config) validate() error {
 		c.WorkerCount = 1
 	}
 
+	if c.DispatchMode == DispatchModeDurable && c.ConnectionURI == "" {
+		return ErrRiverConnectionURIRequired
+	}
+
 	return nil
+}
+
+// buildQueueConfig constructs the River queue config with defaults and optional overrides
+func buildQueueConfig(defaultQueueName string, defaultWorkerCount int, queueWorkers map[string]int) map[string]river.QueueConfig {
+	queues := map[string]river.QueueConfig{
+		defaultQueueName: {MaxWorkers: defaultWorkerCount},
+	}
+
+	for queueName, workers := range queueWorkers {
+		queueName = strings.TrimSpace(queueName)
+		if queueName == "" || workers < 1 {
+			continue
+		}
+
+		queues[queueName] = river.QueueConfig{MaxWorkers: workers}
+	}
+
+	return queues
 }
 
 // Registry returns the Gala topic/listener registry
@@ -319,6 +366,10 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 
 // StartWorkers starts Gala workers
 func (g *Gala) StartWorkers(ctx context.Context) error {
+	if g.dispatchMode == DispatchModeInMemory {
+		return nil
+	}
+
 	if g.jobClient == nil {
 		return ErrRiverJobClientRequired
 	}
@@ -332,6 +383,10 @@ func (g *Gala) StartWorkers(ctx context.Context) error {
 
 // StopWorkers stops Gala workers
 func (g *Gala) StopWorkers(ctx context.Context) error {
+	if g.dispatchMode == DispatchModeInMemory {
+		return nil
+	}
+
 	if g.jobClient == nil {
 		return ErrRiverJobClientRequired
 	}

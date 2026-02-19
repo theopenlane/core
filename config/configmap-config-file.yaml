@@ -1128,23 +1128,17 @@ data:
         trackstate: {{ .Values.openlane.coreConfiguration.workflows.cel.trackstate }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.workflows.gala }}
-      gala:
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.enabled }}
-        enabled: {{ .Values.openlane.coreConfiguration.workflows.gala.enabled }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.workercount }}
-        workercount: {{ .Values.openlane.coreConfiguration.workflows.gala.workercount }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
-        maxretries: {{ .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
-        failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
-        queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
-        {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.eventingenabled }}
+      eventingenabled: {{ .Values.openlane.coreConfiguration.workflows.eventingenabled }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.eventingworkercount }}
+      eventingworkercount: {{ .Values.openlane.coreConfiguration.workflows.eventingworkercount }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.eventingmaxretries }}
+      eventingmaxretries: {{ .Values.openlane.coreConfiguration.workflows.eventingmaxretries }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.eventingqueuename }}
+      eventingqueuename: {{ .Values.openlane.coreConfiguration.workflows.eventingqueuename | quote }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.campaignwebhook }}

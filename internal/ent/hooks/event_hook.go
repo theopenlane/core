@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -19,8 +18,8 @@ import (
 )
 
 // EmitGalaEventHook returns a hook that emits Gala mutation envelopes after mutations.
-func EmitGalaEventHook(galaProvider func() *gala.Gala, failOnEnqueueError bool) ent.Hook {
-	return hook.If(func(next ent.Mutator) ent.Mutator {
+func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
 			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
 				return next.Mutate(ctx, mutation)
@@ -49,6 +48,16 @@ func EmitGalaEventHook(galaProvider func() *gala.Gala, failOnEnqueueError bool) 
 			}
 
 			emit := func() {
+				runtimes := resolveGalaRuntimes(galaProviders)
+				if len(runtimes) == 0 {
+					return
+				}
+
+				targets := mutationDispatchTargets(runtimes, mutationDispatchTopics(topicName), op)
+				if len(targets) == 0 {
+					return
+				}
+
 				eventID := &EventID{}
 				if op == SoftDeleteOne {
 					eventID, err = parseSoftDeleteEventID(ctx, mutation)
@@ -73,11 +82,12 @@ func EmitGalaEventHook(galaProvider func() *gala.Gala, failOnEnqueueError bool) 
 				}
 
 				payload := newMutationPayloadForDispatch(mutation, op, eventID.ID)
-				galaRuntime := galaProvider()
 				metadata := eventqueue.NewMutationGalaMetadata(eventID.ID, payload)
 
-				if galaErr := enqueueGalaMutation(ctx, galaRuntime, topicName, payload, metadata); galaErr != nil && failOnEnqueueError {
-					logx.FromContext(ctx).Error().Err(galaErr).Str("topic", topicName).Msg("gala mutation dispatch failed")
+				for _, target := range targets {
+					if galaErr := enqueueGalaMutation(ctx, target.runtime, string(target.topic), payload, metadata); galaErr != nil {
+						logx.FromContext(ctx).Error().Err(galaErr).Str("topic", string(target.topic)).Msg("gala mutation dispatch failed")
+					}
 				}
 			}
 
@@ -98,32 +108,110 @@ func EmitGalaEventHook(galaProvider func() *gala.Gala, failOnEnqueueError bool) 
 
 			return retVal, err
 		})
-	},
-		emitGalaEventOn(galaProvider),
-	)
+	}
 }
 
-// emitGalaEventOn reports whether the mutation topic is eligible for Gala dispatch
-func emitGalaEventOn(galaProvider func() *gala.Gala) func(context.Context, entgen.Mutation) bool {
-	return func(ctx context.Context, m entgen.Mutation) bool {
-		if m == nil {
-			return false
-		}
-
-		entity := m.Type()
-		if entity == "" || galaProvider == nil {
-			return false
-		}
-
-		g := galaProvider()
-		if g == nil {
-			return false
-		}
-
-		operation := getOperation(ctx, m)
-
-		return g.Registry().InterestedIn(gala.TopicName(entity), operation)
+func resolveGalaRuntimes(providers []func() *gala.Gala) []*gala.Gala {
+	if len(providers) == 0 {
+		return nil
 	}
+
+	seen := map[*gala.Gala]struct{}{}
+	runtimes := make([]*gala.Gala, 0, len(providers))
+
+	for _, provider := range providers {
+		if provider == nil {
+			continue
+		}
+
+		runtime := provider()
+		if runtime == nil {
+			continue
+		}
+
+		if _, ok := seen[runtime]; ok {
+			continue
+		}
+
+		seen[runtime] = struct{}{}
+		runtimes = append(runtimes, runtime)
+	}
+
+	if len(runtimes) == 0 {
+		return nil
+	}
+
+	return runtimes
+}
+
+func mutationDispatchTopics(schemaType string) []gala.TopicName {
+	topics := []gala.TopicName{
+		gala.TopicName(schemaType),
+		eventqueue.WorkflowMutationTopicName(schemaType),
+		eventqueue.NotificationMutationTopicName(schemaType),
+	}
+
+	seen := map[gala.TopicName]struct{}{}
+	out := make([]gala.TopicName, 0, len(topics))
+
+	for _, topic := range topics {
+		if topic == "" {
+			continue
+		}
+
+		if _, ok := seen[topic]; ok {
+			continue
+		}
+
+		seen[topic] = struct{}{}
+		out = append(out, topic)
+	}
+
+	return out
+}
+
+type mutationDispatchTarget struct {
+	runtime *gala.Gala
+	topic   gala.TopicName
+}
+
+func mutationDispatchTargets(runtimes []*gala.Gala, topics []gala.TopicName, operation string) []mutationDispatchTarget {
+	if len(runtimes) == 0 || len(topics) == 0 {
+		return nil
+	}
+
+	seen := map[mutationDispatchTarget]struct{}{}
+	targets := make([]mutationDispatchTarget, 0, len(runtimes)*len(topics))
+
+	for _, runtime := range runtimes {
+		if runtime == nil {
+			continue
+		}
+
+		for _, topic := range topics {
+			if topic == "" {
+				continue
+			}
+
+			if !runtime.Registry().InterestedIn(topic, operation) {
+				continue
+			}
+
+			target := mutationDispatchTarget{runtime: runtime, topic: topic}
+			if _, ok := seen[target]; ok {
+				continue
+			}
+
+			seen[target] = struct{}{}
+			targets = append(targets, target)
+		}
+	}
+
+	if len(targets) == 0 {
+		return nil
+	}
+
+	return targets
 }
 
 // newMutationPayloadForDispatch builds shared mutation payload metadata for asynchronous dispatch hooks.

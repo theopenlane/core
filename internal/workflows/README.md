@@ -61,7 +61,7 @@ User Request ──► Hook intercepts ──► Creates WorkflowProposal ──
 For workflows that react to changes:
 
 ```
-User Request ──► Mutation commits ──► soiree event emitted ──► handleWorkflowMutation
+User Request ──► Mutation commits ──► gala event emitted ──► handleWorkflowMutation
                                                                       │
                                                                       ▼
                                                               Find matching definitions
@@ -220,7 +220,7 @@ There are a few examples included in this package, and you can find the types in
 ## Events and Event Topics
 
 These are the “statuses” stored in workflow_events.event_type and payload.event_type. We only persist
-business-facing snapshots plus emit failure tracking. Runtime flow still uses soiree topics
+business-facing snapshots plus emit failure tracking. Runtime flow uses gala topics
 (WorkflowTriggered, ActionStarted, AssignmentCompleted, etc.), but not all topics are persisted.
 
 | WorkflowEventType | Written by (code) | Meaning / status | Readers / relies-on |

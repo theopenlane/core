@@ -5,9 +5,10 @@ import (
 
 	"entgo.io/ent/privacy"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/utils/contextx"
 )
 
 // WorkflowBypassContextKey is the context key for workflow bypass operations
@@ -26,20 +27,22 @@ type skipEventEmissionFlag struct {
 // WithContext sets the workflow bypass context
 // Operations with this context will skip workflow approval interceptors
 func WithContext(ctx context.Context) context.Context {
-	return contextx.With(ctx, WorkflowBypassContextKey{})
+	return gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
 
 // FromContext retrieves the workflow bypass context
 func FromContext(ctx context.Context) (WorkflowBypassContextKey, bool) {
-	return contextx.From[WorkflowBypassContextKey](ctx)
+	if gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass) {
+		return WorkflowBypassContextKey{}, true
+	}
+
+	return WorkflowBypassContextKey{}, false
 }
 
 // IsWorkflowBypass checks if the context has workflow bypass enabled
 // Used by workflow interceptors to skip approval routing for system operations
 func IsWorkflowBypass(ctx context.Context) bool {
-	_, ok := FromContext(ctx)
-
-	return ok
+	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
 
 // WithAllowWorkflowEventEmission marks the context to allow workflow event emission even when bypass is set.
@@ -48,11 +51,11 @@ func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
 		return ctx
 	}
 
-	if _, ok := contextx.From[WorkflowAllowEventEmissionKey](ctx); ok {
+	if gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission) {
 		return ctx
 	}
 
-	return contextx.With(ctx, WorkflowAllowEventEmissionKey{})
+	return gala.WithFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
 }
 
 // AllowWorkflowEventEmission reports whether workflow events should be emitted even when bypass is set.
@@ -61,9 +64,7 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 		return false
 	}
 
-	_, ok := contextx.From[WorkflowAllowEventEmissionKey](ctx)
-
-	return ok
+	return gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
 }
 
 // WithSkipEventEmission installs a mutable flag in the context so inner hooks can

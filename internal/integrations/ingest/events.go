@@ -1,6 +1,7 @@
 package ingest
 
 import (
+	"context"
 	"strings"
 
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -8,7 +9,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
@@ -27,34 +28,29 @@ type RequestedPayload struct {
 }
 
 // IntegrationIngestRequestedTopic is emitted when webhook payloads should be ingested.
-var IntegrationIngestRequestedTopic = soiree.NewTypedTopic[RequestedPayload](TopicIntegrationIngestRequested,
-	soiree.WithObservability(soiree.ObservabilitySpec[RequestedPayload]{
-		Operation: "handle_integration_ingest_requested",
-		Origin:    "listeners",
-	}),
-)
+var IntegrationIngestRequestedTopic = gala.Topic[RequestedPayload]{Name: gala.TopicName(TopicIntegrationIngestRequested)}
 
-// RegisterIngestListeners registers ingest listeners on the supplied event bus.
-func RegisterIngestListeners(bus *soiree.EventBus, db *ent.Client) error {
-	if bus == nil {
-		return ErrIngestEmitterRequired
+// RegisterIngestListeners registers ingest listeners on the supplied Gala registry.
+func RegisterIngestListeners(registry *gala.Registry, db *ent.Client) ([]gala.ListenerID, error) {
+	if registry == nil {
+		return nil, ErrIngestEmitterRequired
 	}
 	if db == nil {
-		return ErrDBClientRequired
+		return nil, ErrDBClientRequired
 	}
 
-	binding := soiree.BindListener(
-		IntegrationIngestRequestedTopic,
-		func(ctx *soiree.EventContext, payload RequestedPayload) error {
-			return handleIngestRequested(ctx, db, payload)
+	return gala.RegisterListeners(registry,
+		gala.Definition[RequestedPayload]{
+			Topic: IntegrationIngestRequestedTopic,
+			Name:  "integration.ingest.requested",
+			Handle: func(ctx gala.HandlerContext, payload RequestedPayload) error {
+				return handleIngestRequested(ctx.Context, db, payload)
+			},
 		},
 	)
-
-	_, err := bus.RegisterListeners(binding)
-	return err
 }
 
-func handleIngestRequested(ctx *soiree.EventContext, db *ent.Client, payload RequestedPayload) error {
+func handleIngestRequested(ctx context.Context, db *ent.Client, payload RequestedPayload) error {
 	if len(payload.Envelopes) == 0 {
 		return nil
 	}
@@ -69,7 +65,7 @@ func handleIngestRequested(ctx *soiree.EventContext, db *ent.Client, payload Req
 		return ErrIngestSchemaRequired
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	integrationRecord, err := db.Integration.Query().
 		Where(integration.IDEQ(integrationID)).
 		Only(allowCtx)

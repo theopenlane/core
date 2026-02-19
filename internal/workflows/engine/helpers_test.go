@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 type testEntity struct {
@@ -262,7 +262,7 @@ func TestActionFailureDetails(t *testing.T) {
 }
 
 func TestActionIndexOutOfBoundsDetails(t *testing.T) {
-	payload := soiree.WorkflowActionStartedPayload{
+	payload := gala.WorkflowActionStartedPayload{
 		ActionIndex: 3,
 		ActionType:  enums.WorkflowActionTypeNotification,
 		ObjectID:    "obj-2",

@@ -39,7 +39,7 @@ func TestConfigOptions(t *testing.T) {
 	assert.True(t, cfg.CEL.MacroCallTracking)
 	assert.False(t, cfg.CEL.EvalOptimize)
 	assert.True(t, cfg.CEL.TrackState)
-	assert.Equal(t, "events", cfg.Gala.QueueName)
+	assert.Equal(t, "events", cfg.EventingQueueName)
 
 	override := Config{
 		Enabled: false,
@@ -47,23 +47,19 @@ func TestConfigOptions(t *testing.T) {
 			Timeout:   time.Second,
 			CostLimit: 12,
 		},
-		Gala: GalaConfig{
-			Enabled:            true,
-			WorkerCount:        11,
-			MaxRetries:         13,
-			FailOnEnqueueError: true,
-			QueueName:          "events",
-		},
+		EventingEnabled:     true,
+		EventingWorkerCount: 11,
+		EventingMaxRetries:  13,
+		EventingQueueName:   "events",
 	}
 	cfg = NewDefaultConfig(WithConfig(override))
 	assert.Equal(t, override.Enabled, cfg.Enabled)
 	assert.Equal(t, override.CEL.Timeout, cfg.CEL.Timeout)
 	assert.Equal(t, override.CEL.CostLimit, cfg.CEL.CostLimit)
-	assert.Equal(t, override.Gala.Enabled, cfg.Gala.Enabled)
-	assert.Equal(t, override.Gala.WorkerCount, cfg.Gala.WorkerCount)
-	assert.Equal(t, override.Gala.MaxRetries, cfg.Gala.MaxRetries)
-	assert.Equal(t, override.Gala.FailOnEnqueueError, cfg.Gala.FailOnEnqueueError)
-	assert.Equal(t, override.Gala.QueueName, cfg.Gala.QueueName)
+	assert.Equal(t, override.EventingEnabled, cfg.EventingEnabled)
+	assert.Equal(t, override.EventingWorkerCount, cfg.EventingWorkerCount)
+	assert.Equal(t, override.EventingMaxRetries, cfg.EventingMaxRetries)
+	assert.Equal(t, override.EventingQueueName, cfg.EventingQueueName)
 }
 
 func TestConfigIsEnabledNil(t *testing.T) {

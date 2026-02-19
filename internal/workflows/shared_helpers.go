@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -320,53 +319,4 @@ type MutationPayload struct {
 	ProposedChanges map[string]any
 	// Client is the ent client that can be used to perform additional queries or mutations
 	Client *generated.Client
-}
-
-// MutationEntityID derives the entity identifier from the payload or event properties.
-func MutationEntityID(ctx *soiree.EventContext, payload *MutationPayload) (string, bool) {
-	if payload != nil && payload.EntityID != "" {
-		return payload.EntityID, true
-	}
-
-	if ctx == nil {
-		return "", false
-	}
-
-	if id, ok := ctx.PropertyString("ID"); ok && id != "" {
-		return id, true
-	}
-
-	if raw, ok := ctx.Property("ID"); ok && raw != nil {
-		if str, ok := raw.(fmt.Stringer); ok {
-			value := str.String()
-			if value == "" {
-				return "", false
-			}
-
-			return value, true
-		}
-
-		value := fmt.Sprint(raw)
-		if value == "" || value == "<nil>" {
-			return "", false
-		}
-
-		return value, true
-	}
-
-	return "", false
-}
-
-// MutationClient returns the ent client associated with the mutation.
-func MutationClient(ctx *soiree.EventContext, payload *MutationPayload) *generated.Client {
-	if payload != nil && payload.Client != nil {
-		return payload.Client
-	}
-
-	client, ok := soiree.ClientAs[*generated.Client](ctx)
-	if !ok {
-		return nil
-	}
-
-	return client
 }
