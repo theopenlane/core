@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // WorkflowKind enumerates workflow kinds.
 type WorkflowKind string
@@ -15,43 +11,16 @@ var (
 	WorkflowKindNotification WorkflowKind = "NOTIFICATION"
 )
 
-var WorkflowKinds = []string{
-	string(WorkflowKindApproval),
-	string(WorkflowKindLifecycle),
-	string(WorkflowKindNotification),
-}
+var workflowKindValues = []WorkflowKind{WorkflowKindApproval, WorkflowKindLifecycle, WorkflowKindNotification}
 
-func (WorkflowKind) Values() (kinds []string) {
-	return WorkflowKinds
-}
+// WorkflowKinds lists all valid workflow kinds as strings.
+var WorkflowKinds = stringValues(workflowKindValues)
 
-func (r WorkflowKind) String() string { return string(r) }
-
-func ToWorkflowKind(v string) *WorkflowKind {
-	switch strings.ToUpper(v) {
-	case WorkflowKindApproval.String():
-		return &WorkflowKindApproval
-	case WorkflowKindLifecycle.String():
-		return &WorkflowKindLifecycle
-	case WorkflowKindNotification.String():
-		return &WorkflowKindNotification
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowKind) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowKind) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowKind, v)
-	}
-	*r = WorkflowKind(str)
-	return nil
-}
+func (WorkflowKind) Values() []string    { return WorkflowKinds }
+func (r WorkflowKind) String() string    { return string(r) }
+func ToWorkflowKind(v string) *WorkflowKind { return parse(v, workflowKindValues, nil) }
+func (r WorkflowKind) MarshalGQL(w io.Writer)   { marshalGQL(r, w) }
+func (r *WorkflowKind) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
 
 // WorkflowInstanceState enumerates instance states.
 type WorkflowInstanceState string
@@ -63,46 +32,18 @@ var (
 	WorkflowInstanceStatePaused    WorkflowInstanceState = "PAUSED"
 )
 
-var WorkflowInstanceStates = []string{
-	string(WorkflowInstanceStateRunning),
-	string(WorkflowInstanceStateCompleted),
-	string(WorkflowInstanceStateFailed),
-	string(WorkflowInstanceStatePaused),
+var workflowInstanceStateValues = []WorkflowInstanceState{
+	WorkflowInstanceStateRunning, WorkflowInstanceStateCompleted, WorkflowInstanceStateFailed, WorkflowInstanceStatePaused,
 }
 
-func (WorkflowInstanceState) Values() (states []string) {
-	return WorkflowInstanceStates
-}
+// WorkflowInstanceStates lists all valid workflow instance states as strings.
+var WorkflowInstanceStates = stringValues(workflowInstanceStateValues)
 
-func (r WorkflowInstanceState) String() string { return string(r) }
-
-func ToWorkflowInstanceState(v string) *WorkflowInstanceState {
-	switch strings.ToUpper(v) {
-	case WorkflowInstanceStateRunning.String():
-		return &WorkflowInstanceStateRunning
-	case WorkflowInstanceStateCompleted.String():
-		return &WorkflowInstanceStateCompleted
-	case WorkflowInstanceStateFailed.String():
-		return &WorkflowInstanceStateFailed
-	case WorkflowInstanceStatePaused.String():
-		return &WorkflowInstanceStatePaused
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowInstanceState) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowInstanceState) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowInstanceState, v)
-	}
-	*r = WorkflowInstanceState(str)
-	return nil
-}
+func (WorkflowInstanceState) Values() []string       { return WorkflowInstanceStates }
+func (r WorkflowInstanceState) String() string        { return string(r) }
+func ToWorkflowInstanceState(v string) *WorkflowInstanceState { return parse(v, workflowInstanceStateValues, nil) }
+func (r WorkflowInstanceState) MarshalGQL(w io.Writer)        { marshalGQL(r, w) }
+func (r *WorkflowInstanceState) UnmarshalGQL(v any) error     { return unmarshalGQL(r, v) }
 
 // WorkflowAssignmentStatus enumerates assignment statuses.
 type WorkflowAssignmentStatus string
@@ -114,46 +55,19 @@ var (
 	WorkflowAssignmentStatusChangesRequested WorkflowAssignmentStatus = "CHANGES_REQUESTED"
 )
 
-var WorkflowAssignmentStatuses = []string{
-	string(WorkflowAssignmentStatusPending),
-	string(WorkflowAssignmentStatusApproved),
-	string(WorkflowAssignmentStatusRejected),
-	string(WorkflowAssignmentStatusChangesRequested),
+var workflowAssignmentStatusValues = []WorkflowAssignmentStatus{
+	WorkflowAssignmentStatusPending, WorkflowAssignmentStatusApproved,
+	WorkflowAssignmentStatusRejected, WorkflowAssignmentStatusChangesRequested,
 }
 
-func (WorkflowAssignmentStatus) Values() (vals []string) {
-	return WorkflowAssignmentStatuses
-}
+// WorkflowAssignmentStatuses lists all valid workflow assignment statuses as strings.
+var WorkflowAssignmentStatuses = stringValues(workflowAssignmentStatusValues)
 
-func (r WorkflowAssignmentStatus) String() string { return string(r) }
-
-func ToWorkflowAssignmentStatus(v string) *WorkflowAssignmentStatus {
-	switch strings.ToUpper(v) {
-	case WorkflowAssignmentStatusPending.String():
-		return &WorkflowAssignmentStatusPending
-	case WorkflowAssignmentStatusApproved.String():
-		return &WorkflowAssignmentStatusApproved
-	case WorkflowAssignmentStatusRejected.String():
-		return &WorkflowAssignmentStatusRejected
-	case WorkflowAssignmentStatusChangesRequested.String():
-		return &WorkflowAssignmentStatusChangesRequested
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowAssignmentStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowAssignmentStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowAssignmentStatus, v)
-	}
-	*r = WorkflowAssignmentStatus(str)
-	return nil
-}
+func (WorkflowAssignmentStatus) Values() []string       { return WorkflowAssignmentStatuses }
+func (r WorkflowAssignmentStatus) String() string        { return string(r) }
+func ToWorkflowAssignmentStatus(v string) *WorkflowAssignmentStatus { return parse(v, workflowAssignmentStatusValues, nil) }
+func (r WorkflowAssignmentStatus) MarshalGQL(w io.Writer)           { marshalGQL(r, w) }
+func (r *WorkflowAssignmentStatus) UnmarshalGQL(v any) error        { return unmarshalGQL(r, v) }
 
 // WorkflowProposalState enumerates proposal lifecycle states.
 type WorkflowProposalState string
@@ -166,49 +80,19 @@ var (
 	WorkflowProposalStateSuperseded WorkflowProposalState = "SUPERSEDED"
 )
 
-var WorkflowProposalStates = []string{
-	string(WorkflowProposalStateDraft),
-	string(WorkflowProposalStateSubmitted),
-	string(WorkflowProposalStateApplied),
-	string(WorkflowProposalStateRejected),
-	string(WorkflowProposalStateSuperseded),
+var workflowProposalStateValues = []WorkflowProposalState{
+	WorkflowProposalStateDraft, WorkflowProposalStateSubmitted, WorkflowProposalStateApplied,
+	WorkflowProposalStateRejected, WorkflowProposalStateSuperseded,
 }
 
-func (WorkflowProposalState) Values() (vals []string) {
-	return WorkflowProposalStates
-}
+// WorkflowProposalStates lists all valid workflow proposal states as strings.
+var WorkflowProposalStates = stringValues(workflowProposalStateValues)
 
-func (r WorkflowProposalState) String() string { return string(r) }
-
-func ToWorkflowProposalState(v string) *WorkflowProposalState {
-	switch strings.ToUpper(v) {
-	case WorkflowProposalStateDraft.String():
-		return &WorkflowProposalStateDraft
-	case WorkflowProposalStateSubmitted.String():
-		return &WorkflowProposalStateSubmitted
-	case WorkflowProposalStateApplied.String():
-		return &WorkflowProposalStateApplied
-	case WorkflowProposalStateRejected.String():
-		return &WorkflowProposalStateRejected
-	case WorkflowProposalStateSuperseded.String():
-		return &WorkflowProposalStateSuperseded
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowProposalState) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowProposalState) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowProposalState, v)
-	}
-	*r = WorkflowProposalState(str)
-	return nil
-}
+func (WorkflowProposalState) Values() []string       { return WorkflowProposalStates }
+func (r WorkflowProposalState) String() string        { return string(r) }
+func ToWorkflowProposalState(v string) *WorkflowProposalState { return parse(v, workflowProposalStateValues, nil) }
+func (r WorkflowProposalState) MarshalGQL(w io.Writer)        { marshalGQL(r, w) }
+func (r *WorkflowProposalState) UnmarshalGQL(v any) error     { return unmarshalGQL(r, v) }
 
 // WorkflowApprovalSubmissionMode enumerates how approval workflows are triggered for a domain.
 type WorkflowApprovalSubmissionMode string
@@ -218,40 +102,18 @@ var (
 	WorkflowApprovalSubmissionModeAutoSubmit   WorkflowApprovalSubmissionMode = "AUTO_SUBMIT"
 )
 
-var WorkflowApprovalSubmissionModes = []string{
-	string(WorkflowApprovalSubmissionModeManualSubmit),
-	string(WorkflowApprovalSubmissionModeAutoSubmit),
+var workflowApprovalSubmissionModeValues = []WorkflowApprovalSubmissionMode{
+	WorkflowApprovalSubmissionModeManualSubmit, WorkflowApprovalSubmissionModeAutoSubmit,
 }
 
-func (WorkflowApprovalSubmissionMode) Values() (vals []string) {
-	return WorkflowApprovalSubmissionModes
-}
+// WorkflowApprovalSubmissionModes lists all valid workflow approval submission modes as strings.
+var WorkflowApprovalSubmissionModes = stringValues(workflowApprovalSubmissionModeValues)
 
-func (r WorkflowApprovalSubmissionMode) String() string { return string(r) }
-
-func ToWorkflowApprovalSubmissionMode(v string) *WorkflowApprovalSubmissionMode {
-	switch strings.ToUpper(v) {
-	case WorkflowApprovalSubmissionModeManualSubmit.String():
-		return &WorkflowApprovalSubmissionModeManualSubmit
-	case WorkflowApprovalSubmissionModeAutoSubmit.String():
-		return &WorkflowApprovalSubmissionModeAutoSubmit
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowApprovalSubmissionMode) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowApprovalSubmissionMode) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowApprovalSubmissionMode, v)
-	}
-	*r = WorkflowApprovalSubmissionMode(str)
-	return nil
-}
+func (WorkflowApprovalSubmissionMode) Values() []string       { return WorkflowApprovalSubmissionModes }
+func (r WorkflowApprovalSubmissionMode) String() string        { return string(r) }
+func ToWorkflowApprovalSubmissionMode(v string) *WorkflowApprovalSubmissionMode { return parse(v, workflowApprovalSubmissionModeValues, nil) }
+func (r WorkflowApprovalSubmissionMode) MarshalGQL(w io.Writer)                { marshalGQL(r, w) }
+func (r *WorkflowApprovalSubmissionMode) UnmarshalGQL(v any) error             { return unmarshalGQL(r, v) }
 
 // WorkflowTargetType enumerates assignment target types.
 type WorkflowTargetType string
@@ -263,46 +125,18 @@ var (
 	WorkflowTargetTypeResolver WorkflowTargetType = "RESOLVER"
 )
 
-var WorkflowTargetTypes = []string{
-	string(WorkflowTargetTypeUser),
-	string(WorkflowTargetTypeGroup),
-	string(WorkflowTargetTypeRole),
-	string(WorkflowTargetTypeResolver),
+var workflowTargetTypeValues = []WorkflowTargetType{
+	WorkflowTargetTypeUser, WorkflowTargetTypeGroup, WorkflowTargetTypeRole, WorkflowTargetTypeResolver,
 }
 
-func (WorkflowTargetType) Values() (vals []string) {
-	return WorkflowTargetTypes
-}
+// WorkflowTargetTypes lists all valid workflow target types as strings.
+var WorkflowTargetTypes = stringValues(workflowTargetTypeValues)
 
-func (r WorkflowTargetType) String() string { return string(r) }
-
-func ToWorkflowTargetType(v string) *WorkflowTargetType {
-	switch strings.ToUpper(v) {
-	case WorkflowTargetTypeUser.String():
-		return &WorkflowTargetTypeUser
-	case WorkflowTargetTypeGroup.String():
-		return &WorkflowTargetTypeGroup
-	case WorkflowTargetTypeRole.String():
-		return &WorkflowTargetTypeRole
-	case WorkflowTargetTypeResolver.String():
-		return &WorkflowTargetTypeResolver
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowTargetType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowTargetType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowTargetType, v)
-	}
-	*r = WorkflowTargetType(str)
-	return nil
-}
+func (WorkflowTargetType) Values() []string       { return WorkflowTargetTypes }
+func (r WorkflowTargetType) String() string        { return string(r) }
+func ToWorkflowTargetType(v string) *WorkflowTargetType { return parse(v, workflowTargetTypeValues, nil) }
+func (r WorkflowTargetType) MarshalGQL(w io.Writer)     { marshalGQL(r, w) }
+func (r *WorkflowTargetType) UnmarshalGQL(v any) error   { return unmarshalGQL(r, v) }
 
 // WorkflowObjectType is auto-generated in workflow_object_type.go
 // The enum values are dynamically generated based on entities with ApprovalRequiredMixin.
@@ -323,61 +157,20 @@ var (
 	WorkflowActionTypeReview           WorkflowActionType = "REQUEST_REVIEW"
 )
 
-var WorkflowActionTypes = []string{
-	string(WorkflowActionTypeApproval),
-	string(WorkflowActionTypeNotification),
-	string(WorkflowActionTypeWebhook),
-	string(WorkflowActionTypeFieldUpdate),
-	string(WorkflowActionTypeIntegration),
-	string(WorkflowActionTypeReassignApproval),
-	string(WorkflowActionTypeSendEmail),
-	string(WorkflowActionTypeReview),
-	string(WorkflowActionTypeCreateObject),
+var workflowActionTypeValues = []WorkflowActionType{
+	WorkflowActionTypeApproval, WorkflowActionTypeNotification, WorkflowActionTypeWebhook,
+	WorkflowActionTypeFieldUpdate, WorkflowActionTypeIntegration, WorkflowActionTypeReassignApproval,
+	WorkflowActionTypeSendEmail, WorkflowActionTypeCreateObject, WorkflowActionTypeReview,
 }
 
-func (WorkflowActionType) Values() (vals []string) {
-	return WorkflowActionTypes
-}
+// WorkflowActionTypes lists all valid workflow action types as strings.
+var WorkflowActionTypes = stringValues(workflowActionTypeValues)
 
-func (r WorkflowActionType) String() string { return string(r) }
-
-func ToWorkflowActionType(v string) *WorkflowActionType {
-	switch strings.ToUpper(v) {
-	case WorkflowActionTypeApproval.String():
-		return &WorkflowActionTypeApproval
-	case WorkflowActionTypeNotification.String():
-		return &WorkflowActionTypeNotification
-	case WorkflowActionTypeReview.String():
-		return &WorkflowActionTypeReview
-	case WorkflowActionTypeCreateObject.String():
-		return &WorkflowActionTypeCreateObject
-	case WorkflowActionTypeWebhook.String():
-		return &WorkflowActionTypeWebhook
-	case WorkflowActionTypeFieldUpdate.String():
-		return &WorkflowActionTypeFieldUpdate
-	case WorkflowActionTypeIntegration.String():
-		return &WorkflowActionTypeIntegration
-	case WorkflowActionTypeReassignApproval.String():
-		return &WorkflowActionTypeReassignApproval
-	case WorkflowActionTypeSendEmail.String():
-		return &WorkflowActionTypeSendEmail
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowActionType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowActionType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowActionType, v)
-	}
-	*r = WorkflowActionType(str)
-	return nil
-}
+func (WorkflowActionType) Values() []string       { return WorkflowActionTypes }
+func (r WorkflowActionType) String() string        { return string(r) }
+func ToWorkflowActionType(v string) *WorkflowActionType { return parse(v, workflowActionTypeValues, nil) }
+func (r WorkflowActionType) MarshalGQL(w io.Writer)     { marshalGQL(r, w) }
+func (r *WorkflowActionType) UnmarshalGQL(v any) error   { return unmarshalGQL(r, v) }
 
 // WorkflowEventType enumerates event types.
 type WorkflowEventType string
@@ -403,88 +196,23 @@ var (
 	WorkflowEventTypeEmitFailedTerminal    WorkflowEventType = "EMIT_FAILED_TERMINAL"
 )
 
-var WorkflowEventTypes = []string{
-	string(WorkflowEventTypeAction),
-	string(WorkflowEventTypeTrigger),
-	string(WorkflowEventTypeDecision),
-	string(WorkflowEventTypeInstanceTriggered),
-	string(WorkflowEventTypeActionStarted),
-	string(WorkflowEventTypeActionCompleted),
-	string(WorkflowEventTypeActionFailed),
-	string(WorkflowEventTypeActionSkipped),
-	string(WorkflowEventTypeConditionEvaluated),
-	string(WorkflowEventTypeAssignmentCreated),
-	string(WorkflowEventTypeAssignmentResolved),
-	string(WorkflowEventTypeAssignmentInvalidated),
-	string(WorkflowEventTypeInstancePaused),
-	string(WorkflowEventTypeInstanceResumed),
-	string(WorkflowEventTypeInstanceCompleted),
-	string(WorkflowEventTypeEmitFailed),
-	string(WorkflowEventTypeEmitRecovered),
-	string(WorkflowEventTypeEmitFailedTerminal),
+var workflowEventTypeValues = []WorkflowEventType{
+	WorkflowEventTypeAction, WorkflowEventTypeTrigger, WorkflowEventTypeDecision,
+	WorkflowEventTypeInstanceTriggered, WorkflowEventTypeActionStarted, WorkflowEventTypeActionCompleted,
+	WorkflowEventTypeActionFailed, WorkflowEventTypeActionSkipped, WorkflowEventTypeConditionEvaluated,
+	WorkflowEventTypeAssignmentCreated, WorkflowEventTypeAssignmentResolved, WorkflowEventTypeAssignmentInvalidated,
+	WorkflowEventTypeInstancePaused, WorkflowEventTypeInstanceResumed, WorkflowEventTypeInstanceCompleted,
+	WorkflowEventTypeEmitFailed, WorkflowEventTypeEmitRecovered, WorkflowEventTypeEmitFailedTerminal,
 }
 
-func (WorkflowEventType) Values() (vals []string) {
-	return WorkflowEventTypes
-}
+// WorkflowEventTypes lists all valid workflow event types as strings.
+var WorkflowEventTypes = stringValues(workflowEventTypeValues)
 
-func (r WorkflowEventType) String() string { return string(r) }
-
-func ToWorkflowEventType(v string) *WorkflowEventType {
-	switch strings.ToUpper(v) {
-	case WorkflowEventTypeAction.String():
-		return &WorkflowEventTypeAction
-	case WorkflowEventTypeTrigger.String():
-		return &WorkflowEventTypeTrigger
-	case WorkflowEventTypeDecision.String():
-		return &WorkflowEventTypeDecision
-	case WorkflowEventTypeInstanceTriggered.String():
-		return &WorkflowEventTypeInstanceTriggered
-	case WorkflowEventTypeActionStarted.String():
-		return &WorkflowEventTypeActionStarted
-	case WorkflowEventTypeActionCompleted.String():
-		return &WorkflowEventTypeActionCompleted
-	case WorkflowEventTypeActionFailed.String():
-		return &WorkflowEventTypeActionFailed
-	case WorkflowEventTypeActionSkipped.String():
-		return &WorkflowEventTypeActionSkipped
-	case WorkflowEventTypeConditionEvaluated.String():
-		return &WorkflowEventTypeConditionEvaluated
-	case WorkflowEventTypeAssignmentCreated.String():
-		return &WorkflowEventTypeAssignmentCreated
-	case WorkflowEventTypeAssignmentResolved.String():
-		return &WorkflowEventTypeAssignmentResolved
-	case WorkflowEventTypeAssignmentInvalidated.String():
-		return &WorkflowEventTypeAssignmentInvalidated
-	case WorkflowEventTypeInstancePaused.String():
-		return &WorkflowEventTypeInstancePaused
-	case WorkflowEventTypeInstanceResumed.String():
-		return &WorkflowEventTypeInstanceResumed
-	case WorkflowEventTypeInstanceCompleted.String():
-		return &WorkflowEventTypeInstanceCompleted
-	case WorkflowEventTypeEmitFailed.String():
-		return &WorkflowEventTypeEmitFailed
-	case WorkflowEventTypeEmitRecovered.String():
-		return &WorkflowEventTypeEmitRecovered
-	case WorkflowEventTypeEmitFailedTerminal.String():
-		return &WorkflowEventTypeEmitFailedTerminal
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowEventType) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowEventType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowEventType, v)
-	}
-	*r = WorkflowEventType(str)
-	return nil
-}
+func (WorkflowEventType) Values() []string       { return WorkflowEventTypes }
+func (r WorkflowEventType) String() string        { return string(r) }
+func ToWorkflowEventType(v string) *WorkflowEventType { return parse(v, workflowEventTypeValues, nil) }
+func (r WorkflowEventType) MarshalGQL(w io.Writer)    { marshalGQL(r, w) }
+func (r *WorkflowEventType) UnmarshalGQL(v any) error  { return unmarshalGQL(r, v) }
 
 // WorkflowApprovalTiming enumerates when approvals should block changes.
 type WorkflowApprovalTiming string
@@ -494,37 +222,15 @@ var (
 	WorkflowApprovalTimingPostCommit WorkflowApprovalTiming = "POST_COMMIT"
 )
 
-var WorkflowApprovalTimings = []string{
-	string(WorkflowApprovalTimingPreCommit),
-	string(WorkflowApprovalTimingPostCommit),
+var workflowApprovalTimingValues = []WorkflowApprovalTiming{
+	WorkflowApprovalTimingPreCommit, WorkflowApprovalTimingPostCommit,
 }
 
-func (WorkflowApprovalTiming) Values() (vals []string) {
-	return WorkflowApprovalTimings
-}
+// WorkflowApprovalTimings lists all valid workflow approval timings as strings.
+var WorkflowApprovalTimings = stringValues(workflowApprovalTimingValues)
 
-func (r WorkflowApprovalTiming) String() string { return string(r) }
-
-func ToWorkflowApprovalTiming(v string) *WorkflowApprovalTiming {
-	switch strings.ToUpper(v) {
-	case WorkflowApprovalTimingPreCommit.String():
-		return &WorkflowApprovalTimingPreCommit
-	case WorkflowApprovalTimingPostCommit.String():
-		return &WorkflowApprovalTimingPostCommit
-	default:
-		return nil
-	}
-}
-
-func (r WorkflowApprovalTiming) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
-
-func (r *WorkflowApprovalTiming) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowApprovalTiming, v)
-	}
-	*r = WorkflowApprovalTiming(str)
-	return nil
-}
+func (WorkflowApprovalTiming) Values() []string       { return WorkflowApprovalTimings }
+func (r WorkflowApprovalTiming) String() string        { return string(r) }
+func ToWorkflowApprovalTiming(v string) *WorkflowApprovalTiming { return parse(v, workflowApprovalTimingValues, nil) }
+func (r WorkflowApprovalTiming) MarshalGQL(w io.Writer)         { marshalGQL(r, w) }
+func (r *WorkflowApprovalTiming) UnmarshalGQL(v any) error       { return unmarshalGQL(r, v) }

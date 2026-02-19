@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // AssessmentResponseStatus is a custom type representing the various states of AssessmentResponseStatus.
 type AssessmentResponseStatus string
@@ -24,15 +20,17 @@ var (
 	AssessmentResponseStatusInvalid AssessmentResponseStatus = "ASSESSMENTRESPONSESTATUS_INVALID"
 )
 
+var assessmentResponseStatusValues = []AssessmentResponseStatus{
+	AssessmentResponseStatusNotStarted,
+	AssessmentResponseStatusSent,
+	AssessmentResponseStatusCompleted,
+	AssessmentResponseStatusOverdue,
+	AssessmentResponseStatusDraft,
+}
+
 // Values returns a slice of strings representing all valid AssessmentResponseStatus values.
 func (AssessmentResponseStatus) Values() []string {
-	return []string{
-		string(AssessmentResponseStatusNotStarted),
-		string(AssessmentResponseStatusSent),
-		string(AssessmentResponseStatusCompleted),
-		string(AssessmentResponseStatusOverdue),
-		string(AssessmentResponseStatusDraft),
-	}
+	return stringValues(assessmentResponseStatusValues)
 }
 
 // String returns the string representation of the AssessmentResponseStatus value.
@@ -42,35 +40,11 @@ func (r AssessmentResponseStatus) String() string {
 
 // ToAssessmentResponseStatus converts a string to its corresponding AssessmentResponseStatus enum value.
 func ToAssessmentResponseStatus(r string) *AssessmentResponseStatus {
-	switch strings.ToUpper(r) {
-	case AssessmentResponseStatusNotStarted.String():
-		return &AssessmentResponseStatusNotStarted
-	case AssessmentResponseStatusSent.String():
-		return &AssessmentResponseStatusSent
-	case AssessmentResponseStatusCompleted.String():
-		return &AssessmentResponseStatusCompleted
-	case AssessmentResponseStatusOverdue.String():
-		return &AssessmentResponseStatusOverdue
-	case AssessmentResponseStatusDraft.String():
-		return &AssessmentResponseStatusDraft
-	default:
-		return &AssessmentResponseStatusInvalid
-	}
+	return parse(r, assessmentResponseStatusValues, &AssessmentResponseStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r AssessmentResponseStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r AssessmentResponseStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *AssessmentResponseStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for AssessmentResponseStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = AssessmentResponseStatus(str)
-
-	return nil
-}
+func (r *AssessmentResponseStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
