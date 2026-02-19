@@ -64607,11 +64607,11 @@ input CreateNotificationPreferenceInput {
   """
   priority: NotificationPreferencePriority
   """
-  soiree topic names or wildcard patterns this preference applies to; empty means all
+  topic names or wildcard patterns this preference applies to; empty means all
   """
   topicPatterns: [String!]
   """
-  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
   """
   topicOverrides: Map
   """
@@ -64692,7 +64692,7 @@ input CreateNotificationTemplateInput {
   """
   locale: String
   """
-  soiree topic name or wildcard pattern this template targets
+  topic name or wildcard pattern this template targets
   """
   topicPattern: String!
   """
@@ -90061,11 +90061,11 @@ type NotificationPreference implements Node {
   """
   priority: NotificationPreferencePriority
   """
-  soiree topic names or wildcard patterns this preference applies to; empty means all
+  topic names or wildcard patterns this preference applies to; empty means all
   """
   topicPatterns: [String!]
   """
-  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
   """
   topicOverrides: Map
   """
@@ -90592,7 +90592,7 @@ type NotificationTemplate implements Node {
   """
   locale: String!
   """
-  soiree topic name or wildcard pattern this template targets
+  topic name or wildcard pattern this template targets
   """
   topicPattern: String!
   """
@@ -122396,13 +122396,13 @@ input UpdateNotificationPreferenceInput {
   priority: NotificationPreferencePriority
   clearPriority: Boolean
   """
-  soiree topic names or wildcard patterns this preference applies to; empty means all
+  topic names or wildcard patterns this preference applies to; empty means all
   """
   topicPatterns: [String!]
   appendTopicPatterns: [String!]
   clearTopicPatterns: Boolean
   """
-  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
   """
   topicOverrides: Map
   clearTopicOverrides: Boolean
@@ -122496,7 +122496,7 @@ input UpdateNotificationTemplateInput {
   """
   locale: String
   """
-  soiree topic name or wildcard pattern this template targets
+  topic name or wildcard pattern this template targets
   """
   topicPattern: String
   """

@@ -60,7 +60,7 @@ type NotificationTemplateHistory struct {
 	Format enums.NotificationTemplateFormat `json:"format,omitempty"`
 	// locale for the template, e.g. en-US
 	Locale string `json:"locale,omitempty"`
-	// soiree topic name or wildcard pattern this template targets
+	// topic name or wildcard pattern this template targets
 	TopicPattern string `json:"topic_pattern,omitempty"`
 	// integration associated with this template
 	IntegrationID string `json:"integration_id,omitempty"`
