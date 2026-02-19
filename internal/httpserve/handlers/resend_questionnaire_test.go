@@ -201,7 +201,7 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 		suite.db.AssessmentResponse.DeleteOneID(overdueResp.ID).Exec(ctx)
 	})
 
-	t.Run("max attempts returns 429", func(t *testing.T) {
+	t.Run("max attempts returns 200", func(t *testing.T) {
 		suite.ClearTestData()
 
 		maxEmail := "maxattempts-resend@example.com"
@@ -222,10 +222,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 
 		recorder, out := send(t, maxEmail, assessmentObj.ID)
 
-		assert.Equal(t, http.StatusTooManyRequests, recorder.Code)
-		if errMsg, ok := out["error"].(string); ok {
-			assert.Contains(t, errMsg, "max attempts")
-		}
+		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.Equal(t, true, out["success"])
 
 		suite.db.AssessmentResponse.DeleteOneID(maxResp.ID).Exec(ctx)
 	})

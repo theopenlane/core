@@ -74,7 +74,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	}
 
 	if assessmentResp.SendAttempts >= maxQuestionnaireResendAttempts {
-		return h.TooManyRequests(ctx, ErrMaxQuestionnaireResendAttempts, openapi)
+		return h.Success(ctx, out, openapi)
 	}
 
 	assessmentResp, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResp.ID).
