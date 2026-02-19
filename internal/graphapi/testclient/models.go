@@ -7197,9 +7197,9 @@ type CreateNotificationPreferenceInput struct {
 	Cadence *enums.NotificationCadence `json:"cadence,omitempty"`
 	// optional priority override for this preference
 	Priority *enums.Priority `json:"priority,omitempty"`
-	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	// topic names or wildcard patterns this preference applies to; empty means all
 	TopicPatterns []string `json:"topicPatterns,omitempty"`
-	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
 	TopicOverrides map[string]any `json:"topicOverrides,omitempty"`
 	// mute notifications until this time
 	MuteUntil *time.Time `json:"muteUntil,omitempty"`
@@ -7243,7 +7243,7 @@ type CreateNotificationTemplateInput struct {
 	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
 	// locale for the template, e.g. en-US
 	Locale *string `json:"locale,omitempty"`
-	// soiree topic name or wildcard pattern this template targets
+	// topic name or wildcard pattern this template targets
 	TopicPattern string `json:"topicPattern"`
 	// title template for external channel messages
 	TitleTemplate *string `json:"titleTemplate,omitempty"`
@@ -22236,9 +22236,9 @@ type NotificationPreference struct {
 	Cadence enums.NotificationCadence `json:"cadence"`
 	// optional priority override for this preference
 	Priority *enums.Priority `json:"priority,omitempty"`
-	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	// topic names or wildcard patterns this preference applies to; empty means all
 	TopicPatterns []string `json:"topicPatterns,omitempty"`
-	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
 	TopicOverrides map[string]any `json:"topicOverrides,omitempty"`
 	// optional template to use by default for this preference (external channels only)
 	TemplateID *string `json:"templateID,omitempty"`
@@ -22644,7 +22644,7 @@ type NotificationTemplate struct {
 	Format enums.NotificationTemplateFormat `json:"format"`
 	// locale for the template, e.g. en-US
 	Locale string `json:"locale"`
-	// soiree topic name or wildcard pattern this template targets
+	// topic name or wildcard pattern this template targets
 	TopicPattern string `json:"topicPattern"`
 	// integration associated with this template
 	IntegrationID *string `json:"integrationID,omitempty"`
@@ -39009,11 +39009,11 @@ type UpdateNotificationPreferenceInput struct {
 	// optional priority override for this preference
 	Priority      *enums.Priority `json:"priority,omitempty"`
 	ClearPriority *bool           `json:"clearPriority,omitempty"`
-	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	// topic names or wildcard patterns this preference applies to; empty means all
 	TopicPatterns       []string `json:"topicPatterns,omitempty"`
 	AppendTopicPatterns []string `json:"appendTopicPatterns,omitempty"`
 	ClearTopicPatterns  *bool    `json:"clearTopicPatterns,omitempty"`
-	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
 	TopicOverrides      map[string]any `json:"topicOverrides,omitempty"`
 	ClearTopicOverrides *bool          `json:"clearTopicOverrides,omitempty"`
 	// mute notifications until this time
@@ -39070,7 +39070,7 @@ type UpdateNotificationTemplateInput struct {
 	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
 	// locale for the template, e.g. en-US
 	Locale *string `json:"locale,omitempty"`
-	// soiree topic name or wildcard pattern this template targets
+	// topic name or wildcard pattern this template targets
 	TopicPattern *string `json:"topicPattern,omitempty"`
 	// title template for external channel messages
 	TitleTemplate      *string `json:"titleTemplate,omitempty"`
