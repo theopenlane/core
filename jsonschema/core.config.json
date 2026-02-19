@@ -134,14 +134,6 @@
         "keydir": {
           "type": "string",
           "description": "KeyDir is the path to the directory containing PEM keys for JWT signing"
-        },
-        "externalsecretsintegration": {
-          "type": "boolean",
-          "description": "ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)"
-        },
-        "secretmanager": {
-          "type": "string",
-          "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
         }
       },
       "additionalProperties": false,
@@ -204,10 +196,6 @@
         "secure": {
           "$ref": "#/$defs/secure.Config",
           "description": "Secure contains settings for the secure middleware"
-        },
-        "redirects": {
-          "$ref": "#/$defs/redirect.Config",
-          "description": "Redirect contains settings for the redirect middleware"
         },
         "cachecontrol": {
           "$ref": "#/$defs/cachecontrol.Config",
@@ -912,63 +900,6 @@
       "type": "object",
       "description": "Config defines the config for Mime middleware"
     },
-    "otelx.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        },
-        "provider": {
-          "type": "string"
-        },
-        "environment": {
-          "type": "string"
-        },
-        "stdout": {
-          "$ref": "#/$defs/otelx.StdOut"
-        },
-        "otlp": {
-          "$ref": "#/$defs/otelx.OTLP"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "otelx.OTLP": {
-      "properties": {
-        "endpoint": {
-          "type": "string"
-        },
-        "insecure": {
-          "type": "boolean"
-        },
-        "certificate": {
-          "type": "string"
-        },
-        "headers": {
-          "$ref": "#/$defs/[]string"
-        },
-        "compression": {
-          "type": "string"
-        },
-        "timeout": {
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "otelx.StdOut": {
-      "properties": {
-        "pretty": {
-          "type": "boolean"
-        },
-        "disabletimestamp": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "ratelimit.Config": {
       "properties": {
         "enabled": {
@@ -1041,25 +972,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "RateOption defines a distinct rate limiting window and request allowance."
-    },
-    "redirect.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if the redirect middleware should be enabled"
-        },
-        "redirects": {
-          "$ref": "#/$defs/map[string]string",
-          "description": "Redirects is a map of paths to redirect to"
-        },
-        "code": {
-          "type": "integer",
-          "description": "Code is the HTTP status code to use for the redirect"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Config contains the types used in executing redirects via the redirect middleware"
     },
     "river.Config": {
       "properties": {
@@ -1877,10 +1789,6 @@
     "redis": {
       "$ref": "#/$defs/cache.Config",
       "description": "Redis contains the redis configuration for the key-value store"
-    },
-    "tracer": {
-      "$ref": "#/$defs/otelx.Config",
-      "description": "Tracer contains the tracing config for opentelemetry"
     },
     "email": {
       "$ref": "#/$defs/emailtemplates.Config",

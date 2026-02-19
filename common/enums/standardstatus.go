@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // StandardStatus is a custom type for standard status
 type StandardStatus string
@@ -20,48 +16,20 @@ var (
 	StandardInvalid StandardStatus = "STANDARD_STATUS_INVALID"
 )
 
+var standardStatusValues = []StandardStatus{StandardActive, StandardDraft, StandardArchived}
+
 // Values returns a slice of strings that represents all the possible values of the StandardStatus enum.
 // Possible default values are "ACTIVE", "DRAFT", and "ARCHIVED"
-func (StandardStatus) Values() (kinds []string) {
-	for _, s := range []StandardStatus{StandardActive, StandardDraft, StandardArchived} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (StandardStatus) Values() []string { return stringValues(standardStatusValues) }
 
 // String returns the standard status as a string
-func (r StandardStatus) String() string {
-	return string(r)
-}
+func (r StandardStatus) String() string { return string(r) }
 
 // ToStandardStatus returns the standard status enum based on string input
-func ToStandardStatus(r string) *StandardStatus {
-	switch r := strings.ToUpper(r); r {
-	case StandardActive.String():
-		return &StandardActive
-	case StandardDraft.String():
-		return &StandardDraft
-	case StandardArchived.String():
-		return &StandardArchived
-	default:
-		return nil
-	}
-}
+func ToStandardStatus(r string) *StandardStatus { return parse(r, standardStatusValues, nil) }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r StandardStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r StandardStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *StandardStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for StandardStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = StandardStatus(str)
-
-	return nil
-}
+func (r *StandardStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

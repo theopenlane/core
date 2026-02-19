@@ -1,11 +1,11 @@
 package enums
 
 import (
-	"fmt"
 	"io"
 	"strings"
 )
 
+// ControlStatus is a custom type for control status.
 type ControlStatus string
 
 var (
@@ -27,65 +27,34 @@ var (
 	ControlStatusInvalid ControlStatus = "CONTROL_STATUS_INVALID"
 )
 
-// Values returns a slice of strings that represents all the possible values of the ControlType enum.
-// Possible default values are "NOT_IMPLEMENTED", "PREPARING", "NEEDS APPROVAL", "CHANGES REQUESTED",
-// "APPROVED" and "ARCHIVED".
-func (ControlStatus) Values() (kinds []string) {
-	for _, s := range []ControlStatus{
-		ControlStatusPreparing,
-		ControlStatusNeedsApproval,
-		ControlStatusChangesRequested,
-		ControlStatusApproved,
-		ControlStatusArchived,
-		ControlStatusNotImplemented,
-		ControlStatusNotApplicable,
-	} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
+var controlStatusValues = []ControlStatus{
+	ControlStatusPreparing,
+	ControlStatusNeedsApproval,
+	ControlStatusChangesRequested,
+	ControlStatusApproved,
+	ControlStatusArchived,
+	ControlStatusNotImplemented,
+	ControlStatusNotApplicable,
 }
+
+// Values returns a slice of strings that represents all the possible values of the ControlStatus enum.
+func (ControlStatus) Values() []string { return stringValues(controlStatusValues) }
 
 // String returns the ControlStatus as a string
-func (r ControlStatus) String() string {
-	return string(r)
-}
+func (r ControlStatus) String() string { return string(r) }
 
-// ToControlStatus returns the control type enum based on string input
+// ToControlStatus returns the control status enum based on string input.
+// An empty string defaults to ControlStatusNotImplemented.
 func ToControlStatus(r string) *ControlStatus {
-	switch r := strings.ToUpper(r); r {
-	case "", ControlStatusNotImplemented.String():
+	if strings.TrimSpace(r) == "" {
 		return &ControlStatusNotImplemented
-	case ControlStatusPreparing.String():
-		return &ControlStatusPreparing
-	case ControlStatusNeedsApproval.String():
-		return &ControlStatusNeedsApproval
-	case ControlStatusChangesRequested.String():
-		return &ControlStatusChangesRequested
-	case ControlStatusApproved.String():
-		return &ControlStatusApproved
-	case ControlStatusNotApplicable.String():
-		return &ControlStatusNotApplicable
-	case ControlStatusArchived.String():
-		return &ControlStatusArchived
-	default:
-		return &ControlStatusInvalid
 	}
+
+	return parse(r, controlStatusValues, &ControlStatusInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r ControlStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r ControlStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *ControlStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ControlStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = ControlStatus(str)
-
-	return nil
-}
+func (r *ControlStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

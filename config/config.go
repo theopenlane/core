@@ -17,7 +17,6 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/beacon/otelx"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
@@ -36,7 +35,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/shortlinks"
@@ -67,8 +65,6 @@ type Config struct {
 	JobQueue riverqueue.Config `json:"jobqueue" koanf:"jobqueue"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
-	// Tracer contains the tracing config for opentelemetry
-	Tracer otelx.Config `json:"tracer" koanf:"tracer"`
 	// Email contains email sending configuration for the server
 	Email emailtemplates.Config `json:"email" koanf:"email"`
 	// Sessions config for user sessions and cookies
@@ -127,8 +123,6 @@ type Server struct {
 	CORS cors.Config `json:"cors" koanf:"cors"`
 	// Secure contains settings for the secure middleware
 	Secure secure.Config `json:"secure" koanf:"secure"`
-	// Redirect contains settings for the redirect middleware
-	Redirects redirect.Config `json:"redirects" koanf:"redirects"`
 	// CacheControl contains settings for the cache control middleware
 	CacheControl cachecontrol.Config `json:"cachecontrol" koanf:"cachecontrol"`
 	// Mime contains settings for the mime middleware
@@ -162,10 +156,6 @@ type KeyWatcher struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// KeyDir is the path to the directory containing PEM keys for JWT signing
 	KeyDir string `json:"keydir" koanf:"keydir" default:"./keys"`
-	// ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
-	ExternalSecretsIntegration bool `json:"externalsecretsintegration" koanf:"externalsecretsintegration" default:"false"`
-	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
-	SecretManagerSecret string `json:"secretmanager" koanf:"secretmanager" default:"" sensitive:"true"`
 }
 
 // Auth settings including oauth2 providers and token configuration

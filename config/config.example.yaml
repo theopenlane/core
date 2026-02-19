@@ -216,9 +216,7 @@ jobqueue:
     runmigrations: false
 keywatcher:
     enabled: false
-    externalsecretsintegration: false
     keydir: ./keys
-    secretmanager: ""
 objectstorage:
     devmode: false
     enabled: true
@@ -351,10 +349,6 @@ server:
         mimetypesfile: ""
     readheadertimeout: 2000000000
     readtimeout: 15000000000
-    redirects:
-        code: 0
-        enabled: true
-        redirects: null
     secretmanager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
@@ -413,20 +407,6 @@ totp:
     recoverycodelength: 8
     redis: true
     secret: ""
-tracer:
-    enabled: false
-    environment: development
-    otlp:
-        certificate: ""
-        compression: ""
-        endpoint: localhost:4317
-        headers: null
-        insecure: true
-        timeout: 10000000000
-    provider: stdout
-    stdout:
-        disabletimestamp: false
-        pretty: true
 workflows:
     cel:
         comprehensionnestinglimit: 0

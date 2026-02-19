@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // JobCadenceFrequency is a custom type representing the various states of JobCadenceFrequency.
 type JobCadenceFrequency string
@@ -20,47 +16,21 @@ var (
 	JobCadenceFrequencyInvalid JobCadenceFrequency = "JOBCADENCEFREQUENCY_INVALID"
 )
 
+var jobCadenceFrequencyValues = []JobCadenceFrequency{JobCadenceFrequencyDaily, JobCadenceFrequencyWeekly, JobCadenceFrequencyMonthly}
+
 // Values returns a slice of strings representing all valid JobCadenceFrequency values.
-func (JobCadenceFrequency) Values() []string {
-	return []string{
-		string(JobCadenceFrequencyDaily),
-		string(JobCadenceFrequencyWeekly),
-		string(JobCadenceFrequencyMonthly),
-	}
-}
+func (JobCadenceFrequency) Values() []string { return stringValues(jobCadenceFrequencyValues) }
 
 // String returns the string representation of the JobCadenceFrequency value.
-func (r JobCadenceFrequency) String() string {
-	return strings.ToUpper(string(r))
-}
+func (r JobCadenceFrequency) String() string { return string(r) }
 
 // ToJobCadenceFrequency converts a string to its corresponding JobCadenceFrequency enum value.
 func ToJobCadenceFrequency(r string) *JobCadenceFrequency {
-	switch strings.ToUpper(r) {
-	case JobCadenceFrequencyDaily.String():
-		return &JobCadenceFrequencyDaily
-	case JobCadenceFrequencyWeekly.String():
-		return &JobCadenceFrequencyWeekly
-	case JobCadenceFrequencyMonthly.String():
-		return &JobCadenceFrequencyMonthly
-	default:
-		return &JobCadenceFrequencyInvalid
-	}
+	return parse(r, jobCadenceFrequencyValues, &JobCadenceFrequencyInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r JobCadenceFrequency) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r JobCadenceFrequency) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *JobCadenceFrequency) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for JobCadenceFrequency, got: %T", v) //nolint:err113
-	}
-
-	*r = JobCadenceFrequency(str)
-
-	return nil
-}
+func (r *JobCadenceFrequency) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

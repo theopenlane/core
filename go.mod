@@ -14,7 +14,6 @@ replace github.com/theopenlane/core/common => ./common
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/secretmanager v1.16.0
 	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
@@ -23,8 +22,8 @@ require (
 	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.2
 	github.com/aws/aws-sdk-go-v2 v1.41.1
-	github.com/aws/aws-sdk-go-v2/config v1.32.8
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.8
+	github.com/aws/aws-sdk-go-v2/config v1.32.9
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.9
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/brianvoe/gofakeit/v7 v7.14.0
@@ -88,7 +87,6 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
-	github.com/theopenlane/beacon v0.3.0
 	github.com/theopenlane/core/common v1.0.9
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
@@ -121,6 +119,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.8.0 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.5 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
@@ -168,7 +167,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.8 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.17 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.30.9 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.30.10 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.14 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.6
 	github.com/aws/smithy-go v1.24.0 // indirect
@@ -353,17 +352,11 @@ require (
 	github.com/xrash/smetrics v0.0.0-20250705151800-55b8f293f342 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	github.com/zclconf/go-cty v1.17.0 // indirect
-	go.opentelemetry.io/contrib v1.39.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.64.0 // indirect
 	go.opentelemetry.io/otel v1.40.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.40.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.40.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.40.0 // indirect
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.39.0 // indirect
 	go.opentelemetry.io/otel/metric v1.40.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.40.0 // indirect
 	go.opentelemetry.io/otel/trace v1.40.0 // indirect
-	go.opentelemetry.io/proto/otlp v1.9.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect

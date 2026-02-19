@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // EntityStatus is a custom type for the status of an entity
 type EntityStatus string
@@ -30,64 +26,31 @@ var (
 	EntityStatusTerminated EntityStatus = "TERMINATED"
 )
 
-func (EntityStatus) Values() (kinds []string) {
-	for _, s := range []EntityStatus{
-		EntityStatusDraft,
-		EntityStatusUnderReview,
-		EntityStatusApproved,
-		EntityStatusRestricted,
-		EntityStatusRejected,
-		EntityStatusActive,
-		EntityStatusSuspended,
-		EntityStatusOffboarding,
-		EntityStatusTerminated,
-	} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
+var entityStatusValues = []EntityStatus{
+	EntityStatusDraft,
+	EntityStatusUnderReview,
+	EntityStatusApproved,
+	EntityStatusRestricted,
+	EntityStatusRejected,
+	EntityStatusActive,
+	EntityStatusSuspended,
+	EntityStatusOffboarding,
+	EntityStatusTerminated,
 }
 
-func (r EntityStatus) String() string {
-	return string(r)
-}
+// Values returns a slice of strings that represents all the possible values of the EntityStatus enum.
+func (EntityStatus) Values() []string { return stringValues(entityStatusValues) }
 
+// String returns the EntityStatus as a string
+func (r EntityStatus) String() string { return string(r) }
+
+// ToEntityStatus returns the EntityStatus based on string input
 func ToEntityStatus(r string) *EntityStatus {
-	switch r := strings.ToUpper(r); r {
-	case EntityStatusDraft.String():
-		return &EntityStatusDraft
-	case EntityStatusUnderReview.String():
-		return &EntityStatusUnderReview
-	case EntityStatusApproved.String():
-		return &EntityStatusApproved
-	case EntityStatusRestricted.String():
-		return &EntityStatusRestricted
-	case EntityStatusRejected.String():
-		return &EntityStatusRejected
-	case EntityStatusActive.String():
-		return &EntityStatusActive
-	case EntityStatusSuspended.String():
-		return &EntityStatusSuspended
-	case EntityStatusOffboarding.String():
-		return &EntityStatusOffboarding
-	case EntityStatusTerminated.String():
-		return &EntityStatusTerminated
-	default:
-		return nil
-	}
+	return parse(r, entityStatusValues, nil)
 }
 
-func (r EntityStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (r EntityStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
-func (r *EntityStatus) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for EntityStatus, got: %T", v)
-	}
-
-	*r = EntityStatus(str)
-
-	return nil
-}
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (r *EntityStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

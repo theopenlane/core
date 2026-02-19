@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // NotificationCadence represents how often a notification should be delivered.
 type NotificationCadence string
@@ -24,53 +20,24 @@ var (
 	NotificationCadenceInvalid NotificationCadence = "INVALID"
 )
 
-// Values returns a slice of strings that represents all the possible values of the NotificationCadence enum.
-func (NotificationCadence) Values() []string {
-	return []string{
-		NotificationCadenceImmediate.String(),
-		NotificationCadenceDailyDigest.String(),
-		NotificationCadenceWeeklyDigest.String(),
-		NotificationCadenceMonthlyDigest.String(),
-		NotificationCadenceMute.String(),
-	}
+var notificationCadenceValues = []NotificationCadence{
+	NotificationCadenceImmediate, NotificationCadenceDailyDigest, NotificationCadenceWeeklyDigest,
+	NotificationCadenceMonthlyDigest, NotificationCadenceMute,
 }
 
+// Values returns a slice of strings that represents all the possible values of the NotificationCadence enum.
+func (NotificationCadence) Values() []string { return stringValues(notificationCadenceValues) }
+
 // String returns the cadence as a string.
-func (r NotificationCadence) String() string {
-	return string(r)
-}
+func (r NotificationCadence) String() string { return string(r) }
 
 // ToNotificationCadence returns the cadence enum based on string input.
 func ToNotificationCadence(r string) *NotificationCadence {
-	switch strings.ToUpper(r) {
-	case NotificationCadenceImmediate.String():
-		return &NotificationCadenceImmediate
-	case NotificationCadenceDailyDigest.String():
-		return &NotificationCadenceDailyDigest
-	case NotificationCadenceWeeklyDigest.String():
-		return &NotificationCadenceWeeklyDigest
-	case NotificationCadenceMonthlyDigest.String():
-		return &NotificationCadenceMonthlyDigest
-	case NotificationCadenceMute.String():
-		return &NotificationCadenceMute
-	default:
-		return &NotificationCadenceInvalid
-	}
+	return parse(r, notificationCadenceValues, &NotificationCadenceInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r NotificationCadence) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r NotificationCadence) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *NotificationCadence) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for NotificationCadence, got: %T", v) //nolint:err113
-	}
-
-	*r = NotificationCadence(str)
-
-	return nil
-}
+func (r *NotificationCadence) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
