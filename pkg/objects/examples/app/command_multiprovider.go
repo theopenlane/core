@@ -169,7 +169,7 @@ func runMultiProvider(ctx context.Context, out io.Writer, cfg multiProviderRunCo
 	pool := eddy.NewClientPool[*multiProviderStorageClient](10 * time.Minute)
 	service := eddy.NewClientService(pool, eddy.WithConfigClone[
 		*multiProviderStorageClient,
-		storage.ProviderCredentials](cloneProviderOptions))
+		storage.ProviderCredentials]((*storage.ProviderOptions).Clone))
 
 	resolver := createMultiProviderResolver()
 
@@ -645,7 +645,7 @@ func runBenchmark(ctx context.Context, out io.Writer, cfg benchmarkRunConfig) er
 	pool := eddy.NewClientPool[*benchmarkClient](30 * time.Minute)
 	service := eddy.NewClientService(pool, eddy.WithConfigClone[
 		*benchmarkClient,
-		storage.ProviderCredentials](cloneProviderOptions))
+		storage.ProviderCredentials]((*storage.ProviderOptions).Clone))
 
 	resolver := createBenchmarkResolver(tenants)
 

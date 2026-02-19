@@ -20,13 +20,7 @@ type TriggerInput struct {
 
 // ChangeSet returns the trigger mutation change-set from trigger input
 func (input TriggerInput) ChangeSet() mutations.ChangeSet {
-	return mutations.ChangeSet{
-		ChangedFields:   append([]string(nil), input.ChangedFields...),
-		ChangedEdges:    append([]string(nil), input.ChangedEdges...),
-		AddedIDs:        mutations.CloneStringSliceMap(input.AddedIDs),
-		RemovedIDs:      mutations.CloneStringSliceMap(input.RemovedIDs),
-		ProposedChanges: mutations.CloneAnyMap(input.ProposedChanges),
-	}
+	return mutations.NewChangeSet(input.ChangedFields, input.ChangedEdges, input.AddedIDs, input.RemovedIDs, input.ProposedChanges)
 }
 
 // SetChangeSet applies a mutation change-set onto trigger input fields

@@ -34,13 +34,7 @@ type MutationGalaPayload struct {
 
 // ChangeSet returns the payload mutation deltas as a shared change-set contract
 func (payload MutationGalaPayload) ChangeSet() mutations.ChangeSet {
-	return mutations.ChangeSet{
-		ChangedFields:   append([]string(nil), payload.ChangedFields...),
-		ChangedEdges:    append([]string(nil), payload.ChangedEdges...),
-		AddedIDs:        mutations.CloneStringSliceMap(payload.AddedIDs),
-		RemovedIDs:      mutations.CloneStringSliceMap(payload.RemovedIDs),
-		ProposedChanges: mutations.CloneAnyMap(payload.ProposedChanges),
-	}
+	return mutations.NewChangeSet(payload.ChangedFields, payload.ChangedEdges, payload.AddedIDs, payload.RemovedIDs, payload.ProposedChanges)
 }
 
 // SetChangeSet applies a shared change-set contract onto this payload

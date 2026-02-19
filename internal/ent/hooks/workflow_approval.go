@@ -576,10 +576,7 @@ func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated
 		Type: objectType,
 	}
 
-	changedFields := make([]string, 0, len(domain.Changes))
-	for field := range domain.Changes {
-		changedFields = append(changedFields, field)
-	}
+	changedFields := workflows.FieldsFromChanges(domain.Changes)
 
 	return wfEngine.TriggerExistingInstance(allowCtx, instance, def, obj, engine.TriggerInput{
 		EventType:       "UPDATE",

@@ -312,7 +312,7 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, p
 		return ErrFailedToDeriveObjectFromRef
 	}
 
-	changedFields := lo.Keys(proposal.Changes)
+	changedFields := workflows.FieldsFromChanges(proposal.Changes)
 
 	entity, err := workflows.LoadWorkflowObject(ctx, client, obj.Type.String(), obj.ID)
 	if err != nil {
