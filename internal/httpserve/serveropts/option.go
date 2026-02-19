@@ -47,7 +47,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/csrf"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/shortlinks"
@@ -482,16 +481,6 @@ func WithSecureMW() ServerOption {
 	})
 }
 
-// WithRedirects sets up the redirects for the server
-func WithRedirects() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Server.Redirects.Enabled {
-			redirects := s.Config.Settings.Server.Redirects
-			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, redirect.NewWithConfig(redirects))
-		}
-	})
-}
-
 // WithCacheHeaders sets up the cache control headers for the server
 func WithCacheHeaders() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
@@ -585,15 +574,6 @@ func WithKeyDirOption() ServerOption {
 		if s.Config.Settings.Keywatcher.Enabled && s.Config.Settings.Keywatcher.KeyDir != "" {
 			WithKeyDir(s.Config.Settings.Keywatcher.KeyDir).apply(s)
 			WithKeyDirWatcher(s.Config.Settings.Keywatcher.KeyDir).apply(s)
-		}
-	})
-}
-
-// WithSecretManagerKeysOption allows the secret manager secret name to be set via server config.
-func WithSecretManagerKeysOption() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Keywatcher.SecretManagerSecret != "" && s.Config.Settings.Keywatcher.ExternalSecretsIntegration {
-			WithSecretManagerKeys(s.Config.Settings.Server.SecretManagerSecret).apply(s)
 		}
 	})
 }

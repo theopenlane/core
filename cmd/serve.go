@@ -6,7 +6,6 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/theopenlane/beacon/otelx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/iam/fgax"
@@ -70,7 +69,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
 		serveropts.WithKeyDirOption(),
-		serveropts.WithSecretManagerKeysOption(),
 		serveropts.WithShortlinks(),
 	)
 
@@ -91,11 +89,6 @@ func serve(ctx context.Context) error {
 	so.AddServerOptions(
 		serveropts.WithTokenManager(),
 	)
-
-	err = otelx.NewTracer(so.Config.Settings.Tracer, appName)
-	if err != nil {
-		log.Fatal().Err(err).Msg("failed to initialize tracer")
-	}
 
 	// setup Authz connection
 	// this must come before the database setup because the FGA Client

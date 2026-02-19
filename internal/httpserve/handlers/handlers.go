@@ -64,16 +64,6 @@ func isRegistrationContext(ctx echo.Context) bool {
 	return ok
 }
 
-// CheckRegistrationModeWithResponse checks if we're in registration mode and returns early with nil
-// This should be called at the beginning of handlers to skip execution during OpenAPI generation
-func CheckRegistrationModeWithResponse(ctx echo.Context) error {
-	if isRegistrationContext(ctx) {
-		return nil
-	}
-
-	return nil
-}
-
 // OpenAPIContext holds the OpenAPI operation and schema registry for automatic registration
 type OpenAPIContext struct {
 	// Operation is the OpenAPI operation metadata for the handler.
@@ -338,12 +328,6 @@ const requestTypeKey = "requestType"
 func AddRequest[T any](h *Handler, example T, op *openapi3.Operation) {
 	var t T
 	h.AddRequestBody(reflect.TypeOf(t).Name(), example, op)
-}
-
-// AddResponseFor adds a response definition to the OpenAPI schema using the type name of T
-func AddResponseFor[T any](h *Handler, description string, example T, op *openapi3.Operation, status int) {
-	var t T
-	h.AddResponse(reflect.TypeOf(t).Name(), description, example, op, status)
 }
 
 // ProcessRequest provides a generic pattern for handling requests with automatic binding, validation, and response handling
