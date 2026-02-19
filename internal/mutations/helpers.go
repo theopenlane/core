@@ -21,15 +21,20 @@ type ChangeSet struct {
 	ProposedChanges map[string]any
 }
 
+// NewChangeSet builds a cloned change set from raw change payload values
+func NewChangeSet(changedFields, changedEdges []string, addedIDs, removedIDs map[string][]string, proposedChanges map[string]any) ChangeSet {
+	return ChangeSet{
+		ChangedFields:   append([]string(nil), changedFields...),
+		ChangedEdges:    append([]string(nil), changedEdges...),
+		AddedIDs:        CloneStringSliceMap(addedIDs),
+		RemovedIDs:      CloneStringSliceMap(removedIDs),
+		ProposedChanges: CloneAnyMap(proposedChanges),
+	}
+}
+
 // Clone returns a copy of the change set and its map-backed values
 func (set ChangeSet) Clone() ChangeSet {
-	return ChangeSet{
-		ChangedFields:   append([]string(nil), set.ChangedFields...),
-		ChangedEdges:    append([]string(nil), set.ChangedEdges...),
-		AddedIDs:        CloneStringSliceMap(set.AddedIDs),
-		RemovedIDs:      CloneStringSliceMap(set.RemovedIDs),
-		ProposedChanges: CloneAnyMap(set.ProposedChanges),
-	}
+	return NewChangeSet(set.ChangedFields, set.ChangedEdges, set.AddedIDs, set.RemovedIDs, set.ProposedChanges)
 }
 
 // FieldChangeSource captures the mutation accessors needed to derive changed and cleared field lists

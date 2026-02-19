@@ -72,7 +72,7 @@ func buildWithRuntime(config storage.ProviderConfig, runtime serviceOptions) (*p
 	pool := eddy.NewClientPool[storage.Provider](objects.DefaultClientPoolTTL)
 	clientService := eddy.NewClientService(pool, eddy.WithConfigClone[
 		storage.Provider,
-		storage.ProviderCredentials](cloneProviderOptions))
+		storage.ProviderCredentials]((*storage.ProviderOptions).Clone))
 
 	// Create builder instances
 	s3Builder := s3provider.NewS3Builder()
@@ -104,12 +104,4 @@ func buildWithRuntime(config storage.ProviderConfig, runtime serviceOptions) (*p
 	)
 
 	return clientService, resolver
-}
-
-func cloneProviderOptions(in *storage.ProviderOptions) *storage.ProviderOptions {
-	if in == nil {
-		return nil
-	}
-
-	return in.Clone()
 }

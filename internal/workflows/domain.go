@@ -195,9 +195,8 @@ func DomainChangesForDefinition(doc models.WorkflowDefinitionDocument, objectTyp
 
 	domainChanges := SplitChangesByDomains(proposedChanges, objectType, domains)
 	if len(domainChanges) == 0 {
-		fields := lo.Keys(proposedChanges)
+		fields := FieldsFromChanges(proposedChanges)
 		if len(fields) > 0 {
-			sort.Strings(fields)
 			domainChanges = []DomainChanges{{
 				DomainKey: DeriveDomainKey(objectType, fields),
 				Fields:    fields,

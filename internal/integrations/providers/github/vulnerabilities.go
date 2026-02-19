@@ -14,12 +14,6 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
-const (
-	githubAlertTypeDependabot     = "dependabot"
-	githubAlertTypeCodeScanning   = "code_scanning"
-	githubAlertTypeSecretScanning = "secret_scanning"
-)
-
 type githubInstallationRepositoriesResponse struct {
 	// TotalCount is the number of repositories returned by GitHub
 	TotalCount int `json:"total_count"`
@@ -96,40 +90,40 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	)
 
 	for _, repo := range repoNames {
-		if alertTypeRequested(alertTypes, githubAlertTypeDependabot) {
+		if alertTypeRequested(alertTypes, operations.GitHubAlertTypeDependabot) {
 			batch, err := listDependabotAlerts(ctx, client, token, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, map[string]any{
 					"repository": repo,
 				})
 			}
-			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeDependabot, repo, batch)
+			envelopes = appendAlertEnvelopes(envelopes, operations.GitHubAlertTypeDependabot, repo, batch)
 			totalAlerts += len(batch)
-			alertTypeCounts[githubAlertTypeDependabot] += len(batch)
+			alertTypeCounts[operations.GitHubAlertTypeDependabot] += len(batch)
 		}
 
-		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
+		if alertTypeRequested(alertTypes, operations.GitHubAlertTypeCodeScanning) {
 			batch, err := listCodeScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub code scanning alert collection failed", err, map[string]any{
 					"repository": repo,
 				})
 			}
-			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeCodeScanning, repo, batch)
+			envelopes = appendAlertEnvelopes(envelopes, operations.GitHubAlertTypeCodeScanning, repo, batch)
 			totalAlerts += len(batch)
-			alertTypeCounts[githubAlertTypeCodeScanning] += len(batch)
+			alertTypeCounts[operations.GitHubAlertTypeCodeScanning] += len(batch)
 		}
 
-		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
+		if alertTypeRequested(alertTypes, operations.GitHubAlertTypeSecretScanning) {
 			batch, err := listSecretScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, map[string]any{
 					"repository": repo,
 				})
 			}
-			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeSecretScanning, repo, batch)
+			envelopes = appendAlertEnvelopes(envelopes, operations.GitHubAlertTypeSecretScanning, repo, batch)
 			totalAlerts += len(batch)
-			alertTypeCounts[githubAlertTypeSecretScanning] += len(batch)
+			alertTypeCounts[operations.GitHubAlertTypeSecretScanning] += len(batch)
 		}
 	}
 
@@ -354,27 +348,11 @@ func alertTypeRequested(alertTypes []string, target string) bool {
 	if len(alertTypes) == 0 {
 		return true
 	}
-	needle := normalizeAlertType(target)
+	needle := operations.NormalizeGitHubAlertType(target)
 	if needle == "" {
 		return false
 	}
 	return lo.ContainsBy(alertTypes, func(value string) bool {
-		return normalizeAlertType(value) == needle
+		return operations.NormalizeGitHubAlertType(value) == needle
 	})
-}
-
-// normalizeAlertType standardizes alert type identifiers
-func normalizeAlertType(value string) string {
-	value = strings.ReplaceAll(value, "-", "_")
-	value = strings.ReplaceAll(value, " ", "_")
-	switch value {
-	case "dependabot_alerts":
-		return githubAlertTypeDependabot
-	case "code_scanning_alerts":
-		return githubAlertTypeCodeScanning
-	case "secret_scanning_alerts":
-		return githubAlertTypeSecretScanning
-	}
-
-	return value
 }
