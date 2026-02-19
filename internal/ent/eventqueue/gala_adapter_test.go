@@ -126,3 +126,39 @@ func TestNewGalaHeadersFromMutationMetadata(t *testing.T) {
 	_, exists := headers.Properties[""]
 	require.False(t, exists)
 }
+
+// TestMutationGalaPayloadChangeSetRoundTrip verifies payload change-set projections preserve values and clone maps/slices
+func TestMutationGalaPayloadChangeSetRoundTrip(t *testing.T) {
+	t.Parallel()
+
+	payload := MutationGalaPayload{
+		ChangedFields: []string{"status"},
+		ChangedEdges:  []string{"controls"},
+		AddedIDs: map[string][]string{
+			"controls": {"one"},
+		},
+		RemovedIDs: map[string][]string{
+			"controls": {"two"},
+		},
+		ProposedChanges: map[string]any{
+			"status": "approved",
+		},
+	}
+
+	changeSet := payload.ChangeSet()
+	changeSet.ChangedFields[0] = "mutated"
+	changeSet.AddedIDs["controls"][0] = "mutated"
+	changeSet.ProposedChanges["status"] = "mutated"
+
+	require.Equal(t, "status", payload.ChangedFields[0])
+	require.Equal(t, "one", payload.AddedIDs["controls"][0])
+	require.Equal(t, "approved", payload.ProposedChanges["status"])
+
+	var roundTrip MutationGalaPayload
+	roundTrip.SetChangeSet(payload.ChangeSet())
+	require.Equal(t, payload.ChangedFields, roundTrip.ChangedFields)
+	require.Equal(t, payload.ChangedEdges, roundTrip.ChangedEdges)
+	require.Equal(t, payload.AddedIDs, roundTrip.AddedIDs)
+	require.Equal(t, payload.RemovedIDs, roundTrip.RemovedIDs)
+	require.Equal(t, payload.ProposedChanges, roundTrip.ProposedChanges)
+}

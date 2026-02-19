@@ -101,7 +101,9 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	ctx = scope.Context()
 	defer scope.End(err, nil)
 
-	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, input.ChangedFields, input.ChangedEdges, input.AddedIDs, input.RemovedIDs, input.ProposedChanges)
+	changeSet := input.ChangeSet()
+
+	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges)
 	if err != nil {
 		return nil, scope.Fail(fmt.Errorf("failed to evaluate conditions: %w", err), nil)
 	}
@@ -112,7 +114,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	}
 
 	// Guard against multiple active instances per {object, definition}
-	domain, err := approvalDomainForTrigger(def, input.ProposedChanges, input.ChangedFields)
+	domain, err := approvalDomainForTrigger(def, changeSet.ProposedChanges, changeSet.ChangedFields)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
@@ -142,7 +144,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	}
 
 	// Emit workflow triggered event AFTER transaction commits
-	e.emitWorkflowTriggered(scope.Context(), observability.OpTriggerWorkflow, input.EventType, instance, def.ID, obj, input.ChangedFields)
+	e.emitWorkflowTriggered(scope.Context(), observability.OpTriggerWorkflow, input.EventType, instance, def.ID, obj, changeSet.ChangedFields)
 
 	return instance, nil
 }
@@ -155,6 +157,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 	}))
 	ctx = scope.Context()
 	defer scope.End(err, nil)
+	changeSet := input.ChangeSet()
 
 	if instance.State == enums.WorkflowInstanceStateCompleted || instance.State == enums.WorkflowInstanceStateFailed {
 		return scope.Fail(ErrInvalidState, observability.Fields{
@@ -176,7 +179,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 		return scope.Fail(fmt.Errorf("failed to resume workflow instance: %w", err), nil)
 	}
 
-	e.emitWorkflowTriggered(scope.Context(), observability.OpTriggerExistingInstance, input.EventType, instance, def.ID, obj, input.ChangedFields)
+	e.emitWorkflowTriggered(scope.Context(), observability.OpTriggerExistingInstance, input.EventType, instance, def.ID, obj, changeSet.ChangedFields)
 
 	return nil
 }

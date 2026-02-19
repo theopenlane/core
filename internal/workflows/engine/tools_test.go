@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/internal/mutations"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -587,7 +588,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
 		s.Require().NoError(err, "failed to parse approval action params")
-		fields := eventqueue.NormalizeStrings(params.Fields)
+		fields := mutations.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
 		}

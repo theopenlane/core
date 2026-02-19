@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -86,7 +87,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				Node: entity,
 			}
 
-			proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
+			proposedChanges := mutations.BuildProposedChanges(mut, changedFields)
 			if len(proposedChanges) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -124,7 +125,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			eligibleFields, ineligibleFields := workflows.SeparateFieldsByEligibility(mut.Type(), allChangedFields)
 			ineligibleFields = filterNonSystemFields(ineligibleFields)
 
-			eligibleChanges := workflows.BuildProposedChanges(mut, eligibleFields)
+			eligibleChanges := mutations.BuildProposedChanges(mut, eligibleFields)
 			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
 			if hasDirectChanges {
 				resetMutationFields(m, eligibleFields)

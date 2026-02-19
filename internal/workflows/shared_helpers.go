@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -40,44 +39,6 @@ func (e *WorkflowCreationError) Error() string {
 // Unwrap returns the underlying error
 func (e *WorkflowCreationError) Unwrap() error {
 	return e.Err
-}
-
-// mutationProposedChangeSource captures the mutation accessors needed to build proposed changes
-type mutationProposedChangeSource interface {
-	ClearedFields() []string
-	Field(string) (ent.Value, bool)
-}
-
-// BuildProposedChanges materializes mutation values (including cleared fields) for workflow proposals.
-func BuildProposedChanges(m mutationProposedChangeSource, changedFields []string) map[string]any {
-	if m == nil || len(changedFields) == 0 {
-		return nil
-	}
-
-	clearedSet := lo.SliceToMap(m.ClearedFields(), func(f string) (string, struct{}) {
-		return f, struct{}{}
-	})
-
-	proposed := make(map[string]any, len(changedFields))
-	for _, field := range changedFields {
-		if field == "" {
-			continue
-		}
-
-		if val, ok := m.Field(field); ok {
-			proposed[field] = val
-			continue
-		}
-		if _, ok := clearedSet[field]; ok {
-			proposed[field] = nil
-		}
-	}
-
-	if len(proposed) == 0 {
-		return nil
-	}
-
-	return proposed
 }
 
 // DefinitionMatchesTrigger reports whether the workflow definition has a trigger that matches the event type and changed fields.

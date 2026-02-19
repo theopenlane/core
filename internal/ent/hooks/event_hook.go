@@ -6,10 +6,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -215,9 +215,9 @@ func mutationDispatchTargets(runtimes []*gala.Gala, topics []gala.TopicName, ope
 
 // newMutationPayloadForDispatch builds shared mutation payload metadata for asynchronous dispatch hooks.
 func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID string) eventqueue.MutationGalaPayload {
-	changedFields, clearedFields := mutationChangedAndClearedFields(mutation)
+	changedFields, clearedFields := mutations.ChangedAndClearedFields(mutation)
 	changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(mutation)
-	proposedChanges := workflows.BuildProposedChanges(mutation, changedFields)
+	proposedChanges := mutations.BuildProposedChanges(mutation, changedFields)
 
 	return eventqueue.MutationGalaPayload{
 		MutationType:    mutation.Type(),
@@ -230,30 +230,4 @@ func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID st
 		RemovedIDs:      removedIDs,
 		ProposedChanges: proposedChanges,
 	}
-}
-
-// mutationChangedAndClearedFields derives updated/cleared field names from an ent mutation.
-func mutationChangedAndClearedFields(mutation ent.Mutation) ([]string, []string) {
-	if mutation == nil {
-		return nil, nil
-	}
-
-	clearedFields := uniqueStrings(mutation.ClearedFields())
-	changedFields := append(append([]string(nil), mutation.Fields()...), clearedFields...)
-
-	return uniqueStrings(changedFields), clearedFields
-}
-
-// uniqueStrings returns distinct non-empty values while preserving first-seen order.
-func uniqueStrings(values []string) []string {
-	if len(values) == 0 {
-		return nil
-	}
-
-	out := lo.Uniq(lo.Filter(values, func(value string, _ int) bool { return value != "" }))
-	if len(out) == 0 {
-		return nil
-	}
-
-	return out
 }

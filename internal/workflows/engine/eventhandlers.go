@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
@@ -62,13 +63,9 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 	}
 
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
-	changedFields := append([]string(nil), payload.ChangedFields...)
-	changedEdges := append([]string(nil), payload.ChangedEdges...)
-	addedIDs := eventqueue.CloneStringSliceMap(payload.AddedIDs)
-	removedIDs := eventqueue.CloneStringSliceMap(payload.RemovedIDs)
-	proposedChanges := eventqueue.CloneAnyMap(payload.ProposedChanges)
+	changeSet := payload.ChangeSet()
 
-	if len(changedFields) == 0 && len(changedEdges) == 0 && eventType != "CREATE" {
+	if len(changeSet.ChangedFields) == 0 && len(changeSet.ChangedEdges) == 0 && eventType != "CREATE" {
 		return nil
 	}
 
@@ -83,7 +80,7 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 		return nil
 	}
 
-	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, schemaType, eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
+	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, schemaType, eventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil
 	}
@@ -93,14 +90,9 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 			continue
 		}
 
-		_, err := l.engine.TriggerWorkflow(ctx.Context, def, obj, TriggerInput{
-			EventType:       eventType,
-			ChangedFields:   changedFields,
-			ChangedEdges:    changedEdges,
-			AddedIDs:        addedIDs,
-			RemovedIDs:      removedIDs,
-			ProposedChanges: proposedChanges,
-		})
+		triggerInput := TriggerInput{EventType: eventType}
+		triggerInput.SetChangeSet(changeSet)
+		_, err := l.engine.TriggerWorkflow(ctx.Context, def, obj, triggerInput)
 		if err != nil && !errors.Is(err, workflows.ErrWorkflowAlreadyActive) {
 			log.Ctx(ctx.Context).Error().Err(err).Str("definition_id", def.ID).Msg("failed to trigger workflow")
 		}
@@ -228,7 +220,7 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 		keys := lo.Map(gatedToStart, func(item gatedStart, _ int) string {
 			return item.action.Key
 		})
-		keys = eventqueue.NormalizeStrings(keys)
+		keys = mutations.NormalizeStrings(keys)
 		if len(keys) > 0 {
 			allowCtx := workflows.AllowContext(scopeCtx)
 			contextData := instance.Context
@@ -573,7 +565,7 @@ func isChangeRequestAssignment(assignment *generated.WorkflowAssignment) bool {
 }
 
 func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys []string, actionIndex int) (map[int]struct{}, bool) {
-	expectedKeys := eventqueue.NormalizeStrings(parallelKeys)
+	expectedKeys := mutations.NormalizeStrings(parallelKeys)
 	expectedIndices := make(map[int]struct{})
 	for _, key := range expectedKeys {
 		if idx := actionIndexForKey(actions, key); idx >= 0 {
@@ -1098,7 +1090,7 @@ func (l *WorkflowListeners) removeParallelApprovalKey(ctx context.Context, insta
 		return nil
 	}
 
-	keys := eventqueue.NormalizeStrings(instance.Context.ParallelApprovalKeys)
+	keys := mutations.NormalizeStrings(instance.Context.ParallelApprovalKeys)
 	if len(keys) == 0 {
 		return nil
 	}

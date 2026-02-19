@@ -92,8 +92,9 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 		return nil, ErrInstanceNotFound
 	}
 
-	// Use proposed changes from instance context (set when workflow was triggered)
-	proposedChanges := instance.Context.TriggerProposedChanges
+	// Use trigger change-set from instance context (set when workflow was triggered)
+	triggerChangeSet := workflows.TriggerChangeSet(instance.Context)
+	proposedChanges := triggerChangeSet.ProposedChanges
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
@@ -123,10 +124,10 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	vars := workflows.BuildCELVars(
 		obj,
-		instance.Context.TriggerChangedFields,
-		instance.Context.TriggerChangedEdges,
-		instance.Context.TriggerAddedIDs,
-		instance.Context.TriggerRemovedIDs,
+		triggerChangeSet.ChangedFields,
+		triggerChangeSet.ChangedEdges,
+		triggerChangeSet.AddedIDs,
+		triggerChangeSet.RemovedIDs,
 		instance.Context.TriggerEventType,
 		instance.Context.TriggerUserID,
 		proposedChanges,

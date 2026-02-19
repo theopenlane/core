@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/internal/mutations"
 )
 
 const (
@@ -92,9 +93,9 @@ func MutationStringSliceValue(payload MutationGalaPayload, field string) []strin
 
 	switch values := raw.(type) {
 	case []string:
-		return NormalizeStrings(values)
+		return mutations.NormalizeStrings(values)
 	case []any:
-		return NormalizeStrings(lo.FilterMap(values, func(value any, _ int) (string, bool) {
+		return mutations.NormalizeStrings(lo.FilterMap(values, func(value any, _ int) (string, bool) {
 			parsed, ok := ValueAsString(value)
 			if !ok {
 				return "", false
@@ -108,7 +109,7 @@ func MutationStringSliceValue(payload MutationGalaPayload, field string) []strin
 			return nil
 		}
 
-		return NormalizeStrings([]string{value})
+		return mutations.NormalizeStrings([]string{value})
 	}
 }
 
@@ -144,21 +145,4 @@ func MutationStringValuePreferPayload(payload MutationGalaPayload, properties ma
 	}
 
 	return strings.TrimSpace(value)
-}
-
-// NormalizeStrings trims, deduplicates, and drops empty string values
-func NormalizeStrings(values []string) []string {
-	if len(values) == 0 {
-		return nil
-	}
-
-	out := lo.Uniq(lo.FilterMap(values, func(value string, _ int) (string, bool) {
-		value = strings.TrimSpace(value)
-		return value, value != ""
-	}))
-	if len(out) == 0 {
-		return nil
-	}
-
-	return out
 }
