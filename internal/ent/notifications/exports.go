@@ -1,16 +1,18 @@
 package notifications
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -23,50 +25,50 @@ type exportFields struct {
 	errorMessage string
 }
 
-// handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED
-func handleExportMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	props := ctx.Properties()
-	if props == nil {
+// handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED.
+func handleExportMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	client, ok := clientFromHandler(ctx)
+	if !ok {
+		return ErrFailedToGetClient
+	}
+
+	props := ctx.Envelope.Headers.Properties
+	if !mutationFieldChanged(payload, export.FieldStatus) && mutationStringFromProperties(props, export.FieldStatus) == "" {
 		return nil
 	}
 
-	statusVal := props.GetKey(export.FieldStatus)
-	if statusVal == nil {
-		return nil
-	}
-
-	fields, err := fetchExportFields(ctx, props, payload)
+	fields, err := fetchExportFields(ctx.Context, client, props, payload)
 	if err != nil {
-		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get export fields")
+		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to get export fields")
 		return err
 	}
 
-	// we only want to add notifications for either READY or FAILED
+	// Only notify for READY or FAILED statuses.
 	if fields.status != enums.ExportStatusReady && fields.status != enums.ExportStatusFailed {
 		return nil
 	}
 
 	if fields.requestorID == "" {
-		logx.FromContext(ctx.Context()).Warn().Msg("requestor_id not set for export")
+		logx.FromContext(ctx.Context).Warn().Msg("requestor_id not set for export")
 		return nil
 	}
 
-	if err := addExportNotification(ctx, fields); err != nil {
-		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add export notification")
+	if err := addExportNotification(ctx.Context, client, fields); err != nil {
+		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to add export notification")
 		return err
 	}
 
 	return nil
 }
 
-func fetchExportFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*exportFields, error) {
+func fetchExportFields(ctx context.Context, client *generated.Client, props map[string]string, payload eventqueue.MutationGalaPayload) (*exportFields, error) {
 	fields := &exportFields{}
 
 	extractExportFromPayload(payload, fields)
 	extractExportFromProps(props, fields)
 
 	if needsExportDBQuery(fields) {
-		if err := queryExportFromDB(ctx, fields); err != nil {
+		if err := queryExportFromDB(ctx, client, fields); err != nil {
 			return nil, err
 		}
 	}
@@ -74,8 +76,8 @@ func fetchExportFields(ctx *soiree.EventContext, props soiree.Properties, payloa
 	return fields, nil
 }
 
-func extractExportFromPayload(payload *events.MutationPayload, fields *exportFields) {
-	if payload == nil {
+func extractExportFromPayload(payload eventqueue.MutationGalaPayload, fields *exportFields) {
+	if fields == nil {
 		return
 	}
 
@@ -83,91 +85,79 @@ func extractExportFromPayload(payload *events.MutationPayload, fields *exportFie
 		fields.entityID = payload.EntityID
 	}
 
-	exportMut, ok := payload.Mutation.(*generated.ExportMutation)
-	if !ok {
-		return
-	}
-
-	if ownerID, exists := exportMut.OwnerID(); exists {
+	if ownerID, ok := mutationStringValue(payload, export.FieldOwnerID); ok {
 		fields.ownerID = ownerID
 	}
 
-	if requestorID, exists := exportMut.RequestorID(); exists {
+	if requestorID, ok := mutationStringValue(payload, export.FieldRequestorID); ok {
 		fields.requestorID = requestorID
 	}
 
-	if exportType, exists := exportMut.ExportType(); exists {
+	if exportType, ok := events.ParseEnum(payload.ProposedChanges[export.FieldExportType], enums.ToExportType, enums.ExportTypeInvalid); ok {
 		fields.exportType = exportType
 	}
 
-	if status, exists := exportMut.Status(); exists {
+	if status, ok := events.ParseEnum(payload.ProposedChanges[export.FieldStatus], enums.ToExportStatus, enums.ExportStatusInvalid); ok {
 		fields.status = status
 	}
 
-	if errorMessage, exists := exportMut.ErrorMessage(); exists {
+	if errorMessage, ok := mutationStringValue(payload, export.FieldErrorMessage); ok {
 		fields.errorMessage = errorMessage
 	}
 }
 
-func extractExportFromProps(props soiree.Properties, fields *exportFields) {
+func extractExportFromProps(props map[string]string, fields *exportFields) {
+	if fields == nil {
+		return
+	}
+
 	if fields.ownerID == "" {
-		if ownerID, ok := props.GetKey(export.FieldOwnerID).(string); ok {
-			fields.ownerID = ownerID
-		}
+		fields.ownerID = mutationStringFromProperties(props, export.FieldOwnerID)
 	}
 
 	if fields.requestorID == "" {
-		if requestorID, ok := props.GetKey(export.FieldRequestorID).(string); ok {
-			fields.requestorID = requestorID
-		}
+		fields.requestorID = mutationStringFromProperties(props, export.FieldRequestorID)
 	}
 
 	if fields.exportType == "" {
-		switch v := props.GetKey(export.FieldExportType).(type) {
-		case string:
-			fields.exportType = enums.ExportType(v)
-		case enums.ExportType:
-			fields.exportType = v
+		if exportType, ok := events.ParseEnum(props[export.FieldExportType], enums.ToExportType, enums.ExportTypeInvalid); ok {
+			fields.exportType = exportType
 		}
 	}
 
 	if fields.status == "" {
-		switch v := props.GetKey(export.FieldStatus).(type) {
-		case string:
-			fields.status = enums.ExportStatus(v)
-		case enums.ExportStatus:
-			fields.status = v
+		if status, ok := events.ParseEnum(props[export.FieldStatus], enums.ToExportStatus, enums.ExportStatusInvalid); ok {
+			fields.status = status
 		}
 	}
 
 	if fields.errorMessage == "" {
-		if errorMessage, ok := props.GetKey(export.FieldErrorMessage).(string); ok {
-			fields.errorMessage = errorMessage
-		}
+		fields.errorMessage = mutationStringFromProperties(props, export.FieldErrorMessage)
 	}
 
 	if fields.entityID == "" {
-		if id, ok := props.GetKey(export.FieldID).(string); ok {
-			fields.entityID = id
-		}
+		fields.entityID = mutationStringFromProperties(props, export.FieldID)
 	}
 }
 
 func needsExportDBQuery(fields *exportFields) bool {
-	return fields.entityID == "" || fields.ownerID == "" || fields.requestorID == "" || fields.exportType == ""
+	return fields == nil ||
+		fields.entityID == "" ||
+		fields.ownerID == "" ||
+		fields.requestorID == "" ||
+		fields.exportType == ""
 }
 
-func queryExportFromDB(ctx *soiree.EventContext, fields *exportFields) error {
-	if fields.entityID == "" {
+func queryExportFromDB(ctx context.Context, client *generated.Client, fields *exportFields) error {
+	if fields == nil || fields.entityID == "" {
 		return ErrEntityIDNotFound
 	}
 
-	client, ok := soiree.ClientAs[*generated.Client](ctx)
-	if !ok {
+	if client == nil {
 		return ErrFailedToGetClient
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	exportEntity, err := client.Export.Get(allowCtx, fields.entityID)
 	if err != nil {
@@ -197,24 +187,22 @@ func queryExportFromDB(ctx *soiree.EventContext, fields *exportFields) error {
 	return nil
 }
 
-func addExportNotification(ctx *soiree.EventContext, input *exportFields) error {
-	client, ok := soiree.ClientAs[*generated.Client](ctx)
-	if !ok {
+func addExportNotification(ctx context.Context, client *generated.Client, input *exportFields) error {
+	if client == nil {
 		return ErrFailedToGetClient
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	// verify the requestor is a valid user (not a service account)
-	// we only want to add notifications for exports coming from users not the api
-	userOk, err := client.User.Query().Where(user.ID(input.requestorID)).Exist(allowCtx)
+	// Verify the requestor is a user (not service account) before notifying.
+	userOK, err := client.User.Query().Where(user.ID(input.requestorID)).Exist(allowCtx)
 	if err != nil {
-		logx.FromContext(ctx.Context()).Warn().Err(err).Msg("failed to check if requestor is a user")
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to check if requestor is a user")
 		return nil
 	}
 
-	if !userOk {
-		logx.FromContext(ctx.Context()).Debug().Msg("export requestor is not a user, skipping notification")
+	if !userOK {
+		logx.FromContext(ctx).Debug().Msg("export requestor is not a user, skipping notification")
 		return nil
 	}
 

@@ -4,7 +4,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
@@ -81,7 +81,7 @@ type actionCompletedDetails struct {
 }
 
 // actionCompletedDetailsFromPayload builds details from a completion payload
-func actionCompletedDetailsFromPayload(actionKey string, payload soiree.WorkflowActionCompletedPayload) actionCompletedDetails {
+func actionCompletedDetailsFromPayload(actionKey string, payload gala.WorkflowActionCompletedPayload) actionCompletedDetails {
 	return actionCompletedDetails{
 		ActionKey:    actionKey,
 		ActionIndex:  payload.ActionIndex,
@@ -117,7 +117,7 @@ func actionFailureDetails(actionKey string, actionIndex int, actionType enums.Wo
 }
 
 // actionIndexOutOfBoundsDetails builds a failure detail for out of bounds actions
-func actionIndexOutOfBoundsDetails(payload soiree.WorkflowActionStartedPayload) actionCompletedDetails {
+func actionIndexOutOfBoundsDetails(payload gala.WorkflowActionStartedPayload) actionCompletedDetails {
 	return actionCompletedDetails{
 		ActionKey:    "",
 		ActionIndex:  payload.ActionIndex,

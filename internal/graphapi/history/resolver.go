@@ -11,7 +11,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
@@ -20,12 +19,13 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // Resolver provides a graph response resolver
 type Resolver struct {
 	db                *historygenerated.Client
-	pool              *soiree.Pool
+	pool              *gala.Pool
 	extensionsEnabled bool
 	isDevelopment     bool
 	complexityLimit   int
@@ -164,9 +164,9 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 
 // WithPool adds a worker pool to the resolver for parallel processing
 func (r *Resolver) WithPool(maxWorkers int) {
-	r.pool = soiree.NewPool(
-		soiree.WithWorkers(maxWorkers),
-		soiree.WithPoolName("graphapi-history-worker-pool"),
+	r.pool = gala.NewPool(
+		gala.WithWorkers(maxWorkers),
+		gala.WithPoolName("graphapi-history-worker-pool"),
 	)
 }
 

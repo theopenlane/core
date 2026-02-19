@@ -9,7 +9,9 @@ import (
 	"testing"
 	"time"
 
+	"entgo.io/ent"
 	"github.com/rs/zerolog"
+	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
@@ -24,6 +26,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -43,7 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/summarizer"
 
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
@@ -69,7 +72,7 @@ type WorkflowEngineTestSuite struct {
 	tf                *dbtestutils.TestFixture
 	stripeMockBackend *mocks.MockStripeBackend
 	ofgaTF            *fgatest.OpenFGATestFixture
-	eventer           *hooks.Eventer
+	galaRuntime       *gala.Gala
 }
 
 // TestWorkflowEngineTestSuite runs all the tests in the WorkflowEngineTestSuite
@@ -135,11 +138,11 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	entitlements, err := s.mockStripeClient()
 
-	var pool *soiree.Pool
+	var pool *gala.Pool
 	if entCfg.MaxPoolSize > 0 {
-		pool = soiree.NewPool(
-			soiree.WithWorkers(entCfg.MaxPoolSize),
-			soiree.WithPoolName("ent_client_pool"),
+		pool = gala.NewPool(
+			gala.WithWorkers(entCfg.MaxPoolSize),
+			gala.WithPoolName("ent_client_pool"),
 		)
 	}
 
@@ -163,19 +166,37 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	workflows.RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
 
 	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
-	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(workflowCfg.Enabled))
-
 	clientOpts := []entdb.Option{
-		entdb.WithEventer(eventer, workflowCfg),
+		entdb.WithWorkflows(workflowCfg),
 	}
 
 	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
 	s.Require().NoError(err)
 
-	s.client = db
-	s.eventer = eventer
+	runtime, err := gala.NewInMemory()
+	s.Require().NoError(err)
 
-	s.requireWorkflowSetup(workflowCfg, eventer)
+	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
+		return runtime
+	}))
+
+	_, err = hooks.RegisterGalaWorkflowListeners(runtime.Registry())
+	s.Require().NoError(err)
+
+	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
+	s.Require().True(ok, "workflow engine not initialized")
+	s.Require().NotNil(wfEngine, "workflow engine not initialized")
+
+	wfEngine.SetGala(runtime)
+
+	do.ProvideValue(runtime.Injector(), runtime)
+	do.ProvideValue(runtime.Injector(), db)
+	do.ProvideValue(runtime.Injector(), wfEngine)
+
+	s.client = db
+	s.galaRuntime = runtime
+
+	s.requireWorkflowSetup(workflowCfg, runtime)
 }
 
 // TearDownSuite cleans up test dependencies
@@ -209,38 +230,29 @@ func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
 	return wfEngine
 }
 
-// NewIsolatedEngine creates a new workflow engine with a custom emitter for tests that need
+// NewIsolatedEngine creates a new workflow engine with a custom Gala runtime for tests that need
 // isolation (e.g., failure testing). Most tests should use Engine() instead.
-func (s *WorkflowEngineTestSuite) NewIsolatedEngine(emitter soiree.Emitter) *engine.WorkflowEngine {
-	wfEngine, err := engine.NewWorkflowEngine(s.client, emitter)
+func (s *WorkflowEngineTestSuite) NewIsolatedEngine(runtime *gala.Gala) *engine.WorkflowEngine {
+	wfEngine, err := engine.NewWorkflowEngine(s.client, runtime)
 	s.Require().NoError(err)
 
 	return wfEngine
 }
 
-func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, eventer *hooks.Eventer) {
+func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, runtime *gala.Gala) {
 	s.Require().NotNil(s.client, "ent client not initialized")
-	s.Require().NotNil(eventer, "eventer not initialized")
-	s.Require().NotNil(eventer.Emitter, "eventer emitter not initialized")
-
-	if eventer.Emitter != nil {
-		if busClient, ok := eventer.Emitter.Client().(*generated.Client); ok {
-			s.Require().Same(s.client, busClient, "event bus not bound to ent client")
-		} else {
-			s.Require().Fail("event bus client type mismatch")
-		}
-	}
+	s.Require().NotNil(runtime, "gala runtime not initialized")
 
 	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
 
 	s.Require().True(
-		eventer.Emitter.InterestedIn(generated.TypeOrganization),
+		runtime.Registry().InterestedIn(eventqueue.WorkflowMutationTopicName(generated.TypeControl), ent.OpCreate.String()),
 		"mutation listeners not registered",
 	)
 
 	if cfg != nil && cfg.Enabled {
 		s.Require().True(
-			eventer.Emitter.InterestedIn(soiree.TopicWorkflowTriggered),
+			runtime.Registry().InterestedIn(gala.TopicWorkflowTriggered, ""),
 			"workflow listeners not registered",
 		)
 	}
@@ -251,9 +263,8 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ev
 	s.Require().True(ok, "workflow eligible fields missing control.reference_id")
 }
 
-// WaitForEvents blocks until all pending event handlers have completed processing
+// WaitForEvents is a compatibility no-op; in-memory Gala dispatches synchronously.
 func (s *WorkflowEngineTestSuite) WaitForEvents() {
-	s.eventer.Emitter.WaitForIdle()
 }
 
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context

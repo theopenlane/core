@@ -4,39 +4,23 @@ import (
 	"context"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // BeginListenerTopic starts an observation for a workflow listener using topic metadata
-func BeginListenerTopic[T any](ctx *soiree.EventContext, observer *Observer, topic soiree.TypedTopic[T], payload T, extra Fields) *Scope {
+func BeginListenerTopic[T any](ctx gala.HandlerContext, observer *Observer, topic gala.TopicName, payload T, extra Fields) *Scope {
 	baseCtx := context.Background()
-	triggerEvent := ""
-	if ctx != nil {
-		baseCtx = ctx.Context()
-		if ctx.Event() != nil {
-			triggerEvent = ctx.Event().Topic()
-		}
+	if ctx.Context != nil {
+		baseCtx = ctx.Context
 	}
 
-	opName := OperationName(topic.Name())
-	origin := OriginListeners
+	opName := OperationName(topic)
+	triggerEvent := string(ctx.Envelope.Topic)
 	fields := lo.Assign(Fields{FieldPayload: payload}, extra)
-
-	if spec, ok := topic.Observability(); ok {
-		if spec.Operation != "" {
-			opName = OperationName(spec.Operation)
-		}
-		if spec.Origin != "" {
-			origin = Origin(spec.Origin)
-		}
-		if spec.TriggerFunc != nil {
-			triggerEvent = spec.TriggerFunc(ctx, payload)
-		}
-	}
 
 	return observer.begin(baseCtx, Operation{
 		Name:         opName,
-		Origin:       origin,
+		Origin:       OriginListeners,
 		TriggerEvent: triggerEvent,
 	}, fields)
 }

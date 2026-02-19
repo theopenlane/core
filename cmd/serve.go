@@ -21,8 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
@@ -112,11 +112,11 @@ func serve(ctx context.Context) error {
 	defer redisClient.Close()
 
 	// Setup pool if max workers is greater than 0
-	var pool *soiree.Pool
+	var pool *gala.Pool
 	if so.Config.Settings.EntConfig.MaxPoolSize > 0 {
-		pool = soiree.NewPool(
-			soiree.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
-			soiree.WithPoolName("ent_client_pool"),
+		pool = gala.NewPool(
+			gala.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
+			gala.WithPoolName("ent_client_pool"),
 		)
 	}
 
@@ -176,10 +176,8 @@ func serve(ctx context.Context) error {
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled))
-
 	clientOpts := []entdb.Option{
-		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),
+		entdb.WithWorkflows(&so.Config.Settings.Workflows),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -196,6 +194,7 @@ func serve(ctx context.Context) error {
 
 	if so.Config.Settings.Workflows.Enabled {
 		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
+			wfEngine.SetGala(galaApp)
 			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
 			log.Info().Msg("workflow engine initialized")
 		}
@@ -230,9 +229,6 @@ func serve(ctx context.Context) error {
 			log.Ctx(ctx).Error().Err(err).Msg("error closing database")
 		}
 
-		if err := soiree.ShutdownAll(); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error shutting down event pools")
-		}
 	}()
 
 	defer entdb.GracefulClose(context.Background(), dbClient, time.Second)
@@ -270,7 +266,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithIntegrationBroker(),
 		serveropts.WithIntegrationClients(),
 		serveropts.WithIntegrationOperations(),
-		serveropts.WithIntegrationIngestEvents(dbClient),
 		serveropts.WithIntegrationActivation(),
 	)
 

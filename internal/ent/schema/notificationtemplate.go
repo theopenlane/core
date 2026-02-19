@@ -85,7 +85,7 @@ func (NotificationTemplate) Fields() []ent.Field {
 				entgql.OrderField("LOCALE"),
 			),
 		field.String("topic_pattern").
-			Comment("soiree topic name or wildcard pattern this template targets").
+			Comment("topic name or wildcard pattern this template targets").
 			NotEmpty().
 			Annotations(
 				entgql.OrderField("TOPIC_PATTERN"),

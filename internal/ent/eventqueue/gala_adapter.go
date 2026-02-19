@@ -8,7 +8,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/events"
-	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -113,7 +112,7 @@ func NewMutationGalaEnvelope(ctx context.Context, g galaEnvelopeRuntime, topic g
 		return envelope, err
 	}
 
-	snapshot, err := g.ContextManager().Capture(projectGalaFlagsFromWorkflowContext(ctx))
+	snapshot, err := g.ContextManager().Capture(ctx)
 	if err != nil {
 		return envelope, err
 	}
@@ -134,23 +133,6 @@ func NewMutationGalaEnvelope(ctx context.Context, g galaEnvelopeRuntime, topic g
 	}
 
 	return envelope, nil
-}
-
-// projectGalaFlagsFromWorkflowContext maps known workflow context markers into Gala context flags.
-func projectGalaFlagsFromWorkflowContext(ctx context.Context) context.Context {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
-	if workflows.IsWorkflowBypass(ctx) {
-		ctx = gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
-	}
-
-	if workflows.AllowWorkflowEventEmission(ctx) {
-		ctx = gala.WithFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
-	}
-
-	return ctx
 }
 
 // mutationMetadataProperties builds listener fallback properties from payload proposed changes.
@@ -175,31 +157,7 @@ func mutationMetadataProperties(payload *events.MutationPayload) map[string]stri
 		return properties
 	}
 
-	if payload.Mutation == nil {
-		return nil
-	}
-
-	properties = map[string]string{}
-
-	for _, field := range payload.Mutation.Fields() {
-		rawValue, ok := payload.Mutation.Field(field)
-		if !ok || strings.TrimSpace(field) == "" {
-			continue
-		}
-
-		stringValue, valueOK := events.ValueAsString(rawValue)
-		if !valueOK {
-			continue
-		}
-
-		properties[field] = stringValue
-	}
-
-	if len(properties) == 0 {
-		return nil
-	}
-
-	return properties
+	return nil
 }
 
 // normalizeMutationMetadataProperties normalizes mutation metadata keys and values for Gala headers.

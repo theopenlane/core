@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -26,17 +26,15 @@ import (
 type WorkflowEngine struct {
 	// client is the ent database client
 	client *generated.Client
-	// emitter is the event emitter for workflow events
-	emitter soiree.Emitter
-	// integrationEmitter is the event bus dedicated to integration operations
-	integrationEmitter *soiree.EventBus
+	// gala is the runtime used for workflow and integration event dispatch.
+	gala *gala.Gala
 	// integrationRegistry provides provider operation descriptors (optional)
 	integrationRegistry IntegrationRegistry
 	// integrationStore ensures integration records exist
 	integrationStore IntegrationStore
 	// integrationOperations executes integration operations
 	integrationOperations IntegrationOperations
-	// integrationListenersRegistered tracks whether integration listeners are registered
+	// integrationListenersRegistered tracks whether integration listeners are registered.
 	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing
 	observer *observability.Observer
@@ -51,14 +49,14 @@ type WorkflowEngine struct {
 }
 
 // NewWorkflowEngine creates a new workflow engine using the provided configuration options
-func NewWorkflowEngine(client *generated.Client, emitter soiree.Emitter, opts ...workflows.ConfigOpts) (*WorkflowEngine, error) {
+func NewWorkflowEngine(client *generated.Client, runtime *gala.Gala, opts ...workflows.ConfigOpts) (*WorkflowEngine, error) {
 	config := workflows.NewDefaultConfig(opts...)
 
-	return NewWorkflowEngineWithConfig(client, emitter, config)
+	return NewWorkflowEngineWithConfig(client, runtime, config)
 }
 
 // NewWorkflowEngineWithConfig creates a new workflow engine using the provided configuration
-func NewWorkflowEngineWithConfig(client *generated.Client, emitter soiree.Emitter, config *workflows.Config) (*WorkflowEngine, error) {
+func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, config *workflows.Config) (*WorkflowEngine, error) {
 	if client == nil {
 		return nil, ErrNilClient
 	}
@@ -77,13 +75,22 @@ func NewWorkflowEngineWithConfig(client *generated.Client, emitter soiree.Emitte
 
 	return &WorkflowEngine{
 		client:          client,
-		emitter:         emitter,
+		gala:            runtime,
 		observer:        observability.New(),
 		config:          config,
 		env:             env,
 		celEvaluator:    celEvaluator,
 		proposalManager: proposalManager,
 	}, nil
+}
+
+// SetGala updates the runtime used for workflow and integration dispatch.
+func (e *WorkflowEngine) SetGala(runtime *gala.Gala) {
+	if e == nil {
+		return
+	}
+
+	e.gala = runtime
 }
 
 // TriggerWorkflow starts a new workflow instance
@@ -407,7 +414,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		return scope.Fail(fmt.Errorf("failed to get subject ID from context: %w", err), nil)
 	}
 
-	payload := soiree.WorkflowAssignmentCompletedPayload{
+	payload := gala.WorkflowAssignmentCompletedPayload{
 		AssignmentID: assignmentID,
 		InstanceID:   assignment.WorkflowInstanceID,
 		Status:       status,
@@ -437,7 +444,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		meta.ObjectType = instance.Context.ObjectType
 	}
 
-	emitEngineEvent(allowCtx, e, observability.OpCompleteAssignment, status.String(), instance, meta, soiree.WorkflowAssignmentCompletedTopic, payload, observability.Fields{
+	emitEngineEvent(allowCtx, e, observability.OpCompleteAssignment, status.String(), instance, meta, gala.TopicWorkflowAssignmentCompleted, payload, observability.Fields{
 		workflowassignment.FieldWorkflowInstanceID: assignment.WorkflowInstanceID,
 	})
 

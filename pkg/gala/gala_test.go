@@ -1039,6 +1039,82 @@ func TestConfigValidatePreservesExplicitValues(t *testing.T) {
 	}
 }
 
+func TestConfigValidateInMemoryAllowsMissingConnectionURI(t *testing.T) {
+	config := Config{
+		DispatchMode: DispatchModeInMemory,
+	}
+
+	if err := config.validate(); err != nil {
+		t.Fatalf("unexpected validation error: %v", err)
+	}
+}
+
+func TestConfigValidateRejectsUnknownDispatchMode(t *testing.T) {
+	config := Config{
+		DispatchMode: DispatchMode("unknown"),
+	}
+
+	if err := config.validate(); !errors.Is(err, ErrDispatchModeInvalid) {
+		t.Fatalf("expected ErrDispatchModeInvalid, got %v", err)
+	}
+}
+
+func TestNewGalaInMemoryModeDoesNotRequireRiverConnection(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	if runtime.Registry() == nil {
+		t.Fatalf("expected in-memory gala registry to be initialized")
+	}
+
+	if err := runtime.StartWorkers(context.Background()); err != nil {
+		t.Fatalf("expected StartWorkers to be a no-op in in-memory mode, got %v", err)
+	}
+
+	if err := runtime.StopWorkers(context.Background()); err != nil {
+		t.Fatalf("expected StopWorkers to be a no-op in in-memory mode, got %v", err)
+	}
+}
+
+func TestBuildQueueConfigIncludesAdditionalQueues(t *testing.T) {
+	queues := buildQueueConfig("events", 10, map[string]int{
+		"integrations": 4,
+		"":             3,
+		"bad":          0,
+	})
+
+	defaultQueue, ok := queues["events"]
+	if !ok {
+		t.Fatalf("expected default events queue in config")
+	}
+	if defaultQueue.MaxWorkers != 10 {
+		t.Fatalf("expected events max workers 10, got %d", defaultQueue.MaxWorkers)
+	}
+
+	integrationQueue, ok := queues["integrations"]
+	if !ok {
+		t.Fatalf("expected integrations queue in config")
+	}
+	if integrationQueue.MaxWorkers != 4 {
+		t.Fatalf("expected integrations max workers 4, got %d", integrationQueue.MaxWorkers)
+	}
+
+	if _, exists := queues[""]; exists {
+		t.Fatalf("did not expect empty queue name in config")
+	}
+	if _, exists := queues["bad"]; exists {
+		t.Fatalf("did not expect non-positive worker queue in config")
+	}
+}
+
 func TestGalaCloseWithoutJobClient(t *testing.T) {
 	runtime := &Gala{}
 

@@ -21,14 +21,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
-
-// defaultIntegrationWorkers sets the default integration worker pool size
-const defaultIntegrationWorkers = 100
 
 // IntegrationRegistry exposes provider operation descriptors to the engine
 type IntegrationRegistry interface {
@@ -53,8 +50,6 @@ type IntegrationDeps struct {
 	Store IntegrationStore
 	// Operations executes provider operations through keystore
 	Operations IntegrationOperations
-	// Emitter publishes integration events for async processing
-	Emitter *soiree.EventBus
 }
 
 // IntegrationWorkflowMeta ties an integration run back to a workflow action
@@ -114,50 +109,29 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 	if deps.Operations != nil {
 		e.integrationOperations = deps.Operations
 	}
-	if deps.Emitter != nil {
-		e.integrationEmitter = deps.Emitter
-	}
 
 	if e.integrationOperations == nil {
 		return nil
 	}
 
-	bus, err := e.ensureIntegrationEmitter()
-	if err != nil {
-		return err
-	}
-
-	if e.integrationListenersRegistered {
+	if e.gala == nil || e.integrationListenersRegistered {
 		return nil
 	}
 
-	binding := soiree.BindListener(
-		integrations.IntegrationOperationRequestedTopic,
-		func(ctx *soiree.EventContext, payload integrations.IntegrationOperationRequestedPayload) error {
-			return e.handleIntegrationOperationRequested(ctx, payload)
+	if _, err := gala.RegisterListeners(e.gala.Registry(),
+		gala.Definition[integrations.IntegrationOperationEnvelope]{
+			Topic: integrations.IntegrationOperationRequestedTopic,
+			Name:  "integrations.operation.execute",
+			Handle: func(ctx gala.HandlerContext, envelope integrations.IntegrationOperationEnvelope) error {
+				return e.handleIntegrationOperationRequested(ctx, envelope)
+			},
 		},
-	)
-
-	if _, err := bus.RegisterListeners(binding); err != nil {
+	); err != nil {
 		return err
 	}
 
 	e.integrationListenersRegistered = true
 	return nil
-}
-
-// ensureIntegrationEmitter returns the integration emitter or builds a default one
-func (e *WorkflowEngine) ensureIntegrationEmitter() (*soiree.EventBus, error) {
-	if e.integrationEmitter != nil {
-		return e.integrationEmitter, nil
-	}
-
-	e.integrationEmitter = soiree.New(
-		soiree.Workers(defaultIntegrationWorkers),
-		soiree.Client(e.client),
-	)
-
-	return e.integrationEmitter, nil
 }
 
 // QueueIntegrationOperation queues an integration operation for async execution
@@ -269,11 +243,8 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		payload.WorkflowObjectType = req.WorkflowMeta.ObjectType
 	}
 
-	if _, err := e.ensureIntegrationEmitter(); err != nil {
-		return IntegrationQueueResult{}, err
-	}
-
-	receipt := workflows.EmitWorkflowEvent(ctx, e.integrationEmitter, integrations.IntegrationOperationRequestedTopic, payload, e.client)
+	envelope := integrations.NewIntegrationOperationEnvelope(payload)
+	receipt := workflows.EmitWorkflowEventWithHeaders(ctx, e.gala, integrations.IntegrationOperationRequestedTopic.Name, envelope, envelope.Headers())
 	if receipt.Err != nil {
 		if err := e.client.IntegrationRun.UpdateOneID(runRecord.ID).SetStatus(enums.IntegrationRunStatusFailed).SetError(receipt.Err.Error()).Exec(allowCtx); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("run_id", runRecord.ID).Msg("failed to mark integration run as failed after event emission error")
@@ -349,7 +320,9 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 }
 
 // handleIntegrationOperationRequested executes integration operations triggered by events
-func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventContext, payload integrations.IntegrationOperationRequestedPayload) error {
+func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerContext, envelope integrations.IntegrationOperationEnvelope) error {
+	payload := envelope.Request
+
 	if e.integrationOperations == nil {
 		return ErrIntegrationOperationsRequired
 	}
@@ -359,7 +332,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 		return ErrIntegrationRunIDRequired
 	}
 
-	systemCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	systemCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
 	run, err := e.client.IntegrationRun.Query().
 		Where(integrationrun.IDEQ(runID)).
 		WithIntegration().
@@ -391,7 +364,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 	update := e.client.IntegrationRun.UpdateOneID(run.ID).
 		SetStatus(enums.IntegrationRunStatusRunning).
 		SetStartedAt(startedAt)
-	if eventID := soiree.EventID(ctx.Event()); eventID != "" {
+	if eventID := string(ctx.Envelope.ID); eventID != "" {
 		update.SetEventID(eventID)
 	}
 	if err := update.Exec(systemCtx); err != nil {
@@ -403,7 +376,10 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
-	result, opErr := e.integrationOperations.Run(systemCtx, types.OperationRequest{
+	operationCtx, cancel := integrationOperationContext(systemCtx, envelope.TimeoutSeconds)
+	defer cancel()
+
+	result, opErr := e.integrationOperations.Run(operationCtx, types.OperationRequest{
 		OrgID:       run.OwnerID,
 		Provider:    provider,
 		Name:        operationName,
@@ -435,7 +411,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 			if err != nil {
 				ingestErr = err
 			} else {
-				ingestResult, ingestErr = ingest.VulnerabilityAlerts(systemCtx, ingest.VulnerabilityIngestRequest{
+				ingestResult, ingestErr = ingest.VulnerabilityAlerts(operationCtx, ingest.VulnerabilityIngestRequest{
 					OrgID:             run.OwnerID,
 					IntegrationID:     integrationRecord.ID,
 					Provider:          provider,
@@ -475,7 +451,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 	}
 
 	if payload.WorkflowInstanceID != "" && payload.WorkflowActionIndex >= 0 {
-		e.emitWorkflowActionCompleted(ctx.Context(), payload, runStatus, errorText)
+		e.emitWorkflowActionCompleted(ctx.Context, envelope, runStatus, errorText)
 	}
 
 	if runStatus != enums.IntegrationRunStatusSuccess {
@@ -485,13 +461,23 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx *soiree.EventCo
 	return nil
 }
 
+func integrationOperationContext(parent context.Context, timeoutSeconds int) (context.Context, context.CancelFunc) {
+	if timeoutSeconds <= 0 {
+		return parent, func() {}
+	}
+
+	return context.WithTimeout(parent, time.Duration(timeoutSeconds)*time.Second)
+}
+
 // emitWorkflowActionCompleted emits a completion event after an integration run finishes
-func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, payload integrations.IntegrationOperationRequestedPayload, status enums.IntegrationRunStatus, errorText string) {
-	if e.emitter == nil {
+func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelope integrations.IntegrationOperationEnvelope, status enums.IntegrationRunStatus, errorText string) {
+	payload := envelope.Request
+
+	if e.gala == nil {
 		return
 	}
 
-	actionPayload := soiree.WorkflowActionCompletedPayload{
+	actionPayload := gala.WorkflowActionCompletedPayload{
 		InstanceID:  payload.WorkflowInstanceID,
 		ActionIndex: payload.WorkflowActionIndex,
 		ActionType:  enums.WorkflowActionTypeIntegration,
@@ -504,7 +490,7 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, payloa
 		actionPayload.ErrorMessage = errorText
 	}
 
-	receipt := workflows.EmitWorkflowEvent(ctx, e.emitter, soiree.WorkflowActionCompletedTopic, actionPayload, e.client)
+	receipt := workflows.EmitWorkflowEvent(ctx, e.gala, gala.TopicWorkflowActionCompleted, actionPayload)
 	if receipt.Err != nil {
 		logx.FromContext(ctx).Warn().Err(receipt.Err).Msg("failed to emit workflow action completed for integration run")
 	}

@@ -143,19 +143,6 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	require.Equal(t, payload.Operation, decoded.Operation)
 }
 
-// TestProjectGalaFlagsFromWorkflowContext verifies known workflow context markers
-// are projected to Gala flags during envelope context capture.
-func TestProjectGalaFlagsFromWorkflowContext(t *testing.T) {
-	t.Parallel()
-
-	projected := projectGalaFlagsFromWorkflowContext(
-		workflows.WithAllowWorkflowEventEmission(workflows.WithContext(context.Background())),
-	)
-
-	require.True(t, gala.HasFlag(projected, gala.ContextFlagWorkflowBypass))
-	require.True(t, gala.HasFlag(projected, gala.ContextFlagWorkflowAllowEventEmission))
-}
-
 // TestNewGalaHeadersFromMutationMetadata verifies property normalization for gala headers.
 func TestNewGalaHeadersFromMutationMetadata(t *testing.T) {
 	t.Parallel()

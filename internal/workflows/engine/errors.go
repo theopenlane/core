@@ -59,8 +59,6 @@ var (
 	ErrIntegrationStoreRequired = errors.New("integration store required")
 	// ErrIntegrationOperationsRequired is returned when integration operations are not configured
 	ErrIntegrationOperationsRequired = errors.New("integration operations required")
-	// ErrIntegrationEmitterRequired is returned when integration event emitter is missing
-	ErrIntegrationEmitterRequired = errors.New("integration emitter required")
 	// ErrIntegrationRunIDRequired indicates the integration run identifier is missing
 	ErrIntegrationRunIDRequired = errors.New("integration run id required")
 	// ErrIntegrationRecordMissing indicates the integration record is missing for a run

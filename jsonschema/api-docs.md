@@ -131,8 +131,7 @@ Config contains the configuration for the core server
     "integrationoauthprovider": {},
     "integrationgithubapp": {},
     "workflows": {
-        "cel": {},
-        "gala": {}
+        "cel": {}
     },
     "campaignwebhook": {},
     "cloudflare": {},
@@ -1614,15 +1613,17 @@ IntegrationGitHubAppConfig contains configuration required to install and operat
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |[**cel**](#workflowscel)|`object`|||
-|[**gala**](#workflowsgala)|`object`|||
+|**eventingenabled**|`boolean`|||
+|**eventingworkercount**|`integer`|||
+|**eventingmaxretries**|`integer`|||
+|**eventingqueuename**|`string`|||
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "cel": {},
-    "gala": {}
+    "cel": {}
 }
 ```
 
@@ -1646,20 +1647,6 @@ IntegrationGitHubAppConfig contains configuration required to install and operat
 |**macrocalltracking**|`boolean`|||
 |**evaloptimize**|`boolean`|||
 |**trackstate**|`boolean`|||
-
-**Additional Properties:** not allowed  
-<a name="workflowsgala"></a>
-### workflows\.gala: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|**workercount**|`integer`|||
-|**maxretries**|`integer`|||
-|**failonenqueueerror**|`boolean`|||
-|**queuename**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="campaignwebhook"></a>
