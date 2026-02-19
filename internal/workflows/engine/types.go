@@ -1,5 +1,7 @@
 package engine
 
+import "github.com/theopenlane/core/internal/mutations"
+
 // TriggerInput captures the trigger metadata passed to workflow execution
 type TriggerInput struct {
 	// EventType is the trigger event name
@@ -14,4 +16,29 @@ type TriggerInput struct {
 	RemovedIDs map[string][]string
 	// ProposedChanges contains proposed field updates for approval workflows
 	ProposedChanges map[string]any
+}
+
+// ChangeSet returns the trigger mutation change-set from trigger input
+func (input TriggerInput) ChangeSet() mutations.ChangeSet {
+	return mutations.ChangeSet{
+		ChangedFields:   append([]string(nil), input.ChangedFields...),
+		ChangedEdges:    append([]string(nil), input.ChangedEdges...),
+		AddedIDs:        mutations.CloneStringSliceMap(input.AddedIDs),
+		RemovedIDs:      mutations.CloneStringSliceMap(input.RemovedIDs),
+		ProposedChanges: mutations.CloneAnyMap(input.ProposedChanges),
+	}
+}
+
+// SetChangeSet applies a mutation change-set onto trigger input fields
+func (input *TriggerInput) SetChangeSet(changeSet mutations.ChangeSet) {
+	if input == nil {
+		return
+	}
+
+	cloned := changeSet.Clone()
+	input.ChangedFields = cloned.ChangedFields
+	input.ChangedEdges = cloned.ChangedEdges
+	input.AddedIDs = cloned.AddedIDs
+	input.RemovedIDs = cloned.RemovedIDs
+	input.ProposedChanges = cloned.ProposedChanges
 }

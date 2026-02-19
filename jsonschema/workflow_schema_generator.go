@@ -11,7 +11,6 @@ import (
 	"github.com/invopop/jsonschema"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/workflows"
 )
 
@@ -20,21 +19,17 @@ const (
 	ownerReadWritePerm = 0600
 )
 
-// workflowSchemaTypes is the list of types to expose in the workflow schema
-var workflowSchemaTypes = []any{
-	models.WorkflowDefinitionDocument{},
-	models.WorkflowTrigger{},
-	models.WorkflowCondition{},
-	models.WorkflowAction{},
-	models.WorkflowSelector{},
-	workflows.TargetConfig{},
-	workflows.ApprovalActionParams{},
-	workflows.ReviewActionParams{},
-	workflows.NotificationActionParams{},
-	workflows.WebhookActionParams{},
-	workflows.FieldUpdateActionParams{},
-	workflows.IntegrationActionParams{},
-	workflows.CreateObjectActionParams{},
+type schemaDefinitionDecorator func(*jsonschema.Schema)
+
+var workflowDefinitionDecorators = map[string]schemaDefinitionDecorator{
+	"TargetConfig":             addTargetConfigDescription,
+	"ApprovalActionParams":     addApprovalParamsDescription,
+	"ReviewActionParams":       addReviewParamsDescription,
+	"NotificationActionParams": addNotificationParamsDescription,
+	"WebhookActionParams":      addWebhookParamsDescription,
+	"FieldUpdateActionParams":  addFieldUpdateParamsDescription,
+	"IntegrationActionParams":  addIntegrationParamsDescription,
+	"CreateObjectActionParams": addCreateObjectParamsDescription,
 }
 
 // main generates the workflow definition JSON schema
@@ -59,17 +54,19 @@ func generateWorkflowSchema(outputPath string) error {
 	// Add enum mappers for workflow-specific enums
 	r.Mapper = workflowTypeMapper
 
-	schema := r.Reflect(&models.WorkflowDefinitionDocument{})
+	schema := r.Reflect(reflectSchemaValue(workflows.WorkflowDefinitionSchemaRootType.Value))
 
-	// Add $schema and $id
-	schema.Version = "https://json-schema.org/draft/2020-12/schema"
-	schema.ID = "https://theopenlane.io/schemas/workflow-definition.json"
-	schema.Title = "Workflow Definition"
-	schema.Description = "Schema for Openlane workflow definitions"
+	schema.Version = workflows.WorkflowDefinitionJSONSchemaVersion
+	schema.ID = workflows.WorkflowDefinitionJSONSchemaID
+	schema.Title = workflows.WorkflowDefinitionJSONSchemaTitle
+	schema.Description = workflows.WorkflowDefinitionJSONSchemaDescription
 
-	// Enhance the schema with action params definitions
-	if err := addActionParamsDefinitions(schema); err != nil {
-		return fmt.Errorf("failed to add action params definitions: %w", err)
+	if err := ensureCoreDefinitionsPresent(schema); err != nil {
+		return err
+	}
+
+	if err := addWorkflowDefinitions(schema); err != nil {
+		return fmt.Errorf("failed to add workflow schema definitions: %w", err)
 	}
 
 	data, err := json.MarshalIndent(schema, "", "  ")
@@ -82,6 +79,20 @@ func generateWorkflowSchema(outputPath string) error {
 	}
 
 	return nil
+}
+
+// reflectSchemaValue returns a pointer value suitable for jsonschema reflection
+func reflectSchemaValue(value any) any {
+	typ := reflect.TypeOf(value)
+	if typ == nil {
+		return nil
+	}
+
+	if typ.Kind() == reflect.Pointer {
+		return value
+	}
+
+	return reflect.New(typ).Interface()
 }
 
 // workflowTypeMapper handles custom type mappings for enums
@@ -130,7 +141,6 @@ func workflowTypeMapper(t reflect.Type) *jsonschema.Schema {
 			Description: "Notification delivery channel",
 		}
 	case reflect.TypeOf(json.RawMessage{}):
-		// For params field, we'll replace this with oneOf in post-processing
 		return &jsonschema.Schema{
 			Description: "Action-specific parameters (schema varies by action type)",
 		}
@@ -139,8 +149,23 @@ func workflowTypeMapper(t reflect.Type) *jsonschema.Schema {
 	return nil
 }
 
-// addActionParamsDefinitions adds the action parameter type definitions to the schema
-func addActionParamsDefinitions(schema *jsonschema.Schema) error {
+// ensureCoreDefinitionsPresent validates that root reflection produced all expected workflow model defs
+func ensureCoreDefinitionsPresent(schema *jsonschema.Schema) error {
+	if schema == nil || schema.Definitions == nil {
+		return fmt.Errorf("workflow schema missing definitions")
+	}
+
+	for _, definition := range workflows.WorkflowDefinitionSchemaModelTypes {
+		if _, ok := schema.Definitions[definition.Name]; !ok {
+			return fmt.Errorf("workflow schema missing core definition %q", definition.Name)
+		}
+	}
+
+	return nil
+}
+
+// addWorkflowDefinitions adds workflow extension definitions to the root schema
+func addWorkflowDefinitions(schema *jsonschema.Schema) error {
 	if schema.Definitions == nil {
 		schema.Definitions = make(jsonschema.Definitions)
 	}
@@ -152,41 +177,15 @@ func addActionParamsDefinitions(schema *jsonschema.Schema) error {
 	}
 	r.Mapper = workflowTypeMapper
 
-	// Add TargetConfig definition
-	targetConfigSchema := r.Reflect(&workflows.TargetConfig{})
-	schema.Definitions["TargetConfig"] = targetConfigSchema
-	addTargetConfigDescription(targetConfigSchema)
+	for _, definition := range workflows.WorkflowDefinitionSchemaExtensionTypes {
+		definitionSchema := r.Reflect(reflectSchemaValue(definition.Value))
+		schema.Definitions[definition.Name] = definitionSchema
 
-	// Add action param definitions
-	approvalSchema := r.Reflect(&workflows.ApprovalActionParams{})
-	schema.Definitions["ApprovalActionParams"] = approvalSchema
-	addApprovalParamsDescription(approvalSchema)
+		if decorate, ok := workflowDefinitionDecorators[definition.Name]; ok {
+			decorate(definitionSchema)
+		}
+	}
 
-	reviewSchema := r.Reflect(&workflows.ReviewActionParams{})
-	schema.Definitions["ReviewActionParams"] = reviewSchema
-	addReviewParamsDescription(reviewSchema)
-
-	notificationSchema := r.Reflect(&workflows.NotificationActionParams{})
-	schema.Definitions["NotificationActionParams"] = notificationSchema
-	addNotificationParamsDescription(notificationSchema)
-
-	webhookSchema := r.Reflect(&workflows.WebhookActionParams{})
-	schema.Definitions["WebhookActionParams"] = webhookSchema
-	addWebhookParamsDescription(webhookSchema)
-
-	fieldUpdateSchema := r.Reflect(&workflows.FieldUpdateActionParams{})
-	schema.Definitions["FieldUpdateActionParams"] = fieldUpdateSchema
-	addFieldUpdateParamsDescription(fieldUpdateSchema)
-
-	integrationSchema := r.Reflect(&workflows.IntegrationActionParams{})
-	schema.Definitions["IntegrationActionParams"] = integrationSchema
-	addIntegrationParamsDescription(integrationSchema)
-
-	createObjectSchema := r.Reflect(&workflows.CreateObjectActionParams{})
-	schema.Definitions["CreateObjectActionParams"] = createObjectSchema
-	addCreateObjectParamsDescription(createObjectSchema)
-
-	// Add action type descriptions to the main schema
 	addWorkflowActionDescription(schema)
 
 	return nil
@@ -297,8 +296,8 @@ func addWebhookParamsDescription(schema *jsonschema.Schema) {
 		if prop, ok := schema.Properties.Get("headers"); ok {
 			prop.Description = "Additional HTTP headers to include in the request"
 		}
-		if prop, ok := schema.Properties.Get("payload"); ok {
-			prop.Description = "Additional data to merge into the webhook payload"
+		if prop, ok := schema.Properties.Get("payload_expr"); ok {
+			prop.Description = "CEL expression that evaluates to additional data merged into the webhook payload"
 		}
 		if prop, ok := schema.Properties.Get("timeout_ms"); ok {
 			prop.Description = "Request timeout in milliseconds"
@@ -396,16 +395,18 @@ func addWorkflowActionDescription(schema *jsonschema.Schema) {
 			prop.Description = "Unique key identifying this action within the workflow"
 		}
 		if prop, ok := actionSchema.Properties.Get("type"); ok {
-			prop.Description = "Action type: REQUEST_APPROVAL, NOTIFY, WEBHOOK, UPDATE_FIELD, or INTEGRATION"
+			prop.Description = "Action type: REQUEST_APPROVAL, REQUEST_REVIEW, NOTIFY, WEBHOOK, UPDATE_FIELD, INTEGRATION, or CREATE_OBJECT"
 			prop.Enum = toInterfaceSlice(enums.WorkflowActionTypes)
 		}
 		if prop, ok := actionSchema.Properties.Get("params"); ok {
 			prop.Description = "Action-specific parameters. Schema depends on the action type:\n" +
 				"- REQUEST_APPROVAL: ApprovalActionParams\n" +
+				"- REQUEST_REVIEW: ReviewActionParams\n" +
 				"- NOTIFY: NotificationActionParams\n" +
 				"- WEBHOOK: WebhookActionParams\n" +
 				"- UPDATE_FIELD: FieldUpdateActionParams\n" +
-				"- INTEGRATION: IntegrationActionParams"
+				"- INTEGRATION: IntegrationActionParams\n" +
+				"- CREATE_OBJECT: CreateObjectActionParams"
 		}
 		if prop, ok := actionSchema.Properties.Get("when"); ok {
 			prop.Description = "Optional CEL expression to conditionally execute this action"

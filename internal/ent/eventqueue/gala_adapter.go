@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -29,6 +30,31 @@ type MutationGalaPayload struct {
 	RemovedIDs map[string][]string `json:"removed_ids,omitempty"`
 	// ProposedChanges captures field-level proposed values
 	ProposedChanges map[string]any `json:"proposed_changes,omitempty"`
+}
+
+// ChangeSet returns the payload mutation deltas as a shared change-set contract
+func (payload MutationGalaPayload) ChangeSet() mutations.ChangeSet {
+	return mutations.ChangeSet{
+		ChangedFields:   append([]string(nil), payload.ChangedFields...),
+		ChangedEdges:    append([]string(nil), payload.ChangedEdges...),
+		AddedIDs:        mutations.CloneStringSliceMap(payload.AddedIDs),
+		RemovedIDs:      mutations.CloneStringSliceMap(payload.RemovedIDs),
+		ProposedChanges: mutations.CloneAnyMap(payload.ProposedChanges),
+	}
+}
+
+// SetChangeSet applies a shared change-set contract onto this payload
+func (payload *MutationGalaPayload) SetChangeSet(changeSet mutations.ChangeSet) {
+	if payload == nil {
+		return
+	}
+
+	cloned := changeSet.Clone()
+	payload.ChangedFields = cloned.ChangedFields
+	payload.ChangedEdges = cloned.ChangedEdges
+	payload.AddedIDs = cloned.AddedIDs
+	payload.RemovedIDs = cloned.RemovedIDs
+	payload.ProposedChanges = cloned.ProposedChanges
 }
 
 // MutationGalaMetadata captures envelope metadata for Gala mutation dispatch

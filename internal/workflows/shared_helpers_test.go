@@ -23,22 +23,6 @@ func TestWorkflowCreationError(t *testing.T) {
 	assert.ErrorIs(t, err, baseErr)
 }
 
-func TestBuildProposedChanges(t *testing.T) {
-	m := fakeMutation{
-		fields:  []string{"fieldA"},
-		cleared: []string{"fieldB"},
-		values: map[string]any{
-			"fieldA": "value",
-		},
-	}
-
-	changes := BuildProposedChanges(m, []string{"fieldA", "fieldB", "fieldC"})
-	assert.Equal(t, map[string]any{
-		"fieldA": "value",
-		"fieldB": nil,
-	}, changes)
-}
-
 func TestDefinitionMatchesTrigger(t *testing.T) {
 	doc := models.WorkflowDefinitionDocument{
 		Triggers: []models.WorkflowTrigger{

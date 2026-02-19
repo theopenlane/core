@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -94,12 +95,12 @@ func TestNormalizeStrings(t *testing.T) {
 	t.Parallel()
 
 	t.Run("returns nil for empty input", func(t *testing.T) {
-		require.Nil(t, NormalizeStrings(nil))
-		require.Nil(t, NormalizeStrings([]string{}))
+		require.Nil(t, mutations.NormalizeStrings(nil))
+		require.Nil(t, mutations.NormalizeStrings([]string{}))
 	})
 
 	t.Run("trims drops empties and deduplicates", func(t *testing.T) {
-		got := NormalizeStrings([]string{" b ", "", "a", "b", "  "})
+		got := mutations.NormalizeStrings([]string{" b ", "", "a", "b", "  "})
 		require.Equal(t, []string{"b", "a"}, got)
 	})
 }
