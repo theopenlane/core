@@ -64,6 +64,8 @@ type Gala struct {
 	jobClient *riverqueue.Client
 	// dispatchMode captures the runtime dispatch mode.
 	dispatchMode DispatchMode
+	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
+	inMemoryPool *Pool
 }
 
 // NewGala initializes your gala, initializes dependencies, and starts workers
@@ -73,7 +75,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	}
 
 	if config.DispatchMode == DispatchModeInMemory {
-		return newInMemoryGala()
+		return newInMemoryGala(config)
 	}
 
 	app = &Gala{}
@@ -402,6 +404,10 @@ func (g *Gala) StopWorkers(ctx context.Context) error {
 
 // Close closes the dedicated Gala queue client
 func (g *Gala) Close() error {
+	if g.inMemoryPool != nil {
+		g.inMemoryPool.Release()
+	}
+
 	if g.jobClient == nil {
 		return nil
 	}

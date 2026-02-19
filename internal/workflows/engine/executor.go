@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -94,7 +95,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 		return nil, err
 	}
 
-	normalized := wfworkflows.NormalizeStrings(userIDs)
+	normalized := eventqueue.NormalizeStrings(userIDs)
 	if len(normalized) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, actionType, observability.ActionFields(actionKey, observability.Fields{
 			workflowassignmenttarget.FieldTargetType:  target.Type.String(),

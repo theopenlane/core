@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 )
 
 // DeriveDomainKey generates a stable domain key from a sorted list of field names.
@@ -168,7 +169,7 @@ func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) 
 			return nil, fmt.Errorf("%w: action %q: %v", ErrApprovalActionParamsInvalid, action.Key, err)
 		}
 
-		fields := NormalizeStrings(params.Fields)
+		fields := eventqueue.NormalizeStrings(params.Fields)
 		if len(fields) == 0 {
 			continue
 		}

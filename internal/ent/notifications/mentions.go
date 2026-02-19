@@ -74,7 +74,7 @@ type mentionNotificationInput struct {
 
 // handleNoteMutation processes note mutations and creates notifications for mentioned users.
 func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := clientFromHandler(ctx)
+	client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
@@ -157,7 +157,7 @@ func fetchNoteFields(ctx context.Context, client *generated.Client, props map[st
 	extractNoteFromProps(props, fields)
 
 	if fields.entityID == "" {
-		if entityID, ok := mutationEntityID(payload, props); ok {
+		if entityID, ok := eventqueue.MutationEntityID(payload, props); ok {
 			fields.entityID = entityID
 		}
 	}
@@ -202,39 +202,39 @@ func extractNoteFromPayload(payload eventqueue.MutationGalaPayload, fields *note
 		fields.entityID = payload.EntityID
 	}
 
-	if text, ok := mutationStringValue(payload, note.FieldText); ok {
+	if text, ok := eventqueue.MutationStringValue(payload, note.FieldText); ok {
 		fields.text = text
 	}
 
-	if raw, ok := mutationValue(payload, note.FieldTextJSON); ok {
+	if raw, ok := eventqueue.MutationValue(payload, note.FieldTextJSON); ok {
 		fields.textJSON = jsonValueToString(raw)
 	}
 
-	if ownerID, ok := mutationStringValue(payload, note.FieldOwnerID); ok {
+	if ownerID, ok := eventqueue.MutationStringValue(payload, note.FieldOwnerID); ok {
 		fields.ownerID = ownerID
 	}
 
-	if taskID, ok := mutationStringValue(payload, note.TaskColumn); ok {
+	if taskID, ok := eventqueue.MutationStringValue(payload, note.TaskColumn); ok {
 		fields.taskID = taskID
 	}
 
-	if controlID, ok := mutationStringValue(payload, note.ControlColumn); ok {
+	if controlID, ok := eventqueue.MutationStringValue(payload, note.ControlColumn); ok {
 		fields.controlID = controlID
 	}
 
-	if procedureID, ok := mutationStringValue(payload, note.ProcedureColumn); ok {
+	if procedureID, ok := eventqueue.MutationStringValue(payload, note.ProcedureColumn); ok {
 		fields.procedureID = procedureID
 	}
 
-	if riskID, ok := mutationStringValue(payload, note.RiskColumn); ok {
+	if riskID, ok := eventqueue.MutationStringValue(payload, note.RiskColumn); ok {
 		fields.riskID = riskID
 	}
 
-	if policyID, ok := mutationStringValue(payload, note.InternalPolicyColumn); ok {
+	if policyID, ok := eventqueue.MutationStringValue(payload, note.InternalPolicyColumn); ok {
 		fields.policyID = policyID
 	}
 
-	if evidenceID, ok := mutationStringValue(payload, note.EvidenceColumn); ok {
+	if evidenceID, ok := eventqueue.MutationStringValue(payload, note.EvidenceColumn); ok {
 		fields.evidenceID = evidenceID
 	}
 }
@@ -246,39 +246,39 @@ func extractNoteFromProps(props map[string]string, fields *noteFields) {
 	}
 
 	if fields.text == "" {
-		fields.text = mutationStringFromProperties(props, note.FieldText)
+		fields.text = eventqueue.MutationStringFromProperties(props, note.FieldText)
 	}
 
 	if fields.entityID == "" {
-		fields.entityID = mutationStringFromProperties(props, note.FieldID)
+		fields.entityID = eventqueue.MutationStringFromProperties(props, note.FieldID)
 	}
 
 	if fields.ownerID == "" {
-		fields.ownerID = mutationStringFromProperties(props, note.FieldOwnerID)
+		fields.ownerID = eventqueue.MutationStringFromProperties(props, note.FieldOwnerID)
 	}
 
 	if fields.taskID == "" {
-		fields.taskID = mutationStringFromProperties(props, note.TaskColumn)
+		fields.taskID = eventqueue.MutationStringFromProperties(props, note.TaskColumn)
 	}
 
 	if fields.controlID == "" {
-		fields.controlID = mutationStringFromProperties(props, note.ControlColumn)
+		fields.controlID = eventqueue.MutationStringFromProperties(props, note.ControlColumn)
 	}
 
 	if fields.procedureID == "" {
-		fields.procedureID = mutationStringFromProperties(props, note.ProcedureColumn)
+		fields.procedureID = eventqueue.MutationStringFromProperties(props, note.ProcedureColumn)
 	}
 
 	if fields.riskID == "" {
-		fields.riskID = mutationStringFromProperties(props, note.RiskColumn)
+		fields.riskID = eventqueue.MutationStringFromProperties(props, note.RiskColumn)
 	}
 
 	if fields.policyID == "" {
-		fields.policyID = mutationStringFromProperties(props, note.InternalPolicyColumn)
+		fields.policyID = eventqueue.MutationStringFromProperties(props, note.InternalPolicyColumn)
 	}
 
 	if fields.evidenceID == "" {
-		fields.evidenceID = mutationStringFromProperties(props, note.EvidenceColumn)
+		fields.evidenceID = eventqueue.MutationStringFromProperties(props, note.EvidenceColumn)
 	}
 }
 
@@ -496,7 +496,7 @@ type oldDocumentDetails struct {
 
 // handleObjectMentions checks mentions in object details fields (task/risk/procedure/policy).
 func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := clientFromHandler(ctx)
+	client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
@@ -635,20 +635,20 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 
 // extractTaskMentionDetails extracts mention details from task payload metadata.
 func extractTaskMentionDetails(allowCtx context.Context, client *generated.Client, payload eventqueue.MutationGalaPayload, props map[string]string) objectMentionDetails {
-	objectID, _ := mutationEntityID(payload, props)
+	objectID, _ := eventqueue.MutationEntityID(payload, props)
 	details := objectMentionDetails{
 		objectID:   objectID,
 		objectType: generated.TypeTask,
 		valid:      true,
 	}
 
-	if raw, ok := mutationValue(payload, task.FieldDetailsJSON); ok {
+	if raw, ok := eventqueue.MutationValue(payload, task.FieldDetailsJSON); ok {
 		details.newDetailsJSON = jsonValueToString(raw)
 	}
 
-	details.newDetails = mutationStringWithPropertyFallback(payload, props, task.FieldDetails)
-	details.objectName = mutationStringWithPropertyFallback(payload, props, task.FieldTitle)
-	details.ownerID = mutationStringWithPropertyFallback(payload, props, task.FieldOwnerID)
+	details.newDetails = eventqueue.MutationStringValueOrProperty(payload, props, task.FieldDetails)
+	details.objectName = eventqueue.MutationStringValueOrProperty(payload, props, task.FieldTitle)
+	details.ownerID = eventqueue.MutationStringValueOrProperty(payload, props, task.FieldOwnerID)
 
 	if isUpdateOperation(payload.Operation) && details.objectID != "" {
 		taskEntity, err := client.Task.Get(allowCtx, details.objectID)
@@ -677,20 +677,20 @@ func extractDocumentMentionDetails(
 	ownerField string,
 	queryFunc func(string) (*oldDocumentDetails, error),
 ) objectMentionDetails {
-	objectID, _ := mutationEntityID(payload, props)
+	objectID, _ := eventqueue.MutationEntityID(payload, props)
 	details := objectMentionDetails{
 		objectID:   objectID,
 		objectType: payload.MutationType,
 		valid:      true,
 	}
 
-	if raw, ok := mutationValue(payload, detailsJSONField); ok {
+	if raw, ok := eventqueue.MutationValue(payload, detailsJSONField); ok {
 		details.newDetailsJSON = jsonValueToString(raw)
 	}
 
-	details.newDetails = mutationStringWithPropertyFallback(payload, props, detailsField)
-	details.objectName = mutationStringWithPropertyFallback(payload, props, nameField)
-	details.ownerID = mutationStringWithPropertyFallback(payload, props, ownerField)
+	details.newDetails = eventqueue.MutationStringValueOrProperty(payload, props, detailsField)
+	details.objectName = eventqueue.MutationStringValueOrProperty(payload, props, nameField)
+	details.ownerID = eventqueue.MutationStringValueOrProperty(payload, props, ownerField)
 
 	if isUpdateOperation(payload.Operation) && details.objectID != "" && queryFunc != nil {
 		oldDoc, err := queryFunc(details.objectID)
@@ -707,14 +707,6 @@ func extractDocumentMentionDetails(
 	}
 
 	return details
-}
-
-func mutationStringWithPropertyFallback(payload eventqueue.MutationGalaPayload, properties map[string]string, field string) string {
-	if value, ok := mutationStringValue(payload, field); ok {
-		return value
-	}
-
-	return mutationStringFromProperties(properties, field)
 }
 
 func jsonValueToString(raw any) string {

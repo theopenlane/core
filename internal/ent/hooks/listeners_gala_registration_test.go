@@ -52,15 +52,33 @@ func TestRegisterGalaWorkflowMutationListeners(t *testing.T) {
 	require.Len(t, ids, len(enums.WorkflowObjectTypes)+1)
 
 	for _, schemaType := range enums.WorkflowObjectTypes {
-		topic := eventqueue.WorkflowMutationTopicName(schemaType)
+		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, schemaType)
 		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
 		require.True(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
 		require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
 	}
 
-	assignmentTopic := eventqueue.WorkflowMutationTopicName(entgen.TypeWorkflowAssignment)
+	assignmentTopic := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entgen.TypeWorkflowAssignment)
 	require.True(t, registry.InterestedIn(assignmentTopic, ent.OpUpdate.String()))
 	require.False(t, registry.InterestedIn(assignmentTopic, ent.OpCreate.String()))
+}
+
+func TestRegisterGalaWorkflowListenersRegistersCommandTopics(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaWorkflowListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, len(enums.WorkflowObjectTypes)+7)
+
+	require.True(t, registry.InterestedIn(gala.TopicWorkflowTriggered, ""))
+	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionStarted, ""))
+	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionCompleted, ""))
+	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCreated, ""))
+	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCompleted, ""))
+	require.True(t, registry.InterestedIn(gala.TopicWorkflowInstanceCompleted, ""))
+	require.False(t, registry.InterestedIn(gala.TopicName("workflows.command.triggered"), ""))
 }
 
 func TestRegisterGalaNotificationListeners(t *testing.T) {
@@ -72,10 +90,10 @@ func TestRegisterGalaNotificationListeners(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, ids, 6)
 
-	require.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(entgen.TypeTask), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(entgen.TypeInternalPolicy), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(entgen.TypeRisk), ent.OpDelete.String()))
-	require.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(entgen.TypeProcedure), ent.OpUpdateOne.String()))
-	require.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(entgen.TypeNote), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.NotificationMutationTopicName(entgen.TypeExport), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask), ent.OpCreate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeInternalPolicy), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeRisk), ent.OpDelete.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProcedure), ent.OpUpdateOne.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeNote), ent.OpCreate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeExport), ent.OpUpdate.String()))
 }

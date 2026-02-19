@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -43,14 +42,28 @@ func (e *WorkflowCreationError) Unwrap() error {
 	return e.Err
 }
 
+// mutationProposedChangeSource captures the mutation accessors needed to build proposed changes
+type mutationProposedChangeSource interface {
+	ClearedFields() []string
+	Field(string) (ent.Value, bool)
+}
+
 // BuildProposedChanges materializes mutation values (including cleared fields) for workflow proposals.
-func BuildProposedChanges(m utils.GenericMutation, changedFields []string) map[string]any {
+func BuildProposedChanges(m mutationProposedChangeSource, changedFields []string) map[string]any {
+	if m == nil || len(changedFields) == 0 {
+		return nil
+	}
+
 	clearedSet := lo.SliceToMap(m.ClearedFields(), func(f string) (string, struct{}) {
 		return f, struct{}{}
 	})
 
 	proposed := make(map[string]any, len(changedFields))
 	for _, field := range changedFields {
+		if field == "" {
+			continue
+		}
+
 		if val, ok := m.Field(field); ok {
 			proposed[field] = val
 			continue
@@ -58,6 +71,10 @@ func BuildProposedChanges(m utils.GenericMutation, changedFields []string) map[s
 		if _, ok := clearedSet[field]; ok {
 			proposed[field] = nil
 		}
+	}
+
+	if len(proposed) == 0 {
+		return nil
 	}
 
 	return proposed
@@ -292,31 +309,4 @@ func GetObjectUpdatedBy(obj *Object) string {
 	}
 
 	return fields.UpdatedBy
-}
-
-// MutationPayload carries the raw ent mutation, the resolved operation, the entity ID and the ent
-// client so listeners can act without additional lookups
-type MutationPayload struct {
-	// Mutation is the raw ent mutation that triggered the event
-	Mutation ent.Mutation
-	// MutationType is the ent schema type that emitted the mutation
-	MutationType string
-	// Operation is the string representation of the mutation operation
-	Operation string
-	// EntityID is the ID of the entity that was mutated
-	EntityID string
-	// ChangedFields captures updated/cleared fields for the mutation
-	ChangedFields []string
-	// ClearedFields captures fields explicitly cleared in the mutation
-	ClearedFields []string
-	// ChangedEdges captures changed edge names for workflow-eligible edges
-	ChangedEdges []string
-	// AddedIDs captures edge IDs added by edge name
-	AddedIDs map[string][]string
-	// RemovedIDs captures edge IDs removed by edge name
-	RemovedIDs map[string][]string
-	// ProposedChanges captures field-level proposed values (including nil for clears)
-	ProposedChanges map[string]any
-	// Client is the ent client that can be used to perform additional queries or mutations
-	Client *generated.Client
 }

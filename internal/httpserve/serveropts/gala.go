@@ -17,24 +17,25 @@ import (
 // WithGala configures Gala mutation emission and, when enabled, starts Gala workers.
 func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*gala.Gala, error) {
 	workflowCfg := so.Config.Settings.Workflows
-	if !workflowCfg.EventingEnabled {
+	galaCfg := workflowCfg.Gala
+	if !galaCfg.Enabled {
 		return nil, nil
 	}
 
-	galaQueueName := workflowCfg.EventingQueueName
+	galaQueueName := galaCfg.QueueName
 	if galaQueueName == "" {
 		galaQueueName = gala.DefaultQueueName
 	}
 
 	galaApp, err := gala.NewGala(ctx, gala.Config{
-		Enabled:       workflowCfg.EventingEnabled,
+		Enabled:       galaCfg.Enabled,
 		ConnectionURI: so.Config.Settings.JobQueue.ConnectionURI,
 		QueueName:     galaQueueName,
-		WorkerCount:   max(workflowCfg.EventingWorkerCount, 1),
+		WorkerCount:   max(galaCfg.WorkerCount, 1),
 		QueueWorkers: map[string]int{
-			integrations.IntegrationQueueName: max(workflowCfg.EventingWorkerCount, 1),
+			integrations.IntegrationQueueName: max(galaCfg.WorkerCount, 1),
 		},
-		MaxRetries: workflowCfg.EventingMaxRetries,
+		MaxRetries: galaCfg.MaxRetries,
 	})
 	if err != nil {
 		return nil, err
@@ -42,6 +43,7 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 
 	notificationGala, err := gala.NewGala(ctx, gala.Config{
 		DispatchMode: gala.DispatchModeInMemory,
+		WorkerCount:  max(galaCfg.WorkerCount, 1),
 	})
 	if err != nil {
 		if closeErr := galaApp.Close(); closeErr != nil {
@@ -114,7 +116,7 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 		return nil, err
 	}
 
-	log.Info().Int("gala_worker_count", max(workflowCfg.EventingWorkerCount, 1)).Str("gala_queue", galaQueueName).Msg("gala worker client started")
+	log.Info().Int("gala_worker_count", max(galaCfg.WorkerCount, 1)).Str("gala_queue", galaQueueName).Msg("gala worker client started")
 
 	return galaApp, nil
 }

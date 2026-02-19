@@ -10,7 +10,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -71,18 +70,15 @@ type documentNotificationInput struct {
 
 // handleTaskMutation processes task mutations and creates notifications when assignee changes or mentions are added.
 func handleTaskMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := clientFromHandler(ctx)
+	client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
 
 	props := ctx.Envelope.Headers.Properties
 
-	if mutationFieldChanged(payload, task.FieldAssigneeID) {
-		assigneeID, _ := mutationStringValue(payload, task.FieldAssigneeID)
-		if assigneeID == "" {
-			assigneeID = mutationStringFromProperties(props, task.FieldAssigneeID)
-		}
+	if eventqueue.MutationFieldChanged(payload, task.FieldAssigneeID) {
+		assigneeID := eventqueue.MutationStringValueOrProperty(payload, props, task.FieldAssigneeID)
 
 		if assigneeID != "" {
 			fields, err := fetchTaskFields(ctx.Context, client, props, payload)
@@ -140,11 +136,11 @@ func extractTaskFromPayload(payload eventqueue.MutationGalaPayload, fields *task
 		fields.entityID = payload.EntityID
 	}
 
-	if title, ok := mutationStringValue(payload, task.FieldTitle); ok {
+	if title, ok := eventqueue.MutationStringValue(payload, task.FieldTitle); ok {
 		fields.title = title
 	}
 
-	if ownerID, ok := mutationStringValue(payload, task.FieldOwnerID); ok {
+	if ownerID, ok := eventqueue.MutationStringValue(payload, task.FieldOwnerID); ok {
 		fields.ownerID = ownerID
 	}
 }
@@ -156,15 +152,15 @@ func extractTaskFromProps(props map[string]string, fields *taskFields) {
 	}
 
 	if fields.title == "" {
-		fields.title = mutationStringFromProperties(props, task.FieldTitle)
+		fields.title = eventqueue.MutationStringFromProperties(props, task.FieldTitle)
 	}
 
 	if fields.entityID == "" {
-		fields.entityID = mutationStringFromProperties(props, task.FieldID)
+		fields.entityID = eventqueue.MutationStringFromProperties(props, task.FieldID)
 	}
 
 	if fields.ownerID == "" {
-		fields.ownerID = mutationStringFromProperties(props, task.FieldOwnerID)
+		fields.ownerID = eventqueue.MutationStringFromProperties(props, task.FieldOwnerID)
 	}
 }
 
@@ -218,9 +214,9 @@ func handleInternalPolicyMutation(ctx gala.HandlerContext, payload eventqueue.Mu
 func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	props := ctx.Envelope.Headers.Properties
 
-	rawStatus, ok := mutationValue(payload, internalpolicy.FieldStatus)
+	rawStatus, ok := eventqueue.MutationValue(payload, internalpolicy.FieldStatus)
 	if !ok {
-		status := mutationStringFromProperties(props, internalpolicy.FieldStatus)
+		status := eventqueue.MutationStringFromProperties(props, internalpolicy.FieldStatus)
 		if status == "" {
 			return nil
 		}
@@ -228,12 +224,12 @@ func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.Mut
 		rawStatus = status
 	}
 
-	status, ok := events.ParseEnum(rawStatus, enums.ToDocumentStatus, enums.DocumentStatusInvalid)
+	status, ok := eventqueue.ParseEnum(rawStatus, enums.ToDocumentStatus, enums.DocumentStatusInvalid)
 	if !ok || status != enums.DocumentNeedsApproval {
 		return nil
 	}
 
-	client, ok := clientFromHandler(ctx)
+	client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
@@ -305,15 +301,15 @@ func extractDocumentFromPayload(payload eventqueue.MutationGalaPayload, fields *
 		fields.entityID = payload.EntityID
 	}
 
-	if name, ok := mutationStringValue(payload, internalpolicy.FieldName); ok {
+	if name, ok := eventqueue.MutationStringValue(payload, internalpolicy.FieldName); ok {
 		fields.name = name
 	}
 
-	if ownerID, ok := mutationStringValue(payload, internalpolicy.FieldOwnerID); ok {
+	if ownerID, ok := eventqueue.MutationStringValue(payload, internalpolicy.FieldOwnerID); ok {
 		fields.ownerID = ownerID
 	}
 
-	if approverID, ok := mutationStringValue(payload, internalpolicy.FieldApproverID); ok {
+	if approverID, ok := eventqueue.MutationStringValue(payload, internalpolicy.FieldApproverID); ok {
 		fields.approverID = approverID
 	}
 }
@@ -326,19 +322,19 @@ func extractDocumentFromProps(props map[string]string, fields *documentFields) {
 	}
 
 	if fields.approverID == "" {
-		fields.approverID = mutationStringFromProperties(props, internalpolicy.FieldApproverID)
+		fields.approverID = eventqueue.MutationStringFromProperties(props, internalpolicy.FieldApproverID)
 	}
 
 	if fields.name == "" {
-		fields.name = mutationStringFromProperties(props, internalpolicy.FieldName)
+		fields.name = eventqueue.MutationStringFromProperties(props, internalpolicy.FieldName)
 	}
 
 	if fields.entityID == "" {
-		fields.entityID = mutationStringFromProperties(props, internalpolicy.FieldID)
+		fields.entityID = eventqueue.MutationStringFromProperties(props, internalpolicy.FieldID)
 	}
 
 	if fields.ownerID == "" {
-		fields.ownerID = mutationStringFromProperties(props, internalpolicy.FieldOwnerID)
+		fields.ownerID = eventqueue.MutationStringFromProperties(props, internalpolicy.FieldOwnerID)
 	}
 }
 
@@ -533,32 +529,32 @@ func newNotificationCreation(ctx context.Context, client *generated.Client, user
 func RegisterGalaListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationTopic(generated.TypeTask),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeTask),
 			Name:   "notifications.task",
 			Handle: handleTaskMutation,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationTopic(generated.TypeInternalPolicy),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy),
 			Name:   "notifications.internal_policy",
 			Handle: handleInternalPolicyMutation,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationTopic(generated.TypeRisk),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeRisk),
 			Name:   "notifications.risk",
 			Handle: handleRiskMutation,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationTopic(generated.TypeProcedure),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeProcedure),
 			Name:   "notifications.procedure",
 			Handle: handleProcedureMutation,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationTopic(generated.TypeNote),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeNote),
 			Name:   "notifications.note",
 			Handle: handleNoteMutation,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  mutationTopic(generated.TypeExport),
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeExport),
 			Name:   "notifications.export",
 			Handle: handleExportMutation,
 		},

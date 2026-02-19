@@ -7,7 +7,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -27,13 +26,13 @@ type exportFields struct {
 
 // handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED.
 func handleExportMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := clientFromHandler(ctx)
+	client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
 
 	props := ctx.Envelope.Headers.Properties
-	if !mutationFieldChanged(payload, export.FieldStatus) && mutationStringFromProperties(props, export.FieldStatus) == "" {
+	if !eventqueue.MutationFieldChanged(payload, export.FieldStatus) && eventqueue.MutationStringFromProperties(props, export.FieldStatus) == "" {
 		return nil
 	}
 
@@ -85,23 +84,23 @@ func extractExportFromPayload(payload eventqueue.MutationGalaPayload, fields *ex
 		fields.entityID = payload.EntityID
 	}
 
-	if ownerID, ok := mutationStringValue(payload, export.FieldOwnerID); ok {
+	if ownerID, ok := eventqueue.MutationStringValue(payload, export.FieldOwnerID); ok {
 		fields.ownerID = ownerID
 	}
 
-	if requestorID, ok := mutationStringValue(payload, export.FieldRequestorID); ok {
+	if requestorID, ok := eventqueue.MutationStringValue(payload, export.FieldRequestorID); ok {
 		fields.requestorID = requestorID
 	}
 
-	if exportType, ok := events.ParseEnum(payload.ProposedChanges[export.FieldExportType], enums.ToExportType, enums.ExportTypeInvalid); ok {
+	if exportType, ok := eventqueue.ParseEnum(payload.ProposedChanges[export.FieldExportType], enums.ToExportType, enums.ExportTypeInvalid); ok {
 		fields.exportType = exportType
 	}
 
-	if status, ok := events.ParseEnum(payload.ProposedChanges[export.FieldStatus], enums.ToExportStatus, enums.ExportStatusInvalid); ok {
+	if status, ok := eventqueue.ParseEnum(payload.ProposedChanges[export.FieldStatus], enums.ToExportStatus, enums.ExportStatusInvalid); ok {
 		fields.status = status
 	}
 
-	if errorMessage, ok := mutationStringValue(payload, export.FieldErrorMessage); ok {
+	if errorMessage, ok := eventqueue.MutationStringValue(payload, export.FieldErrorMessage); ok {
 		fields.errorMessage = errorMessage
 	}
 }
@@ -112,31 +111,31 @@ func extractExportFromProps(props map[string]string, fields *exportFields) {
 	}
 
 	if fields.ownerID == "" {
-		fields.ownerID = mutationStringFromProperties(props, export.FieldOwnerID)
+		fields.ownerID = eventqueue.MutationStringFromProperties(props, export.FieldOwnerID)
 	}
 
 	if fields.requestorID == "" {
-		fields.requestorID = mutationStringFromProperties(props, export.FieldRequestorID)
+		fields.requestorID = eventqueue.MutationStringFromProperties(props, export.FieldRequestorID)
 	}
 
 	if fields.exportType == "" {
-		if exportType, ok := events.ParseEnum(props[export.FieldExportType], enums.ToExportType, enums.ExportTypeInvalid); ok {
+		if exportType, ok := eventqueue.ParseEnum(props[export.FieldExportType], enums.ToExportType, enums.ExportTypeInvalid); ok {
 			fields.exportType = exportType
 		}
 	}
 
 	if fields.status == "" {
-		if status, ok := events.ParseEnum(props[export.FieldStatus], enums.ToExportStatus, enums.ExportStatusInvalid); ok {
+		if status, ok := eventqueue.ParseEnum(props[export.FieldStatus], enums.ToExportStatus, enums.ExportStatusInvalid); ok {
 			fields.status = status
 		}
 	}
 
 	if fields.errorMessage == "" {
-		fields.errorMessage = mutationStringFromProperties(props, export.FieldErrorMessage)
+		fields.errorMessage = eventqueue.MutationStringFromProperties(props, export.FieldErrorMessage)
 	}
 
 	if fields.entityID == "" {
-		fields.entityID = mutationStringFromProperties(props, export.FieldID)
+		fields.entityID = eventqueue.MutationStringFromProperties(props, export.FieldID)
 	}
 }
 

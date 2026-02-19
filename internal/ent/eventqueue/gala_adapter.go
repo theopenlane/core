@@ -6,83 +6,54 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-
-	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// MutationGalaPayload is the JSON-safe mutation payload contract for gala.
+// MutationGalaPayload is the JSON-safe mutation payload contract for gala
 type MutationGalaPayload struct {
-	// MutationType is the ent schema type that emitted the mutation.
+	// MutationType is the ent schema type that emitted the mutation
 	MutationType string `json:"mutation_type"`
-	// Operation is the mutation operation string.
+	// Operation is the mutation operation string
 	Operation string `json:"operation"`
-	// EntityID is the mutated entity identifier.
+	// EntityID is the mutated entity identifier
 	EntityID string `json:"entity_id"`
-	// ChangedFields captures updated/cleared fields for the mutation.
+	// ChangedFields captures updated/cleared fields for the mutation
 	ChangedFields []string `json:"changed_fields,omitempty"`
-	// ClearedFields captures fields explicitly cleared by the mutation.
+	// ClearedFields captures fields explicitly cleared by the mutation
 	ClearedFields []string `json:"cleared_fields,omitempty"`
-	// ChangedEdges captures changed edge names for workflow-eligible edges.
+	// ChangedEdges captures changed edge names for workflow-eligible edges
 	ChangedEdges []string `json:"changed_edges,omitempty"`
-	// AddedIDs captures edge IDs added by edge name.
+	// AddedIDs captures edge IDs added by edge name
 	AddedIDs map[string][]string `json:"added_ids,omitempty"`
-	// RemovedIDs captures edge IDs removed by edge name.
+	// RemovedIDs captures edge IDs removed by edge name
 	RemovedIDs map[string][]string `json:"removed_ids,omitempty"`
-	// ProposedChanges captures field-level proposed values.
+	// ProposedChanges captures field-level proposed values
 	ProposedChanges map[string]any `json:"proposed_changes,omitempty"`
 }
 
-const (
-	// mutationGalaPropertyEntityID is the standard mutation metadata key used for entity identifiers.
-	mutationGalaPropertyEntityID = "ID"
-)
-
-// MutationGalaMetadata captures envelope metadata for Gala mutation dispatch.
+// MutationGalaMetadata captures envelope metadata for Gala mutation dispatch
 type MutationGalaMetadata struct {
-	// EventID is the stable idempotency/event identifier for this mutation dispatch.
+	// EventID is the stable idempotency/event identifier for this mutation dispatch
 	EventID string
-	// Properties stores string-safe metadata for listener header fallbacks.
+	// Properties stores string-safe metadata for listener header fallbacks
 	Properties map[string]string
 }
 
-// galaEnvelopeRuntime captures the minimal Gala runtime surface needed for envelope construction.
+// galaEnvelopeRuntime captures the minimal Gala runtime surface needed for envelope construction
 type galaEnvelopeRuntime interface {
 	Registry() *gala.Registry
 	ContextManager() *gala.ContextManager
 }
 
-// NewMutationGalaPayload converts a mutation payload into a JSON-safe gala payload.
-func NewMutationGalaPayload(payload *events.MutationPayload) MutationGalaPayload {
-	if payload == nil {
-		return MutationGalaPayload{}
-	}
-
-	return MutationGalaPayload{
-		MutationType:    events.MutationType(payload),
-		Operation:       payload.Operation,
-		EntityID:        payload.EntityID,
-		ChangedFields:   append([]string(nil), payload.ChangedFields...),
-		ClearedFields:   append([]string(nil), payload.ClearedFields...),
-		ChangedEdges:    append([]string(nil), payload.ChangedEdges...),
-		AddedIDs:        events.CloneStringSliceMap(payload.AddedIDs),
-		RemovedIDs:      events.CloneStringSliceMap(payload.RemovedIDs),
-		ProposedChanges: events.CloneAnyMap(payload.ProposedChanges),
-	}
-}
-
-// NewMutationGalaMetadata builds metadata for Gala mutation envelopes from mutation payload data.
-func NewMutationGalaMetadata(eventID string, payload *events.MutationPayload) MutationGalaMetadata {
+// NewMutationGalaMetadata builds metadata for Gala mutation envelopes from mutation payload data
+func NewMutationGalaMetadata(eventID string, payload MutationGalaPayload) MutationGalaMetadata {
 	properties := mutationMetadataProperties(payload)
-	entityID := ""
-	if payload != nil {
-		entityID = strings.TrimSpace(payload.EntityID)
-	}
+	entityID := strings.TrimSpace(payload.EntityID)
 	if entityID != "" {
 		if properties == nil {
 			properties = map[string]string{}
 		}
-		properties[mutationGalaPropertyEntityID] = entityID
+		properties[MutationPropertyEntityID] = entityID
 	}
 
 	return MutationGalaMetadata{
@@ -91,7 +62,7 @@ func NewMutationGalaMetadata(eventID string, payload *events.MutationPayload) Mu
 	}
 }
 
-// NewGalaHeadersFromMutationMetadata builds Gala headers from mutation metadata.
+// NewGalaHeadersFromMutationMetadata builds Gala headers from mutation metadata
 func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Headers {
 	properties := normalizeMutationMetadataProperties(metadata.Properties)
 	eventID := strings.TrimSpace(metadata.EventID)
@@ -102,12 +73,11 @@ func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Head
 	}
 }
 
-// NewMutationGalaEnvelope builds a gala envelope from legacy mutation emit inputs.
-func NewMutationGalaEnvelope(ctx context.Context, g galaEnvelopeRuntime, topic gala.Topic[MutationGalaPayload], payload *events.MutationPayload, metadata MutationGalaMetadata) (envelope gala.Envelope, err error) {
+// NewMutationGalaEnvelope builds a gala envelope from legacy mutation emit inputs
+func NewMutationGalaEnvelope(ctx context.Context, g galaEnvelopeRuntime, topic gala.Topic[MutationGalaPayload], payload MutationGalaPayload, metadata MutationGalaMetadata) (envelope gala.Envelope, err error) {
 	headers := NewGalaHeadersFromMutationMetadata(metadata)
-	galaPayload := NewMutationGalaPayload(payload)
 
-	encodedPayload, err := g.Registry().EncodePayload(topic.Name, galaPayload)
+	encodedPayload, err := g.Registry().EncodePayload(topic.Name, payload)
 	if err != nil {
 		return envelope, err
 	}
@@ -135,15 +105,11 @@ func NewMutationGalaEnvelope(ctx context.Context, g galaEnvelopeRuntime, topic g
 	return envelope, nil
 }
 
-// mutationMetadataProperties builds listener fallback properties from payload proposed changes.
-// Returns raw properties; normalization is deferred to NewGalaHeadersFromMutationMetadata.
-func mutationMetadataProperties(payload *events.MutationPayload) map[string]string {
-	if payload == nil {
-		return nil
-	}
-
+// mutationMetadataProperties builds listener fallback properties from payload proposed changes
+// Returns raw properties; normalization is deferred to NewGalaHeadersFromMutationMetadata
+func mutationMetadataProperties(payload MutationGalaPayload) map[string]string {
 	properties := lo.PickBy(lo.MapEntries(payload.ProposedChanges, func(key string, value any) (string, string) {
-		stringValue, ok := events.ValueAsString(value)
+		stringValue, ok := ValueAsString(value)
 		if !ok {
 			return "", ""
 		}
@@ -160,7 +126,7 @@ func mutationMetadataProperties(payload *events.MutationPayload) map[string]stri
 	return nil
 }
 
-// normalizeMutationMetadataProperties normalizes mutation metadata keys and values for Gala headers.
+// normalizeMutationMetadataProperties normalizes mutation metadata keys and values for Gala headers
 func normalizeMutationMetadataProperties(properties map[string]string) map[string]string {
 	if len(properties) == 0 {
 		return nil

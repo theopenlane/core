@@ -1,4 +1,4 @@
-package events
+package eventqueue
 
 import (
 	"fmt"
@@ -7,49 +7,8 @@ import (
 	"github.com/samber/lo"
 )
 
-// EnumParser converts a normalized string into an enum pointer value.
+// EnumParser converts a normalized string into an enum pointer value
 type EnumParser[T ~string] func(string) *T
-
-// MutationType resolves the mutation schema type from payload metadata with mutation fallback.
-func MutationType(payload *MutationPayload) string {
-	if payload == nil {
-		return ""
-	}
-
-	if mutationType := strings.TrimSpace(payload.MutationType); mutationType != "" {
-		return mutationType
-	}
-
-	if payload.Mutation != nil {
-		return strings.TrimSpace(payload.Mutation.Type())
-	}
-
-	return ""
-}
-
-// ProposedValue returns a proposed field value from mutation metadata.
-func ProposedValue(payload *MutationPayload, field string) (any, bool) {
-	if payload == nil || payload.ProposedChanges == nil || field == "" {
-		return nil, false
-	}
-
-	raw, ok := payload.ProposedChanges[field]
-	if !ok {
-		return nil, false
-	}
-
-	return raw, true
-}
-
-// ProposedString returns a proposed field value as string when possible
-func ProposedString(payload *MutationPayload, field string) (string, bool) {
-	raw, ok := ProposedValue(payload, field)
-	if !ok {
-		return "", false
-	}
-
-	return ValueAsString(raw)
-}
 
 // ValueAsString converts arbitrary values into non-empty strings
 func ValueAsString(raw any) (string, bool) {
@@ -81,7 +40,7 @@ func ValueAsString(raw any) (string, bool) {
 	}
 }
 
-// ValueString converts arbitrary values into a string and returns empty string when conversion fails.
+// ValueString converts arbitrary values into a string and returns empty string when conversion fails
 func ValueString(raw any) string {
 	value, ok := ValueAsString(raw)
 	if !ok {
@@ -91,8 +50,8 @@ func ValueString(raw any) string {
 	return value
 }
 
-// ParseEnum parses enum-like values through the provided enum parser.
-// Optional invalid values can be provided to force known sentinel values to be treated as parse failures.
+// ParseEnum parses enum-like values through the provided enum parser
+// Optional invalid values can be provided to force known sentinel values to be treated as parse failures
 func ParseEnum[T ~string](raw any, parser EnumParser[T], invalid ...T) (T, bool) {
 	var zero T
 	if parser == nil {

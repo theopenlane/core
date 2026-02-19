@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
@@ -65,15 +64,15 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
 	changedFields := append([]string(nil), payload.ChangedFields...)
 	changedEdges := append([]string(nil), payload.ChangedEdges...)
-	addedIDs := events.CloneStringSliceMap(payload.AddedIDs)
-	removedIDs := events.CloneStringSliceMap(payload.RemovedIDs)
-	proposedChanges := events.CloneAnyMap(payload.ProposedChanges)
+	addedIDs := eventqueue.CloneStringSliceMap(payload.AddedIDs)
+	removedIDs := eventqueue.CloneStringSliceMap(payload.RemovedIDs)
+	proposedChanges := eventqueue.CloneAnyMap(payload.ProposedChanges)
 
 	if len(changedFields) == 0 && len(changedEdges) == 0 && eventType != "CREATE" {
 		return nil
 	}
 
-	entityID, ok := mutationEntityIDFromGalaPayload(payload, ctx.Envelope.Headers.Properties)
+	entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok {
 		return nil
 	}
@@ -116,11 +115,11 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.Handle
 		return nil
 	}
 
-	if !workflowMutationFieldChanged(payload, workflowassignment.FieldStatus) {
+	if !eventqueue.MutationFieldChanged(payload, workflowassignment.FieldStatus) {
 		return nil
 	}
 
-	newStatus, ok := events.ParseEnum(
+	newStatus, ok := eventqueue.ParseEnum(
 		payload.ProposedChanges[workflowassignment.FieldStatus],
 		enums.ToWorkflowAssignmentStatus,
 		enums.WorkflowAssignmentStatusPending,
@@ -129,7 +128,7 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.Handle
 		return nil
 	}
 
-	assignmentID, ok := mutationEntityIDFromGalaPayload(payload, ctx.Envelope.Headers.Properties)
+	assignmentID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 	if !ok {
 		return nil
 	}
@@ -170,35 +169,6 @@ func workflowEventTypeFromEntOperation(operation string) string {
 	default:
 		return operation
 	}
-}
-
-func mutationEntityIDFromGalaPayload(payload eventqueue.MutationGalaPayload, properties map[string]string) (string, bool) {
-	entityID := strings.TrimSpace(payload.EntityID)
-	if entityID != "" {
-		return entityID, true
-	}
-
-	entityID = strings.TrimSpace(properties["ID"])
-	if entityID == "" {
-		return "", false
-	}
-
-	return entityID, true
-}
-
-func workflowMutationFieldChanged(payload eventqueue.MutationGalaPayload, field string) bool {
-	field = strings.TrimSpace(field)
-	if field == "" {
-		return false
-	}
-
-	if payload.ProposedChanges != nil {
-		if _, ok := payload.ProposedChanges[field]; ok {
-			return true
-		}
-	}
-
-	return lo.Contains(payload.ChangedFields, field)
 }
 
 // HandleWorkflowTriggered processes a newly triggered workflow instance.
@@ -258,7 +228,7 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 		keys := lo.Map(gatedToStart, func(item gatedStart, _ int) string {
 			return item.action.Key
 		})
-		keys = workflows.NormalizeStrings(keys)
+		keys = eventqueue.NormalizeStrings(keys)
 		if len(keys) > 0 {
 			allowCtx := workflows.AllowContext(scopeCtx)
 			contextData := instance.Context
@@ -603,7 +573,7 @@ func isChangeRequestAssignment(assignment *generated.WorkflowAssignment) bool {
 }
 
 func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys []string, actionIndex int) (map[int]struct{}, bool) {
-	expectedKeys := workflows.NormalizeStrings(parallelKeys)
+	expectedKeys := eventqueue.NormalizeStrings(parallelKeys)
 	expectedIndices := make(map[int]struct{})
 	for _, key := range expectedKeys {
 		if idx := actionIndexForKey(actions, key); idx >= 0 {
@@ -1128,7 +1098,7 @@ func (l *WorkflowListeners) removeParallelApprovalKey(ctx context.Context, insta
 		return nil
 	}
 
-	keys := workflows.NormalizeStrings(instance.Context.ParallelApprovalKeys)
+	keys := eventqueue.NormalizeStrings(instance.Context.ParallelApprovalKeys)
 	if len(keys) == 0 {
 		return nil
 	}
