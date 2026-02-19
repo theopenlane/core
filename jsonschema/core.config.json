@@ -1724,16 +1724,28 @@
         "cel": {
           "$ref": "#/$defs/workflows.CELConfig"
         },
-        "eventingenabled": {
+        "gala": {
+          "$ref": "#/$defs/workflows.GalaConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "workflows.GalaConfig": {
+      "properties": {
+        "enabled": {
           "type": "boolean"
         },
-        "eventingworkercount": {
+        "workercount": {
           "type": "integer"
         },
-        "eventingmaxretries": {
+        "maxretries": {
           "type": "integer"
         },
-        "eventingqueuename": {
+        "failonenqueueerror": {
+          "type": "boolean"
+        },
+        "queuename": {
           "type": "string"
         }
       },

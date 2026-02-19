@@ -418,9 +418,9 @@ func addWorkflowActionDescription(schema *jsonschema.Schema) {
 }
 
 // toInterfaceSlice converts a string slice to an interface slice for enum values
-func toInterfaceSlice(strings []string) []any {
-	result := make([]any, len(strings))
-	for i, s := range strings {
+func toInterfaceSlice(values []string) []any {
+	result := make([]any, len(values))
+	for i, s := range values {
 		result[i] = s
 	}
 

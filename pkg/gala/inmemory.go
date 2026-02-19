@@ -1,6 +1,10 @@
 package gala
 
-import "context"
+import (
+	"context"
+
+	"github.com/theopenlane/core/pkg/logx"
+)
 
 // DispatchFunc adapts a function to the Dispatcher interface.
 type DispatchFunc func(context.Context, Envelope) error
@@ -10,8 +14,8 @@ func (f DispatchFunc) Dispatch(ctx context.Context, envelope Envelope) error {
 	return f(ctx, envelope)
 }
 
-// NewInMemory creates a Gala runtime that dispatches envelopes immediately in-process.
-// This is useful for tests that need deterministic listener execution without River workers.
+// NewInMemory creates a Gala runtime that dispatches envelopes asynchronously via an in-process pool.
+// This is useful when listeners should not require durable River workers.
 func NewInMemory() (*Gala, error) {
 	return newInMemoryGala(Config{
 		DispatchMode: DispatchModeInMemory,
@@ -41,12 +45,13 @@ func newInMemoryGala(config Config) (*Gala, error) {
 			return g.DispatchEnvelope(ctx, envelope)
 		}
 
-		errCh := make(chan error, 1)
 		pool.Submit(func() {
-			errCh <- g.DispatchEnvelope(ctx, envelope)
+			if err := g.DispatchEnvelope(ctx, envelope); err != nil {
+				logx.FromContext(ctx).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Msg("gala in-memory listener dispatch failed")
+			}
 		})
 
-		return <-errCh
+		return nil
 	})
 
 	return g, nil

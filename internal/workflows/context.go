@@ -11,14 +11,6 @@ import (
 	"github.com/theopenlane/utils/contextx"
 )
 
-// WorkflowBypassContextKey is the context key for workflow bypass operations
-// Used to bypass workflow approval checks during system operations (e.g., applying approved changes)
-type WorkflowBypassContextKey struct{}
-
-// WorkflowAllowEventEmissionKey allows workflow event handlers to run even when bypass is set.
-// This is useful for applying approved changes while still triggering post-commit workflows.
-type WorkflowAllowEventEmissionKey struct{}
-
 // skipEventEmissionFlag is used to share a mutable skip flag across hook layers.
 type skipEventEmissionFlag struct {
 	skip bool
@@ -28,15 +20,6 @@ type skipEventEmissionFlag struct {
 // Operations with this context will skip workflow approval interceptors
 func WithContext(ctx context.Context) context.Context {
 	return gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
-}
-
-// FromContext retrieves the workflow bypass context
-func FromContext(ctx context.Context) (WorkflowBypassContextKey, bool) {
-	if gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass) {
-		return WorkflowBypassContextKey{}, true
-	}
-
-	return WorkflowBypassContextKey{}, false
 }
 
 // IsWorkflowBypass checks if the context has workflow bypass enabled

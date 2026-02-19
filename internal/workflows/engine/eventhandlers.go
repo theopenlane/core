@@ -125,6 +125,28 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.Handle
 		return nil
 	}
 
+	// Verify the assignment's current status actually changed to prevent redundant completion calls.
+	// The Gala payload does not carry old values, so query current state.
+	allowCtx := workflows.AllowContext(ctx.Context)
+	orgID, orgErr := auth.GetOrganizationIDFromContext(ctx.Context)
+	if orgErr != nil {
+		return nil
+	}
+
+	assignment, queryErr := l.client.WorkflowAssignment.Query().
+		Where(
+			workflowassignment.IDEQ(assignmentID),
+			workflowassignment.OwnerIDEQ(orgID),
+		).
+		Only(allowCtx)
+	if queryErr != nil {
+		return nil
+	}
+
+	if assignment.Status == newStatus {
+		return nil
+	}
+
 	log.Info().Str("assignment_id", assignmentID).Str("new_status", newStatus.String()).Msg("workflow assignment status changed")
 
 	return l.engine.CompleteAssignment(ctx.Context, assignmentID, newStatus, nil, nil)

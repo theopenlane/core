@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/pkg/gala"
@@ -19,7 +20,7 @@ func enqueueGalaMutation(ctx context.Context, g *gala.Gala, topic string, payloa
 	}
 
 	if err := ensureGalaMutationTopicRegistered(g.Registry(), mutationTopic); err != nil {
-		return ErrGalaMutationEnqueueFailed
+		return fmt.Errorf("%w: topic registration: %v", ErrGalaMutationEnqueueFailed, err)
 	}
 
 	// detach cancellation for best-effort dispatch after commit
@@ -27,11 +28,11 @@ func enqueueGalaMutation(ctx context.Context, g *gala.Gala, topic string, payloa
 
 	envelope, err := eventqueue.NewMutationGalaEnvelope(dispatchCtx, g, mutationTopic, payload, metadata)
 	if err != nil {
-		return ErrGalaMutationEnqueueFailed
+		return fmt.Errorf("%w: envelope construction: %v", ErrGalaMutationEnqueueFailed, err)
 	}
 
 	if err := g.EmitEnvelope(dispatchCtx, envelope); err != nil {
-		return ErrGalaMutationEnqueueFailed
+		return fmt.Errorf("%w: emit: %v", ErrGalaMutationEnqueueFailed, err)
 	}
 
 	return nil

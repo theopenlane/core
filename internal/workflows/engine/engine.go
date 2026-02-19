@@ -85,6 +85,7 @@ func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, c
 }
 
 // SetGala updates the runtime used for workflow and integration dispatch.
+// This must only be called during initialization before the engine serves requests.
 func (e *WorkflowEngine) SetGala(runtime *gala.Gala) {
 	if e == nil {
 		return

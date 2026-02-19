@@ -156,7 +156,7 @@ type WorkflowEventPayload struct {
 	Details json.RawMessage `json:"details,omitempty"`
 }
 
-// AssignmentMetadata captures structured metadata for workflow assignments
+// WorkflowAssignmentApproval captures structured metadata for workflow assignments
 type WorkflowAssignmentApproval struct {
 	// ActionKey is the workflow action key this assignment belongs to
 	ActionKey string `json:"action_key,omitempty"`
@@ -174,7 +174,7 @@ type WorkflowAssignmentApproval struct {
 	ApprovedByUserID string `json:"approved_by_user_id,omitempty"`
 }
 
-// AssignmentInvalidation captures details when an approval is invalidated (approvals are invalidated when there is a subsequent change to the proposed changes)
+// WorkflowAssignmentInvalidation captures details when an approval is invalidated (approvals are invalidated when there is a subsequent change to the proposed changes)
 type WorkflowAssignmentInvalidation struct {
 	// Reason explains why the approval was invalidated
 	Reason string `json:"reason,omitempty"`
@@ -197,11 +197,11 @@ type WorkflowAssignmentRejection struct {
 	// RejectionReason stores an optional rejection reason
 	RejectionReason string `json:"rejection_reason,omitempty"`
 	// RejectedAt is when the rejection occurred
-	RejectedAt string `json:"invalidated_at,omitempty"`
+	RejectedAt string `json:"rejected_at,omitempty"`
 	// RejectedByUserID is the user who made the rejection decision
-	RejectedByUserID string `json:"invalidated_by_user_id,omitempty"`
+	RejectedByUserID string `json:"rejected_by_user_id,omitempty"`
 	// RejectedHash is the hash that was rejected encapsulating the changes that were not merged
-	RejectedHash string `json:"approved_hash,omitempty"`
+	RejectedHash string `json:"rejected_hash,omitempty"`
 	// ChangeRequestInputs stores optional structured inputs for change requests
 	ChangeRequestInputs map[string]any `json:"change_request_inputs,omitempty"`
 }

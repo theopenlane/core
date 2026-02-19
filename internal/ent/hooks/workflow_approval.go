@@ -123,7 +123,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			}
 
 			eligibleFields, ineligibleFields := workflows.SeparateFieldsByEligibility(mut.Type(), allChangedFields)
-			ineligibleFields = filterNonSystemFields(ineligibleFields)
+			ineligibleFields = excludeSystemFields(ineligibleFields)
 
 			eligibleChanges := mutations.BuildProposedChanges(mut, eligibleFields)
 			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
@@ -200,8 +200,8 @@ var workflowApprovalIgnoredFields = map[string]struct{}{
 	"deleted_by": {},
 }
 
-// filterNonSystemFields removes system fields from the given field list
-func filterNonSystemFields(fields []string) []string {
+// excludeSystemFields removes system fields from the given field list
+func excludeSystemFields(fields []string) []string {
 	if len(fields) == 0 {
 		return fields
 	}

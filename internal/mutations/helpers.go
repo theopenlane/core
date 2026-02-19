@@ -5,6 +5,8 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/common/helpers"
 )
 
 // ChangeSet captures mutation deltas shared across eventing and workflow trigger contexts
@@ -126,16 +128,16 @@ func CloneStringSliceMap(values map[string][]string) map[string][]string {
 	return cloned
 }
 
-// CloneAnyMap shallow-copies map values while dropping blank keys
+// CloneAnyMap deep-copies map values while dropping blank keys
 func CloneAnyMap(values map[string]any) map[string]any {
 	if len(values) == 0 {
 		return nil
 	}
 
-	cloned := lo.PickBy(values, func(key string, _ any) bool { return strings.TrimSpace(key) != "" })
-	if len(cloned) == 0 {
+	filtered := lo.PickBy(values, func(key string, _ any) bool { return strings.TrimSpace(key) != "" })
+	if len(filtered) == 0 {
 		return nil
 	}
 
-	return cloned
+	return helpers.DeepCloneMap(filtered)
 }
