@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // EvidenceStatus is a custom type representing the various states of EvidenceStatus.
 type EvidenceStatus string
@@ -28,59 +24,29 @@ var (
 	EvidenceStatusInvalid EvidenceStatus = "EVIDENCESTATUS_INVALID"
 )
 
-// Values returns a slice of strings representing all valid EvidenceStatus values.
-func (EvidenceStatus) Values() []string {
-	return []string{
-		string(EvidenceStatusSubmitted),
-		string(EvidenceStatusReadyForAuditor),
-		string(EvidenceStatusAuditorApproved),
-		string(EvidenceStatusInReview),
-		string(EvidenceStatusMissingArtifact),
-		string(EvidenceStatusNeedsRenewal),
-		string(EvidenceStatusRejected),
-	}
+var evidenceStatusValues = []EvidenceStatus{
+	EvidenceStatusSubmitted,
+	EvidenceStatusReadyForAuditor,
+	EvidenceStatusAuditorApproved,
+	EvidenceStatusInReview,
+	EvidenceStatusMissingArtifact,
+	EvidenceStatusNeedsRenewal,
+	EvidenceStatusRejected,
 }
 
+// Values returns a slice of strings representing all valid EvidenceStatus values.
+func (EvidenceStatus) Values() []string { return stringValues(evidenceStatusValues) }
+
 // String returns the string representation of the EvidenceStatus value.
-func (r EvidenceStatus) String() string {
-	return string(r)
-}
+func (r EvidenceStatus) String() string { return string(r) }
 
 // ToEvidenceStatus converts a string to its corresponding EvidenceStatus enum value.
 func ToEvidenceStatus(r string) *EvidenceStatus {
-	switch strings.ToUpper(r) {
-	case EvidenceStatusSubmitted.String():
-		return &EvidenceStatusSubmitted
-	case EvidenceStatusReadyForAuditor.String():
-		return &EvidenceStatusReadyForAuditor
-	case EvidenceStatusAuditorApproved.String():
-		return &EvidenceStatusAuditorApproved
-	case EvidenceStatusInReview.String():
-		return &EvidenceStatusInReview
-	case EvidenceStatusMissingArtifact.String():
-		return &EvidenceStatusMissingArtifact
-	case EvidenceStatusNeedsRenewal.String():
-		return &EvidenceStatusNeedsRenewal
-	case EvidenceStatusRejected.String():
-		return &EvidenceStatusRejected
-	default:
-		return &EvidenceStatusInvalid
-	}
+	return parse(r, evidenceStatusValues, &EvidenceStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r EvidenceStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r EvidenceStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *EvidenceStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for EvidenceStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = EvidenceStatus(str)
-
-	return nil
-}
+func (r *EvidenceStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

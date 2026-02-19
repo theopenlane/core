@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 type ScanType string
 
@@ -16,41 +12,19 @@ var (
 	ScanTypeInvalid       ScanType = "INVALID"
 )
 
-func (ScanType) Values() []string {
-	return []string{
-		string(ScanTypeDomain),
-		string(ScanTypeVulnerability),
-		string(ScanTypeVendor),
-		string(ScanTypeProvider),
-	}
-}
+var scanTypeValues = []ScanType{ScanTypeDomain, ScanTypeVulnerability, ScanTypeVendor, ScanTypeProvider}
 
+// Values returns a slice of strings that represents all the possible values of the ScanType enum.
+func (ScanType) Values() []string { return stringValues(scanTypeValues) }
+
+// String returns the ScanType as a string
 func (s ScanType) String() string { return string(s) }
 
-func ToScanType(str string) *ScanType {
-	switch strings.ToUpper(str) {
-	case ScanTypeDomain.String():
-		return &ScanTypeDomain
-	case ScanTypeVulnerability.String():
-		return &ScanTypeVulnerability
-	case ScanTypeVendor.String():
-		return &ScanTypeVendor
-	case ScanTypeProvider.String():
-		return &ScanTypeProvider
-	default:
-		return &ScanTypeInvalid
-	}
-}
+// ToScanType returns the ScanType based on string input
+func ToScanType(str string) *ScanType { return parse(str, scanTypeValues, &ScanTypeInvalid) }
 
-func (s ScanType) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + s.String() + `"`)) }
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (s ScanType) MarshalGQL(w io.Writer) { marshalGQL(s, w) }
 
-func (s *ScanType) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ScanType, got: %T", v) //nolint:err113
-	}
-
-	*s = ScanType(str)
-
-	return nil
-}
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (s *ScanType) UnmarshalGQL(v any) error { return unmarshalGQL(s, v) }

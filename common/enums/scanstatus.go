@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 type ScanStatus string
 
@@ -16,40 +12,19 @@ var (
 	ScanStatusInvalid    ScanStatus = "INVALID"
 )
 
-func (ScanStatus) Values() (kinds []string) {
-	for _, s := range []ScanStatus{ScanStatusPending, ScanStatusProcessing, ScanStatusCompleted, ScanStatusFailed} {
-		kinds = append(kinds, string(s))
-	}
+var scanStatusValues = []ScanStatus{ScanStatusPending, ScanStatusProcessing, ScanStatusCompleted, ScanStatusFailed}
 
-	return
-}
+// Values returns a slice of strings that represents all the possible values of the ScanStatus enum.
+func (ScanStatus) Values() []string { return stringValues(scanStatusValues) }
 
+// String returns the ScanStatus as a string
 func (s ScanStatus) String() string { return string(s) }
 
-func ToScanStatus(str string) *ScanStatus {
-	switch strings.ToUpper(str) {
-	case ScanStatusPending.String():
-		return &ScanStatusPending
-	case ScanStatusProcessing.String():
-		return &ScanStatusProcessing
-	case ScanStatusCompleted.String():
-		return &ScanStatusCompleted
-	case ScanStatusFailed.String():
-		return &ScanStatusFailed
-	default:
-		return &ScanStatusInvalid
-	}
-}
+// ToScanStatus returns the ScanStatus based on string input
+func ToScanStatus(str string) *ScanStatus { return parse(str, scanStatusValues, &ScanStatusInvalid) }
 
-func (s ScanStatus) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + s.String() + `"`)) }
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (s ScanStatus) MarshalGQL(w io.Writer) { marshalGQL(s, w) }
 
-func (s *ScanStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for ScanStatus, got: %T", v) //nolint:err113
-	}
-
-	*s = ScanStatus(str)
-
-	return nil
-}
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (s *ScanStatus) UnmarshalGQL(v any) error { return unmarshalGQL(s, v) }

@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // JobExecutionStatus is a custom type representing the various states of JobExecutionStatus.
 type JobExecutionStatus string
@@ -22,50 +18,26 @@ var (
 	JobExecutionStatusInvalid JobExecutionStatus = "JOBEXECUTIONSTATUS_INVALID"
 )
 
-// Values returns a slice of strings representing all valid JobExecutionStatus values.
-func (JobExecutionStatus) Values() []string {
-	return []string{
-		string(JobExecutionStatusCanceled),
-		string(JobExecutionStatusSuccess),
-		string(JobExecutionStatusPending),
-		string(JobExecutionStatusFailed),
-	}
+var jobExecutionStatusValues = []JobExecutionStatus{
+	JobExecutionStatusCanceled,
+	JobExecutionStatusSuccess,
+	JobExecutionStatusPending,
+	JobExecutionStatusFailed,
 }
 
+// Values returns a slice of strings representing all valid JobExecutionStatus values.
+func (JobExecutionStatus) Values() []string { return stringValues(jobExecutionStatusValues) }
+
 // String returns the string representation of the JobExecutionStatus value.
-func (r JobExecutionStatus) String() string {
-	return string(r)
-}
+func (r JobExecutionStatus) String() string { return string(r) }
 
 // ToJobExecutionStatus converts a string to its corresponding JobExecutionStatus enum value.
 func ToJobExecutionStatus(r string) *JobExecutionStatus {
-	switch strings.ToUpper(r) {
-	case JobExecutionStatusCanceled.String():
-		return &JobExecutionStatusCanceled
-	case JobExecutionStatusSuccess.String():
-		return &JobExecutionStatusSuccess
-	case JobExecutionStatusPending.String():
-		return &JobExecutionStatusPending
-	case JobExecutionStatusFailed.String():
-		return &JobExecutionStatusFailed
-	default:
-		return &JobExecutionStatusInvalid
-	}
+	return parse(r, jobExecutionStatusValues, &JobExecutionStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r JobExecutionStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r JobExecutionStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *JobExecutionStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for JobExecutionStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = JobExecutionStatus(str)
-
-	return nil
-}
+func (r *JobExecutionStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // NotificationTopic represents the topic/category of a notification
 type NotificationTopic string
@@ -22,54 +18,24 @@ var (
 	NotificationTopicInvalid NotificationTopic = "INVALID"
 )
 
-// Values returns a slice of strings that represents all the possible values of the NotificationTopic enum.
-func (NotificationTopic) Values() (kinds []string) {
-	for _, s := range []NotificationTopic{
-		NotificationTopicTaskAssignment,
-		NotificationTopicApproval,
-		NotificationTopicMention,
-		NotificationTopicExport,
-	} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
+var notificationTopicValues = []NotificationTopic{
+	NotificationTopicTaskAssignment, NotificationTopicApproval,
+	NotificationTopicMention, NotificationTopicExport,
 }
+
+// Values returns a slice of strings that represents all the possible values of the NotificationTopic enum.
+func (NotificationTopic) Values() []string { return stringValues(notificationTopicValues) }
 
 // String returns the NotificationTopic as a string
-func (r NotificationTopic) String() string {
-	return string(r)
-}
+func (r NotificationTopic) String() string { return string(r) }
 
 // ToNotificationTopic returns the notification topic enum based on string input
 func ToNotificationTopic(r string) *NotificationTopic {
-	switch r := strings.ToUpper(r); r {
-	case NotificationTopicTaskAssignment.String():
-		return &NotificationTopicTaskAssignment
-	case NotificationTopicApproval.String():
-		return &NotificationTopicApproval
-	case NotificationTopicMention.String():
-		return &NotificationTopicMention
-	case NotificationTopicExport.String():
-		return &NotificationTopicExport
-	default:
-		return &NotificationTopicInvalid
-	}
+	return parse(r, notificationTopicValues, &NotificationTopicInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r NotificationTopic) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r NotificationTopic) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *NotificationTopic) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for NotificationTopic, got: %T", v) //nolint:err113
-	}
-
-	*r = NotificationTopic(str)
-
-	return nil
-}
+func (r *NotificationTopic) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

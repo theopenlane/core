@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 type WatermarkStatus string
 
@@ -21,44 +17,27 @@ var (
 	WatermarkStatusInvalid WatermarkStatus = "INVALID"
 )
 
-func (WatermarkStatus) Values() []string {
-	return []string{
-		string(WatermarkStatusPending),
-		string(WatermarkStatusInProgress),
-		string(WatermarkStatusSuccess),
-		string(WatermarkStatusFailed),
-		string(WatermarkStatusDisabled),
-	}
+var watermarkStatusValues = []WatermarkStatus{
+	WatermarkStatusPending,
+	WatermarkStatusInProgress,
+	WatermarkStatusSuccess,
+	WatermarkStatusFailed,
+	WatermarkStatusDisabled,
 }
 
-func (w WatermarkStatus) String() string { return string(w) }
+// Values returns a slice of strings representing all valid WatermarkStatus values.
+func (WatermarkStatus) Values() []string { return stringValues(watermarkStatusValues) }
 
-func ToWatermarkStatus(str string) *WatermarkStatus {
-	switch strings.ToUpper(str) {
-	case WatermarkStatusPending.String():
-		return &WatermarkStatusPending
-	case WatermarkStatusInProgress.String():
-		return &WatermarkStatusInProgress
-	case WatermarkStatusSuccess.String():
-		return &WatermarkStatusSuccess
-	case WatermarkStatusFailed.String():
-		return &WatermarkStatusFailed
-	case WatermarkStatusDisabled.String():
-		return &WatermarkStatusDisabled
-	default:
-		return &WatermarkStatusInvalid
-	}
+// String returns the WatermarkStatus as a string
+func (r WatermarkStatus) String() string { return string(r) }
+
+// ToWatermarkStatus returns the watermark status enum based on string input
+func ToWatermarkStatus(r string) *WatermarkStatus {
+	return parse(r, watermarkStatusValues, &WatermarkStatusInvalid)
 }
 
-func (w WatermarkStatus) MarshalGQL(i io.Writer) { _, _ = i.Write([]byte(`"` + w.String() + `"`)) }
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (r WatermarkStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
-func (w *WatermarkStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for WatermarkStatus, got: %T", v) //nolint:err113
-	}
-
-	*w = WatermarkStatus(str)
-
-	return nil
-}
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (r *WatermarkStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

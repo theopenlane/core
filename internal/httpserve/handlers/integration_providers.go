@@ -14,7 +14,11 @@ import (
 )
 
 // ListIntegrationProviders returns declarative metadata about available third-party providers
-func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
+func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	if h.IntegrationRegistry == nil {
+		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
+	}
+
 	catalog := h.IntegrationRegistry.ProviderMetadataCatalog()
 	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
 

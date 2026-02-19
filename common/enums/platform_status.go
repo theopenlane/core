@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // PlatformStatus is a custom type representing the lifecycle state of a platform
 type PlatformStatus string
@@ -20,48 +16,22 @@ var (
 	PlatformStatusInvalid PlatformStatus = "INVALID"
 )
 
+var platformStatusValues = []PlatformStatus{PlatformStatusActive, PlatformStatusInactive, PlatformStatusRetired}
+
 // Values returns a slice of strings that represents all the possible values of the PlatformStatus enum
 // Possible default values are "ACTIVE", "INACTIVE", and "RETIRED"
-func (PlatformStatus) Values() (kinds []string) {
-	for _, s := range []PlatformStatus{PlatformStatusActive, PlatformStatusInactive, PlatformStatusRetired} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (PlatformStatus) Values() []string { return stringValues(platformStatusValues) }
 
 // String returns the PlatformStatus as a string
-func (r PlatformStatus) String() string {
-	return string(r)
-}
+func (r PlatformStatus) String() string { return string(r) }
 
 // ToPlatformStatus returns the platform status enum based on string input
 func ToPlatformStatus(r string) *PlatformStatus {
-	switch r := strings.ToUpper(r); r {
-	case PlatformStatusActive.String():
-		return &PlatformStatusActive
-	case PlatformStatusInactive.String():
-		return &PlatformStatusInactive
-	case PlatformStatusRetired.String():
-		return &PlatformStatusRetired
-	default:
-		return &PlatformStatusInvalid
-	}
+	return parse(r, platformStatusValues, &PlatformStatusInvalid)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r PlatformStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r PlatformStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *PlatformStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for PlatformStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = PlatformStatus(str)
-
-	return nil
-}
+func (r *PlatformStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

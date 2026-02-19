@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 type SSOProvider string
 
@@ -20,49 +16,28 @@ var (
 	SSOProviderInvalid         SSOProvider = "INVALID"
 )
 
+var ssoProviderValues = []SSOProvider{
+	SSOProviderOkta,
+	SSOProviderOneLogin,
+	SSOProviderGoogleWorkspace,
+	SSOProviderSlack,
+	SSOProviderGithub,
+	SSOProviderEntraID,
+	SSOProviderGenericOIDC,
+	SSOProviderNone,
+}
+
 // Values returns all possible SSOProvider values.
-func (SSOProvider) Values() (kinds []string) {
-	for _, s := range []SSOProvider{SSOProviderOkta, SSOProviderOneLogin, SSOProviderGoogleWorkspace, SSOProviderSlack, SSOProviderGithub, SSOProviderEntraID, SSOProviderGenericOIDC, SSOProviderNone} {
-		kinds = append(kinds, string(s))
-	}
+func (SSOProvider) Values() []string { return stringValues(ssoProviderValues) }
 
-	return
-}
+// String returns the SSOProvider as a string
+func (r SSOProvider) String() string { return string(r) }
 
-func (p SSOProvider) String() string { return string(p) }
+// ToSSOProvider returns the SSOProvider based on string input
+func ToSSOProvider(r string) *SSOProvider { return parse(r, ssoProviderValues, &SSOProviderInvalid) }
 
-func ToSSOProvider(in string) *SSOProvider {
-	switch strings.ToUpper(in) {
-	case SSOProviderOkta.String():
-		return &SSOProviderOkta
-	case SSOProviderOneLogin.String():
-		return &SSOProviderOneLogin
-	case SSOProviderGoogleWorkspace.String():
-		return &SSOProviderGoogleWorkspace
-	case SSOProviderSlack.String():
-		return &SSOProviderSlack
-	case SSOProviderGithub.String():
-		return &SSOProviderGithub
-	case SSOProviderNone.String():
-		return &SSOProviderNone
-	case SSOProviderEntraID.String():
-		return &SSOProviderEntraID
-	case SSOProviderGenericOIDC.String():
-		return &SSOProviderGenericOIDC
-	default:
-		return &SSOProviderInvalid
-	}
-}
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (r SSOProvider) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
-func (p SSOProvider) MarshalGQL(w io.Writer) { _, _ = w.Write([]byte(`"` + p.String() + `"`)) }
-
-func (p *SSOProvider) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for SSOProvider, got: %T", v) //nolint:err113
-	}
-
-	*p = SSOProvider(str)
-
-	return nil
-}
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (r *SSOProvider) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
