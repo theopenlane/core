@@ -12,7 +12,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
@@ -106,21 +105,43 @@ func (_u *TrustCenterFAQHistoryUpdate) ClearDeletedBy() *TrustCenterFAQHistoryUp
 	return _u
 }
 
-// SetTags sets the "tags" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetTags(v []string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetTags(v)
+// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQHistoryUpdate) SetTrustCenterFaqKindName(v string) *TrustCenterFAQHistoryUpdate {
+	_u.mutation.SetTrustCenterFaqKindName(v)
 	return _u
 }
 
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterFAQHistoryUpdate) AppendTags(v []string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.AppendTags(v)
+// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
+func (_u *TrustCenterFAQHistoryUpdate) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterFaqKindName(*v)
+	}
 	return _u
 }
 
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearTags() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearTags()
+// ClearTrustCenterFaqKindName clears the value of the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQHistoryUpdate) ClearTrustCenterFaqKindName() *TrustCenterFAQHistoryUpdate {
+	_u.mutation.ClearTrustCenterFaqKindName()
+	return _u
+}
+
+// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQHistoryUpdate) SetTrustCenterFaqKindID(v string) *TrustCenterFAQHistoryUpdate {
+	_u.mutation.SetTrustCenterFaqKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
+func (_u *TrustCenterFAQHistoryUpdate) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterFaqKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterFaqKindID clears the value of the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQHistoryUpdate) ClearTrustCenterFaqKindID() *TrustCenterFAQHistoryUpdate {
+	_u.mutation.ClearTrustCenterFaqKindID()
 	return _u
 }
 
@@ -266,16 +287,20 @@ func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTags, field.TypeJSON, value)
+	if value, ok := _u.mutation.TrustCenterFaqKindName(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterfaqhistory.FieldTags, value)
-		})
+	if _u.mutation.TrustCenterFaqKindNameCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString)
 	}
-	if _u.mutation.TagsCleared() {
-		_spec.ClearField(trustcenterfaqhistory.FieldTags, field.TypeJSON)
+	if value, ok := _u.mutation.TrustCenterFaqKindID(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterFaqKindIDCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString, value)
@@ -291,9 +316,6 @@ func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.DisplayOrderCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt)
-	}
-	if _u.mutation.TrustCenterIDCleared() {
-		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterFAQHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -391,21 +413,43 @@ func (_u *TrustCenterFAQHistoryUpdateOne) ClearDeletedBy() *TrustCenterFAQHistor
 	return _u
 }
 
-// SetTags sets the "tags" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetTags(v []string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetTags(v)
+// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQHistoryUpdateOne) SetTrustCenterFaqKindName(v string) *TrustCenterFAQHistoryUpdateOne {
+	_u.mutation.SetTrustCenterFaqKindName(v)
 	return _u
 }
 
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) AppendTags(v []string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
+// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
+func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterFaqKindName(*v)
+	}
 	return _u
 }
 
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearTags() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearTags()
+// ClearTrustCenterFaqKindName clears the value of the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQHistoryUpdateOne) ClearTrustCenterFaqKindName() *TrustCenterFAQHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterFaqKindName()
+	return _u
+}
+
+// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQHistoryUpdateOne) SetTrustCenterFaqKindID(v string) *TrustCenterFAQHistoryUpdateOne {
+	_u.mutation.SetTrustCenterFaqKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
+func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterFaqKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterFaqKindID clears the value of the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQHistoryUpdateOne) ClearTrustCenterFaqKindID() *TrustCenterFAQHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterFaqKindID()
 	return _u
 }
 
@@ -581,16 +625,20 @@ func (_u *TrustCenterFAQHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTags, field.TypeJSON, value)
+	if value, ok := _u.mutation.TrustCenterFaqKindName(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterfaqhistory.FieldTags, value)
-		})
+	if _u.mutation.TrustCenterFaqKindNameCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString)
 	}
-	if _u.mutation.TagsCleared() {
-		_spec.ClearField(trustcenterfaqhistory.FieldTags, field.TypeJSON)
+	if value, ok := _u.mutation.TrustCenterFaqKindID(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterFaqKindIDCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString, value)
@@ -606,9 +654,6 @@ func (_u *TrustCenterFAQHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.DisplayOrderCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt)
-	}
-	if _u.mutation.TrustCenterIDCleared() {
-		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterFAQHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

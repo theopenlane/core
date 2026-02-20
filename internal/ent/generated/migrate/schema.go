@@ -2417,7 +2417,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
-		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"ASSET", "CONTROL", "DIRECTORY_MEMBERSHIP", "ENTITY", "EVIDENCE", "FINDING", "IDENTITY_HOLDER", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY"}},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"ASSET", "CONTROL", "DIRECTORY_MEMBERSHIP", "ENTITY", "EVIDENCE", "FINDING", "IDENTITY_HOLDER", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_FAQ", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}, Default: "CSV"},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
 		{Name: "fields", Type: field.TypeJSON, Nullable: true},
@@ -4381,7 +4381,6 @@ var (
 		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
-		{Name: "trust_center_faq_notes", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
@@ -4481,14 +4480,8 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_trust_center_fa_qs_notes",
-				Columns:    []*schema.Column{NotesColumns[28]},
-				RefColumns: []*schema.Column{TrustCenterFaQsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "notes_vulnerabilities_comments",
-				Columns:    []*schema.Column{NotesColumns[29]},
+				Columns:    []*schema.Column{NotesColumns[28]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7210,10 +7203,12 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_faq_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "reference_link", Type: field.TypeString, Nullable: true},
 		{Name: "display_order", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "note_id", Type: field.TypeString},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_kind_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterFaQsTable holds the schema information for the "trust_center_fa_qs" table.
 	TrustCenterFaQsTable = &schema.Table{
@@ -7222,10 +7217,32 @@ var (
 		PrimaryKey: []*schema.Column{TrustCenterFaQsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "trust_center_fa_qs_trust_centers_trust_center_faqs",
+				Symbol:     "trust_center_fa_qs_notes_trust_center_faqs",
 				Columns:    []*schema.Column{TrustCenterFaQsColumns[10]},
+				RefColumns: []*schema.Column{NotesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "trust_center_fa_qs_trust_centers_trust_center_faqs",
+				Columns:    []*schema.Column{TrustCenterFaQsColumns[11]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_fa_qs_custom_type_enums_trust_center_faq_kind",
+				Columns:    []*schema.Column{TrustCenterFaQsColumns[12]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterfaq_note_id_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterFaQsColumns[10], TrustCenterFaQsColumns[11]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -12982,8 +12999,7 @@ func init() {
 	NotesTable.ForeignKeys[12].RefTable = SubcontrolsTable
 	NotesTable.ForeignKeys[13].RefTable = TasksTable
 	NotesTable.ForeignKeys[14].RefTable = TrustCentersTable
-	NotesTable.ForeignKeys[15].RefTable = TrustCenterFaQsTable
-	NotesTable.ForeignKeys[16].RefTable = VulnerabilitiesTable
+	NotesTable.ForeignKeys[15].RefTable = VulnerabilitiesTable
 	NotificationsTable.ForeignKeys[0].RefTable = NotificationTemplatesTable
 	NotificationsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	NotificationsTable.ForeignKeys[2].RefTable = UsersTable
@@ -13156,7 +13172,9 @@ func init() {
 	TrustCenterEntitiesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterEntitiesTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterEntitiesTable.ForeignKeys[3].RefTable = EntityTypesTable
-	TrustCenterFaQsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterFaQsTable.ForeignKeys[0].RefTable = NotesTable
+	TrustCenterFaQsTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TrustCenterFaQsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	TrustCenterNdaRequestsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterNdaRequestsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	TrustCenterNdaRequestsTable.ForeignKeys[2].RefTable = FilesTable

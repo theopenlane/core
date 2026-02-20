@@ -3,13 +3,14 @@
 package generated
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 )
@@ -31,14 +32,18 @@ type TrustCenterFAQ struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
+	// the kind of the trust_center_faq
+	TrustCenterFaqKindName string `json:"trust_center_faq_kind_name,omitempty"`
+	// the kind of the trust_center_faq
+	TrustCenterFaqKindID string `json:"trust_center_faq_kind_id,omitempty"`
+	// ID of the note containing the FAQ question and answer
+	NoteID string `json:"note_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// optional reference link for the FAQ
 	ReferenceLink string `json:"reference_link,omitempty"`
 	// display order of the FAQ
 	DisplayOrder int `json:"display_order,omitempty"`
-	// ID of the trust center
-	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterFAQQuery when eager-loading is set.
 	Edges        TrustCenterFAQEdges `json:"edges"`
@@ -47,29 +52,41 @@ type TrustCenterFAQ struct {
 
 // TrustCenterFAQEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterFAQEdges struct {
+	// TrustCenterFaqKind holds the value of the trust_center_faq_kind edge.
+	TrustCenterFaqKind *CustomTypeEnum `json:"trust_center_faq_kind,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
-	// Notes holds the value of the notes edge.
-	Notes []*Note `json:"notes,omitempty"`
+	// Note holds the value of the note edge.
+	Note *Note `json:"note,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
-	namedNotes         map[string][]*Note
+}
+
+// TrustCenterFaqKindOrErr returns the TrustCenterFaqKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterFAQEdges) TrustCenterFaqKindOrErr() (*CustomTypeEnum, error) {
+	if e.TrustCenterFaqKind != nil {
+		return e.TrustCenterFaqKind, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center_faq_kind"}
 }
 
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterFAQEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -78,7 +95,7 @@ func (e TrustCenterFAQEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterFAQEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -89,19 +106,21 @@ func (e TrustCenterFAQEdges) EditorsOrErr() ([]*Group, error) {
 func (e TrustCenterFAQEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
 }
 
-// NotesOrErr returns the Notes value or an error if the edge
-// was not loaded in eager-loading.
-func (e TrustCenterFAQEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[3] {
-		return e.Notes, nil
+// NoteOrErr returns the Note value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterFAQEdges) NoteOrErr() (*Note, error) {
+	if e.Note != nil {
+		return e.Note, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: note.Label}
 	}
-	return nil, &NotLoadedError{edge: "notes"}
+	return nil, &NotLoadedError{edge: "note"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -109,11 +128,9 @@ func (*TrustCenterFAQ) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcenterfaq.FieldTags:
-			values[i] = new([]byte)
 		case trustcenterfaq.FieldDisplayOrder:
 			values[i] = new(sql.NullInt64)
-		case trustcenterfaq.FieldID, trustcenterfaq.FieldCreatedBy, trustcenterfaq.FieldUpdatedBy, trustcenterfaq.FieldDeletedBy, trustcenterfaq.FieldReferenceLink, trustcenterfaq.FieldTrustCenterID:
+		case trustcenterfaq.FieldID, trustcenterfaq.FieldCreatedBy, trustcenterfaq.FieldUpdatedBy, trustcenterfaq.FieldDeletedBy, trustcenterfaq.FieldTrustCenterFaqKindName, trustcenterfaq.FieldTrustCenterFaqKindID, trustcenterfaq.FieldNoteID, trustcenterfaq.FieldTrustCenterID, trustcenterfaq.FieldReferenceLink:
 			values[i] = new(sql.NullString)
 		case trustcenterfaq.FieldCreatedAt, trustcenterfaq.FieldUpdatedAt, trustcenterfaq.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,13 +191,29 @@ func (_m *TrustCenterFAQ) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
-		case trustcenterfaq.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
+		case trustcenterfaq.FieldTrustCenterFaqKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_faq_kind_name", values[i])
+			} else if value.Valid {
+				_m.TrustCenterFaqKindName = value.String
+			}
+		case trustcenterfaq.FieldTrustCenterFaqKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_faq_kind_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterFaqKindID = value.String
+			}
+		case trustcenterfaq.FieldNoteID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note_id", values[i])
+			} else if value.Valid {
+				_m.NoteID = value.String
+			}
+		case trustcenterfaq.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
 			}
 		case trustcenterfaq.FieldReferenceLink:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -194,12 +227,6 @@ func (_m *TrustCenterFAQ) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DisplayOrder = int(value.Int64)
 			}
-		case trustcenterfaq.FieldTrustCenterID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
-			} else if value.Valid {
-				_m.TrustCenterID = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -211,6 +238,11 @@ func (_m *TrustCenterFAQ) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterFAQ) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryTrustCenterFaqKind queries the "trust_center_faq_kind" edge of the TrustCenterFAQ entity.
+func (_m *TrustCenterFAQ) QueryTrustCenterFaqKind() *CustomTypeEnumQuery {
+	return NewTrustCenterFAQClient(_m.config).QueryTrustCenterFaqKind(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterFAQ entity.
@@ -228,9 +260,9 @@ func (_m *TrustCenterFAQ) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterFAQClient(_m.config).QueryTrustCenter(_m)
 }
 
-// QueryNotes queries the "notes" edge of the TrustCenterFAQ entity.
-func (_m *TrustCenterFAQ) QueryNotes() *NoteQuery {
-	return NewTrustCenterFAQClient(_m.config).QueryNotes(_m)
+// QueryNote queries the "note" edge of the TrustCenterFAQ entity.
+func (_m *TrustCenterFAQ) QueryNote() *NoteQuery {
+	return NewTrustCenterFAQClient(_m.config).QueryNote(_m)
 }
 
 // Update returns a builder for updating this TrustCenterFAQ.
@@ -274,17 +306,23 @@ func (_m *TrustCenterFAQ) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString("trust_center_faq_kind_name=")
+	builder.WriteString(_m.TrustCenterFaqKindName)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_faq_kind_id=")
+	builder.WriteString(_m.TrustCenterFaqKindID)
+	builder.WriteString(", ")
+	builder.WriteString("note_id=")
+	builder.WriteString(_m.NoteID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("reference_link=")
 	builder.WriteString(_m.ReferenceLink)
 	builder.WriteString(", ")
 	builder.WriteString("display_order=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DisplayOrder))
-	builder.WriteString(", ")
-	builder.WriteString("trust_center_id=")
-	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -334,30 +372,6 @@ func (_m *TrustCenterFAQ) appendNamedEditors(name string, edges ...*Group) {
 		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
 		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedNotes returns the Notes named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *TrustCenterFAQ) NamedNotes(name string) ([]*Note, error) {
-	if _m.Edges.namedNotes == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedNotes[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *TrustCenterFAQ) appendNamedNotes(name string, edges ...*Note) {
-	if _m.Edges.namedNotes == nil {
-		_m.Edges.namedNotes = make(map[string][]*Note)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedNotes[name] = []*Note{}
-	} else {
-		_m.Edges.namedNotes[name] = append(_m.Edges.namedNotes[name], edges...)
 	}
 }
 

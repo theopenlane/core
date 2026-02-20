@@ -2,9 +2,15 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -12,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterFAQ holds the schema definition for the TrustCenterFAQ entity
@@ -43,6 +48,15 @@ func (TrustCenterFAQ) PluralName() string {
 // Fields of the TrustCenterFAQ
 func (TrustCenterFAQ) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("note_id").
+			Comment("ID of the note containing the FAQ question and answer").
+			Immutable().
+			NotEmpty(),
+		field.String("trust_center_id").
+			Comment("ID of the trust center").
+			NotEmpty().
+			Immutable().
+			Optional(),
 		field.String("reference_link").
 			Comment("optional reference link for the FAQ").
 			Validate(validator.ValidateURL()).
@@ -51,22 +65,19 @@ func (TrustCenterFAQ) Fields() []ent.Field {
 			Comment("display order of the FAQ").
 			Default(0).
 			Optional(),
-		field.String("trust_center_id").
-			Comment("ID of the trust center").
-			NotEmpty().
-			Immutable().
-			Optional(),
 	}
 }
 
 // Mixin of the TrustCenterFAQ
 func (t TrustCenterFAQ) Mixin() []ent.Mixin {
 	return mixinConfig{
+		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterFAQ](t,
 				withParents(TrustCenter{}),
 				withAllowAnonymousTrustCenterAccess(true),
 			),
+			newCustomEnumMixin(t),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
@@ -81,18 +92,16 @@ func (t TrustCenterFAQ) Edges() []ent.Edge {
 			field:      "trust_center_id",
 			immutable:  true,
 		}),
-		edgeToWithPagination(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
-			name:       "notes",
 			edgeSchema: Note{},
+			immutable:  true,
+			field:      "note_id",
+			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
-	}
-}
-
-// Modules this schema has access to
-func (TrustCenterFAQ) Modules() []models.OrgModule {
-	return []models.OrgModule{
-		models.CatalogTrustCenterModule,
 	}
 }
 
@@ -112,10 +121,25 @@ func (TrustCenterFAQ) Policy() ent.Policy {
 	)
 }
 
+// Indexes of the TrustCenterFAQ
+func (TrustCenterFAQ) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("note_id", "trust_center_id").
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
+}
+
+func (TrustCenterFAQ) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Annotations of the TrustCenterFAQ
 func (TrustCenterFAQ) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
+		entx.NewExportable(),
 	}
 }
 

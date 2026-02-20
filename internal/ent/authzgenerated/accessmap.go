@@ -2026,7 +2026,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "discussion",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
-}, "trust_center_faq": {
+}, "trust_center_faqs": {
 	ObjectType:      "trust_center_faq",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -3754,7 +3754,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "trust_center_faq": {"blocked_groups": {
+}, "trust_center_faq": {"trust_center_faq_kind": {
+	ObjectType:      "trust_center_faq_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
@@ -3766,10 +3770,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "notes": {
-	ObjectType:      "note",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+}, "note": {
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "trust_center_nda_request": {"blocked_groups": {
 	ObjectType:      "group",

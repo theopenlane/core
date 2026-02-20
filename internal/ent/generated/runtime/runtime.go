@@ -7427,7 +7427,7 @@ func init() {
 	}
 	trustcenterfaqMixinHooks0 := trustcenterfaqMixin[0].Hooks()
 	trustcenterfaqMixinHooks1 := trustcenterfaqMixin[1].Hooks()
-	trustcenterfaqMixinHooks3 := trustcenterfaqMixin[3].Hooks()
+	trustcenterfaqMixinHooks4 := trustcenterfaqMixin[4].Hooks()
 	trustcenterfaqMixinHooks5 := trustcenterfaqMixin[5].Hooks()
 	trustcenterfaqMixinHooks6 := trustcenterfaqMixin[6].Hooks()
 
@@ -7435,7 +7435,7 @@ func init() {
 
 	trustcenterfaq.Hooks[2] = trustcenterfaqMixinHooks1[0]
 
-	trustcenterfaq.Hooks[3] = trustcenterfaqMixinHooks3[0]
+	trustcenterfaq.Hooks[3] = trustcenterfaqMixinHooks4[0]
 
 	trustcenterfaq.Hooks[4] = trustcenterfaqMixinHooks5[0]
 
@@ -7443,17 +7443,15 @@ func init() {
 
 	trustcenterfaq.Hooks[6] = trustcenterfaqMixinHooks6[1]
 	trustcenterfaqMixinInters1 := trustcenterfaqMixin[1].Interceptors()
-	trustcenterfaqMixinInters5 := trustcenterfaqMixin[5].Interceptors()
+	trustcenterfaqMixinInters4 := trustcenterfaqMixin[4].Interceptors()
 	trustcenterfaqInters := schema.TrustCenterFAQ{}.Interceptors()
 	trustcenterfaq.Interceptors[0] = trustcenterfaqMixinInters1[0]
-	trustcenterfaq.Interceptors[1] = trustcenterfaqMixinInters5[0]
+	trustcenterfaq.Interceptors[1] = trustcenterfaqMixinInters4[0]
 	trustcenterfaq.Interceptors[2] = trustcenterfaqInters[0]
 	trustcenterfaqMixinFields0 := trustcenterfaqMixin[0].Fields()
 	_ = trustcenterfaqMixinFields0
 	trustcenterfaqMixinFields2 := trustcenterfaqMixin[2].Fields()
 	_ = trustcenterfaqMixinFields2
-	trustcenterfaqMixinFields3 := trustcenterfaqMixin[3].Fields()
-	_ = trustcenterfaqMixinFields3
 	trustcenterfaqFields := schema.TrustCenterFAQ{}.Fields()
 	_ = trustcenterfaqFields
 	// trustcenterfaqDescCreatedAt is the schema descriptor for created_at field.
@@ -7466,22 +7464,22 @@ func init() {
 	trustcenterfaq.DefaultUpdatedAt = trustcenterfaqDescUpdatedAt.Default.(func() time.Time)
 	// trustcenterfaq.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	trustcenterfaq.UpdateDefaultUpdatedAt = trustcenterfaqDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcenterfaqDescTags is the schema descriptor for tags field.
-	trustcenterfaqDescTags := trustcenterfaqMixinFields3[0].Descriptor()
-	// trustcenterfaq.DefaultTags holds the default value on creation for the tags field.
-	trustcenterfaq.DefaultTags = trustcenterfaqDescTags.Default.([]string)
+	// trustcenterfaqDescNoteID is the schema descriptor for note_id field.
+	trustcenterfaqDescNoteID := trustcenterfaqFields[0].Descriptor()
+	// trustcenterfaq.NoteIDValidator is a validator for the "note_id" field. It is called by the builders before save.
+	trustcenterfaq.NoteIDValidator = trustcenterfaqDescNoteID.Validators[0].(func(string) error)
+	// trustcenterfaqDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcenterfaqDescTrustCenterID := trustcenterfaqFields[1].Descriptor()
+	// trustcenterfaq.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcenterfaq.TrustCenterIDValidator = trustcenterfaqDescTrustCenterID.Validators[0].(func(string) error)
 	// trustcenterfaqDescReferenceLink is the schema descriptor for reference_link field.
-	trustcenterfaqDescReferenceLink := trustcenterfaqFields[0].Descriptor()
+	trustcenterfaqDescReferenceLink := trustcenterfaqFields[2].Descriptor()
 	// trustcenterfaq.ReferenceLinkValidator is a validator for the "reference_link" field. It is called by the builders before save.
 	trustcenterfaq.ReferenceLinkValidator = trustcenterfaqDescReferenceLink.Validators[0].(func(string) error)
 	// trustcenterfaqDescDisplayOrder is the schema descriptor for display_order field.
-	trustcenterfaqDescDisplayOrder := trustcenterfaqFields[1].Descriptor()
+	trustcenterfaqDescDisplayOrder := trustcenterfaqFields[3].Descriptor()
 	// trustcenterfaq.DefaultDisplayOrder holds the default value on creation for the display_order field.
 	trustcenterfaq.DefaultDisplayOrder = trustcenterfaqDescDisplayOrder.Default.(int)
-	// trustcenterfaqDescTrustCenterID is the schema descriptor for trust_center_id field.
-	trustcenterfaqDescTrustCenterID := trustcenterfaqFields[2].Descriptor()
-	// trustcenterfaq.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
-	trustcenterfaq.TrustCenterIDValidator = trustcenterfaqDescTrustCenterID.Validators[0].(func(string) error)
 	// trustcenterfaqDescID is the schema descriptor for id field.
 	trustcenterfaqDescID := trustcenterfaqMixinFields2[0].Descriptor()
 	// trustcenterfaq.DefaultID holds the default value on creation for the id field.
@@ -8875,6 +8873,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.6-0.20260214061101-d056659140fa"           // Version of ent codegen.
-	Sum     = "h1:wMZsU7N59QIyi/ByFCi7VUVzFS2ARVpNVropq+D/cqE=" // Sum of ent codegen.
+	Version = "v0.14.6-0.20260218064135-ab0540611e15"           // Version of ent codegen.
+	Sum     = "h1:dmFR0752em2lC99C0w4hip6jw1sQ0eReUuZYjfBiviM=" // Sum of ent codegen.
 )

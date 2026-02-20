@@ -3795,32 +3795,32 @@ type ComplexityRoot struct {
 	}
 
 	Note struct {
-		Control        func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		Discussion     func(childComplexity int) int
-		DiscussionID   func(childComplexity int) int
-		DisplayID      func(childComplexity int) int
-		Evidence       func(childComplexity int) int
-		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID             func(childComplexity int) int
-		InternalPolicy func(childComplexity int) int
-		IsEdited       func(childComplexity int) int
-		NoteRef        func(childComplexity int) int
-		Owner          func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		Procedure      func(childComplexity int) int
-		Risk           func(childComplexity int) int
-		Subcontrol     func(childComplexity int) int
-		Task           func(childComplexity int) int
-		Text           func(childComplexity int) int
-		TextJSON       func(childComplexity int) int
-		Title          func(childComplexity int) int
-		TrustCenter    func(childComplexity int) int
-		TrustCenterFaq func(childComplexity int) int
-		TrustCenterID  func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		Control         func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Discussion      func(childComplexity int) int
+		DiscussionID    func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
+		Evidence        func(childComplexity int) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID              func(childComplexity int) int
+		InternalPolicy  func(childComplexity int) int
+		IsEdited        func(childComplexity int) int
+		NoteRef         func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Procedure       func(childComplexity int) int
+		Risk            func(childComplexity int) int
+		Subcontrol      func(childComplexity int) int
+		Task            func(childComplexity int) int
+		Text            func(childComplexity int) int
+		TextJSON        func(childComplexity int) int
+		Title           func(childComplexity int) int
+		TrustCenter     func(childComplexity int) int
+		TrustCenterFaqs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) int
+		TrustCenterID   func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	NoteConnection struct {
@@ -6224,19 +6224,22 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterFAQ struct {
-		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		DisplayOrder  func(childComplexity int) int
-		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID            func(childComplexity int) int
-		Notes         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		ReferenceLink func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		TrustCenter   func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DisplayOrder           func(childComplexity int) int
+		Editors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                     func(childComplexity int) int
+		Note                   func(childComplexity int) int
+		NoteID                 func(childComplexity int) int
+		ReferenceLink          func(childComplexity int) int
+		TrustCenter            func(childComplexity int) int
+		TrustCenterFaqKind     func(childComplexity int) int
+		TrustCenterFaqKindID   func(childComplexity int) int
+		TrustCenterFaqKindName func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	TrustCenterFAQBulkCreatePayload struct {
@@ -29616,12 +29619,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.TrustCenter(childComplexity), true
 
-	case "Note.trustCenterFaq":
-		if e.complexity.Note.TrustCenterFaq == nil {
+	case "Note.trustCenterFaqs":
+		if e.complexity.Note.TrustCenterFaqs == nil {
 			break
 		}
 
-		return e.complexity.Note.TrustCenterFaq(childComplexity), true
+		args, err := ec.field_Note_trustCenterFaqs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Note.TrustCenterFaqs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterFAQOrder), args["where"].(*generated.TrustCenterFAQWhereInput)), true
 
 	case "Note.trustCenterID":
 		if e.complexity.Note.TrustCenterID == nil {
@@ -43896,17 +43904,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterFAQ.ID(childComplexity), true
 
-	case "TrustCenterFAQ.notes":
-		if e.complexity.TrustCenterFAQ.Notes == nil {
+	case "TrustCenterFAQ.note":
+		if e.complexity.TrustCenterFAQ.Note == nil {
 			break
 		}
 
-		args, err := ec.field_TrustCenterFAQ_notes_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
+		return e.complexity.TrustCenterFAQ.Note(childComplexity), true
+
+	case "TrustCenterFAQ.noteID":
+		if e.complexity.TrustCenterFAQ.NoteID == nil {
+			break
 		}
 
-		return e.complexity.TrustCenterFAQ.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+		return e.complexity.TrustCenterFAQ.NoteID(childComplexity), true
 
 	case "TrustCenterFAQ.referenceLink":
 		if e.complexity.TrustCenterFAQ.ReferenceLink == nil {
@@ -43915,19 +43925,33 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterFAQ.ReferenceLink(childComplexity), true
 
-	case "TrustCenterFAQ.tags":
-		if e.complexity.TrustCenterFAQ.Tags == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterFAQ.Tags(childComplexity), true
-
 	case "TrustCenterFAQ.trustCenter":
 		if e.complexity.TrustCenterFAQ.TrustCenter == nil {
 			break
 		}
 
 		return e.complexity.TrustCenterFAQ.TrustCenter(childComplexity), true
+
+	case "TrustCenterFAQ.trustCenterFaqKind":
+		if e.complexity.TrustCenterFAQ.TrustCenterFaqKind == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQ.TrustCenterFaqKind(childComplexity), true
+
+	case "TrustCenterFAQ.trustCenterFaqKindID":
+		if e.complexity.TrustCenterFAQ.TrustCenterFaqKindID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQ.TrustCenterFaqKindID(childComplexity), true
+
+	case "TrustCenterFAQ.trustCenterFaqKindName":
+		if e.complexity.TrustCenterFAQ.TrustCenterFaqKindName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQ.TrustCenterFaqKindName(childComplexity), true
 
 	case "TrustCenterFAQ.trustCenterID":
 		if e.complexity.TrustCenterFAQ.TrustCenterID == nil {
@@ -64451,7 +64475,7 @@ input CreateNoteInput {
   evidenceID: ID
   trustCenterID: ID
   discussionID: ID
-  trustCenterFaqID: ID
+  trustCenterFaqIDs: [ID!]
   fileIDs: [ID!]
 }
 """
@@ -66320,9 +66344,9 @@ Input was generated by ent.
 """
 input CreateTrustCenterFAQInput {
   """
-  tags associated with the object
+  the kind of the trust_center_faq
   """
-  tags: [String!]
+  trustCenterFaqKindName: String
   """
   optional reference link for the FAQ
   """
@@ -66331,10 +66355,11 @@ input CreateTrustCenterFAQInput {
   display order of the FAQ
   """
   displayOrder: Int
+  trustCenterFaqKindID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   trustCenterID: ID
-  noteIDs: [ID!]
+  noteID: ID!
 }
 """
 CreateTrustCenterInput is used for create TrustCenter object.
@@ -76675,6 +76700,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
   SUBPROCESSOR
   SUBSCRIBER
   TASK
+  TRUST_CENTER_FAQ
   TRUST_CENTER_SUBPROCESSOR
   VULNERABILITY
 }
@@ -89430,7 +89456,37 @@ type Note implements Node {
   evidence: Evidence
   trustCenter: TrustCenter
   discussion: Discussion
-  trustCenterFaq: TrustCenterFAQ
+  trustCenterFaqs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterFAQs returned from the connection.
+    """
+    orderBy: [TrustCenterFAQOrder!]
+
+    """
+    Filtering options for TrustCenterFAQs returned from the connection.
+    """
+    where: TrustCenterFAQWhereInput
+  ): TrustCenterFAQConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -89774,10 +89830,10 @@ input NoteWhereInput {
   hasDiscussion: Boolean
   hasDiscussionWith: [DiscussionWhereInput!]
   """
-  trust_center_faq edge predicates
+  trust_center_faqs edge predicates
   """
-  hasTrustCenterFaq: Boolean
-  hasTrustCenterFaqWith: [TrustCenterFAQWhereInput!]
+  hasTrustCenterFaqs: Boolean
+  hasTrustCenterFaqsWith: [TrustCenterFAQWhereInput!]
   """
   files edge predicates
   """
@@ -115589,9 +115645,21 @@ type TrustCenterFAQ implements Node {
   createdBy: String
   updatedBy: String
   """
-  tags associated with the object
+  the kind of the trust_center_faq
   """
-  tags: [String!]
+  trustCenterFaqKindName: String
+  """
+  the kind of the trust_center_faq
+  """
+  trustCenterFaqKindID: ID
+  """
+  ID of the note containing the FAQ question and answer
+  """
+  noteID: ID!
+  """
+  ID of the trust center
+  """
+  trustCenterID: ID
   """
   optional reference link for the FAQ
   """
@@ -115600,10 +115668,7 @@ type TrustCenterFAQ implements Node {
   display order of the FAQ
   """
   displayOrder: Int
-  """
-  ID of the trust center
-  """
-  trustCenterID: ID
+  trustCenterFaqKind: CustomTypeEnum
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -115667,37 +115732,7 @@ type TrustCenterFAQ implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   trustCenter: TrustCenter
-  notes(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Notes returned from the connection.
-    """
-    orderBy: [NoteOrder!]
-
-    """
-    Filtering options for Notes returned from the connection.
-    """
-    where: NoteWhereInput
-  ): NoteConnection!
+  note: Note!
 }
 """
 A connection to a list of items.
@@ -115833,6 +115868,76 @@ input TrustCenterFAQWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_faq_kind_name field predicates
+  """
+  trustCenterFaqKindName: String
+  trustCenterFaqKindNameNEQ: String
+  trustCenterFaqKindNameIn: [String!]
+  trustCenterFaqKindNameNotIn: [String!]
+  trustCenterFaqKindNameGT: String
+  trustCenterFaqKindNameGTE: String
+  trustCenterFaqKindNameLT: String
+  trustCenterFaqKindNameLTE: String
+  trustCenterFaqKindNameContains: String
+  trustCenterFaqKindNameHasPrefix: String
+  trustCenterFaqKindNameHasSuffix: String
+  trustCenterFaqKindNameIsNil: Boolean
+  trustCenterFaqKindNameNotNil: Boolean
+  trustCenterFaqKindNameEqualFold: String
+  trustCenterFaqKindNameContainsFold: String
+  """
+  trust_center_faq_kind_id field predicates
+  """
+  trustCenterFaqKindID: ID
+  trustCenterFaqKindIDNEQ: ID
+  trustCenterFaqKindIDIn: [ID!]
+  trustCenterFaqKindIDNotIn: [ID!]
+  trustCenterFaqKindIDGT: ID
+  trustCenterFaqKindIDGTE: ID
+  trustCenterFaqKindIDLT: ID
+  trustCenterFaqKindIDLTE: ID
+  trustCenterFaqKindIDContains: ID
+  trustCenterFaqKindIDHasPrefix: ID
+  trustCenterFaqKindIDHasSuffix: ID
+  trustCenterFaqKindIDIsNil: Boolean
+  trustCenterFaqKindIDNotNil: Boolean
+  trustCenterFaqKindIDEqualFold: ID
+  trustCenterFaqKindIDContainsFold: ID
+  """
+  note_id field predicates
+  """
+  noteID: ID
+  noteIDNEQ: ID
+  noteIDIn: [ID!]
+  noteIDNotIn: [ID!]
+  noteIDGT: ID
+  noteIDGTE: ID
+  noteIDLT: ID
+  noteIDLTE: ID
+  noteIDContains: ID
+  noteIDHasPrefix: ID
+  noteIDHasSuffix: ID
+  noteIDEqualFold: ID
+  noteIDContainsFold: ID
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
   reference_link field predicates
   """
   referenceLink: String
@@ -115864,23 +115969,10 @@ input TrustCenterFAQWhereInput {
   displayOrderIsNil: Boolean
   displayOrderNotNil: Boolean
   """
-  trust_center_id field predicates
+  trust_center_faq_kind edge predicates
   """
-  trustCenterID: ID
-  trustCenterIDNEQ: ID
-  trustCenterIDIn: [ID!]
-  trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
-  trustCenterIDContains: ID
-  trustCenterIDHasPrefix: ID
-  trustCenterIDHasSuffix: ID
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: ID
-  trustCenterIDContainsFold: ID
+  hasTrustCenterFaqKind: Boolean
+  hasTrustCenterFaqKindWith: [CustomTypeEnumWhereInput!]
   """
   blocked_groups edge predicates
   """
@@ -115897,14 +115989,10 @@ input TrustCenterFAQWhereInput {
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
   """
-  notes edge predicates
+  note edge predicates
   """
-  hasNotes: Boolean
-  hasNotesWith: [NoteWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
+  hasNote: Boolean
+  hasNoteWith: [NoteWhereInput!]
 }
 type TrustCenterNDARequest implements Node {
   id: ID!
@@ -122184,8 +122272,9 @@ input UpdateNoteInput {
   clearTrustCenter: Boolean
   discussionID: ID
   clearDiscussion: Boolean
-  trustCenterFaqID: ID
-  clearTrustCenterFaq: Boolean
+  addTrustCenterFaqIDs: [ID!]
+  removeTrustCenterFaqIDs: [ID!]
+  clearTrustCenterFaqs: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -124880,11 +124969,10 @@ Input was generated by ent.
 """
 input UpdateTrustCenterFAQInput {
   """
-  tags associated with the object
+  the kind of the trust_center_faq
   """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
+  trustCenterFaqKindName: String
+  clearTrustCenterFaqKindName: Boolean
   """
   optional reference link for the FAQ
   """
@@ -124895,15 +124983,14 @@ input UpdateTrustCenterFAQInput {
   """
   displayOrder: Int
   clearDisplayOrder: Boolean
+  trustCenterFaqKindID: ID
+  clearTrustCenterFaqKind: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addNoteIDs: [ID!]
-  removeNoteIDs: [ID!]
-  clearNotes: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.

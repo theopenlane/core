@@ -21747,8 +21747,20 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
+	if trustCenterFaqKindName, exists := m.TrustCenterFaqKindName(); exists {
+		create = create.SetTrustCenterFaqKindName(trustCenterFaqKindName)
+	}
+
+	if trustCenterFaqKindID, exists := m.TrustCenterFaqKindID(); exists {
+		create = create.SetTrustCenterFaqKindID(trustCenterFaqKindID)
+	}
+
+	if noteID, exists := m.NoteID(); exists {
+		create = create.SetNoteID(noteID)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
 	}
 
 	if referenceLink, exists := m.ReferenceLink(); exists {
@@ -21757,10 +21769,6 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if displayOrder, exists := m.DisplayOrder(); exists {
 		create = create.SetDisplayOrder(displayOrder)
-	}
-
-	if trustCenterID, exists := m.TrustCenterID(); exists {
-		create = create.SetTrustCenterID(trustCenterID)
 	}
 
 	_, err := create.Save(ctx)
@@ -21830,10 +21838,28 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDeletedBy(trustcenterfaq.DeletedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
+		if trustCenterFaqKindName, exists := m.TrustCenterFaqKindName(); exists {
+			create = create.SetTrustCenterFaqKindName(trustCenterFaqKindName)
 		} else {
-			create = create.SetTags(trustcenterfaq.Tags)
+			create = create.SetTrustCenterFaqKindName(trustcenterfaq.TrustCenterFaqKindName)
+		}
+
+		if trustCenterFaqKindID, exists := m.TrustCenterFaqKindID(); exists {
+			create = create.SetTrustCenterFaqKindID(trustCenterFaqKindID)
+		} else {
+			create = create.SetTrustCenterFaqKindID(trustcenterfaq.TrustCenterFaqKindID)
+		}
+
+		if noteID, exists := m.NoteID(); exists {
+			create = create.SetNoteID(noteID)
+		} else {
+			create = create.SetNoteID(trustcenterfaq.NoteID)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterfaq.TrustCenterID)
 		}
 
 		if referenceLink, exists := m.ReferenceLink(); exists {
@@ -21846,12 +21872,6 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDisplayOrder(displayOrder)
 		} else {
 			create = create.SetDisplayOrder(trustcenterfaq.DisplayOrder)
-		}
-
-		if trustCenterID, exists := m.TrustCenterID(); exists {
-			create = create.SetTrustCenterID(trustCenterID)
-		} else {
-			create = create.SetTrustCenterID(trustcenterfaq.TrustCenterID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -21895,10 +21915,12 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetUpdatedBy(trustcenterfaq.UpdatedBy).
 			SetDeletedAt(trustcenterfaq.DeletedAt).
 			SetDeletedBy(trustcenterfaq.DeletedBy).
-			SetTags(trustcenterfaq.Tags).
+			SetTrustCenterFaqKindName(trustcenterfaq.TrustCenterFaqKindName).
+			SetTrustCenterFaqKindID(trustcenterfaq.TrustCenterFaqKindID).
+			SetNoteID(trustcenterfaq.NoteID).
+			SetTrustCenterID(trustcenterfaq.TrustCenterID).
 			SetReferenceLink(trustcenterfaq.ReferenceLink).
 			SetDisplayOrder(trustcenterfaq.DisplayOrder).
-			SetTrustCenterID(trustcenterfaq.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err

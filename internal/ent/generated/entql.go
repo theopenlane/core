@@ -3118,16 +3118,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterFAQ",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterfaq.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterfaq.FieldCreatedAt},
-			trustcenterfaq.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterfaq.FieldUpdatedAt},
-			trustcenterfaq.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterfaq.FieldCreatedBy},
-			trustcenterfaq.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterfaq.FieldUpdatedBy},
-			trustcenterfaq.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterfaq.FieldDeletedAt},
-			trustcenterfaq.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterfaq.FieldDeletedBy},
-			trustcenterfaq.FieldTags:          {Type: field.TypeJSON, Column: trustcenterfaq.FieldTags},
-			trustcenterfaq.FieldReferenceLink: {Type: field.TypeString, Column: trustcenterfaq.FieldReferenceLink},
-			trustcenterfaq.FieldDisplayOrder:  {Type: field.TypeInt, Column: trustcenterfaq.FieldDisplayOrder},
-			trustcenterfaq.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterfaq.FieldTrustCenterID},
+			trustcenterfaq.FieldCreatedAt:              {Type: field.TypeTime, Column: trustcenterfaq.FieldCreatedAt},
+			trustcenterfaq.FieldUpdatedAt:              {Type: field.TypeTime, Column: trustcenterfaq.FieldUpdatedAt},
+			trustcenterfaq.FieldCreatedBy:              {Type: field.TypeString, Column: trustcenterfaq.FieldCreatedBy},
+			trustcenterfaq.FieldUpdatedBy:              {Type: field.TypeString, Column: trustcenterfaq.FieldUpdatedBy},
+			trustcenterfaq.FieldDeletedAt:              {Type: field.TypeTime, Column: trustcenterfaq.FieldDeletedAt},
+			trustcenterfaq.FieldDeletedBy:              {Type: field.TypeString, Column: trustcenterfaq.FieldDeletedBy},
+			trustcenterfaq.FieldTrustCenterFaqKindName: {Type: field.TypeString, Column: trustcenterfaq.FieldTrustCenterFaqKindName},
+			trustcenterfaq.FieldTrustCenterFaqKindID:   {Type: field.TypeString, Column: trustcenterfaq.FieldTrustCenterFaqKindID},
+			trustcenterfaq.FieldNoteID:                 {Type: field.TypeString, Column: trustcenterfaq.FieldNoteID},
+			trustcenterfaq.FieldTrustCenterID:          {Type: field.TypeString, Column: trustcenterfaq.FieldTrustCenterID},
+			trustcenterfaq.FieldReferenceLink:          {Type: field.TypeString, Column: trustcenterfaq.FieldReferenceLink},
+			trustcenterfaq.FieldDisplayOrder:           {Type: field.TypeInt, Column: trustcenterfaq.FieldDisplayOrder},
 		},
 	}
 	graph.Nodes[88] = &sqlgraph.Node{
@@ -9542,12 +9544,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Discussion",
 	)
 	graph.MustAddE(
-		"trust_center_faq",
+		"trust_center_faqs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   note.TrustCenterFaqTable,
-			Columns: []string{note.TrustCenterFaqColumn},
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
 			Bidi:    false,
 		},
 		"Note",
@@ -14618,6 +14620,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"EntityType",
 	)
 	graph.MustAddE(
+		"trust_center_faq_kind",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.TrustCenterFaqKindTable,
+			Columns: []string{trustcenterfaq.TrustCenterFaqKindColumn},
+			Bidi:    false,
+		},
+		"TrustCenterFAQ",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
 		"blocked_groups",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -14654,12 +14668,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenter",
 	)
 	graph.MustAddE(
-		"notes",
+		"note",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterfaq.NoteTable,
+			Columns: []string{trustcenterfaq.NoteColumn},
 			Bidi:    false,
 		},
 		"TrustCenterFAQ",
@@ -30772,14 +30786,14 @@ func (f *NoteFilter) WhereHasDiscussionWith(preds ...predicate.Discussion) {
 	})))
 }
 
-// WhereHasTrustCenterFaq applies a predicate to check if query has an edge trust_center_faq.
-func (f *NoteFilter) WhereHasTrustCenterFaq() {
-	f.Where(entql.HasEdge("trust_center_faq"))
+// WhereHasTrustCenterFaqs applies a predicate to check if query has an edge trust_center_faqs.
+func (f *NoteFilter) WhereHasTrustCenterFaqs() {
+	f.Where(entql.HasEdge("trust_center_faqs"))
 }
 
-// WhereHasTrustCenterFaqWith applies a predicate to check if query has an edge trust_center_faq with a given conditions (other predicates).
-func (f *NoteFilter) WhereHasTrustCenterFaqWith(preds ...predicate.TrustCenterFAQ) {
-	f.Where(entql.HasEdgeWith("trust_center_faq", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasTrustCenterFaqsWith applies a predicate to check if query has an edge trust_center_faqs with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasTrustCenterFaqsWith(preds ...predicate.TrustCenterFAQ) {
+	f.Where(entql.HasEdgeWith("trust_center_faqs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -41839,9 +41853,24 @@ func (f *TrustCenterFAQFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(trustcenterfaq.FieldDeletedBy))
 }
 
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *TrustCenterFAQFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(trustcenterfaq.FieldTags))
+// WhereTrustCenterFaqKindName applies the entql string predicate on the trust_center_faq_kind_name field.
+func (f *TrustCenterFAQFilter) WhereTrustCenterFaqKindName(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaq.FieldTrustCenterFaqKindName))
+}
+
+// WhereTrustCenterFaqKindID applies the entql string predicate on the trust_center_faq_kind_id field.
+func (f *TrustCenterFAQFilter) WhereTrustCenterFaqKindID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaq.FieldTrustCenterFaqKindID))
+}
+
+// WhereNoteID applies the entql string predicate on the note_id field.
+func (f *TrustCenterFAQFilter) WhereNoteID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaq.FieldNoteID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterFAQFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaq.FieldTrustCenterID))
 }
 
 // WhereReferenceLink applies the entql string predicate on the reference_link field.
@@ -41854,9 +41883,18 @@ func (f *TrustCenterFAQFilter) WhereDisplayOrder(p entql.IntP) {
 	f.Where(p.Field(trustcenterfaq.FieldDisplayOrder))
 }
 
-// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
-func (f *TrustCenterFAQFilter) WhereTrustCenterID(p entql.StringP) {
-	f.Where(p.Field(trustcenterfaq.FieldTrustCenterID))
+// WhereHasTrustCenterFaqKind applies a predicate to check if query has an edge trust_center_faq_kind.
+func (f *TrustCenterFAQFilter) WhereHasTrustCenterFaqKind() {
+	f.Where(entql.HasEdge("trust_center_faq_kind"))
+}
+
+// WhereHasTrustCenterFaqKindWith applies a predicate to check if query has an edge trust_center_faq_kind with a given conditions (other predicates).
+func (f *TrustCenterFAQFilter) WhereHasTrustCenterFaqKindWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("trust_center_faq_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
@@ -41901,14 +41939,14 @@ func (f *TrustCenterFAQFilter) WhereHasTrustCenterWith(preds ...predicate.TrustC
 	})))
 }
 
-// WhereHasNotes applies a predicate to check if query has an edge notes.
-func (f *TrustCenterFAQFilter) WhereHasNotes() {
-	f.Where(entql.HasEdge("notes"))
+// WhereHasNote applies a predicate to check if query has an edge note.
+func (f *TrustCenterFAQFilter) WhereHasNote() {
+	f.Where(entql.HasEdge("note"))
 }
 
-// WhereHasNotesWith applies a predicate to check if query has an edge notes with a given conditions (other predicates).
-func (f *TrustCenterFAQFilter) WhereHasNotesWith(preds ...predicate.Note) {
-	f.Where(entql.HasEdgeWith("notes", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasNoteWith applies a predicate to check if query has an edge note with a given conditions (other predicates).
+func (f *TrustCenterFAQFilter) WhereHasNoteWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("note", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

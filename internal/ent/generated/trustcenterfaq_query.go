@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -30,15 +31,15 @@ type TrustCenterFAQQuery struct {
 	order                  []trustcenterfaq.OrderOption
 	inters                 []Interceptor
 	predicates             []predicate.TrustCenterFAQ
+	withTrustCenterFaqKind *CustomTypeEnumQuery
 	withBlockedGroups      *GroupQuery
 	withEditors            *GroupQuery
 	withTrustCenter        *TrustCenterQuery
-	withNotes              *NoteQuery
+	withNote               *NoteQuery
 	loadTotal              []func(context.Context, []*TrustCenterFAQ) error
 	modifiers              []func(*sql.Selector)
 	withNamedBlockedGroups map[string]*GroupQuery
 	withNamedEditors       map[string]*GroupQuery
-	withNamedNotes         map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -73,6 +74,31 @@ func (_q *TrustCenterFAQQuery) Unique(unique bool) *TrustCenterFAQQuery {
 func (_q *TrustCenterFAQQuery) Order(o ...trustcenterfaq.OrderOption) *TrustCenterFAQQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryTrustCenterFaqKind chains the current query on the "trust_center_faq_kind" edge.
+func (_q *TrustCenterFAQQuery) QueryTrustCenterFaqKind() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterfaq.TrustCenterFaqKindTable, trustcenterfaq.TrustCenterFaqKindColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryBlockedGroups chains the current query on the "blocked_groups" edge.
@@ -150,8 +176,8 @@ func (_q *TrustCenterFAQQuery) QueryTrustCenter() *TrustCenterQuery {
 	return query
 }
 
-// QueryNotes chains the current query on the "notes" edge.
-func (_q *TrustCenterFAQQuery) QueryNotes() *NoteQuery {
+// QueryNote chains the current query on the "note" edge.
+func (_q *TrustCenterFAQQuery) QueryNote() *NoteQuery {
 	query := (&NoteClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -164,11 +190,11 @@ func (_q *TrustCenterFAQQuery) QueryNotes() *NoteQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, selector),
 			sqlgraph.To(note.Table, note.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterfaq.NotesTable, trustcenterfaq.NotesColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterfaq.NoteTable, trustcenterfaq.NoteColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -362,20 +388,32 @@ func (_q *TrustCenterFAQQuery) Clone() *TrustCenterFAQQuery {
 		return nil
 	}
 	return &TrustCenterFAQQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]trustcenterfaq.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.TrustCenterFAQ{}, _q.predicates...),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withTrustCenter:   _q.withTrustCenter.Clone(),
-		withNotes:         _q.withNotes.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]trustcenterfaq.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.TrustCenterFAQ{}, _q.predicates...),
+		withTrustCenterFaqKind: _q.withTrustCenterFaqKind.Clone(),
+		withBlockedGroups:      _q.withBlockedGroups.Clone(),
+		withEditors:            _q.withEditors.Clone(),
+		withTrustCenter:        _q.withTrustCenter.Clone(),
+		withNote:               _q.withNote.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithTrustCenterFaqKind tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_faq_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterFAQQuery) WithTrustCenterFaqKind(opts ...func(*CustomTypeEnumQuery)) *TrustCenterFAQQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterFaqKind = query
+	return _q
 }
 
 // WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
@@ -411,14 +449,14 @@ func (_q *TrustCenterFAQQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) 
 	return _q
 }
 
-// WithNotes tells the query-builder to eager-load the nodes that are connected to
-// the "notes" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustCenterFAQQuery) WithNotes(opts ...func(*NoteQuery)) *TrustCenterFAQQuery {
+// WithNote tells the query-builder to eager-load the nodes that are connected to
+// the "note" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterFAQQuery) WithNote(opts ...func(*NoteQuery)) *TrustCenterFAQQuery {
 	query := (&NoteClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withNotes = query
+	_q.withNote = query
 	return _q
 }
 
@@ -506,11 +544,12 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*TrustCenterFAQ{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
+			_q.withTrustCenterFaqKind != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withTrustCenter != nil,
-			_q.withNotes != nil,
+			_q.withNote != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -536,6 +575,12 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withTrustCenterFaqKind; query != nil {
+		if err := _q.loadTrustCenterFaqKind(ctx, query, nodes, nil,
+			func(n *TrustCenterFAQ, e *CustomTypeEnum) { n.Edges.TrustCenterFaqKind = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withBlockedGroups; query != nil {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *TrustCenterFAQ) { n.Edges.BlockedGroups = []*Group{} },
@@ -556,10 +601,9 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
-	if query := _q.withNotes; query != nil {
-		if err := _q.loadNotes(ctx, query, nodes,
-			func(n *TrustCenterFAQ) { n.Edges.Notes = []*Note{} },
-			func(n *TrustCenterFAQ, e *Note) { n.Edges.Notes = append(n.Edges.Notes, e) }); err != nil {
+	if query := _q.withNote; query != nil {
+		if err := _q.loadNote(ctx, query, nodes, nil,
+			func(n *TrustCenterFAQ, e *Note) { n.Edges.Note = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -577,13 +621,6 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedNotes {
-		if err := _q.loadNotes(ctx, query, nodes,
-			func(n *TrustCenterFAQ) { n.appendNamedNotes(name) },
-			func(n *TrustCenterFAQ, e *Note) { n.appendNamedNotes(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for i := range _q.loadTotal {
 		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
@@ -592,6 +629,35 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
+func (_q *TrustCenterFAQQuery) loadTrustCenterFaqKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*TrustCenterFAQ, init func(*TrustCenterFAQ), assign func(*TrustCenterFAQ, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterFAQ)
+	for i := range nodes {
+		fk := nodes[i].TrustCenterFaqKindID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_faq_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *TrustCenterFAQQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*TrustCenterFAQ, init func(*TrustCenterFAQ), assign func(*TrustCenterFAQ, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*TrustCenterFAQ)
@@ -683,34 +749,32 @@ func (_q *TrustCenterFAQQuery) loadTrustCenter(ctx context.Context, query *Trust
 	}
 	return nil
 }
-func (_q *TrustCenterFAQQuery) loadNotes(ctx context.Context, query *NoteQuery, nodes []*TrustCenterFAQ, init func(*TrustCenterFAQ), assign func(*TrustCenterFAQ, *Note)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*TrustCenterFAQ)
+func (_q *TrustCenterFAQQuery) loadNote(ctx context.Context, query *NoteQuery, nodes []*TrustCenterFAQ, init func(*TrustCenterFAQ), assign func(*TrustCenterFAQ, *Note)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterFAQ)
 	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
+		fk := nodes[i].NoteID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
 		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.withFKs = true
-	query.Where(predicate.Note(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(trustcenterfaq.NotesColumn), fks...))
-	}))
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(note.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.trust_center_faq_notes
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "trust_center_faq_notes" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_faq_notes" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "note_id" returned %v`, n.ID)
 		}
-		assign(node, n)
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }
@@ -745,8 +809,14 @@ func (_q *TrustCenterFAQQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
+		if _q.withTrustCenterFaqKind != nil {
+			_spec.Node.AddColumnOnce(trustcenterfaq.FieldTrustCenterFaqKindID)
+		}
 		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcenterfaq.FieldTrustCenterID)
+		}
+		if _q.withNote != nil {
+			_spec.Node.AddColumnOnce(trustcenterfaq.FieldNoteID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -841,20 +911,6 @@ func (_q *TrustCenterFAQQuery) WithNamedEditors(name string, opts ...func(*Group
 		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	_q.withNamedEditors[name] = query
-	return _q
-}
-
-// WithNamedNotes tells the query-builder to eager-load the nodes that are connected to the "notes"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustCenterFAQQuery) WithNamedNotes(name string, opts ...func(*NoteQuery)) *TrustCenterFAQQuery {
-	query := (&NoteClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedNotes == nil {
-		_q.withNamedNotes = make(map[string]*NoteQuery)
-	}
-	_q.withNamedNotes[name] = query
 	return _q
 }
 

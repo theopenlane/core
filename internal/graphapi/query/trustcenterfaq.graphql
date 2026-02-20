@@ -7,7 +7,6 @@ mutation CreateBulkCSVTrustCenterFAQ($input: Upload!) {
       displayOrder
       id
       referenceLink
-      tags
       trustCenterID
       updatedAt
       updatedBy
@@ -23,7 +22,6 @@ mutation CreateBulkTrustCenterFAQ($input: [CreateTrustCenterFAQInput!]) {
       displayOrder
       id
       referenceLink
-      tags
       trustCenterID
       updatedAt
       updatedBy
@@ -39,7 +37,6 @@ mutation CreateTrustCenterFAQ($input: CreateTrustCenterFAQInput!) {
       displayOrder
       id
       referenceLink
-      tags
       trustCenterID
       updatedAt
       updatedBy
@@ -61,7 +58,6 @@ mutation UpdateBulkTrustCenterFAQ($ids: [ID!]!, $input: UpdateTrustCenterFAQInpu
       displayOrder
       id
       referenceLink
-      tags
       trustCenterID
       updatedAt
       updatedBy
@@ -78,7 +74,6 @@ mutation UpdateBulkCSVTrustCenterFAQ($input: Upload!) {
       displayOrder
       id
       referenceLink
-      tags
       trustCenterID
       updatedAt
       updatedBy
@@ -115,7 +110,6 @@ query GetAllTrustCenterFAQS($first: Int, $last: Int, $after: Cursor, $before: Cu
         displayOrder
         id
         referenceLink
-        tags
         trustCenterID
         updatedAt
         updatedBy
@@ -130,7 +124,6 @@ query GetTrustCenterFAQByID($trustCenterFAQId: ID!) {
     displayOrder
     id
     referenceLink
-    tags
     trustCenterID
     updatedAt
     updatedBy
@@ -160,7 +153,6 @@ query GetTrustCenterFAQS($first: Int, $last: Int, $after: Cursor, $before: Curso
         displayOrder
         id
         referenceLink
-        tags
         trustCenterID
         updatedAt
         updatedBy
@@ -176,7 +168,6 @@ mutation UpdateTrustCenterFAQ($updateTrustCenterFAQId: ID!, $input: UpdateTrustC
       displayOrder
       id
       referenceLink
-      tags
       trustCenterID
       updatedAt
       updatedBy

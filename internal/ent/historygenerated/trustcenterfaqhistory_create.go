@@ -141,9 +141,51 @@ func (_c *TrustCenterFAQHistoryCreate) SetNillableDeletedBy(v *string) *TrustCen
 	return _c
 }
 
-// SetTags sets the "tags" field.
-func (_c *TrustCenterFAQHistoryCreate) SetTags(v []string) *TrustCenterFAQHistoryCreate {
-	_c.mutation.SetTags(v)
+// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
+func (_c *TrustCenterFAQHistoryCreate) SetTrustCenterFaqKindName(v string) *TrustCenterFAQHistoryCreate {
+	_c.mutation.SetTrustCenterFaqKindName(v)
+	return _c
+}
+
+// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
+func (_c *TrustCenterFAQHistoryCreate) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterFaqKindName(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
+func (_c *TrustCenterFAQHistoryCreate) SetTrustCenterFaqKindID(v string) *TrustCenterFAQHistoryCreate {
+	_c.mutation.SetTrustCenterFaqKindID(v)
+	return _c
+}
+
+// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
+func (_c *TrustCenterFAQHistoryCreate) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterFaqKindID(*v)
+	}
+	return _c
+}
+
+// SetNoteID sets the "note_id" field.
+func (_c *TrustCenterFAQHistoryCreate) SetNoteID(v string) *TrustCenterFAQHistoryCreate {
+	_c.mutation.SetNoteID(v)
+	return _c
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TrustCenterFAQHistoryCreate) SetTrustCenterID(v string) *TrustCenterFAQHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TrustCenterFAQHistoryCreate) SetNillableTrustCenterID(v *string) *TrustCenterFAQHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
 	return _c
 }
 
@@ -171,20 +213,6 @@ func (_c *TrustCenterFAQHistoryCreate) SetDisplayOrder(v int) *TrustCenterFAQHis
 func (_c *TrustCenterFAQHistoryCreate) SetNillableDisplayOrder(v *int) *TrustCenterFAQHistoryCreate {
 	if v != nil {
 		_c.SetDisplayOrder(*v)
-	}
-	return _c
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_c *TrustCenterFAQHistoryCreate) SetTrustCenterID(v string) *TrustCenterFAQHistoryCreate {
-	_c.mutation.SetTrustCenterID(v)
-	return _c
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_c *TrustCenterFAQHistoryCreate) SetNillableTrustCenterID(v *string) *TrustCenterFAQHistoryCreate {
-	if v != nil {
-		_c.SetTrustCenterID(*v)
 	}
 	return _c
 }
@@ -261,10 +289,6 @@ func (_c *TrustCenterFAQHistoryCreate) defaults() error {
 		v := trustcenterfaqhistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := _c.mutation.Tags(); !ok {
-		v := trustcenterfaqhistory.DefaultTags
-		_c.mutation.SetTags(v)
-	}
 	if _, ok := _c.mutation.DisplayOrder(); !ok {
 		v := trustcenterfaqhistory.DefaultDisplayOrder
 		_c.mutation.SetDisplayOrder(v)
@@ -291,6 +315,9 @@ func (_c *TrustCenterFAQHistoryCreate) check() error {
 		if err := trustcenterfaqhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterFAQHistory.operation": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.NoteID(); !ok {
+		return &ValidationError{Name: "note_id", err: errors.New(`historygenerated: missing required field "TrustCenterFAQHistory.note_id"`)}
 	}
 	return nil
 }
@@ -364,9 +391,21 @@ func (_c *TrustCenterFAQHistoryCreate) createSpec() (*TrustCenterFAQHistory, *sq
 		_spec.SetField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := _c.mutation.Tags(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
+	if value, ok := _c.mutation.TrustCenterFaqKindName(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString, value)
+		_node.TrustCenterFaqKindName = value
+	}
+	if value, ok := _c.mutation.TrustCenterFaqKindID(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString, value)
+		_node.TrustCenterFaqKindID = value
+	}
+	if value, ok := _c.mutation.NoteID(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldNoteID, field.TypeString, value)
+		_node.NoteID = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	if value, ok := _c.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString, value)
@@ -375,10 +414,6 @@ func (_c *TrustCenterFAQHistoryCreate) createSpec() (*TrustCenterFAQHistory, *sq
 	if value, ok := _c.mutation.DisplayOrder(); ok {
 		_spec.SetField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt, value)
 		_node.DisplayOrder = value
-	}
-	if value, ok := _c.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString, value)
-		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

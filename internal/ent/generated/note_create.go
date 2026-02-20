@@ -380,23 +380,19 @@ func (_c *NoteCreate) SetDiscussion(v *Discussion) *NoteCreate {
 	return _c.SetDiscussionID(v.ID)
 }
 
-// SetTrustCenterFaqID sets the "trust_center_faq" edge to the TrustCenterFAQ entity by ID.
-func (_c *NoteCreate) SetTrustCenterFaqID(id string) *NoteCreate {
-	_c.mutation.SetTrustCenterFaqID(id)
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_c *NoteCreate) AddTrustCenterFaqIDs(ids ...string) *NoteCreate {
+	_c.mutation.AddTrustCenterFaqIDs(ids...)
 	return _c
 }
 
-// SetNillableTrustCenterFaqID sets the "trust_center_faq" edge to the TrustCenterFAQ entity by ID if the given value is not nil.
-func (_c *NoteCreate) SetNillableTrustCenterFaqID(id *string) *NoteCreate {
-	if id != nil {
-		_c = _c.SetTrustCenterFaqID(*id)
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_c *NoteCreate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *NoteCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _c
-}
-
-// SetTrustCenterFaq sets the "trust_center_faq" edge to the TrustCenterFAQ entity.
-func (_c *NoteCreate) SetTrustCenterFaq(v *TrustCenterFAQ) *NoteCreate {
-	return _c.SetTrustCenterFaqID(v.ID)
+	return _c.AddTrustCenterFaqIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -769,22 +765,21 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_node.DiscussionID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.TrustCenterFaqIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   note.TrustCenterFaqTable,
-			Columns: []string{note.TrustCenterFaqColumn},
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.TrustCenterFaqsTable,
+			Columns: []string{note.TrustCenterFaqsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.TrustCenterFAQ
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.trust_center_faq_notes = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {

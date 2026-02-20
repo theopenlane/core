@@ -467,6 +467,13 @@ func NarrativeEdgeCleanup(ctx context.Context, id string) error {
 func NoteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).TrustCenterFAQ.Query().Where((trustcenterfaq.HasNoteWith(note.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterfaqCount, err := FromContext(ctx).TrustCenterFAQ.Delete().Where(trustcenterfaq.HasNoteWith(note.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterfaqCount).Msg("error deleting trustcenterfaq")
+			return err
+		}
+	}
+
 	return nil
 }
 

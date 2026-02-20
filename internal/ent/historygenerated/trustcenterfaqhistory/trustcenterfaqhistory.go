@@ -37,14 +37,18 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
+	// FieldTrustCenterFaqKindName holds the string denoting the trust_center_faq_kind_name field in the database.
+	FieldTrustCenterFaqKindName = "trust_center_faq_kind_name"
+	// FieldTrustCenterFaqKindID holds the string denoting the trust_center_faq_kind_id field in the database.
+	FieldTrustCenterFaqKindID = "trust_center_faq_kind_id"
+	// FieldNoteID holds the string denoting the note_id field in the database.
+	FieldNoteID = "note_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// FieldReferenceLink holds the string denoting the reference_link field in the database.
 	FieldReferenceLink = "reference_link"
 	// FieldDisplayOrder holds the string denoting the display_order field in the database.
 	FieldDisplayOrder = "display_order"
-	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
-	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the trustcenterfaqhistory in the database.
 	Table = "trust_center_faq_history"
 )
@@ -61,10 +65,12 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldTags,
+	FieldTrustCenterFaqKindName,
+	FieldTrustCenterFaqKindID,
+	FieldNoteID,
+	FieldTrustCenterID,
 	FieldReferenceLink,
 	FieldDisplayOrder,
-	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -94,8 +100,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
 	// DefaultDisplayOrder holds the default value on creation for the "display_order" field.
 	DefaultDisplayOrder int
 	// DefaultID holds the default value on creation for the "id" field.
@@ -165,6 +169,26 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByTrustCenterFaqKindName orders the results by the trust_center_faq_kind_name field.
+func ByTrustCenterFaqKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterFaqKindName, opts...).ToFunc()
+}
+
+// ByTrustCenterFaqKindID orders the results by the trust_center_faq_kind_id field.
+func ByTrustCenterFaqKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterFaqKindID, opts...).ToFunc()
+}
+
+// ByNoteID orders the results by the note_id field.
+func ByNoteID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNoteID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
 // ByReferenceLink orders the results by the reference_link field.
 func ByReferenceLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReferenceLink, opts...).ToFunc()
@@ -173,11 +197,6 @@ func ByReferenceLink(opts ...sql.OrderTermOption) OrderOption {
 // ByDisplayOrder orders the results by the display_order field.
 func ByDisplayOrder(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayOrder, opts...).ToFunc()
-}
-
-// ByTrustCenterID orders the results by the trust_center_id field.
-func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

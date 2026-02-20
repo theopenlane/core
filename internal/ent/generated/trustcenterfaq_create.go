@@ -4,11 +4,13 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -106,9 +108,51 @@ func (_c *TrustCenterFAQCreate) SetNillableDeletedBy(v *string) *TrustCenterFAQC
 	return _c
 }
 
-// SetTags sets the "tags" field.
-func (_c *TrustCenterFAQCreate) SetTags(v []string) *TrustCenterFAQCreate {
-	_c.mutation.SetTags(v)
+// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
+func (_c *TrustCenterFAQCreate) SetTrustCenterFaqKindName(v string) *TrustCenterFAQCreate {
+	_c.mutation.SetTrustCenterFaqKindName(v)
+	return _c
+}
+
+// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
+func (_c *TrustCenterFAQCreate) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQCreate {
+	if v != nil {
+		_c.SetTrustCenterFaqKindName(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
+func (_c *TrustCenterFAQCreate) SetTrustCenterFaqKindID(v string) *TrustCenterFAQCreate {
+	_c.mutation.SetTrustCenterFaqKindID(v)
+	return _c
+}
+
+// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
+func (_c *TrustCenterFAQCreate) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQCreate {
+	if v != nil {
+		_c.SetTrustCenterFaqKindID(*v)
+	}
+	return _c
+}
+
+// SetNoteID sets the "note_id" field.
+func (_c *TrustCenterFAQCreate) SetNoteID(v string) *TrustCenterFAQCreate {
+	_c.mutation.SetNoteID(v)
+	return _c
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *TrustCenterFAQCreate) SetTrustCenterID(v string) *TrustCenterFAQCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *TrustCenterFAQCreate) SetNillableTrustCenterID(v *string) *TrustCenterFAQCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
 	return _c
 }
 
@@ -140,20 +184,6 @@ func (_c *TrustCenterFAQCreate) SetNillableDisplayOrder(v *int) *TrustCenterFAQC
 	return _c
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_c *TrustCenterFAQCreate) SetTrustCenterID(v string) *TrustCenterFAQCreate {
-	_c.mutation.SetTrustCenterID(v)
-	return _c
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_c *TrustCenterFAQCreate) SetNillableTrustCenterID(v *string) *TrustCenterFAQCreate {
-	if v != nil {
-		_c.SetTrustCenterID(*v)
-	}
-	return _c
-}
-
 // SetID sets the "id" field.
 func (_c *TrustCenterFAQCreate) SetID(v string) *TrustCenterFAQCreate {
 	_c.mutation.SetID(v)
@@ -166,6 +196,11 @@ func (_c *TrustCenterFAQCreate) SetNillableID(v *string) *TrustCenterFAQCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// SetTrustCenterFaqKind sets the "trust_center_faq_kind" edge to the CustomTypeEnum entity.
+func (_c *TrustCenterFAQCreate) SetTrustCenterFaqKind(v *CustomTypeEnum) *TrustCenterFAQCreate {
+	return _c.SetTrustCenterFaqKindID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -203,19 +238,9 @@ func (_c *TrustCenterFAQCreate) SetTrustCenter(v *TrustCenter) *TrustCenterFAQCr
 	return _c.SetTrustCenterID(v.ID)
 }
 
-// AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (_c *TrustCenterFAQCreate) AddNoteIDs(ids ...string) *TrustCenterFAQCreate {
-	_c.mutation.AddNoteIDs(ids...)
-	return _c
-}
-
-// AddNotes adds the "notes" edges to the Note entity.
-func (_c *TrustCenterFAQCreate) AddNotes(v ...*Note) *TrustCenterFAQCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddNoteIDs(ids...)
+// SetNote sets the "note" edge to the Note entity.
+func (_c *TrustCenterFAQCreate) SetNote(v *Note) *TrustCenterFAQCreate {
+	return _c.SetNoteID(v.ID)
 }
 
 // Mutation returns the TrustCenterFAQMutation object of the builder.
@@ -269,10 +294,6 @@ func (_c *TrustCenterFAQCreate) defaults() error {
 		v := trustcenterfaq.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := _c.mutation.Tags(); !ok {
-		v := trustcenterfaq.DefaultTags
-		_c.mutation.SetTags(v)
-	}
 	if _, ok := _c.mutation.DisplayOrder(); !ok {
 		v := trustcenterfaq.DefaultDisplayOrder
 		_c.mutation.SetDisplayOrder(v)
@@ -289,15 +310,26 @@ func (_c *TrustCenterFAQCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *TrustCenterFAQCreate) check() error {
-	if v, ok := _c.mutation.ReferenceLink(); ok {
-		if err := trustcenterfaq.ReferenceLinkValidator(v); err != nil {
-			return &ValidationError{Name: "reference_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenterFAQ.reference_link": %w`, err)}
+	if _, ok := _c.mutation.NoteID(); !ok {
+		return &ValidationError{Name: "note_id", err: errors.New(`generated: missing required field "TrustCenterFAQ.note_id"`)}
+	}
+	if v, ok := _c.mutation.NoteID(); ok {
+		if err := trustcenterfaq.NoteIDValidator(v); err != nil {
+			return &ValidationError{Name: "note_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterFAQ.note_id": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.TrustCenterID(); ok {
 		if err := trustcenterfaq.TrustCenterIDValidator(v); err != nil {
 			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterFAQ.trust_center_id": %w`, err)}
 		}
+	}
+	if v, ok := _c.mutation.ReferenceLink(); ok {
+		if err := trustcenterfaq.ReferenceLinkValidator(v); err != nil {
+			return &ValidationError{Name: "reference_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenterFAQ.reference_link": %w`, err)}
+		}
+	}
+	if len(_c.mutation.NoteIDs()) == 0 {
+		return &ValidationError{Name: "note", err: errors.New(`generated: missing required edge "TrustCenterFAQ.note"`)}
 	}
 	return nil
 }
@@ -359,9 +391,9 @@ func (_c *TrustCenterFAQCreate) createSpec() (*TrustCenterFAQ, *sqlgraph.CreateS
 		_spec.SetField(trustcenterfaq.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := _c.mutation.Tags(); ok {
-		_spec.SetField(trustcenterfaq.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
+	if value, ok := _c.mutation.TrustCenterFaqKindName(); ok {
+		_spec.SetField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString, value)
+		_node.TrustCenterFaqKindName = value
 	}
 	if value, ok := _c.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaq.FieldReferenceLink, field.TypeString, value)
@@ -370,6 +402,24 @@ func (_c *TrustCenterFAQCreate) createSpec() (*TrustCenterFAQ, *sqlgraph.CreateS
 	if value, ok := _c.mutation.DisplayOrder(); ok {
 		_spec.SetField(trustcenterfaq.FieldDisplayOrder, field.TypeInt, value)
 		_node.DisplayOrder = value
+	}
+	if nodes := _c.mutation.TrustCenterFaqKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.TrustCenterFaqKindTable,
+			Columns: []string{trustcenterfaq.TrustCenterFaqKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterFaqKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -423,21 +473,22 @@ func (_c *TrustCenterFAQCreate) createSpec() (*TrustCenterFAQ, *sqlgraph.CreateS
 		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.NotesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.NoteIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterfaq.NoteTable,
+			Columns: []string{trustcenterfaq.NoteColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Note
+		edge.Schema = _c.schemaConfig.TrustCenterFAQ
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.NoteID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

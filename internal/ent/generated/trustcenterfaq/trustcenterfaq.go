@@ -27,24 +27,37 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
+	// FieldTrustCenterFaqKindName holds the string denoting the trust_center_faq_kind_name field in the database.
+	FieldTrustCenterFaqKindName = "trust_center_faq_kind_name"
+	// FieldTrustCenterFaqKindID holds the string denoting the trust_center_faq_kind_id field in the database.
+	FieldTrustCenterFaqKindID = "trust_center_faq_kind_id"
+	// FieldNoteID holds the string denoting the note_id field in the database.
+	FieldNoteID = "note_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// FieldReferenceLink holds the string denoting the reference_link field in the database.
 	FieldReferenceLink = "reference_link"
 	// FieldDisplayOrder holds the string denoting the display_order field in the database.
 	FieldDisplayOrder = "display_order"
-	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
-	FieldTrustCenterID = "trust_center_id"
+	// EdgeTrustCenterFaqKind holds the string denoting the trust_center_faq_kind edge name in mutations.
+	EdgeTrustCenterFaqKind = "trust_center_faq_kind"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
-	// EdgeNotes holds the string denoting the notes edge name in mutations.
-	EdgeNotes = "notes"
+	// EdgeNote holds the string denoting the note edge name in mutations.
+	EdgeNote = "note"
 	// Table holds the table name of the trustcenterfaq in the database.
 	Table = "trust_center_fa_qs"
+	// TrustCenterFaqKindTable is the table that holds the trust_center_faq_kind relation/edge.
+	TrustCenterFaqKindTable = "trust_center_fa_qs"
+	// TrustCenterFaqKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	TrustCenterFaqKindInverseTable = "custom_type_enums"
+	// TrustCenterFaqKindColumn is the table column denoting the trust_center_faq_kind relation/edge.
+	TrustCenterFaqKindColumn = "trust_center_faq_kind_id"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
 	BlockedGroupsTable = "groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
@@ -66,13 +79,13 @@ const (
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
-	// NotesTable is the table that holds the notes relation/edge.
-	NotesTable = "notes"
-	// NotesInverseTable is the table name for the Note entity.
+	// NoteTable is the table that holds the note relation/edge.
+	NoteTable = "trust_center_fa_qs"
+	// NoteInverseTable is the table name for the Note entity.
 	// It exists in this package in order to avoid circular dependency with the "note" package.
-	NotesInverseTable = "notes"
-	// NotesColumn is the table column denoting the notes relation/edge.
-	NotesColumn = "trust_center_faq_notes"
+	NoteInverseTable = "notes"
+	// NoteColumn is the table column denoting the note relation/edge.
+	NoteColumn = "note_id"
 )
 
 // Columns holds all SQL columns for trustcenterfaq fields.
@@ -84,10 +97,12 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldTags,
+	FieldTrustCenterFaqKindName,
+	FieldTrustCenterFaqKindID,
+	FieldNoteID,
+	FieldTrustCenterID,
 	FieldReferenceLink,
 	FieldDisplayOrder,
-	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -115,14 +130,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
+	// NoteIDValidator is a validator for the "note_id" field. It is called by the builders before save.
+	NoteIDValidator func(string) error
+	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	TrustCenterIDValidator func(string) error
 	// ReferenceLinkValidator is a validator for the "reference_link" field. It is called by the builders before save.
 	ReferenceLinkValidator func(string) error
 	// DefaultDisplayOrder holds the default value on creation for the "display_order" field.
 	DefaultDisplayOrder int
-	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
-	TrustCenterIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -165,6 +180,26 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByTrustCenterFaqKindName orders the results by the trust_center_faq_kind_name field.
+func ByTrustCenterFaqKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterFaqKindName, opts...).ToFunc()
+}
+
+// ByTrustCenterFaqKindID orders the results by the trust_center_faq_kind_id field.
+func ByTrustCenterFaqKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterFaqKindID, opts...).ToFunc()
+}
+
+// ByNoteID orders the results by the note_id field.
+func ByNoteID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNoteID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
 // ByReferenceLink orders the results by the reference_link field.
 func ByReferenceLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReferenceLink, opts...).ToFunc()
@@ -175,9 +210,11 @@ func ByDisplayOrder(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayOrder, opts...).ToFunc()
 }
 
-// ByTrustCenterID orders the results by the trust_center_id field.
-func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+// ByTrustCenterFaqKindField orders the results by trust_center_faq_kind field.
+func ByTrustCenterFaqKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterFaqKindStep(), sql.OrderByField(field, opts...))
+	}
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.
@@ -215,18 +252,18 @@ func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByNotesCount orders the results by notes count.
-func ByNotesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByNoteField orders the results by note field.
+func ByNoteField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newNotesStep(), opts...)
+		sqlgraph.OrderByNeighborTerms(s, newNoteStep(), sql.OrderByField(field, opts...))
 	}
 }
-
-// ByNotes orders the results by notes terms.
-func ByNotes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newNotesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
+func newTrustCenterFaqKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterFaqKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterFaqKindTable, TrustCenterFaqKindColumn),
+	)
 }
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
@@ -249,10 +286,10 @@ func newTrustCenterStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 	)
 }
-func newNotesStep() *sqlgraph.Step {
+func newNoteStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(NotesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, NotesTable, NotesColumn),
+		sqlgraph.To(NoteInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, NoteTable, NoteColumn),
 	)
 }

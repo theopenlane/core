@@ -142,10 +142,10 @@ func (n Note) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Discussion{}.Name()),
 			},
 		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: n,
-			edgeSchema: TrustCenterFAQ{},
-			ref:        "notes",
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    n,
+			edgeSchema:    TrustCenterFAQ{},
+			cascadeDelete: "Note",
 		}),
 		defaultEdgeToWithPagination(n, File{}),
 	}

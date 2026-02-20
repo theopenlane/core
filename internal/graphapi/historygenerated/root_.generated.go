@@ -2551,18 +2551,20 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterFAQHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		DisplayOrder  func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		ReferenceLink func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		DisplayOrder           func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		NoteID                 func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ReferenceLink          func(childComplexity int) int
+		TrustCenterFaqKindID   func(childComplexity int) int
+		TrustCenterFaqKindName func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	TrustCenterFAQHistoryConnection struct {
@@ -17250,6 +17252,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterFAQHistory.ID(childComplexity), true
 
+	case "TrustCenterFAQHistory.noteID":
+		if e.complexity.TrustCenterFAQHistory.NoteID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.NoteID(childComplexity), true
+
 	case "TrustCenterFAQHistory.operation":
 		if e.complexity.TrustCenterFAQHistory.Operation == nil {
 			break
@@ -17271,12 +17280,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterFAQHistory.ReferenceLink(childComplexity), true
 
-	case "TrustCenterFAQHistory.tags":
-		if e.complexity.TrustCenterFAQHistory.Tags == nil {
+	case "TrustCenterFAQHistory.trustCenterFaqKindID":
+		if e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.Tags(childComplexity), true
+		return e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindID(childComplexity), true
+
+	case "TrustCenterFAQHistory.trustCenterFaqKindName":
+		if e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindName(childComplexity), true
 
 	case "TrustCenterFAQHistory.trustCenterID":
 		if e.complexity.TrustCenterFAQHistory.TrustCenterID == nil {
@@ -53711,9 +53727,21 @@ type TrustCenterFAQHistory implements Node {
   createdBy: String
   updatedBy: String
   """
-  tags associated with the object
+  the kind of the trust_center_faq
   """
-  tags: [String!]
+  trustCenterFaqKindName: String
+  """
+  the kind of the trust_center_faq
+  """
+  trustCenterFaqKindID: String
+  """
+  ID of the note containing the FAQ question and answer
+  """
+  noteID: String!
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
   """
   optional reference link for the FAQ
   """
@@ -53722,10 +53750,6 @@ type TrustCenterFAQHistory implements Node {
   display order of the FAQ
   """
   displayOrder: Int
-  """
-  ID of the trust center
-  """
-  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -53906,6 +53930,76 @@ input TrustCenterFAQHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_faq_kind_name field predicates
+  """
+  trustCenterFaqKindName: String
+  trustCenterFaqKindNameNEQ: String
+  trustCenterFaqKindNameIn: [String!]
+  trustCenterFaqKindNameNotIn: [String!]
+  trustCenterFaqKindNameGT: String
+  trustCenterFaqKindNameGTE: String
+  trustCenterFaqKindNameLT: String
+  trustCenterFaqKindNameLTE: String
+  trustCenterFaqKindNameContains: String
+  trustCenterFaqKindNameHasPrefix: String
+  trustCenterFaqKindNameHasSuffix: String
+  trustCenterFaqKindNameIsNil: Boolean
+  trustCenterFaqKindNameNotNil: Boolean
+  trustCenterFaqKindNameEqualFold: String
+  trustCenterFaqKindNameContainsFold: String
+  """
+  trust_center_faq_kind_id field predicates
+  """
+  trustCenterFaqKindID: String
+  trustCenterFaqKindIDNEQ: String
+  trustCenterFaqKindIDIn: [String!]
+  trustCenterFaqKindIDNotIn: [String!]
+  trustCenterFaqKindIDGT: String
+  trustCenterFaqKindIDGTE: String
+  trustCenterFaqKindIDLT: String
+  trustCenterFaqKindIDLTE: String
+  trustCenterFaqKindIDContains: String
+  trustCenterFaqKindIDHasPrefix: String
+  trustCenterFaqKindIDHasSuffix: String
+  trustCenterFaqKindIDIsNil: Boolean
+  trustCenterFaqKindIDNotNil: Boolean
+  trustCenterFaqKindIDEqualFold: String
+  trustCenterFaqKindIDContainsFold: String
+  """
+  note_id field predicates
+  """
+  noteID: String
+  noteIDNEQ: String
+  noteIDIn: [String!]
+  noteIDNotIn: [String!]
+  noteIDGT: String
+  noteIDGTE: String
+  noteIDLT: String
+  noteIDLTE: String
+  noteIDContains: String
+  noteIDHasPrefix: String
+  noteIDHasSuffix: String
+  noteIDEqualFold: String
+  noteIDContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
   reference_link field predicates
   """
   referenceLink: String
@@ -53936,24 +54030,6 @@ input TrustCenterFAQHistoryWhereInput {
   displayOrderLTE: Int
   displayOrderIsNil: Boolean
   displayOrderNotNil: Boolean
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDGT: String
-  trustCenterIDGTE: String
-  trustCenterIDLT: String
-  trustCenterIDLTE: String
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
 }
 type TrustCenterHistory implements Node {
   id: ID!

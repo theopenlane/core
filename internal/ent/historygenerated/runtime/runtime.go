@@ -2719,12 +2719,8 @@ func init() {
 	trustcenterfaqhistory.DefaultUpdatedAt = trustcenterfaqhistoryDescUpdatedAt.Default.(func() time.Time)
 	// trustcenterfaqhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	trustcenterfaqhistory.UpdateDefaultUpdatedAt = trustcenterfaqhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcenterfaqhistoryDescTags is the schema descriptor for tags field.
-	trustcenterfaqhistoryDescTags := trustcenterfaqhistoryFields[10].Descriptor()
-	// trustcenterfaqhistory.DefaultTags holds the default value on creation for the tags field.
-	trustcenterfaqhistory.DefaultTags = trustcenterfaqhistoryDescTags.Default.([]string)
 	// trustcenterfaqhistoryDescDisplayOrder is the schema descriptor for display_order field.
-	trustcenterfaqhistoryDescDisplayOrder := trustcenterfaqhistoryFields[12].Descriptor()
+	trustcenterfaqhistoryDescDisplayOrder := trustcenterfaqhistoryFields[15].Descriptor()
 	// trustcenterfaqhistory.DefaultDisplayOrder holds the default value on creation for the display_order field.
 	trustcenterfaqhistory.DefaultDisplayOrder = trustcenterfaqhistoryDescDisplayOrder.Default.(int)
 	// trustcenterfaqhistoryDescID is the schema descriptor for id field.
@@ -3338,6 +3334,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.6-0.20260214061101-d056659140fa"           // Version of ent codegen.
-	Sum     = "h1:wMZsU7N59QIyi/ByFCi7VUVzFS2ARVpNVropq+D/cqE=" // Sum of ent codegen.
+	Version = "v0.14.6-0.20260218064135-ab0540611e15"           // Version of ent codegen.
+	Sum     = "h1:dmFR0752em2lC99C0w4hip6jw1sQ0eReUuZYjfBiviM=" // Sum of ent codegen.
 )

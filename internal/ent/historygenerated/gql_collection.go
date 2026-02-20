@@ -12767,10 +12767,25 @@ func (_q *TrustCenterFAQHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldUpdatedBy)
 				fieldSeen[trustcenterfaqhistory.FieldUpdatedBy] = struct{}{}
 			}
-		case "tags":
-			if _, ok := fieldSeen[trustcenterfaqhistory.FieldTags]; !ok {
-				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldTags)
-				fieldSeen[trustcenterfaqhistory.FieldTags] = struct{}{}
+		case "trustCenterFaqKindName":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldTrustCenterFaqKindName]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldTrustCenterFaqKindName)
+				fieldSeen[trustcenterfaqhistory.FieldTrustCenterFaqKindName] = struct{}{}
+			}
+		case "trustCenterFaqKindID":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldTrustCenterFaqKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldTrustCenterFaqKindID)
+				fieldSeen[trustcenterfaqhistory.FieldTrustCenterFaqKindID] = struct{}{}
+			}
+		case "noteID":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldNoteID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldNoteID)
+				fieldSeen[trustcenterfaqhistory.FieldNoteID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldTrustCenterID)
+				fieldSeen[trustcenterfaqhistory.FieldTrustCenterID] = struct{}{}
 			}
 		case "referenceLink":
 			if _, ok := fieldSeen[trustcenterfaqhistory.FieldReferenceLink]; !ok {
@@ -12781,11 +12796,6 @@ func (_q *TrustCenterFAQHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterfaqhistory.FieldDisplayOrder]; !ok {
 				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldDisplayOrder)
 				fieldSeen[trustcenterfaqhistory.FieldDisplayOrder] = struct{}{}
-			}
-		case "trustCenterID":
-			if _, ok := fieldSeen[trustcenterfaqhistory.FieldTrustCenterID]; !ok {
-				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldTrustCenterID)
-				fieldSeen[trustcenterfaqhistory.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

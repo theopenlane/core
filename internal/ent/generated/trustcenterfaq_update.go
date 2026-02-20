@@ -10,10 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 
@@ -106,21 +105,43 @@ func (_u *TrustCenterFAQUpdate) ClearDeletedBy() *TrustCenterFAQUpdate {
 	return _u
 }
 
-// SetTags sets the "tags" field.
-func (_u *TrustCenterFAQUpdate) SetTags(v []string) *TrustCenterFAQUpdate {
-	_u.mutation.SetTags(v)
+// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQUpdate) SetTrustCenterFaqKindName(v string) *TrustCenterFAQUpdate {
+	_u.mutation.SetTrustCenterFaqKindName(v)
 	return _u
 }
 
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterFAQUpdate) AppendTags(v []string) *TrustCenterFAQUpdate {
-	_u.mutation.AppendTags(v)
+// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdate) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQUpdate {
+	if v != nil {
+		_u.SetTrustCenterFaqKindName(*v)
+	}
 	return _u
 }
 
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterFAQUpdate) ClearTags() *TrustCenterFAQUpdate {
-	_u.mutation.ClearTags()
+// ClearTrustCenterFaqKindName clears the value of the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQUpdate) ClearTrustCenterFaqKindName() *TrustCenterFAQUpdate {
+	_u.mutation.ClearTrustCenterFaqKindName()
+	return _u
+}
+
+// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQUpdate) SetTrustCenterFaqKindID(v string) *TrustCenterFAQUpdate {
+	_u.mutation.SetTrustCenterFaqKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdate) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQUpdate {
+	if v != nil {
+		_u.SetTrustCenterFaqKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterFaqKindID clears the value of the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQUpdate) ClearTrustCenterFaqKindID() *TrustCenterFAQUpdate {
+	_u.mutation.ClearTrustCenterFaqKindID()
 	return _u
 }
 
@@ -171,6 +192,11 @@ func (_u *TrustCenterFAQUpdate) ClearDisplayOrder() *TrustCenterFAQUpdate {
 	return _u
 }
 
+// SetTrustCenterFaqKind sets the "trust_center_faq_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdate) SetTrustCenterFaqKind(v *CustomTypeEnum) *TrustCenterFAQUpdate {
+	return _u.SetTrustCenterFaqKindID(v.ID)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterFAQUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterFAQUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -201,24 +227,15 @@ func (_u *TrustCenterFAQUpdate) AddEditors(v ...*Group) *TrustCenterFAQUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (_u *TrustCenterFAQUpdate) AddNoteIDs(ids ...string) *TrustCenterFAQUpdate {
-	_u.mutation.AddNoteIDs(ids...)
-	return _u
-}
-
-// AddNotes adds the "notes" edges to the Note entity.
-func (_u *TrustCenterFAQUpdate) AddNotes(v ...*Note) *TrustCenterFAQUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddNoteIDs(ids...)
-}
-
 // Mutation returns the TrustCenterFAQMutation object of the builder.
 func (_u *TrustCenterFAQUpdate) Mutation() *TrustCenterFAQMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenterFaqKind clears the "trust_center_faq_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdate) ClearTrustCenterFaqKind() *TrustCenterFAQUpdate {
+	_u.mutation.ClearTrustCenterFaqKind()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -261,27 +278,6 @@ func (_u *TrustCenterFAQUpdate) RemoveEditors(v ...*Group) *TrustCenterFAQUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearNotes clears all "notes" edges to the Note entity.
-func (_u *TrustCenterFAQUpdate) ClearNotes() *TrustCenterFAQUpdate {
-	_u.mutation.ClearNotes()
-	return _u
-}
-
-// RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (_u *TrustCenterFAQUpdate) RemoveNoteIDs(ids ...string) *TrustCenterFAQUpdate {
-	_u.mutation.RemoveNoteIDs(ids...)
-	return _u
-}
-
-// RemoveNotes removes "notes" edges to Note entities.
-func (_u *TrustCenterFAQUpdate) RemoveNotes(v ...*Note) *TrustCenterFAQUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveNoteIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -332,6 +328,9 @@ func (_u *TrustCenterFAQUpdate) check() error {
 		if err := trustcenterfaq.ReferenceLinkValidator(v); err != nil {
 			return &ValidationError{Name: "reference_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenterFAQ.reference_link": %w`, err)}
 		}
+	}
+	if _u.mutation.NoteCleared() && len(_u.mutation.NoteIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "TrustCenterFAQ.note"`)
 	}
 	return nil
 }
@@ -384,16 +383,11 @@ func (_u *TrustCenterFAQUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterfaq.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterfaq.FieldTags, field.TypeJSON, value)
+	if value, ok := _u.mutation.TrustCenterFaqKindName(); ok {
+		_spec.SetField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterfaq.FieldTags, value)
-		})
-	}
-	if _u.mutation.TagsCleared() {
-		_spec.ClearField(trustcenterfaq.FieldTags, field.TypeJSON)
+	if _u.mutation.TrustCenterFaqKindNameCleared() {
+		_spec.ClearField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaq.FieldReferenceLink, field.TypeString, value)
@@ -409,6 +403,37 @@ func (_u *TrustCenterFAQUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.DisplayOrderCleared() {
 		_spec.ClearField(trustcenterfaq.FieldDisplayOrder, field.TypeInt)
+	}
+	if _u.mutation.TrustCenterFaqKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.TrustCenterFaqKindTable,
+			Columns: []string{trustcenterfaq.TrustCenterFaqKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.TrustCenterFaqKindTable,
+			Columns: []string{trustcenterfaq.TrustCenterFaqKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -501,54 +526,6 @@ func (_u *TrustCenterFAQUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.NotesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Note
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Note
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -650,21 +627,43 @@ func (_u *TrustCenterFAQUpdateOne) ClearDeletedBy() *TrustCenterFAQUpdateOne {
 	return _u
 }
 
-// SetTags sets the "tags" field.
-func (_u *TrustCenterFAQUpdateOne) SetTags(v []string) *TrustCenterFAQUpdateOne {
-	_u.mutation.SetTags(v)
+// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQUpdateOne) SetTrustCenterFaqKindName(v string) *TrustCenterFAQUpdateOne {
+	_u.mutation.SetTrustCenterFaqKindName(v)
 	return _u
 }
 
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterFAQUpdateOne) AppendTags(v []string) *TrustCenterFAQUpdateOne {
-	_u.mutation.AppendTags(v)
+// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdateOne) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterFaqKindName(*v)
+	}
 	return _u
 }
 
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterFAQUpdateOne) ClearTags() *TrustCenterFAQUpdateOne {
-	_u.mutation.ClearTags()
+// ClearTrustCenterFaqKindName clears the value of the "trust_center_faq_kind_name" field.
+func (_u *TrustCenterFAQUpdateOne) ClearTrustCenterFaqKindName() *TrustCenterFAQUpdateOne {
+	_u.mutation.ClearTrustCenterFaqKindName()
+	return _u
+}
+
+// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQUpdateOne) SetTrustCenterFaqKindID(v string) *TrustCenterFAQUpdateOne {
+	_u.mutation.SetTrustCenterFaqKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdateOne) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterFaqKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterFaqKindID clears the value of the "trust_center_faq_kind_id" field.
+func (_u *TrustCenterFAQUpdateOne) ClearTrustCenterFaqKindID() *TrustCenterFAQUpdateOne {
+	_u.mutation.ClearTrustCenterFaqKindID()
 	return _u
 }
 
@@ -715,6 +714,11 @@ func (_u *TrustCenterFAQUpdateOne) ClearDisplayOrder() *TrustCenterFAQUpdateOne 
 	return _u
 }
 
+// SetTrustCenterFaqKind sets the "trust_center_faq_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdateOne) SetTrustCenterFaqKind(v *CustomTypeEnum) *TrustCenterFAQUpdateOne {
+	return _u.SetTrustCenterFaqKindID(v.ID)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterFAQUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterFAQUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -745,24 +749,15 @@ func (_u *TrustCenterFAQUpdateOne) AddEditors(v ...*Group) *TrustCenterFAQUpdate
 	return _u.AddEditorIDs(ids...)
 }
 
-// AddNoteIDs adds the "notes" edge to the Note entity by IDs.
-func (_u *TrustCenterFAQUpdateOne) AddNoteIDs(ids ...string) *TrustCenterFAQUpdateOne {
-	_u.mutation.AddNoteIDs(ids...)
-	return _u
-}
-
-// AddNotes adds the "notes" edges to the Note entity.
-func (_u *TrustCenterFAQUpdateOne) AddNotes(v ...*Note) *TrustCenterFAQUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddNoteIDs(ids...)
-}
-
 // Mutation returns the TrustCenterFAQMutation object of the builder.
 func (_u *TrustCenterFAQUpdateOne) Mutation() *TrustCenterFAQMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenterFaqKind clears the "trust_center_faq_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdateOne) ClearTrustCenterFaqKind() *TrustCenterFAQUpdateOne {
+	_u.mutation.ClearTrustCenterFaqKind()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -805,27 +800,6 @@ func (_u *TrustCenterFAQUpdateOne) RemoveEditors(v ...*Group) *TrustCenterFAQUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
-}
-
-// ClearNotes clears all "notes" edges to the Note entity.
-func (_u *TrustCenterFAQUpdateOne) ClearNotes() *TrustCenterFAQUpdateOne {
-	_u.mutation.ClearNotes()
-	return _u
-}
-
-// RemoveNoteIDs removes the "notes" edge to Note entities by IDs.
-func (_u *TrustCenterFAQUpdateOne) RemoveNoteIDs(ids ...string) *TrustCenterFAQUpdateOne {
-	_u.mutation.RemoveNoteIDs(ids...)
-	return _u
-}
-
-// RemoveNotes removes "notes" edges to Note entities.
-func (_u *TrustCenterFAQUpdateOne) RemoveNotes(v ...*Note) *TrustCenterFAQUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveNoteIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustCenterFAQUpdate builder.
@@ -889,6 +863,9 @@ func (_u *TrustCenterFAQUpdateOne) check() error {
 		if err := trustcenterfaq.ReferenceLinkValidator(v); err != nil {
 			return &ValidationError{Name: "reference_link", err: fmt.Errorf(`generated: validator failed for field "TrustCenterFAQ.reference_link": %w`, err)}
 		}
+	}
+	if _u.mutation.NoteCleared() && len(_u.mutation.NoteIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "TrustCenterFAQ.note"`)
 	}
 	return nil
 }
@@ -958,16 +935,11 @@ func (_u *TrustCenterFAQUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterfaq.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterfaq.FieldTags, field.TypeJSON, value)
+	if value, ok := _u.mutation.TrustCenterFaqKindName(); ok {
+		_spec.SetField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterfaq.FieldTags, value)
-		})
-	}
-	if _u.mutation.TagsCleared() {
-		_spec.ClearField(trustcenterfaq.FieldTags, field.TypeJSON)
+	if _u.mutation.TrustCenterFaqKindNameCleared() {
+		_spec.ClearField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaq.FieldReferenceLink, field.TypeString, value)
@@ -983,6 +955,37 @@ func (_u *TrustCenterFAQUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	}
 	if _u.mutation.DisplayOrderCleared() {
 		_spec.ClearField(trustcenterfaq.FieldDisplayOrder, field.TypeInt)
+	}
+	if _u.mutation.TrustCenterFaqKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.TrustCenterFaqKindTable,
+			Columns: []string{trustcenterfaq.TrustCenterFaqKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.TrustCenterFaqKindTable,
+			Columns: []string{trustcenterfaq.TrustCenterFaqKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1075,54 +1078,6 @@ func (_u *TrustCenterFAQUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.NotesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Note
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Note
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.NotesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   trustcenterfaq.NotesTable,
-			Columns: []string{trustcenterfaq.NotesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

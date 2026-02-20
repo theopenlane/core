@@ -17613,19 +17613,19 @@ func (c *NoteClient) QueryDiscussion(_m *Note) *DiscussionQuery {
 	return query
 }
 
-// QueryTrustCenterFaq queries the trust_center_faq edge of a Note.
-func (c *NoteClient) QueryTrustCenterFaq(_m *Note) *TrustCenterFAQQuery {
+// QueryTrustCenterFaqs queries the trust_center_faqs edge of a Note.
+func (c *NoteClient) QueryTrustCenterFaqs(_m *Note) *TrustCenterFAQQuery {
 	query := (&TrustCenterFAQClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(note.Table, note.FieldID, id),
 			sqlgraph.To(trustcenterfaq.Table, trustcenterfaq.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, note.TrustCenterFaqTable, note.TrustCenterFaqColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, note.TrustCenterFaqsTable, note.TrustCenterFaqsColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterFAQ
-		step.Edge.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -30510,6 +30510,25 @@ func (c *TrustCenterFAQClient) GetX(ctx context.Context, id string) *TrustCenter
 	return obj
 }
 
+// QueryTrustCenterFaqKind queries the trust_center_faq_kind edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryTrustCenterFaqKind(_m *TrustCenterFAQ) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterfaq.TrustCenterFaqKindTable, trustcenterfaq.TrustCenterFaqKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBlockedGroups queries the blocked_groups edge of a TrustCenterFAQ.
 func (c *TrustCenterFAQClient) QueryBlockedGroups(_m *TrustCenterFAQ) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -30567,19 +30586,19 @@ func (c *TrustCenterFAQClient) QueryTrustCenter(_m *TrustCenterFAQ) *TrustCenter
 	return query
 }
 
-// QueryNotes queries the notes edge of a TrustCenterFAQ.
-func (c *TrustCenterFAQClient) QueryNotes(_m *TrustCenterFAQ) *NoteQuery {
+// QueryNote queries the note edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryNote(_m *TrustCenterFAQ) *NoteQuery {
 	query := (&NoteClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
 			sqlgraph.To(note.Table, note.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterfaq.NotesTable, trustcenterfaq.NotesColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterfaq.NoteTable, trustcenterfaq.NoteColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

@@ -5,7 +5,6 @@
 package historygenerated
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -39,15 +38,19 @@ type TrustCenterFAQHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
+	// the kind of the trust_center_faq
+	TrustCenterFaqKindName string `json:"trust_center_faq_kind_name,omitempty"`
+	// the kind of the trust_center_faq
+	TrustCenterFaqKindID string `json:"trust_center_faq_kind_id,omitempty"`
+	// ID of the note containing the FAQ question and answer
+	NoteID string `json:"note_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// optional reference link for the FAQ
 	ReferenceLink string `json:"reference_link,omitempty"`
 	// display order of the FAQ
 	DisplayOrder int `json:"display_order,omitempty"`
-	// ID of the trust center
-	TrustCenterID string `json:"trust_center_id,omitempty"`
-	selectValues  sql.SelectValues
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -55,13 +58,11 @@ func (*TrustCenterFAQHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcenterfaqhistory.FieldTags:
-			values[i] = new([]byte)
 		case trustcenterfaqhistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case trustcenterfaqhistory.FieldDisplayOrder:
 			values[i] = new(sql.NullInt64)
-		case trustcenterfaqhistory.FieldID, trustcenterfaqhistory.FieldRef, trustcenterfaqhistory.FieldCreatedBy, trustcenterfaqhistory.FieldUpdatedBy, trustcenterfaqhistory.FieldDeletedBy, trustcenterfaqhistory.FieldReferenceLink, trustcenterfaqhistory.FieldTrustCenterID:
+		case trustcenterfaqhistory.FieldID, trustcenterfaqhistory.FieldRef, trustcenterfaqhistory.FieldCreatedBy, trustcenterfaqhistory.FieldUpdatedBy, trustcenterfaqhistory.FieldDeletedBy, trustcenterfaqhistory.FieldTrustCenterFaqKindName, trustcenterfaqhistory.FieldTrustCenterFaqKindID, trustcenterfaqhistory.FieldNoteID, trustcenterfaqhistory.FieldTrustCenterID, trustcenterfaqhistory.FieldReferenceLink:
 			values[i] = new(sql.NullString)
 		case trustcenterfaqhistory.FieldHistoryTime, trustcenterfaqhistory.FieldCreatedAt, trustcenterfaqhistory.FieldUpdatedAt, trustcenterfaqhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -140,13 +141,29 @@ func (_m *TrustCenterFAQHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
-		case trustcenterfaqhistory.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
+		case trustcenterfaqhistory.FieldTrustCenterFaqKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_faq_kind_name", values[i])
+			} else if value.Valid {
+				_m.TrustCenterFaqKindName = value.String
+			}
+		case trustcenterfaqhistory.FieldTrustCenterFaqKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_faq_kind_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterFaqKindID = value.String
+			}
+		case trustcenterfaqhistory.FieldNoteID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note_id", values[i])
+			} else if value.Valid {
+				_m.NoteID = value.String
+			}
+		case trustcenterfaqhistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
 			}
 		case trustcenterfaqhistory.FieldReferenceLink:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -159,12 +176,6 @@ func (_m *TrustCenterFAQHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field display_order", values[i])
 			} else if value.Valid {
 				_m.DisplayOrder = int(value.Int64)
-			}
-		case trustcenterfaqhistory.FieldTrustCenterID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
-			} else if value.Valid {
-				_m.TrustCenterID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -229,17 +240,23 @@ func (_m *TrustCenterFAQHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString("trust_center_faq_kind_name=")
+	builder.WriteString(_m.TrustCenterFaqKindName)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_faq_kind_id=")
+	builder.WriteString(_m.TrustCenterFaqKindID)
+	builder.WriteString(", ")
+	builder.WriteString("note_id=")
+	builder.WriteString(_m.NoteID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("reference_link=")
 	builder.WriteString(_m.ReferenceLink)
 	builder.WriteString(", ")
 	builder.WriteString("display_order=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DisplayOrder))
-	builder.WriteString(", ")
-	builder.WriteString("trust_center_id=")
-	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

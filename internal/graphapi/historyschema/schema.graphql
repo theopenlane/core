@@ -33293,9 +33293,21 @@ type TrustCenterFAQHistory implements Node {
 	createdBy: String
 	updatedBy: String
 	"""
-	tags associated with the object
+	the kind of the trust_center_faq
 	"""
-	tags: [String!]
+	trustCenterFaqKindName: String
+	"""
+	the kind of the trust_center_faq
+	"""
+	trustCenterFaqKindID: String
+	"""
+	ID of the note containing the FAQ question and answer
+	"""
+	noteID: String!
+	"""
+	ID of the trust center
+	"""
+	trustCenterID: String
 	"""
 	optional reference link for the FAQ
 	"""
@@ -33304,10 +33316,6 @@ type TrustCenterFAQHistory implements Node {
 	display order of the FAQ
 	"""
 	displayOrder: Int
-	"""
-	ID of the trust center
-	"""
-	trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -33488,6 +33496,76 @@ input TrustCenterFAQHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	trust_center_faq_kind_name field predicates
+	"""
+	trustCenterFaqKindName: String
+	trustCenterFaqKindNameNEQ: String
+	trustCenterFaqKindNameIn: [String!]
+	trustCenterFaqKindNameNotIn: [String!]
+	trustCenterFaqKindNameGT: String
+	trustCenterFaqKindNameGTE: String
+	trustCenterFaqKindNameLT: String
+	trustCenterFaqKindNameLTE: String
+	trustCenterFaqKindNameContains: String
+	trustCenterFaqKindNameHasPrefix: String
+	trustCenterFaqKindNameHasSuffix: String
+	trustCenterFaqKindNameIsNil: Boolean
+	trustCenterFaqKindNameNotNil: Boolean
+	trustCenterFaqKindNameEqualFold: String
+	trustCenterFaqKindNameContainsFold: String
+	"""
+	trust_center_faq_kind_id field predicates
+	"""
+	trustCenterFaqKindID: String
+	trustCenterFaqKindIDNEQ: String
+	trustCenterFaqKindIDIn: [String!]
+	trustCenterFaqKindIDNotIn: [String!]
+	trustCenterFaqKindIDGT: String
+	trustCenterFaqKindIDGTE: String
+	trustCenterFaqKindIDLT: String
+	trustCenterFaqKindIDLTE: String
+	trustCenterFaqKindIDContains: String
+	trustCenterFaqKindIDHasPrefix: String
+	trustCenterFaqKindIDHasSuffix: String
+	trustCenterFaqKindIDIsNil: Boolean
+	trustCenterFaqKindIDNotNil: Boolean
+	trustCenterFaqKindIDEqualFold: String
+	trustCenterFaqKindIDContainsFold: String
+	"""
+	note_id field predicates
+	"""
+	noteID: String
+	noteIDNEQ: String
+	noteIDIn: [String!]
+	noteIDNotIn: [String!]
+	noteIDGT: String
+	noteIDGTE: String
+	noteIDLT: String
+	noteIDLTE: String
+	noteIDContains: String
+	noteIDHasPrefix: String
+	noteIDHasSuffix: String
+	noteIDEqualFold: String
+	noteIDContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
+	"""
 	reference_link field predicates
 	"""
 	referenceLink: String
@@ -33518,24 +33596,6 @@ input TrustCenterFAQHistoryWhereInput {
 	displayOrderLTE: Int
 	displayOrderIsNil: Boolean
 	displayOrderNotNil: Boolean
-	"""
-	trust_center_id field predicates
-	"""
-	trustCenterID: String
-	trustCenterIDNEQ: String
-	trustCenterIDIn: [String!]
-	trustCenterIDNotIn: [String!]
-	trustCenterIDGT: String
-	trustCenterIDGTE: String
-	trustCenterIDLT: String
-	trustCenterIDLTE: String
-	trustCenterIDContains: String
-	trustCenterIDHasPrefix: String
-	trustCenterIDHasSuffix: String
-	trustCenterIDIsNil: Boolean
-	trustCenterIDNotNil: Boolean
-	trustCenterIDEqualFold: String
-	trustCenterIDContainsFold: String
 }
 type TrustCenterHistory implements Node {
 	id: ID!

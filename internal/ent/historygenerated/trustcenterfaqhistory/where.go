@@ -107,6 +107,26 @@ func DeletedBy(v string) predicate.TrustCenterFAQHistory {
 	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// TrustCenterFaqKindName applies equality check predicate on the "trust_center_faq_kind_name" field. It's identical to TrustCenterFaqKindNameEQ.
+func TrustCenterFaqKindName(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindID applies equality check predicate on the "trust_center_faq_kind_id" field. It's identical to TrustCenterFaqKindIDEQ.
+func TrustCenterFaqKindID(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterFaqKindID, v))
+}
+
+// NoteID applies equality check predicate on the "note_id" field. It's identical to NoteIDEQ.
+func NoteID(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldNoteID, v))
+}
+
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
 // ReferenceLink applies equality check predicate on the "reference_link" field. It's identical to ReferenceLinkEQ.
 func ReferenceLink(v string) predicate.TrustCenterFAQHistory {
 	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldReferenceLink, v))
@@ -115,11 +135,6 @@ func ReferenceLink(v string) predicate.TrustCenterFAQHistory {
 // DisplayOrder applies equality check predicate on the "display_order" field. It's identical to DisplayOrderEQ.
 func DisplayOrder(v int) predicate.TrustCenterFAQHistory {
 	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldDisplayOrder, v))
-}
-
-// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
-func TrustCenterID(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -632,14 +647,294 @@ func DeletedByContainsFold(v string) predicate.TrustCenterFAQHistory {
 	return predicate.TrustCenterFAQHistory(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldIsNull(FieldTags))
+// TrustCenterFaqKindNameEQ applies the EQ predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterFaqKindName, v))
 }
 
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldNotNull(FieldTags))
+// TrustCenterFaqKindNameNEQ applies the NEQ predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameNEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNEQ(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameIn applies the In predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIn(FieldTrustCenterFaqKindName, vs...))
+}
+
+// TrustCenterFaqKindNameNotIn applies the NotIn predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameNotIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotIn(FieldTrustCenterFaqKindName, vs...))
+}
+
+// TrustCenterFaqKindNameGT applies the GT predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameGT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGT(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameGTE applies the GTE predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameGTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGTE(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameLT applies the LT predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameLT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLT(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameLTE applies the LTE predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameLTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLTE(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameContains applies the Contains predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameContains(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContains(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameHasPrefix applies the HasPrefix predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameHasPrefix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasPrefix(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameHasSuffix applies the HasSuffix predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameHasSuffix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasSuffix(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameIsNil applies the IsNil predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameIsNil() predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIsNull(FieldTrustCenterFaqKindName))
+}
+
+// TrustCenterFaqKindNameNotNil applies the NotNil predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameNotNil() predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotNull(FieldTrustCenterFaqKindName))
+}
+
+// TrustCenterFaqKindNameEqualFold applies the EqualFold predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameEqualFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEqualFold(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindNameContainsFold applies the ContainsFold predicate on the "trust_center_faq_kind_name" field.
+func TrustCenterFaqKindNameContainsFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContainsFold(FieldTrustCenterFaqKindName, v))
+}
+
+// TrustCenterFaqKindIDEQ applies the EQ predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDNEQ applies the NEQ predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDNEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNEQ(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDIn applies the In predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIn(FieldTrustCenterFaqKindID, vs...))
+}
+
+// TrustCenterFaqKindIDNotIn applies the NotIn predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDNotIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotIn(FieldTrustCenterFaqKindID, vs...))
+}
+
+// TrustCenterFaqKindIDGT applies the GT predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDGT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGT(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDGTE applies the GTE predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDGTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGTE(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDLT applies the LT predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDLT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLT(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDLTE applies the LTE predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDLTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLTE(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDContains applies the Contains predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDContains(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContains(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDHasPrefix applies the HasPrefix predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDHasPrefix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasPrefix(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDHasSuffix applies the HasSuffix predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDHasSuffix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasSuffix(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDIsNil applies the IsNil predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDIsNil() predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIsNull(FieldTrustCenterFaqKindID))
+}
+
+// TrustCenterFaqKindIDNotNil applies the NotNil predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDNotNil() predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotNull(FieldTrustCenterFaqKindID))
+}
+
+// TrustCenterFaqKindIDEqualFold applies the EqualFold predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDEqualFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEqualFold(FieldTrustCenterFaqKindID, v))
+}
+
+// TrustCenterFaqKindIDContainsFold applies the ContainsFold predicate on the "trust_center_faq_kind_id" field.
+func TrustCenterFaqKindIDContainsFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContainsFold(FieldTrustCenterFaqKindID, v))
+}
+
+// NoteIDEQ applies the EQ predicate on the "note_id" field.
+func NoteIDEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldNoteID, v))
+}
+
+// NoteIDNEQ applies the NEQ predicate on the "note_id" field.
+func NoteIDNEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNEQ(FieldNoteID, v))
+}
+
+// NoteIDIn applies the In predicate on the "note_id" field.
+func NoteIDIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIn(FieldNoteID, vs...))
+}
+
+// NoteIDNotIn applies the NotIn predicate on the "note_id" field.
+func NoteIDNotIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotIn(FieldNoteID, vs...))
+}
+
+// NoteIDGT applies the GT predicate on the "note_id" field.
+func NoteIDGT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGT(FieldNoteID, v))
+}
+
+// NoteIDGTE applies the GTE predicate on the "note_id" field.
+func NoteIDGTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGTE(FieldNoteID, v))
+}
+
+// NoteIDLT applies the LT predicate on the "note_id" field.
+func NoteIDLT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLT(FieldNoteID, v))
+}
+
+// NoteIDLTE applies the LTE predicate on the "note_id" field.
+func NoteIDLTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLTE(FieldNoteID, v))
+}
+
+// NoteIDContains applies the Contains predicate on the "note_id" field.
+func NoteIDContains(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContains(FieldNoteID, v))
+}
+
+// NoteIDHasPrefix applies the HasPrefix predicate on the "note_id" field.
+func NoteIDHasPrefix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasPrefix(FieldNoteID, v))
+}
+
+// NoteIDHasSuffix applies the HasSuffix predicate on the "note_id" field.
+func NoteIDHasSuffix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasSuffix(FieldNoteID, v))
+}
+
+// NoteIDEqualFold applies the EqualFold predicate on the "note_id" field.
+func NoteIDEqualFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEqualFold(FieldNoteID, v))
+}
+
+// NoteIDContainsFold applies the ContainsFold predicate on the "note_id" field.
+func NoteIDContainsFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContainsFold(FieldNoteID, v))
+}
+
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.TrustCenterFAQHistory {
+	return predicate.TrustCenterFAQHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
 // ReferenceLinkEQ applies the EQ predicate on the "reference_link" field.
@@ -765,81 +1060,6 @@ func DisplayOrderIsNil() predicate.TrustCenterFAQHistory {
 // DisplayOrderNotNil applies the NotNil predicate on the "display_order" field.
 func DisplayOrderNotNil() predicate.TrustCenterFAQHistory {
 	return predicate.TrustCenterFAQHistory(sql.FieldNotNull(FieldDisplayOrder))
-}
-
-// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
-func TrustCenterIDEQ(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldEQ(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
-func TrustCenterIDNEQ(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldNEQ(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
-func TrustCenterIDIn(vs ...string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldIn(FieldTrustCenterID, vs...))
-}
-
-// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
-func TrustCenterIDNotIn(vs ...string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldNotIn(FieldTrustCenterID, vs...))
-}
-
-// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
-func TrustCenterIDGT(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldGT(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
-func TrustCenterIDGTE(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldGTE(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
-func TrustCenterIDLT(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldLT(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
-func TrustCenterIDLTE(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldLTE(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
-func TrustCenterIDContains(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldContains(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
-func TrustCenterIDHasPrefix(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldHasPrefix(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
-func TrustCenterIDHasSuffix(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldHasSuffix(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
-func TrustCenterIDIsNil() predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldIsNull(FieldTrustCenterID))
-}
-
-// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
-func TrustCenterIDNotNil() predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldNotNull(FieldTrustCenterID))
-}
-
-// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
-func TrustCenterIDEqualFold(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldEqualFold(FieldTrustCenterID, v))
-}
-
-// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
-func TrustCenterIDContainsFold(v string) predicate.TrustCenterFAQHistory {
-	return predicate.TrustCenterFAQHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
 // And groups predicates with the AND operator between them.

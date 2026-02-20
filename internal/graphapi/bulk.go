@@ -7079,17 +7079,20 @@ func (r *mutationResolver) bulkDeleteTrustCenterFAQ(ctx context.Context, ids []s
 	funcs := make([]func(), 0, len(ids))
 	for _, id := range ids {
 		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
 			// delete each trustcenterfaq individually to ensure proper cleanup
-			if err := r.db.TrustCenterFAQ.DeleteOneID(id).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to delete trustcenterfaq in bulk operation")
+			if err := r.db.TrustCenterFAQ.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to delete trustcenterfaq in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 				return
 			}
 
-			if err := generated.TrustCenterFAQEdgeCleanup(ctx, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to cleanup trustcenterfaq edges in bulk operation")
+			if err := generated.TrustCenterFAQEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to cleanup trustcenterfaq edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()

@@ -57,6 +57,9 @@ var ExportableSchemas = map[string]info{"ASSET": info{
 }, "TASK": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: false,
+}, "TRUST_CENTER_FAQ": info{
+	hasOwnerField:       false,
+	hasSystemOwnedField: false,
 }, "TRUST_CENTER_SUBPROCESSOR": info{
 	hasOwnerField:       false,
 	hasSystemOwnedField: false,

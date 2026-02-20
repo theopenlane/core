@@ -7753,12 +7753,25 @@ func (_m *Note) Discussion(ctx context.Context) (*Discussion, error) {
 	return result, MaskNotFound(err)
 }
 
-func (_m *Note) TrustCenterFaq(ctx context.Context) (*TrustCenterFAQ, error) {
-	result, err := _m.Edges.TrustCenterFaqOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryTrustCenterFaq().Only(ctx)
+func (_m *Note) TrustCenterFaqs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterFAQOrder, where *TrustCenterFAQWhereInput,
+) (*TrustCenterFAQConnection, error) {
+	opts := []TrustCenterFAQPaginateOption{
+		WithTrustCenterFAQOrder(orderBy),
+		WithTrustCenterFAQFilter(where.Filter),
 	}
-	return result, MaskNotFound(err)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
+	if nodes, err := _m.NamedTrustCenterFaqs(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterFAQPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterFAQConnection{Edges: []*TrustCenterFAQEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenterFaqs().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Note) Files(
@@ -14482,6 +14495,14 @@ func (_m *TrustCenterEntity) EntityType(ctx context.Context) (*EntityType, error
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterFAQ) TrustCenterFaqKind(ctx context.Context) (*CustomTypeEnum, error) {
+	result, err := _m.Edges.TrustCenterFaqKindOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTrustCenterFaqKind().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterFAQ) BlockedGroups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {
@@ -14490,7 +14511,7 @@ func (_m *TrustCenterFAQ) BlockedGroups(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[0][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
 	if nodes, err := _m.NamedBlockedGroups(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -14511,7 +14532,7 @@ func (_m *TrustCenterFAQ) Editors(
 		WithGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
 	if nodes, err := _m.NamedEditors(alias); err == nil || hasTotalCount {
 		pager, err := newGroupPager(opts, last != nil)
 		if err != nil {
@@ -14532,25 +14553,12 @@ func (_m *TrustCenterFAQ) TrustCenter(ctx context.Context) (*TrustCenter, error)
 	return result, MaskNotFound(err)
 }
 
-func (_m *TrustCenterFAQ) Notes(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*NoteOrder, where *NoteWhereInput,
-) (*NoteConnection, error) {
-	opts := []NotePaginateOption{
-		WithNoteOrder(orderBy),
-		WithNoteFilter(where.Filter),
+func (_m *TrustCenterFAQ) Note(ctx context.Context) (*Note, error) {
+	result, err := _m.Edges.NoteOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryNote().Only(ctx)
 	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
-	if nodes, err := _m.NamedNotes(alias); err == nil || hasTotalCount {
-		pager, err := newNotePager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &NoteConnection{Edges: []*NoteEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return _m.QueryNotes().Paginate(ctx, after, first, before, last, opts...)
+	return result, err
 }
 
 func (_m *TrustCenterNDARequest) BlockedGroups(

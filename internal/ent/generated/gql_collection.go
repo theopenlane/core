@@ -39049,16 +39049,94 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				fieldSeen[note.FieldDiscussionID] = struct{}{}
 			}
 
-		case "trustCenterFaq":
+		case "trustCenterFaqs":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&TrustCenterFAQClient{config: _q.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterfaqImplementors)...); err != nil {
+			args := newTrustCenterFAQPaginateArgs(fieldArgs(ctx, new(TrustCenterFAQWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterFAQPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
 			}
-			_q.withTrustCenterFaq = query
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Note) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"note_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(note.TrustCenterFaqsColumn), ids...))
+						})
+						if err := query.GroupBy(note.TrustCenterFaqsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[10][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Note) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterFaqs)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[10][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcenterfaqImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(note.TrustCenterFaqsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustCenterFaqs(alias, func(wq *TrustCenterFAQQuery) {
+				*wq = *query
+			})
 
 		case "files":
 			var (
@@ -71617,6 +71695,21 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "trustCenterFaqKind":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenterFaqKind = query
+			if _, ok := fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldTrustCenterFaqKindID)
+				fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindID] = struct{}{}
+			}
+
 		case "blockedGroups":
 			var (
 				alias = field.Alias
@@ -71660,10 +71753,10 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -71671,10 +71764,10 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterFAQ) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -71749,10 +71842,10 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -71760,10 +71853,10 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterFAQ) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -71810,94 +71903,20 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 				fieldSeen[trustcenterfaq.FieldTrustCenterID] = struct{}{}
 			}
 
-		case "notes":
+		case "note":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&NoteClient{config: _q.config}).Query()
 			)
-			args := newNotePaginateArgs(fieldArgs(ctx, new(NoteWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newNotePager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, noteImplementors)...); err != nil {
 				return err
 			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterFAQ) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"trust_center_faq_notes"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(trustcenterfaq.NotesColumn), ids...))
-						})
-						if err := query.GroupBy(trustcenterfaq.NotesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[3] == nil {
-								nodes[i].Edges.totalCount[3] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[3][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterFAQ) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Notes)
-							if nodes[i].Edges.totalCount[3] == nil {
-								nodes[i].Edges.totalCount[3] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[3][alias] = n
-						}
-						return nil
-					})
-				}
+			_q.withNote = query
+			if _, ok := fieldSeen[trustcenterfaq.FieldNoteID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldNoteID)
+				fieldSeen[trustcenterfaq.FieldNoteID] = struct{}{}
 			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, noteImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(trustcenterfaq.NotesColumn, limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedNotes(alias, func(wq *NoteQuery) {
-				*wq = *query
-			})
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterfaq.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterfaq.FieldCreatedAt)
@@ -71918,10 +71937,25 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, trustcenterfaq.FieldUpdatedBy)
 				fieldSeen[trustcenterfaq.FieldUpdatedBy] = struct{}{}
 			}
-		case "tags":
-			if _, ok := fieldSeen[trustcenterfaq.FieldTags]; !ok {
-				selectedFields = append(selectedFields, trustcenterfaq.FieldTags)
-				fieldSeen[trustcenterfaq.FieldTags] = struct{}{}
+		case "trustCenterFaqKindName":
+			if _, ok := fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindName]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldTrustCenterFaqKindName)
+				fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindName] = struct{}{}
+			}
+		case "trustCenterFaqKindID":
+			if _, ok := fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldTrustCenterFaqKindID)
+				fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindID] = struct{}{}
+			}
+		case "noteID":
+			if _, ok := fieldSeen[trustcenterfaq.FieldNoteID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldNoteID)
+				fieldSeen[trustcenterfaq.FieldNoteID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcenterfaq.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldTrustCenterID)
+				fieldSeen[trustcenterfaq.FieldTrustCenterID] = struct{}{}
 			}
 		case "referenceLink":
 			if _, ok := fieldSeen[trustcenterfaq.FieldReferenceLink]; !ok {
@@ -71932,11 +71966,6 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterfaq.FieldDisplayOrder]; !ok {
 				selectedFields = append(selectedFields, trustcenterfaq.FieldDisplayOrder)
 				fieldSeen[trustcenterfaq.FieldDisplayOrder] = struct{}{}
-			}
-		case "trustCenterID":
-			if _, ok := fieldSeen[trustcenterfaq.FieldTrustCenterID]; !ok {
-				selectedFields = append(selectedFields, trustcenterfaq.FieldTrustCenterID)
-				fieldSeen[trustcenterfaq.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

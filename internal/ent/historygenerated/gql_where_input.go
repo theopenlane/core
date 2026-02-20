@@ -75764,6 +75764,72 @@ type TrustCenterFAQHistoryWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "trust_center_faq_kind_name" field predicates.
+	TrustCenterFaqKindName             *string  `json:"trustCenterFaqKindName,omitempty"`
+	TrustCenterFaqKindNameNEQ          *string  `json:"trustCenterFaqKindNameNEQ,omitempty"`
+	TrustCenterFaqKindNameIn           []string `json:"trustCenterFaqKindNameIn,omitempty"`
+	TrustCenterFaqKindNameNotIn        []string `json:"trustCenterFaqKindNameNotIn,omitempty"`
+	TrustCenterFaqKindNameGT           *string  `json:"trustCenterFaqKindNameGT,omitempty"`
+	TrustCenterFaqKindNameGTE          *string  `json:"trustCenterFaqKindNameGTE,omitempty"`
+	TrustCenterFaqKindNameLT           *string  `json:"trustCenterFaqKindNameLT,omitempty"`
+	TrustCenterFaqKindNameLTE          *string  `json:"trustCenterFaqKindNameLTE,omitempty"`
+	TrustCenterFaqKindNameContains     *string  `json:"trustCenterFaqKindNameContains,omitempty"`
+	TrustCenterFaqKindNameHasPrefix    *string  `json:"trustCenterFaqKindNameHasPrefix,omitempty"`
+	TrustCenterFaqKindNameHasSuffix    *string  `json:"trustCenterFaqKindNameHasSuffix,omitempty"`
+	TrustCenterFaqKindNameIsNil        bool     `json:"trustCenterFaqKindNameIsNil,omitempty"`
+	TrustCenterFaqKindNameNotNil       bool     `json:"trustCenterFaqKindNameNotNil,omitempty"`
+	TrustCenterFaqKindNameEqualFold    *string  `json:"trustCenterFaqKindNameEqualFold,omitempty"`
+	TrustCenterFaqKindNameContainsFold *string  `json:"trustCenterFaqKindNameContainsFold,omitempty"`
+
+	// "trust_center_faq_kind_id" field predicates.
+	TrustCenterFaqKindID             *string  `json:"trustCenterFaqKindID,omitempty"`
+	TrustCenterFaqKindIDNEQ          *string  `json:"trustCenterFaqKindIDNEQ,omitempty"`
+	TrustCenterFaqKindIDIn           []string `json:"trustCenterFaqKindIDIn,omitempty"`
+	TrustCenterFaqKindIDNotIn        []string `json:"trustCenterFaqKindIDNotIn,omitempty"`
+	TrustCenterFaqKindIDGT           *string  `json:"trustCenterFaqKindIDGT,omitempty"`
+	TrustCenterFaqKindIDGTE          *string  `json:"trustCenterFaqKindIDGTE,omitempty"`
+	TrustCenterFaqKindIDLT           *string  `json:"trustCenterFaqKindIDLT,omitempty"`
+	TrustCenterFaqKindIDLTE          *string  `json:"trustCenterFaqKindIDLTE,omitempty"`
+	TrustCenterFaqKindIDContains     *string  `json:"trustCenterFaqKindIDContains,omitempty"`
+	TrustCenterFaqKindIDHasPrefix    *string  `json:"trustCenterFaqKindIDHasPrefix,omitempty"`
+	TrustCenterFaqKindIDHasSuffix    *string  `json:"trustCenterFaqKindIDHasSuffix,omitempty"`
+	TrustCenterFaqKindIDIsNil        bool     `json:"trustCenterFaqKindIDIsNil,omitempty"`
+	TrustCenterFaqKindIDNotNil       bool     `json:"trustCenterFaqKindIDNotNil,omitempty"`
+	TrustCenterFaqKindIDEqualFold    *string  `json:"trustCenterFaqKindIDEqualFold,omitempty"`
+	TrustCenterFaqKindIDContainsFold *string  `json:"trustCenterFaqKindIDContainsFold,omitempty"`
+
+	// "note_id" field predicates.
+	NoteID             *string  `json:"noteID,omitempty"`
+	NoteIDNEQ          *string  `json:"noteIDNEQ,omitempty"`
+	NoteIDIn           []string `json:"noteIDIn,omitempty"`
+	NoteIDNotIn        []string `json:"noteIDNotIn,omitempty"`
+	NoteIDGT           *string  `json:"noteIDGT,omitempty"`
+	NoteIDGTE          *string  `json:"noteIDGTE,omitempty"`
+	NoteIDLT           *string  `json:"noteIDLT,omitempty"`
+	NoteIDLTE          *string  `json:"noteIDLTE,omitempty"`
+	NoteIDContains     *string  `json:"noteIDContains,omitempty"`
+	NoteIDHasPrefix    *string  `json:"noteIDHasPrefix,omitempty"`
+	NoteIDHasSuffix    *string  `json:"noteIDHasSuffix,omitempty"`
+	NoteIDEqualFold    *string  `json:"noteIDEqualFold,omitempty"`
+	NoteIDContainsFold *string  `json:"noteIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
 	// "reference_link" field predicates.
 	ReferenceLink             *string  `json:"referenceLink,omitempty"`
 	ReferenceLinkNEQ          *string  `json:"referenceLinkNEQ,omitempty"`
@@ -75792,26 +75858,6 @@ type TrustCenterFAQHistoryWhereInput struct {
 	DisplayOrderLTE    *int  `json:"displayOrderLTE,omitempty"`
 	DisplayOrderIsNil  bool  `json:"displayOrderIsNil,omitempty"`
 	DisplayOrderNotNil bool  `json:"displayOrderNotNil,omitempty"`
-
-	// "trust_center_id" field predicates.
-	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
-	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
-	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
-	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
-	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
-	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
-	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
-	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
-	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
-	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
-	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
-	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
-	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
-	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
-	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
-
-	// "tags" JSON-string-array predicates.
-	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -76146,6 +76192,180 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterfaqhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.TrustCenterFaqKindName != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameEQ(*i.TrustCenterFaqKindName))
+	}
+	if i.TrustCenterFaqKindNameNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameNEQ(*i.TrustCenterFaqKindNameNEQ))
+	}
+	if len(i.TrustCenterFaqKindNameIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameIn(i.TrustCenterFaqKindNameIn...))
+	}
+	if len(i.TrustCenterFaqKindNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameNotIn(i.TrustCenterFaqKindNameNotIn...))
+	}
+	if i.TrustCenterFaqKindNameGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameGT(*i.TrustCenterFaqKindNameGT))
+	}
+	if i.TrustCenterFaqKindNameGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameGTE(*i.TrustCenterFaqKindNameGTE))
+	}
+	if i.TrustCenterFaqKindNameLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameLT(*i.TrustCenterFaqKindNameLT))
+	}
+	if i.TrustCenterFaqKindNameLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameLTE(*i.TrustCenterFaqKindNameLTE))
+	}
+	if i.TrustCenterFaqKindNameContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameContains(*i.TrustCenterFaqKindNameContains))
+	}
+	if i.TrustCenterFaqKindNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameHasPrefix(*i.TrustCenterFaqKindNameHasPrefix))
+	}
+	if i.TrustCenterFaqKindNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameHasSuffix(*i.TrustCenterFaqKindNameHasSuffix))
+	}
+	if i.TrustCenterFaqKindNameIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameIsNil())
+	}
+	if i.TrustCenterFaqKindNameNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameNotNil())
+	}
+	if i.TrustCenterFaqKindNameEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameEqualFold(*i.TrustCenterFaqKindNameEqualFold))
+	}
+	if i.TrustCenterFaqKindNameContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameContainsFold(*i.TrustCenterFaqKindNameContainsFold))
+	}
+	if i.TrustCenterFaqKindID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDEQ(*i.TrustCenterFaqKindID))
+	}
+	if i.TrustCenterFaqKindIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDNEQ(*i.TrustCenterFaqKindIDNEQ))
+	}
+	if len(i.TrustCenterFaqKindIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDIn(i.TrustCenterFaqKindIDIn...))
+	}
+	if len(i.TrustCenterFaqKindIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDNotIn(i.TrustCenterFaqKindIDNotIn...))
+	}
+	if i.TrustCenterFaqKindIDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDGT(*i.TrustCenterFaqKindIDGT))
+	}
+	if i.TrustCenterFaqKindIDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDGTE(*i.TrustCenterFaqKindIDGTE))
+	}
+	if i.TrustCenterFaqKindIDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDLT(*i.TrustCenterFaqKindIDLT))
+	}
+	if i.TrustCenterFaqKindIDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDLTE(*i.TrustCenterFaqKindIDLTE))
+	}
+	if i.TrustCenterFaqKindIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDContains(*i.TrustCenterFaqKindIDContains))
+	}
+	if i.TrustCenterFaqKindIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDHasPrefix(*i.TrustCenterFaqKindIDHasPrefix))
+	}
+	if i.TrustCenterFaqKindIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDHasSuffix(*i.TrustCenterFaqKindIDHasSuffix))
+	}
+	if i.TrustCenterFaqKindIDIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDIsNil())
+	}
+	if i.TrustCenterFaqKindIDNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDNotNil())
+	}
+	if i.TrustCenterFaqKindIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDEqualFold(*i.TrustCenterFaqKindIDEqualFold))
+	}
+	if i.TrustCenterFaqKindIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDContainsFold(*i.TrustCenterFaqKindIDContainsFold))
+	}
+	if i.NoteID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDEQ(*i.NoteID))
+	}
+	if i.NoteIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDNEQ(*i.NoteIDNEQ))
+	}
+	if len(i.NoteIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDIn(i.NoteIDIn...))
+	}
+	if len(i.NoteIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDNotIn(i.NoteIDNotIn...))
+	}
+	if i.NoteIDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDGT(*i.NoteIDGT))
+	}
+	if i.NoteIDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDGTE(*i.NoteIDGTE))
+	}
+	if i.NoteIDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDLT(*i.NoteIDLT))
+	}
+	if i.NoteIDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDLTE(*i.NoteIDLTE))
+	}
+	if i.NoteIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDContains(*i.NoteIDContains))
+	}
+	if i.NoteIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDHasPrefix(*i.NoteIDHasPrefix))
+	}
+	if i.NoteIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDHasSuffix(*i.NoteIDHasSuffix))
+	}
+	if i.NoteIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDEqualFold(*i.NoteIDEqualFold))
+	}
+	if i.NoteIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDContainsFold(*i.NoteIDContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
 	if i.ReferenceLink != nil {
 		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkEQ(*i.ReferenceLink))
 	}
@@ -76220,58 +76440,6 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	}
 	if i.DisplayOrderNotNil {
 		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderNotNil())
-	}
-	if i.TrustCenterID != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDEQ(*i.TrustCenterID))
-	}
-	if i.TrustCenterIDNEQ != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
-	}
-	if len(i.TrustCenterIDIn) > 0 {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDIn(i.TrustCenterIDIn...))
-	}
-	if len(i.TrustCenterIDNotIn) > 0 {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
-	}
-	if i.TrustCenterIDGT != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDGT(*i.TrustCenterIDGT))
-	}
-	if i.TrustCenterIDGTE != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
-	}
-	if i.TrustCenterIDLT != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDLT(*i.TrustCenterIDLT))
-	}
-	if i.TrustCenterIDLTE != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
-	}
-	if i.TrustCenterIDContains != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDContains(*i.TrustCenterIDContains))
-	}
-	if i.TrustCenterIDHasPrefix != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
-	}
-	if i.TrustCenterIDHasSuffix != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
-	}
-	if i.TrustCenterIDIsNil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDIsNil())
-	}
-	if i.TrustCenterIDNotNil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNotNil())
-	}
-	if i.TrustCenterIDEqualFold != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
-	}
-	if i.TrustCenterIDContainsFold != nil {
-		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
-	}
-
-	if i.TagsHas != nil {
-		v := *i.TagsHas
-		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(trustcenterfaqhistory.FieldTags, v))
-		})
 	}
 
 	switch len(predicates) {

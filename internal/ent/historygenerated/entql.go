@@ -2511,19 +2511,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterFAQHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterfaqhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldHistoryTime},
-			trustcenterfaqhistory.FieldRef:           {Type: field.TypeString, Column: trustcenterfaqhistory.FieldRef},
-			trustcenterfaqhistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcenterfaqhistory.FieldOperation},
-			trustcenterfaqhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldCreatedAt},
-			trustcenterfaqhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldUpdatedAt},
-			trustcenterfaqhistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterfaqhistory.FieldCreatedBy},
-			trustcenterfaqhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterfaqhistory.FieldUpdatedBy},
-			trustcenterfaqhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldDeletedAt},
-			trustcenterfaqhistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterfaqhistory.FieldDeletedBy},
-			trustcenterfaqhistory.FieldTags:          {Type: field.TypeJSON, Column: trustcenterfaqhistory.FieldTags},
-			trustcenterfaqhistory.FieldReferenceLink: {Type: field.TypeString, Column: trustcenterfaqhistory.FieldReferenceLink},
-			trustcenterfaqhistory.FieldDisplayOrder:  {Type: field.TypeInt, Column: trustcenterfaqhistory.FieldDisplayOrder},
-			trustcenterfaqhistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterID},
+			trustcenterfaqhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldHistoryTime},
+			trustcenterfaqhistory.FieldRef:                    {Type: field.TypeString, Column: trustcenterfaqhistory.FieldRef},
+			trustcenterfaqhistory.FieldOperation:              {Type: field.TypeEnum, Column: trustcenterfaqhistory.FieldOperation},
+			trustcenterfaqhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldCreatedAt},
+			trustcenterfaqhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldUpdatedAt},
+			trustcenterfaqhistory.FieldCreatedBy:              {Type: field.TypeString, Column: trustcenterfaqhistory.FieldCreatedBy},
+			trustcenterfaqhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: trustcenterfaqhistory.FieldUpdatedBy},
+			trustcenterfaqhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: trustcenterfaqhistory.FieldDeletedAt},
+			trustcenterfaqhistory.FieldDeletedBy:              {Type: field.TypeString, Column: trustcenterfaqhistory.FieldDeletedBy},
+			trustcenterfaqhistory.FieldTrustCenterFaqKindName: {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterFaqKindName},
+			trustcenterfaqhistory.FieldTrustCenterFaqKindID:   {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterFaqKindID},
+			trustcenterfaqhistory.FieldNoteID:                 {Type: field.TypeString, Column: trustcenterfaqhistory.FieldNoteID},
+			trustcenterfaqhistory.FieldTrustCenterID:          {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterID},
+			trustcenterfaqhistory.FieldReferenceLink:          {Type: field.TypeString, Column: trustcenterfaqhistory.FieldReferenceLink},
+			trustcenterfaqhistory.FieldDisplayOrder:           {Type: field.TypeInt, Column: trustcenterfaqhistory.FieldDisplayOrder},
 		},
 	}
 	graph.Nodes[61] = &sqlgraph.Node{
@@ -13703,9 +13705,24 @@ func (f *TrustCenterFAQHistoryFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(trustcenterfaqhistory.FieldDeletedBy))
 }
 
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *TrustCenterFAQHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(trustcenterfaqhistory.FieldTags))
+// WhereTrustCenterFaqKindName applies the entql string predicate on the trust_center_faq_kind_name field.
+func (f *TrustCenterFAQHistoryFilter) WhereTrustCenterFaqKindName(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaqhistory.FieldTrustCenterFaqKindName))
+}
+
+// WhereTrustCenterFaqKindID applies the entql string predicate on the trust_center_faq_kind_id field.
+func (f *TrustCenterFAQHistoryFilter) WhereTrustCenterFaqKindID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaqhistory.FieldTrustCenterFaqKindID))
+}
+
+// WhereNoteID applies the entql string predicate on the note_id field.
+func (f *TrustCenterFAQHistoryFilter) WhereNoteID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaqhistory.FieldNoteID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterFAQHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaqhistory.FieldTrustCenterID))
 }
 
 // WhereReferenceLink applies the entql string predicate on the reference_link field.
@@ -13716,11 +13733,6 @@ func (f *TrustCenterFAQHistoryFilter) WhereReferenceLink(p entql.StringP) {
 // WhereDisplayOrder applies the entql int predicate on the display_order field.
 func (f *TrustCenterFAQHistoryFilter) WhereDisplayOrder(p entql.IntP) {
 	f.Where(p.Field(trustcenterfaqhistory.FieldDisplayOrder))
-}
-
-// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
-func (f *TrustCenterFAQHistoryFilter) WhereTrustCenterID(p entql.StringP) {
-	f.Where(p.Field(trustcenterfaqhistory.FieldTrustCenterID))
 }
 
 // addPredicate implements the predicateAdder interface.

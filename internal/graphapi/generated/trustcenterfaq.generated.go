@@ -62,22 +62,28 @@ func (ec *executionContext) fieldContext_TrustCenterFAQBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterFAQ_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterFAQ_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterFAQ_tags(ctx, field)
+			case "trustCenterFaqKindName":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindName(ctx, field)
+			case "trustCenterFaqKindID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindID(ctx, field)
+			case "noteID":
+				return ec.fieldContext_TrustCenterFAQ_noteID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
 			case "referenceLink":
 				return ec.fieldContext_TrustCenterFAQ_referenceLink(ctx, field)
 			case "displayOrder":
 				return ec.fieldContext_TrustCenterFAQ_displayOrder(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
+			case "trustCenterFaqKind":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKind(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterFAQ_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterFAQ_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterFAQ_trustCenter(ctx, field)
-			case "notes":
-				return ec.fieldContext_TrustCenterFAQ_notes(ctx, field)
+			case "note":
+				return ec.fieldContext_TrustCenterFAQ_note(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQ", field.Name)
 		},
@@ -148,22 +154,28 @@ func (ec *executionContext) fieldContext_TrustCenterFAQBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterFAQ_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterFAQ_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterFAQ_tags(ctx, field)
+			case "trustCenterFaqKindName":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindName(ctx, field)
+			case "trustCenterFaqKindID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindID(ctx, field)
+			case "noteID":
+				return ec.fieldContext_TrustCenterFAQ_noteID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
 			case "referenceLink":
 				return ec.fieldContext_TrustCenterFAQ_referenceLink(ctx, field)
 			case "displayOrder":
 				return ec.fieldContext_TrustCenterFAQ_displayOrder(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
+			case "trustCenterFaqKind":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKind(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterFAQ_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterFAQ_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterFAQ_trustCenter(ctx, field)
-			case "notes":
-				return ec.fieldContext_TrustCenterFAQ_notes(ctx, field)
+			case "note":
+				return ec.fieldContext_TrustCenterFAQ_note(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQ", field.Name)
 		},
@@ -234,22 +246,28 @@ func (ec *executionContext) fieldContext_TrustCenterFAQCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterFAQ_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterFAQ_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterFAQ_tags(ctx, field)
+			case "trustCenterFaqKindName":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindName(ctx, field)
+			case "trustCenterFaqKindID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindID(ctx, field)
+			case "noteID":
+				return ec.fieldContext_TrustCenterFAQ_noteID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
 			case "referenceLink":
 				return ec.fieldContext_TrustCenterFAQ_referenceLink(ctx, field)
 			case "displayOrder":
 				return ec.fieldContext_TrustCenterFAQ_displayOrder(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
+			case "trustCenterFaqKind":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKind(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterFAQ_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterFAQ_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterFAQ_trustCenter(ctx, field)
-			case "notes":
-				return ec.fieldContext_TrustCenterFAQ_notes(ctx, field)
+			case "note":
+				return ec.fieldContext_TrustCenterFAQ_note(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQ", field.Name)
 		},
@@ -320,22 +338,28 @@ func (ec *executionContext) fieldContext_TrustCenterFAQUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterFAQ_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterFAQ_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterFAQ_tags(ctx, field)
+			case "trustCenterFaqKindName":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindName(ctx, field)
+			case "trustCenterFaqKindID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindID(ctx, field)
+			case "noteID":
+				return ec.fieldContext_TrustCenterFAQ_noteID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
 			case "referenceLink":
 				return ec.fieldContext_TrustCenterFAQ_referenceLink(ctx, field)
 			case "displayOrder":
 				return ec.fieldContext_TrustCenterFAQ_displayOrder(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterFAQ_trustCenterID(ctx, field)
+			case "trustCenterFaqKind":
+				return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKind(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterFAQ_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterFAQ_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterFAQ_trustCenter(ctx, field)
-			case "notes":
-				return ec.fieldContext_TrustCenterFAQ_notes(ctx, field)
+			case "note":
+				return ec.fieldContext_TrustCenterFAQ_note(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQ", field.Name)
 		},
