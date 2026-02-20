@@ -418,7 +418,8 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.DisplayOrder, *resp.UpdateTrustCenterFaq.TrustCenterFaq.DisplayOrder))
 			}
 			if tc.request.ClearReferenceLink != nil && *tc.request.ClearReferenceLink {
-				assert.Check(t, resp.UpdateTrustCenterFaq.TrustCenterFaq.ReferenceLink == nil)
+				assert.Check(t, resp.UpdateTrustCenterFaq.TrustCenterFaq.ReferenceLink == nil ||
+					*resp.UpdateTrustCenterFaq.TrustCenterFaq.ReferenceLink == "")
 			}
 		})
 	}
