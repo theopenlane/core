@@ -291,6 +291,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowKind() {
 		s.Require().NotNil(instance)
 
 		<-webhookCalled
+		s.WaitForEvents()
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 		s.Require().NoError(err)
@@ -366,6 +367,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationWorkflowOnCreate() {
 	case <-time.After(5 * time.Second):
 		s.FailNow("webhook not received")
 	}
+	s.WaitForEvents()
 
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -1467,12 +1469,14 @@ func (s *WorkflowEngineTestSuite) TestTriggerWorkflowCooldownGuard() {
 
 		obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
-		// First trigger completes immediately (no actions)
+		// First trigger completes via async listeners (no actions → immediate completion)
 		instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 			EventType:     "UPDATE",
 			ChangedFields: []string{"status"},
 		})
 		s.Require().NoError(err)
+
+		s.WaitForEvents()
 
 		updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
 		s.Require().NoError(err)

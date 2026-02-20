@@ -1,8 +1,15 @@
 package gala
 
 import (
+	"time"
+
 	"github.com/alitto/pond/v2"
 	"github.com/prometheus/client_golang/prometheus"
+)
+
+const (
+	waitIdlePollInterval = 10 * time.Millisecond
+	waitIdleThreshold    = 3
 )
 
 const defaultPoolWorkers = 200
@@ -56,7 +63,7 @@ func NewPool(opts ...PoolOption) *Pool {
 
 	if p.metricsReg != nil && p.name != "" {
 		collector := newPoolCollector(p.pool, p.name)
-		p.metricsReg.MustRegister(collector)
+		_ = p.metricsReg.Register(collector)
 	}
 
 	return p
@@ -87,6 +94,25 @@ func (p *Pool) SubmitMultipleAndWait(tasks []func()) error {
 	}
 
 	return group.Wait()
+}
+
+// WaitIdle blocks until the pool has no running workers and no waiting tasks.
+// Handles cascading dispatches by requiring two consecutive idle observations.
+func (p *Pool) WaitIdle() {
+	if p == nil {
+		return
+	}
+
+	idleCount := 0
+	for idleCount < waitIdleThreshold {
+		if p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0 {
+			idleCount++
+		} else {
+			idleCount = 0
+		}
+
+		time.Sleep(waitIdlePollInterval)
+	}
 }
 
 // Release stops workers and waits for completion

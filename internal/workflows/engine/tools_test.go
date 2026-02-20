@@ -174,7 +174,15 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
 	s.Require().NoError(err)
 
-	runtime, err := gala.NewInMemory()
+	runtime, err := gala.NewGala(s.ctx, gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     s.tf.URI,
+		QueueName:         "workflow_engine_test",
+		WorkerCount:       5,
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond,
+	})
 	s.Require().NoError(err)
 
 	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
@@ -194,6 +202,8 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	do.ProvideValue(runtime.Injector(), db)
 	do.ProvideValue(runtime.Injector(), wfEngine)
 
+	s.Require().NoError(runtime.StartWorkers(s.ctx))
+
 	s.client = db
 	s.galaRuntime = runtime
 
@@ -202,6 +212,11 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 // TearDownSuite cleans up test dependencies
 func (s *WorkflowEngineTestSuite) TearDownSuite() {
+	if s.galaRuntime != nil {
+		_ = s.galaRuntime.StopWorkers(context.Background())
+		_ = s.galaRuntime.Close()
+	}
+
 	if s.client != nil {
 		_ = s.client.Close()
 	}
@@ -264,8 +279,9 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().True(ok, "workflow eligible fields missing control.reference_id")
 }
 
-// WaitForEvents is a compatibility no-op; in-memory Gala dispatches synchronously.
+// WaitForEvents blocks until all durable Gala dispatch jobs have completed
 func (s *WorkflowEngineTestSuite) WaitForEvents() {
+	s.galaRuntime.WaitIdle()
 }
 
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context

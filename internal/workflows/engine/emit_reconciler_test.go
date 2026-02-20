@@ -148,6 +148,9 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowEventTypeEmitRecovered, recovered.EventType)
 
+	// Wait for the re-emitted event to be processed by async listeners
+	s.WaitForEvents()
+
 	updated, err := s.client.WorkflowInstance.Get(allowCtx, instance.ID)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowInstanceStateCompleted, updated.State)

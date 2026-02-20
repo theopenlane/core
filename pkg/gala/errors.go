@@ -1,6 +1,9 @@
 package gala
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	// ErrGalaRequired is returned when a nil gala runtime is used
@@ -81,10 +84,18 @@ type ListenerError struct {
 	Panicked bool
 }
 
-// Error returns a static error message for listener execution failures
+// Error returns an error message for listener execution failures
 func (e ListenerError) Error() string {
 	if e.Panicked {
+		if e.Cause != nil {
+			return fmt.Sprintf("gala: listener %q panicked: %v", e.ListenerName, e.Cause)
+		}
+
 		return "gala: listener panicked"
+	}
+
+	if e.Cause != nil {
+		return fmt.Sprintf("gala: listener %q execution failed: %v", e.ListenerName, e.Cause)
 	}
 
 	return "gala: listener execution failed"

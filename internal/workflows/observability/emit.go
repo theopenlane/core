@@ -10,7 +10,7 @@ import (
 // emitTyped emits a typed payload through Gala, recording emit errors with operation metadata
 func emitTyped[T any](ctx context.Context, observer *Observer, runtime *gala.Gala, topic gala.TopicName, payload T, op Operation, fields Fields) error {
 	if runtime == nil {
-		return ErrEmitNoRuntime
+		return nil
 	}
 
 	fields = lo.Assign(Fields{FieldPayload: payload}, fields)

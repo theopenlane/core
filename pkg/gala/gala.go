@@ -3,11 +3,13 @@ package gala
 import (
 	"context"
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	"time"
 
 	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -257,7 +259,9 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 	return EmitReceipt{EventID: envelope.ID, Accepted: true}
 }
 
-// EmitEnvelope dispatches a pre-built envelope using its topic registration
+// EmitEnvelope dispatches a pre-built envelope using its topic registration.
+// When the envelope does not already carry a ContextSnapshot, one is captured
+// from ctx so that durable dispatch can reconstruct auth and other values.
 func (g *Gala) EmitEnvelope(ctx context.Context, envelope Envelope) error {
 	if _, err := g.registry.topicRegistration(envelope.Topic); err != nil {
 		return err
@@ -265,6 +269,15 @@ func (g *Gala) EmitEnvelope(ctx context.Context, envelope Envelope) error {
 
 	if g.dispatcher == nil {
 		return ErrDispatcherRequired
+	}
+
+	if len(envelope.ContextSnapshot.Values) == 0 && len(envelope.ContextSnapshot.Flags) == 0 {
+		snapshot, err := g.contextManager.Capture(ctx)
+		if err != nil {
+			return err
+		}
+
+		envelope.ContextSnapshot = snapshot
 	}
 
 	return g.dispatcher.Dispatch(ctx, envelope)
@@ -349,7 +362,7 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 		if recovered := recover(); recovered != nil {
 			err = ListenerError{
 				ListenerName: listener.name,
-				Cause:        ErrListenerPanicked,
+				Cause:        fmt.Errorf("%w: %v", ErrListenerPanicked, recovered),
 				Panicked:     true,
 			}
 		}
@@ -401,6 +414,54 @@ func (g *Gala) StopWorkers(ctx context.Context) error {
 
 	return nil
 }
+
+// WaitIdle blocks until all dispatched work has completed.
+// For in-memory mode, it waits for the pool to drain.
+// For durable mode, it polls River for pending/running jobs.
+func (g *Gala) WaitIdle() {
+	switch g.dispatchMode {
+	case DispatchModeInMemory:
+		if g.inMemoryPool != nil {
+			g.inMemoryPool.WaitIdle()
+		}
+	case DispatchModeDurable:
+		g.waitDurableIdle()
+	}
+}
+
+// waitDurableIdle polls the River job table until no available or running jobs remain
+func (g *Gala) waitDurableIdle() {
+	if g.jobClient == nil {
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), durableWaitTimeout)
+	defer cancel()
+
+	rc := g.jobClient.GetRiverClient()
+
+	idleCount := 0
+	for idleCount < durableIdleThreshold {
+		if ctx.Err() != nil {
+			return
+		}
+
+		result, err := rc.JobList(ctx, river.NewJobListParams().States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled).First(1))
+		if err != nil || len(result.Jobs) > 0 {
+			idleCount = 0
+		} else {
+			idleCount++
+		}
+
+		time.Sleep(durableWaitPollInterval)
+	}
+}
+
+const (
+	durableWaitTimeout      = 30 * time.Second
+	durableWaitPollInterval = 50 * time.Millisecond
+	durableIdleThreshold    = 3
+)
 
 // Close closes the dedicated Gala queue client
 func (g *Gala) Close() error {

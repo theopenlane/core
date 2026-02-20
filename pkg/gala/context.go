@@ -204,6 +204,9 @@ func HasFlag(ctx context.Context, flag ContextFlag) bool {
 // flagsFromContext extracts the current context flags and clones the map
 func flagsFromContext(ctx context.Context) map[ContextFlag]bool {
 	existing := contextx.FromOr(ctx, contextFlagSet{})
+	if existing.Flags == nil {
+		return make(map[ContextFlag]bool)
+	}
 
 	return maps.Clone(existing.Flags)
 }
