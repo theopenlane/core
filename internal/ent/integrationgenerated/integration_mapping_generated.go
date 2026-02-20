@@ -3,20 +3,20 @@ package integrationgenerated
 
 // IntegrationMappingField describes an integration mapping target field.
 type IntegrationMappingField struct {
-	InputKey string
-	EntField string
-	Type string
-	Required bool
+	InputKey  string
+	EntField  string
+	Type      string
+	Required  bool
 	UpsertKey bool
 }
 
 // IntegrationMappingSchema describes a schema with integration mapping fields.
 type IntegrationMappingSchema struct {
-	Name string
-	Fields []IntegrationMappingField
-	AllowedKeys map[string]struct{}
+	Name         string
+	Fields       []IntegrationMappingField
+	AllowedKeys  map[string]struct{}
 	RequiredKeys []string
-	UpsertKeys []string
+	UpsertKeys   []string
 }
 
 const (
@@ -25,42 +25,42 @@ const (
 
 // Integration mapping keys for Vulnerability.
 const (
-	IntegrationMappingVulnerabilityBlocking = "blocking"
-	IntegrationMappingVulnerabilityCategory = "category"
-	IntegrationMappingVulnerabilityCveID = "cveID"
-	IntegrationMappingVulnerabilityDescription = "description"
-	IntegrationMappingVulnerabilityDiscoveredAt = "discoveredAt"
-	IntegrationMappingVulnerabilityDisplayName = "displayName"
-	IntegrationMappingVulnerabilityEnvironmentID = "environmentID"
-	IntegrationMappingVulnerabilityEnvironmentName = "environmentName"
-	IntegrationMappingVulnerabilityExploitability = "exploitability"
-	IntegrationMappingVulnerabilityExternalID = "externalID"
-	IntegrationMappingVulnerabilityExternalOwnerID = "externalOwnerID"
-	IntegrationMappingVulnerabilityExternalURI = "externalURI"
-	IntegrationMappingVulnerabilityImpact = "impact"
-	IntegrationMappingVulnerabilityImpacts = "impacts"
-	IntegrationMappingVulnerabilityInternalNotes = "internalNotes"
-	IntegrationMappingVulnerabilityMetadata = "metadata"
-	IntegrationMappingVulnerabilityOpen = "open"
-	IntegrationMappingVulnerabilityPriority = "priority"
-	IntegrationMappingVulnerabilityProduction = "production"
-	IntegrationMappingVulnerabilityPublic = "public"
-	IntegrationMappingVulnerabilityPublishedAt = "publishedAt"
-	IntegrationMappingVulnerabilityRawPayload = "rawPayload"
-	IntegrationMappingVulnerabilityReferences = "references"
-	IntegrationMappingVulnerabilityRemediationSLA = "remediationSLA"
-	IntegrationMappingVulnerabilityScopeID = "scopeID"
-	IntegrationMappingVulnerabilityScopeName = "scopeName"
-	IntegrationMappingVulnerabilityScore = "score"
-	IntegrationMappingVulnerabilitySeverity = "severity"
-	IntegrationMappingVulnerabilitySource = "source"
-	IntegrationMappingVulnerabilitySourceUpdatedAt = "sourceUpdatedAt"
-	IntegrationMappingVulnerabilityStatus = "status"
-	IntegrationMappingVulnerabilitySummary = "summary"
+	IntegrationMappingVulnerabilityBlocking         = "blocking"
+	IntegrationMappingVulnerabilityCategory         = "category"
+	IntegrationMappingVulnerabilityCveID            = "cveID"
+	IntegrationMappingVulnerabilityDescription      = "description"
+	IntegrationMappingVulnerabilityDiscoveredAt     = "discoveredAt"
+	IntegrationMappingVulnerabilityDisplayName      = "displayName"
+	IntegrationMappingVulnerabilityEnvironmentID    = "environmentID"
+	IntegrationMappingVulnerabilityEnvironmentName  = "environmentName"
+	IntegrationMappingVulnerabilityExploitability   = "exploitability"
+	IntegrationMappingVulnerabilityExternalID       = "externalID"
+	IntegrationMappingVulnerabilityExternalOwnerID  = "externalOwnerID"
+	IntegrationMappingVulnerabilityExternalURI      = "externalURI"
+	IntegrationMappingVulnerabilityImpact           = "impact"
+	IntegrationMappingVulnerabilityImpacts          = "impacts"
+	IntegrationMappingVulnerabilityInternalNotes    = "internalNotes"
+	IntegrationMappingVulnerabilityMetadata         = "metadata"
+	IntegrationMappingVulnerabilityOpen             = "open"
+	IntegrationMappingVulnerabilityPriority         = "priority"
+	IntegrationMappingVulnerabilityProduction       = "production"
+	IntegrationMappingVulnerabilityPublic           = "public"
+	IntegrationMappingVulnerabilityPublishedAt      = "publishedAt"
+	IntegrationMappingVulnerabilityRawPayload       = "rawPayload"
+	IntegrationMappingVulnerabilityReferences       = "references"
+	IntegrationMappingVulnerabilityRemediationSLA   = "remediationSLA"
+	IntegrationMappingVulnerabilityScopeID          = "scopeID"
+	IntegrationMappingVulnerabilityScopeName        = "scopeName"
+	IntegrationMappingVulnerabilityScore            = "score"
+	IntegrationMappingVulnerabilitySeverity         = "severity"
+	IntegrationMappingVulnerabilitySource           = "source"
+	IntegrationMappingVulnerabilitySourceUpdatedAt  = "sourceUpdatedAt"
+	IntegrationMappingVulnerabilityStatus           = "status"
+	IntegrationMappingVulnerabilitySummary          = "summary"
 	IntegrationMappingVulnerabilitySystemInternalID = "systemInternalID"
-	IntegrationMappingVulnerabilityTags = "tags"
-	IntegrationMappingVulnerabilityValidated = "validated"
-	IntegrationMappingVulnerabilityVector = "vector"
+	IntegrationMappingVulnerabilityTags             = "tags"
+	IntegrationMappingVulnerabilityValidated        = "validated"
+	IntegrationMappingVulnerabilityVector           = "vector"
 )
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata.
@@ -69,295 +69,295 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Vulnerability",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey: "blocking",
-				EntField: "blocking",
-				Type: "bool",
-				Required: false,
+				InputKey:  "blocking",
+				EntField:  "blocking",
+				Type:      "bool",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "category",
-				EntField: "category",
-				Type: "string",
-				Required: false,
+				InputKey:  "category",
+				EntField:  "category",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "cveID",
-				EntField: "cve_id",
-				Type: "string",
-				Required: false,
+				InputKey:  "cveID",
+				EntField:  "cve_id",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: true,
 			},
 			{
-				InputKey: "description",
-				EntField: "description",
-				Type: "string",
-				Required: false,
+				InputKey:  "description",
+				EntField:  "description",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "discoveredAt",
-				EntField: "discovered_at",
-				Type: "time.Time",
-				Required: false,
+				InputKey:  "discoveredAt",
+				EntField:  "discovered_at",
+				Type:      "time.Time",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "displayName",
-				EntField: "display_name",
-				Type: "string",
-				Required: false,
+				InputKey:  "displayName",
+				EntField:  "display_name",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "environmentID",
-				EntField: "environment_id",
-				Type: "string",
-				Required: false,
+				InputKey:  "environmentID",
+				EntField:  "environment_id",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "environmentName",
-				EntField: "environment_name",
-				Type: "string",
-				Required: false,
+				InputKey:  "environmentName",
+				EntField:  "environment_name",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "exploitability",
-				EntField: "exploitability",
-				Type: "float64",
-				Required: false,
+				InputKey:  "exploitability",
+				EntField:  "exploitability",
+				Type:      "float64",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "externalID",
-				EntField: "external_id",
-				Type: "string",
-				Required: true,
+				InputKey:  "externalID",
+				EntField:  "external_id",
+				Type:      "string",
+				Required:  true,
 				UpsertKey: true,
 			},
 			{
-				InputKey: "externalOwnerID",
-				EntField: "external_owner_id",
-				Type: "string",
-				Required: false,
+				InputKey:  "externalOwnerID",
+				EntField:  "external_owner_id",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "externalURI",
-				EntField: "external_uri",
-				Type: "string",
-				Required: false,
+				InputKey:  "externalURI",
+				EntField:  "external_uri",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "impact",
-				EntField: "impact",
-				Type: "float64",
-				Required: false,
+				InputKey:  "impact",
+				EntField:  "impact",
+				Type:      "float64",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "impacts",
-				EntField: "impacts",
-				Type: "json.RawMessage",
-				Required: false,
+				InputKey:  "impacts",
+				EntField:  "impacts",
+				Type:      "json.RawMessage",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "internalNotes",
-				EntField: "internal_notes",
-				Type: "string",
-				Required: false,
+				InputKey:  "internalNotes",
+				EntField:  "internal_notes",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "metadata",
-				EntField: "metadata",
-				Type: "json.RawMessage",
-				Required: false,
+				InputKey:  "metadata",
+				EntField:  "metadata",
+				Type:      "json.RawMessage",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "open",
-				EntField: "open",
-				Type: "bool",
-				Required: false,
+				InputKey:  "open",
+				EntField:  "open",
+				Type:      "bool",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "priority",
-				EntField: "priority",
-				Type: "string",
-				Required: false,
+				InputKey:  "priority",
+				EntField:  "priority",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "production",
-				EntField: "production",
-				Type: "bool",
-				Required: false,
+				InputKey:  "production",
+				EntField:  "production",
+				Type:      "bool",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "public",
-				EntField: "public",
-				Type: "bool",
-				Required: false,
+				InputKey:  "public",
+				EntField:  "public",
+				Type:      "bool",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "publishedAt",
-				EntField: "published_at",
-				Type: "time.Time",
-				Required: false,
+				InputKey:  "publishedAt",
+				EntField:  "published_at",
+				Type:      "time.Time",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "rawPayload",
-				EntField: "raw_payload",
-				Type: "json.RawMessage",
-				Required: false,
+				InputKey:  "rawPayload",
+				EntField:  "raw_payload",
+				Type:      "json.RawMessage",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "references",
-				EntField: "references",
-				Type: "json.RawMessage",
-				Required: false,
+				InputKey:  "references",
+				EntField:  "references",
+				Type:      "json.RawMessage",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "remediationSLA",
-				EntField: "remediation_sla",
-				Type: "int",
-				Required: false,
+				InputKey:  "remediationSLA",
+				EntField:  "remediation_sla",
+				Type:      "int",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "scopeID",
-				EntField: "scope_id",
-				Type: "string",
-				Required: false,
+				InputKey:  "scopeID",
+				EntField:  "scope_id",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "scopeName",
-				EntField: "scope_name",
-				Type: "string",
-				Required: false,
+				InputKey:  "scopeName",
+				EntField:  "scope_name",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "score",
-				EntField: "score",
-				Type: "float64",
-				Required: false,
+				InputKey:  "score",
+				EntField:  "score",
+				Type:      "float64",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "severity",
-				EntField: "severity",
-				Type: "string",
-				Required: false,
+				InputKey:  "severity",
+				EntField:  "severity",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "source",
-				EntField: "source",
-				Type: "string",
-				Required: false,
+				InputKey:  "source",
+				EntField:  "source",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "sourceUpdatedAt",
-				EntField: "source_updated_at",
-				Type: "time.Time",
-				Required: false,
+				InputKey:  "sourceUpdatedAt",
+				EntField:  "source_updated_at",
+				Type:      "time.Time",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "status",
-				EntField: "status",
-				Type: "string",
-				Required: false,
+				InputKey:  "status",
+				EntField:  "status",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "summary",
-				EntField: "summary",
-				Type: "string",
-				Required: false,
+				InputKey:  "summary",
+				EntField:  "summary",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "systemInternalID",
-				EntField: "system_internal_id",
-				Type: "string",
-				Required: false,
+				InputKey:  "systemInternalID",
+				EntField:  "system_internal_id",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "tags",
-				EntField: "tags",
-				Type: "json.RawMessage",
-				Required: false,
+				InputKey:  "tags",
+				EntField:  "tags",
+				Type:      "json.RawMessage",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "validated",
-				EntField: "validated",
-				Type: "bool",
-				Required: false,
+				InputKey:  "validated",
+				EntField:  "validated",
+				Type:      "bool",
+				Required:  false,
 				UpsertKey: false,
 			},
 			{
-				InputKey: "vector",
-				EntField: "vector",
-				Type: "string",
-				Required: false,
+				InputKey:  "vector",
+				EntField:  "vector",
+				Type:      "string",
+				Required:  false,
 				UpsertKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"blocking": {},
-			"category": {},
-			"cveID": {},
-			"description": {},
-			"discoveredAt": {},
-			"displayName": {},
-			"environmentID": {},
-			"environmentName": {},
-			"exploitability": {},
-			"externalID": {},
-			"externalOwnerID": {},
-			"externalURI": {},
-			"impact": {},
-			"impacts": {},
-			"internalNotes": {},
-			"metadata": {},
-			"open": {},
-			"priority": {},
-			"production": {},
-			"public": {},
-			"publishedAt": {},
-			"rawPayload": {},
-			"references": {},
-			"remediationSLA": {},
-			"scopeID": {},
-			"scopeName": {},
-			"score": {},
-			"severity": {},
-			"source": {},
-			"sourceUpdatedAt": {},
-			"status": {},
-			"summary": {},
+			"blocking":         {},
+			"category":         {},
+			"cveID":            {},
+			"description":      {},
+			"discoveredAt":     {},
+			"displayName":      {},
+			"environmentID":    {},
+			"environmentName":  {},
+			"exploitability":   {},
+			"externalID":       {},
+			"externalOwnerID":  {},
+			"externalURI":      {},
+			"impact":           {},
+			"impacts":          {},
+			"internalNotes":    {},
+			"metadata":         {},
+			"open":             {},
+			"priority":         {},
+			"production":       {},
+			"public":           {},
+			"publishedAt":      {},
+			"rawPayload":       {},
+			"references":       {},
+			"remediationSLA":   {},
+			"scopeID":          {},
+			"scopeName":        {},
+			"score":            {},
+			"severity":         {},
+			"source":           {},
+			"sourceUpdatedAt":  {},
+			"status":           {},
+			"summary":          {},
 			"systemInternalID": {},
-			"tags": {},
-			"validated": {},
-			"vector": {},
+			"tags":             {},
+			"validated":        {},
+			"vector":           {},
 		},
 		RequiredKeys: []string{
 			"externalID",
