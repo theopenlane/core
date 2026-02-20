@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up trustCenterFAQ by ID
+    """
+     trustCenterFAQ(
+        """
+        ID of the trustCenterFAQ
+        """
+        id: ID!
+    ):  TrustCenterFAQ!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterFAQ
+    """
+    createTrustCenterFAQ(
+        """
+        values of the trustCenterFAQ
+        """
+        input: CreateTrustCenterFAQInput!
+    ): TrustCenterFAQCreatePayload!
+    """
+    Create multiple new trustCenterFAQs
+    """
+    createBulkTrustCenterFAQ(
+        """
+        values of the trustCenterFAQ
+        """
+        input: [CreateTrustCenterFAQInput!]
+    ): TrustCenterFAQBulkCreatePayload!
+    """
+    Create multiple new trustCenterFAQs via file upload
+    """
+    createBulkCSVTrustCenterFAQ(
+        """
+        csv file containing values of the trustCenterFAQ
+        """
+        input: Upload!
+    ): TrustCenterFAQBulkCreatePayload!
+    """
+    Update an existing trustCenterFAQ
+    """
+    updateTrustCenterFAQ(
+        """
+        ID of the trustCenterFAQ
+        """
+        id: ID!
+        """
+        New values for the trustCenterFAQ
+        """
+        input: UpdateTrustCenterFAQInput!
+    ): TrustCenterFAQUpdatePayload!
+    """
+    Delete an existing trustCenterFAQ
+    """
+    deleteTrustCenterFAQ(
+        """
+        ID of the trustCenterFAQ
+        """
+        id: ID!
+    ): TrustCenterFAQDeletePayload!
+    """
+    Delete multiple trustCenterFAQs
+    """
+    deleteBulkTrustCenterFAQ(
+        """
+        IDs of the trustCenterFAQs to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterFAQBulkDeletePayload!
+    """
+    Update multiple existing trustCenterFAQs
+    """
+    updateBulkTrustCenterFAQ(
+        """
+        IDs of the trustCenterFAQs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterFAQs with
+        """
+        input: UpdateTrustCenterFAQInput!
+    ): TrustCenterFAQBulkUpdatePayload!
+    """
+    Update multiple existing trustCenterFAQs via file upload
+    """
+    updateBulkCSVTrustCenterFAQ(
+        """
+        csv file containing values of the trustCenterFAQ, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterFAQBulkUpdatePayload!
+}
+
+"""
+Return response for createTrustCenterFAQ mutation
+"""
+type TrustCenterFAQCreatePayload {
+    """
+    Created trustCenterFAQ
+    """
+    trustCenterFAQ: TrustCenterFAQ!
+}
+
+"""
+Return response for updateTrustCenterFAQ mutation
+"""
+type TrustCenterFAQUpdatePayload {
+    """
+    Updated trustCenterFAQ
+    """
+    trustCenterFAQ: TrustCenterFAQ!
+}
+
+"""
+Return response for deleteTrustCenterFAQ mutation
+"""
+type TrustCenterFAQDeletePayload {
+    """
+    Deleted trustCenterFAQ ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterFAQ mutation
+"""
+type TrustCenterFAQBulkCreatePayload {
+    """
+    Created trustCenterFAQs
+    """
+    trustCenterFAQs: [TrustCenterFAQ!]
+}
+
+"""
+Return response for deleteBulkTrustCenterFAQ mutation
+"""
+type TrustCenterFAQBulkDeletePayload {
+    """
+    Deleted trustCenterFAQ IDs
+    """
+    deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkTrustCenterFAQ mutation
+"""
+type TrustCenterFAQBulkUpdatePayload {
+    """
+    Updated trustCenterFAQs
+    """
+    trustCenterFAQs: [TrustCenterFAQ!]
+    """
+    IDs of the updated trustCenterFAQs
+    """
+    updatedIDs: [ID!]
+}

@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -34,25 +35,27 @@ import (
 // NoteQuery is the builder for querying Note entities.
 type NoteQuery struct {
 	config
-	ctx                *QueryContext
-	order              []note.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Note
-	withOwner          *OrganizationQuery
-	withTask           *TaskQuery
-	withControl        *ControlQuery
-	withSubcontrol     *SubcontrolQuery
-	withProcedure      *ProcedureQuery
-	withRisk           *RiskQuery
-	withInternalPolicy *InternalPolicyQuery
-	withEvidence       *EvidenceQuery
-	withTrustCenter    *TrustCenterQuery
-	withDiscussion     *DiscussionQuery
-	withFiles          *FileQuery
-	withFKs            bool
-	loadTotal          []func(context.Context, []*Note) error
-	modifiers          []func(*sql.Selector)
-	withNamedFiles     map[string]*FileQuery
+	ctx                      *QueryContext
+	order                    []note.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.Note
+	withOwner                *OrganizationQuery
+	withTask                 *TaskQuery
+	withControl              *ControlQuery
+	withSubcontrol           *SubcontrolQuery
+	withProcedure            *ProcedureQuery
+	withRisk                 *RiskQuery
+	withInternalPolicy       *InternalPolicyQuery
+	withEvidence             *EvidenceQuery
+	withTrustCenter          *TrustCenterQuery
+	withDiscussion           *DiscussionQuery
+	withTrustCenterFaqs      *TrustCenterFAQQuery
+	withFiles                *FileQuery
+	withFKs                  bool
+	loadTotal                []func(context.Context, []*Note) error
+	modifiers                []func(*sql.Selector)
+	withNamedTrustCenterFaqs map[string]*TrustCenterFAQQuery
+	withNamedFiles           map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -339,6 +342,31 @@ func (_q *NoteQuery) QueryDiscussion() *DiscussionQuery {
 	return query
 }
 
+// QueryTrustCenterFaqs chains the current query on the "trust_center_faqs" edge.
+func (_q *NoteQuery) QueryTrustCenterFaqs() *TrustCenterFAQQuery {
+	query := (&TrustCenterFAQClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(trustcenterfaq.Table, trustcenterfaq.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, note.TrustCenterFaqsTable, note.TrustCenterFaqsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterFAQ
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryFiles chains the current query on the "files" edge.
 func (_q *NoteQuery) QueryFiles() *FileQuery {
 	query := (&FileClient{config: _q.config}).Query()
@@ -551,22 +579,23 @@ func (_q *NoteQuery) Clone() *NoteQuery {
 		return nil
 	}
 	return &NoteQuery{
-		config:             _q.config,
-		ctx:                _q.ctx.Clone(),
-		order:              append([]note.OrderOption{}, _q.order...),
-		inters:             append([]Interceptor{}, _q.inters...),
-		predicates:         append([]predicate.Note{}, _q.predicates...),
-		withOwner:          _q.withOwner.Clone(),
-		withTask:           _q.withTask.Clone(),
-		withControl:        _q.withControl.Clone(),
-		withSubcontrol:     _q.withSubcontrol.Clone(),
-		withProcedure:      _q.withProcedure.Clone(),
-		withRisk:           _q.withRisk.Clone(),
-		withInternalPolicy: _q.withInternalPolicy.Clone(),
-		withEvidence:       _q.withEvidence.Clone(),
-		withTrustCenter:    _q.withTrustCenter.Clone(),
-		withDiscussion:     _q.withDiscussion.Clone(),
-		withFiles:          _q.withFiles.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]note.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.Note{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withTask:            _q.withTask.Clone(),
+		withControl:         _q.withControl.Clone(),
+		withSubcontrol:      _q.withSubcontrol.Clone(),
+		withProcedure:       _q.withProcedure.Clone(),
+		withRisk:            _q.withRisk.Clone(),
+		withInternalPolicy:  _q.withInternalPolicy.Clone(),
+		withEvidence:        _q.withEvidence.Clone(),
+		withTrustCenter:     _q.withTrustCenter.Clone(),
+		withDiscussion:      _q.withDiscussion.Clone(),
+		withTrustCenterFaqs: _q.withTrustCenterFaqs.Clone(),
+		withFiles:           _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -684,6 +713,17 @@ func (_q *NoteQuery) WithDiscussion(opts ...func(*DiscussionQuery)) *NoteQuery {
 	return _q
 }
 
+// WithTrustCenterFaqs tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_faqs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithTrustCenterFaqs(opts ...func(*TrustCenterFAQQuery)) *NoteQuery {
+	query := (&TrustCenterFAQClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterFaqs = query
+	return _q
+}
+
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *NoteQuery) WithFiles(opts ...func(*FileQuery)) *NoteQuery {
@@ -780,7 +820,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
 			_q.withOwner != nil,
 			_q.withTask != nil,
 			_q.withControl != nil,
@@ -791,6 +831,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withEvidence != nil,
 			_q.withTrustCenter != nil,
 			_q.withDiscussion != nil,
+			_q.withTrustCenterFaqs != nil,
 			_q.withFiles != nil,
 		}
 	)
@@ -883,10 +924,24 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			return nil, err
 		}
 	}
+	if query := _q.withTrustCenterFaqs; query != nil {
+		if err := _q.loadTrustCenterFaqs(ctx, query, nodes,
+			func(n *Note) { n.Edges.TrustCenterFaqs = []*TrustCenterFAQ{} },
+			func(n *Note, e *TrustCenterFAQ) { n.Edges.TrustCenterFaqs = append(n.Edges.TrustCenterFaqs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFiles; query != nil {
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Note) { n.Edges.Files = []*File{} },
 			func(n *Note, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustCenterFaqs {
+		if err := _q.loadTrustCenterFaqs(ctx, query, nodes,
+			func(n *Note) { n.appendNamedTrustCenterFaqs(name) },
+			func(n *Note, e *TrustCenterFAQ) { n.appendNamedTrustCenterFaqs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1216,6 +1271,36 @@ func (_q *NoteQuery) loadDiscussion(ctx context.Context, query *DiscussionQuery,
 	}
 	return nil
 }
+func (_q *NoteQuery) loadTrustCenterFaqs(ctx context.Context, query *TrustCenterFAQQuery, nodes []*Note, init func(*Note), assign func(*Note, *TrustCenterFAQ)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Note)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcenterfaq.FieldNoteID)
+	}
+	query.Where(predicate.TrustCenterFAQ(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(note.TrustCenterFaqsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.NoteID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "note_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *NoteQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Note, init func(*Note), assign func(*Note, *File)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Note)
@@ -1353,6 +1438,20 @@ func (_q *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedTrustCenterFaqs tells the query-builder to eager-load the nodes that are connected to the "trust_center_faqs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithNamedTrustCenterFaqs(name string, opts ...func(*TrustCenterFAQQuery)) *NoteQuery {
+	query := (&TrustCenterFAQClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustCenterFaqs == nil {
+		_q.withNamedTrustCenterFaqs = make(map[string]*TrustCenterFAQQuery)
+	}
+	_q.withNamedTrustCenterFaqs[name] = query
+	return _q
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"

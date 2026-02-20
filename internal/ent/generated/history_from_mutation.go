@@ -21707,6 +21707,229 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 	return nil
 }
 
+func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.TrustCenterFAQHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if trustCenterFaqKindName, exists := m.TrustCenterFaqKindName(); exists {
+		create = create.SetTrustCenterFaqKindName(trustCenterFaqKindName)
+	}
+
+	if trustCenterFaqKindID, exists := m.TrustCenterFaqKindID(); exists {
+		create = create.SetTrustCenterFaqKindID(trustCenterFaqKindID)
+	}
+
+	if noteID, exists := m.NoteID(); exists {
+		create = create.SetNoteID(noteID)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if referenceLink, exists := m.ReferenceLink(); exists {
+		create = create.SetReferenceLink(referenceLink)
+	}
+
+	if displayOrder, exists := m.DisplayOrder(); exists {
+		create = create.SetDisplayOrder(displayOrder)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterfaq, err := client.TrustCenterFAQ.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterFAQHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcenterfaq.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcenterfaq.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcenterfaq.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcenterfaq.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcenterfaq.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcenterfaq.DeletedBy)
+		}
+
+		if trustCenterFaqKindName, exists := m.TrustCenterFaqKindName(); exists {
+			create = create.SetTrustCenterFaqKindName(trustCenterFaqKindName)
+		} else {
+			create = create.SetTrustCenterFaqKindName(trustcenterfaq.TrustCenterFaqKindName)
+		}
+
+		if trustCenterFaqKindID, exists := m.TrustCenterFaqKindID(); exists {
+			create = create.SetTrustCenterFaqKindID(trustCenterFaqKindID)
+		} else {
+			create = create.SetTrustCenterFaqKindID(trustcenterfaq.TrustCenterFaqKindID)
+		}
+
+		if noteID, exists := m.NoteID(); exists {
+			create = create.SetNoteID(noteID)
+		} else {
+			create = create.SetNoteID(trustcenterfaq.NoteID)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterfaq.TrustCenterID)
+		}
+
+		if referenceLink, exists := m.ReferenceLink(); exists {
+			create = create.SetReferenceLink(referenceLink)
+		} else {
+			create = create.SetReferenceLink(trustcenterfaq.ReferenceLink)
+		}
+
+		if displayOrder, exists := m.DisplayOrder(); exists {
+			create = create.SetDisplayOrder(displayOrder)
+		} else {
+			create = create.SetDisplayOrder(trustcenterfaq.DisplayOrder)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterfaq, err := client.TrustCenterFAQ.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterFAQHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcenterfaq.CreatedAt).
+			SetUpdatedAt(trustcenterfaq.UpdatedAt).
+			SetCreatedBy(trustcenterfaq.CreatedBy).
+			SetUpdatedBy(trustcenterfaq.UpdatedBy).
+			SetDeletedAt(trustcenterfaq.DeletedAt).
+			SetDeletedBy(trustcenterfaq.DeletedBy).
+			SetTrustCenterFaqKindName(trustcenterfaq.TrustCenterFaqKindName).
+			SetTrustCenterFaqKindID(trustcenterfaq.TrustCenterFaqKindID).
+			SetNoteID(trustcenterfaq.NoteID).
+			SetTrustCenterID(trustcenterfaq.TrustCenterID).
+			SetReferenceLink(trustcenterfaq.ReferenceLink).
+			SetDisplayOrder(trustcenterfaq.DisplayOrder).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()

@@ -152,6 +152,9 @@ type organization
     define trust_center_compliance_creator: [group#member]
     define can_create_trust_center_compliance: can_edit or trust_center_compliance_creator or can_manage_trust_center
 
+    define trust_center_faq_creator: [group#member]
+    define can_create_trust_center_faq: can_edit or trust_center_faq_creator or can_manage_trust_center
+
     define trust_center_post_creator: [group#member]
     define can_create_trust_center_post: can_edit or trust_center_post_creator or can_manage_trust_center
 
@@ -642,7 +645,7 @@ type note
     define can_edit: [user, service] or owner or editor
     define can_delete: [user, service] or can_edit
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk, evidence, discussion]
+    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk, evidence, discussion, trust_center_faq]
     define editor: [organization#owner]
     define owner : [user, service]
 # similar to notes, discussions are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
@@ -798,6 +801,18 @@ type trust_center_entity
     define viewer: editor
 
 type trust_center_nda_request
+  relations
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    define parent: [trust_center, user, service]
+    define editor: [group#member]
+    define viewer: editor
+
+type trust_center_faq
   relations
     define can_view: [user, service] or parent_viewer or viewer
     define can_edit: [user, service] or parent_editor or editor

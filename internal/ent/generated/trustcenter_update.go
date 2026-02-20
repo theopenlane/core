@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -522,6 +523,21 @@ func (_u *TrustCenterUpdate) AddTrustCenterNdaRequests(v ...*TrustCenterNDAReque
 	return _u.AddTrustCenterNdaRequestIDs(ids...)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_u *TrustCenterUpdate) AddTrustCenterFaqIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdate) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterFaqIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdate) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -750,6 +766,27 @@ func (_u *TrustCenterUpdate) RemoveTrustCenterNdaRequests(v ...*TrustCenterNDARe
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterNdaRequestIDs(ids...)
+}
+
+// ClearTrustCenterFaqs clears all "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdate) ClearTrustCenterFaqs() *TrustCenterUpdate {
+	_u.mutation.ClearTrustCenterFaqs()
+	return _u
+}
+
+// RemoveTrustCenterFaqIDs removes the "trust_center_faqs" edge to TrustCenterFAQ entities by IDs.
+func (_u *TrustCenterUpdate) RemoveTrustCenterFaqIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterFaqs removes "trust_center_faqs" edges to TrustCenterFAQ entities.
+func (_u *TrustCenterUpdate) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterFaqIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1532,6 +1569,54 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterFaqsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenter
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2033,6 +2118,21 @@ func (_u *TrustCenterUpdateOne) AddTrustCenterNdaRequests(v ...*TrustCenterNDARe
 	return _u.AddTrustCenterNdaRequestIDs(ids...)
 }
 
+// AddTrustCenterFaqIDs adds the "trust_center_faqs" edge to the TrustCenterFAQ entity by IDs.
+func (_u *TrustCenterUpdateOne) AddTrustCenterFaqIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterFaqs adds the "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdateOne) AddTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterFaqIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -2261,6 +2361,27 @@ func (_u *TrustCenterUpdateOne) RemoveTrustCenterNdaRequests(v ...*TrustCenterND
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterNdaRequestIDs(ids...)
+}
+
+// ClearTrustCenterFaqs clears all "trust_center_faqs" edges to the TrustCenterFAQ entity.
+func (_u *TrustCenterUpdateOne) ClearTrustCenterFaqs() *TrustCenterUpdateOne {
+	_u.mutation.ClearTrustCenterFaqs()
+	return _u
+}
+
+// RemoveTrustCenterFaqIDs removes the "trust_center_faqs" edge to TrustCenterFAQ entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterFaqIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveTrustCenterFaqIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterFaqs removes "trust_center_faqs" edges to TrustCenterFAQ entities.
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterFaqs(v ...*TrustCenterFAQ) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterFaqIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustCenterUpdate builder.
@@ -3068,6 +3189,54 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterFaqsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterFaqsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterFaqsTable,
+			Columns: []string{trustcenter.TrustCenterFaqsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterFAQ
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

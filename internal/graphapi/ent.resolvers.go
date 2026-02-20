@@ -2628,6 +2628,40 @@ func (r *queryResolver) TrustCenterEntities(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// TrustCenterFAQs is the resolver for the trustCenterFAQs field.
+func (r *queryResolver) TrustCenterFAQs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) (*generated.TrustCenterFAQConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterFAQOrder{
+			{
+				Field:     generated.TrustCenterFAQOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterFAQ.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterfaq"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterFAQOrder(orderBy),
+		generated.WithTrustCenterFAQFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterfaq"})
+	}
+
+	return res, err
+}
+
 // TrustCenterNdaRequests is the resolver for the trustCenterNdaRequests field.
 func (r *queryResolver) TrustCenterNdaRequests(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestOrder, where *generated.TrustCenterNDARequestWhereInput) (*generated.TrustCenterNDARequestConnection, error) {
 	// set page limit if nothing was set
@@ -3219,6 +3253,11 @@ func (r *Resolver) CreateScanInput() gqlgenerated.CreateScanInputResolver {
 	return &createScanInputResolver{r}
 }
 
+// CreateTrustCenterFAQInput returns gqlgenerated.CreateTrustCenterFAQInputResolver implementation.
+func (r *Resolver) CreateTrustCenterFAQInput() gqlgenerated.CreateTrustCenterFAQInputResolver {
+	return &createTrustCenterFAQInputResolver{r}
+}
+
 // CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
 func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputResolver {
 	return &createTrustCenterInputResolver{r}
@@ -3304,6 +3343,11 @@ func (r *Resolver) UpdateTaskInput() gqlgenerated.UpdateTaskInputResolver {
 	return &updateTaskInputResolver{r}
 }
 
+// UpdateTrustCenterFAQInput returns gqlgenerated.UpdateTrustCenterFAQInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterFAQInput() gqlgenerated.UpdateTrustCenterFAQInputResolver {
+	return &updateTrustCenterFAQInputResolver{r}
+}
+
 // UpdateTrustCenterInput returns gqlgenerated.UpdateTrustCenterInputResolver implementation.
 func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputResolver {
 	return &updateTrustCenterInputResolver{r}
@@ -3331,6 +3375,7 @@ type createMappedControlInputResolver struct{ *Resolver }
 type createNotificationInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
 type createScanInputResolver struct{ *Resolver }
+type createTrustCenterFAQInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
@@ -3348,4 +3393,5 @@ type updateStandardInputResolver struct{ *Resolver }
 type updateSubcontrolInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
+type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }

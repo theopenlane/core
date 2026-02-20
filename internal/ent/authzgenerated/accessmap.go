@@ -2026,6 +2026,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "discussion",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "trust_center_faqs": {
+	ObjectType:      "trust_center_faq",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "files": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
@@ -3678,6 +3682,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_nda_request",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_faqs": {
+	ObjectType:      "trust_center_faq",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center_compliance": {"blocked_groups": {
 	ObjectType:      "group",
@@ -3745,6 +3753,27 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+},
+}, "trust_center_faq": {"trust_center_faq_kind": {
+	ObjectType:      "trust_center_faq_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "note": {
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "trust_center_nda_request": {"blocked_groups": {
 	ObjectType:      "group",

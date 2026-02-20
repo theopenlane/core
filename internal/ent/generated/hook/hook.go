@@ -1053,6 +1053,18 @@ func (f TrustCenterEntityFunc) Mutate(ctx context.Context, m generated.Mutation)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterEntityMutation", m)
 }
 
+// The TrustCenterFAQFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterFAQ mutator.
+type TrustCenterFAQFunc func(context.Context, *generated.TrustCenterFAQMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterFAQFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterFAQMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterFAQMutation", m)
+}
+
 // The TrustCenterNDARequestFunc type is an adapter to allow the use of ordinary
 // function as TrustCenterNDARequest mutator.
 type TrustCenterNDARequestFunc func(context.Context, *generated.TrustCenterNDARequestMutation) (generated.Value, error)

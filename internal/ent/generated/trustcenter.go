@@ -96,11 +96,13 @@ type TrustCenterEdges struct {
 	TrustCenterEntities []*TrustCenterEntity `json:"trust_center_entities,omitempty"`
 	// TrustCenterNdaRequests holds the value of the trust_center_nda_requests edge.
 	TrustCenterNdaRequests []*TrustCenterNDARequest `json:"trust_center_nda_requests,omitempty"`
+	// TrustCenterFaqs holds the value of the trust_center_faqs edge.
+	TrustCenterFaqs []*TrustCenterFAQ `json:"trust_center_faqs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedBlockedGroups            map[string][]*Group
 	namedEditors                  map[string][]*Group
@@ -111,6 +113,7 @@ type TrustCenterEdges struct {
 	namedPosts                    map[string][]*Note
 	namedTrustCenterEntities      map[string][]*TrustCenterEntity
 	namedTrustCenterNdaRequests   map[string][]*TrustCenterNDARequest
+	namedTrustCenterFaqs          map[string][]*TrustCenterFAQ
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -258,6 +261,15 @@ func (e TrustCenterEdges) TrustCenterNdaRequestsOrErr() ([]*TrustCenterNDAReques
 		return e.TrustCenterNdaRequests, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_nda_requests"}
+}
+
+// TrustCenterFaqsOrErr returns the TrustCenterFaqs value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) TrustCenterFaqsOrErr() ([]*TrustCenterFAQ, error) {
+	if e.loadedTypes[15] {
+		return e.TrustCenterFaqs, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_faqs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -504,6 +516,11 @@ func (_m *TrustCenter) QueryTrustCenterEntities() *TrustCenterEntityQuery {
 // QueryTrustCenterNdaRequests queries the "trust_center_nda_requests" edge of the TrustCenter entity.
 func (_m *TrustCenter) QueryTrustCenterNdaRequests() *TrustCenterNDARequestQuery {
 	return NewTrustCenterClient(_m.config).QueryTrustCenterNdaRequests(_m)
+}
+
+// QueryTrustCenterFaqs queries the "trust_center_faqs" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryTrustCenterFaqs() *TrustCenterFAQQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterFaqs(_m)
 }
 
 // Update returns a builder for updating this TrustCenter.
@@ -795,6 +812,30 @@ func (_m *TrustCenter) appendNamedTrustCenterNdaRequests(name string, edges ...*
 		_m.Edges.namedTrustCenterNdaRequests[name] = []*TrustCenterNDARequest{}
 	} else {
 		_m.Edges.namedTrustCenterNdaRequests[name] = append(_m.Edges.namedTrustCenterNdaRequests[name], edges...)
+	}
+}
+
+// NamedTrustCenterFaqs returns the TrustCenterFaqs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedTrustCenterFaqs(name string) ([]*TrustCenterFAQ, error) {
+	if _m.Edges.namedTrustCenterFaqs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterFaqs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedTrustCenterFaqs(name string, edges ...*TrustCenterFAQ) {
+	if _m.Edges.namedTrustCenterFaqs == nil {
+		_m.Edges.namedTrustCenterFaqs = make(map[string][]*TrustCenterFAQ)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterFaqs[name] = []*TrustCenterFAQ{}
+	} else {
+		_m.Edges.namedTrustCenterFaqs[name] = append(_m.Edges.namedTrustCenterFaqs[name], edges...)
 	}
 }
 

@@ -1327,6 +1327,35 @@ func HasDiscussionWith(preds ...predicate.Discussion) predicate.Note {
 	})
 }
 
+// HasTrustCenterFaqs applies the HasEdge predicate on the "trust_center_faqs" edge.
+func HasTrustCenterFaqs() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterFaqsTable, TrustCenterFaqsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterFAQ
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterFaqsWith applies the HasEdge predicate on the "trust_center_faqs" edge with a given conditions (other predicates).
+func HasTrustCenterFaqsWith(preds ...predicate.TrustCenterFAQ) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newTrustCenterFaqsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterFAQ
+		step.Edge.Schema = schemaConfig.TrustCenterFAQ
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFiles applies the HasEdge predicate on the "files" edge.
 func HasFiles() predicate.Note {
 	return predicate.Note(func(s *sql.Selector) {

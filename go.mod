@@ -25,6 +25,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.9
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.9
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.1
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.4
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.0
 	github.com/brianvoe/gofakeit/v7 v7.14.0
 	github.com/cenkalti/backoff/v5 v5.0.3
@@ -75,7 +76,6 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/pressly/goose/v3 v3.26.0
 	github.com/prometheus/client_golang v1.23.2
-	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.18.0
 	github.com/riverqueue/river v0.30.2
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.2
@@ -93,7 +93,7 @@ require (
 	github.com/theopenlane/emailtemplates v0.3.5
 	github.com/theopenlane/entx v0.22.5
 	github.com/theopenlane/go-client v0.8.4
-	github.com/theopenlane/gqlgen-plugins v0.14.3
+	github.com/theopenlane/gqlgen-plugins v0.14.4
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.24.1
 	github.com/theopenlane/newman v0.2.1
@@ -119,7 +119,6 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.8.0 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.5 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect

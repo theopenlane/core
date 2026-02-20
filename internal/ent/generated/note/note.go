@@ -65,6 +65,8 @@ const (
 	EdgeTrustCenter = "trust_center"
 	// EdgeDiscussion holds the string denoting the discussion edge name in mutations.
 	EdgeDiscussion = "discussion"
+	// EdgeTrustCenterFaqs holds the string denoting the trust_center_faqs edge name in mutations.
+	EdgeTrustCenterFaqs = "trust_center_faqs"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// Table holds the table name of the note in the database.
@@ -139,6 +141,13 @@ const (
 	DiscussionInverseTable = "discussions"
 	// DiscussionColumn is the table column denoting the discussion relation/edge.
 	DiscussionColumn = "discussion_id"
+	// TrustCenterFaqsTable is the table that holds the trust_center_faqs relation/edge.
+	TrustCenterFaqsTable = "trust_center_faqs"
+	// TrustCenterFaqsInverseTable is the table name for the TrustCenterFAQ entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterfaq" package.
+	TrustCenterFaqsInverseTable = "trust_center_faqs"
+	// TrustCenterFaqsColumn is the table column denoting the trust_center_faqs relation/edge.
+	TrustCenterFaqsColumn = "note_id"
 	// FilesTable is the table that holds the files relation/edge.
 	FilesTable = "files"
 	// FilesInverseTable is the table name for the File entity.
@@ -376,6 +385,20 @@ func ByDiscussionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByTrustCenterFaqsCount orders the results by trust_center_faqs count.
+func ByTrustCenterFaqsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterFaqsStep(), opts...)
+	}
+}
+
+// ByTrustCenterFaqs orders the results by trust_center_faqs terms.
+func ByTrustCenterFaqs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterFaqsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -457,6 +480,13 @@ func newDiscussionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DiscussionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, DiscussionTable, DiscussionColumn),
+	)
+}
+func newTrustCenterFaqsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterFaqsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterFaqsTable, TrustCenterFaqsColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

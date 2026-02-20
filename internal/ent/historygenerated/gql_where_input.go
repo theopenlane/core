@@ -74,6 +74,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -75650,6 +75651,804 @@ func (i *TrustCenterEntityHistoryWhereInput) P() (predicate.TrustCenterEntityHis
 		return predicates[0], nil
 	default:
 		return trustcenterentityhistory.And(predicates...), nil
+	}
+}
+
+// TrustCenterFAQHistoryWhereInput represents a where input for filtering TrustCenterFAQHistory queries.
+type TrustCenterFAQHistoryWhereInput struct {
+	Predicates []predicate.TrustCenterFAQHistory  `json:"-"`
+	Not        *TrustCenterFAQHistoryWhereInput   `json:"not,omitempty"`
+	Or         []*TrustCenterFAQHistoryWhereInput `json:"or,omitempty"`
+	And        []*TrustCenterFAQHistoryWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "history_time" field predicates.
+	HistoryTime      *time.Time  `json:"historyTime,omitempty"`
+	HistoryTimeNEQ   *time.Time  `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGT    *time.Time  `json:"historyTimeGT,omitempty"`
+	HistoryTimeGTE   *time.Time  `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLT    *time.Time  `json:"historyTimeLT,omitempty"`
+	HistoryTimeLTE   *time.Time  `json:"historyTimeLTE,omitempty"`
+
+	// "ref" field predicates.
+	Ref             *string  `json:"ref,omitempty"`
+	RefNEQ          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGT           *string  `json:"refGT,omitempty"`
+	RefGTE          *string  `json:"refGTE,omitempty"`
+	RefLT           *string  `json:"refLT,omitempty"`
+	RefLTE          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        bool     `json:"refIsNil,omitempty"`
+	RefNotNil       bool     `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+
+	// "operation" field predicates.
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "trust_center_faq_kind_name" field predicates.
+	TrustCenterFaqKindName             *string  `json:"trustCenterFaqKindName,omitempty"`
+	TrustCenterFaqKindNameNEQ          *string  `json:"trustCenterFaqKindNameNEQ,omitempty"`
+	TrustCenterFaqKindNameIn           []string `json:"trustCenterFaqKindNameIn,omitempty"`
+	TrustCenterFaqKindNameNotIn        []string `json:"trustCenterFaqKindNameNotIn,omitempty"`
+	TrustCenterFaqKindNameGT           *string  `json:"trustCenterFaqKindNameGT,omitempty"`
+	TrustCenterFaqKindNameGTE          *string  `json:"trustCenterFaqKindNameGTE,omitempty"`
+	TrustCenterFaqKindNameLT           *string  `json:"trustCenterFaqKindNameLT,omitempty"`
+	TrustCenterFaqKindNameLTE          *string  `json:"trustCenterFaqKindNameLTE,omitempty"`
+	TrustCenterFaqKindNameContains     *string  `json:"trustCenterFaqKindNameContains,omitempty"`
+	TrustCenterFaqKindNameHasPrefix    *string  `json:"trustCenterFaqKindNameHasPrefix,omitempty"`
+	TrustCenterFaqKindNameHasSuffix    *string  `json:"trustCenterFaqKindNameHasSuffix,omitempty"`
+	TrustCenterFaqKindNameIsNil        bool     `json:"trustCenterFaqKindNameIsNil,omitempty"`
+	TrustCenterFaqKindNameNotNil       bool     `json:"trustCenterFaqKindNameNotNil,omitempty"`
+	TrustCenterFaqKindNameEqualFold    *string  `json:"trustCenterFaqKindNameEqualFold,omitempty"`
+	TrustCenterFaqKindNameContainsFold *string  `json:"trustCenterFaqKindNameContainsFold,omitempty"`
+
+	// "trust_center_faq_kind_id" field predicates.
+	TrustCenterFaqKindID             *string  `json:"trustCenterFaqKindID,omitempty"`
+	TrustCenterFaqKindIDNEQ          *string  `json:"trustCenterFaqKindIDNEQ,omitempty"`
+	TrustCenterFaqKindIDIn           []string `json:"trustCenterFaqKindIDIn,omitempty"`
+	TrustCenterFaqKindIDNotIn        []string `json:"trustCenterFaqKindIDNotIn,omitempty"`
+	TrustCenterFaqKindIDGT           *string  `json:"trustCenterFaqKindIDGT,omitempty"`
+	TrustCenterFaqKindIDGTE          *string  `json:"trustCenterFaqKindIDGTE,omitempty"`
+	TrustCenterFaqKindIDLT           *string  `json:"trustCenterFaqKindIDLT,omitempty"`
+	TrustCenterFaqKindIDLTE          *string  `json:"trustCenterFaqKindIDLTE,omitempty"`
+	TrustCenterFaqKindIDContains     *string  `json:"trustCenterFaqKindIDContains,omitempty"`
+	TrustCenterFaqKindIDHasPrefix    *string  `json:"trustCenterFaqKindIDHasPrefix,omitempty"`
+	TrustCenterFaqKindIDHasSuffix    *string  `json:"trustCenterFaqKindIDHasSuffix,omitempty"`
+	TrustCenterFaqKindIDIsNil        bool     `json:"trustCenterFaqKindIDIsNil,omitempty"`
+	TrustCenterFaqKindIDNotNil       bool     `json:"trustCenterFaqKindIDNotNil,omitempty"`
+	TrustCenterFaqKindIDEqualFold    *string  `json:"trustCenterFaqKindIDEqualFold,omitempty"`
+	TrustCenterFaqKindIDContainsFold *string  `json:"trustCenterFaqKindIDContainsFold,omitempty"`
+
+	// "note_id" field predicates.
+	NoteID             *string  `json:"noteID,omitempty"`
+	NoteIDNEQ          *string  `json:"noteIDNEQ,omitempty"`
+	NoteIDIn           []string `json:"noteIDIn,omitempty"`
+	NoteIDNotIn        []string `json:"noteIDNotIn,omitempty"`
+	NoteIDGT           *string  `json:"noteIDGT,omitempty"`
+	NoteIDGTE          *string  `json:"noteIDGTE,omitempty"`
+	NoteIDLT           *string  `json:"noteIDLT,omitempty"`
+	NoteIDLTE          *string  `json:"noteIDLTE,omitempty"`
+	NoteIDContains     *string  `json:"noteIDContains,omitempty"`
+	NoteIDHasPrefix    *string  `json:"noteIDHasPrefix,omitempty"`
+	NoteIDHasSuffix    *string  `json:"noteIDHasSuffix,omitempty"`
+	NoteIDEqualFold    *string  `json:"noteIDEqualFold,omitempty"`
+	NoteIDContainsFold *string  `json:"noteIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "reference_link" field predicates.
+	ReferenceLink             *string  `json:"referenceLink,omitempty"`
+	ReferenceLinkNEQ          *string  `json:"referenceLinkNEQ,omitempty"`
+	ReferenceLinkIn           []string `json:"referenceLinkIn,omitempty"`
+	ReferenceLinkNotIn        []string `json:"referenceLinkNotIn,omitempty"`
+	ReferenceLinkGT           *string  `json:"referenceLinkGT,omitempty"`
+	ReferenceLinkGTE          *string  `json:"referenceLinkGTE,omitempty"`
+	ReferenceLinkLT           *string  `json:"referenceLinkLT,omitempty"`
+	ReferenceLinkLTE          *string  `json:"referenceLinkLTE,omitempty"`
+	ReferenceLinkContains     *string  `json:"referenceLinkContains,omitempty"`
+	ReferenceLinkHasPrefix    *string  `json:"referenceLinkHasPrefix,omitempty"`
+	ReferenceLinkHasSuffix    *string  `json:"referenceLinkHasSuffix,omitempty"`
+	ReferenceLinkIsNil        bool     `json:"referenceLinkIsNil,omitempty"`
+	ReferenceLinkNotNil       bool     `json:"referenceLinkNotNil,omitempty"`
+	ReferenceLinkEqualFold    *string  `json:"referenceLinkEqualFold,omitempty"`
+	ReferenceLinkContainsFold *string  `json:"referenceLinkContainsFold,omitempty"`
+
+	// "display_order" field predicates.
+	DisplayOrder       *int  `json:"displayOrder,omitempty"`
+	DisplayOrderNEQ    *int  `json:"displayOrderNEQ,omitempty"`
+	DisplayOrderIn     []int `json:"displayOrderIn,omitempty"`
+	DisplayOrderNotIn  []int `json:"displayOrderNotIn,omitempty"`
+	DisplayOrderGT     *int  `json:"displayOrderGT,omitempty"`
+	DisplayOrderGTE    *int  `json:"displayOrderGTE,omitempty"`
+	DisplayOrderLT     *int  `json:"displayOrderLT,omitempty"`
+	DisplayOrderLTE    *int  `json:"displayOrderLTE,omitempty"`
+	DisplayOrderIsNil  bool  `json:"displayOrderIsNil,omitempty"`
+	DisplayOrderNotNil bool  `json:"displayOrderNotNil,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TrustCenterFAQHistoryWhereInput) AddPredicates(predicates ...predicate.TrustCenterFAQHistory) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TrustCenterFAQHistoryWhereInput filter on the TrustCenterFAQHistoryQuery builder.
+func (i *TrustCenterFAQHistoryWhereInput) Filter(q *TrustCenterFAQHistoryQuery) (*TrustCenterFAQHistoryQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTrustCenterFAQHistoryWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTrustCenterFAQHistoryWhereInput is returned in case the TrustCenterFAQHistoryWhereInput is empty.
+var ErrEmptyTrustCenterFAQHistoryWhereInput = errors.New("historygenerated: empty predicate TrustCenterFAQHistoryWhereInput")
+
+// P returns a predicate for filtering trustcenterfaqhistories.
+// An error is returned if the input is empty or invalid.
+func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, error) {
+	var predicates []predicate.TrustCenterFAQHistory
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, trustcenterfaqhistory.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TrustCenterFAQHistory, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, trustcenterfaqhistory.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TrustCenterFAQHistory, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, trustcenterfaqhistory.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.HistoryTime != nil {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeEQ(*i.HistoryTime))
+	}
+	if i.HistoryTimeNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeNEQ(*i.HistoryTimeNEQ))
+	}
+	if len(i.HistoryTimeIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeIn(i.HistoryTimeIn...))
+	}
+	if len(i.HistoryTimeNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeNotIn(i.HistoryTimeNotIn...))
+	}
+	if i.HistoryTimeGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeGT(*i.HistoryTimeGT))
+	}
+	if i.HistoryTimeGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeGTE(*i.HistoryTimeGTE))
+	}
+	if i.HistoryTimeLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeLT(*i.HistoryTimeLT))
+	}
+	if i.HistoryTimeLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.HistoryTimeLTE(*i.HistoryTimeLTE))
+	}
+	if i.Ref != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefEQ(*i.Ref))
+	}
+	if i.RefNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefNEQ(*i.RefNEQ))
+	}
+	if len(i.RefIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.RefIn(i.RefIn...))
+	}
+	if len(i.RefNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.RefNotIn(i.RefNotIn...))
+	}
+	if i.RefGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefGT(*i.RefGT))
+	}
+	if i.RefGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefGTE(*i.RefGTE))
+	}
+	if i.RefLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefLT(*i.RefLT))
+	}
+	if i.RefLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefLTE(*i.RefLTE))
+	}
+	if i.RefContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefContains(*i.RefContains))
+	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
+	if i.RefHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefHasSuffix(*i.RefHasSuffix))
+	}
+	if i.RefIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.RefIsNil())
+	}
+	if i.RefNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.RefNotNil())
+	}
+	if i.RefEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefEqualFold(*i.RefEqualFold))
+	}
+	if i.RefContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefContainsFold(*i.RefContainsFold))
+	}
+	if i.Operation != nil {
+		predicates = append(predicates, trustcenterfaqhistory.OperationEQ(*i.Operation))
+	}
+	if i.OperationNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.OperationNEQ(*i.OperationNEQ))
+	}
+	if len(i.OperationIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.OperationIn(i.OperationIn...))
+	}
+	if len(i.OperationNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.OperationNotIn(i.OperationNotIn...))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.TrustCenterFaqKindName != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameEQ(*i.TrustCenterFaqKindName))
+	}
+	if i.TrustCenterFaqKindNameNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameNEQ(*i.TrustCenterFaqKindNameNEQ))
+	}
+	if len(i.TrustCenterFaqKindNameIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameIn(i.TrustCenterFaqKindNameIn...))
+	}
+	if len(i.TrustCenterFaqKindNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameNotIn(i.TrustCenterFaqKindNameNotIn...))
+	}
+	if i.TrustCenterFaqKindNameGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameGT(*i.TrustCenterFaqKindNameGT))
+	}
+	if i.TrustCenterFaqKindNameGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameGTE(*i.TrustCenterFaqKindNameGTE))
+	}
+	if i.TrustCenterFaqKindNameLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameLT(*i.TrustCenterFaqKindNameLT))
+	}
+	if i.TrustCenterFaqKindNameLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameLTE(*i.TrustCenterFaqKindNameLTE))
+	}
+	if i.TrustCenterFaqKindNameContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameContains(*i.TrustCenterFaqKindNameContains))
+	}
+	if i.TrustCenterFaqKindNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameHasPrefix(*i.TrustCenterFaqKindNameHasPrefix))
+	}
+	if i.TrustCenterFaqKindNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameHasSuffix(*i.TrustCenterFaqKindNameHasSuffix))
+	}
+	if i.TrustCenterFaqKindNameIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameIsNil())
+	}
+	if i.TrustCenterFaqKindNameNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameNotNil())
+	}
+	if i.TrustCenterFaqKindNameEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameEqualFold(*i.TrustCenterFaqKindNameEqualFold))
+	}
+	if i.TrustCenterFaqKindNameContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindNameContainsFold(*i.TrustCenterFaqKindNameContainsFold))
+	}
+	if i.TrustCenterFaqKindID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDEQ(*i.TrustCenterFaqKindID))
+	}
+	if i.TrustCenterFaqKindIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDNEQ(*i.TrustCenterFaqKindIDNEQ))
+	}
+	if len(i.TrustCenterFaqKindIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDIn(i.TrustCenterFaqKindIDIn...))
+	}
+	if len(i.TrustCenterFaqKindIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDNotIn(i.TrustCenterFaqKindIDNotIn...))
+	}
+	if i.TrustCenterFaqKindIDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDGT(*i.TrustCenterFaqKindIDGT))
+	}
+	if i.TrustCenterFaqKindIDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDGTE(*i.TrustCenterFaqKindIDGTE))
+	}
+	if i.TrustCenterFaqKindIDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDLT(*i.TrustCenterFaqKindIDLT))
+	}
+	if i.TrustCenterFaqKindIDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDLTE(*i.TrustCenterFaqKindIDLTE))
+	}
+	if i.TrustCenterFaqKindIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDContains(*i.TrustCenterFaqKindIDContains))
+	}
+	if i.TrustCenterFaqKindIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDHasPrefix(*i.TrustCenterFaqKindIDHasPrefix))
+	}
+	if i.TrustCenterFaqKindIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDHasSuffix(*i.TrustCenterFaqKindIDHasSuffix))
+	}
+	if i.TrustCenterFaqKindIDIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDIsNil())
+	}
+	if i.TrustCenterFaqKindIDNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDNotNil())
+	}
+	if i.TrustCenterFaqKindIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDEqualFold(*i.TrustCenterFaqKindIDEqualFold))
+	}
+	if i.TrustCenterFaqKindIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDContainsFold(*i.TrustCenterFaqKindIDContainsFold))
+	}
+	if i.NoteID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDEQ(*i.NoteID))
+	}
+	if i.NoteIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDNEQ(*i.NoteIDNEQ))
+	}
+	if len(i.NoteIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDIn(i.NoteIDIn...))
+	}
+	if len(i.NoteIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDNotIn(i.NoteIDNotIn...))
+	}
+	if i.NoteIDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDGT(*i.NoteIDGT))
+	}
+	if i.NoteIDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDGTE(*i.NoteIDGTE))
+	}
+	if i.NoteIDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDLT(*i.NoteIDLT))
+	}
+	if i.NoteIDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDLTE(*i.NoteIDLTE))
+	}
+	if i.NoteIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDContains(*i.NoteIDContains))
+	}
+	if i.NoteIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDHasPrefix(*i.NoteIDHasPrefix))
+	}
+	if i.NoteIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDHasSuffix(*i.NoteIDHasSuffix))
+	}
+	if i.NoteIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDEqualFold(*i.NoteIDEqualFold))
+	}
+	if i.NoteIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.NoteIDContainsFold(*i.NoteIDContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.ReferenceLink != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkEQ(*i.ReferenceLink))
+	}
+	if i.ReferenceLinkNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkNEQ(*i.ReferenceLinkNEQ))
+	}
+	if len(i.ReferenceLinkIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkIn(i.ReferenceLinkIn...))
+	}
+	if len(i.ReferenceLinkNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkNotIn(i.ReferenceLinkNotIn...))
+	}
+	if i.ReferenceLinkGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkGT(*i.ReferenceLinkGT))
+	}
+	if i.ReferenceLinkGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkGTE(*i.ReferenceLinkGTE))
+	}
+	if i.ReferenceLinkLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkLT(*i.ReferenceLinkLT))
+	}
+	if i.ReferenceLinkLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkLTE(*i.ReferenceLinkLTE))
+	}
+	if i.ReferenceLinkContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkContains(*i.ReferenceLinkContains))
+	}
+	if i.ReferenceLinkHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkHasPrefix(*i.ReferenceLinkHasPrefix))
+	}
+	if i.ReferenceLinkHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkHasSuffix(*i.ReferenceLinkHasSuffix))
+	}
+	if i.ReferenceLinkIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkIsNil())
+	}
+	if i.ReferenceLinkNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkNotNil())
+	}
+	if i.ReferenceLinkEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkEqualFold(*i.ReferenceLinkEqualFold))
+	}
+	if i.ReferenceLinkContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.ReferenceLinkContainsFold(*i.ReferenceLinkContainsFold))
+	}
+	if i.DisplayOrder != nil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderEQ(*i.DisplayOrder))
+	}
+	if i.DisplayOrderNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderNEQ(*i.DisplayOrderNEQ))
+	}
+	if len(i.DisplayOrderIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderIn(i.DisplayOrderIn...))
+	}
+	if len(i.DisplayOrderNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderNotIn(i.DisplayOrderNotIn...))
+	}
+	if i.DisplayOrderGT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderGT(*i.DisplayOrderGT))
+	}
+	if i.DisplayOrderGTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderGTE(*i.DisplayOrderGTE))
+	}
+	if i.DisplayOrderLT != nil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderLT(*i.DisplayOrderLT))
+	}
+	if i.DisplayOrderLTE != nil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderLTE(*i.DisplayOrderLTE))
+	}
+	if i.DisplayOrderIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderIsNil())
+	}
+	if i.DisplayOrderNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.DisplayOrderNotNil())
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTrustCenterFAQHistoryWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return trustcenterfaqhistory.And(predicates...), nil
 	}
 }
 

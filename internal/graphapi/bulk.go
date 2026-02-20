@@ -7046,6 +7046,160 @@ func (r *mutationResolver) bulkCreateTrustCenterEntity(ctx context.Context, inpu
 	}, nil
 }
 
+// bulkCreateTrustCenterFAQ uses the CreateBulk function to create multiple TrustCenterFAQ entities
+func (r *mutationResolver) bulkCreateTrustCenterFAQ(ctx context.Context, input []*generated.CreateTrustCenterFAQInput) (*model.TrustCenterFAQBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TrustCenterFAQCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TrustCenterFAQ.Create().SetInput(*data)
+	}
+
+	res, err := c.TrustCenterFAQ.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterfaq"})
+	}
+
+	// return response
+	return &model.TrustCenterFAQBulkCreatePayload{
+		TrustCenterFAQs: res,
+	}, nil
+}
+
+// bulkDeleteTrustCenterFAQ deletes multiple TrustCenterFAQ entities by their IDs
+func (r *mutationResolver) bulkDeleteTrustCenterFAQ(ctx context.Context, ids []string) (*model.TrustCenterFAQBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each trustcenterfaq individually to ensure proper cleanup
+			if err := r.db.TrustCenterFAQ.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to delete trustcenterfaq in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TrustCenterFAQEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to cleanup trustcenterfaq edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterfaq deletions failed")
+	}
+
+	return &model.TrustCenterFAQBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkUpdateTrustCenterFAQ updates multiple TrustCenterFAQ entities
+func (r *mutationResolver) bulkUpdateTrustCenterFAQ(ctx context.Context, ids []string, input generated.UpdateTrustCenterFAQInput) (*model.TrustCenterFAQBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.TrustCenterFAQ, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each trustcenterfaq individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for trustcenterfaq")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.TrustCenterFAQ.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to get trustcenterfaq in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", id).Msg("failed to update trustcenterfaq in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.TrustCenterFAQBulkUpdatePayload{
+		TrustCenterFAQs: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVTrustCenterFAQ updates multiple TrustCenterFAQ entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVTrustCenterFAQ(ctx context.Context, inputs []*csvgenerated.TrustCenterFAQCSVUpdateInput) (*model.TrustCenterFAQBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.TrustCenterFAQ, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each trustcenterfaq individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for trustcenterfaq")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.TrustCenterFAQ.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", input.ID).Msg("failed to get trustcenterfaq in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterfaq_id", input.ID).Msg("failed to update trustcenterfaq in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.TrustCenterFAQBulkUpdatePayload{
+		TrustCenterFAQs: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
 // bulkCreateTrustCenterNDARequest uses the CreateBulk function to create multiple TrustCenterNDARequest entities
 func (r *mutationResolver) bulkCreateTrustCenterNDARequest(ctx context.Context, input []*generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

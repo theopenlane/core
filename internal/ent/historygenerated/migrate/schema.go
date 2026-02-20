@@ -2661,6 +2661,38 @@ var (
 			},
 		},
 	}
+	// TrustCenterFaqsHistoryColumns holds the columns for the "trust_center_faqs_history" table.
+	TrustCenterFaqsHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_faq_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "note_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "reference_link", Type: field.TypeString, Nullable: true},
+		{Name: "display_order", Type: field.TypeInt, Nullable: true, Default: 0},
+	}
+	// TrustCenterFaqsHistoryTable holds the schema information for the "trust_center_faqs_history" table.
+	TrustCenterFaqsHistoryTable = &schema.Table{
+		Name:       "trust_center_faqs_history",
+		Columns:    TrustCenterFaqsHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterFaqsHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterfaqhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterFaqsHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterHistoryColumns holds the columns for the "trust_center_history" table.
 	TrustCenterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3312,6 +3344,7 @@ var (
 		TrustCenterComplianceHistoryTable,
 		TrustCenterDocHistoryTable,
 		TrustCenterEntityHistoryTable,
+		TrustCenterFaqsHistoryTable,
 		TrustCenterHistoryTable,
 		TrustCenterNdaRequestHistoryTable,
 		TrustCenterSettingHistoryTable,
@@ -3509,6 +3542,9 @@ func init() {
 	}
 	TrustCenterEntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_entity_history",
+	}
+	TrustCenterFaqsHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_faqs_history",
 	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",

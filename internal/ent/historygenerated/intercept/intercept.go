@@ -71,6 +71,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
@@ -1763,6 +1764,33 @@ func (f TraverseTrustCenterEntityHistory) Traverse(ctx context.Context, q histor
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.TrustCenterEntityHistoryQuery", q)
 }
 
+// The TrustCenterFAQHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterFAQHistoryFunc func(context.Context, *historygenerated.TrustCenterFAQHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterFAQHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.TrustCenterFAQHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.TrustCenterFAQHistoryQuery", q)
+}
+
+// The TraverseTrustCenterFAQHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterFAQHistory func(context.Context, *historygenerated.TrustCenterFAQHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterFAQHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterFAQHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.TrustCenterFAQHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.TrustCenterFAQHistoryQuery", q)
+}
+
 // The TrustCenterHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TrustCenterHistoryFunc func(context.Context, *historygenerated.TrustCenterHistoryQuery) (historygenerated.Value, error)
 
@@ -2264,6 +2292,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.TrustCenterDocHistoryQuery, predicate.TrustCenterDocHistory, trustcenterdochistory.OrderOption]{typ: historygenerated.TypeTrustCenterDocHistory, tq: q}, nil
 	case *historygenerated.TrustCenterEntityHistoryQuery:
 		return &query[*historygenerated.TrustCenterEntityHistoryQuery, predicate.TrustCenterEntityHistory, trustcenterentityhistory.OrderOption]{typ: historygenerated.TypeTrustCenterEntityHistory, tq: q}, nil
+	case *historygenerated.TrustCenterFAQHistoryQuery:
+		return &query[*historygenerated.TrustCenterFAQHistoryQuery, predicate.TrustCenterFAQHistory, trustcenterfaqhistory.OrderOption]{typ: historygenerated.TypeTrustCenterFAQHistory, tq: q}, nil
 	case *historygenerated.TrustCenterHistoryQuery:
 		return &query[*historygenerated.TrustCenterHistoryQuery, predicate.TrustCenterHistory, trustcenterhistory.OrderOption]{typ: historygenerated.TypeTrustCenterHistory, tq: q}, nil
 	case *historygenerated.TrustCenterNDARequestHistoryQuery:

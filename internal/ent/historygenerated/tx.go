@@ -134,6 +134,8 @@ type Tx struct {
 	TrustCenterDocHistory *TrustCenterDocHistoryClient
 	// TrustCenterEntityHistory is the client for interacting with the TrustCenterEntityHistory builders.
 	TrustCenterEntityHistory *TrustCenterEntityHistoryClient
+	// TrustCenterFAQHistory is the client for interacting with the TrustCenterFAQHistory builders.
+	TrustCenterFAQHistory *TrustCenterFAQHistoryClient
 	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
 	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterNDARequestHistory is the client for interacting with the TrustCenterNDARequestHistory builders.
@@ -353,6 +355,7 @@ func (tx *Tx) init() {
 	tx.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(tx.config)
 	tx.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(tx.config)
 	tx.TrustCenterEntityHistory = NewTrustCenterEntityHistoryClient(tx.config)
+	tx.TrustCenterFAQHistory = NewTrustCenterFAQHistoryClient(tx.config)
 	tx.TrustCenterHistory = NewTrustCenterHistoryClient(tx.config)
 	tx.TrustCenterNDARequestHistory = NewTrustCenterNDARequestHistoryClient(tx.config)
 	tx.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(tx.config)

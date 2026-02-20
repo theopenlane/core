@@ -2795,6 +2795,44 @@ type TrustCenterEntityUpdatePayload struct {
 	TrustCenterEntity *generated.TrustCenterEntity `json:"trustCenterEntity"`
 }
 
+// Return response for createBulkTrustCenterFAQ mutation
+type TrustCenterFAQBulkCreatePayload struct {
+	// Created trustCenterFAQs
+	TrustCenterFAQs []*generated.TrustCenterFAQ `json:"trustCenterFAQs,omitempty"`
+}
+
+// Return response for deleteBulkTrustCenterFAQ mutation
+type TrustCenterFAQBulkDeletePayload struct {
+	// Deleted trustCenterFAQ IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterFAQ mutation
+type TrustCenterFAQBulkUpdatePayload struct {
+	// Updated trustCenterFAQs
+	TrustCenterFAQs []*generated.TrustCenterFAQ `json:"trustCenterFAQs,omitempty"`
+	// IDs of the updated trustCenterFAQs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createTrustCenterFAQ mutation
+type TrustCenterFAQCreatePayload struct {
+	// Created trustCenterFAQ
+	TrustCenterFaq *generated.TrustCenterFAQ `json:"trustCenterFAQ"`
+}
+
+// Return response for deleteTrustCenterFAQ mutation
+type TrustCenterFAQDeletePayload struct {
+	// Deleted trustCenterFAQ ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterFAQ mutation
+type TrustCenterFAQUpdatePayload struct {
+	// Updated trustCenterFAQ
+	TrustCenterFaq *generated.TrustCenterFAQ `json:"trustCenterFAQ"`
+}
+
 type TrustCenterNDACreatePayload struct {
 	Template *generated.Template `json:"template"`
 }

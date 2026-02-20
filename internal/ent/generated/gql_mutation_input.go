@@ -13719,22 +13719,23 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Title            *string
-	Text             string
-	TextJSON         []interface{}
-	NoteRef          *string
-	IsEdited         *bool
-	OwnerID          *string
-	TaskID           *string
-	ControlID        *string
-	SubcontrolID     *string
-	ProcedureID      *string
-	RiskID           *string
-	InternalPolicyID *string
-	EvidenceID       *string
-	TrustCenterID    *string
-	DiscussionID     *string
-	FileIDs          []string
+	Title             *string
+	Text              string
+	TextJSON          []interface{}
+	NoteRef           *string
+	IsEdited          *bool
+	OwnerID           *string
+	TaskID            *string
+	ControlID         *string
+	SubcontrolID      *string
+	ProcedureID       *string
+	RiskID            *string
+	InternalPolicyID  *string
+	EvidenceID        *string
+	TrustCenterID     *string
+	DiscussionID      *string
+	TrustCenterFaqIDs []string
+	FileIDs           []string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -13782,6 +13783,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.DiscussionID; v != nil {
 		m.SetDiscussionID(*v)
 	}
+	if v := i.TrustCenterFaqIDs; len(v) > 0 {
+		m.AddTrustCenterFaqIDs(v...)
+	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
@@ -13795,36 +13799,39 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	ClearTitle          bool
-	Title               *string
-	Text                *string
-	ClearTextJSON       bool
-	TextJSON            []interface{}
-	AppendTextJSON      []interface{}
-	ClearNoteRef        bool
-	NoteRef             *string
-	IsEdited            *bool
-	ClearTask           bool
-	TaskID              *string
-	ClearControl        bool
-	ControlID           *string
-	ClearSubcontrol     bool
-	SubcontrolID        *string
-	ClearProcedure      bool
-	ProcedureID         *string
-	ClearRisk           bool
-	RiskID              *string
-	ClearInternalPolicy bool
-	InternalPolicyID    *string
-	ClearEvidence       bool
-	EvidenceID          *string
-	ClearTrustCenter    bool
-	TrustCenterID       *string
-	ClearDiscussion     bool
-	DiscussionID        *string
-	ClearFiles          bool
-	AddFileIDs          []string
-	RemoveFileIDs       []string
+	ClearTitle              bool
+	Title                   *string
+	Text                    *string
+	ClearTextJSON           bool
+	TextJSON                []interface{}
+	AppendTextJSON          []interface{}
+	ClearNoteRef            bool
+	NoteRef                 *string
+	IsEdited                *bool
+	ClearTask               bool
+	TaskID                  *string
+	ClearControl            bool
+	ControlID               *string
+	ClearSubcontrol         bool
+	SubcontrolID            *string
+	ClearProcedure          bool
+	ProcedureID             *string
+	ClearRisk               bool
+	RiskID                  *string
+	ClearInternalPolicy     bool
+	InternalPolicyID        *string
+	ClearEvidence           bool
+	EvidenceID              *string
+	ClearTrustCenter        bool
+	TrustCenterID           *string
+	ClearDiscussion         bool
+	DiscussionID            *string
+	ClearTrustCenterFaqs    bool
+	AddTrustCenterFaqIDs    []string
+	RemoveTrustCenterFaqIDs []string
+	ClearFiles              bool
+	AddFileIDs              []string
+	RemoveFileIDs           []string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -13909,6 +13916,15 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.DiscussionID; v != nil {
 		m.SetDiscussionID(*v)
+	}
+	if i.ClearTrustCenterFaqs {
+		m.ClearTrustCenterFaqs()
+	}
+	if v := i.AddTrustCenterFaqIDs; len(v) > 0 {
+		m.AddTrustCenterFaqIDs(v...)
+	}
+	if v := i.RemoveTrustCenterFaqIDs; len(v) > 0 {
+		m.RemoveTrustCenterFaqIDs(v...)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()
@@ -23580,6 +23596,7 @@ type CreateTrustCenterInput struct {
 	PostIDs                    []string
 	TrustCenterEntityIDs       []string
 	TrustCenterNdaRequestIDs   []string
+	TrustCenterFaqIDs          []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -23647,6 +23664,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.TrustCenterNdaRequestIDs; len(v) > 0 {
 		m.AddTrustCenterNdaRequestIDs(v...)
 	}
+	if v := i.TrustCenterFaqIDs; len(v) > 0 {
+		m.AddTrustCenterFaqIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
@@ -23709,6 +23729,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterNdaRequests      bool
 	AddTrustCenterNdaRequestIDs      []string
 	RemoveTrustCenterNdaRequestIDs   []string
+	ClearTrustCenterFaqs             bool
+	AddTrustCenterFaqIDs             []string
+	RemoveTrustCenterFaqIDs          []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -23868,6 +23891,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterNdaRequestIDs; len(v) > 0 {
 		m.RemoveTrustCenterNdaRequestIDs(v...)
+	}
+	if i.ClearTrustCenterFaqs {
+		m.ClearTrustCenterFaqs()
+	}
+	if v := i.AddTrustCenterFaqIDs; len(v) > 0 {
+		m.AddTrustCenterFaqIDs(v...)
+	}
+	if v := i.RemoveTrustCenterFaqIDs; len(v) > 0 {
+		m.RemoveTrustCenterFaqIDs(v...)
 	}
 }
 
@@ -24259,6 +24291,126 @@ func (c *TrustCenterEntityUpdate) SetInput(i UpdateTrustCenterEntityInput) *Trus
 
 // SetInput applies the change-set in the UpdateTrustCenterEntityInput on the TrustCenterEntityUpdateOne builder.
 func (c *TrustCenterEntityUpdateOne) SetInput(i UpdateTrustCenterEntityInput) *TrustCenterEntityUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterFAQInput represents a mutation input for creating trustcenterfaqs.
+type CreateTrustCenterFAQInput struct {
+	TrustCenterFaqKindName *string
+	ReferenceLink          *string
+	DisplayOrder           *int
+	TrustCenterFaqKindID   *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	TrustCenterID          *string
+	NoteID                 string
+}
+
+// Mutate applies the CreateTrustCenterFAQInput on the TrustCenterFAQMutation builder.
+func (i *CreateTrustCenterFAQInput) Mutate(m *TrustCenterFAQMutation) {
+	if v := i.TrustCenterFaqKindName; v != nil {
+		m.SetTrustCenterFaqKindName(*v)
+	}
+	if v := i.ReferenceLink; v != nil {
+		m.SetReferenceLink(*v)
+	}
+	if v := i.DisplayOrder; v != nil {
+		m.SetDisplayOrder(*v)
+	}
+	if v := i.TrustCenterFaqKindID; v != nil {
+		m.SetTrustCenterFaqKindID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	m.SetNoteID(i.NoteID)
+}
+
+// SetInput applies the change-set in the CreateTrustCenterFAQInput on the TrustCenterFAQCreate builder.
+func (c *TrustCenterFAQCreate) SetInput(i CreateTrustCenterFAQInput) *TrustCenterFAQCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterFAQInput represents a mutation input for updating trustcenterfaqs.
+type UpdateTrustCenterFAQInput struct {
+	ClearTrustCenterFaqKindName bool
+	TrustCenterFaqKindName      *string
+	ClearReferenceLink          bool
+	ReferenceLink               *string
+	ClearDisplayOrder           bool
+	DisplayOrder                *int
+	ClearTrustCenterFaqKind     bool
+	TrustCenterFaqKindID        *string
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+}
+
+// Mutate applies the UpdateTrustCenterFAQInput on the TrustCenterFAQMutation builder.
+func (i *UpdateTrustCenterFAQInput) Mutate(m *TrustCenterFAQMutation) {
+	if i.ClearTrustCenterFaqKindName {
+		m.ClearTrustCenterFaqKindName()
+	}
+	if v := i.TrustCenterFaqKindName; v != nil {
+		m.SetTrustCenterFaqKindName(*v)
+	}
+	if i.ClearReferenceLink {
+		m.ClearReferenceLink()
+	}
+	if v := i.ReferenceLink; v != nil {
+		m.SetReferenceLink(*v)
+	}
+	if i.ClearDisplayOrder {
+		m.ClearDisplayOrder()
+	}
+	if v := i.DisplayOrder; v != nil {
+		m.SetDisplayOrder(*v)
+	}
+	if i.ClearTrustCenterFaqKind {
+		m.ClearTrustCenterFaqKind()
+	}
+	if v := i.TrustCenterFaqKindID; v != nil {
+		m.SetTrustCenterFaqKindID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterFAQInput on the TrustCenterFAQUpdate builder.
+func (c *TrustCenterFAQUpdate) SetInput(i UpdateTrustCenterFAQInput) *TrustCenterFAQUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterFAQInput on the TrustCenterFAQUpdateOne builder.
+func (c *TrustCenterFAQUpdateOne) SetInput(i UpdateTrustCenterFAQInput) *TrustCenterFAQUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

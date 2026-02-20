@@ -92,6 +92,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -33644,6 +33645,361 @@ func (_m *TrustCenterEntity) ToEdge(order *TrustCenterEntityOrder) *TrustCenterE
 		order = DefaultTrustCenterEntityOrder
 	}
 	return &TrustCenterEntityEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// TrustCenterFAQEdge is the edge representation of TrustCenterFAQ.
+type TrustCenterFAQEdge struct {
+	Node   *TrustCenterFAQ `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// TrustCenterFAQConnection is the connection containing edges to TrustCenterFAQ.
+type TrustCenterFAQConnection struct {
+	Edges      []*TrustCenterFAQEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *TrustCenterFAQConnection) build(nodes []*TrustCenterFAQ, pager *trustcenterfaqPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterFAQ
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterFAQ {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterFAQ {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterFAQEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterFAQEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterFAQPaginateOption enables pagination customization.
+type TrustCenterFAQPaginateOption func(*trustcenterfaqPager) error
+
+// WithTrustCenterFAQOrder configures pagination ordering.
+func WithTrustCenterFAQOrder(order []*TrustCenterFAQOrder) TrustCenterFAQPaginateOption {
+	return func(pager *trustcenterfaqPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTrustCenterFAQFilter configures pagination filter.
+func WithTrustCenterFAQFilter(filter func(*TrustCenterFAQQuery) (*TrustCenterFAQQuery, error)) TrustCenterFAQPaginateOption {
+	return func(pager *trustcenterfaqPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterFAQQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcenterfaqPager struct {
+	reverse bool
+	order   []*TrustCenterFAQOrder
+	filter  func(*TrustCenterFAQQuery) (*TrustCenterFAQQuery, error)
+}
+
+func newTrustCenterFAQPager(opts []TrustCenterFAQPaginateOption, reverse bool) (*trustcenterfaqPager, error) {
+	pager := &trustcenterfaqPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *trustcenterfaqPager) applyFilter(query *TrustCenterFAQQuery) (*TrustCenterFAQQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcenterfaqPager) toCursor(_m *TrustCenterFAQ) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *trustcenterfaqPager) applyCursors(query *TrustCenterFAQQuery, after, before *Cursor) (*TrustCenterFAQQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTrustCenterFAQOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *trustcenterfaqPager) applyOrder(query *TrustCenterFAQQuery) *TrustCenterFAQQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTrustCenterFAQOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTrustCenterFAQOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *trustcenterfaqPager) orderExpr(query *TrustCenterFAQQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTrustCenterFAQOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterFAQ.
+func (_m *TrustCenterFAQQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterFAQPaginateOption,
+) (*TrustCenterFAQConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterFAQPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterFAQConnection{Edges: []*TrustCenterFAQEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterFAQOrderFieldCreatedAt orders TrustCenterFAQ by created_at.
+	TrustCenterFAQOrderFieldCreatedAt = &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: trustcenterfaq.FieldCreatedAt,
+		toTerm: trustcenterfaq.ByCreatedAt,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterFAQOrderFieldUpdatedAt orders TrustCenterFAQ by updated_at.
+	TrustCenterFAQOrderFieldUpdatedAt = &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: trustcenterfaq.FieldUpdatedAt,
+		toTerm: trustcenterfaq.ByUpdatedAt,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterFAQOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterFAQOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterFAQOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterFAQOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterFAQOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterFAQOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TrustCenterFAQOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterFAQOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterFAQOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterFAQOrderField defines the ordering field of TrustCenterFAQ.
+type TrustCenterFAQOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterFAQ.
+	Value    func(*TrustCenterFAQ) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcenterfaq.OrderOption
+	toCursor func(*TrustCenterFAQ) Cursor
+}
+
+// TrustCenterFAQOrder defines the ordering of TrustCenterFAQ.
+type TrustCenterFAQOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *TrustCenterFAQOrderField `json:"field"`
+}
+
+// DefaultTrustCenterFAQOrder is the default ordering of TrustCenterFAQ.
+var DefaultTrustCenterFAQOrder = &TrustCenterFAQOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterFAQOrderField{
+		Value: func(_m *TrustCenterFAQ) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: trustcenterfaq.FieldID,
+		toTerm: trustcenterfaq.ByID,
+		toCursor: func(_m *TrustCenterFAQ) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterFAQ into TrustCenterFAQEdge.
+func (_m *TrustCenterFAQ) ToEdge(order *TrustCenterFAQOrder) *TrustCenterFAQEdge {
+	if order == nil {
+		order = DefaultTrustCenterFAQOrder
+	}
+	return &TrustCenterFAQEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
