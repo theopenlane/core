@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -127,11 +129,19 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
+	authURL, err := h.shortenQuestionnaireURL(reqCtx, accessToken)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error shortening questionnaire URL")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
 	email, err := h.Emailer.NewQuestionnaireAuthEmail(emailtemplates.Recipient{
 		Email: in.Email,
 	}, accessToken, emailtemplates.QuestionnaireAuthData{
-		CompanyName:    org.DisplayName,
-		AssessmentName: assessmentData.Name,
+		CompanyName:              org.DisplayName,
+		AssessmentName:           assessmentData.Name,
+		QuestionnaireAuthFullURL: authURL,
 	})
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating questionnaire auth email")
@@ -158,4 +168,28 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	}
 
 	return h.Success(ctx, out, openapi)
+}
+
+func (h *Handler) shortenQuestionnaireURL(ctx context.Context, token string) (string, error) {
+	baseURL, err := url.Parse(h.Emailer.URLS.Questionnaire)
+	if err != nil {
+		return "", err
+	}
+
+	originalURL := baseURL.ResolveReference(&url.URL{RawQuery: url.Values{"token": []string{token}}.Encode()})
+
+	if h.ShortlinksClient == nil {
+		return originalURL.String(), nil
+	}
+
+	shortURL, err := h.ShortlinksClient.Create(ctx, originalURL.String(), "")
+	if err != nil {
+		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).
+			Err(err).
+			Msg("failed to shorten URL, using original")
+
+		return originalURL.String(), nil
+	}
+
+	return shortURL, nil
 }

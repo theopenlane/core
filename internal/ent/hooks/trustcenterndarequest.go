@@ -444,14 +444,15 @@ func addTokenToURLAndShorten(ctx context.Context, baseURL url.URL, token string)
 	regularLink := url.String()
 
 	// if no shortlinks client, return the regular link with the token
-	if transactionFromContext(ctx).Shortlinks == nil {
+	tx := transactionFromContext(ctx)
+	if tx == nil || tx.Shortlinks == nil {
 		return regularLink, nil
 	}
 
-	shortenedURL, shortenErr := transactionFromContext(ctx).Shortlinks.Create(ctx, regularLink, "")
-	if shortenErr != nil {
+	shortenedURL, err := tx.Shortlinks.Create(ctx, regularLink, "")
+	if err != nil {
 		// don't log the full link as it contains a confidential token, just log the base URL
-		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).Err(shortenErr).Msg("failed to shorten URL, using original")
+		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).Err(err).Msg("failed to shorten URL, using original")
 
 		return regularLink, nil
 	}
