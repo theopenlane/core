@@ -40,8 +40,6 @@ func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.Cre
 		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
 
 		input.EntityTypeID = &etID
-	} else {
-		logx.FromContext(ctx).Warn().Msg("no entity type name provided, skipping resolution")
 	}
 
 	res, err := withTransactionalMutation(ctx).Entity.Create().SetInput(input).Save(ctx)
@@ -55,7 +53,7 @@ func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.Cre
 }
 
 // CreateBulkEntity is the resolver for the createBulkEntity field.
-func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput, entityTypeName *string) (*model.EntityBulkCreatePayload, error) {
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
@@ -68,11 +66,27 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	if entityTypeName != nil {
+		// get the entity id from the entity type name
+		etID, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.NameEqualFold(*entityTypeName)).OnlyID(ctx)
+		if err != nil || etID == "" {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_type_name", *entityTypeName).Msg("failed to get entity type by name")
+
+			return nil, rout.InvalidField("entity_type_name")
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
+
+		for i := range input {
+			input[i].EntityTypeID = &etID
+		}
+	}
+
 	return r.bulkCreateEntity(ctx, input)
 }
 
 // CreateBulkCSVEntity is the resolver for the createBulkCSVEntity field.
-func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error) {
+func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string) (*model.EntityBulkCreatePayload, error) {
 	data, err := common.UnmarshalBulkData[csvgenerated.EntityCSVInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
@@ -100,8 +114,27 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 		return nil, err
 	}
 
+	var entityTypeID string
+	if entityTypeName != nil {
+		// get the entity id from the entity type name
+		etID, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.NameEqualFold(*entityTypeName)).OnlyID(ctx)
+		if err != nil || etID == "" {
+			logx.FromContext(ctx).Error().Err(err).Str("entity_type_name", *entityTypeName).Msg("failed to get entity type by name")
+
+			return nil, rout.InvalidField("entity_type_name")
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_name", *entityTypeName).Str("entity_type_id", etID).Msg("resolved entity type name to id")
+
+		entityTypeID = etID
+	}
+
 	inputs := make([]*generated.CreateEntityInput, 0, len(data))
 	for i := range data {
+		if entityTypeID != "" {
+			data[i].Input.EntityTypeID = &entityTypeID
+		}
+
 		inputs = append(inputs, &data[i].Input)
 	}
 
