@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	"entgo.io/ent"
@@ -276,11 +277,22 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
+	baseURL, err := url.Parse(m.Emailer.URLS.Questionnaire)
+	if err != nil {
+		return err
+	}
+
+	fullURL, err := addTokenToURLAndShorten(ctx, *baseURL, accessToken)
+	if err != nil {
+		return err
+	}
+
 	email, err := m.Emailer.NewQuestionnaireAuthEmail(emailtemplates.Recipient{
 		Email: emailAddress,
 	}, accessToken, emailtemplates.QuestionnaireAuthData{
-		CompanyName:    org.DisplayName,
-		AssessmentName: assessmentData.Name,
+		CompanyName:              org.DisplayName,
+		AssessmentName:           assessmentData.Name,
+		QuestionnaireAuthFullURL: fullURL,
 	})
 	if err != nil {
 		return err

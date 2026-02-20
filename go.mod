@@ -90,13 +90,13 @@ require (
 	github.com/theopenlane/core/common v1.0.9
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/emailtemplates v0.3.5
+	github.com/theopenlane/emailtemplates v0.3.6
 	github.com/theopenlane/entx v0.22.5
 	github.com/theopenlane/go-client v0.8.4
 	github.com/theopenlane/gqlgen-plugins v0.14.4
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.24.1
-	github.com/theopenlane/newman v0.2.1
+	github.com/theopenlane/newman v0.2.2
 	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.6.2
 	github.com/tmc/langchaingo v0.1.14
