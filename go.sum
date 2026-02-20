@@ -569,8 +569,6 @@ github.com/redis/go-redis/v9 v9.18.0 h1:pMkxYPkEbMPwRdenAzUNyFNrDgHx9U+DrBabWNfS
 github.com/redis/go-redis/v9 v9.18.0/go.mod h1:k3ufPphLU5YXwNTUcCRXGxUoF1fqxnhFQmscfkCoDA0=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
-github.com/resend/resend-go/v2 v2.28.0 h1:ttM1/VZR4fApBv3xI1TneSKi1pbfFsVrq7fXFlHKtj4=
-github.com/resend/resend-go/v2 v2.28.0/go.mod h1:3YCb8c8+pLiqhtRFXTyFwlLvfjQtluxOr9HEh2BwCkQ=
 github.com/resend/resend-go/v3 v3.1.0 h1:bJpU5gYCDcczLdhCo37oy9mOmdtSVlOzM6IfWX9zhMw=
 github.com/resend/resend-go/v3 v3.1.0/go.mod h1:iI7VA0NoGjWvsNii5iNC5Dy0llsI3HncXPejhniYzwE=
 github.com/riverqueue/river v0.30.2 h1:RtJ3/CBat00Jjtllvy2P7A/QxSH3PRR0ri/B8PxWm1w=
@@ -677,8 +675,6 @@ github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.24.1 h1:R4LLtxqoQQrZCKc3hod2O0Y+zeep2cbfk544u7kSpZ8=
 github.com/theopenlane/iam v0.24.1/go.mod h1:oC11W/2TXtxRO0zwmbPLGOo3ZxTxpzLMyewy5Y94jS0=
-github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
-github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
 github.com/theopenlane/newman v0.2.2 h1:TADWEoD9vOJonRqPKTUePMudpoRq7w6K7Vdy5RdapWw=
 github.com/theopenlane/newman v0.2.2/go.mod h1:nUyyNIxUIfKpPLf4oO/v1bFp5Ca8P42FG0ObxyEp/pA=
 github.com/theopenlane/riverboat v0.8.8 h1:MnArmNTqcM8cM21chiFkwVp9F74vdHevNoTeEIJtmpE=

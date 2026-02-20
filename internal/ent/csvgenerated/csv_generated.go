@@ -1324,7 +1324,8 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"TrustCenterFAQ": {
 		SchemaName: "TrustCenterFAQ",
-		Rules:      []CSVReferenceRule{},
+		Rules: []CSVReferenceRule{
+		},
 	},
 	"TrustCenterNDARequest": {
 		SchemaName: "TrustCenterNDARequest",
@@ -2855,7 +2856,7 @@ func (TrustCenterFAQCSVInput) CSVInputWrapper() {}
 // TrustCenterFAQCSVUpdateInput wraps UpdateTrustCenterFAQInput with CSV reference columns for bulk updates.
 type TrustCenterFAQCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID    string `csv:"ID"`
+	ID string `csv:"ID"`
 	Input generated.UpdateTrustCenterFAQInput
 }
 
