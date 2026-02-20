@@ -50,7 +50,7 @@ const (
 	// FieldDisplayOrder holds the string denoting the display_order field in the database.
 	FieldDisplayOrder = "display_order"
 	// Table holds the table name of the trustcenterfaqhistory in the database.
-	Table = "trust_center_faq_history"
+	Table = "trust_center_faqs_history"
 )
 
 // Columns holds all SQL columns for trustcenterfaqhistory fields.

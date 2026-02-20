@@ -50,9 +50,9 @@ const (
 	// EdgeNote holds the string denoting the note edge name in mutations.
 	EdgeNote = "note"
 	// Table holds the table name of the trustcenterfaq in the database.
-	Table = "trust_center_fa_qs"
+	Table = "trust_center_faqs"
 	// TrustCenterFaqKindTable is the table that holds the trust_center_faq_kind relation/edge.
-	TrustCenterFaqKindTable = "trust_center_fa_qs"
+	TrustCenterFaqKindTable = "trust_center_faqs"
 	// TrustCenterFaqKindInverseTable is the table name for the CustomTypeEnum entity.
 	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
 	TrustCenterFaqKindInverseTable = "custom_type_enums"
@@ -73,14 +73,14 @@ const (
 	// EditorsColumn is the table column denoting the editors relation/edge.
 	EditorsColumn = "trust_center_faq_editors"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
-	TrustCenterTable = "trust_center_fa_qs"
+	TrustCenterTable = "trust_center_faqs"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
 	// NoteTable is the table that holds the note relation/edge.
-	NoteTable = "trust_center_fa_qs"
+	NoteTable = "trust_center_faqs"
 	// NoteInverseTable is the table name for the Note entity.
 	// It exists in this package in order to avoid circular dependency with the "note" package.
 	NoteInverseTable = "notes"

@@ -29,7 +29,7 @@ func (TrustCenterFAQHistory) Annotations() []entschema.Annotation {
 	return []entschema.Annotation{
 		entx.SchemaGenSkip(true),
 		entsql.Annotation{
-			Table: "trust_center_faq_history",
+			Table: "trust_center_faqs_history",
 		},
 		history.Annotations{
 			IsHistory: true,

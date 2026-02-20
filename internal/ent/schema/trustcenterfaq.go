@@ -142,6 +142,7 @@ func (TrustCenterFAQ) Annotations() []schema.Annotation {
 		entfga.SettingsChecks("trust_center"),
 		entx.NewExportable(),
 		entgql.QueryField("trustCenterFAQs"),
+		entsql.Annotation{Table: "trust_center_faqs"},
 	}
 }
 

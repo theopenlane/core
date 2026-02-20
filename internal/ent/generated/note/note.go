@@ -142,10 +142,10 @@ const (
 	// DiscussionColumn is the table column denoting the discussion relation/edge.
 	DiscussionColumn = "discussion_id"
 	// TrustCenterFaqsTable is the table that holds the trust_center_faqs relation/edge.
-	TrustCenterFaqsTable = "trust_center_fa_qs"
+	TrustCenterFaqsTable = "trust_center_faqs"
 	// TrustCenterFaqsInverseTable is the table name for the TrustCenterFAQ entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenterfaq" package.
-	TrustCenterFaqsInverseTable = "trust_center_fa_qs"
+	TrustCenterFaqsInverseTable = "trust_center_faqs"
 	// TrustCenterFaqsColumn is the table column denoting the trust_center_faqs relation/edge.
 	TrustCenterFaqsColumn = "note_id"
 	// FilesTable is the table that holds the files relation/edge.
