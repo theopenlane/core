@@ -867,6 +867,10 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 		assert.Check(t, tc.TrustCenterEntities.Edges != nil)
 		assert.Check(t, tc.TrustCenterSubprocessors.Edges != nil)
 		assert.Check(t, tc.Posts.Edges != nil)
+		assert.Assert(t, resp.Controls.Edges != nil)
+		assert.Assert(t, is.Len(resp.Controls.Edges, 1))
+		assert.Check(t, resp.Controls.Edges[0].Node.ID == tcControl.ID)
+		assert.Check(t, resp.Controls.Edges[0].Node.RefCode != "")
 	})
 
 	t.Run("anonymous user can query publicly visible trust center controls", func(t *testing.T) {

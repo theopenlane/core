@@ -367,6 +367,14 @@ query GetTrustCenterFrontendQuery {
       }
     }
   }
+  controls {
+    edges {
+      node {
+        id
+        refCode
+      }
+    }
+  }
 }
 
 query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {

@@ -73,6 +73,7 @@ func (Control) Fields() []ent.Field {
 		field.Bool("is_trust_center_control").
 			Default(false).
 			Optional().
+			Immutable().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).

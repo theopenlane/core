@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
@@ -97,7 +98,7 @@ func HookControlTrustCenterVisibility() ent.Hook {
 			}
 
 			if m.Op().Is(ent.OpUpdate) {
-				return handleControlVisibilityBulkUpdate(ctx, m, next)
+				return handleControlVisibilityUpdate(ctx, m, next)
 			}
 
 			v, err := next.Mutate(ctx, m)
@@ -171,7 +172,7 @@ func handleControlVisibilityCreate(ctx context.Context, m *generated.ControlMuta
 	return ctrl, nil
 }
 
-// controlVisibilityTupleChanges returns tuple writes/deletes for a control visibility transition.
+// controlVisibilityTupleChanges returns tuple writes/deletes for a control visibility transition
 func controlVisibilityTupleChanges(controlID string, oldVisibility, newVisibility enums.TrustCenterControlVisibility) (writes, deletes []fgax.TupleKey) {
 	shouldWrite, shouldDelete := ControlVisibilityTupleAction(newVisibility, oldVisibility, true)
 
@@ -186,121 +187,164 @@ func controlVisibilityTupleChanges(controlID string, oldVisibility, newVisibilit
 	return writes, deletes
 }
 
-// handleControlVisibilityUpdate manages wildcard viewer tuples when visibility changes on single-entity updates.
-func handleControlVisibilityUpdate(ctx context.Context, m *generated.ControlMutation, next ent.Mutator) (generated.Value, error) {
-	visibility, visibilityChanged := m.TrustCenterVisibility()
-	if !visibilityChanged {
-		return next.Mutate(ctx, m)
-	}
-
-	id, ok := getSingleMutationID(ctx, m)
-	if !ok {
-		return next.Mutate(ctx, m)
-	}
-
-	oldControl, err := m.Client().Control.Query().
-		Where(control.ID(id)).
-		Select(control.FieldID, control.FieldTrustCenterVisibility).
-		Only(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	v, err := next.Mutate(ctx, m)
-	if err != nil {
-		return v, err
-	}
-
-	ctrl, ok := v.(*generated.Control)
-	if !ok {
-		return v, nil
-	}
-
-	// only manage wildcard tuples for trust center controls
-	if !ctrl.IsTrustCenterControl {
-		return v, nil
-	}
-
-	writes, deletes := controlVisibilityTupleChanges(ctrl.ID, oldControl.TrustCenterVisibility, visibility)
-
-	if len(writes) > 0 || len(deletes) > 0 {
-		logx.FromContext(ctx).Debug().Str("control_id", ctrl.ID).Str("old_visibility", string(oldControl.TrustCenterVisibility)).Str("new_visibility", string(visibility)).Msg("updating wildcard viewer tuples for trust center control visibility change")
-
-		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
-			return nil, err
+// controlVisibilityTupleChangesFromTupleState computes tuple writes/deletes when only the
+// current wildcard tuple state is known
+func controlVisibilityTupleChangesFromTupleState(controlID string, newVisibility enums.TrustCenterControlVisibility, tupleExists bool) (writes, deletes []fgax.TupleKey) {
+	if newVisibility == enums.TrustCenterControlVisibilityPubliclyVisible {
+		if !tupleExists {
+			writes = fgax.CreateWildcardViewerTuple(controlID, generated.TypeControl)
 		}
+
+		return writes, nil
 	}
 
-	return v, nil
+	if tupleExists {
+		deletes = fgax.CreateWildcardViewerTuple(controlID, generated.TypeControl)
+	}
+
+	return nil, deletes
 }
 
-// handleControlVisibilityBulkUpdate manages wildcard viewer tuples when visibility changes on bulk update operations.
-func handleControlVisibilityBulkUpdate(ctx context.Context, m *generated.ControlMutation, next ent.Mutator) (generated.Value, error) {
-	visibility, visibilityChanged := m.TrustCenterVisibility()
-	if !visibilityChanged {
-		return next.Mutate(ctx, m)
-	}
+// hasControlWildcardViewerTuple checks whether the wildcard viewer tuple currently exists for a control
+func hasControlWildcardViewerTuple(ctx context.Context, m *generated.ControlMutation, controlID string) (bool, error) {
+	return m.Authz.CheckAccessHighConsistency(ctx, fgax.AccessCheck{
+		SubjectID:   fgax.Wildcard,
+		SubjectType: auth.UserSubjectType,
+		Relation:    fgax.CanView,
+		ObjectID:    controlID,
+		ObjectType:  fgax.Kind(generated.TypeControl),
+	})
+}
 
-	updatedIDs := getMutationIDs(ctx, m)
-	if len(updatedIDs) == 0 {
-		return next.Mutate(ctx, m)
-	}
+type controlVisibilityTransition struct {
+	newVisibility    enums.TrustCenterControlVisibility
+	oldVisibility    enums.TrustCenterControlVisibility
+	hasOldVisibility bool
+}
 
-	oldControls, err := m.Client().Control.Query().
-		Where(control.IDIn(updatedIDs...)).
-		Select(control.FieldID, control.FieldTrustCenterVisibility).
-		All(ctx)
-	if err != nil {
-		return nil, err
-	}
+// handleControlVisibilityUpdate manages wildcard viewer tuples for both single and bulk updates.
+func handleControlVisibilityUpdate(ctx context.Context, m *generated.ControlMutation, next ent.Mutator) (generated.Value, error) {
+	if m.Op().Is(ent.OpUpdateOne) {
+		v, err := next.Mutate(ctx, m)
+		if err != nil {
+			return v, err
+		}
 
-	oldVisibilityByID := make(map[string]enums.TrustCenterControlVisibility, len(oldControls))
-	for _, ctrl := range oldControls {
-		oldVisibilityByID[ctrl.ID] = ctrl.TrustCenterVisibility
-	}
+		ctrl, ok := v.(*generated.Control)
+		if !ok {
+			return v, nil
+		}
 
-	v, err := next.Mutate(ctx, m)
-	if err != nil {
-		return v, err
-	}
+		// only manage wildcard tuples for trust center controls
+		if !ctrl.IsTrustCenterControl {
+			return v, nil
+		}
 
-	if len(oldVisibilityByID) == 0 {
+		transition := controlVisibilityTransition{
+			newVisibility: ctrl.TrustCenterVisibility,
+		}
+
+		if oldVisibility, oldErr := m.OldTrustCenterVisibility(ctx); oldErr == nil {
+			transition.oldVisibility = oldVisibility
+			transition.hasOldVisibility = true
+		}
+
+		if err := applyControlVisibilityTransitions(ctx, m, map[string]controlVisibilityTransition{
+			ctrl.ID: transition,
+		}); err != nil {
+			return nil, err
+		}
+
 		return v, nil
 	}
 
-	trustCenterControls, err := m.Client().Control.Query().
-		Where(control.IDIn(updatedIDs...), control.IsTrustCenterControl(true)).
-		Select(control.FieldID).
-		All(ctx)
-	if err != nil {
-		return nil, err
+	if m.Op().Is(ent.OpUpdate) {
+		visibility, visibilityChanged := m.TrustCenterVisibility()
+		if !visibilityChanged {
+			return next.Mutate(ctx, m)
+		}
+
+		updatedIDs := getMutationIDs(ctx, m)
+		if len(updatedIDs) == 0 {
+			return next.Mutate(ctx, m)
+		}
+
+		oldControls, err := m.Client().Control.Query().
+			Where(control.IDIn(updatedIDs...)).
+			Select(control.FieldID, control.FieldTrustCenterVisibility, control.FieldIsTrustCenterControl).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		oldVisibilityByID := make(map[string]enums.TrustCenterControlVisibility, len(oldControls))
+		for _, ctrl := range oldControls {
+			if !ctrl.IsTrustCenterControl {
+				continue
+			}
+
+			oldVisibilityByID[ctrl.ID] = ctrl.TrustCenterVisibility
+		}
+
+		v, err := next.Mutate(ctx, m)
+		if err != nil {
+			return v, err
+		}
+
+		if len(oldVisibilityByID) == 0 {
+			return v, nil
+		}
+
+		transitions := make(map[string]controlVisibilityTransition, len(oldVisibilityByID))
+		for controlID, oldVisibility := range oldVisibilityByID {
+			transitions[controlID] = controlVisibilityTransition{
+				newVisibility:    visibility,
+				oldVisibility:    oldVisibility,
+				hasOldVisibility: true,
+			}
+		}
+
+		if err := applyControlVisibilityTransitions(ctx, m, transitions); err != nil {
+			return nil, err
+		}
+
+		return v, nil
+	}
+
+	return next.Mutate(ctx, m)
+}
+
+// applyControlVisibilityTransitions applies the necessary wildcard viewer tuple writes/deletes for a set of control visibility transitions
+func applyControlVisibilityTransitions(ctx context.Context, m *generated.ControlMutation, transitions map[string]controlVisibilityTransition) error {
+	if len(transitions) == 0 {
+		return nil
 	}
 
 	var writes, deletes []fgax.TupleKey
 
-	for _, ctrl := range trustCenterControls {
-		oldVisibility, ok := oldVisibilityByID[ctrl.ID]
-		if !ok {
-			continue
+	for controlID, transition := range transitions {
+		var ctrlWrites, ctrlDeletes []fgax.TupleKey
+
+		if transition.hasOldVisibility {
+			ctrlWrites, ctrlDeletes = controlVisibilityTupleChanges(controlID, transition.oldVisibility, transition.newVisibility)
+		} else {
+			tupleExists, err := hasControlWildcardViewerTuple(ctx, m, controlID)
+			if err != nil {
+				return err
+			}
+
+			ctrlWrites, ctrlDeletes = controlVisibilityTupleChangesFromTupleState(controlID, transition.newVisibility, tupleExists)
 		}
 
-		ctrlWrites, ctrlDeletes := controlVisibilityTupleChanges(ctrl.ID, oldVisibility, visibility)
 		writes = append(writes, ctrlWrites...)
 		deletes = append(deletes, ctrlDeletes...)
 	}
 
-	if len(writes) > 0 || len(deletes) > 0 {
-		logx.FromContext(ctx).Debug().
-			Int("affected_controls", len(trustCenterControls)).
-			Str("new_visibility", string(visibility)).
-			Int("write_count", len(writes)).
-			Int("delete_count", len(deletes)).
-			Msg("updating wildcard viewer tuples for bulk trust center control visibility change")
-
-		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
-			return nil, err
-		}
+	if len(writes) == 0 && len(deletes) == 0 {
+		return nil
 	}
 
-	return v, nil
+	_, err := m.Authz.WriteTupleKeys(ctx, writes, deletes)
+
+	return err
 }

@@ -838,26 +838,6 @@ func (_u *ControlHistoryUpdate) ClearTrustCenterVisibility() *ControlHistoryUpda
 	return _u
 }
 
-// SetIsTrustCenterControl sets the "is_trust_center_control" field.
-func (_u *ControlHistoryUpdate) SetIsTrustCenterControl(v bool) *ControlHistoryUpdate {
-	_u.mutation.SetIsTrustCenterControl(v)
-	return _u
-}
-
-// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
-func (_u *ControlHistoryUpdate) SetNillableIsTrustCenterControl(v *bool) *ControlHistoryUpdate {
-	if v != nil {
-		_u.SetIsTrustCenterControl(*v)
-	}
-	return _u
-}
-
-// ClearIsTrustCenterControl clears the value of the "is_trust_center_control" field.
-func (_u *ControlHistoryUpdate) ClearIsTrustCenterControl() *ControlHistoryUpdate {
-	_u.mutation.ClearIsTrustCenterControl()
-	return _u
-}
-
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (_u *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 	return _u.mutation
@@ -1266,9 +1246,6 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.TrustCenterVisibilityCleared() {
 		_spec.ClearField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.IsTrustCenterControl(); ok {
-		_spec.SetField(controlhistory.FieldIsTrustCenterControl, field.TypeBool, value)
 	}
 	if _u.mutation.IsTrustCenterControlCleared() {
 		_spec.ClearField(controlhistory.FieldIsTrustCenterControl, field.TypeBool)
@@ -2099,26 +2076,6 @@ func (_u *ControlHistoryUpdateOne) ClearTrustCenterVisibility() *ControlHistoryU
 	return _u
 }
 
-// SetIsTrustCenterControl sets the "is_trust_center_control" field.
-func (_u *ControlHistoryUpdateOne) SetIsTrustCenterControl(v bool) *ControlHistoryUpdateOne {
-	_u.mutation.SetIsTrustCenterControl(v)
-	return _u
-}
-
-// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
-func (_u *ControlHistoryUpdateOne) SetNillableIsTrustCenterControl(v *bool) *ControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsTrustCenterControl(*v)
-	}
-	return _u
-}
-
-// ClearIsTrustCenterControl clears the value of the "is_trust_center_control" field.
-func (_u *ControlHistoryUpdateOne) ClearIsTrustCenterControl() *ControlHistoryUpdateOne {
-	_u.mutation.ClearIsTrustCenterControl()
-	return _u
-}
-
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (_u *ControlHistoryUpdateOne) Mutation() *ControlHistoryMutation {
 	return _u.mutation
@@ -2557,9 +2514,6 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.TrustCenterVisibilityCleared() {
 		_spec.ClearField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.IsTrustCenterControl(); ok {
-		_spec.SetField(controlhistory.FieldIsTrustCenterControl, field.TypeBool, value)
 	}
 	if _u.mutation.IsTrustCenterControlCleared() {
 		_spec.ClearField(controlhistory.FieldIsTrustCenterControl, field.TypeBool)
