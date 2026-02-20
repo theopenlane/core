@@ -344,8 +344,8 @@ func TestModulesEnabled(t *testing.T) {
 			expectedErr: "features are not enabled",
 		},
 		{
-			title:       "Missing Compliance module",
-			modules:     []models.OrgModule{models.CatalogBaseModule, models.CatalogTrustCenterModule},
+			title:       "Missing required module for Control",
+			modules:     []models.OrgModule{models.CatalogBaseModule, models.CatalogEntityManagementModule},
 			shouldAllow: false,
 			expectedErr: "features are not enabled",
 		},

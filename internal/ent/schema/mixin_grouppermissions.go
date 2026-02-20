@@ -188,6 +188,11 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	// this can be used to prevent extra queries to fga for objects that are view by default
 	// except for blocked groups (e.g. controls)
 	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		// anonymous trust center users don't belong to groups, skip group filtering
+		if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+			return nil
+		}
+
 		// add a filter to exclude results that have a blocked group that the user is a member of
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {

@@ -13,6 +13,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -2892,6 +2893,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
 		SetTrustCenterVisibility(enums.TrustCenterDocumentVisibilityPubliclyVisible).
+		SetOwnerID(testUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
@@ -2902,6 +2904,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
 		SetTrustCenterVisibility(enums.TrustCenterDocumentVisibilityNotVisible).
+		SetOwnerID(testUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
@@ -2914,6 +2917,7 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	assert.NilError(t, err)
 
 	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	anonCtx = contextx.With(anonCtx, auth.TrustCenterContextKey{})
 
 	testCases := []struct {
 		name            string
