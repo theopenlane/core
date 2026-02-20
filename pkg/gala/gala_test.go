@@ -684,12 +684,12 @@ func TestListenerErrorErrorMethod(t *testing.T) {
 		{
 			name:     "panicked listener",
 			err:      ListenerError{ListenerName: "test.listener", Panicked: true, Cause: ErrListenerPanicked},
-			expected: "gala: listener panicked",
+			expected: `gala: listener "test.listener" panicked: gala: listener panicked`,
 		},
 		{
 			name:     "non-panicked listener",
 			err:      ListenerError{ListenerName: "test.listener", Panicked: false, Cause: errors.New("failed")},
-			expected: "gala: listener execution failed",
+			expected: `gala: listener "test.listener" execution failed: failed`,
 		},
 	}
 

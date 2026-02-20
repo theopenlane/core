@@ -12,6 +12,8 @@ import (
 
 // TestSetRecipientCountIfNeeded tests the recipient count helper.
 func TestSetRecipientCountIfNeeded(t *testing.T) {
+	t.Parallel()
+
 	t.Run("sets count when nil", func(t *testing.T) {
 		input := &generated.CreateCampaignInput{}
 		setRecipientCountIfNeeded(input, 5)
@@ -28,6 +30,8 @@ func TestSetRecipientCountIfNeeded(t *testing.T) {
 
 // TestFilterValidTargetsWithCompact tests that lo.Compact correctly filters nil targets.
 func TestFilterValidTargetsWithCompact(t *testing.T) {
+	t.Parallel()
+
 	t.Run("removes nil targets", func(t *testing.T) {
 		targets := []*generated.CreateCampaignTargetInput{
 			{Email: "a@test.com"},

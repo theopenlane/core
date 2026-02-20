@@ -409,7 +409,7 @@ func NewTestFixture() *testutils.TestFixture {
 	}
 
 	if testDBContainerExpiry == "" {
-		testDBContainerExpiry = "5" // default expiry of 5 minutes
+		testDBContainerExpiry = "10" // default expiry of 10 minutes
 	}
 
 	expiry, err := strconv.Atoi(testDBContainerExpiry)

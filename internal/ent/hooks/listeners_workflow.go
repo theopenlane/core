@@ -126,7 +126,7 @@ func RegisterGalaWorkflowMutationListeners(registry *gala.Registry) ([]gala.List
 
 // handleWorkflowMutationGala forwards workflow mutation envelopes to workflow listeners
 func handleWorkflowMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -136,7 +136,7 @@ func handleWorkflowMutationGala(ctx gala.HandlerContext, payload eventqueue.Muta
 
 // handleWorkflowAssignmentMutationGala forwards assignment mutation envelopes to workflow listeners
 func handleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -146,7 +146,7 @@ func handleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload event
 
 // handleWorkflowTriggeredGala forwards workflow trigger command envelopes to workflow listeners
 func handleWorkflowTriggeredGala(ctx gala.HandlerContext, payload gala.WorkflowTriggeredPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -156,7 +156,7 @@ func handleWorkflowTriggeredGala(ctx gala.HandlerContext, payload gala.WorkflowT
 
 // handleWorkflowActionStartedGala forwards action started command envelopes to workflow listeners
 func handleWorkflowActionStartedGala(ctx gala.HandlerContext, payload gala.WorkflowActionStartedPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -166,7 +166,7 @@ func handleWorkflowActionStartedGala(ctx gala.HandlerContext, payload gala.Workf
 
 // handleWorkflowActionCompletedGala forwards action completed command envelopes to workflow listeners
 func handleWorkflowActionCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowActionCompletedPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -176,7 +176,7 @@ func handleWorkflowActionCompletedGala(ctx gala.HandlerContext, payload gala.Wor
 
 // handleWorkflowAssignmentCreatedGala forwards assignment created command envelopes to workflow listeners
 func handleWorkflowAssignmentCreatedGala(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCreatedPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -186,7 +186,7 @@ func handleWorkflowAssignmentCreatedGala(ctx gala.HandlerContext, payload gala.W
 
 // handleWorkflowAssignmentCompletedGala forwards assignment completed command envelopes to workflow listeners
 func handleWorkflowAssignmentCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCompletedPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -196,7 +196,7 @@ func handleWorkflowAssignmentCompletedGala(ctx gala.HandlerContext, payload gala
 
 // handleWorkflowInstanceCompletedGala forwards instance completed command envelopes to workflow listeners
 func handleWorkflowInstanceCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowInstanceCompletedPayload) error {
-	listeners, ok := workflowListenersFromGala(ctx)
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
 	if !ok {
 		return nil
 	}
@@ -205,21 +205,28 @@ func handleWorkflowInstanceCompletedGala(ctx gala.HandlerContext, payload gala.W
 }
 
 // workflowListenersFromGala resolves workflow listener dependencies from the gala injector
-func workflowListenersFromGala(handlerCtx gala.HandlerContext) (*engine.WorkflowListeners, bool) {
+// and enriches the handler context so the ent client is available to interceptors
+func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerContext, *engine.WorkflowListeners, bool) {
 	client, ok := eventqueue.ClientFromHandler(handlerCtx)
 	if !ok {
-		return nil, false
+		return handlerCtx, nil, false
 	}
 
 	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
 	if !ok || wfEngine == nil {
-		return nil, false
+		return handlerCtx, nil, false
 	}
 
 	runtime, err := do.Invoke[*gala.Gala](handlerCtx.Injector)
 	if err != nil {
-		return nil, false
+		return handlerCtx, nil, false
 	}
 
-	return engine.NewWorkflowListeners(client, wfEngine, runtime), true
+	// Ensure the ent client is in context for interceptors and privacy checks.
+	// In durable dispatch the context is reconstructed from a snapshot that does
+	// not include the ent client, so interceptors like FGA auth would get a nil
+	// client from generated.FromContext.
+	handlerCtx.Context = generated.NewContext(handlerCtx.Context, client)
+
+	return handlerCtx, engine.NewWorkflowListeners(client, wfEngine, runtime), true
 }
