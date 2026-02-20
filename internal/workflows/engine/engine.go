@@ -58,7 +58,7 @@ func NewWorkflowEngine(client *generated.Client, runtime *gala.Gala, opts ...wor
 // NewWorkflowEngineWithConfig creates a new workflow engine using the provided configuration
 func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, config *workflows.Config) (*WorkflowEngine, error) {
 	if client == nil {
-		return nil, ErrNilClient
+		return nil, workflows.ErrNilClient
 	}
 
 	if config == nil {
@@ -352,7 +352,6 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 
 	// Approval actions pause the workflow until decisions arrive
 	if actionType != nil && isGatedActionType(*actionType) {
-		allowCtx := workflows.AllowContext(ctx)
 		if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 			SetState(enums.WorkflowInstanceStatePaused).
 			Exec(allowCtx); err != nil {

@@ -385,12 +385,6 @@ type runtimeOperationPayload struct {
 	Message   string `json:"message"`
 }
 
-type runtimeAccessorTestDispatcher struct{}
-
-func (runtimeAccessorTestDispatcher) Dispatch(context.Context, Envelope) error {
-	return nil
-}
-
 func TestRuntimeAccessorsReturnConfiguredDependencies(t *testing.T) {
 	injector := do.New()
 	contextManager, err := NewContextManager()
@@ -398,7 +392,7 @@ func TestRuntimeAccessorsReturnConfiguredDependencies(t *testing.T) {
 		t.Fatalf("failed to build context manager: %v", err)
 	}
 
-	dispatcher := runtimeAccessorTestDispatcher{}
+	dispatcher := &runtimeTestDispatcher{}
 	runtime := newTestGala(t, dispatcher)
 	runtime.injector = injector
 	runtime.contextManager = contextManager
@@ -620,16 +614,8 @@ func TestRuntimeDispatchEnvelopeFiltersListenersByOperation(t *testing.T) {
 	}
 }
 
-type failingDispatcher struct {
-	err error
-}
-
-func (d failingDispatcher) Dispatch(context.Context, Envelope) error {
-	return d.err
-}
-
 func TestRuntimeEmitReturnsDurableDispatchError(t *testing.T) {
-	dispatcher := failingDispatcher{err: errors.New("durable failed")}
+	dispatcher := &runtimeTestDispatcher{err: errors.New("durable failed")}
 	runtime := newTestGala(t, dispatcher)
 
 	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.durable.error")}

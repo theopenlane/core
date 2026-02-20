@@ -10,6 +10,8 @@ import (
 const (
 	// MutationPropertyEntityID is the standard mutation metadata key used for entity identifiers
 	MutationPropertyEntityID = "ID"
+	// SoftDeleteOne is a synthetic operation used for soft-delete hooks
+	SoftDeleteOne = "SoftDeleteOne"
 )
 
 // MutationEntityID resolves the mutation entity ID from payload metadata or headers

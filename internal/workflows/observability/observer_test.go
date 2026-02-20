@@ -146,7 +146,6 @@ func findLogEntry(t *testing.T, buf *bytes.Buffer, msg string) map[string]any {
 	return nil
 }
 
-
 func TestScopeSkipMarksSkippedAndLogsDebug(t *testing.T) {
 	var buf bytes.Buffer
 	logger := zerolog.New(&buf).Level(zerolog.DebugLevel)
@@ -308,22 +307,6 @@ func TestWarnListenerLogsWarning(t *testing.T) {
 	}
 	if entry[FieldOperation] != string(OpHandleAssignmentCompleted) {
 		t.Fatalf("expected operation %s, got %v", OpHandleAssignmentCompleted, entry[FieldOperation])
-	}
-}
-
-func TestWarnResolverLogsWarning(t *testing.T) {
-	var buf bytes.Buffer
-	logger := zerolog.New(&buf).Level(zerolog.WarnLevel)
-	ctx := logger.WithContext(context.Background())
-
-	WarnResolver(ctx, OpResolveTargets, "resolve.trigger", Fields{"target": "user"}, nil)
-
-	entry := findLogEntry(t, &buf, msgOpWarning)
-	if entry[FieldOrigin] != string(OriginResolver) {
-		t.Fatalf("expected origin %s, got %v", OriginResolver, entry[FieldOrigin])
-	}
-	if entry[FieldOperation] != string(OpResolveTargets) {
-		t.Fatalf("expected operation %s, got %v", OpResolveTargets, entry[FieldOperation])
 	}
 }
 

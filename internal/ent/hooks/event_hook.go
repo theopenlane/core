@@ -37,7 +37,7 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 
 			op := getOperation(ctx, mutation)
 
-			if op != SoftDeleteOne && retVal != nil && reflect.TypeOf(retVal).Kind() == reflect.Int {
+			if op != eventqueue.SoftDeleteOne && retVal != nil && reflect.TypeOf(retVal).Kind() == reflect.Int {
 				return retVal, err
 			}
 
@@ -62,7 +62,7 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 					parseErr error
 				)
 
-				if op == SoftDeleteOne {
+				if op == eventqueue.SoftDeleteOne {
 					eventID, parseErr = parseSoftDeleteEventID(ctx, mutation)
 					if parseErr != nil {
 						logx.FromContext(ctx).Info().Err(parseErr).Msg("failed to parse event ID for soft delete, skipping gala emission")
@@ -154,20 +154,11 @@ func mutationDispatchTopics(schemaType string) []gala.TopicName {
 		eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, schemaType),
 	}
 
-	seen := map[gala.TopicName]struct{}{}
 	out := make([]gala.TopicName, 0, len(topics))
-
 	for _, topic := range topics {
-		if topic == "" {
-			continue
+		if topic != "" {
+			out = append(out, topic)
 		}
-
-		if _, ok := seen[topic]; ok {
-			continue
-		}
-
-		seen[topic] = struct{}{}
-		out = append(out, topic)
 	}
 
 	return out

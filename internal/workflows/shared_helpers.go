@@ -41,34 +41,6 @@ func (e *WorkflowCreationError) Unwrap() error {
 	return e.Err
 }
 
-// DefinitionMatchesTrigger reports whether the workflow definition has a trigger that matches the event type and changed fields.
-func DefinitionMatchesTrigger(doc models.WorkflowDefinitionDocument, eventType string, changedFields []string) bool {
-	targetEvent := strings.ToUpper(eventType)
-
-	for _, trigger := range doc.Triggers {
-		if trigger.Operation != "" {
-			if targetEvent == "" || strings.ToUpper(trigger.Operation) != targetEvent {
-				continue
-			}
-		}
-
-		if len(trigger.Fields) == 0 && len(trigger.Edges) == 0 {
-			return true
-		}
-
-		allFields := lo.Flatten([][]string{trigger.Fields, trigger.Edges})
-		if len(allFields) == 0 {
-			return true
-		}
-
-		if len(lo.Intersect(allFields, changedFields)) > 0 {
-			return true
-		}
-	}
-
-	return false
-}
-
 // ResolveOwnerID returns the provided owner ID or derives it from the context when empty.
 func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
 	if ownerID != "" {

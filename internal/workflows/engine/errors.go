@@ -3,8 +3,6 @@ package engine
 import "errors"
 
 var (
-	// ErrWorkflowNotFound is returned when a workflow definition cannot be found
-	ErrWorkflowNotFound = errors.New("workflow definition not found")
 	// ErrInstanceNotFound is returned when a workflow instance cannot be found
 	ErrInstanceNotFound = errors.New("workflow instance not found")
 	// ErrAssignmentNotFound is returned when a workflow assignment cannot be found
@@ -13,10 +11,6 @@ var (
 	ErrInvalidState = errors.New("invalid workflow state")
 	// ErrConditionFailed is returned when a CEL condition evaluation fails
 	ErrConditionFailed = errors.New("condition evaluation failed")
-	// ErrNoMatchingDefinitions is returned when no workflow definitions match the trigger criteria
-	ErrNoMatchingDefinitions = errors.New("no matching workflow definitions")
-	// ErrTargetResolutionFailed is returned when dynamic target resolution fails
-	ErrTargetResolutionFailed = errors.New("target resolution failed")
 	// ErrActionExecutionFailed is returned when an action execution fails
 	ErrActionExecutionFailed = errors.New("action execution failed")
 	// ErrInvalidTargetType is returned when an unknown target type is encountered
@@ -25,20 +19,14 @@ var (
 	ErrInvalidActionType = errors.New("invalid action type")
 	// ErrMissingRequiredField is returned when a required field is missing
 	ErrMissingRequiredField = errors.New("missing required field")
-	// ErrInvalidObjectType is returned when an unknown object type is encountered
-	ErrInvalidObjectType = errors.New("invalid object type")
 	// ErrObjectRefMissingID is returned when a workflow object ref has no object ID set
 	ErrObjectRefMissingID = errors.New("workflow object ref has no object ID set")
-	// ErrFieldNotWorkflowEligible is returned when a field cannot be updated by workflow
-	ErrFieldNotWorkflowEligible = errors.New("field is not eligible for workflow modification")
 	// ErrCELTypeMismatch is returned when a CEL expression returns a non-boolean type
 	ErrCELTypeMismatch = errors.New("CEL expression must return boolean")
 	// ErrCELValueExtraction is returned when extracting a boolean value from CEL fails
 	ErrCELValueExtraction = errors.New("failed to extract boolean value from CEL result")
 	// ErrEvaluationTimeout is returned when CEL evaluation exceeds the timeout
 	ErrEvaluationTimeout = errors.New("CEL evaluation timeout")
-	// ErrCELPanic is returned when CEL evaluation panics
-	ErrCELPanic = errors.New("CEL evaluation panic")
 	// ErrCELNilOutput is returned when CEL evaluation returns nil output
 	ErrCELNilOutput = errors.New("CEL evaluation returned nil output")
 	// ErrWebhookFailed is returned when a webhook request fails
@@ -53,8 +41,6 @@ var (
 	ErrIntegrationFailed = errors.New("integration operation failed")
 	// ErrExecutorNotAvailable is returned when the executor is not available
 	ErrExecutorNotAvailable = errors.New("executor is nil")
-	// ErrIntegrationManagerNotAvailable is returned when the integration manager is not available
-	ErrIntegrationManagerNotAvailable = errors.New("integration operations manager not available")
 	// ErrIntegrationStoreRequired is returned when an integration store dependency is missing
 	ErrIntegrationStoreRequired = errors.New("integration store required")
 	// ErrIntegrationOperationsRequired is returned when integration operations are not configured
@@ -73,8 +59,6 @@ var (
 	ErrIntegrationAlertPayloadsMissing = errors.New("integration alert payloads missing")
 	// ErrIntegrationActionQueued indicates the integration action was queued for async processing
 	ErrIntegrationActionQueued = errors.New("integration action queued")
-	// ErrUnsupportedTimeFormat is returned when a time format is not supported
-	ErrUnsupportedTimeFormat = errors.New("unsupported time format")
 	// ErrObjectNil is returned when the workflow object is nil
 	ErrObjectNil = errors.New("object is nil")
 	// ErrProposalChangesModified is returned when proposal changes are modified after approval
@@ -109,8 +93,6 @@ var (
 	ErrActionIndexOutOfBounds = errors.New("workflow action index out of bounds")
 	// ErrAssignmentActionNotFound is returned when a workflow assignment cannot be mapped to an action
 	ErrAssignmentActionNotFound = errors.New("workflow assignment action not found")
-	// ErrNilClient is returned when a nil database client is provided
-	ErrNilClient = errors.New("ent client is required to initialize workflow engine")
 	// ErrCELProgramCreationFailed is returned when CEL program creation fails
 	ErrCELProgramCreationFailed = errors.New("failed to create CEL program")
 	// ErrCELCompilationFailed is returned when CEL fails to compile

@@ -1,8 +1,6 @@
 package gala
 
 import (
-	"runtime"
-
 	"github.com/alitto/pond/v2"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -56,6 +54,11 @@ func NewPool(opts ...PoolOption) *Pool {
 
 	p.pool = pond.NewPool(p.maxWorkers)
 
+	if p.metricsReg != nil && p.name != "" {
+		collector := newPoolCollector(p.pool, p.name)
+		p.metricsReg.MustRegister(collector)
+	}
+
 	return p
 }
 
@@ -95,23 +98,47 @@ func (p *Pool) Release() {
 	p.pool.StopAndWait()
 }
 
-// Resize updates worker concurrency when positive
-func (p *Pool) Resize(maxWorkers int) {
-	if p == nil || maxWorkers <= 0 {
-		return
-	}
+// poolCollector implements prometheus.Collector to expose pool metrics at scrape time
+type poolCollector struct {
+	pool pond.Pool
+	name string
 
-	p.maxWorkers = maxWorkers
-	p.pool.Resize(maxWorkers)
+	runningWorkers *prometheus.Desc
+	waitingTasks   *prometheus.Desc
+	submittedTasks *prometheus.Desc
+	completedTasks *prometheus.Desc
+	failedTasks    *prometheus.Desc
 }
 
-// WaitForIdle blocks until queued and running tasks drain
-func (p *Pool) WaitForIdle() {
-	if p == nil {
-		return
-	}
+// newPoolCollector creates a collector that reads pool stats on each Prometheus scrape
+func newPoolCollector(pool pond.Pool, name string) *poolCollector {
+	labels := prometheus.Labels{"pool": name}
 
-	for p.pool.RunningWorkers() > 0 || p.pool.WaitingTasks() > 0 {
-		runtime.Gosched()
+	return &poolCollector{
+		pool:           pool,
+		name:           name,
+		runningWorkers: prometheus.NewDesc("gala_pool_running_workers", "Number of workers currently executing tasks", nil, labels),
+		waitingTasks:   prometheus.NewDesc("gala_pool_waiting_tasks", "Number of tasks waiting in the queue", nil, labels),
+		submittedTasks: prometheus.NewDesc("gala_pool_submitted_tasks_total", "Total number of tasks submitted to the pool", nil, labels),
+		completedTasks: prometheus.NewDesc("gala_pool_completed_tasks_total", "Total number of tasks completed by the pool", nil, labels),
+		failedTasks:    prometheus.NewDesc("gala_pool_failed_tasks_total", "Total number of tasks that failed", nil, labels),
 	}
+}
+
+// Describe sends descriptor metadata to the channel
+func (c *poolCollector) Describe(ch chan<- *prometheus.Desc) {
+	ch <- c.runningWorkers
+	ch <- c.waitingTasks
+	ch <- c.submittedTasks
+	ch <- c.completedTasks
+	ch <- c.failedTasks
+}
+
+// Collect reads current pool stats and sends metrics to the channel
+func (c *poolCollector) Collect(ch chan<- prometheus.Metric) {
+	ch <- prometheus.MustNewConstMetric(c.runningWorkers, prometheus.GaugeValue, float64(c.pool.RunningWorkers()))
+	ch <- prometheus.MustNewConstMetric(c.waitingTasks, prometheus.GaugeValue, float64(c.pool.WaitingTasks()))
+	ch <- prometheus.MustNewConstMetric(c.submittedTasks, prometheus.CounterValue, float64(c.pool.SubmittedTasks()))
+	ch <- prometheus.MustNewConstMetric(c.completedTasks, prometheus.CounterValue, float64(c.pool.CompletedTasks()))
+	ch <- prometheus.MustNewConstMetric(c.failedTasks, prometheus.CounterValue, float64(c.pool.FailedTasks()))
 }

@@ -53,7 +53,7 @@ type Reconciler struct {
 // New constructs a workflow reconciler
 func New(client *generated.Client, runtime *gala.Gala, opts ...Option) (*Reconciler, error) {
 	if client == nil {
-		return nil, ErrNilClient
+		return nil, workflows.ErrNilClient
 	}
 
 	r := &Reconciler{

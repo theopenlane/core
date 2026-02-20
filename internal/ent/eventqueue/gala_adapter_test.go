@@ -17,35 +17,20 @@ type galaAdapterTestActor struct {
 	ID string `json:"id"`
 }
 
-type galaAdapterRuntime struct {
-	registry       *gala.Registry
-	contextManager *gala.ContextManager
-}
-
-// Registry returns the fixture registry for envelope encoding and decoding
-func (r galaAdapterRuntime) Registry() *gala.Registry {
-	return r.registry
-}
-
-// ContextManager returns the fixture context manager for snapshot capture and restore
-func (r galaAdapterRuntime) ContextManager() *gala.ContextManager {
-	return r.contextManager
-}
-
-// TestNewMutationGalaEnvelope verifies envelope creation from legacy mutation emit inputs
+// TestNewMutationGalaEnvelope verifies envelope creation from mutation emit inputs
 func TestNewMutationGalaEnvelope(t *testing.T) {
 	t.Parallel()
 
-	contextManager, err := gala.NewContextManager(
-		gala.NewContextCodec(),
-		gala.NewTypedContextCodec[galaAdapterTestActor]("adapter_actor"),
-	)
+	runtime, err := gala.NewGala(context.Background(), gala.Config{
+		DispatchMode: gala.DispatchModeInMemory,
+	})
 	require.NoError(t, err)
 
-	runtime := galaAdapterRuntime{
-		registry:       gala.NewRegistry(),
-		contextManager: contextManager,
-	}
+	t.Cleanup(func() { _ = runtime.Close() })
+
+	require.NoError(t, runtime.ContextManager().Register(
+		gala.NewTypedContextCodec[galaAdapterTestActor]("adapter_actor"),
+	))
 
 	topic := gala.Topic[MutationGalaPayload]{Name: gala.TopicName("mutation.organization")}
 	err = gala.RegisterTopic(runtime.Registry(), gala.Registration[MutationGalaPayload]{
