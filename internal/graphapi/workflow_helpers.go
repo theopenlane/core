@@ -23,11 +23,13 @@ var ErrConnectionURIRequired = errors.New("connection URI is required for durabl
 const (
 	defaultPollInterval = 50 * time.Millisecond
 	defaultPollTimeout  = 5 * time.Second
+	defaultWorkerCount  = 5
+	defaultFetchPoll    = 10 * time.Millisecond
 )
 
 var (
 	// workflowTestQueueSeq generates unique queue names per setup to isolate River workers
-	workflowTestQueueSeq       atomic.Uint64
+	workflowTestQueueSeq           atomic.Uint64
 	ErrTimedOutWaitingForCondition = errors.New("timed out waiting for condition")
 	ErrClientRequired              = errors.New("client is required")
 )
@@ -106,10 +108,10 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		DispatchMode:      gala.DispatchModeDurable,
 		ConnectionURI:     connectionURI,
 		QueueName:         queueName,
-		WorkerCount:       5,
+		WorkerCount:       defaultWorkerCount,
 		RunMigrations:     true,
 		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond,
+		FetchPollInterval: defaultFetchPoll,
 	})
 	if err != nil {
 		return nil, err

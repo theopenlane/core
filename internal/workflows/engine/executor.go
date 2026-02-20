@@ -362,9 +362,12 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
 	defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
 
-	var title, body string
-	data := map[string]any{}
-	vars := map[string]any{}
+	var (
+		title string
+		body  string
+		data  map[string]any
+		vars  map[string]any
+	)
 
 	if rendered != nil {
 		title = rendered.Title

@@ -1265,6 +1265,25 @@ func TestBuildQueueConfigIncludesAdditionalQueues(t *testing.T) {
 	}
 }
 
+func TestQueueNamesFromConfigSortsAndSkipsEmpty(t *testing.T) {
+	queueNames := queueNamesFromConfig(buildQueueConfig("events", 10, map[string]int{
+		"integrations": 4,
+		"audit":        2,
+		"":             1,
+	}))
+
+	expected := []string{"audit", "events", "integrations"}
+	if len(queueNames) != len(expected) {
+		t.Fatalf("expected %d queue names, got %d (%v)", len(expected), len(queueNames), queueNames)
+	}
+
+	for i, name := range expected {
+		if queueNames[i] != name {
+			t.Fatalf("expected queueNames[%d] to be %q, got %q", i, name, queueNames[i])
+		}
+	}
+}
+
 func TestGalaCloseWithoutJobClient(t *testing.T) {
 	runtime := &Gala{}
 
