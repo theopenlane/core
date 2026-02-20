@@ -651,6 +651,7 @@ func RegisterRoutes(router *Router) error {
 		registerTrustCenterAnonymousJWTHandler,
 		registerQuestionnaireHandler,
 		registerQuestionnaireSubmitHandler,
+		registerResendQuestionnaireHandler,
 		registerStartImpersonationHandler,
 		registerEndImpersonationHandler,
 		registerProductCatalogHandler,

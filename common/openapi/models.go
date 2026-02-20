@@ -87,13 +87,13 @@ func exampleTime(offset time.Duration) time.Time {
 
 type AuthData struct {
 	// AccessToken is the access_token value.
-	AccessToken  string `json:"access_token" description:"The access token to be used for authentication"`
+	AccessToken string `json:"access_token" description:"The access token to be used for authentication"`
 	// RefreshToken is the refresh_token value.
 	RefreshToken string `json:"refresh_token,omitempty" description:"The refresh token to be used to refresh the access token after it expires"`
 	// Session is the session value.
-	Session      string `json:"session,omitempty" description:"The short-lived session token required for authentication"`
+	Session string `json:"session,omitempty" description:"The short-lived session token required for authentication"`
 	// TokenType is the token_type value.
-	TokenType    string `json:"token_type,omitempty" description:"The type of token being returned" example:"bearer"`
+	TokenType string `json:"token_type,omitempty" description:"The type of token being returned" example:"bearer"`
 }
 
 // =========
@@ -115,11 +115,11 @@ type LoginReply struct {
 	// AuthData is the authdata value.
 	AuthData
 	// TFAEnabled is the tfa_enabled value.
-	TFAEnabled       bool   `json:"tfa_enabled,omitempty"`
+	TFAEnabled bool `json:"tfa_enabled,omitempty"`
 	// TFASetupRequired is the tfa_required value.
-	TFASetupRequired bool   `json:"tfa_required,omitempty"`
+	TFASetupRequired bool `json:"tfa_required,omitempty"`
 	// Message is the message value.
-	Message          string `json:"message"`
+	Message string `json:"message"`
 }
 
 // ExampleResponse returns an example LoginReply for OpenAPI documentation
@@ -299,23 +299,23 @@ type UserInfoReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the id value.
-	ID              string  `json:"id" description:"The ID of the user" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ID string `json:"id" description:"The ID of the user" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// Email is the email value.
-	Email           string  `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	// FirstName is the first_name value.
-	FirstName       string  `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
+	FirstName string `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
 	// LastName is the last_name value.
-	LastName        string  `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
+	LastName string `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
 	// DisplayName is the display_name value.
-	DisplayName     string  `json:"display_name,omitempty" description:"The display name of the user" example:"Jon Snow"`
+	DisplayName string `json:"display_name,omitempty" description:"The display name of the user" example:"Jon Snow"`
 	// AvatarRemoteURL is the avatar_remote_url value.
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty" description:"URL of the user's remote avatar" example:"https://example.com/avatar.jpg"`
 	// LastSeen is the last_seen value.
-	LastSeen        *string `json:"last_seen,omitempty" description:"The time the user was last seen" example:"2023-01-01T00:00:00Z"`
+	LastSeen *string `json:"last_seen,omitempty" description:"The time the user was last seen" example:"2023-01-01T00:00:00Z"`
 	// Role is the role value.
-	Role            string  `json:"role,omitempty" description:"The user's role" example:"ADMIN"`
+	Role string `json:"role,omitempty" description:"The user's role" example:"ADMIN"`
 	// Sub is the sub value.
-	Sub             string  `json:"sub" description:"The subject of the user JWT" example:"user123"`
+	Sub string `json:"sub" description:"The subject of the user JWT" example:"user123"`
 }
 
 // ExampleUserInfoSuccessResponse is an example of a successful userinfo response for OpenAPI documentation
@@ -344,15 +344,15 @@ func stringPtr(s string) *string {
 // RegisterRequest contains user registration information for creating new accounts
 type RegisterRequest struct {
 	// FirstName is the first_name value.
-	FirstName string  `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
+	FirstName string `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
 	// LastName is the last_name value.
-	LastName  string  `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
+	LastName string `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
 	// Email is the email value.
-	Email     string  `json:"email,omitempty" description:"The email address of the user" example:"jsnow@example.com"`
+	Email string `json:"email,omitempty" description:"The email address of the user" example:"jsnow@example.com"`
 	// Password is the password value.
-	Password  string  `json:"password,omitempty" description:"The password to be used for authentication after registration" example:"Wint3rIsC0ming123!"`
+	Password string `json:"password,omitempty" description:"The password to be used for authentication after registration" example:"Wint3rIsC0ming123!"`
 	// Token is the token value.
-	Token     *string `json:"token" description:"A newly invited user can use this to join a org as at the same time they are creating their account"`
+	Token *string `json:"token" description:"A newly invited user can use this to join a org as at the same time they are creating their account"`
 }
 
 // RegisterReply contains authentication tokens and user information after successful registration
@@ -360,13 +360,13 @@ type RegisterReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the user_id value.
-	ID      string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ID string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// Email is the email value.
-	Email   string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	// Message is the message value.
 	Message string `json:"message"`
 	// Token is the token value.
-	Token   string `json:"token,omitempty" exclude:"true"` // only used for requests against local development, excluded from OpenAPI documentation
+	Token string `json:"token,omitempty" exclude:"true"` // only used for requests against local development, excluded from OpenAPI documentation
 }
 
 // ExampleResponse returns an example RegisterReply for OpenAPI documentation
@@ -438,9 +438,9 @@ type SwitchOrganizationReply struct {
 	// AuthData is the authdata value.
 	AuthData
 	// NeedsSSO is the needs_sso value.
-	NeedsSSO    bool   `json:"needs_sso,omitempty"`
+	NeedsSSO bool `json:"needs_sso,omitempty"`
 	// NeedsTFA is the needs_tfa value.
-	NeedsTFA    bool   `json:"needs_tfa,omitempty"`
+	NeedsTFA bool `json:"needs_tfa,omitempty"`
 	// RedirectURI is the redirect_uri value.
 	RedirectURI string `json:"redirect_uri,omitempty"`
 }
@@ -500,9 +500,9 @@ type VerifyReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the user_id value.
-	ID      string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ID string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// Email is the email value.
-	Email   string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	// Message is the message value.
 	Message string `json:"message,omitempty"`
 	// AuthData is the authdata value.
@@ -563,7 +563,7 @@ type File = storagetypes.File
 
 type FileDownload struct {
 	// ID is the id value.
-	ID    string `param:"id" description:"the file ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	ID string `param:"id" description:"the file ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// Token is the token value.
 	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
 }
@@ -589,7 +589,7 @@ type FileDownloadReply struct {
 	// Message is the message value.
 	Message string `json:"message,omitempty"`
 	// File is the file value.
-	File    File   `json:"file" description:"The files that were uploaded"`
+	File File `json:"file" description:"The files that were uploaded"`
 }
 
 // ExampleResponse returns an example UploadFilesReply for OpenAPI documentation
@@ -706,7 +706,7 @@ type ResetPasswordRequest struct {
 	// Password is the password value.
 	Password string `json:"password" description:"The new password to be used for authentication"`
 	// Token is the token value.
-	Token    string `json:"token" description:"The token to be used to reset the password, token is sent via email"`
+	Token string `json:"token" description:"The token to be used to reset the password, token is sent via email"`
 }
 
 // ResetPasswordReply is the response returned from a non-successful password reset request
@@ -765,7 +765,7 @@ type WebauthnRegistrationRequest struct {
 	// Email is the email value.
 	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
 	// Name is the name value.
-	Name  string `json:"name,omitempty" description:"The name of the user" example:"Jon Snow"`
+	Name string `json:"name,omitempty" description:"The name of the user" example:"Jon Snow"`
 }
 
 func (r *WebauthnRegistrationRequest) Validate() error {
@@ -827,17 +827,17 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 // This represents the credential creation response from the browser's WebAuthn API
 type WebauthnRegistrationFinishRequest struct {
 	// ID is the id value.
-	ID                      string                 `json:"id" description:"The credential ID"`
+	ID string `json:"id" description:"The credential ID"`
 	// RawID is the rawId value.
-	RawID                   string                 `json:"rawId" description:"The raw credential ID"`
+	RawID string `json:"rawId" description:"The raw credential ID"`
 	// Type is the type value.
-	Type                    string                 `json:"type" description:"The credential type, should be 'public-key'"`
+	Type string `json:"type" description:"The credential type, should be 'public-key'"`
 	// AuthenticatorAttachment is the authenticatorAttachment value.
-	AuthenticatorAttachment string                 `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
+	AuthenticatorAttachment string `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
 	// ClientExtensionResults is the clientExtensionResults value.
-	ClientExtensionResults  map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
+	ClientExtensionResults map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
 	// Response is the response value.
-	Response                struct {
+	Response struct {
 		AttestationObject  string   `json:"attestationObject" description:"The attestation object"`
 		ClientDataJSON     string   `json:"clientDataJSON" description:"The client data JSON"`
 		PublicKey          string   `json:"publicKey,omitempty" description:"The public key"`
@@ -927,17 +927,17 @@ type WebauthnBeginLoginResponse struct {
 // This represents the credential assertion response from the browser's WebAuthn API
 type WebauthnLoginFinishRequest struct {
 	// ID is the id value.
-	ID                      string                 `json:"id" description:"The credential ID"`
+	ID string `json:"id" description:"The credential ID"`
 	// RawID is the rawId value.
-	RawID                   string                 `json:"rawId" description:"The raw credential ID"`
+	RawID string `json:"rawId" description:"The raw credential ID"`
 	// Type is the type value.
-	Type                    string                 `json:"type" description:"The credential type, should be 'public-key'"`
+	Type string `json:"type" description:"The credential type, should be 'public-key'"`
 	// AuthenticatorAttachment is the authenticatorAttachment value.
-	AuthenticatorAttachment string                 `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
+	AuthenticatorAttachment string `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
 	// ClientExtensionResults is the clientExtensionResults value.
-	ClientExtensionResults  map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
+	ClientExtensionResults map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
 	// Response is the response value.
-	Response                struct {
+	Response struct {
 		AuthenticatorData string `json:"authenticatorData" description:"The authenticator data"`
 		ClientDataJSON    string `json:"clientDataJSON" description:"The client data JSON"`
 		Signature         string `json:"signature" description:"The assertion signature"`
@@ -1074,17 +1074,17 @@ type InviteReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the user_id value.
-	ID          string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ID string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// Email is the email value.
-	Email       string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	// Message is the message value.
-	Message     string `json:"message"`
+	Message string `json:"message"`
 	// JoinedOrgID is the joined_org_id value.
 	JoinedOrgID string `json:"joined_org_id" description:"The ID of the organization the user joined" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
 	// Role is the role value.
-	Role        string `json:"role" description:"The role the user has in the organization" example:"admin"`
+	Role string `json:"role" description:"The role the user has in the organization" example:"admin"`
 	// NeedsSSO is the needs_sso value.
-	NeedsSSO    bool   `json:"needs_sso,omitempty"`
+	NeedsSSO bool `json:"needs_sso,omitempty"`
 	// AuthData is the authdata value.
 	AuthData
 }
@@ -1144,21 +1144,21 @@ var ExampleInviteResponse = InviteReply{
 // OauthTokenRequest to authenticate an oauth user with the Server
 type OauthTokenRequest struct {
 	// Name is the name value.
-	Name             string `json:"name" description:"The name of the user" example:"Jon Snow"`
+	Name string `json:"name" description:"The name of the user" example:"Jon Snow"`
 	// Email is the email value.
-	Email            string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
+	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
 	// AuthProvider is the authProvider value.
-	AuthProvider     string `json:"authProvider" description:"The provider used to authenticate the user, e.g. google, github, etc." example:"google"`
+	AuthProvider string `json:"authProvider" description:"The provider used to authenticate the user, e.g. google, github, etc." example:"google"`
 	// ExternalUserID is the externalUserId value.
-	ExternalUserID   string `json:"externalUserId" description:"The ID of the user from the external provider" example:"1234567890"`
+	ExternalUserID string `json:"externalUserId" description:"The ID of the user from the external provider" example:"1234567890"`
 	// ExternalUserName is the externalUserName value.
 	ExternalUserName string `json:"externalUserName" description:"The username of the user from the external provider" example:"jsnow"`
 	// ClientToken is the clientToken value.
-	ClientToken      string `json:"clientToken" description:"The token provided by the external provider"`
+	ClientToken string `json:"clientToken" description:"The token provided by the external provider"`
 	// Image is the image value.
-	Image            string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
+	Image string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
 	// OrgID is the org_id value.
-	OrgID            string `json:"org_id,omitempty" description:"the organization id for the sso connection"`
+	OrgID string `json:"org_id,omitempty" description:"the organization id for the sso connection"`
 }
 
 // ExampleOauthTokenRequest is an example OAuth token request for OpenAPI documentation
@@ -1179,11 +1179,11 @@ var ExampleOauthTokenRequest = OauthTokenRequest{
 // AccountAccessRequest contains organization ID for checking access permissions
 type AccountAccessRequest struct {
 	// ObjectID is the object_id value.
-	ObjectID    string `json:"object_id" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectID string `json:"object_id" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// ObjectType is the object_type value.
-	ObjectType  string `json:"object_type" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
+	ObjectType string `json:"object_type" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
 	// Relation is the relation value.
-	Relation    string `json:"relation" description:"The relation to check access for, e.g. can_view, can_edit" example:"can_view"`
+	Relation string `json:"relation" description:"The relation to check access for, e.g. can_view, can_edit" example:"can_view"`
 	// SubjectType is the subject_type value.
 	SubjectType string `json:"subject_type,omitempty" description:"The type of subject to check access for, e.g. service, user" example:"user"`
 }
@@ -1246,15 +1246,15 @@ var ExampleAccountAccessReply = AccountAccessReply{
 // AccountRolesRequest contains object IDs for retrieving roles associated with them
 type AccountRolesRequest struct {
 	// @deprecated use ObjectIDs instead, may be removed in a future release
-	ObjectID    string   `json:"object_id,omitempty" description:" @deprecated use ObjectIDs instead. The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ObjectID string `json:"object_id,omitempty" description:" @deprecated use ObjectIDs instead. The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// ObjectIDs is the object_ids value.
-	ObjectIDs   []string `json:"object_ids,omitempty" description:"The IDs of the object to check roles for, can be used to check multiple ids in one request"` // example:"["01J4EXD5MM60CX4YNYN0DEE3Y1", "01J4EXD5MM60CX4YNYN0DEE3Y2"]"
+	ObjectIDs []string `json:"object_ids,omitempty" description:"The IDs of the object to check roles for, can be used to check multiple ids in one request"` // example:"["01J4EXD5MM60CX4YNYN0DEE3Y1", "01J4EXD5MM60CX4YNYN0DEE3Y2"]"
 	// ObjectType is the object_type value.
-	ObjectType  string   `json:"object_type" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
+	ObjectType string `json:"object_type" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
 	// SubjectType is the subject_type value.
-	SubjectType string   `json:"subject_type,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
+	SubjectType string `json:"subject_type,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
 	// Relations is the relations value.
-	Relations   []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit"`
+	Relations []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit"`
 }
 
 // AccountRolesReply holds the fields that are sent on a response to the `/account/roles` endpoint
@@ -1321,9 +1321,9 @@ type AccountRolesOrganizationReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Roles is the roles value.
-	Roles          []string `json:"roles" description:"The roles the user has in the organization, e.g. can_view, can_edit"`
+	Roles []string `json:"roles" description:"The roles the user has in the organization, e.g. can_view, can_edit"`
 	// OrganizationID is the organization_id value.
-	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	OrganizationID string `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleResponse returns an example AccountRolesOrganizationReply for OpenAPI documentation
@@ -1368,9 +1368,9 @@ type AccountFeaturesReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Features is the features value.
-	Features       []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module"`
+	Features []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module"`
 	// OrganizationID is the organization_id value.
-	OrganizationID string   `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	OrganizationID string `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleResponse returns an example AccountFeaturesReply for OpenAPI documentation
@@ -1420,11 +1420,11 @@ type UploadFilesReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
-	Message   string `json:"message,omitempty"`
+	Message string `json:"message,omitempty"`
 	// FileCount is the file_count value.
-	FileCount int64  `json:"file_count,omitempty" description:"The number of files uploaded"`
+	FileCount int64 `json:"file_count,omitempty" description:"The number of files uploaded"`
 	// Files is the files value.
-	Files     []File `json:"files,omitempty" description:"The files that were uploaded"`
+	Files []File `json:"files,omitempty" description:"The files that were uploaded"`
 }
 
 // ExampleResponse returns an example UploadFilesReply for OpenAPI documentation
@@ -1476,7 +1476,7 @@ var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 // TFARequest holds the payload for verifying the 2fa code (/2fa/validate)
 type TFARequest struct {
 	// TOTPCode is the totp_code value.
-	TOTPCode     string `json:"totp_code,omitempty" description:"The TOTP code to validate, always takes precedence over recovery code" example:"113371"`
+	TOTPCode string `json:"totp_code,omitempty" description:"The TOTP code to validate, always takes precedence over recovery code" example:"113371"`
 	// RecoveryCode is the recovery_code value.
 	RecoveryCode string `json:"recovery_code,omitempty" description:"The recovery code to validate, only used if TOTP code is not provided" example:"8VM7AL91"`
 }
@@ -1549,13 +1549,13 @@ var ExampleExampleCSVRequest = ExampleCSVRequest{
 // JobRunnerRegistrationRequest is the request to register a new node
 type JobRunnerRegistrationRequest struct {
 	// IPAddress is the ip_address value.
-	IPAddress string   `json:"ip_address" description:"The IP address of the node being registered"`
+	IPAddress string `json:"ip_address" description:"The IP address of the node being registered"`
 	// Token is the token value.
-	Token     string   `json:"token" description:"Your agent registration token"`
+	Token string `json:"token" description:"Your agent registration token"`
 	// Name is the name value.
-	Name      string   `json:"name" description:"the name of your job runner node"`
+	Name string `json:"name" description:"the name of your job runner node"`
 	// Tags is the tags value.
-	Tags      []string `json:"tags" description:"The tags for your runner node"`
+	Tags []string `json:"tags" description:"The tags for your runner node"`
 }
 
 // Validate ensures the required fields are set on the AgentNodeRegistrationRequest
@@ -1583,7 +1583,7 @@ func (r *JobRunnerRegistrationRequest) Validate() error {
 // this includes the credential creation options and the session token
 type JobRunnerRegistrationReply struct {
 	// Reply is the reply value.
-	Reply   rout.Reply
+	Reply rout.Reply
 	// Message is the message value.
 	Message string `json:"message"`
 }
@@ -1660,9 +1660,9 @@ type SSOLoginRequest struct {
 	// OrganizationID is the organization_id value.
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// ReturnURL is the return value.
-	ReturnURL      string `json:"return" query:"return" description:"return url after authentication" example:"https://app.mitb.com"`
+	ReturnURL string `json:"return" query:"return" description:"return url after authentication" example:"https://app.mitb.com"`
 	// IsTest is the is_test value.
-	IsTest         bool   `json:"is_test" query:"is_test" description:"Used when testing the sso was successfully connected"`
+	IsTest bool `json:"is_test" query:"is_test" description:"Used when testing the sso was successfully connected"`
 }
 
 // Validate ensures the required fields are set on the SSOLoginRequest
@@ -1686,9 +1686,9 @@ var ExampleSSOLoginRequest = SSOLoginRequest{
 // SSOCallbackRequest holds the query parameters for completing the SSO login flow
 type SSOCallbackRequest struct {
 	// Code is the code value.
-	Code           string `json:"code" query:"code" description:"authorization code" example:"abc"`
+	Code string `json:"code" query:"code" description:"authorization code" example:"abc"`
 	// State is the state value.
-	State          string `json:"state" query:"state" description:"state value" example:"state123"`
+	State string `json:"state" query:"state" description:"state value" example:"state123"`
 	// OrganizationID is the organization_id value.
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 }
@@ -1721,7 +1721,7 @@ var ExampleSSOCallbackRequest = SSOCallbackRequest{
 // SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
 type SSOTokenCallbackRequest struct {
 	// Code is the code value.
-	Code  string `json:"code" query:"code" description:"authorization code" example:"abc"`
+	Code string `json:"code" query:"code" description:"authorization code" example:"abc"`
 	// State is the state value.
 	State string `json:"state" query:"state" description:"state value" example:"state123"`
 }
@@ -1775,21 +1775,21 @@ type SSOStatusReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Enforced is the enforced value.
-	Enforced       bool              `json:"enforced"`
+	Enforced bool `json:"enforced"`
 	// Provider is the provider value.
-	Provider       enums.SSOProvider `json:"provider,omitempty"`
+	Provider enums.SSOProvider `json:"provider,omitempty"`
 	// DiscoveryURL is the discovery_url value.
-	DiscoveryURL   string            `json:"discovery_url,omitempty"`
+	DiscoveryURL string `json:"discovery_url,omitempty"`
 	// SAMLSignInURL is the saml_signin_url value.
-	SAMLSignInURL  string            `json:"saml_signin_url,omitempty"`
+	SAMLSignInURL string `json:"saml_signin_url,omitempty"`
 	// OrganizationID is the organization_id value.
-	OrganizationID string            `json:"organization_id,omitempty"`
+	OrganizationID string `json:"organization_id,omitempty"`
 	// OrgTFAEnforced is the tfa_enforced value.
-	OrgTFAEnforced bool              `json:"tfa_enforced"`
+	OrgTFAEnforced bool `json:"tfa_enforced"`
 	// UserTFAEnabled is the user_tfa_enabled value.
-	UserTFAEnabled bool              `json:"user_tfa_enabled,omitempty"`
+	UserTFAEnabled bool `json:"user_tfa_enabled,omitempty"`
 	// IsOrgOwner is the is_org_owner value.
-	IsOrgOwner     bool              `json:"is_org_owner,omitempty"`
+	IsOrgOwner bool `json:"is_org_owner,omitempty"`
 }
 
 // ExampleResponse returns an example SSOStatusReply for OpenAPI documentation
@@ -1829,9 +1829,9 @@ type SSOTokenAuthorizeRequest struct {
 	// OrganizationID is the organization_id value.
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 	// TokenID is the token_id value.
-	TokenID        string `json:"token_id" query:"token_id" description:"token id to authorize" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
+	TokenID string `json:"token_id" query:"token_id" description:"token id to authorize" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
 	// TokenType is the token_type value.
-	TokenType      string `json:"token_type" query:"token_type" description:"token type: api or personal" example:"api"`
+	TokenType string `json:"token_type" query:"token_type" description:"token type: api or personal" example:"api"`
 }
 
 // Validate ensures required fields are set on the SSOTokenAuthorizeRequest
@@ -1860,9 +1860,9 @@ type SSOTokenAuthorizeReply struct {
 	// OrganizationID is the organization_id value.
 	OrganizationID string `json:"organization_id"`
 	// TokenID is the token_id value.
-	TokenID        string `json:"token_id"`
+	TokenID string `json:"token_id"`
 	// Message is the message value.
-	Message        string `json:"message,omitempty"`
+	Message string `json:"message,omitempty"`
 }
 
 // ExampleResponse returns an example SSOTokenAuthorizeReply for OpenAPI documentation
@@ -1996,6 +1996,41 @@ var ExampleSubmitQuestionnaireResponse = SubmitQuestionnaireResponse{
 	CompletedAt:    "2024-01-01T12:00:00Z",
 }
 
+// ResendQuestionnaireRequest contains fields for requesting a new questionnaire auth email
+type ResendQuestionnaireRequest struct {
+	// Email is the email address associated with the assessment response
+	Email string `json:"email" description:"The email address associated with the assessment response"`
+	// AssessmentID is the ID of the assessment
+	AssessmentID string `json:"assessment_id" description:"The ID of the assessment"`
+}
+
+// Validate ensures the required fields are set on the ResendQuestionnaireRequest
+func (r *ResendQuestionnaireRequest) Validate() error {
+	if r.Email == "" {
+		return rout.NewMissingRequiredFieldError("email")
+	}
+
+	if r.AssessmentID == "" {
+		return rout.NewMissingRequiredFieldError("assessment_id")
+	}
+
+	return nil
+}
+
+// ExampleResendQuestionnaireRequest is an example request for OpenAPI documentation
+var ExampleResendQuestionnaireRequest = ResendQuestionnaireRequest{
+	Email:        "vendor@example.com",
+	AssessmentID: "01JCQR8Z9X1A2B3C4D5E6F7G8H",
+}
+
+// ExampleResendQuestionnaireResponse is an example response for OpenAPI documentation
+var ExampleResendQuestionnaireResponse = ResendReply{
+	Reply: rout.Reply{
+		Success: true,
+	},
+	Message: "If the email address is associated with an active assessment, a new authentication email has been sent",
+}
+
 // =================
 // IMPERSONATION
 // =================
@@ -2011,17 +2046,17 @@ const (
 // StartImpersonationRequest represents a request to start impersonating a user
 type StartImpersonationRequest struct {
 	// TargetUserID is the target_user_id value.
-	TargetUserID   string   `json:"target_user_id" validate:"required" description:"The ID of the user to impersonate"`
+	TargetUserID string `json:"target_user_id" validate:"required" description:"The ID of the user to impersonate"`
 	// Type is the type value.
-	Type           string   `json:"type" validate:"required,oneof=support job admin" description:"The type of impersonation (support, job, admin)"`
+	Type string `json:"type" validate:"required,oneof=support job admin" description:"The type of impersonation (support, job, admin)"`
 	// Reason is the reason value.
-	Reason         string   `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
+	Reason string `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
 	// Duration is the duration_hours value.
-	Duration       *int     `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
+	Duration *int `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
 	// Scopes is the scopes value.
-	Scopes         []string `json:"scopes,omitempty" description:"Specific scopes for the impersonation session"`
+	Scopes []string `json:"scopes,omitempty" description:"Specific scopes for the impersonation session"`
 	// OrganizationID is the organization_id value.
-	OrganizationID string   `json:"organization_id,omitempty" description:"Organization context for impersonation"`
+	OrganizationID string `json:"organization_id,omitempty" description:"Organization context for impersonation"`
 }
 
 // StartImpersonationReply represents the response when starting impersonation
@@ -2029,13 +2064,13 @@ type StartImpersonationReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Token is the token value.
-	Token     string    `json:"token" description:"The impersonation token"`
+	Token string `json:"token" description:"The impersonation token"`
 	// ExpiresAt is the expires_at value.
 	ExpiresAt time.Time `json:"expires_at" description:"When the impersonation token expires"`
 	// SessionID is the session_id value.
-	SessionID string    `json:"session_id" description:"The impersonation session ID"`
+	SessionID string `json:"session_id" description:"The impersonation session ID"`
 	// Message is the message value.
-	Message   string    `json:"message" description:"Success message"`
+	Message string `json:"message" description:"Success message"`
 }
 
 // ExampleResponse returns an example StartImpersonationReply for OpenAPI documentation
@@ -2054,7 +2089,7 @@ type EndImpersonationRequest struct {
 	// SessionID is the session_id value.
 	SessionID string `json:"session_id" validate:"required" description:"The session ID to end"`
 	// Reason is the reason value.
-	Reason    string `json:"reason,omitempty" description:"Optional reason for ending the session"`
+	Reason string `json:"reason,omitempty" description:"Optional reason for ending the session"`
 }
 
 // EndImpersonationReply represents the response when ending impersonation
@@ -2115,19 +2150,19 @@ func (r *EndImpersonationRequest) Validate() error {
 // IntegrationToken represents stored OAuth tokens for an integration
 type IntegrationToken struct {
 	// Provider is the provider value.
-	Provider         string     `json:"provider" description:"OAuth provider (github, slack, etc.)"`
+	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)"`
 	// AccessToken is the accessToken value.
-	AccessToken      string     `json:"accessToken" description:"OAuth access token"`
+	AccessToken string `json:"accessToken" description:"OAuth access token"`
 	// RefreshToken is the refreshToken value.
-	RefreshToken     string     `json:"refreshToken,omitempty" description:"OAuth refresh token"`
+	RefreshToken string `json:"refreshToken,omitempty" description:"OAuth refresh token"`
 	// ExpiresAt is the expiresAt value.
-	ExpiresAt        *time.Time `json:"expiresAt,omitempty" description:"Token expiration time"`
+	ExpiresAt *time.Time `json:"expiresAt,omitempty" description:"Token expiration time"`
 	// ProviderUserID is the providerUserId value.
-	ProviderUserID   string     `json:"providerUserId,omitempty" description:"User ID from the OAuth provider"`
+	ProviderUserID string `json:"providerUserId,omitempty" description:"User ID from the OAuth provider"`
 	// ProviderUsername is the providerUsername value.
-	ProviderUsername string     `json:"providerUsername,omitempty" description:"Username from the OAuth provider"`
+	ProviderUsername string `json:"providerUsername,omitempty" description:"Username from the OAuth provider"`
 	// ProviderEmail is the providerEmail value.
-	ProviderEmail    string     `json:"providerEmail,omitempty" description:"Email from the OAuth provider"`
+	ProviderEmail string `json:"providerEmail,omitempty" description:"Email from the OAuth provider"`
 }
 
 // IsExpired returns true if the token has expired
@@ -2149,11 +2184,11 @@ type IntegrationTokenResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Provider is the provider value.
-	Provider  string            `json:"provider"`
+	Provider string `json:"provider"`
 	// Token is the token value.
-	Token     *IntegrationToken `json:"token"`
+	Token *IntegrationToken `json:"token"`
 	// ExpiresAt is the expiresAt value.
-	ExpiresAt *time.Time        `json:"expiresAt,omitempty"`
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 }
 
 // ExampleResponse returns an example IntegrationTokenResponse for OpenAPI documentation
@@ -2184,7 +2219,7 @@ type DeleteIntegrationResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
-	Message   string `json:"message"`
+	Message string `json:"message"`
 	// DeletedID is the deletedId value.
 	DeletedID string `json:"deletedId,omitempty"`
 }
@@ -2194,19 +2229,19 @@ type IntegrationStatusResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Provider is the provider value.
-	Provider     string `json:"provider"`
+	Provider string `json:"provider"`
 	// Connected is the connected value.
-	Connected    bool   `json:"connected"`
+	Connected bool `json:"connected"`
 	// Status is the status value.
-	Status       string `json:"status,omitempty"` // "connected", "expired", "invalid"
+	Status string `json:"status,omitempty"` // "connected", "expired", "invalid"
 	// TokenValid is the tokenValid value.
-	TokenValid   bool   `json:"tokenValid,omitempty"`
+	TokenValid bool `json:"tokenValid,omitempty"`
 	// TokenExpired is the tokenExpired value.
-	TokenExpired bool   `json:"tokenExpired,omitempty"`
+	TokenExpired bool `json:"tokenExpired,omitempty"`
 	// Message is the message value.
-	Message      string `json:"message"`
+	Message string `json:"message"`
 	// Integration is the integration value.
-	Integration  any    `json:"integration,omitempty"` // Will be *ent.Integration
+	Integration any `json:"integration,omitempty"` // Will be *ent.Integration
 }
 
 // ExampleResponse returns an example IntegrationStatusResponse for OpenAPI documentation
@@ -2299,11 +2334,11 @@ func (r *GetIntegrationStatusRequest) Validate() error {
 // OAuthFlowRequest represents the initial OAuth flow request
 type OAuthFlowRequest struct {
 	// Provider is the provider value.
-	Provider    string   `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 	// RedirectURI is the redirectUri value.
-	RedirectURI string   `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
+	RedirectURI string `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
 	// Scopes is the scopes value.
-	Scopes      []string `json:"scopes,omitempty" description:"Additional OAuth scopes to request"` // example: ["repo", "gist"]
+	Scopes []string `json:"scopes,omitempty" description:"Additional OAuth scopes to request"` // example: ["repo", "gist"]
 }
 
 // Validate ensures the required fields are set on the OAuthFlowRequest
@@ -2332,13 +2367,13 @@ type OAuthFlowResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// AuthURL is the authUrl value.
-	AuthURL       string `json:"authUrl" description:"URL to redirect user to for OAuth authorization" example:"https://github.com/login/oauth/authorize?client_id=..."`
+	AuthURL string `json:"authUrl" description:"URL to redirect user to for OAuth authorization" example:"https://github.com/login/oauth/authorize?client_id=..."`
 	// State is the state value.
-	State         string `json:"state,omitempty" description:"OAuth state parameter for security" example:"eyJvcmdJRCI6IjAxSE..."`
+	State string `json:"state,omitempty" description:"OAuth state parameter for security" example:"eyJvcmdJRCI6IjAxSE..."`
 	// Message is the message value.
-	Message       string `json:"message,omitempty" description:"Optional message (e.g., for authentication required)" example:"Authentication required. Please login first."`
+	Message string `json:"message,omitempty" description:"Optional message (e.g., for authentication required)" example:"Authentication required. Please login first."`
 	// RequiresLogin is the requiresLogin value.
-	RequiresLogin bool   `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow"`
+	RequiresLogin bool `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow"`
 }
 
 // ExampleResponse returns an example OAuthFlowResponse for OpenAPI documentation
@@ -2357,9 +2392,9 @@ type OAuthCallbackRequest struct {
 	// Provider is the provider value.
 	Provider string `json:"provider,omitempty" query:"provider" description:"OAuth provider (extracted from state)"`
 	// Code is the code value.
-	Code     string `json:"code" query:"code" description:"OAuth authorization code"`
+	Code string `json:"code" query:"code" description:"OAuth authorization code"`
 	// State is the state value.
-	State    string `json:"state" query:"state" description:"OAuth state parameter"`
+	State string `json:"state" query:"state" description:"OAuth state parameter"`
 }
 
 // Validate ensures the required fields are set on the OAuthCallbackRequest
@@ -2412,11 +2447,11 @@ type OAuthCallbackResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Success is the success value.
-	Success     bool   `json:"success" description:"Whether the OAuth callback was processed successfully"`
+	Success bool `json:"success" description:"Whether the OAuth callback was processed successfully"`
 	// Integration is the integration value.
-	Integration any    `json:"integration,omitempty" description:"The created/updated integration object"`
+	Integration any `json:"integration,omitempty" description:"The created/updated integration object"`
 	// Message is the message value.
-	Message     string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
+	Message string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
 }
 
 // ExampleResponse returns an example OAuthCallbackResponse for OpenAPI documentation
@@ -2478,9 +2513,9 @@ type GitHubAppInstallResponse struct {
 	// InstallURL is the installUrl value.
 	InstallURL string `json:"installUrl" description:"URL to initiate the GitHub App installation" example:"https://github.com/apps/openlane/installations/new?state=eyJvcmdJRCI6IjAxSE..."`
 	// State is the state value.
-	State      string `json:"state,omitempty" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
+	State string `json:"state,omitempty" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
 	// Message is the message value.
-	Message    string `json:"message,omitempty" description:"Optional message"`
+	Message string `json:"message,omitempty" description:"Optional message"`
 }
 
 // ExampleResponse returns an example GitHubAppInstallResponse.
@@ -2498,9 +2533,9 @@ type GitHubAppInstallCallbackRequest struct {
 	// InstallationID is the installation_id value.
 	InstallationID string `json:"installation_id" query:"installation_id" description:"GitHub App installation ID" example:"12345678"`
 	// SetupAction is the setup_action value.
-	SetupAction    string `json:"setup_action,omitempty" query:"setup_action" description:"GitHub setup action" example:"install"`
+	SetupAction string `json:"setup_action,omitempty" query:"setup_action" description:"GitHub setup action" example:"install"`
 	// State is the state value.
-	State          string `json:"state" query:"state" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
+	State string `json:"state" query:"state" description:"State parameter used to validate the installation callback" example:"eyJvcmdJRCI6IjAxSE..."`
 }
 
 // Validate ensures required callback fields are set.
@@ -2602,7 +2637,7 @@ func (r *StripeWebhookRequest) Validate() error {
 // ProductCatalogRequest
 type ProductCatalogRequest struct {
 	// IncludeBeta is the includebeta value.
-	IncludeBeta    bool `query:"include_beta" description:"Whether to include beta products in the catalog" example:"false"`
+	IncludeBeta bool `query:"include_beta" description:"Whether to include beta products in the catalog" example:"false"`
 	// IncludePrivate is the includeprivate value.
 	IncludePrivate bool `query:"include_private" description:"Whether to include private products in the catalog" example:"false"`
 }
@@ -2669,19 +2704,19 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 // IntegrationConfigRequest represents arbitrary credential configuration submitted for a provider.
 type IntegrationConfigRequest struct {
 	// ServiceAccountEmail is the serviceAccountEmail value.
-	ServiceAccountEmail      string         `json:"serviceAccountEmail,omitempty"`
+	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty"`
 	// Audience is the audience value.
-	Audience                 string         `json:"audience,omitempty"`
+	Audience string `json:"audience,omitempty"`
 	// ProjectID is the projectId value.
-	ProjectID                string         `json:"projectId,omitempty"`
+	ProjectID string `json:"projectId,omitempty"`
 	// OrganizationID is the organizationId value.
-	OrganizationID           string         `json:"organizationId,omitempty"`
+	OrganizationID string `json:"organizationId,omitempty"`
 	// WorkloadIdentityProvider is the workloadIdentityProvider value.
-	WorkloadIdentityProvider string         `json:"workloadIdentityProvider,omitempty"`
+	WorkloadIdentityProvider string `json:"workloadIdentityProvider,omitempty"`
 	// FindingFilter is the findingFilter value.
-	FindingFilter            string         `json:"findingFilter,omitempty"`
+	FindingFilter string `json:"findingFilter,omitempty"`
 	// Additional is the additional value.
-	Additional               map[string]any `json:"-"`
+	Additional map[string]any `json:"-"`
 }
 
 // ExampleIntegrationConfigRequest is an example configuration payload for OpenAPI documentation.
@@ -2785,11 +2820,11 @@ type IntegrationOperationParams struct {
 // IntegrationOperationRequest describes a provider operation to run.
 type IntegrationOperationRequest struct {
 	// Operation is the operation value.
-	Operation string         `json:"operation" validate:"required"`
+	Operation string `json:"operation" validate:"required"`
 	// Config is the config value.
-	Config    map[string]any `json:"config,omitempty"`
+	Config map[string]any `json:"config,omitempty"`
 	// Force is the force value.
-	Force     bool           `json:"force,omitempty"`
+	Force bool `json:"force,omitempty"`
 }
 
 // IntegrationOperationPayload wraps the params with the operation body.
@@ -2816,13 +2851,13 @@ var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
 // IntegrationOperationMetadata describes an operation published by a provider.
 type IntegrationOperationMetadata struct {
 	// Name is the name value.
-	Name         string         `json:"name"`
+	Name string `json:"name"`
 	// Kind is the kind value.
-	Kind         string         `json:"kind"`
+	Kind string `json:"kind"`
 	// Description is the description value.
-	Description  string         `json:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 	// Client is the client value.
-	Client       string         `json:"client,omitempty"`
+	Client string `json:"client,omitempty"`
 	// ConfigSchema is the configSchema value.
 	ConfigSchema map[string]any `json:"configSchema,omitempty"`
 }
@@ -2830,33 +2865,33 @@ type IntegrationOperationMetadata struct {
 // IntegrationProviderMetadata describes the data required for rendering integration forms.
 type IntegrationProviderMetadata struct {
 	// Name is the name value.
-	Name                   string                             `json:"name"`
+	Name string `json:"name"`
 	// DisplayName is the displayName value.
-	DisplayName            string                             `json:"displayName"`
+	DisplayName string `json:"displayName"`
 	// Category is the category value.
-	Category               string                             `json:"category"`
+	Category string `json:"category"`
 	// AuthType is the authType value.
-	AuthType               types.AuthKind                     `json:"authType"`
+	AuthType types.AuthKind `json:"authType"`
 	// Active is the active value.
-	Active                 bool                               `json:"active"`
+	Active bool `json:"active"`
 	// LogoURL is the logoUrl value.
-	LogoURL                string                             `json:"logoUrl,omitempty"`
+	LogoURL string `json:"logoUrl,omitempty"`
 	// DocsURL is the docsUrl value.
-	DocsURL                string                             `json:"docsUrl,omitempty"`
+	DocsURL string `json:"docsUrl,omitempty"`
 	// OAuth is the oauth value.
-	OAuth                  *IntegrationOAuthMetadata          `json:"oauth,omitempty"`
+	OAuth *IntegrationOAuthMetadata `json:"oauth,omitempty"`
 	// GoogleWorkloadIdentity is the workloadIdentity value.
 	GoogleWorkloadIdentity *config.GoogleWorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
 	// GitHubApp is the githubApp value.
-	GitHubApp              *config.GitHubAppSpec              `json:"githubApp,omitempty"`
+	GitHubApp *config.GitHubAppSpec `json:"githubApp,omitempty"`
 	// Persistence is the persistence value.
-	Persistence            *config.PersistenceSpec            `json:"persistence,omitempty"`
+	Persistence *config.PersistenceSpec `json:"persistence,omitempty"`
 	// CredentialsSchema is the credentialsSchema value.
-	CredentialsSchema      map[string]any                     `json:"credentialsSchema,omitempty"`
+	CredentialsSchema map[string]any `json:"credentialsSchema,omitempty"`
 	// Labels is the labels value.
-	Labels                 map[string]string                  `json:"labels,omitempty"`
+	Labels map[string]string `json:"labels,omitempty"`
 	// Operations is the operations value.
-	Operations             []IntegrationOperationMetadata     `json:"operations,omitempty"`
+	Operations []IntegrationOperationMetadata `json:"operations,omitempty"`
 }
 
 // IntegrationOperationTemplate captures persisted configuration for an operation.
@@ -2933,17 +2968,17 @@ var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 // IntegrationOAuthMetadata captures OAuth-specific metadata for integrations.
 type IntegrationOAuthMetadata struct {
 	// AuthURL is the authUrl value.
-	AuthURL     string            `json:"authUrl,omitempty"`
+	AuthURL string `json:"authUrl,omitempty"`
 	// TokenURL is the tokenUrl value.
-	TokenURL    string            `json:"tokenUrl,omitempty"`
+	TokenURL string `json:"tokenUrl,omitempty"`
 	// RedirectURI is the redirectUri value.
-	RedirectURI string            `json:"redirectUri,omitempty"`
+	RedirectURI string `json:"redirectUri,omitempty"`
 	// Scopes is the scopes value.
-	Scopes      []string          `json:"scopes,omitempty"`
+	Scopes []string `json:"scopes,omitempty"`
 	// UsePKCE is the usePkce value.
-	UsePKCE     bool              `json:"usePkce,omitempty"`
+	UsePKCE bool `json:"usePkce,omitempty"`
 	// AuthParams is the authParams value.
-	AuthParams  map[string]string `json:"authParams,omitempty"`
+	AuthParams map[string]string `json:"authParams,omitempty"`
 	// TokenParams is the tokenParams value.
 	TokenParams map[string]string `json:"tokenParams,omitempty"`
 }
@@ -2953,7 +2988,7 @@ type IntegrationProvidersResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Schema is the schema value.
-	Schema    *jsonschema.Schema            `json:"schema"`
+	Schema *jsonschema.Schema `json:"schema"`
 	// Providers is the providers value.
 	Providers []IntegrationProviderMetadata `json:"providers"`
 }
@@ -2971,15 +3006,15 @@ type IntegrationOperationResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Provider is the provider value.
-	Provider  string         `json:"provider"`
+	Provider string `json:"provider"`
 	// Operation is the operation value.
-	Operation string         `json:"operation"`
+	Operation string `json:"operation"`
 	// Status is the status value.
-	Status    string         `json:"status"`
+	Status string `json:"status"`
 	// Summary is the summary value.
-	Summary   string         `json:"summary"`
+	Summary string `json:"summary"`
 	// Details is the details value.
-	Details   map[string]any `json:"details,omitempty"`
+	Details map[string]any `json:"details,omitempty"`
 }
 
 // ExampleResponse returns an example IntegrationConfigResponse for OpenAPI documentation.
@@ -3007,7 +3042,7 @@ func (r *IntegrationOperationResponse) ExampleResponse() any {
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
 type DisconnectIntegrationRequest struct {
 	// Provider is the provider value.
-	Provider      string `param:"provider" description:"Integration provider key" example:"github"`
+	Provider string `param:"provider" description:"Integration provider key" example:"github"`
 	// IntegrationID is the integrationid value.
 	IntegrationID string `query:"integration_id,omitempty" description:"Specific integration ID to delete"`
 }
@@ -3024,7 +3059,7 @@ var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
 // SnapshotRequest contains fields for a snapshot request to the `/snapshot` endpoint
 type SnapshotRequest struct {
 	// URL is the url value.
-	URL             string `json:"url" description:"The URL of the domain to take a snapshot of" example:"https://www.example.com"`
+	URL string `json:"url" description:"The URL of the domain to take a snapshot of" example:"https://www.example.com"`
 	// WaitForSelector is the waitForSelector value.
 	WaitForSelector string `json:"waitForSelector,omitempty" description:"optional CSS selector to wait for before taking the snapshot" example:"img#main-image"`
 }
@@ -3034,9 +3069,9 @@ type SnapshotReply struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
-	Message  string `json:"message"`
+	Message string `json:"message"`
 	// Image is the image value.
-	Image    string `json:"image" description:"Base64-encoded image data of the snapshot"`
+	Image string `json:"image" description:"Base64-encoded image data of the snapshot"`
 	// MIMEType is the mimeType value.
 	MIMEType string `json:"mimeType" description:"MIME type of the snapshot image" example:"image/png"`
 }
