@@ -122,7 +122,7 @@ type ControlHistory struct {
 	// the id of the standard that the control belongs to, if applicable
 	StandardID string `json:"standard_id,omitempty"`
 	// visibility of the control on the trust center, controls the publishing state for trust center display
-	TrustCenterVisibility enums.TrustCenterDocumentVisibility `json:"trust_center_visibility,omitempty"`
+	TrustCenterVisibility enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
 	// indicates the control is derived from the trust center standard, set by the system during control clone
 	IsTrustCenterControl bool `json:"is_trust_center_control,omitempty"`
 	selectValues         sql.SelectValues
@@ -491,7 +491,7 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_visibility", values[i])
 			} else if value.Valid {
-				_m.TrustCenterVisibility = enums.TrustCenterDocumentVisibility(value.String)
+				_m.TrustCenterVisibility = enums.TrustCenterControlVisibility(value.String)
 			}
 		case controlhistory.FieldIsTrustCenterControl:
 			if value, ok := values[i].(*sql.NullBool); !ok {

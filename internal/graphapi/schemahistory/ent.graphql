@@ -4341,7 +4341,7 @@ type ControlHistory implements Node {
   """
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
-  trustCenterVisibility: ControlHistoryTrustCenterDocumentVisibility
+  trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
   """
   indicates the control is derived from the trust center standard, set by the system during control clone
   """
@@ -4435,11 +4435,10 @@ enum ControlHistoryOrderField {
   ref_code
 }
 """
-ControlHistoryTrustCenterDocumentVisibility is enum for the field trust_center_visibility
+ControlHistoryTrustCenterControlVisibility is enum for the field trust_center_visibility
 """
-enum ControlHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterDocumentVisibility") {
+enum ControlHistoryTrustCenterControlVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterControlVisibility") {
   PUBLICLY_VISIBLE
-  PROTECTED
   NOT_VISIBLE
 }
 """
@@ -5024,10 +5023,10 @@ input ControlHistoryWhereInput {
   """
   trust_center_visibility field predicates
   """
-  trustCenterVisibility: ControlHistoryTrustCenterDocumentVisibility
-  trustCenterVisibilityNEQ: ControlHistoryTrustCenterDocumentVisibility
-  trustCenterVisibilityIn: [ControlHistoryTrustCenterDocumentVisibility!]
-  trustCenterVisibilityNotIn: [ControlHistoryTrustCenterDocumentVisibility!]
+  trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
+  trustCenterVisibilityNEQ: ControlHistoryTrustCenterControlVisibility
+  trustCenterVisibilityIn: [ControlHistoryTrustCenterControlVisibility!]
+  trustCenterVisibilityNotIn: [ControlHistoryTrustCenterControlVisibility!]
   trustCenterVisibilityIsNil: Boolean
   trustCenterVisibilityNotNil: Boolean
   """

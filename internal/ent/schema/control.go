@@ -66,8 +66,8 @@ func (Control) Fields() []ent.Field {
 			Comment("the id of the standard that the control belongs to, if applicable").
 			Optional(),
 		field.Enum("trust_center_visibility").
-			GoType(enums.TrustCenterDocumentVisibility("")).
-			Default(enums.TrustCenterDocumentVisibilityNotVisible.String()).
+			GoType(enums.TrustCenterControlVisibility("")).
+			Default(enums.TrustCenterControlVisibilityNotVisible.String()).
 			Optional().
 			Comment("visibility of the control on the trust center, controls the publishing state for trust center display"),
 		field.Bool("is_trust_center_control").

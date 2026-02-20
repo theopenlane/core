@@ -2797,7 +2797,7 @@ type CreateControlInput struct {
 	ScopeName                  *string
 	WorkflowEligibleMarker     *bool
 	RefCode                    string
-	TrustCenterVisibility      *enums.TrustCenterDocumentVisibility
+	TrustCenterVisibility      *enums.TrustCenterControlVisibility
 	EvidenceIDs                []string
 	ControlObjectiveIDs        []string
 	TaskIDs                    []string
@@ -3089,7 +3089,7 @@ type UpdateControlInput struct {
 	WorkflowEligibleMarker          *bool
 	RefCode                         *string
 	ClearTrustCenterVisibility      bool
-	TrustCenterVisibility           *enums.TrustCenterDocumentVisibility
+	TrustCenterVisibility           *enums.TrustCenterControlVisibility
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
 	RemoveEvidenceIDs               []string

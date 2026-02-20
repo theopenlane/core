@@ -371,6 +371,12 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 	}
 
 	if _, trustCenterAnonAuth := contextx.From[auth.TrustCenterContextKey](ctx); trustCenterAnonAuth {
+		// Keep anonymous trust center template queries scoped by owner/trust center context
+		// instead of bypassing org filtering entirely.
+		if q.Type() == generated.TypeTemplate {
+			return false
+		}
+
 		return true
 	}
 

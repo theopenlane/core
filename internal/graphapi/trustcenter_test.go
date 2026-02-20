@@ -15,6 +15,8 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -831,7 +833,55 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 		})
 	}
 
+	// create a trust center control and verify frontend query still works with controls present
+	dbCtx := setContext(testUser.UserCtx, suite.client.db)
+
+	tcControl, err := suite.client.db.Control.Create().
+		SetRefCode("OTS-TC-" + ulids.New().String()).
+		SetTitle("Trust Center Control").
+		SetSource(enums.ControlSourceUserDefined).
+		SetIsTrustCenterControl(true).
+		SetOwnerID(testUser.OrganizationID).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	_, err = suite.client.api.UpdateControl(testUser.UserCtx, tcControl.ID, testclient.UpdateControlInput{
+		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
+	})
+	assert.NilError(t, err)
+
+	t.Run("anonymous user frontend query returns all child objects with controls present", func(t *testing.T) {
+		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID)
+
+		resp, err := suite.client.api.GetTrustCenterFrontendQuery(anonCtx)
+		assert.NilError(t, err)
+		assert.Check(t, resp != nil)
+		assert.Assert(t, is.Len(resp.TrustCenters.Edges, 1))
+
+		tc := resp.TrustCenters.Edges[0].Node
+
+		assert.Check(t, tc.ID != "")
+		assert.Check(t, tc.GetSetting() != nil)
+		assert.Check(t, tc.TrustCenterCompliances.Edges != nil)
+		assert.Check(t, tc.TrustCenterDocs.Edges != nil)
+		assert.Check(t, tc.TrustCenterEntities.Edges != nil)
+		assert.Check(t, tc.TrustCenterSubprocessors.Edges != nil)
+		assert.Check(t, tc.Posts.Edges != nil)
+	})
+
+	t.Run("anonymous user can query publicly visible trust center controls", func(t *testing.T) {
+		anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID)
+
+		resp, err := suite.client.api.GetAllControls(anonCtx)
+		assert.NilError(t, err)
+		assert.Check(t, resp != nil)
+		assert.Check(t, is.Len(resp.Controls.Edges, 1))
+		assert.Check(t, resp.Controls.Edges[0].Node.ID == tcControl.ID)
+		assert.Check(t, resp.Controls.Edges[0].Node.RefCode != "")
+	})
+
 	// Cleanup Trust Center Children
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: tcControl.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, ID: entity1.CreateTrustCenterEntity.TrustCenterEntity.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.NoteDeleteOne]{client: suite.client.db.Note, ID: postID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: tcc.CreateTrustCenterCompliance.TrustCenterCompliance.ID}).MustDelete(testUser.UserCtx, t)

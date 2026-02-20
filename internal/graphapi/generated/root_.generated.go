@@ -58716,7 +58716,7 @@ type Control implements Node {
   """
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
-  trustCenterVisibility: ControlTrustCenterDocumentVisibility
+  trustCenterVisibility: ControlTrustCenterControlVisibility
   """
   indicates the control is derived from the trust center standard, set by the system during control clone
   """
@@ -60917,11 +60917,10 @@ enum ControlOrderField {
   RESPONSIBLE_PARTY_name
 }
 """
-ControlTrustCenterDocumentVisibility is enum for the field trust_center_visibility
+ControlTrustCenterControlVisibility is enum for the field trust_center_visibility
 """
-enum ControlTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterDocumentVisibility") {
+enum ControlTrustCenterControlVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterControlVisibility") {
   PUBLICLY_VISIBLE
-  PROTECTED
   NOT_VISIBLE
 }
 """
@@ -61470,10 +61469,10 @@ input ControlWhereInput {
   """
   trust_center_visibility field predicates
   """
-  trustCenterVisibility: ControlTrustCenterDocumentVisibility
-  trustCenterVisibilityNEQ: ControlTrustCenterDocumentVisibility
-  trustCenterVisibilityIn: [ControlTrustCenterDocumentVisibility!]
-  trustCenterVisibilityNotIn: [ControlTrustCenterDocumentVisibility!]
+  trustCenterVisibility: ControlTrustCenterControlVisibility
+  trustCenterVisibilityNEQ: ControlTrustCenterControlVisibility
+  trustCenterVisibilityIn: [ControlTrustCenterControlVisibility!]
+  trustCenterVisibilityNotIn: [ControlTrustCenterControlVisibility!]
   trustCenterVisibilityIsNil: Boolean
   trustCenterVisibilityNotNil: Boolean
   """
@@ -62438,7 +62437,7 @@ input CreateControlInput {
   """
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
-  trustCenterVisibility: ControlTrustCenterDocumentVisibility
+  trustCenterVisibility: ControlTrustCenterControlVisibility
   evidenceIDs: [ID!]
   controlObjectiveIDs: [ID!]
   taskIDs: [ID!]
@@ -119440,7 +119439,7 @@ input UpdateControlInput {
   """
   visibility of the control on the trust center, controls the publishing state for trust center display
   """
-  trustCenterVisibility: ControlTrustCenterDocumentVisibility
+  trustCenterVisibility: ControlTrustCenterControlVisibility
   clearTrustCenterVisibility: Boolean
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]

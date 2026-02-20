@@ -581,13 +581,13 @@ func (_c *ControlCreate) SetNillableStandardID(v *string) *ControlCreate {
 }
 
 // SetTrustCenterVisibility sets the "trust_center_visibility" field.
-func (_c *ControlCreate) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlCreate {
+func (_c *ControlCreate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlCreate {
 	_c.mutation.SetTrustCenterVisibility(v)
 	return _c
 }
 
 // SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
-func (_c *ControlCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlCreate {
+func (_c *ControlCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlCreate {
 	if v != nil {
 		_c.SetTrustCenterVisibility(*v)
 	}

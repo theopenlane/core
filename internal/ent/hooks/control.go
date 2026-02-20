@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -91,6 +92,14 @@ func HookControlReferenceFramework() ent.Hook {
 func HookControlTrustCenterVisibility() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
+			if m.Op().Is(ent.OpUpdateOne) {
+				return handleControlVisibilityUpdate(ctx, m, next)
+			}
+
+			if m.Op().Is(ent.OpUpdate) {
+				return handleControlVisibilityBulkUpdate(ctx, m, next)
+			}
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
@@ -107,21 +116,19 @@ func HookControlTrustCenterVisibility() ent.Hook {
 			}
 
 			if m.Op().Is(ent.OpCreate) {
-				return handleControlVisibilityCreate(ctx, m, ctrl)
+				_, err := handleControlVisibilityCreate(ctx, m, ctrl)
+				return v, err
 			}
 
-			return handleControlVisibilityUpdate(ctx, m, ctrl)
+			return v, nil
 		})
-	}, ent.OpCreate|ent.OpUpdateOne)
+	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
 }
 
 // ControlVisibilityTupleAction determines whether wildcard viewer tuples should be
-// written or deleted based on the trust center visibility state of a control
-func ControlVisibilityTupleAction(isTrustCenterControl bool, newVisibility, oldVisibility enums.TrustCenterDocumentVisibility, visibilityChanged bool) (shouldWrite, shouldDelete bool) {
-	if !isTrustCenterControl {
-		return false, false
-	}
-
+// written or deleted based on the trust center visibility state of a control.
+// The caller is responsible for ensuring this is only called for trust center controls.
+func ControlVisibilityTupleAction(newVisibility, oldVisibility enums.TrustCenterControlVisibility, visibilityChanged bool) (shouldWrite, shouldDelete bool) {
 	if !visibilityChanged {
 		return false, false
 	}
@@ -130,11 +137,11 @@ func ControlVisibilityTupleAction(isTrustCenterControl bool, newVisibility, oldV
 		return false, false
 	}
 
-	if newVisibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+	if newVisibility == enums.TrustCenterControlVisibilityPubliclyVisible {
 		return true, false
 	}
 
-	if oldVisibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+	if oldVisibility == enums.TrustCenterControlVisibilityPubliclyVisible {
 		return false, true
 	}
 
@@ -144,10 +151,9 @@ func ControlVisibilityTupleAction(isTrustCenterControl bool, newVisibility, oldV
 // handleControlVisibilityCreate adds wildcard viewer tuples on create if the control is publicly visible
 func handleControlVisibilityCreate(ctx context.Context, m *generated.ControlMutation, ctrl *generated.Control) (generated.Value, error) {
 	shouldWrite, _ := ControlVisibilityTupleAction(
-		ctrl.IsTrustCenterControl,
 		ctrl.TrustCenterVisibility,
-		enums.TrustCenterDocumentVisibilityNotVisible,
-		ctrl.TrustCenterVisibility != enums.TrustCenterDocumentVisibilityNotVisible,
+		enums.TrustCenterControlVisibilityNotVisible,
+		ctrl.TrustCenterVisibility != enums.TrustCenterControlVisibilityNotVisible,
 	)
 
 	if !shouldWrite {
@@ -165,37 +171,136 @@ func handleControlVisibilityCreate(ctx context.Context, m *generated.ControlMuta
 	return ctrl, nil
 }
 
-// handleControlVisibilityUpdate manages wildcard viewer tuples when visibility changes on update
-func handleControlVisibilityUpdate(ctx context.Context, m *generated.ControlMutation, ctrl *generated.Control) (generated.Value, error) {
-	visibility, visibilityChanged := m.TrustCenterVisibility()
-	if !visibilityChanged {
-		return ctrl, nil
+// controlVisibilityTupleChanges returns tuple writes/deletes for a control visibility transition.
+func controlVisibilityTupleChanges(controlID string, oldVisibility, newVisibility enums.TrustCenterControlVisibility) (writes, deletes []fgax.TupleKey) {
+	shouldWrite, shouldDelete := ControlVisibilityTupleAction(newVisibility, oldVisibility, true)
+
+	if shouldWrite {
+		writes = fgax.CreateWildcardViewerTuple(controlID, generated.TypeControl)
 	}
 
-	oldVisibility, err := m.OldTrustCenterVisibility(ctx)
+	if shouldDelete {
+		deletes = fgax.CreateWildcardViewerTuple(controlID, generated.TypeControl)
+	}
+
+	return writes, deletes
+}
+
+// handleControlVisibilityUpdate manages wildcard viewer tuples when visibility changes on single-entity updates.
+func handleControlVisibilityUpdate(ctx context.Context, m *generated.ControlMutation, next ent.Mutator) (generated.Value, error) {
+	visibility, visibilityChanged := m.TrustCenterVisibility()
+	if !visibilityChanged {
+		return next.Mutate(ctx, m)
+	}
+
+	id, ok := getSingleMutationID(ctx, m)
+	if !ok {
+		return next.Mutate(ctx, m)
+	}
+
+	oldControl, err := m.Client().Control.Query().
+		Where(control.ID(id)).
+		Select(control.FieldID, control.FieldTrustCenterVisibility).
+		Only(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	shouldWrite, shouldDelete := ControlVisibilityTupleAction(ctrl.IsTrustCenterControl, visibility, oldVisibility, true)
-
-	var writes, deletes []fgax.TupleKey
-
-	if shouldWrite {
-		writes = fgax.CreateWildcardViewerTuple(ctrl.ID, generated.TypeControl)
+	v, err := next.Mutate(ctx, m)
+	if err != nil {
+		return v, err
 	}
 
-	if shouldDelete {
-		deletes = fgax.CreateWildcardViewerTuple(ctrl.ID, generated.TypeControl)
+	ctrl, ok := v.(*generated.Control)
+	if !ok {
+		return v, nil
 	}
+
+	// only manage wildcard tuples for trust center controls
+	if !ctrl.IsTrustCenterControl {
+		return v, nil
+	}
+
+	writes, deletes := controlVisibilityTupleChanges(ctrl.ID, oldControl.TrustCenterVisibility, visibility)
 
 	if len(writes) > 0 || len(deletes) > 0 {
-		logx.FromContext(ctx).Debug().Str("control_id", ctrl.ID).Str("old_visibility", string(oldVisibility)).Str("new_visibility", string(visibility)).Msg("updating wildcard viewer tuples for trust center control visibility change")
+		logx.FromContext(ctx).Debug().Str("control_id", ctrl.ID).Str("old_visibility", string(oldControl.TrustCenterVisibility)).Str("new_visibility", string(visibility)).Msg("updating wildcard viewer tuples for trust center control visibility change")
 
 		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
 			return nil, err
 		}
 	}
 
-	return ctrl, nil
+	return v, nil
+}
+
+// handleControlVisibilityBulkUpdate manages wildcard viewer tuples when visibility changes on bulk update operations.
+func handleControlVisibilityBulkUpdate(ctx context.Context, m *generated.ControlMutation, next ent.Mutator) (generated.Value, error) {
+	visibility, visibilityChanged := m.TrustCenterVisibility()
+	if !visibilityChanged {
+		return next.Mutate(ctx, m)
+	}
+
+	updatedIDs := getMutationIDs(ctx, m)
+	if len(updatedIDs) == 0 {
+		return next.Mutate(ctx, m)
+	}
+
+	oldControls, err := m.Client().Control.Query().
+		Where(control.IDIn(updatedIDs...)).
+		Select(control.FieldID, control.FieldTrustCenterVisibility).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	oldVisibilityByID := make(map[string]enums.TrustCenterControlVisibility, len(oldControls))
+	for _, ctrl := range oldControls {
+		oldVisibilityByID[ctrl.ID] = ctrl.TrustCenterVisibility
+	}
+
+	v, err := next.Mutate(ctx, m)
+	if err != nil {
+		return v, err
+	}
+
+	if len(oldVisibilityByID) == 0 {
+		return v, nil
+	}
+
+	trustCenterControls, err := m.Client().Control.Query().
+		Where(control.IDIn(updatedIDs...), control.IsTrustCenterControl(true)).
+		Select(control.FieldID).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var writes, deletes []fgax.TupleKey
+
+	for _, ctrl := range trustCenterControls {
+		oldVisibility, ok := oldVisibilityByID[ctrl.ID]
+		if !ok {
+			continue
+		}
+
+		ctrlWrites, ctrlDeletes := controlVisibilityTupleChanges(ctrl.ID, oldVisibility, visibility)
+		writes = append(writes, ctrlWrites...)
+		deletes = append(deletes, ctrlDeletes...)
+	}
+
+	if len(writes) > 0 || len(deletes) > 0 {
+		logx.FromContext(ctx).Debug().
+			Int("affected_controls", len(trustCenterControls)).
+			Str("new_visibility", string(visibility)).
+			Int("write_count", len(writes)).
+			Int("delete_count", len(deletes)).
+			Msg("updating wildcard viewer tuples for bulk trust center control visibility change")
+
+		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
+			return nil, err
+		}
+	}
+
+	return v, nil
 }

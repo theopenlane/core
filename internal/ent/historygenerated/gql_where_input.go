@@ -10669,12 +10669,12 @@ type ControlHistoryWhereInput struct {
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
 
 	// "trust_center_visibility" field predicates.
-	TrustCenterVisibility       *enums.TrustCenterDocumentVisibility  `json:"trustCenterVisibility,omitempty"`
-	TrustCenterVisibilityNEQ    *enums.TrustCenterDocumentVisibility  `json:"trustCenterVisibilityNEQ,omitempty"`
-	TrustCenterVisibilityIn     []enums.TrustCenterDocumentVisibility `json:"trustCenterVisibilityIn,omitempty"`
-	TrustCenterVisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"trustCenterVisibilityNotIn,omitempty"`
-	TrustCenterVisibilityIsNil  bool                                  `json:"trustCenterVisibilityIsNil,omitempty"`
-	TrustCenterVisibilityNotNil bool                                  `json:"trustCenterVisibilityNotNil,omitempty"`
+	TrustCenterVisibility       *enums.TrustCenterControlVisibility  `json:"trustCenterVisibility,omitempty"`
+	TrustCenterVisibilityNEQ    *enums.TrustCenterControlVisibility  `json:"trustCenterVisibilityNEQ,omitempty"`
+	TrustCenterVisibilityIn     []enums.TrustCenterControlVisibility `json:"trustCenterVisibilityIn,omitempty"`
+	TrustCenterVisibilityNotIn  []enums.TrustCenterControlVisibility `json:"trustCenterVisibilityNotIn,omitempty"`
+	TrustCenterVisibilityIsNil  bool                                 `json:"trustCenterVisibilityIsNil,omitempty"`
+	TrustCenterVisibilityNotNil bool                                 `json:"trustCenterVisibilityNotNil,omitempty"`
 
 	// "is_trust_center_control" field predicates.
 	IsTrustCenterControl       *bool `json:"isTrustCenterControl,omitempty"`

@@ -2774,19 +2774,19 @@ func StandardIDContainsFold(v string) predicate.ControlHistory {
 }
 
 // TrustCenterVisibilityEQ applies the EQ predicate on the "trust_center_visibility" field.
-func TrustCenterVisibilityEQ(v enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+func TrustCenterVisibilityEQ(v enums.TrustCenterControlVisibility) predicate.ControlHistory {
 	vc := v
 	return predicate.ControlHistory(sql.FieldEQ(FieldTrustCenterVisibility, vc))
 }
 
 // TrustCenterVisibilityNEQ applies the NEQ predicate on the "trust_center_visibility" field.
-func TrustCenterVisibilityNEQ(v enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+func TrustCenterVisibilityNEQ(v enums.TrustCenterControlVisibility) predicate.ControlHistory {
 	vc := v
 	return predicate.ControlHistory(sql.FieldNEQ(FieldTrustCenterVisibility, vc))
 }
 
 // TrustCenterVisibilityIn applies the In predicate on the "trust_center_visibility" field.
-func TrustCenterVisibilityIn(vs ...enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+func TrustCenterVisibilityIn(vs ...enums.TrustCenterControlVisibility) predicate.ControlHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -2795,7 +2795,7 @@ func TrustCenterVisibilityIn(vs ...enums.TrustCenterDocumentVisibility) predicat
 }
 
 // TrustCenterVisibilityNotIn applies the NotIn predicate on the "trust_center_visibility" field.
-func TrustCenterVisibilityNotIn(vs ...enums.TrustCenterDocumentVisibility) predicate.ControlHistory {
+func TrustCenterVisibilityNotIn(vs ...enums.TrustCenterControlVisibility) predicate.ControlHistory {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]

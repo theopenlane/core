@@ -12,7 +12,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
@@ -2886,15 +2885,21 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 
 	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
 
-	// create a trust center control that is publicly visible
+	// create a trust center control with default (not visible) visibility
 	publicControl, err := suite.client.db.Control.Create().
 		SetRefCode("OTS-TEST-" + ulids.New().String()).
 		SetTitle("Trust Center Public Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
-		SetTrustCenterVisibility(enums.TrustCenterDocumentVisibilityPubliclyVisible).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// use the API client to set visibility to publicly visible, which triggers the hook
+	// to create wildcard viewer tuples for anonymous access
+	_, err = suite.client.api.UpdateControl(testUser1.UserCtx, publicControl.ID, testclient.UpdateControlInput{
+		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
+	})
 	assert.NilError(t, err)
 
 	// create a trust center control that is not visible
@@ -2903,7 +2908,6 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetTitle("Trust Center Hidden Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
-		SetTrustCenterVisibility(enums.TrustCenterDocumentVisibilityNotVisible).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
@@ -2911,58 +2915,47 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	// create a regular control (not a trust center control)
 	regularControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// add wildcard viewer tuple for the publicly visible control (simulates what the hook does)
-	wildcardTuples := fgax.CreateWildcardViewerTuple(publicControl.ID, "control")
-	_, err = suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, wildcardTuples, nil)
-	assert.NilError(t, err)
-
 	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
 	anonCtx = contextx.With(anonCtx, auth.TrustCenterContextKey{})
 
 	testCases := []struct {
-		name            string
-		client          *testclient.TestClient
-		ctx             context.Context
-		queryID         string
-		errorMsg        string
-		expectedResults int // for list queries, -1 means use queryID for get
+		name     string
+		client   *testclient.TestClient
+		ctx      context.Context
+		queryID  string
+		errorMsg string
 	}{
 		{
-			name:            "anonymous user can view publicly visible trust center control",
-			client:          suite.client.api,
-			ctx:             anonCtx,
-			queryID:         publicControl.ID,
-			expectedResults: -1,
+			name:    "anonymous user can view publicly visible trust center control",
+			client:  suite.client.api,
+			ctx:     anonCtx,
+			queryID: publicControl.ID,
 		},
 		{
-			name:            "anonymous user cannot view hidden trust center control",
-			client:          suite.client.api,
-			ctx:             anonCtx,
-			queryID:         hiddenControl.ID,
-			errorMsg:        notFoundErrorMsg,
-			expectedResults: -1,
+			name:     "anonymous user cannot view hidden trust center control",
+			client:   suite.client.api,
+			ctx:      anonCtx,
+			queryID:  hiddenControl.ID,
+			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:            "anonymous user cannot view regular control",
-			client:          suite.client.api,
-			ctx:             anonCtx,
-			queryID:         regularControl.ID,
-			errorMsg:        notFoundErrorMsg,
-			expectedResults: -1,
+			name:     "anonymous user cannot view regular control",
+			client:   suite.client.api,
+			ctx:      anonCtx,
+			queryID:  regularControl.ID,
+			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:            "authenticated user can view all their controls",
-			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			queryID:         publicControl.ID,
-			expectedResults: -1,
+			name:    "authenticated user can view all their controls",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			queryID: publicControl.ID,
 		},
 		{
-			name:            "authenticated user can view hidden trust center control",
-			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
-			queryID:         hiddenControl.ID,
-			expectedResults: -1,
+			name:    "authenticated user can view hidden trust center control",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			queryID: hiddenControl.ID,
 		},
 	}
 

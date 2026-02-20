@@ -592,13 +592,13 @@ func (_c *ControlHistoryCreate) SetNillableStandardID(v *string) *ControlHistory
 }
 
 // SetTrustCenterVisibility sets the "trust_center_visibility" field.
-func (_c *ControlHistoryCreate) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlHistoryCreate {
+func (_c *ControlHistoryCreate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryCreate {
 	_c.mutation.SetTrustCenterVisibility(v)
 	return _c
 }
 
 // SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
-func (_c *ControlHistoryCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlHistoryCreate {
+func (_c *ControlHistoryCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryCreate {
 	if v != nil {
 		_c.SetTrustCenterVisibility(*v)
 	}

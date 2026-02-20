@@ -255,12 +255,12 @@ func SourceValidator(s enums.ControlSource) error {
 	}
 }
 
-const DefaultTrustCenterVisibility enums.TrustCenterDocumentVisibility = "NOT_VISIBLE"
+const DefaultTrustCenterVisibility enums.TrustCenterControlVisibility = "NOT_VISIBLE"
 
 // TrustCenterVisibilityValidator is a validator for the "trust_center_visibility" field enum values. It is called by the builders before save.
-func TrustCenterVisibilityValidator(tcv enums.TrustCenterDocumentVisibility) error {
+func TrustCenterVisibilityValidator(tcv enums.TrustCenterControlVisibility) error {
 	switch tcv.String() {
-	case "PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE":
+	case "PUBLICLY_VISIBLE", "NOT_VISIBLE":
 		return nil
 	default:
 		return fmt.Errorf("controlhistory: invalid enum value for trust_center_visibility field: %q", tcv)
@@ -492,8 +492,8 @@ var (
 )
 
 var (
-	// enums.TrustCenterDocumentVisibility must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.TrustCenterDocumentVisibility)(nil)
-	// enums.TrustCenterDocumentVisibility must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.TrustCenterDocumentVisibility)(nil)
+	// enums.TrustCenterControlVisibility must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterControlVisibility)(nil)
+	// enums.TrustCenterControlVisibility must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterControlVisibility)(nil)
 )

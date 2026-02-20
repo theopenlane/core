@@ -819,13 +819,13 @@ func (_u *ControlHistoryUpdate) ClearStandardID() *ControlHistoryUpdate {
 }
 
 // SetTrustCenterVisibility sets the "trust_center_visibility" field.
-func (_u *ControlHistoryUpdate) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlHistoryUpdate {
+func (_u *ControlHistoryUpdate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryUpdate {
 	_u.mutation.SetTrustCenterVisibility(v)
 	return _u
 }
 
 // SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
-func (_u *ControlHistoryUpdate) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlHistoryUpdate {
+func (_u *ControlHistoryUpdate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryUpdate {
 	if v != nil {
 		_u.SetTrustCenterVisibility(*v)
 	}
@@ -2080,13 +2080,13 @@ func (_u *ControlHistoryUpdateOne) ClearStandardID() *ControlHistoryUpdateOne {
 }
 
 // SetTrustCenterVisibility sets the "trust_center_visibility" field.
-func (_u *ControlHistoryUpdateOne) SetTrustCenterVisibility(v enums.TrustCenterDocumentVisibility) *ControlHistoryUpdateOne {
+func (_u *ControlHistoryUpdateOne) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryUpdateOne {
 	_u.mutation.SetTrustCenterVisibility(v)
 	return _u
 }
 
 // SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
-func (_u *ControlHistoryUpdateOne) SetNillableTrustCenterVisibility(v *enums.TrustCenterDocumentVisibility) *ControlHistoryUpdateOne {
+func (_u *ControlHistoryUpdateOne) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryUpdateOne {
 	if v != nil {
 		_u.SetTrustCenterVisibility(*v)
 	}
