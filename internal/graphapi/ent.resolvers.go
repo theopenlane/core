@@ -2628,8 +2628,8 @@ func (r *queryResolver) TrustCenterEntities(ctx context.Context, after *entgql.C
 	return res, err
 }
 
-// TrustCenterFaQs is the resolver for the trustCenterFaQs field.
-func (r *queryResolver) TrustCenterFaQs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) (*generated.TrustCenterFAQConnection, error) {
+// TrustCenterFAQs is the resolver for the trustCenterFAQs field.
+func (r *queryResolver) TrustCenterFAQs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) (*generated.TrustCenterFAQConnection, error) {
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 

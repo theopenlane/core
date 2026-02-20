@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -140,6 +141,7 @@ func (TrustCenterFAQ) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
 		entx.NewExportable(),
+		entgql.QueryField("trustCenterFAQs"),
 	}
 }
 

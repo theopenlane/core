@@ -4948,7 +4948,7 @@ type ComplexityRoot struct {
 		TrustCenterEntities             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterEntityOrder, where *generated.TrustCenterEntityWhereInput) int
 		TrustCenterEntity               func(childComplexity int, id string) int
 		TrustCenterEntitySearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		TrustCenterFaQs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) int
+		TrustCenterFAQs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) int
 		TrustCenterFaq                  func(childComplexity int, id string) int
 		TrustCenterNDARequest           func(childComplexity int, id string) int
 		TrustCenterNdaRequests          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestOrder, where *generated.TrustCenterNDARequestWhereInput) int
@@ -37212,17 +37212,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterEntitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
-	case "Query.trustCenterFaQs":
-		if e.complexity.Query.TrustCenterFaQs == nil {
+	case "Query.trustCenterFAQs":
+		if e.complexity.Query.TrustCenterFAQs == nil {
 			break
 		}
 
-		args, err := ec.field_Query_trustCenterFaQs_args(ctx, rawArgs)
+		args, err := ec.field_Query_trustCenterFAQs_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterFaQs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterFAQOrder), args["where"].(*generated.TrustCenterFAQWhereInput)), true
+		return e.complexity.Query.TrustCenterFAQs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterFAQOrder), args["where"].(*generated.TrustCenterFAQWhereInput)), true
 
 	case "Query.trustCenterFAQ":
 		if e.complexity.Query.TrustCenterFaq == nil {
@@ -103188,7 +103188,7 @@ type Query {
     """
     where: TrustCenterEntityWhereInput
   ): TrustCenterEntityConnection!
-  trustCenterFaQs(
+  trustCenterFAQs(
     """
     Returns the elements in the list that come after the specified cursor.
     """

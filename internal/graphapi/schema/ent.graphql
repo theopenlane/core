@@ -50788,7 +50788,7 @@ type Query {
     """
     where: TrustCenterEntityWhereInput
   ): TrustCenterEntityConnection!
-  trustCenterFaQs(
+  trustCenterFAQs(
     """
     Returns the elements in the list that come after the specified cursor.
     """

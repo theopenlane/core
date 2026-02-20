@@ -89,7 +89,7 @@ mutation DeleteBulkTrustCenterFAQ($ids: [ID!]!) {
 }
 
 query GetAllTrustCenterFAQS($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterFAQOrder!]){
-  trustCenterFaQs(
+  trustCenterFAQs(
     first: $first
     last: $last
     after: $after
@@ -131,7 +131,7 @@ query GetTrustCenterFAQByID($trustCenterFAQId: ID!) {
 }
 
 query GetTrustCenterFAQS($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterFAQOrder!], $where: TrustCenterFAQWhereInput) {
-  trustCenterFaQs(
+  trustCenterFAQs(
       first: $first
       last: $last
       after: $after
