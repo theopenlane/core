@@ -36,6 +36,8 @@ var (
 	ExportTypeSubscriber ExportType = "SUBSCRIBER"
 	// ExportTypeTask indicates the task.
 	ExportTypeTask ExportType = "TASK"
+	// ExportTypeTrustCenterFaq indicates the trustcenterfaq.
+	ExportTypeTrustCenterFaq ExportType = "TRUST_CENTER_FAQ"
 	// ExportTypeTrustCenterSubprocessor indicates the trustcentersubprocessor.
 	ExportTypeTrustCenterSubprocessor ExportType = "TRUST_CENTER_SUBPROCESSOR"
 	// ExportTypeVulnerability indicates the vulnerability.
@@ -60,6 +62,7 @@ var exportTypeValues = []ExportType{
 	ExportTypeSubprocessor,
 	ExportTypeSubscriber,
 	ExportTypeTask,
+	ExportTypeTrustCenterFaq,
 	ExportTypeTrustCenterSubprocessor,
 	ExportTypeVulnerability,
 }

@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateTrustCenterFaq(ctx context.Context, input gener
 	}
 
 	return &model.TrustCenterFAQCreatePayload{
-		TrustCenterFAQ: res,
+		TrustCenterFaq: res,
 	}, nil
 }
 
@@ -97,7 +97,7 @@ func (r *mutationResolver) UpdateTrustCenterFaq(ctx context.Context, id string, 
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input)
 
 	res, err = req.Save(ctx)
 	if err != nil {
@@ -105,7 +105,7 @@ func (r *mutationResolver) UpdateTrustCenterFaq(ctx context.Context, id string, 
 	}
 
 	return &model.TrustCenterFAQUpdatePayload{
-		TrustCenterFAQ: res,
+		TrustCenterFaq: res,
 	}, nil
 }
 

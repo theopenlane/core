@@ -207,13 +207,13 @@ func (r *mutationResolver) UpdateTrustCenterFAQComment(ctx context.Context, id s
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).TrustCenterFAQ.Query().Where(trustcenterfaq.HasNotesWith(note.ID(id))).WithNotes().Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).TrustCenterFAQ.Query().Where(trustcenterfaq.HasNoteWith(note.ID(id))).WithNote().Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
 	}
 
 	return &model.TrustCenterFAQUpdatePayload{
-		TrustCenterFAQ: objectRes,
+		TrustCenterFaq: objectRes,
 	}, nil
 }
 
@@ -315,7 +315,7 @@ func (r *createTrustCenterFAQInputResolver) CreateNote(ctx context.Context, obj 
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "note"})
 	}
 
-	obj.NoteIDs = append(obj.NoteIDs, noteRes.ID)
+	obj.NoteID = noteRes.ID
 
 	return nil
 }
@@ -932,11 +932,6 @@ func (r *updateTrustCenterFAQInputResolver) AddComment(ctx context.Context, obj 
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	data.TrustCenterFaqID = graphutils.GetStringInputVariableByName(ctx, "id")
-	if data.TrustCenterFaqID == nil {
-		return common.NewNotFoundError("trustcenterfaq")
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
