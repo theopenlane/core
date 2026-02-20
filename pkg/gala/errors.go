@@ -67,10 +67,6 @@ var (
 	ErrRiverClientCloseFailed = errors.New("gala: river client close failed")
 	// ErrDispatchModeInvalid is returned when an unknown gala dispatch mode is configured.
 	ErrDispatchModeInvalid = errors.New("gala: dispatch mode is invalid")
-	// ErrAuthContextEncodeFailed is returned when auth context snapshot encoding fails
-	ErrAuthContextEncodeFailed = errors.New("gala: auth context encode failed")
-	// ErrAuthContextDecodeFailed is returned when auth context snapshot decoding fails
-	ErrAuthContextDecodeFailed = errors.New("gala: auth context decode failed")
 	// ErrListenerPanicked is returned when a listener panics during execution
 	ErrListenerPanicked = errors.New("gala: listener panicked")
 )

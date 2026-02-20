@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows"
-	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/gala"
+	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
 // This file will not be regenerated automatically.

@@ -21,8 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/gala"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.

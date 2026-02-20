@@ -10,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -19,11 +20,6 @@ import (
 type EventID struct {
 	ID string `json:"id,omitempty"`
 }
-
-const (
-	// SoftDeleteOne is a synthetic operation used for soft-delete hooks.
-	SoftDeleteOne = "SoftDeleteOne"
-)
 
 // parseEventID extracts the EventID from the returned mutation value.
 func parseEventID(retVal ent.Value) (*EventID, error) {
@@ -67,7 +63,7 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 		opCtx := graphql.GetOperationContext(ctx)
 		if opCtx != nil {
 			if opCtx.OperationName == "DeleteOrganization" && mutation.Type() == entgen.TypeOrganization {
-				return SoftDeleteOne
+				return eventqueue.SoftDeleteOne
 			}
 		}
 	}

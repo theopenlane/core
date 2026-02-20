@@ -204,6 +204,12 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 	def := instance.DefinitionSnapshot
 	obj := workflowObjectFromPayload(payload.ObjectID, payload.ObjectType)
 
+	if workflows.DefinitionHasReviewAction(def) {
+		scope.WithFields(observability.Fields{
+			"has_review_action": true,
+		})
+	}
+
 	if len(def.Actions) == 0 {
 		l.emitInstanceCompleted(scope, instance, enums.WorkflowInstanceStateCompleted, obj)
 		return nil

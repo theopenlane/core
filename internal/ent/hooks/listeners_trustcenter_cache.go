@@ -91,7 +91,7 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 	shouldClearCache := false
 
 	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
 		shouldClearCache = true
 	case ent.OpCreate.String():
 		visibility, ok := eventqueue.ParseEnum(
@@ -367,7 +367,7 @@ func handleTrustCenterMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 	}
 
 	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
 		return nil
 	}
 
@@ -386,7 +386,7 @@ func shouldInvalidateCacheForSubprocessor(payload eventqueue.MutationGalaPayload
 		return eventqueue.MutationFieldChanged(payload, subprocessor.FieldName) ||
 			eventqueue.MutationFieldChanged(payload, subprocessor.FieldLogoFileID) ||
 			eventqueue.MutationFieldChanged(payload, subprocessor.FieldLogoRemoteURL)
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
 		return true
 	}
 
@@ -399,7 +399,7 @@ func shouldInvalidateCacheForStandard(payload eventqueue.MutationGalaPayload) bo
 	case ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String():
 		return eventqueue.MutationFieldChanged(payload, standard.FieldName) ||
 			eventqueue.MutationFieldChanged(payload, standard.FieldLogoFileID)
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
 		return true
 	}
 

@@ -359,51 +359,39 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		}
 	}
 
-	title := ""
-	body := ""
+	defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
+	defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
+
+	var title, body string
 	data := map[string]any{}
 	vars := map[string]any{}
+
 	if rendered != nil {
 		title = rendered.Title
 		body = rendered.Body
 		data = rendered.Data
 		vars = rendered.Vars
-	}
-
-	if rendered == nil {
+	} else {
 		var err error
 		vars, data, err = e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
 		if err != nil {
 			return err
 		}
+	}
 
-		defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
-		defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
-
+	if title == "" {
+		var err error
 		title, err = renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
 		if err != nil {
 			return err
 		}
+	}
+
+	if body == "" {
+		var err error
 		body, err = renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
 		if err != nil {
 			return err
-		}
-	} else {
-		defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
-		defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
-		if title == "" {
-			renderedTitle, err := renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
-			if err != nil {
-				return err
-			}
-			title = renderedTitle
-		}
-		if body == "" {
-			renderedBody, err := renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
-			if err != nil {
-				return err
-			}
-			body = renderedBody
 		}
 	}
 

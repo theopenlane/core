@@ -38,16 +38,6 @@ func ValueAsString(raw any) (string, bool) {
 	}
 }
 
-// ValueString converts arbitrary values into a string and returns empty string when conversion fails
-func ValueString(raw any) string {
-	value, ok := ValueAsString(raw)
-	if !ok {
-		return ""
-	}
-
-	return value
-}
-
 // ParseEnum parses enum-like values through the provided enum parser
 // Optional invalid values can be provided to force known sentinel values to be treated as parse failures
 func ParseEnum[T ~string](raw any, parser EnumParser[T], invalid ...T) (T, bool) {
@@ -56,8 +46,8 @@ func ParseEnum[T ~string](raw any, parser EnumParser[T], invalid ...T) (T, bool)
 		return zero, false
 	}
 
-	stringValue := ValueString(raw)
-	if strings.TrimSpace(stringValue) == "" {
+	stringValue, ok := ValueAsString(raw)
+	if !ok || strings.TrimSpace(stringValue) == "" {
 		return zero, false
 	}
 
@@ -73,14 +63,4 @@ func ParseEnum[T ~string](raw any, parser EnumParser[T], invalid ...T) (T, bool)
 	}
 
 	return *parsed, true
-}
-
-// ParseEnumPtr parses enum-like values through the provided enum parser and returns a pointer
-func ParseEnumPtr[T ~string](raw any, parser EnumParser[T], invalid ...T) *T {
-	parsed, ok := ParseEnum(raw, parser, invalid...)
-	if !ok {
-		return nil
-	}
-
-	return &parsed
 }

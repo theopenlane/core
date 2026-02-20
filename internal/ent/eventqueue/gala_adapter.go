@@ -59,12 +59,6 @@ type MutationGalaMetadata struct {
 	Properties map[string]string
 }
 
-// galaEnvelopeRuntime captures the minimal Gala runtime surface needed for envelope construction
-type galaEnvelopeRuntime interface {
-	Registry() *gala.Registry
-	ContextManager() *gala.ContextManager
-}
-
 // NewMutationGalaMetadata builds metadata for Gala mutation envelopes from mutation payload data
 func NewMutationGalaMetadata(eventID string, payload MutationGalaPayload) MutationGalaMetadata {
 	properties := mutationMetadataProperties(payload)
@@ -93,8 +87,8 @@ func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Head
 	}
 }
 
-// NewMutationGalaEnvelope builds a gala envelope from legacy mutation emit inputs
-func NewMutationGalaEnvelope(ctx context.Context, g galaEnvelopeRuntime, topic gala.Topic[MutationGalaPayload], payload MutationGalaPayload, metadata MutationGalaMetadata) (envelope gala.Envelope, err error) {
+// NewMutationGalaEnvelope builds a gala envelope from mutation emit inputs
+func NewMutationGalaEnvelope(ctx context.Context, g *gala.Gala, topic gala.Topic[MutationGalaPayload], payload MutationGalaPayload, metadata MutationGalaMetadata) (envelope gala.Envelope, err error) {
 	headers := NewGalaHeadersFromMutationMetadata(metadata)
 
 	encodedPayload, err := g.Registry().EncodePayload(topic.Name, payload)

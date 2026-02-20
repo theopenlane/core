@@ -22,7 +22,7 @@ func TestRegisterGalaEntitlementListeners(t *testing.T) {
 	require.Len(t, ids, 2)
 
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), SoftDeleteOne))
+	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), eventqueue.SoftDeleteOne))
 	require.False(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), ent.OpUpdate.String()))
 
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganizationSetting), ent.OpUpdate.String()))
@@ -39,7 +39,7 @@ func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {
 	require.Len(t, ids, 9)
 
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenterDoc), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenter), SoftDeleteOne))
+	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenter), eventqueue.SoftDeleteOne))
 }
 
 func TestRegisterGalaWorkflowMutationListeners(t *testing.T) {

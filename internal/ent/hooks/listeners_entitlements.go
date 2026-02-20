@@ -34,7 +34,7 @@ func RegisterGalaEntitlementListeners(registry *gala.Registry) ([]gala.ListenerI
 				ent.OpCreate.String(),
 				ent.OpDelete.String(),
 				ent.OpDeleteOne.String(),
-				SoftDeleteOne,
+				eventqueue.SoftDeleteOne,
 			},
 			Handle: handleOrganizationMutationGala,
 		},
@@ -55,7 +55,7 @@ func handleOrganizationMutationGala(ctx gala.HandlerContext, payload eventqueue.
 	switch strings.TrimSpace(payload.Operation) {
 	case ent.OpCreate.String():
 		return handleOrganizationCreatedGala(ctx, payload)
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
 		return handleOrganizationDeleteGala(ctx, payload)
 	default:
 		return nil
@@ -114,7 +114,9 @@ func handleOrganizationCreatedGala(ctx gala.HandlerContext, payload eventqueue.M
 
 // handleOrganizationSettingsUpdateOneGala updates Stripe customer details for billing changes.
 func handleOrganizationSettingsUpdateOneGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !mutationTouches(payload, "billing_email", "billing_phone", "billing_address") {
+	if !lo.SomeBy([]string{"billing_email", "billing_phone", "billing_address"}, func(field string) bool {
+		return eventqueue.MutationFieldChanged(payload, field)
+	}) {
 		return nil
 	}
 
@@ -234,17 +236,6 @@ func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue
 		entityID: entityID,
 		allow:    allowCtx,
 	}, true
-}
-
-// mutationTouches reports whether the mutation payload updates any requested fields.
-func mutationTouches(payload eventqueue.MutationGalaPayload, fields ...string) bool {
-	if len(fields) == 0 {
-		return false
-	}
-
-	return lo.SomeBy(fields, func(field string) bool {
-		return eventqueue.MutationFieldChanged(payload, field)
-	})
 }
 
 // fetchOrganizationCustomerByOrgSettingID loads organization and customer data for a setting.

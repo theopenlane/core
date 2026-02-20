@@ -8,8 +8,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/workflows"
-	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/gala"
+	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
 // WithTrustCenterCnameTarget sets the trust center cname target for the resolver
