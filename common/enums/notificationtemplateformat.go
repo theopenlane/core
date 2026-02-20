@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // NotificationTemplateFormat represents the format used to render a notification template.
 type NotificationTemplateFormat string
@@ -22,50 +18,26 @@ var (
 	NotificationTemplateFormatInvalid NotificationTemplateFormat = "INVALID"
 )
 
+var notificationTemplateFormatValues = []NotificationTemplateFormat{
+	NotificationTemplateFormatText, NotificationTemplateFormatMarkdown,
+	NotificationTemplateFormatHTML, NotificationTemplateFormatJSON,
+}
+
 // Values returns a slice of strings that represents all the possible values of the NotificationTemplateFormat enum.
 func (NotificationTemplateFormat) Values() []string {
-	return []string{
-		NotificationTemplateFormatText.String(),
-		NotificationTemplateFormatMarkdown.String(),
-		NotificationTemplateFormatHTML.String(),
-		NotificationTemplateFormatJSON.String(),
-	}
+	return stringValues(notificationTemplateFormatValues)
 }
 
 // String returns the template format as a string.
-func (r NotificationTemplateFormat) String() string {
-	return string(r)
-}
+func (r NotificationTemplateFormat) String() string { return string(r) }
 
 // ToNotificationTemplateFormat returns the template format enum based on string input.
 func ToNotificationTemplateFormat(r string) *NotificationTemplateFormat {
-	switch strings.ToUpper(r) {
-	case NotificationTemplateFormatText.String():
-		return &NotificationTemplateFormatText
-	case NotificationTemplateFormatMarkdown.String():
-		return &NotificationTemplateFormatMarkdown
-	case NotificationTemplateFormatHTML.String():
-		return &NotificationTemplateFormatHTML
-	case NotificationTemplateFormatJSON.String():
-		return &NotificationTemplateFormatJSON
-	default:
-		return &NotificationTemplateFormatInvalid
-	}
+	return parse(r, notificationTemplateFormatValues, &NotificationTemplateFormatInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r NotificationTemplateFormat) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r NotificationTemplateFormat) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *NotificationTemplateFormat) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for NotificationTemplateFormat, got: %T", v) //nolint:err113
-	}
-
-	*r = NotificationTemplateFormat(str)
-
-	return nil
-}
+func (r *NotificationTemplateFormat) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

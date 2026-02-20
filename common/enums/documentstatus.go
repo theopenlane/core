@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // DocumentStatus is a custom type for document status
 type DocumentStatus string
@@ -24,52 +20,28 @@ var (
 	DocumentStatusInvalid DocumentStatus = "DOCUMENT_STATUS_INVALID"
 )
 
+var documentStatusValues = []DocumentStatus{
+	DocumentPublished,
+	DocumentDraft,
+	DocumentNeedsApproval,
+	DocumentApproved,
+	DocumentArchived,
+}
+
 // Values returns a slice of strings that represents all the possible values of the DocumentStatus enum.
 // Possible default values are "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", and "APPROVED"
-func (DocumentStatus) Values() (kinds []string) {
-	for _, s := range []DocumentStatus{DocumentPublished, DocumentDraft, DocumentNeedsApproval, DocumentApproved, DocumentArchived} {
-		kinds = append(kinds, string(s))
-	}
-
-	return
-}
+func (DocumentStatus) Values() []string { return stringValues(documentStatusValues) }
 
 // String returns the document status as a string
-func (r DocumentStatus) String() string {
-	return string(r)
-}
+func (r DocumentStatus) String() string { return string(r) }
 
 // ToDocumentStatus returns the document status enum based on string input
 func ToDocumentStatus(r string) *DocumentStatus {
-	switch r := strings.ToUpper(r); r {
-	case DocumentPublished.String():
-		return &DocumentPublished
-	case DocumentDraft.String():
-		return &DocumentDraft
-	case DocumentNeedsApproval.String():
-		return &DocumentNeedsApproval
-	case DocumentApproved.String():
-		return &DocumentApproved
-	case DocumentArchived.String():
-		return &DocumentArchived
-	default:
-		return nil
-	}
+	return parse(r, documentStatusValues, nil)
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
-func (r DocumentStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r DocumentStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
-func (r *DocumentStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for DocumentStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = DocumentStatus(str)
-
-	return nil
-}
+func (r *DocumentStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

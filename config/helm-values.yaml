@@ -71,14 +71,6 @@ coreConfiguration:
       referrerpolicy: "same-origin"  # @schema type:string; default:same-origin
       # -- CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false
       cspreportonly: false  # @schema type:boolean; default:false
-    # -- Redirect contains settings for the redirect middleware
-    redirects:
-      # -- Enabled indicates if the redirect middleware should be enabled
-      enabled: true  # @schema type:boolean; default:true
-      # -- Redirects is a map of paths to redirect to
-      redirects: {}
-      # -- Code is the HTTP status code to use for the redirect
-      code: 0  # @schema type:integer
     # -- CacheControl contains settings for the cache control middleware
     cachecontrol:
       enabled: true  # @schema type:boolean; default:true
@@ -352,21 +344,6 @@ coreConfiguration:
     minidleconns: 0  # @schema type:integer; default:0
     maxidleconns: 0  # @schema type:integer; default:0
     maxactiveconns: 0  # @schema type:integer; default:0
-  # -- Tracer contains the tracing config for opentelemetry
-  tracer:
-    enabled: false  # @schema type:boolean; default:false
-    provider: "stdout"  # @schema type:string; default:stdout
-    environment: "development"  # @schema type:string; default:development
-    stdout:
-      pretty: true  # @schema type:boolean; default:true
-      disabletimestamp: false  # @schema type:boolean; default:false
-    otlp:
-      endpoint: "localhost:4317"  # @schema type:string; default:localhost:4317
-      insecure: true  # @schema type:boolean; default:true
-      certificate: ""  # @schema type:string
-      headers: []
-      compression: ""  # @schema type:string
-      timeout: "10s"  # @schema type:integer; default:10s
   # -- Email contains email sending configuration for the server
   email:
     companyname: ""  # @schema type:string
@@ -542,8 +519,6 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     # -- KeyDir is the path to the directory containing PEM keys for JWT signing
     keydir: "./keys"  # @schema type:string; default:./keys
-    # -- ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
-    externalsecretsintegration: false  # @schema type:boolean; default:false
   # -- Slack contains settings for Slack notifications
   slack:
     # -- NewSubscriberMessageFile is the path to the template used for new subscriber notifications
@@ -895,14 +870,6 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_12_15_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2025_12_15_clover"  # @schema type:string
-    # -- core-keywatcher-secretmanager secret configuration
-    core-keywatcher-secretmanager:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for keywatcher.secretmanager
-      secretKey: "CORE_KEYWATCHER_SECRETMANAGER"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-keywatcher-secretmanager"  # @schema type:string
     # -- core-slack-webhookurl secret configuration
     core-slack-webhookurl:
       # -- Enable this external secret

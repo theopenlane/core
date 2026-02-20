@@ -8,7 +8,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/ravilushqa/otelgqlgen"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
@@ -165,8 +164,6 @@ func (r *Resolver) Handler() *Handler {
 	common.WithResultLimit(srv, r.maxResultLimit)
 
 	common.WithMetrics(srv)
-
-	srv.Use(otelgqlgen.Middleware())
 
 	h := &Handler{
 		r:              r,

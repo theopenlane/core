@@ -114,20 +114,6 @@ data:
         cspreportonly: {{ .Values.openlane.coreConfiguration.server.secure.cspreportonly }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.server.redirects }}
-      redirects:
-        {{- if .Values.openlane.coreConfiguration.server.redirects.enabled }}
-        enabled: {{ .Values.openlane.coreConfiguration.server.redirects.enabled }}
-        {{- end }}
-        {{- $mapValue := (.Values.openlane.coreConfiguration.server.redirects.redirects | default (dict)) }}
-        {{- if gt (len $mapValue) 0 }}
-        redirects:
-        {{- toYaml $mapValue | nindent 10 }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.redirects.code }}
-        code: {{ .Values.openlane.coreConfiguration.server.redirects.code }}
-        {{- end }}
-      {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.cachecontrol }}
       cachecontrol:
         {{- if .Values.openlane.coreConfiguration.server.cachecontrol.enabled }}
@@ -696,50 +682,6 @@ data:
       maxactiveconns: {{ .Values.openlane.coreConfiguration.redis.maxactiveconns }}
       {{- end }}
     {{- end }}
-    {{- if .Values.openlane.coreConfiguration.tracer }}
-    tracer:
-      {{- if .Values.openlane.coreConfiguration.tracer.enabled }}
-      enabled: {{ .Values.openlane.coreConfiguration.tracer.enabled }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.tracer.provider }}
-      provider: {{ .Values.openlane.coreConfiguration.tracer.provider | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.tracer.environment }}
-      environment: {{ .Values.openlane.coreConfiguration.tracer.environment | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.tracer.stdout }}
-      stdout:
-        {{- if .Values.openlane.coreConfiguration.tracer.stdout.pretty }}
-        pretty: {{ .Values.openlane.coreConfiguration.tracer.stdout.pretty }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.tracer.stdout.disabletimestamp }}
-        disabletimestamp: {{ .Values.openlane.coreConfiguration.tracer.stdout.disabletimestamp }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.tracer.otlp }}
-      otlp:
-        {{- if .Values.openlane.coreConfiguration.tracer.otlp.endpoint }}
-        endpoint: {{ .Values.openlane.coreConfiguration.tracer.otlp.endpoint | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.tracer.otlp.insecure }}
-        insecure: {{ .Values.openlane.coreConfiguration.tracer.otlp.insecure }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.tracer.otlp.certificate }}
-        certificate: {{ .Values.openlane.coreConfiguration.tracer.otlp.certificate | quote }}
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.tracer.otlp.headers | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        headers:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.tracer.otlp.compression }}
-        compression: {{ .Values.openlane.coreConfiguration.tracer.otlp.compression | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.tracer.otlp.timeout }}
-        timeout: {{ .Values.openlane.coreConfiguration.tracer.otlp.timeout | quote }}
-        {{- end }}
-      {{- end }}
-    {{- end }}
     {{- if .Values.openlane.coreConfiguration.email }}
     email:
       {{- if .Values.openlane.coreConfiguration.email.companyname }}
@@ -1099,9 +1041,6 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.keywatcher.keydir }}
       keydir: {{ .Values.openlane.coreConfiguration.keywatcher.keydir | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.keywatcher.externalsecretsintegration }}
-      externalsecretsintegration: {{ .Values.openlane.coreConfiguration.keywatcher.externalsecretsintegration }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.slack }}

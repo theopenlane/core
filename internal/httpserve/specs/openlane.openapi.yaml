@@ -1219,6 +1219,15 @@ components:
                 unverified:
                     type: boolean
             type: object
+        ResendQuestionnaireRequest:
+            properties:
+                assessment_id:
+                    description: The ID of the assessment
+                    type: string
+                email:
+                    description: The email address associated with the assessment response
+                    type: string
+            type: object
         ResendReply:
             properties:
                 error:
@@ -2871,6 +2880,40 @@ paths:
                 - basic: []
                 - apiKey: []
             summary: SubmitQuestionnaire
+            tags:
+                - questionnaire
+    /questionnaire/resend:
+        post:
+            description: Resend questionnaire authentication email with new JWT token
+            operationId: ResendQuestionnaireEmail
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    assessment_id: 01JCQR8Z9X1A2B3C4D5E6F7G8H
+                                    email: vendor@example.com
+                        schema:
+                            $ref: '#/components/schemas/ResendQuestionnaireRequest'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        message: Verification email resent successfully
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/ResendReply'
+                    description: Success
+                default:
+                    description: ""
+            security:
+                - basic: []
+            summary: ResendQuestionnaireEmail
             tags:
                 - questionnaire
     /ready:

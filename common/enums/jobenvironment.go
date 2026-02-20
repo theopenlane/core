@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // JobEnvironment is a custom type representing the various states of JobEnvironment.
 type JobEnvironment string
@@ -18,44 +14,21 @@ var (
 	JobEnvironmentInvalid JobEnvironment = "JOBENVIRONMENT_INVALID"
 )
 
+var jobEnvironmentValues = []JobEnvironment{JobEnvironmentOpenlane, JobEnvironmentExternal}
+
 // Values returns a slice of strings representing all valid JobEnvironment values.
-func (JobEnvironment) Values() []string {
-	return []string{
-		string(JobEnvironmentOpenlane),
-		string(JobEnvironmentExternal),
-	}
-}
+func (JobEnvironment) Values() []string { return stringValues(jobEnvironmentValues) }
 
 // String returns the string representation of the JobEnvironment value.
-func (r JobEnvironment) String() string {
-	return string(r)
-}
+func (r JobEnvironment) String() string { return string(r) }
 
 // ToJobEnvironment converts a string to its corresponding JobEnvironment enum value.
 func ToJobEnvironment(r string) *JobEnvironment {
-	switch strings.ToUpper(r) {
-	case JobEnvironmentOpenlane.String():
-		return &JobEnvironmentOpenlane
-	case JobEnvironmentExternal.String():
-		return &JobEnvironmentExternal
-	default:
-		return &JobEnvironmentInvalid
-	}
+	return parse(r, jobEnvironmentValues, &JobEnvironmentInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r JobEnvironment) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r JobEnvironment) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *JobEnvironment) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for JobEnvironment, got: %T", v) //nolint:err113
-	}
-
-	*r = JobEnvironment(str)
-
-	return nil
-}
+func (r *JobEnvironment) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

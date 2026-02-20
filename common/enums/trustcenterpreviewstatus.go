@@ -1,10 +1,6 @@
 package enums
 
-import (
-	"fmt"
-	"io"
-	"strings"
-)
+import "io"
 
 // TrustCenterPreviewStatus is a custom type representing the various states of TrustCenterPreviewStatus.
 type TrustCenterPreviewStatus string
@@ -24,53 +20,29 @@ var (
 	TrustCenterPreviewStatusInvalid TrustCenterPreviewStatus = "TRUSTCENTERPREVIEWSTATUS_INVALID"
 )
 
+var trustCenterPreviewStatusValues = []TrustCenterPreviewStatus{
+	TrustCenterPreviewStatusProvisioning,
+	TrustCenterPreviewStatusReady,
+	TrustCenterPreviewStatusFailed,
+	TrustCenterPreviewStatusDeprovisioning,
+	TrustCenterPreviewStatusNone,
+}
+
 // Values returns a slice of strings representing all valid TrustCenterPreviewStatus values.
 func (TrustCenterPreviewStatus) Values() []string {
-	return []string{
-		string(TrustCenterPreviewStatusProvisioning),
-		string(TrustCenterPreviewStatusReady),
-		string(TrustCenterPreviewStatusFailed),
-		string(TrustCenterPreviewStatusDeprovisioning),
-		string(TrustCenterPreviewStatusNone),
-	}
+	return stringValues(trustCenterPreviewStatusValues)
 }
 
 // String returns the string representation of the TrustCenterPreviewStatus value.
-func (r TrustCenterPreviewStatus) String() string {
-	return string(r)
-}
+func (r TrustCenterPreviewStatus) String() string { return string(r) }
 
 // ToTrustCenterPreviewStatus converts a string to its corresponding TrustCenterPreviewStatus enum value.
 func ToTrustCenterPreviewStatus(r string) *TrustCenterPreviewStatus {
-	switch strings.ToUpper(r) {
-	case TrustCenterPreviewStatusProvisioning.String():
-		return &TrustCenterPreviewStatusProvisioning
-	case TrustCenterPreviewStatusReady.String():
-		return &TrustCenterPreviewStatusReady
-	case TrustCenterPreviewStatusFailed.String():
-		return &TrustCenterPreviewStatusFailed
-	case TrustCenterPreviewStatusDeprovisioning.String():
-		return &TrustCenterPreviewStatusDeprovisioning
-	case TrustCenterPreviewStatusNone.String():
-		return &TrustCenterPreviewStatusNone
-	default:
-		return &TrustCenterPreviewStatusInvalid
-	}
+	return parse(r, trustCenterPreviewStatusValues, &TrustCenterPreviewStatusInvalid)
 }
 
 // MarshalGQL implements the gqlgen Marshaler interface.
-func (r TrustCenterPreviewStatus) MarshalGQL(w io.Writer) {
-	_, _ = w.Write([]byte(`"` + r.String() + `"`))
-}
+func (r TrustCenterPreviewStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements the gqlgen Unmarshaler interface.
-func (r *TrustCenterPreviewStatus) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("wrong type for TrustCenterPreviewStatus, got: %T", v) //nolint:err113
-	}
-
-	*r = TrustCenterPreviewStatus(str)
-
-	return nil
-}
+func (r *TrustCenterPreviewStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

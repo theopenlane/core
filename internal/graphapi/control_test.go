@@ -1360,6 +1360,97 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
+func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	originalRevision := publicStandard.Revision
+
+	sourceControl := (&ControlBuilder{
+		client:     suite.client,
+		StandardID: publicStandard.ID,
+		AllFields:  true,
+		Title:      "Original Title",
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	sourceSubcontrol := (&SubcontrolBuilder{
+		client:    suite.client,
+		ControlID: sourceControl.ID,
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	// clone the controls first
+	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+
+	clonedControl := resp.CreateControlsByClone.Controls[0]
+	assert.Equal(t, *clonedControl.Title, "Original Title")
+	assert.Equal(t, *clonedControl.ReferenceFrameworkRevision, originalRevision)
+	assert.Assert(t, is.Len(clonedControl.Subcontrols.Edges, 1))
+	assert.Equal(t, clonedControl.Subcontrols.Edges[0].Node.RefCode, sourceSubcontrol.RefCode)
+
+	// then bump up the standard revision to create the drift
+	newRevision := "v0.1.0"
+	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
+		Revision: &newRevision,
+	}, nil)
+	assert.NilError(t, err)
+
+	newSourceSubcontrol := (&SubcontrolBuilder{
+		client:    suite.client,
+		ControlID: sourceControl.ID,
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	resp2, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(resp2.CreateControlsByClone.Controls, 1))
+
+	updatedControl := resp2.CreateControlsByClone.Controls[0]
+
+	assert.Equal(t, updatedControl.ID, clonedControl.ID)
+
+	assert.Equal(t, *updatedControl.Title, "Original Title")
+
+	assert.Equal(t, *updatedControl.ReferenceFrameworkRevision, newRevision)
+
+	assert.Equal(t, *updatedControl.Status, enums.ControlStatusNotImplemented)
+
+	assert.Assert(t, is.Len(updatedControl.Subcontrols.Edges, 2))
+
+	subcontrolRefCodes := []string{
+		updatedControl.Subcontrols.Edges[0].Node.RefCode,
+		updatedControl.Subcontrols.Edges[1].Node.RefCode,
+	}
+	slices.Sort(subcontrolRefCodes)
+
+	expectedRefCodes := []string{sourceSubcontrol.RefCode, newSourceSubcontrol.RefCode}
+	slices.Sort(expectedRefCodes)
+
+	assert.DeepEqual(t, subcontrolRefCodes, expectedRefCodes)
+
+	// cloning with the same revision should not do anything
+	noopResponse, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &publicStandard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(noopResponse.CreateControlsByClone.Controls, 1))
+	assert.Equal(t, noopResponse.CreateControlsByClone.Controls[0].ID, clonedControl.ID)
+	assert.Equal(t, *noopResponse.CreateControlsByClone.Controls[0].ReferenceFrameworkRevision, newRevision)
+
+	// cleanup
+	clonedSubcontrolIDs := []string{}
+	for _, edge := range updatedControl.Subcontrols.Edges {
+		clonedSubcontrolIDs = append(clonedSubcontrolIDs, edge.Node.ID)
+	}
+
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: clonedSubcontrolIDs}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{sourceSubcontrol.ID, newSourceSubcontrol.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
 func TestMutationUpdateControl(t *testing.T) {
 	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
