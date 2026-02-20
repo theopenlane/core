@@ -106,6 +106,11 @@ func (o *Observer) begin(ctx context.Context, op Operation, fields Fields) *Scop
 	}
 }
 
+// HandleEmitError records a synchronous emit error with operation metadata.
+func (o *Observer) HandleEmitError(ctx context.Context, op Operation, fields Fields, topic string, err error) {
+	o.handleEmitError(ctx, op, fields, topic, err)
+}
+
 // handleEmitError records a synchronous emit error with operation metadata
 func (o *Observer) handleEmitError(ctx context.Context, op Operation, fields Fields, topic string, err error) {
 	if err == nil {

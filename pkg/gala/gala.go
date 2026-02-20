@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 	"time"
 
@@ -64,6 +65,8 @@ type Gala struct {
 	contextManager *ContextManager
 	// jobClient is the dedicated River client used for durable dispatch
 	jobClient *riverqueue.Client
+	// durableQueues tracks River queues this runtime is responsible for.
+	durableQueues []string
 	// dispatchMode captures the runtime dispatch mode.
 	dispatchMode DispatchMode
 	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
@@ -89,9 +92,10 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		return nil, err
 	}
 
+	queueConfig := buildQueueConfig(config.QueueName, config.WorkerCount, config.QueueWorkers)
 	riverConf := river.Config{
 		Workers: workers,
-		Queues:  buildQueueConfig(config.QueueName, config.WorkerCount, config.QueueWorkers),
+		Queues:  queueConfig,
 	}
 
 	if config.MaxRetries > 0 {
@@ -137,6 +141,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	}
 
 	app.jobClient = jobClient
+	app.durableQueues = queueNamesFromConfig(queueConfig)
 
 	return app, nil
 }
@@ -201,6 +206,30 @@ func buildQueueConfig(defaultQueueName string, defaultWorkerCount int, queueWork
 	}
 
 	return queues
+}
+
+func queueNamesFromConfig(queues map[string]river.QueueConfig) []string {
+	if len(queues) == 0 {
+		return nil
+	}
+
+	names := make([]string, 0, len(queues))
+	for queueName := range queues {
+		queueName = strings.TrimSpace(queueName)
+		if queueName == "" {
+			continue
+		}
+
+		names = append(names, queueName)
+	}
+
+	if len(names) == 0 {
+		return nil
+	}
+
+	sort.Strings(names)
+
+	return names
 }
 
 // Registry returns the Gala topic/listener registry
@@ -429,7 +458,7 @@ func (g *Gala) WaitIdle() {
 	}
 }
 
-// waitDurableIdle polls the River job table until no available or running jobs remain
+// waitDurableIdle polls configured Gala queues until no active jobs remain.
 func (g *Gala) waitDurableIdle() {
 	if g.jobClient == nil {
 		return
@@ -446,7 +475,14 @@ func (g *Gala) waitDurableIdle() {
 			return
 		}
 
-		result, err := rc.JobList(ctx, river.NewJobListParams().States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled).First(1))
+		params := river.NewJobListParams().
+			States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled).
+			First(1)
+		if len(g.durableQueues) > 0 {
+			params = params.Queues(g.durableQueues...)
+		}
+
+		result, err := rc.JobList(ctx, params)
 		if err != nil || len(result.Jobs) > 0 {
 			idleCount = 0
 		} else {
