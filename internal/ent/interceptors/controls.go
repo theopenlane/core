@@ -4,10 +4,54 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
+
+// InterceptorTrustCenterControl is middleware that filters control queries based on user context:
+// - anonymous trust center users only see publicly visible trust center controls
+// - authenticated users with only the trust center module (not compliance) only see trust center controls
+func InterceptorTrustCenterControl() ent.Interceptor {
+	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		// anonymous trust center users can only see controls that are:
+		// 1. marked as trust center controls (cloned from the trust center standard)
+		// 2. have public visibility
+		if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+			q.WhereP(
+				sql.FieldEQ(control.FieldIsTrustCenterControl, true),
+				sql.FieldEQ(control.FieldTrustCenterVisibility, enums.TrustCenterControlVisibilityPubliclyVisible),
+			)
+
+			return nil
+		}
+
+		// For internal/service/system-admin contexts, skip module-based filtering.
+		// These paths are used by hooks/workflow internals and must see all controls.
+		if rule.ShouldSkipFeatureCheck(ctx) {
+			return nil
+		}
+
+		// for authenticated users with only the trust center module (not compliance),
+		// limit to trust center controls only
+		hasCompliance, _, err := rule.HasAnyFeature(ctx, models.CatalogComplianceModule)
+		if err != nil {
+			return nil
+		}
+
+		if !hasCompliance {
+			q.WhereP(sql.FieldEQ(control.FieldIsTrustCenterControl, true))
+		}
+
+		return nil
+	})
+}
 
 // InterceptorControlFieldSort sorts the custom model slice fields
 // on controls and subcontrols to ensure consistent order of results

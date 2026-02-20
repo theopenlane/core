@@ -4400,6 +4400,14 @@ type ControlHistory implements Node {
 	the id of the standard that the control belongs to, if applicable
 	"""
 	standardID: String
+	"""
+	visibility of the control on the trust center, controls the publishing state for trust center display
+	"""
+	trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
+	"""
+	indicates the control is derived from the trust center standard, set by the system during control clone
+	"""
+	isTrustCenterControl: Boolean
 }
 """
 A connection to a list of items.
@@ -4487,6 +4495,13 @@ enum ControlHistoryOrderField {
 	category
 	subcategory
 	ref_code
+}
+"""
+ControlHistoryTrustCenterControlVisibility is enum for the field trust_center_visibility
+"""
+enum ControlHistoryTrustCenterControlVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterControlVisibility") {
+	PUBLICLY_VISIBLE
+	NOT_VISIBLE
 }
 """
 ControlHistoryWhereInput is used for filtering ControlHistory objects.
@@ -5067,6 +5082,22 @@ input ControlHistoryWhereInput {
 	standardIDNotNil: Boolean
 	standardIDEqualFold: String
 	standardIDContainsFold: String
+	"""
+	trust_center_visibility field predicates
+	"""
+	trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
+	trustCenterVisibilityNEQ: ControlHistoryTrustCenterControlVisibility
+	trustCenterVisibilityIn: [ControlHistoryTrustCenterControlVisibility!]
+	trustCenterVisibilityNotIn: [ControlHistoryTrustCenterControlVisibility!]
+	trustCenterVisibilityIsNil: Boolean
+	trustCenterVisibilityNotNil: Boolean
+	"""
+	is_trust_center_control field predicates
+	"""
+	isTrustCenterControl: Boolean
+	isTrustCenterControlNEQ: Boolean
+	isTrustCenterControlIsNil: Boolean
+	isTrustCenterControlNotNil: Boolean
 }
 type ControlImplementationHistory implements Node {
 	id: ID!

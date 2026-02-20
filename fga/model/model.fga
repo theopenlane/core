@@ -284,10 +284,9 @@ type program
 # controls are associated with an organization and will inherit access from the organization
 # controls inherit access can also be inherited associated program(s) or from associated groups
 # the control author will be assigned as an admin of the control
-# TODO (sfunk): require approval for control edits
 type control
   relations
-    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
     define can_edit: [user, service] or owner or delegate or system_admin from system or (editor but not blocked)
     define can_delete: [user, service] or owner or (editor but not blocked) or system_admin from system
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view

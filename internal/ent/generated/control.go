@@ -117,6 +117,10 @@ type Control struct {
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the standard that the control belongs to, if applicable
 	StandardID string `json:"standard_id,omitempty"`
+	// visibility of the control on the trust center, controls the publishing state for trust center display
+	TrustCenterVisibility enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
+	// indicates the control is derived from the trust center standard, set by the system during control clone
+	IsTrustCenterControl bool `json:"is_trust_center_control,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                     ControlEdges `json:"edges"`
@@ -536,9 +540,9 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case control.FieldTags, control.FieldDescriptionJSON, control.FieldAliases, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences, control.FieldTestingProcedures, control.FieldEvidenceRequests:
 			values[i] = new([]byte)
-		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker:
+		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker, control.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldEnvironmentName, control.FieldEnvironmentID, control.FieldScopeName, control.FieldScopeID, control.FieldRefCode, control.FieldStandardID, control.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -875,6 +879,18 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
 			} else if value.Valid {
 				_m.StandardID = value.String
+			}
+		case control.FieldTrustCenterVisibility:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_visibility", values[i])
+			} else if value.Valid {
+				_m.TrustCenterVisibility = enums.TrustCenterControlVisibility(value.String)
+			}
+		case control.FieldIsTrustCenterControl:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_trust_center_control", values[i])
+			} else if value.Valid {
+				_m.IsTrustCenterControl = value.Bool
 			}
 		case control.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1247,6 +1263,12 @@ func (_m *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("standard_id=")
 	builder.WriteString(_m.StandardID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_visibility=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TrustCenterVisibility))
+	builder.WriteString(", ")
+	builder.WriteString("is_trust_center_control=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsTrustCenterControl))
 	builder.WriteByte(')')
 	return builder.String()
 }

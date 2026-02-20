@@ -591,6 +591,34 @@ func (_c *ControlHistoryCreate) SetNillableStandardID(v *string) *ControlHistory
 	return _c
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_c *ControlHistoryCreate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryCreate {
+	_c.mutation.SetTrustCenterVisibility(v)
+	return _c
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterVisibility(*v)
+	}
+	return _c
+}
+
+// SetIsTrustCenterControl sets the "is_trust_center_control" field.
+func (_c *ControlHistoryCreate) SetIsTrustCenterControl(v bool) *ControlHistoryCreate {
+	_c.mutation.SetIsTrustCenterControl(v)
+	return _c
+}
+
+// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableIsTrustCenterControl(v *bool) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetIsTrustCenterControl(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ControlHistoryCreate) SetID(v string) *ControlHistoryCreate {
 	_c.mutation.SetID(v)
@@ -683,6 +711,14 @@ func (_c *ControlHistoryCreate) defaults() error {
 		v := controlhistory.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
+	if _, ok := _c.mutation.TrustCenterVisibility(); !ok {
+		v := controlhistory.DefaultTrustCenterVisibility
+		_c.mutation.SetTrustCenterVisibility(v)
+	}
+	if _, ok := _c.mutation.IsTrustCenterControl(); !ok {
+		v := controlhistory.DefaultIsTrustCenterControl
+		_c.mutation.SetIsTrustCenterControl(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if controlhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized controlhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -721,6 +757,11 @@ func (_c *ControlHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.RefCode(); !ok {
 		return &ValidationError{Name: "ref_code", err: errors.New(`historygenerated: missing required field "ControlHistory.ref_code"`)}
+	}
+	if v, ok := _c.mutation.TrustCenterVisibility(); ok {
+		if err := controlhistory.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.trust_center_visibility": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -953,6 +994,14 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.StandardID(); ok {
 		_spec.SetField(controlhistory.FieldStandardID, field.TypeString, value)
 		_node.StandardID = value
+	}
+	if value, ok := _c.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum, value)
+		_node.TrustCenterVisibility = value
+	}
+	if value, ok := _c.mutation.IsTrustCenterControl(); ok {
+		_spec.SetField(controlhistory.FieldIsTrustCenterControl, field.TypeBool, value)
+		_node.IsTrustCenterControl = value
 	}
 	return _node, _spec
 }

@@ -485,6 +485,10 @@ func init() {
 	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[47].Descriptor()
 	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
+	// controlhistoryDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
+	controlhistoryDescIsTrustCenterControl := controlhistoryFields[51].Descriptor()
+	// controlhistory.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
+	controlhistory.DefaultIsTrustCenterControl = controlhistoryDescIsTrustCenterControl.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
 	controlhistoryDescID := controlhistoryFields[9].Descriptor()
 	// controlhistory.DefaultID holds the default value on creation for the id field.

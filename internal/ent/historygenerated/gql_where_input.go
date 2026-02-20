@@ -10668,6 +10668,20 @@ type ControlHistoryWhereInput struct {
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
 
+	// "trust_center_visibility" field predicates.
+	TrustCenterVisibility       *enums.TrustCenterControlVisibility  `json:"trustCenterVisibility,omitempty"`
+	TrustCenterVisibilityNEQ    *enums.TrustCenterControlVisibility  `json:"trustCenterVisibilityNEQ,omitempty"`
+	TrustCenterVisibilityIn     []enums.TrustCenterControlVisibility `json:"trustCenterVisibilityIn,omitempty"`
+	TrustCenterVisibilityNotIn  []enums.TrustCenterControlVisibility `json:"trustCenterVisibilityNotIn,omitempty"`
+	TrustCenterVisibilityIsNil  bool                                 `json:"trustCenterVisibilityIsNil,omitempty"`
+	TrustCenterVisibilityNotNil bool                                 `json:"trustCenterVisibilityNotNil,omitempty"`
+
+	// "is_trust_center_control" field predicates.
+	IsTrustCenterControl       *bool `json:"isTrustCenterControl,omitempty"`
+	IsTrustCenterControlNEQ    *bool `json:"isTrustCenterControlNEQ,omitempty"`
+	IsTrustCenterControlIsNil  bool  `json:"isTrustCenterControlIsNil,omitempty"`
+	IsTrustCenterControlNotNil bool  `json:"isTrustCenterControlNotNil,omitempty"`
+
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
 
@@ -12140,6 +12154,36 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.StandardIDContainsFold != nil {
 		predicates = append(predicates, controlhistory.StandardIDContainsFold(*i.StandardIDContainsFold))
+	}
+	if i.TrustCenterVisibility != nil {
+		predicates = append(predicates, controlhistory.TrustCenterVisibilityEQ(*i.TrustCenterVisibility))
+	}
+	if i.TrustCenterVisibilityNEQ != nil {
+		predicates = append(predicates, controlhistory.TrustCenterVisibilityNEQ(*i.TrustCenterVisibilityNEQ))
+	}
+	if len(i.TrustCenterVisibilityIn) > 0 {
+		predicates = append(predicates, controlhistory.TrustCenterVisibilityIn(i.TrustCenterVisibilityIn...))
+	}
+	if len(i.TrustCenterVisibilityNotIn) > 0 {
+		predicates = append(predicates, controlhistory.TrustCenterVisibilityNotIn(i.TrustCenterVisibilityNotIn...))
+	}
+	if i.TrustCenterVisibilityIsNil {
+		predicates = append(predicates, controlhistory.TrustCenterVisibilityIsNil())
+	}
+	if i.TrustCenterVisibilityNotNil {
+		predicates = append(predicates, controlhistory.TrustCenterVisibilityNotNil())
+	}
+	if i.IsTrustCenterControl != nil {
+		predicates = append(predicates, controlhistory.IsTrustCenterControlEQ(*i.IsTrustCenterControl))
+	}
+	if i.IsTrustCenterControlNEQ != nil {
+		predicates = append(predicates, controlhistory.IsTrustCenterControlNEQ(*i.IsTrustCenterControlNEQ))
+	}
+	if i.IsTrustCenterControlIsNil {
+		predicates = append(predicates, controlhistory.IsTrustCenterControlIsNil())
+	}
+	if i.IsTrustCenterControlNotNil {
+		predicates = append(predicates, controlhistory.IsTrustCenterControlNotNil())
 	}
 
 	if i.TagsHas != nil {

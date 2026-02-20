@@ -818,6 +818,26 @@ func (_u *ControlHistoryUpdate) ClearStandardID() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdate) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryUpdate {
+	_u.mutation.SetTrustCenterVisibility(v)
+	return _u
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterVisibility(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterVisibility clears the value of the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdate) ClearTrustCenterVisibility() *ControlHistoryUpdate {
+	_u.mutation.ClearTrustCenterVisibility()
+	return _u
+}
+
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (_u *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 	return _u.mutation
@@ -875,6 +895,11 @@ func (_u *ControlHistoryUpdate) check() error {
 	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TrustCenterVisibility(); ok {
+		if err := controlhistory.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.trust_center_visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -1215,6 +1240,15 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(controlhistory.FieldStandardID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.TrustCenterVisibilityCleared() {
+		_spec.ClearField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum)
+	}
+	if _u.mutation.IsTrustCenterControlCleared() {
+		_spec.ClearField(controlhistory.FieldIsTrustCenterControl, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -2022,6 +2056,26 @@ func (_u *ControlHistoryUpdateOne) ClearStandardID() *ControlHistoryUpdateOne {
 	return _u
 }
 
+// SetTrustCenterVisibility sets the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdateOne) SetTrustCenterVisibility(v enums.TrustCenterControlVisibility) *ControlHistoryUpdateOne {
+	_u.mutation.SetTrustCenterVisibility(v)
+	return _u
+}
+
+// SetNillableTrustCenterVisibility sets the "trust_center_visibility" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableTrustCenterVisibility(v *enums.TrustCenterControlVisibility) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterVisibility(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterVisibility clears the value of the "trust_center_visibility" field.
+func (_u *ControlHistoryUpdateOne) ClearTrustCenterVisibility() *ControlHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterVisibility()
+	return _u
+}
+
 // Mutation returns the ControlHistoryMutation object of the builder.
 func (_u *ControlHistoryUpdateOne) Mutation() *ControlHistoryMutation {
 	return _u.mutation
@@ -2092,6 +2146,11 @@ func (_u *ControlHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TrustCenterVisibility(); ok {
+		if err := controlhistory.TrustCenterVisibilityValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_visibility", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.trust_center_visibility": %w`, err)}
 		}
 	}
 	return nil
@@ -2449,6 +2508,15 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(controlhistory.FieldStandardID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterVisibility(); ok {
+		_spec.SetField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.TrustCenterVisibilityCleared() {
+		_spec.ClearField(controlhistory.FieldTrustCenterVisibility, field.TypeEnum)
+	}
+	if _u.mutation.IsTrustCenterControlCleared() {
+		_spec.ClearField(controlhistory.FieldIsTrustCenterControl, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -64,6 +65,19 @@ func (Control) Fields() []ent.Field {
 		field.String("standard_id").
 			Comment("the id of the standard that the control belongs to, if applicable").
 			Optional(),
+		field.Enum("trust_center_visibility").
+			GoType(enums.TrustCenterControlVisibility("")).
+			Default(enums.TrustCenterControlVisibilityNotVisible.String()).
+			Optional().
+			Comment("visibility of the control on the trust center, controls the publishing state for trust center display"),
+		field.Bool("is_trust_center_control").
+			Default(false).
+			Optional().
+			Immutable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Comment("indicates the control is derived from the trust center standard, set by the system during control clone"),
 	}
 
 	return additionalFields
@@ -179,6 +193,7 @@ func (c Control) Mixin() []ent.Mixin {
 				// skip the interceptor
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 				withWorkflowOwnedEdges(),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			// add groups permissions with editor, and blocked groups
@@ -195,6 +210,14 @@ func (c Control) Mixin() []ent.Mixin {
 func (Control) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookControlReferenceFramework(),
+		hooks.HookControlTrustCenterVisibility(),
+	}
+}
+
+// Interceptors of the Control
+func (Control) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterControl(),
 	}
 }
 
@@ -218,6 +241,7 @@ func (c Control) Policy() ent.Policy {
 func (Control) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+		models.CatalogTrustCenterModule,
 	}
 }
 

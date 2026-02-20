@@ -466,6 +466,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: controlhistory.FieldWorkflowEligibleMarker},
 			controlhistory.FieldRefCode:                    {Type: field.TypeString, Column: controlhistory.FieldRefCode},
 			controlhistory.FieldStandardID:                 {Type: field.TypeString, Column: controlhistory.FieldStandardID},
+			controlhistory.FieldTrustCenterVisibility:      {Type: field.TypeEnum, Column: controlhistory.FieldTrustCenterVisibility},
+			controlhistory.FieldIsTrustCenterControl:       {Type: field.TypeBool, Column: controlhistory.FieldIsTrustCenterControl},
 		},
 	}
 	graph.Nodes[8] = &sqlgraph.Node{
@@ -4758,6 +4760,16 @@ func (f *ControlHistoryFilter) WhereRefCode(p entql.StringP) {
 // WhereStandardID applies the entql string predicate on the standard_id field.
 func (f *ControlHistoryFilter) WhereStandardID(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldStandardID))
+}
+
+// WhereTrustCenterVisibility applies the entql string predicate on the trust_center_visibility field.
+func (f *ControlHistoryFilter) WhereTrustCenterVisibility(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldTrustCenterVisibility))
+}
+
+// WhereIsTrustCenterControl applies the entql bool predicate on the is_trust_center_control field.
+func (f *ControlHistoryFilter) WhereIsTrustCenterControl(p entql.BoolP) {
+	f.Where(p.Field(controlhistory.FieldIsTrustCenterControl))
 }
 
 // addPredicate implements the predicateAdder interface.

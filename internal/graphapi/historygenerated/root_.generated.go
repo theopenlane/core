@@ -387,6 +387,7 @@ type ComplexityRoot struct {
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
+		IsTrustCenterControl       func(childComplexity int) int
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
@@ -408,6 +409,7 @@ type ComplexityRoot struct {
 		Tags                       func(childComplexity int) int
 		TestingProcedures          func(childComplexity int) int
 		Title                      func(childComplexity int) int
+		TrustCenterVisibility      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
 		WorkflowEligibleMarker     func(childComplexity int) int
@@ -5065,6 +5067,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.InternalNotes(childComplexity), true
 
+	case "ControlHistory.isTrustCenterControl":
+		if e.complexity.ControlHistory.IsTrustCenterControl == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.IsTrustCenterControl(childComplexity), true
+
 	case "ControlHistory.mappedCategories":
 		if e.complexity.ControlHistory.MappedCategories == nil {
 			break
@@ -5211,6 +5220,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.Title(childComplexity), true
+
+	case "ControlHistory.trustCenterVisibility":
+		if e.complexity.ControlHistory.TrustCenterVisibility == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.TrustCenterVisibility(childComplexity), true
 
 	case "ControlHistory.updatedAt":
 		if e.complexity.ControlHistory.UpdatedAt == nil {
@@ -24879,6 +24895,14 @@ type ControlHistory implements Node {
   the id of the standard that the control belongs to, if applicable
   """
   standardID: String
+  """
+  visibility of the control on the trust center, controls the publishing state for trust center display
+  """
+  trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
+  """
+  indicates the control is derived from the trust center standard, set by the system during control clone
+  """
+  isTrustCenterControl: Boolean
 }
 """
 A connection to a list of items.
@@ -24966,6 +24990,13 @@ enum ControlHistoryOrderField {
   category
   subcategory
   ref_code
+}
+"""
+ControlHistoryTrustCenterControlVisibility is enum for the field trust_center_visibility
+"""
+enum ControlHistoryTrustCenterControlVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterControlVisibility") {
+  PUBLICLY_VISIBLE
+  NOT_VISIBLE
 }
 """
 ControlHistoryWhereInput is used for filtering ControlHistory objects.
@@ -25546,6 +25577,22 @@ input ControlHistoryWhereInput {
   standardIDNotNil: Boolean
   standardIDEqualFold: String
   standardIDContainsFold: String
+  """
+  trust_center_visibility field predicates
+  """
+  trustCenterVisibility: ControlHistoryTrustCenterControlVisibility
+  trustCenterVisibilityNEQ: ControlHistoryTrustCenterControlVisibility
+  trustCenterVisibilityIn: [ControlHistoryTrustCenterControlVisibility!]
+  trustCenterVisibilityNotIn: [ControlHistoryTrustCenterControlVisibility!]
+  trustCenterVisibilityIsNil: Boolean
+  trustCenterVisibilityNotNil: Boolean
+  """
+  is_trust_center_control field predicates
+  """
+  isTrustCenterControl: Boolean
+  isTrustCenterControlNEQ: Boolean
+  isTrustCenterControlIsNil: Boolean
+  isTrustCenterControlNotNil: Boolean
 }
 type ControlImplementationHistory implements Node {
   id: ID!

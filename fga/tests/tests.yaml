@@ -1362,6 +1362,24 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:anon_trustcenter_visitor # anonymous trust center visitor can view published control
+        object: control:ots-01.1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:anon_trustcenter_visitor # anonymous trust center visitor cannot view unpublished control
+        object: control:ots-01.2
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:tc-owner-1 # trust center org owner can view and edit published trust center control
+        object: control:ots-01.1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: standard
     description: standards can be made public with system-owned standards, or organizations can create their own custom standards
     tuple_file: tuples/standards.yaml

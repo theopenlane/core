@@ -247,10 +247,11 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	for i, c := range updatedControlsToClone {
 		c := c // capture loop variable
 		funcs[i] = func() {
-			controlInput, _ := createCloneControlInput(c, programID, orgID)
+			controlInput, _, isTCControl := createCloneControlInput(c, programID, orgID)
 
 			res, err := r.db.Control.Create().
-				SetInput(controlInput).Save(ctrlCtx)
+				SetInput(controlInput).
+				SetIsTrustCenterControl(isTCControl).Save(ctrlCtx)
 			if err != nil {
 				mu.Lock()
 
@@ -356,9 +357,18 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	return query.All(allowCtx)
 }
 
+// trustCenterStandardShortName is the short name of the trust center standard
+// used to identify controls that should be flagged as trust center controls during clone
+const trustCenterStandardShortName = "openlane-trust-center"
+
+// isTrustCenterStandard returns true if the standard is the trust center standard
+func isTrustCenterStandard(std *generated.Standard) bool {
+	return std != nil && std.ShortName == trustCenterStandardShortName
+}
+
 // createCloneControlInput creates a CreateControlInput from the given control that is being cloned
-// and returns the input and the standard ID that was set
-func createCloneControlInput(c *generated.Control, programID *string, orgID string) (generated.CreateControlInput, string) {
+// and returns the input, the standard ID that was set, and whether the control is a trust center control
+func createCloneControlInput(c *generated.Control, programID *string, orgID string) (generated.CreateControlInput, string, bool) {
 	controlInput := generated.CreateControlInput{
 		// grab fields from the existing control
 		Tags:                   c.Tags,
@@ -408,7 +418,7 @@ func createCloneControlInput(c *generated.Control, programID *string, orgID stri
 		controlInput.ProgramIDs = []string{*programID}
 	}
 
-	return controlInput, standardID
+	return controlInput, standardID, isTrustCenterStandard(c.Edges.Standard)
 }
 
 // cloneSubcontrols clones the subcontrols from the given control to the new control ID

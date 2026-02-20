@@ -12,7 +12,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Campaign":                   {models.CatalogComplianceModule},
 	"CampaignTarget":             {models.CatalogComplianceModule},
 	"Contact":                    {models.CatalogEntityManagementModule, models.CatalogComplianceModule},
-	"Control":                    {models.CatalogComplianceModule},
+	"Control":                    {models.CatalogComplianceModule, models.CatalogTrustCenterModule},
 	"ControlImplementation":      {models.CatalogComplianceModule},
 	"ControlObjective":           {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon},
 	"CustomDomain":               {models.CatalogTrustCenterModule},
