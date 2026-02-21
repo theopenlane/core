@@ -137,6 +137,13 @@ func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, str
 	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		// PAT-authenticated requests can legitimately carry only OrganizationIDs (no selected OrganizationID)
+		// until an org context header is provided. For single-org tokens, default to that sole org.
+		if orgIDs, orgIDsErr := auth.GetOrganizationIDsFromContext(ctx); orgIDsErr == nil && len(orgIDs) == 1 && orgIDs[0] != "" {
+			return allowCtx, orgIDs[0], nil
+		}
+	}
 
 	return allowCtx, orgID, err
 }

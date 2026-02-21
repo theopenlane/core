@@ -42,3 +42,39 @@ func TestWorkflowContexts(t *testing.T) {
 	_, _, err = AllowContextWithOrg(base)
 	assert.Error(t, err)
 }
+
+func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
+	orgID := ulids.New().String()
+	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		SubjectID:       ulids.New().String(),
+		OrganizationIDs: []string{orgID},
+	})
+
+	allowCtx, resolvedOrg, err := AllowContextWithOrg(ctx)
+	assert.NoError(t, err)
+	assert.Equal(t, orgID, resolvedOrg)
+
+	decision, ok := privacy.DecisionFromContext(allowCtx)
+	assert.True(t, ok)
+	assert.NoError(t, decision)
+}
+
+func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T) {
+	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		SubjectID:       ulids.New().String(),
+		OrganizationIDs: []string{ulids.New().String(), ulids.New().String()},
+	})
+
+	_, _, err := AllowContextWithOrg(ctx)
+	assert.Error(t, err)
+}
+
+func TestAllowContextWithOrg_EmptyAuthorizedOrgs(t *testing.T) {
+	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		SubjectID:       ulids.New().String(),
+		OrganizationIDs: []string{},
+	})
+
+	_, _, err := AllowContextWithOrg(ctx)
+	assert.Error(t, err)
+}

@@ -3,10 +3,14 @@
 package engine_test
 
 import (
+	"context"
+
 	"github.com/oklog/ulid/v2"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows"
 )
 
@@ -230,6 +234,121 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 		s.NoError(err)
 		s.Empty(defs)
 	})
+}
+
+// TestFindMatchingDefinitionsAuthContextPermutations verifies auth context permutations used by
+// workflow matching, including PAT/API token contexts without a selected OrganizationID.
+func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutations() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.Engine()
+	def := s.CreateTestWorkflowDefinitionWithPrefilter(
+		userCtx,
+		orgID,
+		[]models.WorkflowTrigger{
+			{Operation: "UPDATE", Fields: []string{"status"}},
+		},
+		[]string{"UPDATE"},
+		[]string{"status"},
+	)
+	defer s.ClearWorkflowDefinitionsForOrg(orgID)
+
+	obj := &workflows.Object{ID: "auth-context-test", Type: enums.WorkflowObjectTypeControl}
+	otherOrgID := ulid.Make().String()
+	apiTokenSubjectID := ulid.Make().String()
+
+	testCases := []struct {
+		name      string
+		authUser  *auth.AuthenticatedUser
+		expectErr bool
+	}{
+		{
+			name: "jwt with selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          userID,
+				OrganizationID:     orgID,
+				OrganizationIDs:    []string{orgID},
+				AuthenticationType: auth.JWTAuthentication,
+			},
+		},
+		{
+			name: "pat with selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          userID,
+				OrganizationID:     orgID,
+				OrganizationIDs:    []string{orgID},
+				AuthenticationType: auth.PATAuthentication,
+			},
+		},
+		{
+			name: "pat with single authorized organization and no selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          userID,
+				OrganizationIDs:    []string{orgID},
+				AuthenticationType: auth.PATAuthentication,
+			},
+		},
+		{
+			name: "pat with multiple authorized organizations and no selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          userID,
+				OrganizationIDs:    []string{orgID, otherOrgID},
+				AuthenticationType: auth.PATAuthentication,
+			},
+			expectErr: true,
+		},
+		{
+			name: "pat with empty authorized organizations and no selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          userID,
+				OrganizationIDs:    []string{},
+				AuthenticationType: auth.PATAuthentication,
+			},
+			expectErr: true,
+		},
+		{
+			name: "api token with selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          apiTokenSubjectID,
+				OrganizationID:     orgID,
+				OrganizationIDs:    []string{orgID},
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+		},
+		{
+			name: "api token with single authorized organization and no selected organization",
+			authUser: &auth.AuthenticatedUser{
+				SubjectID:          apiTokenSubjectID,
+				OrganizationIDs:    []string{orgID},
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+		},
+		{
+			name:      "missing authenticated user",
+			authUser:  nil,
+			expectErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		s.Run(tc.name, func() {
+			ctx := context.Background()
+			if tc.authUser != nil {
+				ctx = auth.WithAuthenticatedUser(ctx, tc.authUser)
+			}
+			ctx = generated.NewContext(ctx, s.client)
+
+			defs, err := wfEngine.FindMatchingDefinitions(ctx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
+			if tc.expectErr {
+				s.Error(err)
+				return
+			}
+
+			s.NoError(err)
+			s.Len(defs, 1)
+			s.Equal(def.ID, defs[0].ID)
+		})
+	}
 }
 
 // TestFindMatchingDefinitionsSelectors verifies that workflow definitions with selectors
