@@ -23,7 +23,9 @@ github.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0/go.mod h1:t2tdK
 github.com/aws/aws-sdk-go-v2 v1.41.1 h1:ABlyEARCDLN034NhxlRUSZr4l71mh+T5KAeGh6cerhU=
 github.com/aws/aws-sdk-go-v2 v1.41.1/go.mod h1:MayyLB8y+buD9hZqkCW3kX1AKq07Y5pXxtgB+rRFhz0=
 github.com/aws/aws-sdk-go-v2/config v1.32.9 h1:ktda/mtAydeObvJXlHzyGpK1xcsLaP16zfUPDGoW90A=
+github.com/aws/aws-sdk-go-v2/config v1.32.9/go.mod h1:U+fCQ+9QKsLW786BCfEjYRj34VVTbPdsLP3CHSYXMOI=
 github.com/aws/aws-sdk-go-v2/credentials v1.19.9 h1:sWvTKsyrMlJGEuj/WgrwilpoJ6Xa1+KhIpGdzw7mMU8=
+github.com/aws/aws-sdk-go-v2/credentials v1.19.9/go.mod h1:+J44MBhmfVY/lETFiKI+klz0Vym2aCmIjqgClMmW82w=
 github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.17 h1:I0GyV8wiYrP8XpA70g1HBcQO1JlQxCMTW9npl5UbDHY=
 github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.17/go.mod h1:tyw7BOl5bBe/oqvoIeECFJjMdzXoa/dfVz3QQ5lgHGA=
 github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.17 h1:xOLELNKGp2vsiteLsvLPwxC+mYmO6OZ8PYgiuPJzF8U=
@@ -39,6 +41,7 @@ github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.17/go.mod h1:F
 github.com/aws/aws-sdk-go-v2/service/signin v1.0.5 h1:VrhDvQib/i0lxvr3zqlUwLwJP4fpmpyD9wYG1vfSu+Y=
 github.com/aws/aws-sdk-go-v2/service/signin v1.0.5/go.mod h1:k029+U8SY30/3/ras4G/Fnv/b88N4mAfliNn08Dem4M=
 github.com/aws/aws-sdk-go-v2/service/sso v1.30.10 h1:+VTRawC4iVY58pS/lzpo0lnoa/SYNGF4/B/3/U5ro8Y=
+github.com/aws/aws-sdk-go-v2/service/sso v1.30.10/go.mod h1:yifAsgBxgJWn3ggx70A3urX2AN49Y5sJTD1UQFlfqBw=
 github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.14 h1:0jbJeuEHlwKJ9PfXtpSFc4MF+WIWORdhN1n30ITZGFM=
 github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.14/go.mod h1:sTGThjphYE4Ohw8vJiRStAcu3rbjtXRsdNB0TvZ5wwo=
 github.com/aws/aws-sdk-go-v2/service/sts v1.41.6 h1:5fFjR/ToSOzB2OQ/XqWpZBmNvmP/pJ1jOWYlFDJTjRQ=
@@ -191,14 +194,16 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
+github.com/theopenlane/core v1.9.11 h1:H+OzPdodGm27AsCYqswBl6KcH6c0vRoE13e+dBRBqfE=
+github.com/theopenlane/core v1.9.11/go.mod h1:v4U5K8wKO9Z8R8QgADorSsjZJu5wiGpXKn/khFHZj3Q=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/entx v0.22.5 h1:wVRnC8xAVrofucPgj8fgsbv2wkq0HbNS2HIxtPkyekE=
 github.com/theopenlane/entx v0.22.5/go.mod h1:YEXLGD7rn5zeoL4091PrnR83fEaJDWprd47ULKxE7nE=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/utils v0.6.2 h1:7TgABVt0rb+Dhph3N7DEBAO3jcB/J+wgVv47F2Nry7c=
-github.com/theopenlane/utils v0.6.2/go.mod h1:7STP+gs2LAYYKLS7blxq8FTY5jvL7R0riLiUQJfTeM0=
+github.com/theopenlane/utils v0.7.0 h1:tSN9PBC8Ywn2As3TDW/1TAfWsVsodrccec40oAhiZgo=
+github.com/theopenlane/utils v0.7.0/go.mod h1:7U9CDoVzCAFWw/JygR5ZhCKGwhHBnuJpK3Jgh1m59+w=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
 github.com/tidwall/gjson v1.18.0 h1:FIDeeyB800efLX89e5a8Y0BNH+LOngJyGrIWxG2FKQY=
 github.com/tidwall/gjson v1.18.0/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
