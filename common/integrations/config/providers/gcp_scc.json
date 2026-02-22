@@ -4,8 +4,9 @@
   "category": "cloud",
   "authType": "workload_identity",
   "active": true,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://cloud.google.com/security-command-center/docs",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/gcp_scc/overview",
   "googleWorkloadIdentity": {
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform"
@@ -23,10 +24,21 @@
   "credentialsSchema": {
     "type": "object",
     "additionalProperties": false,
-    "required": [
-      "projectId"
-    ],
     "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "organizationId"
+            ]
+          },
+          {
+            "required": [
+              "projectId"
+            ]
+          }
+        ]
+      },
       {
         "anyOf": [
           {
@@ -39,18 +51,34 @@
               "workloadIdentityProvider",
               "audience",
               "serviceAccountEmail",
-              "organizationId",
               "subjectToken"
             ]
           }
         ]
+      },
+      {
+        "if": {
+          "properties": {
+            "projectScope": {
+              "const": "specific"
+            }
+          },
+          "required": [
+            "projectScope"
+          ]
+        },
+        "then": {
+          "required": [
+            "projectIds"
+          ]
+        }
       }
     ],
     "properties": {
       "projectId": {
         "type": "string",
         "title": "GCP Project ID",
-        "description": "Project that owns the Security Command Center resources."
+        "description": "Primary GCP project used for single-project SCC access and quota project defaults."
       },
       "workloadIdentityProvider": {
         "type": "string",
@@ -70,12 +98,39 @@
       "organizationId": {
         "type": "string",
         "title": "Organization ID",
-        "description": "GCP organization to scope SCC queries."
+        "description": "GCP organization used as the SCC parent for organization-wide collection."
+      },
+      "projectScope": {
+        "type": "string",
+        "title": "Project Scope",
+        "description": "Collect across all accessible projects or restrict to a specific set of project IDs.",
+        "enum": [
+          "all",
+          "specific"
+        ],
+        "default": "all"
+      },
+      "projectIds": {
+        "type": "array",
+        "title": "Project IDs",
+        "description": "Required when Project Scope is specific. These project IDs are used to fan out source collection.",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
       },
       "sourceId": {
         "type": "string",
         "title": "SCC Source ID",
         "description": "Optional SCC source identifier (e.g. organizations/123/sources/456) to scope findings."
+      },
+      "sourceIds": {
+        "type": "array",
+        "title": "SCC Source IDs",
+        "description": "Optional list of SCC source identifiers. Bare source IDs are expanded against selected parents.",
+        "items": {
+          "type": "string"
+        }
       },
       "scopes": {
         "type": "array",
@@ -122,5 +177,6 @@
         "minLength": 1
       }
     }
-  }
+  },
+  "description": "Collect Google Cloud Security Command Center findings and settings using workload identity or service-account based access."
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -36,11 +37,7 @@ func githubAppOperations(baseURL string) []types.OperationDescriptor {
 
 				var resp githubAppInstallationReposResponse
 				if err := fetchGitHubAppResource(ctx, baseURL, token, "installation/repositories", nil, &resp); err != nil {
-					return types.OperationResult{
-						Status:  types.OperationStatusFailed,
-						Summary: "GitHub App installation lookup failed",
-						Details: map[string]any{"error": err.Error()},
-					}, err
+					return operations.OperationFailure("GitHub App installation lookup failed", err, nil)
 				}
 
 				count := resp.TotalCount
@@ -68,9 +65,5 @@ func fetchGitHubAppResource(ctx context.Context, baseURL, token, path string, pa
 		}
 	}
 
-	headers := map[string]string{
-		"Accept": "application/vnd.github+json",
-	}
-
-	return auth.HTTPGetJSON(ctx, nil, endpoint, token, headers, out)
+	return auth.HTTPGetJSON(ctx, nil, endpoint, token, githubClientHeaders, out)
 }

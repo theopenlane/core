@@ -4,8 +4,9 @@
   "category": "security",
   "authType": "apikey",
   "active": true,
+  "visible": true,
   "logoUrl": "https://developers.cloudflare.com/resources/logo/favicon.ico",
-  "docsUrl": "https://developers.cloudflare.com/fundamentals/api/",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/cloudflare/overview",
   "apiKey": {
     "keyLabel": "API Token",
     "headerName": "Authorization"
@@ -67,5 +68,6 @@
         "description": "Optional label recorded with scan jobs for traceability."
       }
     }
-  }
+  },
+  "description": "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows."
 }

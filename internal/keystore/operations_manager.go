@@ -8,6 +8,7 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -114,7 +115,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		Provider:   req.Provider,
 		Credential: payload,
 		Client:     client,
-		Config:     cloneConfigMap(req.Config),
+		Config:     helpers.DeepCloneMap(req.Config),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)

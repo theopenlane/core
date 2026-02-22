@@ -3,9 +3,12 @@
   "displayName": "Google Workspace",
   "category": "identity",
   "authType": "oauth2",
+  "authStartPath": "/v1/integrations/oauth/start",
+  "authCallbackPath": "/v1/integrations/oauth/callback",
   "active": true,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://developers.google.com/admin-sdk/directory",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
   "oauth": {
     "clientId": "${GOOGLE_WORKSPACE_CLIENT_ID}",
     "clientSecret": "${GOOGLE_WORKSPACE_CLIENT_SECRET}",
@@ -84,5 +87,6 @@
         "default": true
       }
     }
-  }
+  },
+  "description": "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks."
 }

@@ -2,8 +2,9 @@ package buildkite
 
 import (
 	"context"
-	"errors"
 	"fmt"
+
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -13,8 +14,6 @@ import (
 const (
 	buildkiteOperationHealth types.OperationName = "health.default"
 	buildkiteOperationOrgs   types.OperationName = "organizations.collect"
-
-	maxSampleSize = 5
 )
 
 // buildkiteUserResponse represents the response from the Buildkite /v2/user endpoint
@@ -64,22 +63,19 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 	}
 
 	var orgs []buildkiteOrgResponse
-	if err := fetchBuildkiteResource(ctx, client, token, "organizations", &orgs); err != nil {
-		return operations.OperationFailure("Buildkite organizations fetch failed", err), err
+	endpoint := "https://api.buildkite.com/v2/organizations"
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &orgs); err != nil {
+		return operations.OperationFailure("Buildkite organizations fetch failed", err, nil)
 	}
 
-	samples := make([]map[string]any, 0, min(maxSampleSize, len(orgs)))
-	for _, org := range orgs {
-		if len(samples) >= cap(samples) {
-			break
-		}
-		samples = append(samples, map[string]any{
+	samples := lo.Map(orgs[:min(len(orgs), operations.DefaultSampleSize)], func(org buildkiteOrgResponse, _ int) map[string]any {
+		return map[string]any{
 			"id":   org.ID,
 			"name": org.Name,
 			"slug": org.Slug,
 			"url":  org.WebURL,
-		})
-	}
+		}
+	})
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
@@ -89,17 +85,4 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 			"samples": samples,
 		},
 	}, nil
-}
-
-// fetchBuildkiteResource retrieves Buildkite API resources with either a pooled client or raw token.
-func fetchBuildkiteResource(ctx context.Context, client *auth.AuthenticatedClient, token, path string, out any) error {
-	endpoint := fmt.Sprintf("https://api.buildkite.com/v2/%s", path)
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
-		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return ErrAPIRequest
-		}
-		return err
-	}
-
-	return nil
 }

@@ -204,11 +204,7 @@ func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integration
 	}()
 
 	if len(record.Edges.Secrets) > 0 {
-		secretIDs := make([]string, 0, len(record.Edges.Secrets))
-		for _, secret := range record.Edges.Secrets {
-			secretIDs = append(secretIDs, secret.ID)
-		}
-
+		secretIDs := lo.Map(record.Edges.Secrets, func(s *ent.Hush, _ int) string { return s.ID })
 		if _, err = tx.Hush.Delete().Where(hushschema.IDIn(secretIDs...)).Exec(ctx); err != nil {
 			return types.ProviderUnknown, "", err
 		}

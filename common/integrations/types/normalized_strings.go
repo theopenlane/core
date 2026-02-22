@@ -3,6 +3,8 @@ package types
 import (
 	"encoding"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 // TrimmedString stores a string normalized by trimming leading/trailing whitespace
@@ -49,3 +51,17 @@ func (s LowerString) String() string { return string(s) }
 
 // String returns the upper-cased string value
 func (s UpperString) String() string { return string(s) }
+
+// NormalizeStringSlice trims whitespace, removes empty values, deduplicates,
+// and returns nil when the result is empty.
+func NormalizeStringSlice(values []string) []string {
+	result := lo.Uniq(lo.FilterMap(values, func(value string, _ int) (string, bool) {
+		trimmed := strings.TrimSpace(value)
+		return trimmed, trimmed != ""
+	}))
+	if len(result) == 0 {
+		return nil
+	}
+
+	return result
+}

@@ -3,7 +3,6 @@ package gcpscc
 import (
 	"context"
 	"encoding/json"
-	"maps"
 	"strings"
 	"time"
 
@@ -18,7 +17,6 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -33,6 +31,8 @@ const (
 	requestedTokenType       = "urn:ietf:params:oauth:token-type:access_token" //nolint:gosec
 	defaultScope             = "https://www.googleapis.com/auth/cloud-platform"
 	defaultSubjectTokenType  = "urn:ietf:params:oauth:token-type:id_token" //nolint:gosec
+	projectScopeAll          = "all"
+	projectScopeSpecific     = "specific"
 	subjectTokenAttr         = "subject_token"
 	subjectTokenTypeAttr     = "subject_token_type"
 	minImpersonationLifetime = time.Minute
@@ -45,30 +45,18 @@ const ClientSecurityCenter types.ClientName = "securitycenter.v2"
 
 const securityCenterDescription = "Google Cloud Security Command Center v2 client"
 
-var (
-	errSubjectTokenRequired   = ErrSubjectTokenRequired
-	errProjectIDRequired      = ErrProjectIDRequired
-	errAudienceRequired       = ErrAudienceRequired
-	errServiceAccountRequired = ErrServiceAccountRequired
-	errSourceIDRequired       = ErrSourceIDRequired
-	errCredentialMetadata     = ErrCredentialMetadataRequired
-	errAccessTokenMissing     = ErrAccessTokenMissing
-)
-
 var _ types.ClientProvider = (*Provider)(nil)
 
 // Provider implements the GCP SCC integration using workload identity federation.
 type Provider struct {
 	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
-	spec      config.ProviderSpec
 	defaults  workloadDefaults
 	stsClient func(ctx context.Context) (*stsv1.Service, error)
 }
 
 type workloadDefaults struct {
 	scopes            []string
-	tokenLifetime     time.Duration
 	audience          string
 	targetServiceAcct string
 	subjectTokenType  string
@@ -95,11 +83,6 @@ func newProvider(spec config.ProviderSpec) *Provider {
 		defaultScopes = []string{defaultScope}
 	}
 
-	lifetime := spec.GoogleWorkloadIdentity.TokenLifetime
-	if lifetime <= 0 {
-		lifetime = defaultImpersonationLife
-	}
-
 	subjectTokenType := spec.GoogleWorkloadIdentity.SubjectTokenType
 	if subjectTokenType == "" {
 		subjectTokenType = defaultSubjectTokenType
@@ -109,7 +92,6 @@ func newProvider(spec config.ProviderSpec) *Provider {
 
 	defaults := workloadDefaults{
 		scopes:            defaultScopes,
-		tokenLifetime:     clampLifetime(lifetime),
 		audience:          audience,
 		targetServiceAcct: targetServiceAcct,
 		subjectTokenType:  subjectTokenType,
@@ -123,7 +105,6 @@ func newProvider(spec config.ProviderSpec) *Provider {
 
 	return &Provider{
 		BaseProvider: providers.NewBaseProvider(TypeGCPSCC, caps, nil, nil),
-		spec:         spec,
 		defaults:     defaults,
 		stsClient: func(ctx context.Context) (*stsv1.Service, error) {
 			return stsv1.NewService(ctx)
@@ -144,16 +125,16 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	}
 
 	meta = meta.withDefaults(p.defaults)
-	if err := meta.validate(); err != nil {
-		return types.CredentialPayload{}, err
-	}
 
 	if meta.ServiceAccountKey != "" {
-		if _, err := serviceAccountCredentials(ctx, string(meta.ServiceAccountKey), meta.Scopes); err != nil {
+		if _, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes); err != nil {
 			return types.CredentialPayload{}, err
 		}
 
-		providerData := meta.persist(subject.Credential.Data.ProviderData)
+		providerData, err := auth.PersistMetadata(subject.Credential.Data.ProviderData, meta)
+		if err != nil {
+			return types.CredentialPayload{}, err
+		}
 
 		builder := types.NewCredentialBuilder(TypeGCPSCC).With(
 			types.WithCredentialKind(types.CredentialKindMetadata),
@@ -177,7 +158,10 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 		return types.CredentialPayload{}, err
 	}
 
-	providerData := meta.persist(subject.Credential.Data.ProviderData)
+	providerData, err := auth.PersistMetadata(subject.Credential.Data.ProviderData, meta)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
 
 	builder := types.NewCredentialBuilder(TypeGCPSCC).With(
 		types.WithCredentialKind(types.CredentialKindWorkload),
@@ -209,6 +193,13 @@ func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
 						"type":        "string",
 						"description": "Optional SCC source override (e.g. organizations/123/sources/456).",
 					},
+					"sourceIds": map[string]any{
+						"type":        "array",
+						"description": "Optional SCC source overrides for fan-out collection.",
+						"items": map[string]any{
+							"type": "string",
+						},
+					},
 				},
 			},
 		},
@@ -233,7 +224,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 	}
 
 	req := &stsv1.GoogleIdentityStsV1ExchangeTokenRequest{
-		Audience:           string(meta.Audience),
+		Audience:           meta.Audience.String(),
 		GrantType:          workloadGrantType,
 		RequestedTokenType: requestedTokenType,
 		Scope:              scope,
@@ -261,7 +252,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 
 	lifetime := clampLifetime(meta.tokenLifetime())
 	cfg := impersonate.CredentialsConfig{
-		TargetPrincipal: string(meta.ServiceAccountEmail),
+		TargetPrincipal: meta.ServiceAccountEmail.String(),
 		Scopes:          meta.Scopes,
 		Lifetime:        lifetime,
 	}
@@ -293,7 +284,7 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 
 	opts := append([]option.ClientOption{}, clientOpts...)
 	if meta.ProjectID != "" {
-		opts = append(opts, option.WithQuotaProject(string(meta.ProjectID)))
+		opts = append(opts, option.WithQuotaProject(meta.ProjectID.String()))
 	}
 
 	client, err := cloudscc.NewClient(ctx, opts...)
@@ -308,11 +299,11 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, token *oauth2.Token) ([]option.ClientOption, error) {
 	logger := logx.FromContext(ctx).With().
 		Str("provider", string(TypeGCPSCC)).
-		Str("projectId", string(meta.ProjectID)).
+		Str("projectId", meta.ProjectID.String()).
 		Logger()
 
 	if meta.ServiceAccountKey != "" {
-		creds, err := serviceAccountCredentials(ctx, string(meta.ServiceAccountKey), meta.Scopes)
+		creds, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes)
 		if err != nil {
 			logger.Error().Err(err).Msg("gcpscc: failed to parse service account key for client")
 			return nil, err
@@ -338,12 +329,12 @@ func securityCenterClientOptions(ctx context.Context, meta credentialMetadata, t
 	}
 
 	logger.Error().Msg("gcpscc: service account key and oauth token missing for client build")
-	return nil, errAccessTokenMissing
+	return nil, ErrAccessTokenMissing
 }
 
 // serviceAccountCredentials parses and validates a service account key
-func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []string) (*google.Credentials, error) {
-	key := auth.NormalizeServiceAccountKey(rawKey)
+func serviceAccountCredentials[T ~string](ctx context.Context, rawKey T, scopes []string) (*google.Credentials, error) {
+	key := auth.NormalizeServiceAccountKey(string(rawKey))
 	if key == "" {
 		return nil, ErrServiceAccountKeyInvalid
 	}
@@ -364,31 +355,37 @@ func serviceAccountCredentials(ctx context.Context, rawKey string, scopes []stri
 // credentialMetadata captures the persisted SCC metadata supplied during activation.
 type credentialMetadata struct {
 	// ProjectID is the GCP project identifier
-	ProjectID types.TrimmedString `json:"projectId"`
+	ProjectID types.TrimmedString `json:"projectId,omitempty"`
 	// OrganizationID is the GCP organization identifier
-	OrganizationID types.TrimmedString `json:"organizationId"`
+	OrganizationID types.TrimmedString `json:"organizationId,omitempty"`
+	// ProjectScope controls whether collection runs across all accessible projects or a specific set
+	ProjectScope types.LowerString `json:"projectScope,omitempty"`
+	// ProjectIDs lists explicit project IDs used when projectScope is specific
+	ProjectIDs []string `json:"projectIds,omitempty"`
 	// WorkloadIdentityProvider is the workload identity provider resource name
-	WorkloadIdentityProvider types.TrimmedString `json:"workloadIdentityProvider"`
+	WorkloadIdentityProvider types.TrimmedString `json:"workloadIdentityProvider,omitempty"`
 	// Audience is the STS audience used for token exchange
-	Audience types.TrimmedString `json:"audience"`
+	Audience types.TrimmedString `json:"audience,omitempty"`
 	// ServiceAccountEmail is the target service account to impersonate
-	ServiceAccountEmail types.TrimmedString `json:"serviceAccountEmail"`
+	ServiceAccountEmail types.TrimmedString `json:"serviceAccountEmail,omitempty"`
 	// SourceID is the SCC source identifier used for findings
-	SourceID types.TrimmedString `json:"sourceId"`
+	SourceID types.TrimmedString `json:"sourceId,omitempty"`
+	// SourceIDs optionally lists multiple SCC source identifiers for fan-out collection
+	SourceIDs []string `json:"sourceIds,omitempty"`
 	// Scopes lists OAuth scopes requested for access tokens
-	Scopes []string `json:"scopes"`
+	Scopes []string `json:"scopes,omitempty"`
 	// TokenLifetime configures the impersonation token lifetime
-	TokenLifetime types.TrimmedString `json:"tokenLifetime"`
+	TokenLifetime types.TrimmedString `json:"tokenLifetime,omitempty"`
 	// AudienceHint provides an optional audience hint for metadata
-	AudienceHint types.TrimmedString `json:"audienceHint"`
+	AudienceHint types.TrimmedString `json:"audienceHint,omitempty"`
 	// WorkloadPoolProject identifies the billing project for STS exchanges
-	WorkloadPoolProject types.TrimmedString `json:"workloadPoolProject"`
+	WorkloadPoolProject types.TrimmedString `json:"workloadPoolProject,omitempty"`
 	// FindingFilter holds the default SCC findings filter
-	FindingFilter types.TrimmedString `json:"findingFilter"`
+	FindingFilter types.TrimmedString `json:"findingFilter,omitempty"`
 	// SubjectToken stores the subject token for STS exchange
-	SubjectToken types.TrimmedString `json:"subjectToken"`
+	SubjectToken types.TrimmedString `json:"subjectToken,omitempty"`
 	// ServiceAccountKey stores the service account key JSON
-	ServiceAccountKey types.TrimmedString `json:"serviceAccountKey"`
+	ServiceAccountKey types.TrimmedString `json:"serviceAccountKey,omitempty"`
 }
 
 // withDefaults applies provider defaults to missing metadata values
@@ -406,63 +403,12 @@ func (m credentialMetadata) withDefaults(defaults workloadDefaults) credentialMe
 	return result
 }
 
-// validate ensures required metadata values are present
-func (m credentialMetadata) validate() error {
-	if m.ProjectID == "" {
-		return errProjectIDRequired
-	}
-
-	if m.ServiceAccountKey != "" {
-		return nil
-	}
-
-	switch {
-	case m.Audience == "":
-		return errAudienceRequired
-	case m.ServiceAccountEmail == "":
-		return errServiceAccountRequired
-	}
-	return nil
-}
-
-// persist merges metadata into the existing provider data map
-func (m credentialMetadata) persist(existing map[string]any) map[string]any {
-	out := map[string]any{}
-	if len(existing) > 0 {
-		out = maps.Clone(existing)
-	}
-
-	setIfNotEmpty(out, "projectId", m.ProjectID)
-	setIfNotEmpty(out, "organizationId", m.OrganizationID)
-	setIfNotEmpty(out, "workloadIdentityProvider", m.WorkloadIdentityProvider)
-	setIfNotEmpty(out, "audience", m.Audience)
-	setIfNotEmpty(out, "serviceAccountEmail", m.ServiceAccountEmail)
-	setIfNotEmpty(out, "sourceId", m.SourceID)
-	setIfNotEmpty(out, "audienceHint", m.AudienceHint)
-	setIfNotEmpty(out, "workloadPoolProject", m.WorkloadPoolProject)
-	setIfNotEmpty(out, "findingFilter", m.FindingFilter)
-	setIfNotEmpty(out, "serviceAccountKey", m.ServiceAccountKey)
-	if len(m.Scopes) > 0 {
-		out["scopes"] = append([]string(nil), m.Scopes...)
-	}
-	if m.TokenLifetime != "" {
-		out["tokenLifetime"] = string(m.TokenLifetime)
-	}
-
-	// Persist subject token only when explicitly supplied to allow autonomous refresh.
-	if m.SubjectToken != "" {
-		out["subjectToken"] = string(m.SubjectToken)
-	}
-
-	return out
-}
-
 // tokenLifetime parses the configured token lifetime
 func (m credentialMetadata) tokenLifetime() time.Duration {
 	if m.TokenLifetime == "" {
 		return 0
 	}
-	dur, err := time.ParseDuration(string(m.TokenLifetime))
+	dur, err := time.ParseDuration(m.TokenLifetime.String())
 	if err != nil {
 		return 0
 	}
@@ -472,16 +418,16 @@ func (m credentialMetadata) tokenLifetime() time.Duration {
 
 // metadataFromPayload decodes provider metadata from the credential payload
 func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, error) {
-	if payload.Data.ProviderData == nil {
-		return credentialMetadata{}, errCredentialMetadata
+	if len(payload.Data.ProviderData) == 0 {
+		return credentialMetadata{}, ErrCredentialMetadataRequired
 	}
 
-	var meta credentialMetadata
-	if err := operations.DecodeConfig(payload.Data.ProviderData, &meta); err != nil {
+	meta, err := auth.ExtractMetadata[credentialMetadata](payload)
+	if err != nil {
 		return credentialMetadata{}, ErrMetadataDecode
 	}
 
-	return meta.normalize(), nil
+	return meta.applyDefaults(), nil
 }
 
 // resolveSubjectToken selects the subject token and token type for STS exchange
@@ -489,11 +435,11 @@ func resolveSubjectToken(subject types.CredentialSubject, meta credentialMetadat
 	if attr := subject.Attributes[subjectTokenAttr]; attr != "" {
 		token = attr
 	} else {
-		token = string(meta.SubjectToken)
+		token = meta.SubjectToken.String()
 	}
 
 	if token == "" {
-		return "", "", errSubjectTokenRequired
+		return "", "", ErrSubjectTokenRequired
 	}
 
 	if attrType := subject.Attributes[subjectTokenTypeAttr]; attrType != "" {
@@ -512,7 +458,7 @@ func buildSTSOptions(meta credentialMetadata) (string, error) {
 	}
 
 	payload := map[string]string{
-		"userProject": string(meta.WorkloadPoolProject),
+		"userProject": meta.WorkloadPoolProject.String(),
 	}
 
 	encoded, err := json.Marshal(payload)
@@ -528,57 +474,18 @@ func clampLifetime(value time.Duration) time.Duration {
 	if value <= 0 {
 		return defaultImpersonationLife
 	}
-	if value < minImpersonationLifetime {
-		return minImpersonationLifetime
-	}
-	if value > maxImpersonationLifetime {
-		return maxImpersonationLifetime
-	}
-	return value
+	return lo.Clamp(value, minImpersonationLifetime, maxImpersonationLifetime)
 }
 
-// setIfNotEmpty writes a key when the value is non-empty
-func setIfNotEmpty[T ~string](target map[string]any, key string, value T) {
-	if value == "" {
-		return
-	}
-	target[key] = string(value)
-}
-
-// normalize cleans up metadata values for persistence
-func (m credentialMetadata) normalize() credentialMetadata {
+// applyDefaults fills in fallback values, deduplicates slice fields, and normalizes the service account key.
+func (m credentialMetadata) applyDefaults() credentialMetadata {
 	normalized := m
-	normalized.ServiceAccountKey = types.TrimmedString(auth.NormalizeServiceAccountKey(string(normalized.ServiceAccountKey)))
-	normalized.Scopes = normalizeScopes(normalized.Scopes)
+	if normalized.ProjectScope == "" {
+		normalized.ProjectScope = types.LowerString(projectScopeAll)
+	}
+	normalized.ProjectIDs = types.NormalizeStringSlice(normalized.ProjectIDs)
+	normalized.SourceIDs = types.NormalizeStringSlice(normalized.SourceIDs)
+	normalized.ServiceAccountKey = types.TrimmedString(auth.NormalizeServiceAccountKey(normalized.ServiceAccountKey.String()))
+	normalized.Scopes = types.NormalizeStringSlice(normalized.Scopes)
 	return normalized
-}
-
-// normalizeScopes trims, flattens, and de-duplicates scope values
-func normalizeScopes(scopes []string) []string {
-	if len(scopes) == 0 {
-		return nil
-	}
-
-	out := make([]string, 0, len(scopes))
-	for _, scope := range scopes {
-		if scope == "" {
-			continue
-		}
-
-		if strings.HasPrefix(scope, "[") && strings.HasSuffix(scope, "]") {
-			var decoded []string
-			if err := json.Unmarshal([]byte(scope), &decoded); err == nil {
-				out = append(out, normalizeScopes(decoded)...)
-				continue
-			}
-		}
-
-		out = append(out, scope)
-	}
-
-	if len(out) == 0 {
-		return nil
-	}
-
-	return lo.Uniq(out)
 }

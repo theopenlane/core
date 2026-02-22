@@ -3,9 +3,10 @@
   "displayName": "Buildkite",
   "category": "ci",
   "authType": "apikey",
-  "active": true,
+  "active": false,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://buildkite.com/docs/apis/rest-api",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/buildkite/overview",
   "apiKey": {
     "keyLabel": "API Token",
     "headerName": "Authorization"
@@ -53,5 +54,6 @@
         "description": "Optional duration string indicating how frequently Buildkite metadata should be refreshed."
       }
     }
-  }
+  },
+  "description": "Collect Buildkite organization and pipeline context to support CI security and compliance posture reporting."
 }

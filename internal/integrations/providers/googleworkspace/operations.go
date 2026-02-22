@@ -15,10 +15,27 @@ const (
 	googleWorkspaceUsersOp  types.OperationName = "directory.sample_users"
 )
 
+type googleUserinfoResponse struct {
+	// Sub is the subject identifier for the user
+	Sub string `json:"sub"`
+	// Email is the primary email address
+	Email string `json:"email"`
+	// Name is the display name for the user
+	Name string `json:"name"`
+}
+
 // googleWorkspaceOperations returns the Google Workspace operations supported by this provider.
 func googleWorkspaceOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(googleWorkspaceHealthOp, "Call Google OAuth userinfo to verify the workspace token.", ClientGoogleWorkspaceAPI, runGoogleWorkspaceHealth),
+		operations.HealthOperation(googleWorkspaceHealthOp, "Call Google OAuth userinfo to verify the workspace token.", ClientGoogleWorkspaceAPI,
+			operations.HealthCheckRunner(operations.TokenTypeOAuth, "https://www.googleapis.com/oauth2/v3/userinfo", "Google userinfo failed",
+				func(resp googleUserinfoResponse) (string, map[string]any) {
+					return fmt.Sprintf("Google token valid for %s", resp.Email), map[string]any{
+						"sub":   resp.Sub,
+						"email": resp.Email,
+						"name":  resp.Name,
+					}
+				})),
 		{
 			Name:        googleWorkspaceUsersOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -27,38 +44,6 @@ func googleWorkspaceOperations() []types.OperationDescriptor {
 			Run:         runGoogleWorkspaceUsers,
 		},
 	}
-}
-
-// runGoogleWorkspaceHealth validates the OAuth token with userinfo
-func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	var userinfo struct {
-		// Sub is the subject identifier for the user
-		Sub string `json:"sub"`
-		// Email is the primary email address
-		Email string `json:"email"`
-		// Name is the display name for the user
-		Name string `json:"name"`
-	}
-
-	endpoint := "https://www.googleapis.com/oauth2/v3/userinfo"
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &userinfo); err != nil {
-		return operations.OperationFailure("Google userinfo failed", err), err
-	}
-
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Google token valid for %s", userinfo.Email),
-		Details: map[string]any{
-			"sub":   userinfo.Sub,
-			"email": userinfo.Email,
-			"name":  userinfo.Name,
-		},
-	}, nil
 }
 
 // runGoogleWorkspaceUsers returns a small sample of directory users for posture checks.
@@ -87,7 +72,7 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 	}
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return operations.OperationFailure("Directory users fetch failed", err), err
+		return operations.OperationFailure("Directory users fetch failed", err, nil)
 	}
 
 	samples := make([]map[string]any, 0, len(resp.Users))

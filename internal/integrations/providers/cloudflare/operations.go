@@ -48,15 +48,13 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 	}
 	endpoint := "https://api.cloudflare.com/client/v4/user/tokens/verify"
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, &resp); err != nil {
-		return operations.OperationFailure("Cloudflare token verification failed", err), err
+		return operations.OperationFailure("Cloudflare token verification failed", err, nil)
 	}
 
 	if !resp.Success {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Cloudflare token verification returned errors",
-			Details: map[string]any{"errors": resp.Errors},
-		}, ErrTokenVerificationFailed
+		return operations.OperationFailure("Cloudflare token verification returned errors", ErrTokenVerificationFailed, map[string]any{
+			"errors": resp.Errors,
+		})
 	}
 
 	return types.OperationResult{

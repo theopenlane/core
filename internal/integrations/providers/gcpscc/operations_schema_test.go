@@ -16,6 +16,7 @@ func TestSecurityCenterFindingsConfigSchema(t *testing.T) {
 	props := schematest.Properties(t, schema)
 	for _, key := range []string{
 		"sourceId",
+		"sourceIds",
 		"filter",
 		"page_size",
 		"max_findings",

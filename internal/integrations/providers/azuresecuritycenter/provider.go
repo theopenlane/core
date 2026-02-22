@@ -3,11 +3,11 @@ package azuresecuritycenter
 import (
 	"context"
 	"fmt"
-	"maps"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -24,7 +24,7 @@ const (
 type Provider struct {
 	// BaseProvider provides shared provider metadata
 	providers.BaseProvider
-	tokenEndpoint func(tenantID string) string
+	tokenEndpoint func(tenantID types.TrimmedString) string
 }
 
 // newProvider constructs the Azure Security Center provider from a spec.
@@ -51,12 +51,11 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint exchanges stored client credentials for an Azure access token.
 func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	meta := cloneProviderData(subject.Credential.Data.ProviderData)
-	if len(meta) == 0 {
+	if len(subject.Credential.Data.ProviderData) == 0 {
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	credentials, err := azureSecurityCenterMetadataFromMap(meta)
+	credentials, err := azureSecurityCenterMetadataFromMap(subject.Credential.Data.ProviderData)
 	if err != nil {
 		return types.CredentialPayload{}, err
 	}
@@ -66,7 +65,10 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 		return types.CredentialPayload{}, err
 	}
 
-	providerData := credentials.persist(meta)
+	providerData, err := auth.PersistMetadata(subject.Credential.Data.ProviderData, credentials)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
 	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithCredentialKind(types.CredentialKindOAuthToken),
 		types.WithOAuthToken(token),
@@ -87,8 +89,8 @@ func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMet
 
 	scopeList := meta.scopes(scopes)
 	cfg := clientcredentials.Config{
-		ClientID:     meta.ClientID,
-		ClientSecret: meta.ClientSecret,
+		ClientID:     meta.ClientID.String(),
+		ClientSecret: meta.ClientSecret.String(),
 		TokenURL:     tokenURL,
 		Scopes:       scopeList,
 		AuthStyle:    oauth2.AuthStyleInParams,
@@ -103,42 +105,34 @@ func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMet
 }
 
 // defaultAzureTokenEndpoint builds the Azure token endpoint for the tenant.
-func defaultAzureTokenEndpoint(tenantID string) string {
+func defaultAzureTokenEndpoint(tenantID types.TrimmedString) string {
 	if tenantID == "" {
 		return ""
 	}
 	return fmt.Sprintf(azureTokenURLTemplate, tenantID)
 }
 
-// cloneProviderData returns a shallow copy of provider metadata.
-func cloneProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
-		return nil
-	}
-	return maps.Clone(data)
-}
-
 type azureSecurityCenterMetadata struct {
 	// TenantID identifies the Azure tenant
-	TenantID string `json:"tenantId"`
+	TenantID types.TrimmedString `json:"tenantId,omitempty"`
 	// ClientID identifies the Azure application
-	ClientID string `json:"clientId"`
+	ClientID types.TrimmedString `json:"clientId,omitempty"`
 	// ClientSecret holds the client credential secret
-	ClientSecret string `json:"clientSecret"`
+	ClientSecret types.TrimmedString `json:"clientSecret,omitempty"`
 	// SubscriptionID identifies the Azure subscription
-	SubscriptionID string `json:"subscriptionId"`
+	SubscriptionID types.TrimmedString `json:"subscriptionId,omitempty"`
 	// ResourceGroup scopes access to a resource group
-	ResourceGroup string `json:"resourceGroup"`
+	ResourceGroup types.TrimmedString `json:"resourceGroup,omitempty"`
 	// WorkspaceID identifies the Defender workspace
-	WorkspaceID string `json:"workspaceId"`
+	WorkspaceID types.TrimmedString `json:"workspaceId,omitempty"`
 	// Scope overrides the default OAuth scope
-	Scope string `json:"scope"`
+	Scope types.TrimmedString `json:"scope,omitempty"`
 }
 
 // azureSecurityCenterMetadataFromMap normalizes and validates provider metadata.
 func azureSecurityCenterMetadataFromMap(meta map[string]any) (azureSecurityCenterMetadata, error) {
 	var decoded azureSecurityCenterMetadata
-	if err := operations.DecodeConfig(meta, &decoded); err != nil {
+	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
 		return azureSecurityCenterMetadata{}, err
 	}
 
@@ -162,26 +156,8 @@ func (m azureSecurityCenterMetadata) scopes(overrides []string) []string {
 		return append([]string(nil), overrides...)
 	}
 	if m.Scope != "" {
-		return []string{m.Scope}
+		return []string{m.Scope.String()}
 	}
-	return []string{defaultAzureScope}
-}
 
-// persist merges normalized metadata back into the provider data map.
-func (m azureSecurityCenterMetadata) persist(base map[string]any) map[string]any {
-	out := maps.Clone(base)
-	out["tenantId"] = m.TenantID
-	out["clientId"] = m.ClientID
-	out["clientSecret"] = m.ClientSecret
-	out["subscriptionId"] = m.SubscriptionID
-	if m.ResourceGroup != "" {
-		out["resourceGroup"] = m.ResourceGroup
-	}
-	if m.WorkspaceID != "" {
-		out["workspaceId"] = m.WorkspaceID
-	}
-	if m.Scope != "" {
-		out["scope"] = m.Scope
-	}
-	return out
+	return []string{defaultAzureScope}
 }

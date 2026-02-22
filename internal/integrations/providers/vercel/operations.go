@@ -70,7 +70,7 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 	endpoint := "https://api.vercel.com/v4/projects?" + params.Encode()
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return operations.OperationFailure("Vercel projects fetch failed", err), err
+		return operations.OperationFailure("Vercel projects fetch failed", err, nil)
 	}
 
 	samples := make([]map[string]any, 0, len(resp.Projects))

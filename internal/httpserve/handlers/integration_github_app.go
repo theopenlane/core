@@ -69,12 +69,6 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	_, err = h.IntegrationStore.EnsureIntegration(userCtx, user.OrganizationID, github.TypeGitHubApp)
-	if err != nil {
-		logx.FromContext(userCtx).Error().Err(err).Str("org_id", user.OrganizationID).Msg("failed to ensure github app integration")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
 	state, err := h.generateOAuthState(user.OrganizationID, string(github.TypeGitHubApp))
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Msg("error generating github app state")
@@ -115,6 +109,9 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	if err := h.validateGitHubAppConfig(); err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
+	}
+	if h.IntegrationStore == nil {
+		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapiCtx)
 	}
 
 	req := ctx.Request()
@@ -174,8 +171,8 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
 	attrs := map[string]any{
-		"appId":          strings.TrimSpace(h.IntegrationGitHubApp.AppID),
-		"installationId": strings.TrimSpace(in.InstallationID),
+		"appId":          h.IntegrationGitHubApp.AppID,
+		"installationId": in.InstallationID,
 		"privateKey":     normalizeGitHubAppPrivateKey(h.IntegrationGitHubApp.PrivateKey),
 	}
 
@@ -287,8 +284,8 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID 
 		return errDBClientNotConfigured
 	}
 
-	appID := strings.TrimSpace(fmt.Sprint(attrs["appId"]))
-	installationID := strings.TrimSpace(fmt.Sprint(attrs["installationId"]))
+	appID, _ := attrs["appId"].(string)
+	installationID, _ := attrs["installationId"].(string)
 	if appID == "" || installationID == "" {
 		return ErrInvalidStateFormat
 	}

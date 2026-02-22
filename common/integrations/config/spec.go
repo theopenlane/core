@@ -16,10 +16,20 @@ type ProviderSpec struct {
 	DisplayName string `json:"displayName"`
 	// Category groups providers (code, collab, etc)
 	Category string `json:"category"`
+	// Description optionally describes the provider in the UI
+	Description string `json:"description,omitempty"`
 	// AuthType describes the authentication kind
 	AuthType types.AuthKind `json:"authType"`
+	// AuthStartPath is the integration API path to initiate provider authentication
+	AuthStartPath string `json:"authStartPath,omitempty"`
+	// AuthCallbackPath is the integration API callback path used to complete provider authentication
+	AuthCallbackPath string `json:"authCallbackPath,omitempty"`
 	// Active toggles provider availability
 	Active bool `json:"active"`
+	// Visible toggles provider visibility in the UI
+	Visible bool `json:"visible"`
+	// Tags define UI labels/pills rendered for the provider card
+	Tags []string `json:"tags,omitempty"`
 	// LogoURL references the logo asset
 	LogoURL string `json:"logoUrl"`
 	// DocsURL links to provider documentation
@@ -61,7 +71,7 @@ func (s ProviderSpec) ToProviderConfig() types.ProviderConfig {
 		Type:        s.ProviderType(),
 		Auth:        s.AuthType,
 		DisplayName: s.DisplayName,
-		Description: "",
+		Description: s.Description,
 		Category:    s.Category,
 		DocsURL:     s.DocsURL,
 		LogoURL:     s.LogoURL,
@@ -163,6 +173,8 @@ type GitHubAppSpec struct {
 	BaseURL string `json:"baseUrl,omitempty"`
 	// TokenTTL optionally indicates desired installation token lifetime
 	TokenTTL time.Duration `json:"tokenTtl,omitempty"`
+	// AppSlug optionally exposes the configured app slug for UI metadata
+	AppSlug string `json:"appSlug,omitempty"`
 }
 
 // AWSFederationSpec captures AssumeRoleWithWebIdentity defaults

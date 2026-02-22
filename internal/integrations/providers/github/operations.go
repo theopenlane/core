@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -18,7 +20,6 @@ const (
 
 	defaultPerPage = 50
 	maxPerPage     = 100
-	maxSampleSize  = 5
 
 	defaultAlertState = "open"
 	githubAPIVersion  = "2022-11-28"
@@ -126,7 +127,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 			var resp githubInstallationRepositoriesResponse
 			endpoint := githubAPIBaseURL + "installation/repositories?per_page=1"
 			if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-				return operations.OperationFailure("GitHub App installation lookup failed", err), err
+				return operations.OperationFailure("GitHub App installation lookup failed", err, nil)
 			}
 
 			return types.OperationResult{
@@ -140,7 +141,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 			Pagination: operations.Pagination{PerPage: 1},
 		})
 		if err != nil {
-			return operations.OperationFailure("GitHub App installation lookup failed", err), err
+			return operations.OperationFailure("GitHub App installation lookup failed", err, nil)
 		}
 
 		return types.OperationResult{
@@ -152,7 +153,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 
 	var user githubUserResponse
 	if err := fetchGitHubResource(ctx, client, token, "user", nil, &user); err != nil {
-		return operations.OperationFailure("GitHub user lookup failed", err), err
+		return operations.OperationFailure("GitHub user lookup failed", err, nil)
 	}
 
 	details := map[string]any{
@@ -175,7 +176,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		return types.OperationResult{}, err
 	}
 
-	repoConfig, err := decodeGitHubRepoConfig(input.Config)
+	repoConfig, err := operations.Decode[githubRepoOperationConfig](input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -188,21 +189,17 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	var repos []githubRepoResponse
 	repos, err = listGitHubReposForProvider(ctx, client, token, input.Provider, config)
 	if err != nil {
-		return operations.OperationFailure("GitHub repository collection failed", err), err
+		return operations.OperationFailure("GitHub repository collection failed", err, nil)
 	}
 
-	samples := make([]map[string]any, 0, min(maxSampleSize, len(repos)))
-	for _, repo := range repos {
-		if len(samples) >= cap(samples) {
-			break
-		}
-		samples = append(samples, map[string]any{
+	samples := lo.Map(repos[:min(len(repos), operations.DefaultSampleSize)], func(repo githubRepoResponse, _ int) map[string]any {
+		return map[string]any{
 			"name":       repo.Name,
 			"private":    repo.Private,
 			"updated_at": repo.UpdatedAt,
 			"url":        repo.HTMLURL,
-		})
-	}
+		}
+	})
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
@@ -223,12 +220,7 @@ func fetchGitHubResource(ctx context.Context, client *auth.AuthenticatedClient, 
 		}
 	}
 
-	headers := map[string]string{
-		"Accept":               "application/vnd.github+json",
-		"X-GitHub-Api-Version": githubAPIVersion,
-	}
-
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, out); err != nil {
+	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, githubClientHeaders, out); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
 			return ErrAPIRequest
 		}
@@ -249,14 +241,4 @@ func clampPerPage(value int) int {
 	}
 
 	return value
-}
-
-// decodeGitHubRepoConfig decodes repo collection config into a typed struct.
-func decodeGitHubRepoConfig(config map[string]any) (githubRepoOperationConfig, error) {
-	var decoded githubRepoOperationConfig
-	if err := operations.DecodeConfig(config, &decoded); err != nil {
-		return decoded, err
-	}
-
-	return decoded, nil
 }

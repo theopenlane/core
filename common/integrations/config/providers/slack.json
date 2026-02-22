@@ -3,9 +3,12 @@
   "displayName": "Slack",
   "category": "collab",
   "authType": "oauth2",
+  "authStartPath": "/v1/integrations/oauth/start",
+  "authCallbackPath": "/v1/integrations/oauth/callback",
   "active": true,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://api.slack.com/authentication/oauth-v2",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/slack/overview",
   "oauth": {
     "clientId": "${SLACK_CLIENT_ID}",
     "clientSecret": "${SLACK_CLIENT_SECRET}",
@@ -28,5 +31,6 @@
   },
   "persistence": {
     "storeRefreshToken": true
-  }
+  },
+  "description": "Integrate with Slack to verify workspace posture and send operational or compliance notifications to channels."
 }

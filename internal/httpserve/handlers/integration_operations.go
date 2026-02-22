@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	echo "github.com/theopenlane/echox"
@@ -17,7 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// RunIntegrationOperation queues a provider-published operation for async execution
+// RunIntegrationOperation queues provider operations for async execution.
+// Health checks are executed inline to return immediate validation status to callers.
 func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationOperationPayload, openapi.IntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
@@ -41,10 +43,59 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 
 	if h.WorkflowEngine == nil {
-		return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
+		if operationName != defaultHealthOperation {
+			return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
+		}
 	}
 
 	queueCtx := context.WithoutCancel(requestCtx)
+
+	if operationName == defaultHealthOperation {
+		if h.IntegrationOperations == nil {
+			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
+		}
+
+		result, err := h.IntegrationOperations.Run(queueCtx, types.OperationRequest{
+			OrgID:    user.OrganizationID,
+			Provider: providerType,
+			Name:     operationName,
+			Config:   req.Body.Config,
+			Force:    req.Body.Force,
+		})
+		if err != nil {
+			if errors.Is(err, keystore.ErrOperationNotRegistered) {
+				return h.BadRequest(ctx, err, openapiCtx)
+			}
+			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+		}
+
+		out := openapi.IntegrationOperationResponse{
+			Reply:     rout.Reply{Success: result.Status == types.OperationStatusOK},
+			Provider:  string(providerType),
+			Operation: string(operationName),
+			Status:    string(result.Status),
+			Summary:   result.Summary,
+			Details:   result.Details,
+		}
+
+		if out.Status == "" {
+			out.Status = string(types.OperationStatusUnknown)
+		}
+		if strings.TrimSpace(out.Summary) == "" {
+			out.Summary = "Health check completed"
+		}
+
+		if result.Status != types.OperationStatusOK {
+			healthErr := ErrProviderHealthCheckFailed
+			if strings.TrimSpace(result.Summary) != "" {
+				healthErr = fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, result.Summary)
+			}
+			return h.BadRequest(ctx, wrapIntegrationError("validate", healthErr), openapiCtx)
+		}
+
+		return h.Success(ctx, out)
+	}
+
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
 		OrgID:     user.OrganizationID,
 		Provider:  providerType,

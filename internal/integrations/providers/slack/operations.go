@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -135,15 +137,13 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 
 	var resp slackAuthTestResponse
 	if err := slackAPIGet(ctx, client, token, "auth.test", nil, &resp); err != nil {
-		return operations.OperationFailure("Slack auth.test failed", err), err
+		return operations.OperationFailure("Slack auth.test failed", err, nil)
 	}
 
 	if !resp.OK {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Slack auth.test returned error",
-			Details: map[string]any{"error": resp.Error},
-		}, ErrSlackAPIError
+		return operations.OperationFailure("Slack auth.test returned error", ErrSlackAPIError, map[string]any{
+			"error": resp.Error,
+		})
 	}
 
 	return types.OperationResult{
@@ -166,15 +166,13 @@ func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (typ
 
 	var resp slackTeamInfoResponse
 	if err := slackAPIGet(ctx, client, token, "team.info", nil, &resp); err != nil {
-		return operations.OperationFailure("Slack team.info failed", err), err
+		return operations.OperationFailure("Slack team.info failed", err, nil)
 	}
 
 	if !resp.OK {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Slack team.info returned error",
-			Details: map[string]any{"error": resp.Error},
-		}, ErrSlackAPIError
+		return operations.OperationFailure("Slack team.info returned error", ErrSlackAPIError, map[string]any{
+			"error": resp.Error,
+		})
 	}
 
 	team := resp.Team
@@ -208,15 +206,12 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, err
 	}
 
-	var cfg slackMessageConfig
-	if err := operations.DecodeConfig(input.Config, &cfg); err != nil {
+	cfg, err := operations.Decode[slackMessageConfig](input.Config)
+	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	channel := string(cfg.Channel)
-	if channel == "" {
-		channel = string(cfg.ChannelID)
-	}
+	channel := lo.CoalesceOrEmpty(cfg.Channel, cfg.ChannelID).String()
 	if channel == "" {
 		return types.OperationResult{}, ErrSlackChannelMissing
 	}
@@ -225,13 +220,7 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		"channel": channel,
 	}
 
-	text := string(cfg.Text)
-	if text == "" {
-		text = string(cfg.Message)
-	}
-	if text == "" {
-		text = string(cfg.Body)
-	}
+	text := lo.CoalesceOrEmpty(cfg.Text, cfg.Message, cfg.Body).String()
 	if text != "" {
 		payload["text"] = text
 	}
@@ -243,7 +232,7 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		payload["attachments"] = cfg.Attachments
 	}
 	if cfg.ThreadTS != "" {
-		payload["thread_ts"] = string(cfg.ThreadTS)
+		payload["thread_ts"] = cfg.ThreadTS.String()
 	}
 	if cfg.UnfurlLinks != nil {
 		payload["unfurl_links"] = cfg.UnfurlLinks
@@ -263,15 +252,13 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 	var resp slackMessageResponse
 	endpoint := "https://slack.com/api/chat.postMessage"
 	if err := auth.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
-		return operations.OperationFailure("Slack chat.postMessage failed", err), err
+		return operations.OperationFailure("Slack chat.postMessage failed", err, nil)
 	}
 
 	if !resp.OK {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Slack chat.postMessage returned error",
-			Details: map[string]any{"error": resp.Error},
-		}, ErrSlackAPIError
+		return operations.OperationFailure("Slack chat.postMessage returned error", ErrSlackAPIError, map[string]any{
+			"error": resp.Error,
+		})
 	}
 
 	return types.OperationResult{

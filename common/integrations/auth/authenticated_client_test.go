@@ -7,14 +7,14 @@ import (
 	"testing"
 )
 
-func TestNewAuthenticatedClient_ClonesHeadersAndTrimsToken(t *testing.T) {
+func TestNewAuthenticatedClient_ClonesHeadersAndKeepsToken(t *testing.T) {
 	headers := map[string]string{
 		"X-Test": "one",
 	}
 
 	client := NewAuthenticatedClient("  token ", headers)
-	if client.BearerToken != "token" {
-		t.Fatalf("expected trimmed token, got %q", client.BearerToken)
+	if client.BearerToken != "  token " {
+		t.Fatalf("expected token to be preserved, got %q", client.BearerToken)
 	}
 
 	headers["X-Test"] = "two"

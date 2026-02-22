@@ -172,6 +172,8 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 		return ErrBuilderMismatch
 	}
 
+	r.configs[providerType] = spec
+
 	provider, err := builder.Build(ctx, spec)
 	if err != nil {
 		return ErrProviderBuildFailed
@@ -180,7 +182,6 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 		return ErrProviderNil
 	}
 
-	r.configs[providerType] = spec
 	r.providers[providerType] = provider
 
 	if clientProvider, ok := provider.(types.ClientProvider); ok {

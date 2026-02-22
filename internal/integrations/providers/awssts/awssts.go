@@ -2,7 +2,8 @@ package awssts
 
 import (
 	"context"
-	"maps"
+
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
@@ -51,6 +52,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 			}
 
 			clients := operations.SanitizeClientDescriptors(provider, cfg.clients)
+
 			return &Provider{
 				BaseProvider: providers.NewBaseProvider(
 					provider,
@@ -85,48 +87,16 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	var decoded awsSTSMetadata
-	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
+	decoded, err := awsSTSMetadataFromMap(meta)
+	if err != nil {
 		return types.CredentialPayload{}, err
 	}
 
-	if decoded.RoleARN == "" {
-		return types.CredentialPayload{}, ErrRoleARNRequired
-	}
-	if decoded.Region == "" {
-		return types.CredentialPayload{}, ErrRegionRequired
-	}
+	creds := decoded.credentials()
 
-	sanitized := maps.Clone(meta)
-	sanitized["roleArn"] = decoded.RoleARN
-	sanitized["region"] = decoded.Region
-
-	creds := auth.AWSCredentials{
-		AccessKeyID:     decoded.AccessKeyID,
-		SecretAccessKey: decoded.SecretAccessKey,
-		SessionToken:    decoded.SessionToken,
-	}
-
-	if decoded.ExternalID != "" {
-		sanitized["externalId"] = decoded.ExternalID
-	}
-	if decoded.SessionName != "" {
-		sanitized["sessionName"] = decoded.SessionName
-	}
-	if decoded.SessionDuration != "" {
-		sanitized["sessionDuration"] = decoded.SessionDuration
-	}
-	if decoded.AccountID != "" {
-		sanitized["accountId"] = decoded.AccountID
-	}
-	if creds.AccessKeyID != "" {
-		sanitized["accessKeyId"] = creds.AccessKeyID
-	}
-	if creds.SecretAccessKey != "" {
-		sanitized["secretAccessKey"] = creds.SecretAccessKey
-	}
-	if creds.SessionToken != "" {
-		sanitized["sessionToken"] = creds.SessionToken
+	sanitized, err := auth.PersistMetadata(meta, decoded)
+	if err != nil {
+		return types.CredentialPayload{}, err
 	}
 
 	builder := types.NewCredentialBuilder(p.Type()).With(
@@ -144,21 +114,60 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 
 type awsSTSMetadata struct {
 	// RoleARN is the role ARN to assume
-	RoleARN string `json:"roleArn"`
+	RoleARN types.TrimmedString `json:"roleArn,omitempty"`
 	// Region is the AWS region for API calls
-	Region string `json:"region"`
+	Region types.TrimmedString `json:"region,omitempty"`
+	// HomeRegion is the Security Hub home region used for aggregated findings
+	HomeRegion types.TrimmedString `json:"homeRegion,omitempty"`
+	// LinkedRegions optionally limits collection to the provided regions
+	LinkedRegions []string `json:"linkedRegions,omitempty"`
+	// OrganizationID is the AWS Organizations identifier associated with this integration
+	OrganizationID types.TrimmedString `json:"organizationId,omitempty"`
+	// AccountScope indicates whether queries should run for all accessible accounts or a specific set
+	AccountScope types.LowerString `json:"accountScope,omitempty"`
+	// AccountIDs identifies the account IDs to query when accountScope is specific
+	AccountIDs []string `json:"accountIds,omitempty"`
 	// ExternalID is the optional external ID for role assumption
-	ExternalID string `json:"externalId"`
+	ExternalID types.TrimmedString `json:"externalId,omitempty"`
 	// SessionName is the optional session name for STS
-	SessionName string `json:"sessionName"`
+	SessionName types.TrimmedString `json:"sessionName,omitempty"`
 	// SessionDuration is the optional session duration string
-	SessionDuration string `json:"sessionDuration"`
+	SessionDuration types.TrimmedString `json:"sessionDuration,omitempty"`
 	// AccountID is the AWS account identifier
-	AccountID string `json:"accountId"`
+	AccountID types.TrimmedString `json:"accountId,omitempty"`
 	// AccessKeyID is the AWS access key ID
-	AccessKeyID string `json:"accessKeyId"`
+	AccessKeyID types.TrimmedString `json:"accessKeyId,omitempty"`
 	// SecretAccessKey is the AWS secret access key
-	SecretAccessKey string `json:"secretAccessKey"`
+	SecretAccessKey types.TrimmedString `json:"secretAccessKey,omitempty"`
 	// SessionToken is the AWS session token
-	SessionToken string `json:"sessionToken"`
+	SessionToken types.TrimmedString `json:"sessionToken,omitempty"`
+}
+
+func awsSTSMetadataFromMap(meta map[string]any) (awsSTSMetadata, error) {
+	var decoded awsSTSMetadata
+	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
+		return awsSTSMetadata{}, err
+	}
+
+	decoded.applyDefaults()
+
+	return decoded, nil
+}
+
+// applyDefaults fills in fallback values and deduplicates slice fields.
+func (m *awsSTSMetadata) applyDefaults() {
+	m.Region = lo.CoalesceOrEmpty(m.Region, m.HomeRegion)
+	m.HomeRegion = lo.CoalesceOrEmpty(m.HomeRegion, m.Region)
+	m.AccountScope = lo.CoalesceOrEmpty(m.AccountScope, types.LowerString(auth.AWSAccountScopeAll))
+
+	m.AccountIDs = types.NormalizeStringSlice(m.AccountIDs)
+	m.LinkedRegions = types.NormalizeStringSlice(m.LinkedRegions)
+}
+
+func (m awsSTSMetadata) credentials() auth.AWSCredentials {
+	return auth.AWSCredentials{
+		AccessKeyID:     m.AccessKeyID.String(),
+		SecretAccessKey: m.SecretAccessKey.String(),
+		SessionToken:    m.SessionToken.String(),
+	}
 }

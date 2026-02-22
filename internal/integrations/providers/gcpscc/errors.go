@@ -11,10 +11,6 @@ var (
 	ErrSubjectTokenRequired = errors.New("gcpscc: subject token required")
 	// ErrProjectIDRequired indicates the projectId is missing
 	ErrProjectIDRequired = errors.New("gcpscc: projectId required")
-	// ErrAudienceRequired indicates the audience is missing
-	ErrAudienceRequired = errors.New("gcpscc: audience required")
-	// ErrServiceAccountRequired indicates the service account email is missing
-	ErrServiceAccountRequired = errors.New("gcpscc: service account email required")
 	// ErrSourceIDRequired indicates the sourceId is missing
 	ErrSourceIDRequired = errors.New("gcpscc: sourceId required")
 	// ErrCredentialMetadataRequired indicates provider metadata is missing

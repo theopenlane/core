@@ -3,7 +3,10 @@ package operations
 import (
 	"strings"
 
+	"github.com/samber/lo"
+
 	commonhelpers "github.com/theopenlane/core/common/helpers"
+	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 )
 
@@ -67,27 +70,20 @@ func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string,
 	if len(overrides) == 0 {
 		return nil, nil
 	}
+
 	return commonhelpers.DeepCloneMap(overrides), nil
 }
 
 // parseOverrideKeys normalizes and deduplicates override keys
 func parseOverrideKeys(values []string) map[string]struct{} {
-	if len(values) == 0 {
+	normalized := types.NormalizeStringSlice(values)
+	if len(normalized) == 0 {
 		return nil
 	}
 
-	out := make(map[string]struct{}, len(values))
-	for _, item := range values {
-		item = strings.TrimSpace(item)
-		if item == "" {
-			continue
-		}
-		out[item] = struct{}{}
-	}
-	if len(out) == 0 {
-		return nil
-	}
-	return out
+	return lo.SliceToMap(normalized, func(item string) (string, struct{}) {
+		return item, struct{}{}
+	})
 }
 
 // operationTemplateFromConfig converts stored template config into an OperationTemplate
@@ -97,6 +93,7 @@ func operationTemplateFromConfig(template openapi.IntegrationOperationTemplate) 
 	if config == nil && overrides == nil {
 		return OperationTemplate{}, false
 	}
+
 	if config == nil {
 		config = map[string]any{}
 	}

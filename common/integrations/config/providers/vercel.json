@@ -3,9 +3,10 @@
   "displayName": "Vercel",
   "category": "devops",
   "authType": "apikey",
-  "active": true,
+  "active": false,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://vercel.com/docs/rest-api",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/vercel/overview",
   "apiKey": {
     "keyLabel": "API Token",
     "headerName": "Authorization"
@@ -67,5 +68,6 @@
         }
       }
     }
-  }
+  },
+  "description": "Collect Vercel project and deployment context to support devops posture and drift detection workflows."
 }

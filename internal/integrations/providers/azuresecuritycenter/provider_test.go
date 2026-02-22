@@ -77,8 +77,8 @@ func TestAzureSecurityCenterMint_ClientCredentials(t *testing.T) {
 	azureProvider, ok := provider.(*Provider)
 	require.True(t, ok)
 
-	var capturedTenant string
-	azureProvider.tokenEndpoint = func(tenantID string) string {
+	var capturedTenant types.TrimmedString
+	azureProvider.tokenEndpoint = func(tenantID types.TrimmedString) string {
 		capturedTenant = tenantID
 		return "https://example.com/token"
 	}
@@ -101,7 +101,7 @@ func TestAzureSecurityCenterMint_ClientCredentials(t *testing.T) {
 		Credential: payload,
 	})
 	require.NoError(t, err)
-	require.Equal(t, "tenant-123", capturedTenant)
+	require.Equal(t, types.TrimmedString("tenant-123"), capturedTenant)
 	require.NotNil(t, result.Token)
 	require.Equal(t, "token-value", result.Token.AccessToken)
 	require.Equal(t, "Bearer", result.Token.TokenType)

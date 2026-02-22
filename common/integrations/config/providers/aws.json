@@ -4,8 +4,9 @@
   "category": "cloud",
   "authType": "aws_sts",
   "active": true,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/aws/overview",
   "awsSts": {
     "sessionName": "openlane-aws",
     "duration": "3600s",
@@ -19,7 +20,27 @@
     "additionalProperties": false,
     "required": [
       "roleArn",
-      "region"
+      "externalId",
+      "homeRegion"
+    ],
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "accountScope": {
+              "const": "specific"
+            }
+          },
+          "required": [
+            "accountScope"
+          ]
+        },
+        "then": {
+          "required": [
+            "accountIds"
+          ]
+        }
+      }
     ],
     "properties": {
       "alias": {
@@ -30,18 +51,55 @@
       "roleArn": {
         "type": "string",
         "title": "IAM Role ARN",
-        "description": "Role assumed to query AWS services."
+        "description": "Cross-account role Openlane should assume in the tenant environment."
       },
       "externalId": {
         "type": "string",
         "title": "External ID",
-        "description": "Optional external ID required by the delegated role."
+        "description": "External ID required in the tenant role trust policy to prevent confused deputy attacks."
+      },
+      "homeRegion": {
+        "type": "string",
+        "title": "Security Hub Home Region",
+        "description": "Primary AWS region where Security Hub aggregation is managed.",
+        "default": "us-east-1"
       },
       "region": {
         "type": "string",
-        "title": "Default Region",
-        "description": "AWS region used for service queries.",
+        "title": "AWS Region (Legacy)",
+        "description": "Legacy alias for home region; use Security Hub Home Region when possible.",
         "default": "us-east-1"
+      },
+      "linkedRegions": {
+        "type": "array",
+        "title": "Linked Regions",
+        "description": "Optional list of regions to filter findings by region.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "organizationId": {
+        "type": "string",
+        "title": "AWS Organization ID",
+        "description": "Optional AWS Organizations identifier (for traceability and scoping)."
+      },
+      "accountScope": {
+        "type": "string",
+        "title": "Account Scope",
+        "description": "Use all accessible accounts from the delegated admin role, or limit to specific account IDs.",
+        "default": "all",
+        "enum": [
+          "all",
+          "specific"
+        ]
+      },
+      "accountIds": {
+        "type": "array",
+        "title": "Account IDs",
+        "description": "Required when Account Scope is set to specific.",
+        "items": {
+          "type": "string"
+        }
       },
       "sessionDuration": {
         "type": "string",
@@ -56,17 +114,19 @@
       "accessKeyId": {
         "type": "string",
         "title": "Access Key ID",
-        "description": "Optional static credentials if role assumption is not available."
+        "description": "Optional source credential key when Openlane cannot use runtime IAM credentials."
       },
       "secretAccessKey": {
         "type": "string",
         "title": "Secret Access Key",
-        "description": "Optional static credentials if role assumption is not available."
+        "description": "Optional source credential secret paired with Access Key ID.",
+        "secret": true
       },
       "sessionToken": {
         "type": "string",
         "title": "Session Token",
-        "description": "Optional session token paired with the static credentials."
+        "description": "Optional source session token when using temporary source credentials.",
+        "secret": true
       },
       "accountId": {
         "type": "string",
@@ -82,5 +142,6 @@
         }
       }
     }
-  }
+  },
+  "description": "Collect AWS security and compliance findings and posture from Security Hub and Audit Manager data."
 }

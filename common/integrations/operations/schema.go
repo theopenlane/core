@@ -1,9 +1,9 @@
 package operations
 
 import (
-	"encoding/json"
-
 	"github.com/invopop/jsonschema"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 var schemaReflector = &jsonschema.Reflector{
@@ -15,13 +15,8 @@ var schemaReflector = &jsonschema.Reflector{
 func SchemaFrom[T any]() map[string]any {
 	schema := schemaReflector.Reflect(new(T))
 
-	data, err := json.Marshal(schema)
+	out, err := jsonx.ToMap(schema)
 	if err != nil {
-		return nil
-	}
-
-	var out map[string]any
-	if err := json.Unmarshal(data, &out); err != nil {
 		return nil
 	}
 

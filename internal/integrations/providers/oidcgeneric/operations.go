@@ -39,7 +39,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 
 		var resp map[string]any
 		if err := auth.GetJSONWithClient(ctx, client, userInfoURL, token, nil, &resp); err != nil {
-			return operations.OperationFailure("OIDC userinfo call failed", err), err
+			return operations.OperationFailure("OIDC userinfo call failed", err, nil)
 		}
 
 		summary := "OIDC userinfo call succeeded"

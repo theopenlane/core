@@ -41,7 +41,7 @@ func ProposedValue(payload *MutationPayload, field string) (any, bool) {
 	return raw, true
 }
 
-// ProposedString returns a proposed field value as string when possible.
+// ProposedString returns a proposed field value as string when possible
 func ProposedString(payload *MutationPayload, field string) (string, bool) {
 	raw, ok := ProposedValue(payload, field)
 	if !ok {
@@ -51,7 +51,7 @@ func ProposedString(payload *MutationPayload, field string) (string, bool) {
 	return ValueAsString(raw)
 }
 
-// ValueAsString converts arbitrary values into non-empty strings.
+// ValueAsString converts arbitrary values into non-empty strings
 func ValueAsString(raw any) (string, bool) {
 	switch value := raw.(type) {
 	case nil:
@@ -118,7 +118,7 @@ func ParseEnum[T ~string](raw any, parser EnumParser[T], invalid ...T) (T, bool)
 	return *parsed, true
 }
 
-// ParseEnumPtr parses enum-like values through the provided enum parser and returns a pointer.
+// ParseEnumPtr parses enum-like values through the provided enum parser and returns a pointer
 func ParseEnumPtr[T ~string](raw any, parser EnumParser[T], invalid ...T) *T {
 	parsed, ok := ParseEnum(raw, parser, invalid...)
 	if !ok {
@@ -128,14 +128,20 @@ func ParseEnumPtr[T ~string](raw any, parser EnumParser[T], invalid ...T) *T {
 	return &parsed
 }
 
-// CloneStringSliceMap deep-copies map values while dropping blank keys.
+// CloneStringSliceMap deep-copies map values while dropping blank keys
 func CloneStringSliceMap(values map[string][]string) map[string][]string {
 	if len(values) == 0 {
 		return nil
 	}
 
-	filtered := lo.PickBy(values, func(key string, _ []string) bool { return strings.TrimSpace(key) != "" })
-	cloned := lo.MapValues(filtered, func(list []string, _ string) []string { return append([]string(nil), list...) })
+	filtered := lo.PickBy(values, func(key string, _ []string) bool {
+		return strings.TrimSpace(key) != ""
+	})
+
+	cloned := lo.MapValues(filtered, func(list []string, _ string) []string {
+		return append([]string(nil), list...)
+	})
+
 	if len(cloned) == 0 {
 		return nil
 	}
@@ -143,13 +149,16 @@ func CloneStringSliceMap(values map[string][]string) map[string][]string {
 	return cloned
 }
 
-// CloneAnyMap shallow-copies map values while dropping blank keys.
+// CloneAnyMap shallow-copies map values while dropping blank keys
 func CloneAnyMap(values map[string]any) map[string]any {
 	if len(values) == 0 {
 		return nil
 	}
 
-	cloned := lo.PickBy(values, func(key string, _ any) bool { return strings.TrimSpace(key) != "" })
+	cloned := lo.PickBy(values, func(key string, _ any) bool {
+		return strings.TrimSpace(key) != ""
+	})
+
 	if len(cloned) == 0 {
 		return nil
 	}

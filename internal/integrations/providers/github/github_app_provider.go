@@ -14,6 +14,7 @@ import (
 	"github.com/samber/lo"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -105,6 +106,7 @@ func (p *appProvider) Operations() []types.OperationDescriptor {
 
 	out := make([]types.OperationDescriptor, len(p.operations))
 	copy(out, p.operations)
+
 	return out
 }
 
@@ -147,23 +149,25 @@ func githubAppCredentialsFromPayload(payload types.CredentialPayload) (string, s
 		return "", "", "", ErrProviderNotInitialized
 	}
 
-	providerData := payload.Data.ProviderData
-	appID := providerDataString(providerData, "appId")
-	if appID == "" {
+	var decoded githubAppProviderData
+	if err := auth.DecodeProviderData(payload.Data.ProviderData, &decoded); err != nil {
+		return "", "", "", err
+	}
+
+	if decoded.AppID == "" {
 		return "", "", "", ErrAppIDMissing
 	}
 
-	installationID := providerDataString(providerData, "installationId")
-	if installationID == "" {
+	if decoded.InstallationID == "" {
 		return "", "", "", ErrInstallationIDMissing
 	}
 
-	privateKey := normalizePrivateKey(providerDataString(providerData, "privateKey"))
+	privateKey := normalizePrivateKey(decoded.PrivateKey.String())
 	if privateKey == "" {
 		return "", "", "", ErrPrivateKeyMissing
 	}
 
-	return appID, installationID, privateKey, nil
+	return decoded.AppID.String(), decoded.InstallationID.String(), privateKey, nil
 }
 
 // normalizePrivateKey converts escaped newlines to PEM newlines.
@@ -179,29 +183,10 @@ func normalizePrivateKey(value string) string {
 	return value
 }
 
-// providerDataString reads a string value from provider metadata.
-func providerDataString(providerData map[string]any, key string) string {
-	if len(providerData) == 0 || strings.TrimSpace(key) == "" {
-		return ""
-	}
-
-	value, ok := providerData[key]
-	if !ok || value == nil {
-		return ""
-	}
-
-	switch v := value.(type) {
-	case string:
-		return strings.TrimSpace(v)
-	case fmt.Stringer:
-		return strings.TrimSpace(v.String())
-	default:
-		trimmed := strings.TrimSpace(fmt.Sprint(v))
-		if trimmed == "<nil>" {
-			return ""
-		}
-		return trimmed
-	}
+type githubAppProviderData struct {
+	AppID          types.TrimmedString `json:"appId"`
+	InstallationID types.TrimmedString `json:"installationId"`
+	PrivateKey     types.TrimmedString `json:"privateKey"`
 }
 
 // buildAppJWT signs a GitHub App JWT for authentication.
@@ -253,7 +238,7 @@ func parseRSAPrivateKey(privateKey string) (*rsa.PrivateKey, error) {
 
 // requestInstallationToken exchanges a GitHub App JWT for an installation token.
 func (p *appProvider) requestInstallationToken(ctx context.Context, installationID, jwtToken string) (*oauth2.Token, error) {
-	if strings.TrimSpace(installationID) == "" {
+	if installationID == "" {
 		return nil, ErrInstallationIDMissing
 	}
 
@@ -284,7 +269,7 @@ func (p *appProvider) requestInstallationToken(ctx context.Context, installation
 		}
 	}
 
-	if strings.TrimSpace(resp.Token) == "" {
+	if resp.Token == "" {
 		return nil, ErrInstallationTokenEmpty
 	}
 
