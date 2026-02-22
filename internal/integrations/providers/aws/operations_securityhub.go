@@ -9,6 +9,8 @@ import (
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
+	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -73,30 +75,27 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	}
 
 	maxFindings := cfg.MaxFindings
-	severityFilter := string(cfg.Severity)
-	recordStateFilter := string(cfg.RecordState)
-	workflowFilter := string(cfg.WorkflowStatus)
+	severityFilter := cfg.Severity.String()
+	recordStateFilter := cfg.RecordState.String()
+	workflowFilter := cfg.WorkflowStatus.String()
 
 	var (
 		envelopes []types.AlertEnvelope
 		total     int
 		nextToken *string
+		filters   = securityHubFiltersFromMetadata(meta)
 	)
 
 	for {
 		resp, err := client.GetFindings(ctx, &securityhub.GetFindingsInput{
 			MaxResults: awssdk.Int32(int32(min(pageSize, math.MaxInt32))), //nolint:gosec // bounds checked via min
 			NextToken:  nextToken,
+			Filters:    filters,
 		})
 		if err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "AWS Security Hub findings fetch failed",
-				Details: map[string]any{
-					"region": meta.Region,
-					"error":  err.Error(),
-				},
-			}, err
+			return operations.OperationFailure("AWS Security Hub findings fetch failed", err, map[string]any{
+				"region": meta.Region,
+			})
 		}
 
 		for _, finding := range resp.Findings {
@@ -129,14 +128,9 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 
 			payload, err := json.Marshal(finding)
 			if err != nil {
-				return types.OperationResult{
-					Status:  types.OperationStatusFailed,
-					Summary: "AWS Security Hub finding serialization failed",
-					Details: map[string]any{
-						"region": meta.Region,
-						"error":  err.Error(),
-					},
-				}, err
+				return operations.OperationFailure("AWS Security Hub finding serialization failed", err, map[string]any{
+					"region": meta.Region,
+				})
 			}
 
 			resourceID := ""
@@ -195,4 +189,36 @@ func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (
 // buildSecurityHubClient builds a Security Hub client from stored credentials.
 func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload) (*securityhub.Client, auth.AWSMetadata, error) {
 	return buildAWSClient(ctx, payload, newSecurityHubClient)
+}
+
+func securityHubFiltersFromMetadata(meta auth.AWSMetadata) *securityhubtypes.AwsSecurityFindingFilters {
+	var filters securityhubtypes.AwsSecurityFindingFilters
+
+	if meta.AccountScope == auth.AWSAccountScopeSpecific {
+		filters.AwsAccountId = toSecurityHubStringFilters(meta.AccountIDs)
+	}
+
+	filters.Region = toSecurityHubStringFilters(meta.LinkedRegions)
+
+	if len(filters.AwsAccountId) == 0 && len(filters.Region) == 0 {
+		return nil
+	}
+
+	return &filters
+}
+
+func toSecurityHubStringFilters(values []string) []securityhubtypes.StringFilter {
+	filters := lo.FilterMap(values, func(value string, _ int) (securityhubtypes.StringFilter, bool) {
+		if value == "" {
+			return securityhubtypes.StringFilter{}, false
+		}
+		return securityhubtypes.StringFilter{
+			Comparison: securityhubtypes.StringFilterComparisonEquals,
+			Value:      awssdk.String(value),
+		}, true
+	})
+	if len(filters) == 0 {
+		return nil
+	}
+	return filters
 }

@@ -52,8 +52,8 @@ func TestAPITokenFromPayload(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if token != "token" {
-		t.Fatalf("expected trimmed token, got %q", token)
+	if token != "  token " {
+		t.Fatalf("expected token to be preserved, got %q", token)
 	}
 }
 

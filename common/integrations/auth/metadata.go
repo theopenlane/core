@@ -4,6 +4,7 @@ import (
 	"maps"
 
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // ExtractMetadata decodes provider metadata from a credential payload into the target type.
@@ -30,9 +31,16 @@ func CloneMetadata(data map[string]any) map[string]any {
 	return maps.Clone(data)
 }
 
-// SetMetadataField sets a field in the metadata map only if the value is non-empty.
-func SetMetadataField(meta map[string]any, key, value string) {
-	if value != "" {
-		meta[key] = value
+// PersistMetadata merges the JSON-tagged fields of meta into a clone of base.
+// Fields tagged with omitempty are excluded when zero-valued.
+func PersistMetadata[T any](base map[string]any, meta T) (map[string]any, error) {
+	overlay, err := jsonx.ToMap(meta)
+	if err != nil {
+		return nil, err
 	}
+
+	out := CloneMetadata(base)
+	maps.Copy(out, overlay)
+
+	return out, nil
 }

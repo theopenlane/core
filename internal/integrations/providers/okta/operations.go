@@ -42,7 +42,7 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/org"
 	var resp map[string]any
 	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
-		return operations.OperationFailure("Okta org lookup failed", err), err
+		return operations.OperationFailure("Okta org lookup failed", err, nil)
 	}
 
 	summary := fmt.Sprintf("Okta org %s reachable", baseURL)
@@ -64,7 +64,7 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/policies?type=SIGN_ON"
 	var resp []map[string]any
 	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
-		return operations.OperationFailure("Okta policies fetch failed", err), err
+		return operations.OperationFailure("Okta policies fetch failed", err, nil)
 	}
 
 	samples := resp

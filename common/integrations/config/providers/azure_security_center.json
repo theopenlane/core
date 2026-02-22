@@ -3,9 +3,10 @@
   "displayName": "Microsoft Defender for Cloud",
   "category": "compliance",
   "authType": "oauth2",
-  "active": true,
+  "active": false,
+  "visible": true,
   "logoUrl": "https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256",
-  "docsUrl": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center/overview",
   "labels": {
     "vendor": "microsoft",
     "product": "defender-for-cloud"
@@ -56,5 +57,6 @@
         "description": "Optional workspace ID when querying Defender alerts via Log Analytics."
       }
     }
-  }
+  },
+  "description": "Collect Microsoft Defender for Cloud pricing and plan metadata from an Azure subscription for security posture visibility."
 }

@@ -47,7 +47,7 @@ func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (
 
 	endpoint := "https://www.googleapis.com/oauth2/v3/userinfo"
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &userinfo); err != nil {
-		return operations.OperationFailure("Google userinfo failed", err), err
+		return operations.OperationFailure("Google userinfo failed", err, nil)
 	}
 
 	return types.OperationResult{
@@ -87,7 +87,7 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 	}
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return operations.OperationFailure("Directory users fetch failed", err), err
+		return operations.OperationFailure("Directory users fetch failed", err, nil)
 	}
 
 	samples := make([]map[string]any, 0, len(resp.Users))

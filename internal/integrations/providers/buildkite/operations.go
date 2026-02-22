@@ -65,7 +65,7 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 
 	var orgs []buildkiteOrgResponse
 	if err := fetchBuildkiteResource(ctx, client, token, "organizations", &orgs); err != nil {
-		return operations.OperationFailure("Buildkite organizations fetch failed", err), err
+		return operations.OperationFailure("Buildkite organizations fetch failed", err, nil)
 	}
 
 	samples := make([]map[string]any, 0, min(maxSampleSize, len(orgs)))

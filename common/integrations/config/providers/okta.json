@@ -3,9 +3,10 @@
   "displayName": "Okta",
   "category": "sso",
   "authType": "apikey",
-  "active": true,
+  "active": false,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://developer.okta.com/docs/reference/api/overview/",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/okta/overview",
   "labels": {
     "vendor": "okta",
     "product": "identity"
@@ -34,5 +35,6 @@
         "description": "Okta API token with permission to query users, groups, and system settings."
       }
     }
-  }
+  },
+  "description": "Collect Okta tenant and sign-on policy metadata for identity posture and access governance analysis."
 }

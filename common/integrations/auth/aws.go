@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -10,36 +9,64 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/credentials/stscreds"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
+)
+
+const (
+	// AWSAccountScopeAll indicates operations should run across all accessible accounts.
+	AWSAccountScopeAll = "all"
+	// AWSAccountScopeSpecific indicates operations should be limited to explicitly listed accounts.
+	AWSAccountScopeSpecific = "specific"
 )
 
 // awsProviderData holds AWS provider data fields used for authentication
 type awsProviderData struct {
 	// Region is the AWS region for API calls
-	Region string `json:"region"`
+	Region types.TrimmedString `json:"region"`
+	// HomeRegion is the Security Hub home region for aggregated queries
+	HomeRegion types.TrimmedString `json:"homeRegion"`
+	// LinkedRegions optionally limits queries to the listed regions
+	LinkedRegions []string `json:"linkedRegions"`
+	// OrganizationID is the AWS Organizations identifier associated with this integration
+	OrganizationID types.TrimmedString `json:"organizationId"`
+	// AccountScope controls whether queries should use all accounts or a provided subset
+	AccountScope types.LowerString `json:"accountScope"`
+	// AccountIDs optionally scopes collection to specific AWS account IDs
+	AccountIDs []string `json:"accountIds"`
 	// RoleARN is the ARN of the role to assume
-	RoleARN string `json:"roleArn"`
+	RoleARN types.TrimmedString `json:"roleArn"`
 	// AccountID is the AWS account ID
-	AccountID string `json:"accountId"`
+	AccountID types.TrimmedString `json:"accountId"`
 	// ExternalID is the external ID for role assumption
-	ExternalID string `json:"externalId"`
+	ExternalID types.TrimmedString `json:"externalId"`
 	// SessionName is the name for the session
-	SessionName string `json:"sessionName"`
+	SessionName types.TrimmedString `json:"sessionName"`
 	// SessionDuration is the duration for the session
-	SessionDuration string `json:"sessionDuration"`
+	SessionDuration types.TrimmedString `json:"sessionDuration"`
 	// AccessKeyID is the AWS access key ID
-	AccessKeyID string `json:"accessKeyId"`
+	AccessKeyID types.TrimmedString `json:"accessKeyId"`
 	// SecretAccessKey is the AWS secret access key
-	SecretAccessKey string `json:"secretAccessKey"`
+	SecretAccessKey types.TrimmedString `json:"secretAccessKey"`
 	// SessionToken is the AWS session token
-	SessionToken string `json:"sessionToken"`
+	SessionToken types.TrimmedString `json:"sessionToken"`
 }
 
 // AWSMetadata captures common AWS configuration fields stored in provider metadata
 type AWSMetadata struct {
 	// Region is the AWS region for API calls
 	Region string
+	// HomeRegion is the Security Hub home region for aggregated queries
+	HomeRegion string
+	// LinkedRegions optionally limits queries to the listed regions
+	LinkedRegions []string
+	// OrganizationID is the AWS Organizations identifier associated with this integration
+	OrganizationID string
+	// AccountScope controls whether queries should use all accounts or a provided subset
+	AccountScope string
+	// AccountIDs optionally scopes collection to specific AWS account IDs
+	AccountIDs []string
 	// RoleARN is the ARN of the role to assume
 	RoleARN string
 	// AccountID is the AWS account ID
@@ -81,38 +108,40 @@ func AWSMetadataFromProviderData(meta map[string]any, defaultSessionName string)
 		return AWSMetadata{}, err
 	}
 
-	sessionName := decoded.SessionName
-	if sessionName == "" {
-		sessionName = defaultSessionName
-	}
+	region := lo.CoalesceOrEmpty(decoded.Region.String(), decoded.HomeRegion.String())
+	homeRegion := lo.CoalesceOrEmpty(decoded.HomeRegion.String(), region)
+	sessionName := lo.CoalesceOrEmpty(decoded.SessionName.String(), defaultSessionName)
+	accountScope := lo.CoalesceOrEmpty(decoded.AccountScope.String(), AWSAccountScopeAll)
+
+	linkedRegions := types.NormalizeStringSlice(decoded.LinkedRegions)
+	accountIDs := types.NormalizeStringSlice(decoded.AccountIDs)
 
 	return AWSMetadata{
-		Region:          decoded.Region,
-		RoleARN:         decoded.RoleARN,
-		AccountID:       decoded.AccountID,
-		ExternalID:      decoded.ExternalID,
+		Region:          region,
+		HomeRegion:      homeRegion,
+		LinkedRegions:   linkedRegions,
+		OrganizationID:  decoded.OrganizationID.String(),
+		AccountScope:    accountScope,
+		AccountIDs:      accountIDs,
+		RoleARN:         decoded.RoleARN.String(),
+		AccountID:       decoded.AccountID.String(),
+		ExternalID:      decoded.ExternalID.String(),
 		SessionName:     sessionName,
-		SessionDuration: ParseDuration(decoded.SessionDuration),
+		SessionDuration: ParseDuration(decoded.SessionDuration.String()),
 	}, nil
 }
 
 // AWSCredentialsFromPayload extracts access keys from payload credentials with metadata fallback
 func AWSCredentialsFromPayload(payload types.CredentialPayload) AWSCredentials {
-	accessKey := strings.TrimSpace(payload.Data.AccessKeyID)
-	secretKey := strings.TrimSpace(payload.Data.SecretAccessKey)
-	sessionToken := strings.TrimSpace(payload.Data.SessionToken)
+	accessKey := payload.Data.AccessKeyID
+	secretKey := payload.Data.SecretAccessKey
+	sessionToken := payload.Data.SessionToken
 
 	var decoded awsProviderData
 	if err := DecodeProviderData(payload.Data.ProviderData, &decoded); err == nil {
-		if accessKey == "" {
-			accessKey = decoded.AccessKeyID
-		}
-		if secretKey == "" {
-			secretKey = decoded.SecretAccessKey
-		}
-		if sessionToken == "" {
-			sessionToken = decoded.SessionToken
-		}
+		accessKey = lo.CoalesceOrEmpty(accessKey, decoded.AccessKeyID.String())
+		secretKey = lo.CoalesceOrEmpty(secretKey, decoded.SecretAccessKey.String())
+		sessionToken = lo.CoalesceOrEmpty(sessionToken, decoded.SessionToken.String())
 	}
 
 	return AWSCredentials{
@@ -138,7 +167,7 @@ func BuildAWSConfig(ctx context.Context, region string, creds AWSCredentials, as
 		return cfg, err
 	}
 
-	if strings.TrimSpace(assume.RoleARN) == "" {
+	if assume.RoleARN == "" {
 		return cfg, nil
 	}
 

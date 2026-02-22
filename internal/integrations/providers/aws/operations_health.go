@@ -33,13 +33,13 @@ func runAWSHealth(ctx context.Context, input types.OperationInput) (types.Operat
 		SessionDuration: meta.SessionDuration,
 	})
 	if err != nil {
-		return operations.OperationFailure("AWS config build failed", err), err
+		return operations.OperationFailure("AWS config build failed", err, nil)
 	}
 
 	client := sts.NewFromConfig(cfg)
 	resp, err := client.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
-		return operations.OperationFailure("AWS STS GetCallerIdentity failed", err), err
+		return operations.OperationFailure("AWS STS GetCallerIdentity failed", err, nil)
 	}
 
 	accountID := awssdk.ToString(resp.Account)

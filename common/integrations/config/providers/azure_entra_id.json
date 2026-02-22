@@ -3,9 +3,12 @@
   "displayName": "Azure Entra ID",
   "category": "identity",
   "authType": "oauth2",
-  "active": true,
+  "authStartPath": "/v1/integrations/oauth/start",
+  "authCallbackPath": "/v1/integrations/oauth/callback",
+  "active": false,
+  "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://learn.microsoft.com/en-us/entra/identity-platform/",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
   "oauth": {
     "clientId": "${AZURE_ENTRA_CLIENT_ID}",
     "clientSecret": "${AZURE_ENTRA_CLIENT_SECRET}",
@@ -60,5 +63,6 @@
         "description": "Optional secret tied to the provided Application ID."
       }
     }
-  }
+  },
+  "description": "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata."
 }

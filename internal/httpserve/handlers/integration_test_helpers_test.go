@@ -86,8 +86,11 @@ func gcpSCCSpec() config.ProviderSpec {
 		Name:        "gcp_scc",
 		DisplayName: "Google Cloud SCC",
 		Category:    "cloud",
+		Description: "Google Cloud Security Command Center integration",
 		AuthType:    types.AuthKindWorkloadIdentity,
 		Active:      true,
+		Visible:     true,
+		Tags:        []string{"cloud", "google"},
 		CredentialsSchema: map[string]any{
 			"type": "object",
 			"required": []string{

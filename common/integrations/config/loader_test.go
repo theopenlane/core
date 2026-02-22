@@ -63,6 +63,34 @@ func TestFSLoader_LoadUnsupportedSchemaVersion(t *testing.T) {
 	}
 }
 
+func TestFSLoader_LoadIncludesInactiveSpecs(t *testing.T) {
+	fsys := fstest.MapFS{
+		"providers/vercel.json": {
+			Data: []byte(`{
+				"name": "vercel",
+				"displayName": "Vercel",
+				"category": "devops",
+				"authType": "apikey",
+				"active": false
+			}`),
+		},
+	}
+
+	loader := NewFSLoader(fsys, "providers")
+	specs, err := loader.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+
+	spec, ok := specs[types.ProviderType("vercel")]
+	if !ok {
+		t.Fatalf("expected inactive provider spec to be loaded")
+	}
+	if spec.Active {
+		t.Fatalf("expected inactive provider, got active=true")
+	}
+}
+
 // TestToProviderConfigs verifies provider specs are converted into provider configs
 func TestToProviderConfigs(t *testing.T) {
 	specs := map[types.ProviderType]ProviderSpec{

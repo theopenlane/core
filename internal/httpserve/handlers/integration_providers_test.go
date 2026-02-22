@@ -48,6 +48,9 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 		provider, ok := providersByName[string(name)]
 		require.True(t, ok, "expected provider %s", name)
 		assert.Equal(t, spec.DisplayName, provider.DisplayName)
+		assert.Equal(t, spec.Description, provider.Description)
+		assert.Equal(t, spec.Visible, provider.Visible)
+		assert.ElementsMatch(t, spec.Tags, provider.Tags)
 		assert.NotNil(t, provider.CredentialsSchema, "expected schema for %s", provider.Name)
 	}
 }
@@ -62,11 +65,16 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 	specs := map[types.ProviderType]config.ProviderSpec{
 		types.ProviderType("gcp_scc"): gcpSCCSpec(),
 		types.ProviderType("github"): {
-			Name:        "github",
-			DisplayName: "GitHub",
-			Category:    "code",
-			AuthType:    types.AuthKindOAuth2,
-			Active:      true,
+			Name:             "github",
+			DisplayName:      "GitHub",
+			Category:         "code",
+			Description:      "GitHub integration",
+			AuthType:         types.AuthKindOAuth2,
+			AuthStartPath:    "/v1/integrations/oauth/start",
+			AuthCallbackPath: "/v1/integrations/oauth/callback",
+			Active:           true,
+			Visible:          true,
+			Tags:             []string{"code", "github"},
 			OAuth: &config.OAuthSpec{
 				ClientID:     "test-client",
 				ClientSecret: "test-secret",
@@ -91,11 +99,17 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	providerNames := make(map[string]bool)
+	providersByName := make(map[string]models.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
 		providerNames[provider.Name] = true
+		providersByName[provider.Name] = provider
 	}
 	assert.True(t, providerNames["gcp_scc"])
 	assert.True(t, providerNames["github"])
+	assert.Equal(t, "/v1/integrations/oauth/start", providersByName["github"].AuthStartPath)
+	assert.Equal(t, "/v1/integrations/oauth/callback", providersByName["github"].AuthCallbackPath)
+	assert.Equal(t, "GitHub integration", providersByName["github"].Description)
+	assert.Equal(t, []string{"code", "github"}, providersByName["github"].Tags)
 }
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersSingleProvider() {
@@ -146,6 +160,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	inactiveSpec.Name = "inactive_provider"
 	inactiveSpec.DisplayName = "Inactive Provider"
 	inactiveSpec.Active = false
+	inactiveSpec.Visible = true
 
 	specs := map[types.ProviderType]config.ProviderSpec{
 		types.ProviderType("gcp_scc"):           activeSpec,
@@ -171,7 +186,63 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	}
 
 	require.Contains(t, providersByName, "gcp_scc")
-	require.NotContains(t, providersByName, "inactive_provider")
+	require.Contains(t, providersByName, "inactive_provider")
 
 	assert.True(t, providersByName["gcp_scc"].Active)
+	assert.True(t, providersByName["gcp_scc"].Visible)
+	assert.False(t, providersByName["inactive_provider"].Active)
+	assert.True(t, providersByName["inactive_provider"].Visible)
+}
+
+func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInstallMetadata() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ListIntegrationProvidersGitHubAppMetadata"
+	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
+
+	specs := map[types.ProviderType]config.ProviderSpec{
+		types.ProviderType("github_app"): {
+			Name:             "github_app",
+			DisplayName:      "GitHub App",
+			Category:         "code",
+			Description:      "GitHub App integration",
+			AuthType:         types.AuthKindGitHubApp,
+			AuthStartPath:    "/v1/integrations/github/app/install",
+			AuthCallbackPath: "/v1/integrations/github/app/callback",
+			Active:           true,
+			Visible:          true,
+			GitHubApp: &config.GitHubAppSpec{
+				BaseURL: "https://api.github.com",
+				AppSlug: "openlane-test-app",
+			},
+		},
+	}
+	restore := suite.withIntegrationRegistry(t, specs)
+	defer restore()
+
+	req := httptest.NewRequest(http.MethodGet, "/v1/integrations/providers", nil)
+	req = req.WithContext(echocontext.NewTestEchoContext().Request().Context())
+	rec := httptest.NewRecorder()
+
+	suite.e.ServeHTTP(rec, req)
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp models.IntegrationProvidersResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.True(t, resp.Success)
+
+	var githubAppProvider *models.IntegrationProviderMetadata
+	for i := range resp.Providers {
+		if resp.Providers[i].Name == "github_app" {
+			githubAppProvider = &resp.Providers[i]
+			break
+		}
+	}
+	require.NotNil(t, githubAppProvider, "expected github_app provider in response")
+	require.NotNil(t, githubAppProvider.GitHubApp, "expected githubApp metadata")
+	assert.Equal(t, "openlane-test-app", githubAppProvider.GitHubApp.AppSlug)
+	assert.Equal(t, "/v1/integrations/github/app/install", githubAppProvider.AuthStartPath)
+	assert.Equal(t, "/v1/integrations/github/app/callback", githubAppProvider.AuthCallbackPath)
+	assert.Equal(t, "GitHub App integration", githubAppProvider.Description)
 }

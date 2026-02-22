@@ -42,7 +42,7 @@ func OAuthTokenFromPayload(payload types.CredentialPayload) (string, error) {
 
 // APITokenFromPayload extracts a raw API token from the credential payload.
 func APITokenFromPayload(payload types.CredentialPayload) (string, error) {
-	token := strings.TrimSpace(payload.Data.APIToken)
+	token := payload.Data.APIToken
 	if token == "" {
 		return "", ErrAPITokenMissing
 	}

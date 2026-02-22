@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 
 	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -39,14 +40,9 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 		MaxResults: awssdk.Int32(1),
 	})
 	if err != nil {
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "AWS Audit Manager list assessments failed",
-			Details: map[string]any{
-				"region": meta.Region,
-				"error":  err.Error(),
-			},
-		}, err
+		return operations.OperationFailure("AWS Audit Manager list assessments failed", err, map[string]any{
+			"region": meta.Region,
+		})
 	}
 
 	details := map[string]any{

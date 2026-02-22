@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"strings"
+
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -93,7 +94,7 @@ func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.Oper
 
 	endpoint := "https://graph.microsoft.com/v1.0/me"
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &profile); err != nil {
-		return operations.OperationFailure("Graph /me failed", err), err
+		return operations.OperationFailure("Graph /me failed", err, nil)
 	}
 
 	return types.OperationResult{
@@ -123,7 +124,7 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 	endpoint := "https://graph.microsoft.com/v1.0/me/joinedTeams?$top=5"
 
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return operations.OperationFailure("Graph joinedTeams failed", err), err
+		return operations.OperationFailure("Graph joinedTeams failed", err, nil)
 	}
 
 	samples := make([]map[string]any, 0, len(resp.Value))
@@ -148,38 +149,23 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, err
 	}
 
-	var cfg teamsMessageConfig
-	if err := operations.DecodeConfig(input.Config, &cfg); err != nil {
+	cfg, err := operations.Decode[teamsMessageConfig](input.Config)
+	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	teamID := strings.TrimSpace(string(cfg.TeamID))
-	if teamID == "" {
-		teamID = strings.TrimSpace(string(cfg.Team))
-	}
-	channelID := strings.TrimSpace(string(cfg.ChannelID))
-	if channelID == "" {
-		channelID = strings.TrimSpace(string(cfg.Channel))
-	}
+	teamID := lo.CoalesceOrEmpty(cfg.TeamID, cfg.Team).String()
+	channelID := lo.CoalesceOrEmpty(cfg.ChannelID, cfg.Channel).String()
 	if teamID == "" || channelID == "" {
 		return types.OperationResult{}, ErrTeamsChannelMissing
 	}
 
-	body := strings.TrimSpace(string(cfg.Body))
-	if body == "" {
-		body = strings.TrimSpace(string(cfg.Text))
-	}
-	if body == "" {
-		body = strings.TrimSpace(string(cfg.Message))
-	}
+	body := lo.CoalesceOrEmpty(cfg.Body, cfg.Text, cfg.Message).String()
 	if body == "" {
 		return types.OperationResult{}, ErrTeamsMessageEmpty
 	}
 
-	contentType := strings.TrimSpace(string(cfg.BodyFormat))
-	if contentType == "" {
-		contentType = "text"
-	}
+	contentType := lo.CoalesceOrEmpty(cfg.BodyFormat, "text").String()
 	if contentType != "text" && contentType != "html" {
 		return types.OperationResult{}, ErrTeamsMessageFormatInvalid
 	}
@@ -191,7 +177,7 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		},
 	}
 
-	subject := strings.TrimSpace(string(cfg.Subject))
+	subject := cfg.Subject.String()
 	if subject != "" {
 		payload["subject"] = subject
 	}
@@ -201,7 +187,7 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		ID string `json:"id"`
 	}
 	if err := auth.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
-		return operations.OperationFailure("Graph channel message failed", err), err
+		return operations.OperationFailure("Graph channel message failed", err, nil)
 	}
 
 	return types.OperationResult{

@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"maps"
-	"strings"
 )
 
 // AuthenticatedClient wraps a bearer token and headers for simple HTTP JSON calls
@@ -16,10 +15,9 @@ type AuthenticatedClient struct {
 
 // NewAuthenticatedClient builds an AuthenticatedClient with a cloned header map
 func NewAuthenticatedClient(bearerToken string, headers map[string]string) *AuthenticatedClient {
-	cloned := cloneHeaders(headers)
 	return &AuthenticatedClient{
-		BearerToken: strings.TrimSpace(bearerToken),
-		Headers:     cloned,
+		BearerToken: bearerToken,
+		Headers:     maps.Clone(headers),
 	}
 }
 
@@ -47,11 +45,3 @@ func AuthenticatedClientFromAny(value any) *AuthenticatedClient {
 	return client
 }
 
-// cloneHeaders creates a shallow copy of the header map
-func cloneHeaders(headers map[string]string) map[string]string {
-	if len(headers) == 0 {
-		return nil
-	}
-
-	return maps.Clone(headers)
-}

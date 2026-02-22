@@ -2870,10 +2870,20 @@ type IntegrationProviderMetadata struct {
 	DisplayName string `json:"displayName"`
 	// Category is the category value.
 	Category string `json:"category"`
+	// Description is the description value.
+	Description string `json:"description,omitempty"`
 	// AuthType is the authType value.
 	AuthType types.AuthKind `json:"authType"`
+	// AuthStartPath is the integration API path to initiate provider authentication.
+	AuthStartPath string `json:"authStartPath,omitempty"`
+	// AuthCallbackPath is the integration API callback path used to complete provider authentication.
+	AuthCallbackPath string `json:"authCallbackPath,omitempty"`
 	// Active is the active value.
 	Active bool `json:"active"`
+	// Visible is the visible value.
+	Visible bool `json:"visible"`
+	// Tags is the tags value.
+	Tags []string `json:"tags,omitempty"`
 	// LogoURL is the logoUrl value.
 	LogoURL string `json:"logoUrl,omitempty"`
 	// DocsURL is the docsUrl value.

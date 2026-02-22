@@ -58,7 +58,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		return types.OperationResult{}, err
 	}
 
-	config, err := decodeGitHubVulnerabilityConfig(input.Config)
+	config, err := operations.Decode[githubVulnerabilityConfig](input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -69,9 +69,9 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	if len(repoNames) == 0 {
 		repos, err := listGitHubReposForProvider(ctx, client, token, input.Provider, config)
 		if err != nil {
-			return operations.OperationFailure("GitHub repository listing failed", err), err
+			return operations.OperationFailure("GitHub repository listing failed", err, nil)
 		}
-		repoNames = repoNamesFromResponses(repos, string(config.Owner))
+		repoNames = repoNamesFromResponses(repos, config.Owner.String())
 	}
 
 	if len(repoNames) == 0 {
@@ -99,14 +99,9 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeDependabot) {
 			batch, err := listDependabotAlerts(ctx, client, token, repo, config)
 			if err != nil {
-				return types.OperationResult{
-					Status:  types.OperationStatusFailed,
-					Summary: "GitHub Dependabot alert collection failed",
-					Details: map[string]any{
-						"repository": repo,
-						"error":      err.Error(),
-					},
-				}, err
+				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, map[string]any{
+					"repository": repo,
+				})
 			}
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeDependabot, repo, batch)
 			totalAlerts += len(batch)
@@ -116,14 +111,9 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
 			batch, err := listCodeScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
-				return types.OperationResult{
-					Status:  types.OperationStatusFailed,
-					Summary: "GitHub code scanning alert collection failed",
-					Details: map[string]any{
-						"repository": repo,
-						"error":      err.Error(),
-					},
-				}, err
+				return operations.OperationFailure("GitHub code scanning alert collection failed", err, map[string]any{
+					"repository": repo,
+				})
 			}
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeCodeScanning, repo, batch)
 			totalAlerts += len(batch)
@@ -133,14 +123,9 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
 			batch, err := listSecretScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
-				return types.OperationResult{
-					Status:  types.OperationStatusFailed,
-					Summary: "GitHub secret scanning alert collection failed",
-					Details: map[string]any{
-						"repository": repo,
-						"error":      err.Error(),
-					},
-				}, err
+				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, map[string]any{
+					"repository": repo,
+				})
 			}
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeSecretScanning, repo, batch)
 			totalAlerts += len(batch)
@@ -199,10 +184,10 @@ func listGitHubRepos(ctx context.Context, client *auth.AuthenticatedClient, toke
 	out := make([]githubRepoResponse, 0)
 	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
 		params := gitHubPageParams(page, perPage)
-		if visibility := string(config.Visibility); visibility != "" {
+		if visibility := config.Visibility.String(); visibility != "" {
 			params.Set("visibility", visibility)
 		}
-		if affiliation := string(config.Affiliation); affiliation != "" {
+		if affiliation := config.Affiliation.String(); affiliation != "" {
 			params.Set("affiliation", affiliation)
 		}
 
@@ -227,10 +212,11 @@ func listGitHubRepos(ctx context.Context, client *auth.AuthenticatedClient, toke
 func listDependabotAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	path := fmt.Sprintf("repos/%s/dependabot/alerts", repo)
 	return listGitHubAlerts[*gh.DependabotAlert](ctx, client, token, path, config, func(params url.Values) {
-		if severity := string(config.Severity); severity != "" {
+		if severity := config.Severity.String(); severity != "" {
 			params.Set("severity", severity)
 		}
-		if ecosystem := string(config.Ecosystem); ecosystem != "" {
+
+		if ecosystem := config.Ecosystem.String(); ecosystem != "" {
 			params.Set("ecosystem", ecosystem)
 		}
 	})
@@ -239,19 +225,21 @@ func listDependabotAlerts(ctx context.Context, client *auth.AuthenticatedClient,
 // listCodeScanningAlerts fetches code scanning alerts for a repository
 func listCodeScanningAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	path := fmt.Sprintf("repos/%s/code-scanning/alerts", repo)
+
 	return listGitHubAlerts[*gh.Alert](ctx, client, token, path, config, nil)
 }
 
 // listSecretScanningAlerts fetches secret scanning alerts for a repository
 func listSecretScanningAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	path := fmt.Sprintf("repos/%s/secret-scanning/alerts", repo)
+
 	return listGitHubAlerts[*gh.SecretScanningAlert](ctx, client, token, path, config, nil)
 }
 
 // listGitHubAlerts fetches and marshals GitHub alert payloads with pagination
 func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClient, token, path string, config githubVulnerabilityConfig, decorate func(url.Values)) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	state := resolveAlertState(string(config.AlertState))
+	state := lo.CoalesceOrEmpty(config.AlertState.String(), defaultAlertState)
 	out := make([]json.RawMessage, 0)
 
 	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]T, error) {
@@ -259,6 +247,7 @@ func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClie
 		if state != "" {
 			params.Set("state", state)
 		}
+
 		if decorate != nil {
 			decorate(params)
 		}
@@ -274,10 +263,12 @@ func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClie
 			if lo.IsNil(alert) {
 				continue
 			}
+
 			payload, err := json.Marshal(alert)
 			if err != nil {
 				return err
 			}
+
 			out = append(out, payload)
 		}
 		return nil
@@ -296,13 +287,16 @@ func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page
 		if err := ctx.Err(); err != nil {
 			return err
 		}
+
 		batch, err := fetch(page, perPage)
 		if err != nil {
 			return err
 		}
+
 		if err := handle(batch); err != nil {
 			return err
 		}
+
 		if len(batch) < perPage {
 			return nil
 		}
@@ -315,95 +309,46 @@ func gitHubPageParams(page, perPage int) url.Values {
 	params := url.Values{}
 	params.Set("per_page", fmt.Sprintf("%d", perPage))
 	params.Set("page", fmt.Sprintf("%d", page))
-	return params
-}
 
-// resolveAlertState applies the default alert state when none is supplied
-func resolveAlertState(value string) string {
-	if value == "" {
-		return defaultAlertState
-	}
-	return value
+	return params
 }
 
 // appendAlertEnvelopes wraps payloads into alert envelopes
 func appendAlertEnvelopes(envelopes []types.AlertEnvelope, alertType, resource string, payloads []json.RawMessage) []types.AlertEnvelope {
-	for _, payload := range payloads {
-		envelopes = append(envelopes, types.AlertEnvelope{
-			AlertType: alertType,
-			Resource:  resource,
-			Payload:   payload,
-		})
-	}
-
-	return envelopes
+	return append(envelopes, lo.Map(payloads, func(p json.RawMessage, _ int) types.AlertEnvelope {
+		return types.AlertEnvelope{AlertType: alertType, Resource: resource, Payload: p}
+	})...)
 }
 
 // repoNamesFromResponses builds full repo names from API responses
 func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []string {
-	filter := ownerFilter
-	names := make([]string, 0, len(repos))
-
-	for _, repo := range repos {
-		full := repo.FullName
-		if full == "" && repo.Owner.Login != "" {
-			full = repo.Owner.Login + "/" + repo.Name
-		}
-
+	return lo.FilterMap(repos, func(repo githubRepoResponse, _ int) (string, bool) {
+		full := lo.CoalesceOrEmpty(repo.FullName, lo.Ternary(repo.Owner.Login != "", repo.Owner.Login+"/"+repo.Name, ""))
 		if full == "" {
-			continue
+			return "", false
 		}
-
-		if filter != "" {
-			if strings.HasPrefix(full, filter+"/") || strings.EqualFold(repo.Owner.Login, filter) {
-				names = append(names, full)
-			}
-			continue
+		if ownerFilter == "" {
+			return full, true
 		}
-
-		names = append(names, full)
-	}
-
-	return names
+		return full, strings.HasPrefix(full, ownerFilter+"/") || strings.EqualFold(repo.Owner.Login, ownerFilter)
+	})
 }
+
+// defaultAlertTypes lists every alert category collected when none is specified.
+var defaultAlertTypes = []string{githubAlertTypeDependabot, githubAlertTypeCodeScanning, githubAlertTypeSecretScanning}
 
 // alertTypesFromConfig normalizes and defaults the requested alert types
 func alertTypesFromConfig(values []types.LowerString) []string {
-	if len(values) == 0 {
-		return []string{githubAlertTypeDependabot, githubAlertTypeCodeScanning, githubAlertTypeSecretScanning}
-	}
-
-	seen := map[string]struct{}{}
-	out := make([]string, 0, len(values))
-	for _, value := range values {
-		normalized := normalizeAlertType(string(value))
-		if normalized == "" {
-			continue
-		}
-		if _, ok := seen[normalized]; ok {
-			continue
-		}
-
-		seen[normalized] = struct{}{}
-		out = append(out, normalized)
-	}
-
+	out := lo.Uniq(lo.FilterMap(values, func(value types.LowerString, _ int) (string, bool) {
+		normalized := normalizeAlertType(value.String())
+		return normalized, normalized != ""
+	}))
 	if len(out) == 0 {
-		return []string{githubAlertTypeDependabot, githubAlertTypeCodeScanning, githubAlertTypeSecretScanning}
+		return defaultAlertTypes
 	}
-
 	return out
 }
 
-// decodeGitHubVulnerabilityConfig decodes operation config into a typed struct
-func decodeGitHubVulnerabilityConfig(config map[string]any) (githubVulnerabilityConfig, error) {
-	var decoded githubVulnerabilityConfig
-	if err := operations.DecodeConfig(config, &decoded); err != nil {
-		return decoded, err
-	}
-
-	return decoded, nil
-}
 
 // alertTypeRequested checks whether a specific alert type should be fetched
 func alertTypeRequested(alertTypes []string, target string) bool {

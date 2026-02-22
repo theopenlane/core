@@ -64,10 +64,6 @@ func (l *FSLoader) Load() (map[types.ProviderType]ProviderSpec, error) {
 			return nil, &LoaderPathError{Err: ErrDecodeSpec, Path: fullPath, Cause: decodeErr}
 		}
 
-		if !spec.Active {
-			continue
-		}
-
 		spec.Name = lo.Ternary(spec.Name != "", spec.Name, strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name())))
 		if spec.SchemaVersion == "" {
 			spec.SchemaVersion = DefaultSchemaVersion

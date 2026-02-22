@@ -45,7 +45,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 
 	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
 	if err != nil {
-		return operations.OperationFailure("Azure Security Center pricing fetch failed", err), err
+		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
 
 	return types.OperationResult{
@@ -71,7 +71,7 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 
 	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
 	if err != nil {
-		return operations.OperationFailure("Azure Security Center pricing fetch failed", err), err
+		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
 
 	samples := make([]map[string]any, 0, maxSampleSize)

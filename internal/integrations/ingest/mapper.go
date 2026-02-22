@@ -323,31 +323,20 @@ func resolveMappingSpecWithIndex(index mappingOverrideIndex, provider integratio
 	return defaultMappingSpec(provider, schemaName, variant)
 }
 
-// allowedMappingKeys returns the set of allowed input keys for a schema
-func allowedMappingKeys(schema integrationgenerated.IntegrationMappingSchema) map[string]struct{} {
+// allowedMappingKeys returns the list of allowed input keys for a schema
+func allowedMappingKeys(schema integrationgenerated.IntegrationMappingSchema) []string {
 	if len(schema.AllowedKeys) > 0 {
-		return schema.AllowedKeys
-	}
-	out := make(map[string]struct{}, len(schema.Fields))
-	for _, field := range schema.Fields {
-		key := field.InputKey
-		if key == "" {
-			continue
-		}
-		out[key] = struct{}{}
+		return lo.Keys(schema.AllowedKeys)
 	}
 
-	return out
+	return lo.FilterMap(schema.Fields, func(field integrationgenerated.IntegrationMappingField, _ int) (string, bool) {
+		return field.InputKey, field.InputKey != ""
+	})
 }
 
 // filterMappingOutput strips fields that are not part of the schema mapping
 func filterMappingOutput(schema integrationgenerated.IntegrationMappingSchema, input map[string]any) map[string]any {
-	allowed := allowedMappingKeys(schema)
-	return lo.PickBy(input, func(key string, _ any) bool {
-		_, ok := allowed[key]
-
-		return ok
-	})
+	return lo.PickByKeys(input, allowedMappingKeys(schema))
 }
 
 // validateMappingOutput checks required fields are present in mapped output

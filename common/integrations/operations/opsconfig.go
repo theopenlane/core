@@ -1,6 +1,10 @@
 package operations
 
-import "github.com/theopenlane/core/common/integrations/types"
+import (
+	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/common/integrations/types"
+)
 
 // Pagination captures common paging controls
 type Pagination struct {
@@ -34,6 +38,7 @@ func EnsureIncludePayloads(config map[string]any) map[string]any {
 	if config == nil {
 		config = map[string]any{}
 	}
+
 	config["include_payloads"] = true
 
 	return config
@@ -53,30 +58,12 @@ type RepositorySelector struct {
 
 // List returns a merged, de-duplicated repository list
 func (r RepositorySelector) List() []string {
-	out := make([]string, 0, len(r.Repositories)+len(r.Repos)+1)
-	seen := map[string]struct{}{}
+	combined := make([]types.TrimmedString, 0, len(r.Repositories)+len(r.Repos)+1)
+	combined = append(combined, r.Repositories...)
+	combined = append(combined, r.Repos...)
+	combined = append(combined, r.Repository)
 
-	appendValue := func(value types.TrimmedString) {
-		if value == "" {
-			return
-		}
-		key := string(value)
-		if _, ok := seen[key]; ok {
-			return
-		}
-		seen[key] = struct{}{}
-		out = append(out, key)
-	}
-
-	for _, value := range r.Repositories {
-		appendValue(value)
-	}
-	for _, value := range r.Repos {
-		appendValue(value)
-	}
-	if r.Repository != "" {
-		appendValue(r.Repository)
-	}
-
-	return out
+	return lo.Uniq(lo.FilterMap(combined, func(v types.TrimmedString, _ int) (string, bool) {
+		return v.String(), v != ""
+	}))
 }

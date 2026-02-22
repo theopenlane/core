@@ -9,6 +9,7 @@ import (
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 	securitycenterpb "cloud.google.com/go/securitycenter/apiv2/securitycenterpb"
+	"github.com/samber/lo"
 	"google.golang.org/api/iterator"
 	"google.golang.org/protobuf/encoding/protojson"
 
@@ -44,6 +45,8 @@ type securityCenterFindingsConfig struct {
 	Filter types.TrimmedString `json:"filter"`
 	// SourceID overrides the stored SCC source identifier
 	SourceID types.TrimmedString `json:"sourceId"`
+	// SourceIDs overrides stored SCC source identifiers for fan-out collection
+	SourceIDs []string `json:"sourceIds"`
 	// MaxFindings caps the number of findings returned
 	MaxFindings int `json:"max_findings"`
 }
@@ -51,6 +54,8 @@ type securityCenterFindingsConfig struct {
 type securityCenterFindingsSchema struct {
 	// SourceID overrides the SCC source identifier
 	SourceID types.TrimmedString `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (full resource name or bare source ID)."`
+	// SourceIDs overrides SCC source identifiers for fan-out collection
+	SourceIDs []string `json:"sourceIds,omitempty" jsonschema:"description=Optional SCC source overrides for fan-out collection. Bare source IDs expand against selected parents."`
 	// Filter overrides the stored SCC findings filter
 	Filter types.TrimmedString `json:"filter,omitempty" jsonschema:"description=Optional SCC findings filter overriding stored metadata."`
 	// PageSize overrides the findings page size
@@ -106,38 +111,35 @@ func runSecurityCenterHealthOperation(ctx context.Context, input types.Operation
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
-	parent, err := resolveSecurityCenterParent(meta)
+	parents, err := resolveSecurityCenterParents(meta)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	req := &securitycenterpb.ListSourcesRequest{
-		Parent:   parent,
-		PageSize: 1,
-	}
-
-	it := client.ListSources(ctx, req)
-	_, err = it.Next()
-	if errors.Is(err, iterator.Done) {
-		err = nil
-	}
-	if err != nil {
-		details := map[string]any{
-			"parent": parent,
-			"error":  err.Error(),
+	for _, parent := range parents {
+		req := &securitycenterpb.ListSourcesRequest{
+			Parent:   parent,
+			PageSize: 1,
 		}
-		return types.OperationResult{
-			Status:  types.OperationStatusFailed,
-			Summary: "Security Command Center list sources failed",
-			Details: details,
-		}, err
+
+		it := client.ListSources(ctx, req)
+		_, err = it.Next()
+		if errors.Is(err, iterator.Done) {
+			err = nil
+		}
+		if err != nil {
+			return operations.OperationFailure("Security Command Center list sources failed", err, map[string]any{
+				"parent":  parent,
+				"parents": parents,
+			})
+		}
 	}
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Security Command Center reachable for %s", parent),
+		Summary: fmt.Sprintf("Security Command Center reachable for %d parent(s)", len(parents)),
 		Details: map[string]any{
-			"parent": parent,
+			"parents": parents,
 		},
 	}, nil
 }
@@ -159,15 +161,12 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
-	sourceName, err := resolveSecurityCenterSource(meta, config)
+	sources, err := resolveSecurityCenterSources(meta, config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	filter := string(config.Filter)
-	if filter == "" {
-		filter = string(meta.FindingFilter)
-	}
+	filter := lo.CoalesceOrEmpty(config.Filter, meta.FindingFilter).String()
 
 	pageSize := config.EffectivePageSize(findingsPageSize)
 	if pageSize <= 0 {
@@ -179,102 +178,103 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 
 	maxFindings := config.MaxFindings
 
-	req := &securitycenterpb.ListFindingsRequest{
-		Parent:   sourceName,
-		Filter:   filter,
-		PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
-	}
-
-	it := client.ListFindings(ctx, req)
 	total := 0
 	samples := make([]map[string]any, 0, maxSampleSize)
 	envelopes := make([]types.AlertEnvelope, 0)
 	severityCounts := map[string]int{}
 	stateCounts := map[string]int{}
+	sourceCounts := map[string]int{}
 	marshaler := protojson.MarshalOptions{UseProtoNames: true}
 
-	for {
-		result, err := it.Next()
-		if errors.Is(err, iterator.Done) {
-			break
-		}
-		if err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Security Command Center list findings failed",
-				Details: map[string]any{
-					"source": sourceName,
-					"filter": filter,
-					"error":  err.Error(),
-				},
-			}, err
+collectLoop:
+	for _, sourceName := range sources {
+		req := &securitycenterpb.ListFindingsRequest{
+			Parent:   sourceName,
+			Filter:   filter,
+			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
 		}
 
-		finding := result.GetFinding()
-		if finding == nil {
-			continue
-		}
+		it := client.ListFindings(ctx, req)
 
-		if maxFindings > 0 && total >= maxFindings {
-			break
-		}
-
-		payload, err := marshaler.Marshal(finding)
-		if err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Security Command Center finding serialization failed",
-				Details: map[string]any{
-					"source": sourceName,
-					"error":  err.Error(),
-				},
-			}, err
-		}
-
-		resourceName := finding.GetResourceName()
-		envelopes = append(envelopes, types.AlertEnvelope{
-			AlertType: sccAlertTypeFinding,
-			Resource:  resourceName,
-			Payload:   payload,
-		})
-		total++
-
-		if severity := finding.GetSeverity().String(); severity != "" {
-			key := strings.ToLower(severity)
-			if key != "severity_unspecified" {
-				severityCounts[key]++
+		for {
+			result, err := it.Next()
+			if errors.Is(err, iterator.Done) {
+				break
 			}
-		}
-		if state := finding.GetState().String(); state != "" {
-			key := strings.ToLower(state)
-			if key != "state_unspecified" {
-				stateCounts[key]++
+			if err != nil {
+				return operations.OperationFailure("Security Command Center list findings failed", err, map[string]any{
+					"sources": sources,
+					"filter":  filter,
+					"source":  sourceName,
+				})
 			}
-		}
 
-		if len(samples) < cap(samples) {
-			samples = append(samples, map[string]any{
-				"name":     finding.GetName(),
-				"category": finding.GetCategory(),
-				"state":    finding.GetState().String(),
-				"severity": finding.GetSeverity().String(),
+			finding := result.GetFinding()
+			if finding == nil {
+				continue
+			}
+
+			if maxFindings > 0 && total >= maxFindings {
+				break collectLoop
+			}
+
+			payload, err := marshaler.Marshal(finding)
+			if err != nil {
+				return operations.OperationFailure("Security Command Center finding serialization failed", err, map[string]any{
+					"sources": sources,
+					"source":  sourceName,
+				})
+			}
+
+			resourceName := finding.GetResourceName()
+			envelopes = append(envelopes, types.AlertEnvelope{
+				AlertType: sccAlertTypeFinding,
+				Resource:  resourceName,
+				Payload:   payload,
 			})
+			total++
+			sourceCounts[sourceName]++
+
+			if severity := finding.GetSeverity().String(); severity != "" {
+				key := strings.ToLower(severity)
+				if key != "severity_unspecified" {
+					severityCounts[key]++
+				}
+			}
+			if state := finding.GetState().String(); state != "" {
+				key := strings.ToLower(state)
+				if key != "state_unspecified" {
+					stateCounts[key]++
+				}
+			}
+
+			if len(samples) < cap(samples) {
+				samples = append(samples, map[string]any{
+					"name":     finding.GetName(),
+					"category": finding.GetCategory(),
+					"state":    finding.GetState().String(),
+					"severity": finding.GetSeverity().String(),
+					"source":   sourceName,
+				})
+			}
 		}
 	}
 
 	details := map[string]any{
-		"source":          sourceName,
-		"filter":          filter,
-		"totalFindings":   total,
-		"severity_counts": severityCounts,
-		"state_counts":    stateCounts,
-		"samples":         samples,
+		"sources":          sources,
+		"sourceCount":      len(sources),
+		"filter":           filter,
+		"totalFindings":    total,
+		"findingsBySource": sourceCounts,
+		"severity_counts":  severityCounts,
+		"state_counts":     stateCounts,
+		"samples":          samples,
 	}
 	details = operations.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d findings from %s", total, sourceName),
+		Summary: fmt.Sprintf("Collected %d findings from %d source(s)", total, len(sources)),
 		Details: details,
 	}, nil
 }
@@ -291,95 +291,127 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
-	parent, err := resolveSecurityCenterParent(meta)
+	parents, err := resolveSecurityCenterParents(meta)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	req := &securitycenterpb.ListNotificationConfigsRequest{
-		Parent:   parent,
-		PageSize: settingsPageSize,
-	}
-
-	it := client.ListNotificationConfigs(ctx, req)
 	configs := make([]map[string]any, 0, sampleConfigsCapacity)
 	count := 0
 
-	for {
-		cfg, err := it.Next()
-		if errors.Is(err, iterator.Done) {
-			break
-		}
-		if err != nil {
-			return types.OperationResult{
-				Status:  types.OperationStatusFailed,
-				Summary: "Security Command Center notification config scan failed",
-				Details: map[string]any{
-					"parent": parent,
-					"error":  err.Error(),
-				},
-			}, err
+	for _, parent := range parents {
+		req := &securitycenterpb.ListNotificationConfigsRequest{
+			Parent:   parent,
+			PageSize: settingsPageSize,
 		}
 
-		count++
-		if len(configs) < cap(configs) {
-			configs = append(configs, map[string]any{
-				"name":        cfg.GetName(),
-				"description": cfg.GetDescription(),
-				"pubsubTopic": cfg.GetPubsubTopic(),
-			})
+		it := client.ListNotificationConfigs(ctx, req)
+		for {
+			cfg, err := it.Next()
+			if errors.Is(err, iterator.Done) {
+				break
+			}
+			if err != nil {
+				return operations.OperationFailure("Security Command Center notification config scan failed", err, map[string]any{
+					"parents": parents,
+					"parent":  parent,
+				})
+			}
+
+			count++
+			if len(configs) < cap(configs) {
+				configs = append(configs, map[string]any{
+					"name":        cfg.GetName(),
+					"description": cfg.GetDescription(),
+					"pubsubTopic": cfg.GetPubsubTopic(),
+					"parent":      parent,
+				})
+			}
 		}
 	}
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Discovered %d notification configs under %s", count, parent),
+		Summary: fmt.Sprintf("Discovered %d notification configs across %d parent(s)", count, len(parents)),
 		Details: map[string]any{
-			"parent":                    parent,
+			"parents":                   parents,
 			"notificationConfigCount":   count,
 			"sampleNotificationConfigs": configs,
 		},
 	}, nil
 }
 
-// resolveSecurityCenterParent chooses an org or project parent resource
-func resolveSecurityCenterParent(meta credentialMetadata) (string, error) {
-	if meta.OrganizationID != "" {
-		return fmt.Sprintf("organizations/%s", meta.OrganizationID), nil
+// resolveSecurityCenterParents chooses the SCC parent resources used for health/settings checks.
+func resolveSecurityCenterParents(meta credentialMetadata) ([]string, error) {
+	if meta.OrganizationID != "" && meta.ProjectScope != projectScopeSpecific {
+		return []string{fmt.Sprintf("organizations/%s", meta.OrganizationID)}, nil
+	}
+
+	if meta.ProjectScope == projectScopeSpecific {
+		parents := lo.FilterMap(meta.ProjectIDs, func(projectID string, _ int) (string, bool) {
+			value := strings.TrimSpace(projectID)
+			if value == "" {
+				return "", false
+			}
+			return fmt.Sprintf("projects/%s", value), true
+		})
+		parents = lo.Uniq(parents)
+		if len(parents) == 0 {
+			return nil, ErrProjectIDRequired
+		}
+		return parents, nil
 	}
 
 	if meta.ProjectID != "" {
-		return fmt.Sprintf("projects/%s", meta.ProjectID), nil
+		return []string{fmt.Sprintf("projects/%s", meta.ProjectID)}, nil
 	}
 
-	return "", errProjectIDRequired
+	if meta.OrganizationID != "" {
+		return []string{fmt.Sprintf("organizations/%s", meta.OrganizationID)}, nil
+	}
+
+	return nil, ErrProjectIDRequired
 }
 
-// resolveSecurityCenterSource resolves the source name from config or metadata
-func resolveSecurityCenterSource(meta credentialMetadata, config securityCenterFindingsConfig) (string, error) {
+// resolveSecurityCenterSources resolves source resource names from config and metadata.
+func resolveSecurityCenterSources(meta credentialMetadata, config securityCenterFindingsConfig) ([]string, error) {
+	raw := make([]string, 0, 1+len(meta.SourceIDs))
 	if config.SourceID != "" {
-		return normalizeSourceName(string(config.SourceID), meta)
+		raw = append(raw, config.SourceID.String())
+	}
+	raw = append(raw, config.SourceIDs...)
+	if len(raw) == 0 {
+		raw = append(raw, meta.SourceIDs...)
+		if len(raw) == 0 && meta.SourceID != "" {
+			raw = append(raw, meta.SourceID.String())
+		}
+	}
+	if len(raw) == 0 {
+		return nil, ErrSourceIDRequired
 	}
 
-	if meta.SourceID != "" {
-		return normalizeSourceName(string(meta.SourceID), meta)
-	}
-
-	return "", errSourceIDRequired
-}
-
-// normalizeSourceName expands a source short name to a full resource path
-func normalizeSourceName(source string, meta credentialMetadata) (string, error) {
-	if strings.HasPrefix(source, "organizations/") || strings.HasPrefix(source, "projects/") {
-		return source, nil
-	}
-
-	parent, err := resolveSecurityCenterParent(meta)
+	parents, err := resolveSecurityCenterParents(meta)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return fmt.Sprintf("%s/sources/%s", parent, source), nil
+	out := lo.Uniq(lo.FlatMap(raw, func(source string, _ int) []string {
+		source = strings.TrimSpace(source)
+		if source == "" {
+			return nil
+		}
+		if strings.HasPrefix(source, "organizations/") || strings.HasPrefix(source, "projects/") {
+			return []string{source}
+		}
+		return lo.Map(parents, func(parent string, _ int) string {
+			return fmt.Sprintf("%s/sources/%s", parent, source)
+		})
+	}))
+	if len(out) == 0 {
+		return nil, ErrSourceIDRequired
+	}
+
+	return out, nil
 }
 
 // decodeSecurityCenterFindingsConfig decodes operation config into a typed struct
@@ -388,5 +420,6 @@ func decodeSecurityCenterFindingsConfig(config map[string]any) (securityCenterFi
 	if err := operations.DecodeConfig(config, &decoded); err != nil {
 		return decoded, err
 	}
+	decoded.SourceIDs = types.NormalizeStringSlice(decoded.SourceIDs)
 	return decoded, nil
 }

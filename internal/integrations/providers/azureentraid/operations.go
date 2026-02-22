@@ -37,7 +37,7 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 
 	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return operations.OperationFailure("Graph organization lookup failed", err), err
+		return operations.OperationFailure("Graph organization lookup failed", err, nil)
 	}
 
 	summary := fmt.Sprintf("Tenant %s reachable", org.DisplayName)
@@ -61,7 +61,7 @@ func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput)
 
 	org, err := fetchOrganization(ctx, token, client)
 	if err != nil {
-		return operations.OperationFailure("Graph organization lookup failed", err), err
+		return operations.OperationFailure("Graph organization lookup failed", err, nil)
 	}
 
 	details := map[string]any{

@@ -54,7 +54,7 @@ func (m *ClientPoolManager) RegisterDescriptor(descriptor types.ClientDescriptor
 	builder := descriptorClientBuilder{descriptor: descriptor}
 
 	pool, err := NewClientPool(m.source, builder,
-		WithClientConfigClone[any](cloneConfigMap))
+		WithClientConfigClone[any](helpers.DeepCloneMap))
 	if err != nil {
 		return err
 	}
@@ -131,18 +131,13 @@ type descriptorClientBuilder struct {
 
 // Build constructs a client using the descriptor's build function
 func (b descriptorClientBuilder) Build(ctx context.Context, payload types.CredentialPayload, config map[string]any) (any, error) {
-	cloned := cloneConfigMap(config)
+	cloned := helpers.DeepCloneMap(config)
 	return b.descriptor.Build(ctx, payload, cloned)
 }
 
 // ProviderType returns the provider identifier for this client builder
 func (b descriptorClientBuilder) ProviderType() types.ProviderType {
 	return b.descriptor.Provider
-}
-
-// cloneConfigMap creates a deep copy of the configuration map
-func cloneConfigMap(input map[string]any) map[string]any {
-	return helpers.DeepCloneMap(input)
 }
 
 // clientDescriptorKey uniquely identifies a client descriptor by provider and name

@@ -1,6 +1,32 @@
 package types
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestNormalizeStringSlice(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  []string
+		expect []string
+	}{
+		{"nil input", nil, nil},
+		{"empty input", []string{}, nil},
+		{"all empty strings", []string{"", " ", "  "}, nil},
+		{"trims and deduplicates", []string{" a ", "b", " a"}, []string{"a", "b"}},
+		{"preserves order", []string{"c", "b", "a"}, []string{"c", "b", "a"}},
+		{"single value", []string{"x"}, []string{"x"}},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			result := NormalizeStringSlice(tc.input)
+			assert.Equal(t, tc.expect, result)
+		})
+	}
+}
 
 func TestNormalizedStrings(t *testing.T) {
 	var trimmed TrimmedString

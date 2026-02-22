@@ -2,7 +2,10 @@ package handlers
 
 import (
 	"maps"
+	"sort"
 	"strings"
+
+	"github.com/samber/lo"
 
 	echo "github.com/theopenlane/echox"
 
@@ -25,10 +28,6 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPI
 	for providerType, meta := range catalog {
 		spec, ok := h.IntegrationRegistry.Config(providerType)
 		if !ok {
-			continue
-		}
-
-		if !spec.Active {
 			continue
 		}
 
@@ -57,12 +56,28 @@ func defaultProviderName(provider types.ProviderType, fallback string) string {
 	return strings.ToLower(string(provider))
 }
 
-func cloneProviderSchema(input map[string]any) map[string]any {
-	if len(input) == 0 {
+func providerTags(spec config.ProviderSpec) []string {
+	if len(spec.Tags) > 0 {
+		return append([]string{}, spec.Tags...)
+	}
+
+	keys := lo.Keys(spec.Labels)
+	sort.Strings(keys)
+
+	tags := lo.FilterMap(keys, func(key string, _ int) (string, bool) {
+		value := strings.TrimSpace(spec.Labels[key])
+		return value, value != ""
+	})
+	if category := strings.TrimSpace(spec.Category); category != "" {
+		tags = append([]string{category}, tags...)
+	}
+	tags = lo.Uniq(tags)
+
+	if len(tags) == 0 {
 		return nil
 	}
 
-	return maps.Clone(input)
+	return tags
 }
 
 // buildIntegrationProviderMetadata constructs provider metadata for API responses
@@ -71,8 +86,13 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 		Name:                   defaultProviderName(providerType, spec.Name),
 		DisplayName:            meta.DisplayName,
 		Category:               meta.Category,
+		Description:            meta.Description,
 		AuthType:               keystore.AuthType(meta.Auth),
+		AuthStartPath:          spec.AuthStartPath,
+		AuthCallbackPath:       spec.AuthCallbackPath,
 		Active:                 spec.Active,
+		Visible:                spec.Visible,
+		Tags:                   providerTags(spec),
 		LogoURL:                meta.LogoURL,
 		DocsURL:                meta.DocsURL,
 		Persistence:            spec.Persistence,
@@ -109,7 +129,7 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 					Kind:         string(descriptor.Kind),
 					Description:  descriptor.Description,
 					Client:       string(descriptor.Client),
-					ConfigSchema: cloneProviderSchema(descriptor.ConfigSchema),
+					ConfigSchema: maps.Clone(descriptor.ConfigSchema),
 				})
 			}
 		}

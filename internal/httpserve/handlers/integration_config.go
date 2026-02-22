@@ -64,7 +64,9 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
 	}
 
-	normalizeServiceAccountKey(attrs)
+	if key, ok := attrs["serviceAccountKey"].(string); ok {
+		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
+	}
 
 	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
 	documentLoader := gojsonschema.NewGoLoader(attrs)
@@ -115,29 +117,10 @@ func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID stri
 	_, err := h.IntegrationActivation.Configure(ctx, activation.ConfigureRequest{
 		OrgID:        orgID,
 		Provider:     provider,
-		ProviderData: normalizeProviderData(data),
+		ProviderData: maps.Clone(data),
 		Validate:     true,
 	})
 
 	return err
 }
 
-func normalizeProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
-		return nil
-	}
-
-	cloned := maps.Clone(data)
-	normalizeServiceAccountKey(cloned)
-
-	return cloned
-}
-
-func normalizeServiceAccountKey(attrs map[string]any) {
-	if attrs == nil {
-		return
-	}
-	if key, ok := attrs["serviceAccountKey"].(string); ok {
-		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
-	}
-}

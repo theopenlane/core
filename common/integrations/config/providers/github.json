@@ -3,9 +3,12 @@
   "displayName": "GitHub",
   "category": "code",
   "authType": "oauth2",
+  "authStartPath": "/v1/integrations/oauth/start",
+  "authCallbackPath": "/v1/integrations/oauth/callback",
   "active": true,
+  "visible": false,
   "logoUrl": "",
-  "docsUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/github/overview",
   "oauth": {
     "clientId": "Ov23lipGzu6xlTkJKTVj",
     "clientSecret": "",
@@ -31,5 +34,6 @@
   },
   "persistence": {
     "storeRefreshToken": true
-  }
+  },
+  "description": "Collect GitHub repository metadata and security alerts (Dependabot, code scanning, and secret scanning) for exposure management."
 }
