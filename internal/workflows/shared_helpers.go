@@ -5,15 +5,12 @@ import (
 	"fmt"
 	"strings"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -42,54 +39,6 @@ func (e *WorkflowCreationError) Error() string {
 // Unwrap returns the underlying error
 func (e *WorkflowCreationError) Unwrap() error {
 	return e.Err
-}
-
-// BuildProposedChanges materializes mutation values (including cleared fields) for workflow proposals.
-func BuildProposedChanges(m utils.GenericMutation, changedFields []string) map[string]any {
-	clearedSet := lo.SliceToMap(m.ClearedFields(), func(f string) (string, struct{}) {
-		return f, struct{}{}
-	})
-
-	proposed := make(map[string]any, len(changedFields))
-	for _, field := range changedFields {
-		if val, ok := m.Field(field); ok {
-			proposed[field] = val
-			continue
-		}
-		if _, ok := clearedSet[field]; ok {
-			proposed[field] = nil
-		}
-	}
-
-	return proposed
-}
-
-// DefinitionMatchesTrigger reports whether the workflow definition has a trigger that matches the event type and changed fields.
-func DefinitionMatchesTrigger(doc models.WorkflowDefinitionDocument, eventType string, changedFields []string) bool {
-	targetEvent := strings.ToUpper(eventType)
-
-	for _, trigger := range doc.Triggers {
-		if trigger.Operation != "" {
-			if targetEvent == "" || strings.ToUpper(trigger.Operation) != targetEvent {
-				continue
-			}
-		}
-
-		if len(trigger.Fields) == 0 && len(trigger.Edges) == 0 {
-			return true
-		}
-
-		allFields := lo.Flatten([][]string{trigger.Fields, trigger.Edges})
-		if len(allFields) == 0 {
-			return true
-		}
-
-		if len(lo.Intersect(allFields, changedFields)) > 0 {
-			return true
-		}
-	}
-
-	return false
 }
 
 // ResolveOwnerID returns the provided owner ID or derives it from the context when empty.
@@ -293,80 +242,4 @@ func GetObjectUpdatedBy(obj *Object) string {
 	}
 
 	return fields.UpdatedBy
-}
-
-// MutationPayload carries the raw ent mutation, the resolved operation, the entity ID and the ent
-// client so listeners can act without additional lookups
-type MutationPayload struct {
-	// Mutation is the raw ent mutation that triggered the event
-	Mutation ent.Mutation
-	// MutationType is the ent schema type that emitted the mutation
-	MutationType string
-	// Operation is the string representation of the mutation operation
-	Operation string
-	// EntityID is the ID of the entity that was mutated
-	EntityID string
-	// ChangedFields captures updated/cleared fields for the mutation
-	ChangedFields []string
-	// ClearedFields captures fields explicitly cleared in the mutation
-	ClearedFields []string
-	// ChangedEdges captures changed edge names for workflow-eligible edges
-	ChangedEdges []string
-	// AddedIDs captures edge IDs added by edge name
-	AddedIDs map[string][]string
-	// RemovedIDs captures edge IDs removed by edge name
-	RemovedIDs map[string][]string
-	// ProposedChanges captures field-level proposed values (including nil for clears)
-	ProposedChanges map[string]any
-	// Client is the ent client that can be used to perform additional queries or mutations
-	Client *generated.Client
-}
-
-// MutationEntityID derives the entity identifier from the payload or event properties.
-func MutationEntityID(ctx *soiree.EventContext, payload *MutationPayload) (string, bool) {
-	if payload != nil && payload.EntityID != "" {
-		return payload.EntityID, true
-	}
-
-	if ctx == nil {
-		return "", false
-	}
-
-	if id, ok := ctx.PropertyString("ID"); ok && id != "" {
-		return id, true
-	}
-
-	if raw, ok := ctx.Property("ID"); ok && raw != nil {
-		if str, ok := raw.(fmt.Stringer); ok {
-			value := str.String()
-			if value == "" {
-				return "", false
-			}
-
-			return value, true
-		}
-
-		value := fmt.Sprint(raw)
-		if value == "" || value == "<nil>" {
-			return "", false
-		}
-
-		return value, true
-	}
-
-	return "", false
-}
-
-// MutationClient returns the ent client associated with the mutation.
-func MutationClient(ctx *soiree.EventContext, payload *MutationPayload) *generated.Client {
-	if payload != nil && payload.Client != nil {
-		return payload.Client
-	}
-
-	client, ok := soiree.ClientAs[*generated.Client](ctx)
-	if !ok {
-		return nil
-	}
-
-	return client
 }

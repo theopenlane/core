@@ -4,15 +4,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/theopenlane/core/common/integrations/operations"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-)
-
-const (
-	githubAlertTypeDependabot     = "dependabot"
-	githubAlertTypeCodeScanning   = "code_scanning"
-	githubAlertTypeSecretScanning = "secret_scanning"
 )
 
 type celMapEntry struct {
@@ -67,7 +62,7 @@ func buildGitHubMappingExpr(category, externalIDExpr string, extras []celMapEntr
 
 var (
 	mapExprGitHubDependabot = buildGitHubMappingExpr(
-		githubAlertTypeDependabot,
+		operations.GitHubAlertTypeDependabot,
 		`"github:" + resource + ":dependabot:" + (payload.number != 0 ? string(payload.number) : (payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown"))`,
 		[]celMapEntry{
 			{key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, expr: "payload.security_advisory.severity"},
@@ -78,7 +73,7 @@ var (
 	)
 
 	mapExprGitHubCodeScanning = buildGitHubMappingExpr(
-		githubAlertTypeCodeScanning,
+		operations.GitHubAlertTypeCodeScanning,
 		`"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : (payload.id != 0 ? string(payload.id) : "unknown"))`,
 		[]celMapEntry{
 			{key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, expr: `payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : payload.rule.severity`},
@@ -87,7 +82,7 @@ var (
 	)
 
 	mapExprGitHubSecretScanning = buildGitHubMappingExpr(
-		githubAlertTypeSecretScanning,
+		operations.GitHubAlertTypeSecretScanning,
 		`"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
 		[]celMapEntry{
 			{key: integrationgenerated.IntegrationMappingVulnerabilitySummary, expr: `payload.secret_type_display_name != "" ? payload.secret_type_display_name : payload.secret_type`},
@@ -98,15 +93,15 @@ var (
 var normalizedVulnerabilitySchema = normalizeMappingKey(mappingSchemaVulnerability)
 
 var githubVulnerabilityMappings = map[string]openapi.IntegrationMappingOverride{
-	githubAlertTypeDependabot: {
+	operations.GitHubAlertTypeDependabot: {
 		FilterExpr: "true",
 		MapExpr:    mapExprGitHubDependabot,
 	},
-	githubAlertTypeCodeScanning: {
+	operations.GitHubAlertTypeCodeScanning: {
 		FilterExpr: "true",
 		MapExpr:    mapExprGitHubCodeScanning,
 	},
-	githubAlertTypeSecretScanning: {
+	operations.GitHubAlertTypeSecretScanning: {
 		FilterExpr: "true",
 		MapExpr:    mapExprGitHubSecretScanning,
 	},
@@ -142,28 +137,11 @@ func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName s
 
 // githubMappingSpec selects the GitHub mapping for a specific alert type
 func githubMappingSpec(alertType string) (openapi.IntegrationMappingOverride, bool) {
-	alertType = normalizeAlertType(alertType)
+	alertType = operations.NormalizeGitHubAlertType(alertType)
 	spec, ok := githubVulnerabilityMappings[alertType]
 	if !ok {
 		return openapi.IntegrationMappingOverride{}, false
 	}
 
 	return spec, true
-}
-
-// normalizeAlertType standardizes alert type identifiers
-func normalizeAlertType(value string) string {
-	value = strings.TrimSpace(strings.ToLower(value))
-	value = strings.ReplaceAll(value, "-", "_")
-	value = strings.ReplaceAll(value, " ", "_")
-	switch value {
-	case "dependabot_alerts":
-		return githubAlertTypeDependabot
-	case "code_scanning_alerts":
-		return githubAlertTypeCodeScanning
-	case "secret_scanning_alerts":
-		return githubAlertTypeSecretScanning
-	}
-
-	return value
 }

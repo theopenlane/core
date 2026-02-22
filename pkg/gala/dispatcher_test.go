@@ -9,7 +9,7 @@ import (
 	"github.com/riverqueue/river/rivertype"
 )
 
-// riverTestInsertClient records Insert invocations for tests.
+// riverTestInsertClient records Insert invocations for tests
 type riverTestInsertClient struct {
 	called   int
 	lastArgs river.JobArgs
@@ -17,7 +17,7 @@ type riverTestInsertClient struct {
 	err      error
 }
 
-// Insert records call metadata and returns the configured error.
+// Insert records call metadata and returns the configured error
 func (c *riverTestInsertClient) Insert(_ context.Context, args river.JobArgs, opts *river.InsertOpts) (*rivertype.JobInsertResult, error) {
 	c.called++
 	c.lastArgs = args
@@ -240,6 +240,58 @@ func TestRiverDispatcherQueueSelectionUsesCustomDefaultQueue(t *testing.T) {
 
 	if client.lastOpts == nil || client.lastOpts.Queue != "queue_custom_default" {
 		t.Fatalf("expected custom default queue, got %#v", client.lastOpts)
+	}
+}
+
+func TestRiverDispatcherQueueSelectionUsesHeaderQueueOverride(t *testing.T) {
+	client := &riverTestInsertClient{}
+	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+
+	envelope := Envelope{
+		ID:      NewEventID(),
+		Topic:   TopicName("gala.test.queue_header_override"),
+		Payload: []byte(`{"message":"hello"}`),
+		Headers: Headers{
+			Queue: "queue_integrations",
+		},
+	}
+
+	err = dispatcher.Dispatch(context.Background(), envelope)
+	if err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if client.lastOpts == nil || client.lastOpts.Queue != "queue_integrations" {
+		t.Fatalf("expected header queue override, got %#v", client.lastOpts)
+	}
+}
+
+func TestRiverDispatcherPassesHeaderMaxAttempts(t *testing.T) {
+	client := &riverTestInsertClient{}
+	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+
+	envelope := Envelope{
+		ID:      NewEventID(),
+		Topic:   TopicName("gala.test.max_attempts_override"),
+		Payload: []byte(`{"message":"hello"}`),
+		Headers: Headers{
+			MaxAttempts: 7,
+		},
+	}
+
+	err = dispatcher.Dispatch(context.Background(), envelope)
+	if err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if client.lastOpts == nil || client.lastOpts.MaxAttempts != 7 {
+		t.Fatalf("expected max attempts override, got %#v", client.lastOpts)
 	}
 }
 

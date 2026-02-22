@@ -51,7 +51,7 @@ import (
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 
@@ -115,7 +115,7 @@ type HandlerTestSuite struct {
 	sharedSessionManager sessions.Store[map[string]any]
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
-	sharedPool           *soiree.Pool
+	sharedPool           *gala.Pool
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
@@ -179,9 +179,9 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	}
 
 	// shared pool to avoid worker pool creation
-	suite.sharedPool = soiree.NewPool(
-		soiree.WithWorkers(100), //nolint:mnd
-		soiree.WithPoolName("ent_client_pool"),
+	suite.sharedPool = gala.NewPool(
+		gala.WithWorkers(100), //nolint:mnd
+		gala.WithPoolName("ent_client_pool"),
 	)
 }
 
@@ -385,7 +385,6 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 			RedirectURL: "http://localhost",
 		},
 		DefaultTrustCenterDomain: "trust.openlane.com",
-		EventEmitter:             soiree.New(),
 	}
 
 	return h

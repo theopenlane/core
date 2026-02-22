@@ -4,36 +4,15 @@ package engine_test
 
 import (
 	"context"
-	"errors"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/internal/workflows/reconciler"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/utils/ulids"
 )
-
-type failingQueueStore struct {
-	err error
-}
-
-// SaveEvent simulates an enqueue failure.
-func (s *failingQueueStore) SaveEvent(event soiree.Event) error {
-	return s.err
-}
-
-// SaveHandlerResult is a no-op for tests.
-func (s *failingQueueStore) SaveHandlerResult(event soiree.Event, handlerID string, err error) error {
-	return nil
-}
-
-// DequeueEvent blocks until the context is cancelled.
-func (s *failingQueueStore) DequeueEvent(ctx context.Context) (soiree.Event, error) {
-	<-ctx.Done()
-	return nil, ctx.Err()
-}
 
 // clearEmitFailedEvents removes emit failure events to isolate test cases.
 func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
@@ -79,10 +58,7 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	failBus := soiree.New(soiree.EventStore(&failingQueueStore{err: errors.New("enqueue failed")}))
-	defer func() { _ = failBus.Close() }()
-
-	wfEngine := s.NewIsolatedEngine(failBus)
+	wfEngine := s.NewIsolatedEngine(nil)
 
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
@@ -104,14 +80,14 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 
 	details, err := workflows.ParseEmitFailureDetails(event.Payload.Details)
 	s.Require().NoError(err)
-	s.Equal(soiree.WorkflowTriggeredTopic.Name(), details.Topic)
+	s.Equal(string(gala.TopicWorkflowTriggered), details.Topic)
 	s.Equal(enums.WorkflowEventTypeInstanceTriggered, details.OriginalEventType)
 	s.Equal(obj.ID, details.ObjectID)
 	s.Equal(obj.Type, details.ObjectType)
 	s.Equal(1, details.Attempts)
 	s.NotEmpty(details.EventID)
 	s.NotEmpty(details.Payload)
-	s.Contains(details.LastError, "enqueue failed")
+	s.Contains(details.LastError, workflows.ErrEmitNoEmitter.Error())
 }
 
 // TestReconcileEmitFailureRecovers verifies that the reconciler can recover from emit failures
@@ -146,18 +122,15 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	failBus := soiree.New(soiree.EventStore(&failingQueueStore{err: errors.New("enqueue failed")}))
-	defer func() { _ = failBus.Close() }()
-
-	wfEngine := s.NewIsolatedEngine(failBus)
+	wfEngine := s.NewIsolatedEngine(nil)
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
-	// Use the suite's real emitter for recovery (listeners already registered)
-	rec, err := reconciler.New(s.client, s.eventer.Emitter)
+	// Use the suite's real gala runtime for recovery (listeners already registered).
+	rec, err := reconciler.New(s.client, s.galaRuntime)
 	s.Require().NoError(err)
 
 	result, err := rec.ReconcileEmitFailures(userCtx)
@@ -174,6 +147,9 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 		Only(allowCtx)
 	s.Require().NoError(err)
 	s.Equal(enums.WorkflowEventTypeEmitRecovered, recovered.EventType)
+
+	// Wait for the re-emitted event to be processed by async listeners
+	s.WaitForEvents()
 
 	updated, err := s.client.WorkflowInstance.Get(allowCtx, instance.ID)
 	s.Require().NoError(err)
@@ -218,17 +194,14 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	failBus := soiree.New(soiree.EventStore(&failingQueueStore{err: errors.New("enqueue failed")}))
-	defer func() { _ = failBus.Close() }()
-
-	wfEngine := s.NewIsolatedEngine(failBus)
+	wfEngine := s.NewIsolatedEngine(nil)
 	instance, err := wfEngine.TriggerWorkflow(userCtx, def, obj, engine.TriggerInput{
 		EventType: "UPDATE",
 	})
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
-	rec, err := reconciler.New(s.client, failBus, reconciler.WithMaxAttempts(3))
+	rec, err := reconciler.New(s.client, nil, reconciler.WithMaxAttempts(3))
 	s.Require().NoError(err)
 
 	allowCtx := workflows.AllowContext(userCtx)

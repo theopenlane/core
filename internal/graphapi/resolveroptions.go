@@ -8,7 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
@@ -118,8 +118,8 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 
 // WithPool adds a worker pool to the resolver for parallel processing
 func (r *Resolver) WithPool(maxWorkers int) {
-	r.pool = soiree.NewPool(
-		soiree.WithWorkers(maxWorkers),
-		soiree.WithPoolName("graphapi-worker-pool"),
+	r.pool = gala.NewPool(
+		gala.WithWorkers(maxWorkers),
+		gala.WithPoolName("graphapi-worker-pool"),
 	)
 }

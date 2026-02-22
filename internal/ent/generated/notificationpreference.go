@@ -54,9 +54,9 @@ type NotificationPreference struct {
 	Cadence enums.NotificationCadence `json:"cadence,omitempty"`
 	// optional priority override for this preference
 	Priority enums.Priority `json:"priority,omitempty"`
-	// soiree topic names or wildcard patterns this preference applies to; empty means all
+	// topic names or wildcard patterns this preference applies to; empty means all
 	TopicPatterns []string `json:"topic_patterns,omitempty"`
-	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+	// optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
 	TopicOverrides map[string]interface{} `json:"topic_overrides,omitempty"`
 	// optional template to use by default for this preference (external channels only)
 	TemplateID string `json:"template_id,omitempty"`

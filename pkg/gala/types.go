@@ -11,6 +11,10 @@ type Headers struct {
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// Properties stores additional typed metadata projected to string values
 	Properties map[string]string `json:"properties,omitempty"`
+	// Queue optionally overrides the River queue used for dispatch.
+	Queue string `json:"queue,omitempty"`
+	// MaxAttempts optionally overrides River max attempts for this envelope.
+	MaxAttempts int `json:"max_attempts,omitempty"`
 }
 
 // Envelope is the durable event envelope

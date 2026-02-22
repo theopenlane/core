@@ -3,23 +3,18 @@ package workflows
 import (
 	"context"
 	"encoding/json"
-	"time"
-
-	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
-
-const emitEnqueueTimeout = 200 * time.Millisecond
 
 // EmitReceipt captures enqueue status for workflow events
 type EmitReceipt struct {
-	// EventID is the event idempotency key when assigned
+	// EventID is the idempotency/event identifier when assigned
 	EventID string
-	// Enqueued reports whether the event was enqueued
+	// Enqueued reports whether the event was accepted for processing
 	Enqueued bool
-	// Err is the enqueue error when present
+	// Err is the enqueue/dispatch error when present
 	Err error
 }
 
@@ -39,7 +34,7 @@ type EmitFailureMeta struct {
 
 // EmitFailureDetails stores failure context for deterministic re-emission
 type EmitFailureDetails struct {
-	// Topic is the soiree topic name
+	// Topic is the event topic name
 	Topic string `json:"topic"`
 	// EventID is the idempotency key when available
 	EventID string `json:"event_id,omitempty"`
@@ -101,71 +96,58 @@ func ParseEmitFailureDetails(raw json.RawMessage) (EmitFailureDetails, error) {
 	return details, nil
 }
 
-// EmitWorkflowEvent wraps and emits a typed workflow event, returning enqueue status
-func EmitWorkflowEvent[T any](ctx context.Context, emitter soiree.Emitter, topic soiree.TypedTopic[T], payload T, client any) EmitReceipt {
-	event, err := topic.Wrap(payload)
-	if err != nil {
-		return EmitReceipt{Err: err}
-	}
-
-	return EmitWorkflowEventWithEvent(ctx, emitter, topic.Name(), event, client)
+// EmitWorkflowEvent emits a typed workflow payload via Gala
+func EmitWorkflowEvent(ctx context.Context, runtime *gala.Gala, topic gala.TopicName, payload any) EmitReceipt {
+	return EmitWorkflowEventWithHeaders(ctx, runtime, topic, payload, gala.Headers{})
 }
 
-// EmitWorkflowEventWithEvent emits a pre-built event and returns enqueue status
-func EmitWorkflowEventWithEvent(ctx context.Context, emitter soiree.Emitter, topic string, event soiree.Event, client any) EmitReceipt {
-	if emitter == nil {
+// EmitWorkflowEventWithHeaders emits a typed workflow payload via Gala with explicit headers
+func EmitWorkflowEventWithHeaders(ctx context.Context, runtime *gala.Gala, topic gala.TopicName, payload any, headers gala.Headers) EmitReceipt {
+	eventID := string(gala.NewEventID())
+
+	if runtime == nil {
+		return EmitReceipt{
+			EventID: eventID,
+			Err:     ErrEmitNoEmitter,
+		}
+	}
+
+	resolvedHeaders := headers
+	if resolvedHeaders.IdempotencyKey == "" {
+		resolvedHeaders.IdempotencyKey = eventID
+	}
+	receipt := runtime.EmitWithHeaders(ctx, topic, payload, resolvedHeaders)
+	receivedEventID := string(receipt.EventID)
+	if receivedEventID == "" {
+		receivedEventID = eventID
+	}
+
+	return EmitReceipt{
+		EventID:  receivedEventID,
+		Enqueued: receipt.Accepted,
+		Err:      receipt.Err,
+	}
+}
+
+// EmitWorkflowEnvelope emits a pre-built Gala envelope
+func EmitWorkflowEnvelope(ctx context.Context, runtime *gala.Gala, envelope gala.Envelope) EmitReceipt {
+	if runtime == nil {
 		return EmitReceipt{Err: ErrEmitNoEmitter}
 	}
 
-	if ctx != nil {
-		event.SetContext(ctx)
-	}
-	if client != nil {
-		event.SetClient(client)
+	if envelope.ID == "" {
+		envelope.ID = gala.NewEventID()
 	}
 
-	eventID := soiree.EventID(event)
-	if eventID == "" {
-		props := event.Properties()
-		if props == nil {
-			props = soiree.NewProperties()
-		}
-		eventID = ulids.New().String()
-		props[soiree.PropertyEventID] = eventID
-		event.SetProperties(props)
+	if envelope.Headers.IdempotencyKey == "" {
+		envelope.Headers.IdempotencyKey = string(envelope.ID)
 	}
 
-	errCh := emitter.Emit(topic, event)
-	enqueueErr := drainEmitErrors(errCh, emitEnqueueTimeout)
+	err := runtime.EmitEnvelope(ctx, envelope)
 
 	return EmitReceipt{
-		EventID:  eventID,
-		Enqueued: enqueueErr == nil,
-		Err:      enqueueErr,
-	}
-}
-
-// drainEmitErrors reads errors until close or timeout and returns the first error
-func drainEmitErrors(errCh <-chan error, timeout time.Duration) error {
-	if errCh == nil {
-		return nil
-	}
-
-	timer := time.NewTimer(timeout)
-	defer timer.Stop()
-
-	var firstErr error
-	for {
-		select {
-		case err, ok := <-errCh:
-			if !ok {
-				return firstErr
-			}
-			if err != nil && firstErr == nil {
-				firstErr = err
-			}
-		case <-timer.C:
-			return firstErr
-		}
+		EventID:  string(envelope.ID),
+		Enqueued: err == nil,
+		Err:      err,
 	}
 }

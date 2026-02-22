@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/mutations"
 )
 
 // DeriveDomainKey generates a stable domain key from a sorted list of field names.
@@ -168,7 +169,7 @@ func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) 
 			return nil, fmt.Errorf("%w: action %q: %v", ErrApprovalActionParamsInvalid, action.Key, err)
 		}
 
-		fields := NormalizeStrings(params.Fields)
+		fields := mutations.NormalizeStrings(params.Fields)
 		if len(fields) == 0 {
 			continue
 		}
@@ -194,9 +195,8 @@ func DomainChangesForDefinition(doc models.WorkflowDefinitionDocument, objectTyp
 
 	domainChanges := SplitChangesByDomains(proposedChanges, objectType, domains)
 	if len(domainChanges) == 0 {
-		fields := lo.Keys(proposedChanges)
+		fields := FieldsFromChanges(proposedChanges)
 		if len(fields) > 0 {
-			sort.Strings(fields)
 			domainChanges = []DomainChanges{{
 				DomainKey: DeriveDomainKey(objectType, fields),
 				Fields:    fields,

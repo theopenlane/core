@@ -105,10 +105,3 @@ func runLifecycle(ctx context.Context, out io.Writer, svc *storage.ObjectService
 
 	return uploadedFile, nil
 }
-
-func cloneProviderOptions(in *storage.ProviderOptions) *storage.ProviderOptions {
-	if in == nil {
-		return nil
-	}
-	return in.Clone()
-}

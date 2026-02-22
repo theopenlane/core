@@ -300,7 +300,8 @@
           "description": "Additional HTTP headers to include in the request"
         },
         "payload_expr": {
-          "type": "string"
+          "type": "string",
+          "description": "CEL expression that evaluates to additional data merged into the webhook payload"
         },
         "timeout_ms": {
           "type": "integer",
@@ -343,10 +344,10 @@
             "CREATE_OBJECT",
             "REQUEST_REVIEW"
           ],
-          "description": "Action type: REQUEST_APPROVAL, NOTIFY, WEBHOOK, UPDATE_FIELD, or INTEGRATION"
+          "description": "Action type: REQUEST_APPROVAL, REQUEST_REVIEW, NOTIFY, WEBHOOK, UPDATE_FIELD, INTEGRATION, or CREATE_OBJECT"
         },
         "params": {
-          "description": "Action-specific parameters. Schema depends on the action type:\n- REQUEST_APPROVAL: ApprovalActionParams\n- NOTIFY: NotificationActionParams\n- WEBHOOK: WebhookActionParams\n- UPDATE_FIELD: FieldUpdateActionParams\n- INTEGRATION: IntegrationActionParams"
+          "description": "Action-specific parameters. Schema depends on the action type:\n- REQUEST_APPROVAL: ApprovalActionParams\n- REQUEST_REVIEW: ReviewActionParams\n- NOTIFY: NotificationActionParams\n- WEBHOOK: WebhookActionParams\n- UPDATE_FIELD: FieldUpdateActionParams\n- INTEGRATION: IntegrationActionParams\n- CREATE_OBJECT: CreateObjectActionParams"
         },
         "when": {
           "type": "string",

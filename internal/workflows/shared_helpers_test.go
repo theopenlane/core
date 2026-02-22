@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -21,53 +20,6 @@ func TestWorkflowCreationError(t *testing.T) {
 
 	assert.True(t, strings.Contains(err.Error(), "workflow instance creation failed"))
 	assert.ErrorIs(t, err, baseErr)
-}
-
-func TestBuildProposedChanges(t *testing.T) {
-	m := fakeMutation{
-		fields:  []string{"fieldA"},
-		cleared: []string{"fieldB"},
-		values: map[string]any{
-			"fieldA": "value",
-		},
-	}
-
-	changes := BuildProposedChanges(m, []string{"fieldA", "fieldB", "fieldC"})
-	assert.Equal(t, map[string]any{
-		"fieldA": "value",
-		"fieldB": nil,
-	}, changes)
-}
-
-func TestDefinitionMatchesTrigger(t *testing.T) {
-	doc := models.WorkflowDefinitionDocument{
-		Triggers: []models.WorkflowTrigger{
-			{Operation: "UPDATE", Fields: []string{"name"}},
-		},
-	}
-	assert.False(t, DefinitionMatchesTrigger(doc, "CREATE", []string{"name"}))
-	assert.False(t, DefinitionMatchesTrigger(doc, "", []string{"name"}))
-
-	doc = models.WorkflowDefinitionDocument{
-		Triggers: []models.WorkflowTrigger{
-			{Operation: "UPDATE"},
-		},
-	}
-	assert.True(t, DefinitionMatchesTrigger(doc, "UPDATE", nil))
-
-	doc = models.WorkflowDefinitionDocument{
-		Triggers: []models.WorkflowTrigger{
-			{Fields: []string{"status"}, Edges: []string{"owner"}},
-		},
-	}
-	assert.True(t, DefinitionMatchesTrigger(doc, "", []string{"status"}))
-
-	doc = models.WorkflowDefinitionDocument{
-		Triggers: []models.WorkflowTrigger{
-			{Fields: []string{"status"}, Edges: []string{"owner"}},
-		},
-	}
-	assert.False(t, DefinitionMatchesTrigger(doc, "", []string{"other"}))
 }
 
 func TestResolveOwnerID(t *testing.T) {

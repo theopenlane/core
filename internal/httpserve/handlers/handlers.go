@@ -31,7 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/shortlinks"
@@ -127,10 +127,8 @@ type Handler struct {
 	IntegrationClients *keystore.ClientPoolManager
 	// IntegrationOperations standardizes executing provider operations
 	IntegrationOperations *keystore.OperationManager
-	// IntegrationIngestEmitter publishes webhook ingest events (dedicated pool).
-	IntegrationIngestEmitter soiree.Emitter
-	// EventEmitter publishes asynchronous integration events
-	EventEmitter soiree.Emitter
+	// Gala is the shared event runtime for asynchronous dispatch.
+	Gala *gala.Gala
 	// IntegrationActivation orchestrates integration activation flows
 	IntegrationActivation *activation.Service
 	// WorkflowEngine orchestrates workflow execution.

@@ -90,10 +90,10 @@ func (NotificationPreference) Fields() []ent.Field {
 			GoType(enums.Priority("")).
 			Optional(),
 		field.Strings("topic_patterns").
-			Comment("soiree topic names or wildcard patterns this preference applies to; empty means all").
+			Comment("topic names or wildcard patterns this preference applies to; empty means all").
 			Optional(),
 		field.JSON("topic_overrides", map[string]any{}).
-			Comment("optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name").
+			Comment("optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),

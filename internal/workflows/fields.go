@@ -5,6 +5,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/mutations"
 )
 
 // eligibleFieldsRegistry holds the registered eligible fields map from generated code.
@@ -56,14 +57,10 @@ func SeparateFieldsByEligibility(schemaType string, fields []string) (eligible, 
 // CollectChangedFields returns the union of modified and cleared fields from a mutation,
 // filtered to only include fields eligible for workflow processing.
 func CollectChangedFields(m utils.GenericMutation) []string {
-	fields := m.Fields()
-	cleared := m.ClearedFields()
-
 	objectType := enums.ToWorkflowObjectType(m.Type())
 	eligible := EligibleWorkflowFields(lo.FromPtr(objectType))
 
-	allFields := append(append([]string(nil), fields...), cleared...)
-	uniqueFields := lo.Uniq(allFields)
+	uniqueFields, _ := mutations.ChangedAndClearedFields(m)
 
 	if len(eligible) == 0 {
 		return uniqueFields
@@ -78,9 +75,6 @@ func CollectChangedFields(m utils.GenericMutation) []string {
 // CollectAllChangedFields returns the union of modified and cleared fields from a mutation
 // without filtering by workflow eligibility.
 func CollectAllChangedFields(m utils.GenericMutation) []string {
-	fields := m.Fields()
-	cleared := m.ClearedFields()
-
-	allFields := append(append([]string(nil), fields...), cleared...)
-	return lo.Uniq(allFields)
+	allFields, _ := mutations.ChangedAndClearedFields(m)
+	return allFields
 }

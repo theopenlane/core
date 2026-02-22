@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"sync"
 	"testing"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/samber/do/v2"
@@ -384,12 +385,6 @@ type runtimeOperationPayload struct {
 	Message   string `json:"message"`
 }
 
-type runtimeAccessorTestDispatcher struct{}
-
-func (runtimeAccessorTestDispatcher) Dispatch(context.Context, Envelope) error {
-	return nil
-}
-
 func TestRuntimeAccessorsReturnConfiguredDependencies(t *testing.T) {
 	injector := do.New()
 	contextManager, err := NewContextManager()
@@ -397,7 +392,7 @@ func TestRuntimeAccessorsReturnConfiguredDependencies(t *testing.T) {
 		t.Fatalf("failed to build context manager: %v", err)
 	}
 
-	dispatcher := runtimeAccessorTestDispatcher{}
+	dispatcher := &runtimeTestDispatcher{}
 	runtime := newTestGala(t, dispatcher)
 	runtime.injector = injector
 	runtime.contextManager = contextManager
@@ -619,16 +614,8 @@ func TestRuntimeDispatchEnvelopeFiltersListenersByOperation(t *testing.T) {
 	}
 }
 
-type failingDispatcher struct {
-	err error
-}
-
-func (d failingDispatcher) Dispatch(context.Context, Envelope) error {
-	return d.err
-}
-
 func TestRuntimeEmitReturnsDurableDispatchError(t *testing.T) {
-	dispatcher := failingDispatcher{err: errors.New("durable failed")}
+	dispatcher := &runtimeTestDispatcher{err: errors.New("durable failed")}
 	runtime := newTestGala(t, dispatcher)
 
 	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.durable.error")}
@@ -697,12 +684,12 @@ func TestListenerErrorErrorMethod(t *testing.T) {
 		{
 			name:     "panicked listener",
 			err:      ListenerError{ListenerName: "test.listener", Panicked: true, Cause: ErrListenerPanicked},
-			expected: "gala: listener panicked",
+			expected: `gala: listener "test.listener" panicked: gala: listener panicked`,
 		},
 		{
 			name:     "non-panicked listener",
 			err:      ListenerError{ListenerName: "test.listener", Panicked: false, Cause: errors.New("failed")},
-			expected: "gala: listener execution failed",
+			expected: `gala: listener "test.listener" execution failed: failed`,
 		},
 	}
 
@@ -1036,6 +1023,264 @@ func TestConfigValidatePreservesExplicitValues(t *testing.T) {
 
 	if config.WorkerCount != 10 {
 		t.Fatalf("expected worker count to be preserved as 10, got %d", config.WorkerCount)
+	}
+}
+
+func TestConfigValidateInMemoryAllowsMissingConnectionURI(t *testing.T) {
+	config := Config{
+		DispatchMode: DispatchModeInMemory,
+	}
+
+	if err := config.validate(); err != nil {
+		t.Fatalf("unexpected validation error: %v", err)
+	}
+}
+
+func TestConfigValidateRejectsUnknownDispatchMode(t *testing.T) {
+	config := Config{
+		DispatchMode: DispatchMode("unknown"),
+	}
+
+	if err := config.validate(); !errors.Is(err, ErrDispatchModeInvalid) {
+		t.Fatalf("expected ErrDispatchModeInvalid, got %v", err)
+	}
+}
+
+func TestNewGalaInMemoryModeDoesNotRequireRiverConnection(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	if runtime.Registry() == nil {
+		t.Fatalf("expected in-memory gala registry to be initialized")
+	}
+
+	if runtime.inMemoryPool == nil {
+		t.Fatalf("expected in-memory gala pool to be initialized")
+	}
+
+	if err := runtime.StartWorkers(context.Background()); err != nil {
+		t.Fatalf("expected StartWorkers to be a no-op in in-memory mode, got %v", err)
+	}
+
+	if err := runtime.StopWorkers(context.Background()); err != nil {
+		t.Fatalf("expected StopWorkers to be a no-op in in-memory mode, got %v", err)
+	}
+}
+
+func TestInMemoryDispatchUsesPoolWorkerLimit(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+		WorkerCount:  1,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.inmemory.pool")}
+	if err := RegisterTopic(runtime.Registry(), Registration[runtimeTestPayload]{
+		Topic: topic,
+		Codec: JSONCodec[runtimeTestPayload]{},
+	}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	firstStarted := make(chan struct{})
+	secondStarted := make(chan struct{})
+	releaseFirst := make(chan struct{})
+
+	callCount := 0
+	callMu := sync.Mutex{}
+	if _, err := AttachListener(runtime.Registry(), Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.inmemory.pool.listener",
+		Handle: func(_ HandlerContext, _ runtimeTestPayload) error {
+			callMu.Lock()
+			callCount++
+			current := callCount
+			callMu.Unlock()
+
+			if current == 1 {
+				close(firstStarted)
+				<-releaseFirst
+				return nil
+			}
+
+			if current == 2 {
+				close(secondStarted)
+			}
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	errs := make(chan error, 2)
+	go func() {
+		receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "one"}, Headers{})
+		errs <- receipt.Err
+	}()
+
+	<-firstStarted
+
+	go func() {
+		receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "two"}, Headers{})
+		errs <- receipt.Err
+	}()
+
+	select {
+	case <-secondStarted:
+		t.Fatalf("expected second listener execution to wait for in-memory pool worker availability")
+	case <-time.After(100 * time.Millisecond): //nolint:mnd
+	}
+
+	close(releaseFirst)
+
+	for i := 0; i < 2; i++ {
+		if emitErr := <-errs; emitErr != nil {
+			t.Fatalf("unexpected emit error: %v", emitErr)
+		}
+	}
+
+	select {
+	case <-secondStarted:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("expected second listener execution after first completed")
+	}
+}
+
+func TestInMemoryEmitReturnsBeforeListenerCompletes(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+		WorkerCount:  1,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.inmemory.async")}
+	if err := RegisterTopic(runtime.Registry(), Registration[runtimeTestPayload]{
+		Topic: topic,
+		Codec: JSONCodec[runtimeTestPayload]{},
+	}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	started := make(chan struct{})
+	release := make(chan struct{})
+	done := make(chan struct{})
+
+	if _, err := AttachListener(runtime.Registry(), Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.inmemory.async.listener",
+		Handle: func(_ HandlerContext, _ runtimeTestPayload) error {
+			close(started)
+			<-release
+			close(done)
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	receiptCh := make(chan EmitReceipt, 1)
+	go func() {
+		receiptCh <- runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "async"}, Headers{})
+	}()
+
+	select {
+	case <-started:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("expected listener to start")
+	}
+
+	select {
+	case receipt := <-receiptCh:
+		if receipt.Err != nil {
+			t.Fatalf("unexpected emit error: %v", receipt.Err)
+		}
+	case <-time.After(200 * time.Millisecond): //nolint:mnd
+		t.Fatalf("expected emit to return before listener completion")
+	}
+
+	select {
+	case <-done:
+		t.Fatalf("expected listener to remain blocked until release")
+	default:
+	}
+
+	close(release)
+
+	select {
+	case <-done:
+	case <-time.After(1 * time.Second):
+		t.Fatalf("expected listener to complete after release")
+	}
+}
+
+func TestBuildQueueConfigIncludesAdditionalQueues(t *testing.T) {
+	queues := buildQueueConfig("events", 10, map[string]int{
+		"integrations": 4,
+		"":             3,
+		"bad":          0,
+	})
+
+	defaultQueue, ok := queues["events"]
+	if !ok {
+		t.Fatalf("expected default events queue in config")
+	}
+	if defaultQueue.MaxWorkers != 10 {
+		t.Fatalf("expected events max workers 10, got %d", defaultQueue.MaxWorkers)
+	}
+
+	integrationQueue, ok := queues["integrations"]
+	if !ok {
+		t.Fatalf("expected integrations queue in config")
+	}
+	if integrationQueue.MaxWorkers != 4 {
+		t.Fatalf("expected integrations max workers 4, got %d", integrationQueue.MaxWorkers)
+	}
+
+	if _, exists := queues[""]; exists {
+		t.Fatalf("did not expect empty queue name in config")
+	}
+	if _, exists := queues["bad"]; exists {
+		t.Fatalf("did not expect non-positive worker queue in config")
+	}
+}
+
+func TestQueueNamesFromConfigSortsAndSkipsEmpty(t *testing.T) {
+	queueNames := queueNamesFromConfig(buildQueueConfig("events", 10, map[string]int{
+		"integrations": 4,
+		"audit":        2,
+		"":             1,
+	}))
+
+	expected := []string{"audit", "events", "integrations"}
+	if len(queueNames) != len(expected) {
+		t.Fatalf("expected %d queue names, got %d (%v)", len(expected), len(queueNames), queueNames)
+	}
+
+	for i, name := range expected {
+		if queueNames[i] != name {
+			t.Fatalf("expected queueNames[%d] to be %q, got %q", i, name, queueNames[i])
+		}
 	}
 }
 

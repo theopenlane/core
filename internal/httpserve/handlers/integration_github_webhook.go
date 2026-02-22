@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // GitHub webhook header names and limits.
@@ -134,21 +135,14 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		},
 	}
 
-	if h.IntegrationIngestEmitter != nil {
-		errCh := h.IntegrationIngestEmitter.Emit(ingest.TopicIntegrationIngestRequested, ingest.RequestedPayload{
+	if h.Gala != nil {
+		receipt := h.Gala.EmitWithHeaders(req.Context(), ingest.IntegrationIngestRequestedTopic.Name, ingest.RequestedPayload{
 			IntegrationID: integrationRecord.ID,
 			Schema:        integrationgenerated.IntegrationMappingSchemaVulnerability,
 			Envelopes:     alerts,
-		})
-
-		if errCh != nil {
-			go func() {
-				for err := range errCh {
-					if err != nil {
-						logx.FromContext(req.Context()).Warn().Err(err).Msg("failed to emit integration ingest event")
-					}
-				}
-			}()
+		}, gala.Headers{})
+		if receipt.Err != nil {
+			logx.FromContext(req.Context()).Warn().Err(receipt.Err).Msg("failed to emit integration ingest event")
 		}
 	}
 

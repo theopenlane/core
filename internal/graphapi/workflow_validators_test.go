@@ -14,6 +14,8 @@ import (
 )
 
 func TestValidateWorkflowDefinitionInput(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name       string
 		schemaType string
@@ -119,6 +121,8 @@ func TestValidateWorkflowDefinitionInput(t *testing.T) {
 }
 
 func TestValidateReviewActionParams(t *testing.T) {
+	t.Parallel()
+
 	params := workflows.ReviewActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
 			Targets: []workflows.TargetConfig{
@@ -135,6 +139,8 @@ func TestValidateReviewActionParams(t *testing.T) {
 }
 
 func TestValidateTrigger(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name       string
 		schemaType string
@@ -200,6 +206,8 @@ func TestValidateTrigger(t *testing.T) {
 }
 
 func TestValidateApprovalActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name           string
 		params         json.RawMessage
@@ -272,6 +280,8 @@ func TestValidateApprovalActionParams(t *testing.T) {
 }
 
 func TestValidateWebhookActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name            string
 		params          json.RawMessage
@@ -333,6 +343,8 @@ func TestValidateWebhookActionParams(t *testing.T) {
 }
 
 func TestValidateFieldUpdateActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		params  json.RawMessage
@@ -370,6 +382,8 @@ func TestValidateFieldUpdateActionParams(t *testing.T) {
 }
 
 func TestValidateTarget(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		target  workflows.TargetConfig
@@ -427,6 +441,8 @@ func TestValidateTarget(t *testing.T) {
 }
 
 func TestFilterApprovalActions(t *testing.T) {
+	t.Parallel()
+
 	actions := []models.WorkflowAction{
 		{Key: "approval1", Type: string(enums.WorkflowActionTypeApproval)},
 		{Key: "webhook1", Type: string(enums.WorkflowActionTypeWebhook)},
@@ -442,6 +458,8 @@ func TestFilterApprovalActions(t *testing.T) {
 }
 
 func TestExtractFieldSetKey(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		action   models.WorkflowAction
@@ -478,6 +496,8 @@ func TestExtractFieldSetKey(t *testing.T) {
 }
 
 func TestValidateApprovalSubmissionMode(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		mode    enums.WorkflowApprovalSubmissionMode
@@ -515,6 +535,8 @@ func TestValidateApprovalSubmissionMode(t *testing.T) {
 }
 
 func TestValidateRequiredField(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		required any

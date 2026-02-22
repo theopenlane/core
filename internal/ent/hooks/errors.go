@@ -44,8 +44,6 @@ var (
 	ErrMissingRequiredName = errors.New("name or display name is required but not provided")
 	// ErrTooManyAvatarFiles is returned when a user attempts to upload more than one avatar file
 	ErrTooManyAvatarFiles = errors.New("too many avatar files uploaded, only one is allowed")
-	// ErrFailedToRegisterListener is returned when a listener fails to register
-	ErrFailedToRegisterListener = errors.New("failed to register listener")
 	// ErrNoControls is returned when a subcontrol has no controls assigned
 	ErrNoControls = errors.New("subcontrol must have at least one control assigned")
 	// ErrUnableToCast is returned when a type assertion fails
@@ -133,14 +131,8 @@ var (
 	ErrMutationMissingID = errors.New("mutation missing ID")
 	// ErrProposedChangesNotSupported is returned when proposed changes are not supported for a schema type
 	ErrProposedChangesNotSupported = errors.New("proposed changes not supported for this schema type")
-	// ErrWorkflowIneligibleField is returned when a field is not eligible for workflow approval
-	ErrWorkflowIneligibleField = errors.New("field is not eligible for workflow approval")
 	// ErrFailedToGetUserFromContext is returned when the user cannot be resolved from the context
 	ErrFailedToGetUserFromContext = errors.New("failed to get user from context")
-	// ErrWorkflowUnknownSchemaType is returned when a workflow schema type is unknown
-	ErrWorkflowUnknownSchemaType = errors.New("unknown workflow schema type")
-	// ErrWorkflowNoEligibleFields is returned when no eligible workflow fields exist for a schema
-	ErrWorkflowNoEligibleFields = errors.New("no eligible workflow fields for schema")
 	// ErrFailedToGetObjectOwnerID is returned when the owner id cannot be resolved for a workflow object
 	ErrFailedToGetObjectOwnerID = errors.New("failed to get object owner id")
 	// ErrFailedToQueryObjectRefs is returned when workflow object refs cannot be queried

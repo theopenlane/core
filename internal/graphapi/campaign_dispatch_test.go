@@ -14,12 +14,16 @@ import (
 
 // TestCampaignTargetDispatchableOverdueResend ensures overdue targets can be resent.
 func TestCampaignTargetDispatchableOverdueResend(t *testing.T) {
+	t.Parallel()
+
 	dispatchable := campaignTargetDispatchable(enums.AssessmentResponseStatusOverdue, true, false)
 	assert.Check(t, dispatchable)
 }
 
 // TestResolveCampaignScheduleAt validates schedule resolution rules.
 func TestResolveCampaignScheduleAt(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2024, time.January, 2, 15, 4, 5, 0, time.UTC)
 	past := models.DateTime(now.Add(-time.Hour))
 	future := models.DateTime(now.Add(time.Hour))
@@ -45,6 +49,8 @@ func TestResolveCampaignScheduleAt(t *testing.T) {
 
 // TestShouldSetCampaignDueDate ensures due-date behavior on resend.
 func TestShouldSetCampaignDueDate(t *testing.T) {
+	t.Parallel()
+
 	now := time.Date(2024, time.January, 2, 15, 4, 5, 0, time.UTC)
 	past := models.DateTime(now.Add(-time.Hour))
 	future := models.DateTime(now.Add(time.Hour))
