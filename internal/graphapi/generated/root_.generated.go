@@ -3203,7 +3203,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEmailBranding           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload, entityTypeName *string) int
 		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEvidence                func(childComplexity int, input graphql.Upload) int
@@ -3265,7 +3265,7 @@ type ComplexityRoot struct {
 		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
 		CreateBulkEmailBranding              func(childComplexity int, input []*generated.CreateEmailBrandingInput) int
 		CreateBulkEmailTemplate              func(childComplexity int, input []*generated.CreateEmailTemplateInput) int
-		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput) int
+		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput, entityTypeName *string) int
 		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
 		CreateBulkEvent                      func(childComplexity int, input []*generated.CreateEventInput) int
 		CreateBulkEvidence                   func(childComplexity int, input []*generated.CreateEvidenceInput) int
@@ -22858,7 +22858,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBulkCSVEntity(childComplexity, args["input"].(graphql.Upload)), true
+		return e.complexity.Mutation.CreateBulkCSVEntity(childComplexity, args["input"].(graphql.Upload), args["entityTypeName"].(*string)), true
 
 	case "Mutation.createBulkCSVEntityType":
 		if e.complexity.Mutation.CreateBulkCSVEntityType == nil {
@@ -23602,7 +23602,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBulkEntity(childComplexity, args["input"].([]*generated.CreateEntityInput)), true
+		return e.complexity.Mutation.CreateBulkEntity(childComplexity, args["input"].([]*generated.CreateEntityInput), args["entityTypeName"].(*string)), true
 
 	case "Mutation.createBulkEntityType":
 		if e.complexity.Mutation.CreateBulkEntityType == nil {
@@ -132271,6 +132271,10 @@ extend type Mutation{
         values of the entity
         """
         input: [CreateEntityInput!]
+        """
+        entity type name allows the name of the entity type to be passed in over an id, this is applied to all created entities
+        """
+        entityTypeName: String
     ): EntityBulkCreatePayload!
     """
     Create multiple new entities via file upload
@@ -132280,6 +132284,10 @@ extend type Mutation{
         csv file containing values of the entity
         """
         input: Upload!
+        """
+        entity type name allows the name of the entity type to be passed in over an id, this is applied to all created entities
+        """
+        entityTypeName: String
     ): EntityBulkCreatePayload!
     """
     Update an existing entity

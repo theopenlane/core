@@ -169,8 +169,8 @@ type MutationResolver interface {
 	DeleteEmailTemplate(ctx context.Context, id string) (*model.EmailTemplateDeletePayload, error)
 	DeleteBulkEmailTemplate(ctx context.Context, ids []string) (*model.EmailTemplateBulkDeletePayload, error)
 	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string) (*model.EntityCreatePayload, error)
-	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput) (*model.EntityBulkCreatePayload, error)
-	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error)
+	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
+	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
 	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error)
 	DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error)
 	DeleteBulkEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error)
@@ -1008,6 +1008,11 @@ func (ec *executionContext) field_Mutation_createBulkCSVEntity_args(ctx context.
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "entityTypeName", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["entityTypeName"] = arg1
 	return args, nil
 }
 
@@ -1690,6 +1695,11 @@ func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Con
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "entityTypeName", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["entityTypeName"] = arg1
 	return args, nil
 }
 
@@ -15397,7 +15407,7 @@ func (ec *executionContext) _Mutation_createBulkEntity(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createBulkEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEntity(ctx, fc.Args["input"].([]*generated.CreateEntityInput))
+			return ec.resolvers.Mutation().CreateBulkEntity(ctx, fc.Args["input"].([]*generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
 		},
 		nil,
 		ec.marshalNEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkCreatePayload,
@@ -15442,7 +15452,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEntity(ctx context.Context, f
 		ec.fieldContext_Mutation_createBulkCSVEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEntity(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.resolvers.Mutation().CreateBulkCSVEntity(ctx, fc.Args["input"].(graphql.Upload), fc.Args["entityTypeName"].(*string))
 		},
 		nil,
 		ec.marshalNEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkCreatePayload,

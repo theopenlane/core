@@ -40869,6 +40869,11 @@ type Mutation {
 		values of the entity
 		"""
 		input: [CreateEntityInput!]
+
+		"""
+		entity type name allows the name of the entity type to be passed in over an id, this is applied to all created entities
+		"""
+		entityTypeName: String
 	): EntityBulkCreatePayload!
 	"""
 	Create multiple new entities via file upload
@@ -40878,6 +40883,11 @@ type Mutation {
 		csv file containing values of the entity
 		"""
 		input: Upload!
+
+		"""
+		entity type name allows the name of the entity type to be passed in over an id, this is applied to all created entities
+		"""
+		entityTypeName: String
 	): EntityBulkCreatePayload!
 	"""
 	Update an existing entity

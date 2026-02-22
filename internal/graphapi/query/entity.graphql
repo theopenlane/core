@@ -1,5 +1,5 @@
-mutation CreateBulkCSVEntity($input: Upload!) {
-  createBulkCSVEntity(input: $input) {
+mutation CreateBulkCSVEntity($input: Upload!, $entityTypeName: String) {
+  createBulkCSVEntity(input: $input, entityTypeName: $entityTypeName) {
     entities {
       createdAt
       createdBy
@@ -30,8 +30,8 @@ mutation CreateBulkCSVEntity($input: Upload!) {
   }
 }
 
-mutation CreateBulkEntity($input: [CreateEntityInput!]) {
-  createBulkEntity(input: $input) {
+mutation CreateBulkEntity($input: [CreateEntityInput!], $entityTypeName: String) {
+  createBulkEntity(input: $input, entityTypeName: $entityTypeName) {
     entities {
       createdAt
       createdBy
