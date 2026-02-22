@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -13,8 +15,6 @@ import (
 const (
 	azureSecurityHealth  types.OperationName = "health.default"
 	azureSecurityPricing types.OperationName = "security.pricing_overview"
-
-	maxSampleSize = 5
 )
 
 // azureSecurityOperations registers the Defender for Cloud operations.
@@ -74,18 +74,14 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
 
-	samples := make([]map[string]any, 0, maxSampleSize)
-	for _, item := range resp.Value {
-		if len(samples) >= cap(samples) {
-			break
-		}
-		samples = append(samples, map[string]any{
+	samples := lo.Map(resp.Value[:min(len(resp.Value), operations.DefaultSampleSize)], func(item defenderPricing, _ int) map[string]any {
+		return map[string]any{
 			"name":      item.Name,
 			"tier":      item.Properties.PricingTier,
 			"subPlan":   item.Properties.SubPlan,
 			"freeTrial": item.Properties.FreeTrialRemainingTime,
-		})
-	}
+		}
+	})
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,

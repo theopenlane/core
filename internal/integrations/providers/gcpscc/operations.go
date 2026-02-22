@@ -25,7 +25,6 @@ const (
 
 	findingsPageSize      = 100
 	findingsMaxPageSize   = 1000
-	maxSampleSize         = 5
 	settingsPageSize      = 10
 	sampleConfigsCapacity = 5
 	sccAlertTypeFinding   = "finding"
@@ -179,7 +178,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	maxFindings := config.MaxFindings
 
 	total := 0
-	samples := make([]map[string]any, 0, maxSampleSize)
+	samples := make([]map[string]any, 0, operations.DefaultSampleSize)
 	envelopes := make([]types.AlertEnvelope, 0)
 	severityCounts := map[string]int{}
 	stateCounts := map[string]int{}

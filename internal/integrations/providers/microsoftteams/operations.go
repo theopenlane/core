@@ -57,7 +57,14 @@ var teamsMessageConfigSchema = operations.SchemaFrom[teamsMessageOperationConfig
 // teamsOperations returns the Microsoft Teams operations supported by this provider
 func teamsOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI, runTeamsHealth),
+		operations.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI,
+			operations.HealthCheckRunner(operations.TokenTypeOAuth, "https://graph.microsoft.com/v1.0/me", "Graph /me failed",
+				func(profile teamsProfileResponse) (string, map[string]any) {
+					return fmt.Sprintf("Graph token valid for %s", profile.DisplayName), map[string]any{
+						"id":   profile.ID,
+						"mail": profile.Mail,
+					}
+				})),
 		{
 			Name:        teamsChannelsOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -76,32 +83,13 @@ func teamsOperations() []types.OperationDescriptor {
 	}
 }
 
-// runTeamsHealth verifies the Microsoft Graph token by fetching the user profile
-func runTeamsHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	var profile struct {
-		// ID is the user identifier
-		ID string `json:"id"`
-		// DisplayName is the user display name
-		DisplayName string `json:"displayName"`
-		// Mail is the primary email address
-		Mail string `json:"mail"`
-	}
-
-	endpoint := "https://graph.microsoft.com/v1.0/me"
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &profile); err != nil {
-		return operations.OperationFailure("Graph /me failed", err, nil)
-	}
-
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Graph token valid for %s", profile.DisplayName),
-		Details: map[string]any{"id": profile.ID, "mail": profile.Mail},
-	}, nil
+type teamsProfileResponse struct {
+	// ID is the user identifier
+	ID string `json:"id"`
+	// DisplayName is the user display name
+	DisplayName string `json:"displayName"`
+	// Mail is the primary email address
+	Mail string `json:"mail"`
 }
 
 // runTeamsSample collects a sample of joined Teams for the authenticated user

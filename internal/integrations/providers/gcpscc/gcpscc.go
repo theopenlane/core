@@ -489,4 +489,3 @@ func (m credentialMetadata) applyDefaults() credentialMetadata {
 	normalized.Scopes = types.NormalizeStringSlice(normalized.Scopes)
 	return normalized
 }
-

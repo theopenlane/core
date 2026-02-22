@@ -349,7 +349,6 @@ func alertTypesFromConfig(values []types.LowerString) []string {
 	return out
 }
 
-
 // alertTypeRequested checks whether a specific alert type should be fetched
 func alertTypeRequested(alertTypes []string, target string) bool {
 	if len(alertTypes) == 0 {

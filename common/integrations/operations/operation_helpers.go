@@ -48,6 +48,9 @@ func HealthOperation(name types.OperationName, description string, client types.
 	}
 }
 
+// DefaultSampleSize is the standard number of sample items returned in operation results
+const DefaultSampleSize = 5
+
 // TokenType indicates whether to use OAuth or API token extraction
 type TokenType int
 

@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -18,7 +20,6 @@ const (
 
 	defaultPerPage = 50
 	maxPerPage     = 100
-	maxSampleSize  = 5
 
 	defaultAlertState = "open"
 	githubAPIVersion  = "2022-11-28"
@@ -191,18 +192,14 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		return operations.OperationFailure("GitHub repository collection failed", err, nil)
 	}
 
-	samples := make([]map[string]any, 0, min(maxSampleSize, len(repos)))
-	for _, repo := range repos {
-		if len(samples) >= cap(samples) {
-			break
-		}
-		samples = append(samples, map[string]any{
+	samples := lo.Map(repos[:min(len(repos), operations.DefaultSampleSize)], func(repo githubRepoResponse, _ int) map[string]any {
+		return map[string]any{
 			"name":       repo.Name,
 			"private":    repo.Private,
 			"updated_at": repo.UpdatedAt,
 			"url":        repo.HTMLURL,
-		})
-	}
+		}
+	})
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,

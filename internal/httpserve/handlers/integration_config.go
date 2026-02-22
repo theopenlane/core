@@ -123,4 +123,3 @@ func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID stri
 
 	return err
 }
-

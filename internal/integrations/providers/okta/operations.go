@@ -15,7 +15,6 @@ const (
 	oktaHealthOp   types.OperationName = "health.default"
 	oktaPoliciesOp types.OperationName = "policies.collect"
 )
-const maxSampleSize = 5
 
 // oktaOperations returns the Okta operations supported by this provider.
 func oktaOperations() []types.OperationDescriptor {
@@ -67,10 +66,7 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 		return operations.OperationFailure("Okta policies fetch failed", err, nil)
 	}
 
-	samples := resp
-	if len(samples) > maxSampleSize {
-		samples = samples[:maxSampleSize]
-	}
+	samples := resp[:min(len(resp), operations.DefaultSampleSize)]
 
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
