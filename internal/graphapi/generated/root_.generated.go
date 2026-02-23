@@ -809,6 +809,12 @@ type ComplexityRoot struct {
 		Node func(childComplexity int) int
 	}
 
+	ControlChange struct {
+		Diffs   func(childComplexity int) int
+		RefCode func(childComplexity int) int
+		Title   func(childComplexity int) int
+	}
+
 	ControlConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -823,9 +829,23 @@ type ComplexityRoot struct {
 		DeletedID func(childComplexity int) int
 	}
 
+	ControlDiffPayload struct {
+		Changes     func(childComplexity int) int
+		NewRevision func(childComplexity int) int
+		OldRevision func(childComplexity int) int
+		StandardID  func(childComplexity int) int
+	}
+
 	ControlEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	ControlFieldDiff struct {
+		Diff     func(childComplexity int) int
+		Field    func(childComplexity int) int
+		NewValue func(childComplexity int) int
+		OldValue func(childComplexity int) int
 	}
 
 	ControlGroup struct {
@@ -4775,6 +4795,7 @@ type ComplexityRoot struct {
 		Control                         func(childComplexity int, id string) int
 		ControlCategories               func(childComplexity int) int
 		ControlCategoriesByFramework    func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
+		ControlDiff                     func(childComplexity int, input model.ControlDiffInput) int
 		ControlImplementation           func(childComplexity int, id string) int
 		ControlImplementations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjective                func(childComplexity int, id string) int
@@ -11014,6 +11035,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlCategoryEdge.Node(childComplexity), true
 
+	case "ControlChange.diffs":
+		if e.complexity.ControlChange.Diffs == nil {
+			break
+		}
+
+		return e.complexity.ControlChange.Diffs(childComplexity), true
+
+	case "ControlChange.refCode":
+		if e.complexity.ControlChange.RefCode == nil {
+			break
+		}
+
+		return e.complexity.ControlChange.RefCode(childComplexity), true
+
+	case "ControlChange.title":
+		if e.complexity.ControlChange.Title == nil {
+			break
+		}
+
+		return e.complexity.ControlChange.Title(childComplexity), true
+
 	case "ControlConnection.edges":
 		if e.complexity.ControlConnection.Edges == nil {
 			break
@@ -11049,6 +11091,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlDeletePayload.DeletedID(childComplexity), true
 
+	case "ControlDiffPayload.changes":
+		if e.complexity.ControlDiffPayload.Changes == nil {
+			break
+		}
+
+		return e.complexity.ControlDiffPayload.Changes(childComplexity), true
+
+	case "ControlDiffPayload.newRevision":
+		if e.complexity.ControlDiffPayload.NewRevision == nil {
+			break
+		}
+
+		return e.complexity.ControlDiffPayload.NewRevision(childComplexity), true
+
+	case "ControlDiffPayload.oldRevision":
+		if e.complexity.ControlDiffPayload.OldRevision == nil {
+			break
+		}
+
+		return e.complexity.ControlDiffPayload.OldRevision(childComplexity), true
+
+	case "ControlDiffPayload.standardID":
+		if e.complexity.ControlDiffPayload.StandardID == nil {
+			break
+		}
+
+		return e.complexity.ControlDiffPayload.StandardID(childComplexity), true
+
 	case "ControlEdge.cursor":
 		if e.complexity.ControlEdge.Cursor == nil {
 			break
@@ -11062,6 +11132,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlEdge.Node(childComplexity), true
+
+	case "ControlFieldDiff.diff":
+		if e.complexity.ControlFieldDiff.Diff == nil {
+			break
+		}
+
+		return e.complexity.ControlFieldDiff.Diff(childComplexity), true
+
+	case "ControlFieldDiff.field":
+		if e.complexity.ControlFieldDiff.Field == nil {
+			break
+		}
+
+		return e.complexity.ControlFieldDiff.Field(childComplexity), true
+
+	case "ControlFieldDiff.newValue":
+		if e.complexity.ControlFieldDiff.NewValue == nil {
+			break
+		}
+
+		return e.complexity.ControlFieldDiff.NewValue(childComplexity), true
+
+	case "ControlFieldDiff.oldValue":
+		if e.complexity.ControlFieldDiff.OldValue == nil {
+			break
+		}
+
+		return e.complexity.ControlFieldDiff.OldValue(childComplexity), true
 
 	case "ControlGroup.category":
 		if e.complexity.ControlGroup.Category == nil {
@@ -35138,6 +35236,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.ControlCategoriesByFramework(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
 
+	case "Query.controlDiff":
+		if e.complexity.Query.ControlDiff == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlDiff_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlDiff(childComplexity, args["input"].(model.ControlDiffInput)), true
+
 	case "Query.controlImplementation":
 		if e.complexity.Query.ControlImplementation == nil {
 			break
@@ -48367,6 +48477,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputContactOrder,
 		ec.unmarshalInputContactWhereInput,
 		ec.unmarshalInputControlCategoryOrder,
+		ec.unmarshalInputControlDiffInput,
 		ec.unmarshalInputControlImplementationOrder,
 		ec.unmarshalInputControlImplementationWhereInput,
 		ec.unmarshalInputControlObjectiveOrder,
@@ -50509,7 +50620,93 @@ extend type Mutation{
   ): ControlBulkCreatePayload!
 }
 
+"""
+ControlDiffInput is used to compare all controls under a standard across two revisions
+"""
+input ControlDiffInput {
+    """
+    ID of the standard to compare controls for
+    """
+    standardID: ID!
+    """
+    base revision to compare from (e.g. "v1.0.0")
+    """
+    oldRevision: String!
+    """
+    target revision to compare to (e.g. "v2.0.0")
+    """
+    newRevision: String!
+}
+
+"""
+ControlFieldDiff describes a single field that differs between two control revisions
+"""
+type ControlFieldDiff {
+    """
+    Field name (snake_case)
+    """
+    field: String!
+    """
+    Value in the old revision
+    """
+    oldValue: Any
+    """
+    Value in the new revision
+    """
+    newValue: Any
+    """
+    Unified diff text when applicable
+    """
+    diff: String
+}
+
+"""
+ControlChange describes the diffs for a single control identified by refCode
+"""
+type ControlChange {
+    """
+    The ref_code of the control
+    """
+    refCode: String!
+    """
+    The title of the control at the new revision
+    """
+    title: String!
+    """
+    Field-level diffs for this control
+    """
+    diffs: [ControlFieldDiff!]!
+}
+
+"""
+ControlDiffPayload contains the field-level diffs between two revisions of all controls under a standard
+"""
+type ControlDiffPayload {
+    """
+    The standard ID being compared
+    """
+    standardID: ID!
+    """
+    The base revision
+    """
+    oldRevision: String!
+    """
+    The target revision
+    """
+    newRevision: String!
+    """
+    Per-control changes between the two revisions
+    """
+    changes: [ControlChange!]!
+}
+
 extend type Query {
+    """
+    Compare a system-owned control between two framework revisions to see which fields changed
+    """
+    controlDiff(
+        input: ControlDiffInput!
+    ): ControlDiffPayload!
     """
     All existing categories or domains used in the organization @deprecated
     """
@@ -89986,6 +90183,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   APPROVAL
   MENTION
   EXPORT
+  STANDARD_UPDATE
 }
 """
 NotificationNotificationType is enum for the field notification_type

@@ -247,6 +247,11 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 	return out, nil
 }
 
+// ControlDiff is the resolver for the controlDiff field.
+func (r *queryResolver) ControlDiff(ctx context.Context, input model.ControlDiffInput) (*model.ControlDiffPayload, error) {
+	return r.controlDiff(ctx, input)
+}
+
 // ControlCategories is the resolver for the controlCategories field.
 func (r *queryResolver) ControlCategories(ctx context.Context) ([]string, error) {
 	categories, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldCategory).
