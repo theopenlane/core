@@ -1,6 +1,9 @@
 package gala
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	// ErrGalaRequired is returned when a nil gala runtime is used
@@ -65,10 +68,8 @@ var (
 	ErrRiverWorkerStopFailed = errors.New("gala: river worker stop failed")
 	// ErrRiverClientCloseFailed is returned when closing the gala river queue client fails
 	ErrRiverClientCloseFailed = errors.New("gala: river client close failed")
-	// ErrAuthContextEncodeFailed is returned when auth context snapshot encoding fails
-	ErrAuthContextEncodeFailed = errors.New("gala: auth context encode failed")
-	// ErrAuthContextDecodeFailed is returned when auth context snapshot decoding fails
-	ErrAuthContextDecodeFailed = errors.New("gala: auth context decode failed")
+	// ErrDispatchModeInvalid is returned when an unknown gala dispatch mode is configured.
+	ErrDispatchModeInvalid = errors.New("gala: dispatch mode is invalid")
 	// ErrListenerPanicked is returned when a listener panics during execution
 	ErrListenerPanicked = errors.New("gala: listener panicked")
 )
@@ -83,10 +84,18 @@ type ListenerError struct {
 	Panicked bool
 }
 
-// Error returns a static error message for listener execution failures
+// Error returns an error message for listener execution failures
 func (e ListenerError) Error() string {
 	if e.Panicked {
+		if e.Cause != nil {
+			return fmt.Sprintf("gala: listener %q panicked: %v", e.ListenerName, e.Cause)
+		}
+
 		return "gala: listener panicked"
+	}
+
+	if e.Cause != nil {
+		return fmt.Sprintf("gala: listener %q execution failed: %v", e.ListenerName, e.Cause)
 	}
 
 	return "gala: listener execution failed"

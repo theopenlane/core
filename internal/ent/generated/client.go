@@ -126,7 +126,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
@@ -504,7 +504,7 @@ type (
 		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
 		Shortlinks         *shortlinks.Client
-		Pool               *soiree.Pool
+		Pool               *gala.Pool
 		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
@@ -642,7 +642,7 @@ func Shortlinks(v *shortlinks.Client) Option {
 }
 
 // Pool configures the Pool.
-func Pool(v *soiree.Pool) Option {
+func Pool(v *gala.Pool) Option {
 	return func(c *config) {
 		c.Pool = v
 	}

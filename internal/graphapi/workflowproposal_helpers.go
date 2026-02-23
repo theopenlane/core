@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/mutations"
 )
 
 // requireWorkflowObjectEditAccess checks that the user in the context has edit access to the given workflow object
@@ -65,18 +65,7 @@ func workflowProposalDomainFields(domainKey string) (string, []string, error) {
 		return objectType, nil, fmt.Errorf("%w: proposal domain key missing fields", rout.ErrBadRequest)
 	}
 
-	rawFields := strings.Split(fieldsPart, ",")
-	fields := make([]string, 0, len(rawFields))
-	for _, field := range rawFields {
-		trimmedField := strings.TrimSpace(field)
-		if trimmedField == "" {
-			continue
-		}
-
-		fields = append(fields, trimmedField)
-	}
-
-	fields = workflows.NormalizeStrings(fields)
+	fields := mutations.NormalizeStrings(strings.Split(fieldsPart, ","))
 	if len(fields) == 0 {
 		return objectType, nil, fmt.Errorf("%w: proposal domain key missing fields", rout.ErrBadRequest)
 	}

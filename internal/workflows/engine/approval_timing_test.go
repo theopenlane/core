@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 )
 
@@ -26,7 +27,7 @@ func (s *WorkflowEngineTestSuite) createApprovalWorkflowDefinitionWithTiming(ctx
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
 		s.Require().NoError(err, "failed to parse approval action params")
-		fields := workflows.NormalizeStrings(params.Fields)
+		fields := mutations.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
 		}

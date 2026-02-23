@@ -21,7 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -112,11 +112,11 @@ func serve(ctx context.Context) error {
 	defer redisClient.Close()
 
 	// Setup pool if max workers is greater than 0
-	var pool *soiree.Pool
+	var pool *gala.Pool
 	if so.Config.Settings.EntConfig.MaxPoolSize > 0 {
-		pool = soiree.NewPool(
-			soiree.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
-			soiree.WithPoolName("ent_client_pool"),
+		pool = gala.NewPool(
+			gala.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
+			gala.WithPoolName("ent_client_pool"),
 		)
 	}
 
@@ -172,14 +172,17 @@ func serve(ctx context.Context) error {
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
+	galaApp, notifGala, err := serveropts.NewGalaRuntimes(ctx, so)
+	if err != nil {
+		return err
+	}
+
 	jobOpts := []riverqueue.Option{
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	eventer := hooks.NewEventer(hooks.WithWorkflowListenersEnabled(so.Config.Settings.Workflows.Enabled))
-
 	clientOpts := []entdb.Option{
-		entdb.WithEventer(eventer, &so.Config.Settings.Workflows),
+		entdb.WithWorkflows(&so.Config.Settings.Workflows, galaApp),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -189,8 +192,7 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	galaApp, err := serveropts.WithGala(ctx, so, dbClient)
-	if err != nil {
+	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
 		return err
 	}
 
@@ -230,9 +232,6 @@ func serve(ctx context.Context) error {
 			log.Ctx(ctx).Error().Err(err).Msg("error closing database")
 		}
 
-		if err := soiree.ShutdownAll(); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error shutting down event pools")
-		}
 	}()
 
 	defer entdb.GracefulClose(context.Background(), dbClient, time.Second)
@@ -270,7 +269,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithIntegrationBroker(),
 		serveropts.WithIntegrationClients(),
 		serveropts.WithIntegrationOperations(),
-		serveropts.WithIntegrationIngestEvents(dbClient),
 		serveropts.WithIntegrationActivation(),
 	)
 

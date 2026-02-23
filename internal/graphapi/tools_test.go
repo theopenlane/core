@@ -51,7 +51,7 @@ import (
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -220,9 +220,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
 	requireNoError(t, err)
 
-	pool := soiree.NewPool(
-		soiree.WithWorkers(200), //nolint:mnd
-		soiree.WithPoolName("ent_client_pool"),
+	pool := gala.NewPool(
+		gala.WithWorkers(200), //nolint:mnd
+		gala.WithPoolName("ent_client_pool"),
 	)
 
 	// setup history client
@@ -638,13 +638,6 @@ func newTestGraphServer(t *testing.T) http.Handler {
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
-
-	// register events for subscriptions
-	eventer := hooks.NewEventerPool(suite.client.db)
-	hooks.RegisterGlobalHooks(suite.client.db, eventer)
-
-	err = hooks.RegisterListeners(eventer)
-	require.NoError(t, err)
 
 	r := graphapi.NewResolver(suite.client.db, nil).
 		WithExtensions(true).

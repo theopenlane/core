@@ -1,62 +1,232 @@
 package hooks
 
 import (
+	"entgo.io/ent"
+	"github.com/samber/do/v2"
+
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/events"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
-// RegisterWorkflowListeners registers workflow event listeners and mutation triggers.
-func RegisterWorkflowListeners(eventer *Eventer) {
-	getListeners := func(ctx *soiree.EventContext) (*engine.WorkflowListeners, bool) {
-		client, ok := soiree.ClientAs[*generated.Client](ctx)
-		if !ok {
-			return nil, false
-		}
-
-		wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
-		if !ok || wfEngine == nil {
-			return nil, false
-		}
-
-		return engine.NewWorkflowListeners(client, wfEngine, eventer.Emitter), true
+// RegisterGalaWorkflowListeners registers workflow mutation and command listeners on Gala
+func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
+	mutationIDs, err := RegisterGalaWorkflowMutationListeners(registry)
+	if err != nil {
+		return nil, err
 	}
 
-	eventer.AddListenerBinding(bindWorkflowListener(soiree.WorkflowTriggeredTopic, getListeners, (*engine.WorkflowListeners).HandleWorkflowTriggered))
-	eventer.AddListenerBinding(bindWorkflowListener(soiree.WorkflowActionStartedTopic, getListeners, (*engine.WorkflowListeners).HandleActionStarted))
-	eventer.AddListenerBinding(bindWorkflowListener(soiree.WorkflowActionCompletedTopic, getListeners, (*engine.WorkflowListeners).HandleActionCompleted))
-	eventer.AddListenerBinding(bindWorkflowListener(soiree.WorkflowAssignmentCreatedTopic, getListeners, (*engine.WorkflowListeners).HandleAssignmentCreated))
-	eventer.AddListenerBinding(bindWorkflowListener(soiree.WorkflowAssignmentCompletedTopic, getListeners, (*engine.WorkflowListeners).HandleAssignmentCompleted))
-	eventer.AddListenerBinding(bindWorkflowListener(soiree.WorkflowInstanceCompletedTopic, getListeners, (*engine.WorkflowListeners).HandleInstanceCompleted))
-
-	// small adapter to match MutationHandler signature
-	wrapMutationHandler := func(handler func(*engine.WorkflowListeners, *soiree.EventContext, *events.MutationPayload) error) MutationHandler {
-		return func(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-			listeners, ok := getListeners(ctx)
-			if !ok {
-				return nil
-			}
-			return handler(listeners, ctx, payload)
-		}
+	commandIDs, err := gala.RegisterListeners(registry,
+		gala.Definition[gala.WorkflowTriggeredPayload]{
+			Topic:  gala.WorkflowTriggeredEventTopic,
+			Name:   string(gala.TopicWorkflowTriggered),
+			Handle: handleWorkflowTriggeredGala,
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
 
-	for _, entity := range enums.WorkflowObjectTypes {
-		eventer.AddMutationListener(entity, wrapMutationHandler((*engine.WorkflowListeners).HandleWorkflowMutation))
+	ids, err := gala.RegisterListeners(registry,
+		gala.Definition[gala.WorkflowActionStartedPayload]{
+			Topic:  gala.WorkflowActionStartedEventTopic,
+			Name:   string(gala.TopicWorkflowActionStarted),
+			Handle: handleWorkflowActionStartedGala,
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
+	commandIDs = append(commandIDs, ids...)
 
-	eventer.AddMutationListener(generated.TypeWorkflowAssignment, wrapMutationHandler((*engine.WorkflowListeners).HandleWorkflowAssignmentMutation))
+	ids, err = gala.RegisterListeners(registry,
+		gala.Definition[gala.WorkflowActionCompletedPayload]{
+			Topic:  gala.WorkflowActionCompletedEventTopic,
+			Name:   string(gala.TopicWorkflowActionCompleted),
+			Handle: handleWorkflowActionCompletedGala,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	commandIDs = append(commandIDs, ids...)
+
+	ids, err = gala.RegisterListeners(registry,
+		gala.Definition[gala.WorkflowAssignmentCreatedPayload]{
+			Topic:  gala.WorkflowAssignmentCreatedEventTopic,
+			Name:   string(gala.TopicWorkflowAssignmentCreated),
+			Handle: handleWorkflowAssignmentCreatedGala,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	commandIDs = append(commandIDs, ids...)
+
+	ids, err = gala.RegisterListeners(registry,
+		gala.Definition[gala.WorkflowAssignmentCompletedPayload]{
+			Topic:  gala.WorkflowAssignmentCompletedEventTopic,
+			Name:   string(gala.TopicWorkflowAssignmentCompleted),
+			Handle: handleWorkflowAssignmentCompletedGala,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	commandIDs = append(commandIDs, ids...)
+
+	ids, err = gala.RegisterListeners(registry,
+		gala.Definition[gala.WorkflowInstanceCompletedPayload]{
+			Topic:  gala.WorkflowInstanceCompletedEventTopic,
+			Name:   string(gala.TopicWorkflowInstanceCompleted),
+			Handle: handleWorkflowInstanceCompletedGala,
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	commandIDs = append(commandIDs, ids...)
+
+	return append(mutationIDs, commandIDs...), nil
 }
 
-// bindWorkflowListener is a generics helper to reduce boilerplate when binding typed listeners
-func bindWorkflowListener[T any](topic soiree.TypedTopic[T], getListeners func(*soiree.EventContext) (*engine.WorkflowListeners, bool), handler func(*engine.WorkflowListeners, *soiree.EventContext, T) error) soiree.ListenerBinding {
-	return soiree.BindListener(topic, func(ctx *soiree.EventContext, payload T) error {
-		listeners, ok := getListeners(ctx)
-		if !ok {
-			return nil
-		}
+// RegisterGalaWorkflowMutationListeners registers workflow mutation listeners on Gala
+func RegisterGalaWorkflowMutationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
+	definitions := make([]gala.Definition[eventqueue.MutationGalaPayload], 0, len(enums.WorkflowObjectTypes)+1)
 
-		return handler(listeners, ctx, payload)
+	for _, entity := range enums.WorkflowObjectTypes {
+		topicName := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entity)
+		definitions = append(definitions, gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernWorkflow, entity),
+			Name:  string(topicName),
+			Operations: []string{
+				ent.OpCreate.String(),
+				ent.OpUpdate.String(),
+				ent.OpUpdateOne.String(),
+			},
+			Handle: handleWorkflowMutationGala,
+		})
+	}
+
+	assignmentTopicName := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeWorkflowAssignment)
+	definitions = append(definitions, gala.Definition[eventqueue.MutationGalaPayload]{
+		Topic: eventqueue.MutationTopic(eventqueue.MutationConcernWorkflow, generated.TypeWorkflowAssignment),
+		Name:  string(assignmentTopicName),
+		Operations: []string{
+			ent.OpUpdate.String(),
+			ent.OpUpdateOne.String(),
+		},
+		Handle: handleWorkflowAssignmentMutationGala,
 	})
+
+	return gala.RegisterListeners(registry, definitions...)
+}
+
+// handleWorkflowMutationGala forwards workflow mutation envelopes to workflow listeners
+func handleWorkflowMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleWorkflowMutationGala(ctx, payload)
+}
+
+// handleWorkflowAssignmentMutationGala forwards assignment mutation envelopes to workflow listeners
+func handleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleWorkflowAssignmentMutationGala(ctx, payload)
+}
+
+// handleWorkflowTriggeredGala forwards workflow trigger command envelopes to workflow listeners
+func handleWorkflowTriggeredGala(ctx gala.HandlerContext, payload gala.WorkflowTriggeredPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleWorkflowTriggered(ctx, payload)
+}
+
+// handleWorkflowActionStartedGala forwards action started command envelopes to workflow listeners
+func handleWorkflowActionStartedGala(ctx gala.HandlerContext, payload gala.WorkflowActionStartedPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleActionStarted(ctx, payload)
+}
+
+// handleWorkflowActionCompletedGala forwards action completed command envelopes to workflow listeners
+func handleWorkflowActionCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowActionCompletedPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleActionCompleted(ctx, payload)
+}
+
+// handleWorkflowAssignmentCreatedGala forwards assignment created command envelopes to workflow listeners
+func handleWorkflowAssignmentCreatedGala(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCreatedPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleAssignmentCreated(ctx, payload)
+}
+
+// handleWorkflowAssignmentCompletedGala forwards assignment completed command envelopes to workflow listeners
+func handleWorkflowAssignmentCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCompletedPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleAssignmentCompleted(ctx, payload)
+}
+
+// handleWorkflowInstanceCompletedGala forwards instance completed command envelopes to workflow listeners
+func handleWorkflowInstanceCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowInstanceCompletedPayload) error {
+	ctx, listeners, ok := workflowListenersFromGala(ctx)
+	if !ok {
+		return nil
+	}
+
+	return listeners.HandleInstanceCompleted(ctx, payload)
+}
+
+// workflowListenersFromGala resolves workflow listener dependencies from the gala injector
+// and enriches the handler context so the ent client is available to interceptors
+func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerContext, *engine.WorkflowListeners, bool) {
+	client, ok := eventqueue.ClientFromHandler(handlerCtx)
+	if !ok {
+		return handlerCtx, nil, false
+	}
+
+	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
+	if !ok || wfEngine == nil {
+		return handlerCtx, nil, false
+	}
+
+	runtime, err := do.Invoke[*gala.Gala](handlerCtx.Injector)
+	if err != nil {
+		return handlerCtx, nil, false
+	}
+
+	// Ensure the ent client is in context for interceptors and privacy checks.
+	// In durable dispatch the context is reconstructed from a snapshot that does
+	// not include the ent client, so interceptors like FGA auth would get a nil
+	// client from generated.FromContext.
+	handlerCtx.Context = generated.NewContext(handlerCtx.Context, client)
+
+	return handlerCtx, engine.NewWorkflowListeners(client, wfEngine, runtime), true
 }

@@ -27,7 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
@@ -464,7 +464,7 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 		),
 		entc.Dependency(
 			entc.DependencyName("Pool"),
-			entc.DependencyType(&soiree.Pool{}),
+			entc.DependencyType(&gala.Pool{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("EmailVerifier"),

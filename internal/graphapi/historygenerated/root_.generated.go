@@ -39501,11 +39501,11 @@ type NotificationPreferenceHistory implements Node {
   """
   priority: NotificationPreferenceHistoryPriority
   """
-  soiree topic names or wildcard patterns this preference applies to; empty means all
+  topic names or wildcard patterns this preference applies to; empty means all
   """
   topicPatterns: [String!]
   """
-  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by soiree topic name
+  optional per-topic overrides (e.g. template_id, cadence, priority) keyed by topic name
   """
   topicOverrides: Map
   """
@@ -40058,7 +40058,7 @@ type NotificationTemplateHistory implements Node {
   """
   locale: String!
   """
-  soiree topic name or wildcard pattern this template targets
+  topic name or wildcard pattern this template targets
   """
   topicPattern: String!
   """

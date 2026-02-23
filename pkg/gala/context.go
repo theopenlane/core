@@ -7,7 +7,6 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -205,8 +204,11 @@ func HasFlag(ctx context.Context, flag ContextFlag) bool {
 // flagsFromContext extracts the current context flags and clones the map
 func flagsFromContext(ctx context.Context) map[ContextFlag]bool {
 	existing := contextx.FromOr(ctx, contextFlagSet{})
+	if existing.Flags == nil {
+		return make(map[ContextFlag]bool)
+	}
 
-	return lo.Assign(map[ContextFlag]bool{}, existing.Flags)
+	return maps.Clone(existing.Flags)
 }
 
 // codecsSnapshot clones the registered codec map for lock-free processing
@@ -214,7 +216,7 @@ func (m *ContextManager) codecsSnapshot() map[ContextKey]ContextCodec {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	return lo.Assign(map[ContextKey]ContextCodec{}, m.codecs)
+	return maps.Clone(m.codecs)
 }
 
 const (

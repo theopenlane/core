@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -86,7 +87,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				Node: entity,
 			}
 
-			proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
+			proposedChanges := mutations.BuildProposedChanges(mut, changedFields)
 			if len(proposedChanges) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -122,9 +123,9 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			}
 
 			eligibleFields, ineligibleFields := workflows.SeparateFieldsByEligibility(mut.Type(), allChangedFields)
-			ineligibleFields = filterNonSystemFields(ineligibleFields)
+			ineligibleFields = excludeSystemFields(ineligibleFields)
 
-			eligibleChanges := workflows.BuildProposedChanges(mut, eligibleFields)
+			eligibleChanges := mutations.BuildProposedChanges(mut, eligibleFields)
 			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
 			if hasDirectChanges {
 				resetMutationFields(m, eligibleFields)
@@ -199,8 +200,8 @@ var workflowApprovalIgnoredFields = map[string]struct{}{
 	"deleted_by": {},
 }
 
-// filterNonSystemFields removes system fields from the given field list
-func filterNonSystemFields(fields []string) []string {
+// excludeSystemFields removes system fields from the given field list
+func excludeSystemFields(fields []string) []string {
 	if len(fields) == 0 {
 		return fields
 	}
@@ -575,10 +576,7 @@ func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated
 		Type: objectType,
 	}
 
-	changedFields := make([]string, 0, len(domain.Changes))
-	for field := range domain.Changes {
-		changedFields = append(changedFields, field)
-	}
+	changedFields := workflows.FieldsFromChanges(domain.Changes)
 
 	return wfEngine.TriggerExistingInstance(allowCtx, instance, def, obj, engine.TriggerInput{
 		EventType:       "UPDATE",

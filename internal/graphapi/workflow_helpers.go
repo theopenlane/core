@@ -3,25 +3,33 @@ package graphapi
 import (
 	"context"
 	"errors"
-	"sync"
+	"fmt"
+	"sync/atomic"
 	"time"
 
+	"github.com/samber/do/v2"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/gala"
 )
+
+// ErrConnectionURIRequired is returned when SetupWorkflowEngine is called without a connection URI
+var ErrConnectionURIRequired = errors.New("connection URI is required for durable workflow dispatch")
 
 const (
 	defaultPollInterval = 50 * time.Millisecond
 	defaultPollTimeout  = 5 * time.Second
+	defaultWorkerCount  = 5
+	defaultFetchPoll    = 10 * time.Millisecond
 )
 
 var (
-	workflowTestSetupMu            sync.Mutex
-	workflowTestSetups             = map[*generated.Client]*WorkflowTestSetup{}
+	// workflowTestQueueSeq generates unique queue names per setup to isolate River workers
+	workflowTestQueueSeq           atomic.Uint64
 	ErrTimedOutWaitingForCondition = errors.New("timed out waiting for condition")
 	ErrClientRequired              = errors.New("client is required")
 )
@@ -63,51 +71,79 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 	return result, ErrTimedOutWaitingForCondition
 }
 
-// WorkflowTestSetup contains the workflow engine and eventer for tests
+// WorkflowTestSetup contains the workflow engine and gala runtime for tests.
 type WorkflowTestSetup struct {
 	Engine  *engine.WorkflowEngine
-	Eventer *hooks.Eventer
+	Runtime *gala.Gala
 }
 
-// SetupWorkflowEngine creates a workflow engine with a real eventer for integration tests.
-// This wires up event listeners so that assignment completions and other workflow events
-// are processed through the actual event-driven flow used in production.
-func SetupWorkflowEngine(client *generated.Client) (*WorkflowTestSetup, error) {
+// Teardown stops workflow runtime workers and releases connections.
+// Call this via defer after SetupWorkflowEngine.
+func (s *WorkflowTestSetup) Teardown() {
+	if s == nil || s.Runtime == nil {
+		return
+	}
+
+	_ = s.Runtime.StopWorkers(context.Background())
+	_ = s.Runtime.Close()
+}
+
+// SetupWorkflowEngine creates a workflow engine with a durable Gala runtime for integration tests.
+// Each call creates a fresh runtime with its own River queue, so connections are never stale.
+// The EmitGalaEventHook is additive on the shared client; previous hooks referencing closed
+// runtimes fail silently (errors are logged, not returned). Call Teardown on the returned
+// setup when the test completes.
+func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connectionURI string) (*WorkflowTestSetup, error) {
 	if client == nil {
 		return nil, ErrClientRequired
 	}
 
-	workflowTestSetupMu.Lock()
-	defer workflowTestSetupMu.Unlock()
-
-	if existing, ok := workflowTestSetups[client]; ok && existing != nil {
-		client.WorkflowEngine = existing.Engine
-
-		return existing, nil
+	if connectionURI == "" {
+		return nil, ErrConnectionURIRequired
 	}
 
-	eventer := hooks.NewEventerPool(client)
-	hooks.RegisterGlobalHooks(client, eventer)
+	queueName := fmt.Sprintf("workflow_test_%d", workflowTestQueueSeq.Add(1))
 
-	if err := hooks.RegisterListeners(eventer); err != nil {
+	runtime, err := gala.NewGala(ctx, gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     connectionURI,
+		QueueName:         queueName,
+		WorkerCount:       defaultWorkerCount,
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: defaultFetchPoll,
+	})
+	if err != nil {
 		return nil, err
 	}
 
-	wfEngine, err := engine.NewWorkflowEngine(client, eventer.Emitter)
+	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
+		return runtime
+	}))
+
+	if _, err := hooks.RegisterGalaWorkflowListeners(runtime.Registry()); err != nil {
+		return nil, err
+	}
+
+	wfEngine, err := engine.NewWorkflowEngine(client, runtime)
 	if err != nil {
+		return nil, err
+	}
+
+	do.ProvideValue(runtime.Injector(), runtime)
+	do.ProvideValue(runtime.Injector(), client)
+	do.ProvideValue(runtime.Injector(), wfEngine)
+
+	if err := runtime.StartWorkers(ctx); err != nil {
 		return nil, err
 	}
 
 	client.WorkflowEngine = wfEngine
 
-	setup := &WorkflowTestSetup{
+	return &WorkflowTestSetup{
 		Engine:  wfEngine,
-		Eventer: eventer,
-	}
-
-	workflowTestSetups[client] = setup
-
-	return setup, nil
+		Runtime: runtime,
+	}, nil
 }
 
 // workflowsEnabled reports whether workflows are enabled for this resolver

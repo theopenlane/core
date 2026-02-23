@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/internal/mutations"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/celx"
@@ -94,7 +95,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 		return nil, err
 	}
 
-	normalized := wfworkflows.NormalizeStrings(userIDs)
+	normalized := mutations.NormalizeStrings(userIDs)
 	if len(normalized) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, actionType, observability.ActionFields(actionKey, observability.Fields{
 			workflowassignmenttarget.FieldTargetType:  target.Type.String(),
@@ -358,51 +359,42 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		}
 	}
 
-	title := ""
-	body := ""
-	data := map[string]any{}
-	vars := map[string]any{}
+	defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
+	defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
+
+	var (
+		title string
+		body  string
+		data  map[string]any
+		vars  map[string]any
+	)
+
 	if rendered != nil {
 		title = rendered.Title
 		body = rendered.Body
 		data = rendered.Data
 		vars = rendered.Vars
-	}
-
-	if rendered == nil {
+	} else {
 		var err error
 		vars, data, err = e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
 		if err != nil {
 			return err
 		}
+	}
 
-		defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
-		defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
-
+	if title == "" {
+		var err error
 		title, err = renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
 		if err != nil {
 			return err
 		}
+	}
+
+	if body == "" {
+		var err error
 		body, err = renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
 		if err != nil {
 			return err
-		}
-	} else {
-		defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
-		defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
-		if title == "" {
-			renderedTitle, err := renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
-			if err != nil {
-				return err
-			}
-			title = renderedTitle
-		}
-		if body == "" {
-			renderedBody, err := renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
-			if err != nil {
-				return err
-			}
-			body = renderedBody
 		}
 	}
 

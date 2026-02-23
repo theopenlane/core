@@ -9,6 +9,8 @@ import (
 )
 
 func TestGetStandardRefCodes(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name     string
 		data     []string

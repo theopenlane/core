@@ -20,8 +20,3 @@ func WarnEngine(ctx context.Context, op OperationName, triggerEvent string, fiel
 func WarnListener(ctx context.Context, op OperationName, triggerEvent string, fields Fields, err error) {
 	warnWithFields(ctx, op, OriginListeners, triggerEvent, fields, err)
 }
-
-// WarnResolver logs a workflow warning for resolver operations (with the trigger event pre-set reducing overhead for callers)
-func WarnResolver(ctx context.Context, op OperationName, triggerEvent string, fields Fields, err error) {
-	warnWithFields(ctx, op, OriginResolver, triggerEvent, fields, err)
-}

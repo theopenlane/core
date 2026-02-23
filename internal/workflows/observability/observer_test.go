@@ -13,33 +13,15 @@ import (
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
-	"github.com/theopenlane/utils/contextx"
 )
 
 type testPayload struct {
 	ID string `json:"id"`
-}
-
-type testContextValue struct {
-	Value string
-}
-
-type captureEmitter struct {
-	topic   string
-	payload any
-}
-
-func (e *captureEmitter) Emit(topic string, payload any) <-chan error {
-	e.topic = topic
-	e.payload = payload
-
-	errCh := make(chan error)
-	close(errCh)
-	return errCh
 }
 
 func TestScopeEndRecordsMetrics(t *testing.T) {
@@ -95,17 +77,11 @@ func TestHandleEmitRecordsError(t *testing.T) {
 	topic := "workflow.emit.test"
 
 	before := testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
-	errCh := make(chan error, 1)
-	errCh <- errors.New("emit failed")
-	close(errCh)
 
-	if err := observer.handleEmit(ctx, op, Fields{"k": "v"}, topic, errCh); err != nil {
-		t.Fatalf("expected nil error, got %v", err)
-	}
+	observer.handleEmitError(ctx, op, Fields{"k": "v"}, topic, errors.New("emit failed"))
 
-	waitForMetric(t, func() float64 {
-		return testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
-	}, before+1)
+	after := testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
+	require.Equal(t, before+1, after)
 }
 
 func TestBeginListenerTopicAppliesSpec(t *testing.T) {
@@ -116,67 +92,36 @@ func TestBeginListenerTopicAppliesSpec(t *testing.T) {
 	defer func() { log.Logger = oldLogger }()
 
 	payload := testPayload{ID: "payload-1"}
-	topic := soiree.NewTypedTopic("workflow.listener.test",
-		soiree.WithObservability(soiree.ObservabilitySpec[testPayload]{
-			Operation: "custom_op",
-			Origin:    "custom_origin",
-			TriggerFunc: func(_ *soiree.EventContext, _ testPayload) string {
-				return "custom_trigger"
-			},
-		}),
-	)
-
-	// nil EventContext causes fallback to context.Background() and global logger
-	scope := BeginListenerTopic(nil, New(), topic, payload, Fields{"extra": "value"})
-
-	// Verify the scope was created with correct operation from topic spec
-	if scope.op.Name != "custom_op" {
-		t.Fatalf("expected operation custom_op, got %v", scope.op.Name)
+	topic := gala.TopicName("workflow.listener.test")
+	handlerCtx := gala.HandlerContext{
+		Context: context.Background(),
+		Envelope: gala.Envelope{
+			Topic: "custom_trigger",
+		},
 	}
-	if scope.op.Origin != "custom_origin" {
-		t.Fatalf("expected origin custom_origin, got %v", scope.op.Origin)
+
+	scope := BeginListenerTopic(handlerCtx, New(), topic, payload, Fields{"extra": "value"})
+
+	if scope.op.Name != OperationName(topic) {
+		t.Fatalf("expected operation %q, got %v", topic, scope.op.Name)
+	}
+	if scope.op.Origin != OriginListeners {
+		t.Fatalf("expected origin %q, got %v", OriginListeners, scope.op.Origin)
 	}
 	if scope.op.TriggerEvent != "custom_trigger" {
 		t.Fatalf("expected trigger custom_trigger, got %v", scope.op.TriggerEvent)
 	}
 }
 
-func TestEmitTypedSetsPayloadClientAndContext(t *testing.T) {
-	ctx := contextx.With(context.Background(), testContextValue{Value: "ctx"})
-	ctx = zerolog.New(io.Discard).With().Logger().WithContext(ctx)
+func TestEmitTypedNoRuntime(t *testing.T) {
+	ctx := zerolog.New(io.Discard).With().Logger().WithContext(context.Background())
 
-	payload := testPayload{ID: "payload-2"}
-	topic := soiree.NewTypedTopic[testPayload]("workflow.emit.typed")
-	emitter := &captureEmitter{}
-	observer := New()
-	client := "client"
-
-	err := emitTyped(ctx, observer, emitter, topic, payload, client, Operation{
+	err := emitTyped(ctx, New(), nil, gala.TopicName("workflow.emit.typed"), testPayload{ID: "payload-2"}, Operation{
 		Name:   OperationName("emit_op"),
 		Origin: OriginEngine,
 	}, nil)
 	if err != nil {
 		t.Fatalf("expected nil error, got %v", err)
-	}
-
-	if emitter.topic != topic.Name() {
-		t.Fatalf("expected topic %q, got %q", topic.Name(), emitter.topic)
-	}
-
-	event, ok := emitter.payload.(soiree.Event)
-	if !ok {
-		t.Fatalf("expected soiree.Event payload, got %T", emitter.payload)
-	}
-
-	if got := event.Payload(); got != payload {
-		t.Fatalf("expected payload %v, got %v", payload, got)
-	}
-	if event.Client() != client {
-		t.Fatalf("expected client %v, got %v", client, event.Client())
-	}
-
-	if got, ok := contextx.From[testContextValue](event.Context()); !ok || got.Value != "ctx" {
-		t.Fatalf("expected context value ctx, got %v (ok=%v)", got, ok)
 	}
 }
 
@@ -199,20 +144,6 @@ func findLogEntry(t *testing.T, buf *bytes.Buffer, msg string) map[string]any {
 
 	t.Fatalf("log entry with message %q not found", msg)
 	return nil
-}
-
-func waitForMetric(t *testing.T, read func() float64, want float64) {
-	t.Helper()
-
-	deadline := time.Now().Add(500 * time.Millisecond)
-	for time.Now().Before(deadline) {
-		if got := read(); got == want {
-			return
-		}
-		time.Sleep(10 * time.Millisecond)
-	}
-
-	t.Fatalf("timed out waiting for metric, got %v want %v", read(), want)
 }
 
 func TestScopeSkipMarksSkippedAndLogsDebug(t *testing.T) {
@@ -376,22 +307,6 @@ func TestWarnListenerLogsWarning(t *testing.T) {
 	}
 	if entry[FieldOperation] != string(OpHandleAssignmentCompleted) {
 		t.Fatalf("expected operation %s, got %v", OpHandleAssignmentCompleted, entry[FieldOperation])
-	}
-}
-
-func TestWarnResolverLogsWarning(t *testing.T) {
-	var buf bytes.Buffer
-	logger := zerolog.New(&buf).Level(zerolog.WarnLevel)
-	ctx := logger.WithContext(context.Background())
-
-	WarnResolver(ctx, OpResolveTargets, "resolve.trigger", Fields{"target": "user"}, nil)
-
-	entry := findLogEntry(t, &buf, msgOpWarning)
-	if entry[FieldOrigin] != string(OriginResolver) {
-		t.Fatalf("expected origin %s, got %v", OriginResolver, entry[FieldOrigin])
-	}
-	if entry[FieldOperation] != string(OpResolveTargets) {
-		t.Fatalf("expected operation %s, got %v", OpResolveTargets, entry[FieldOperation])
 	}
 }
 

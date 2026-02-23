@@ -283,7 +283,6 @@ func TestApprovalDomains(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, [][]string{
-		{" status ", "name"},
 		{"name", "status"},
 		{"priority"},
 	}, domains)

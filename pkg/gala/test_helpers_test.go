@@ -182,7 +182,7 @@ func newTestGalaInMemory(t *testing.T, dispatcher Dispatcher) *Gala {
 	t.Helper()
 
 	g := &Gala{}
-	if err := g.initialize(dispatcher); err != nil {
+	if err := g.initialize(dispatcher, DispatchModeDurable); err != nil {
 		t.Fatalf("failed to build gala: %v", err)
 	}
 

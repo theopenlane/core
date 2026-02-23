@@ -4,16 +4,15 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
 	approvalRejectedMessage   = "approval rejected"
-	approvalChangesRequested  = "changes requested"
+	changesRequestedMessage   = "changes requested"
 	approvalQuorumNotMet      = "approval quorum not met"
 	approvalFailedMessage     = "approval failed"
 	reviewRejectedMessage     = "review rejected"
-	reviewChangesRequested    = "changes requested"
 	reviewQuorumNotMet        = "review quorum not met"
 	reviewFailedMessage       = "review failed"
 	actionExecutionFailedMsg  = "action execution failed"
@@ -81,7 +80,7 @@ type actionCompletedDetails struct {
 }
 
 // actionCompletedDetailsFromPayload builds details from a completion payload
-func actionCompletedDetailsFromPayload(actionKey string, payload soiree.WorkflowActionCompletedPayload) actionCompletedDetails {
+func actionCompletedDetailsFromPayload(actionKey string, payload gala.WorkflowActionCompletedPayload) actionCompletedDetails {
 	return actionCompletedDetails{
 		ActionKey:    actionKey,
 		ActionIndex:  payload.ActionIndex,
@@ -117,7 +116,7 @@ func actionFailureDetails(actionKey string, actionIndex int, actionType enums.Wo
 }
 
 // actionIndexOutOfBoundsDetails builds a failure detail for out of bounds actions
-func actionIndexOutOfBoundsDetails(payload soiree.WorkflowActionStartedPayload) actionCompletedDetails {
+func actionIndexOutOfBoundsDetails(payload gala.WorkflowActionStartedPayload) actionCompletedDetails {
 	return actionCompletedDetails{
 		ActionKey:    "",
 		ActionIndex:  payload.ActionIndex,
@@ -149,17 +148,20 @@ func assignmentCreatedDetailsForAction(action models.WorkflowAction, actionType 
 	return details
 }
 
-// approvalCompletedDetails builds action completion details for approval actions
-func approvalCompletedDetails(action models.WorkflowAction, actionIndex int, obj *workflows.Object, counts AssignmentStatusCounts, requiredCount int, assignmentIDs, targetUserIDs []string, success bool, label string, required bool) actionCompletedDetails {
+// failureMessageFunc derives a user-facing failure message from assignment status counts
+type failureMessageFunc func(counts AssignmentStatusCounts, requiredCount int) string
+
+// gatedActionCompletedDetails builds action completion details for gated (approval/review) actions
+func gatedActionCompletedDetails(actionType enums.WorkflowActionType, action models.WorkflowAction, actionIndex int, obj *workflows.Object, counts AssignmentStatusCounts, requiredCount int, assignmentIDs, targetUserIDs []string, success bool, label string, required bool, rejectedCount int, failureMsg failureMessageFunc) actionCompletedDetails {
 	details := actionCompletedDetails{
 		ActionKey:     action.Key,
 		ActionIndex:   actionIndex,
-		ActionType:    enums.WorkflowActionTypeApproval,
+		ActionType:    actionType,
 		Success:       success,
 		AssignmentIDs: assignmentIDs,
 		TargetUserIDs: targetUserIDs,
 		ApprovedCount: counts.Approved,
-		RejectedCount: counts.Rejected,
+		RejectedCount: rejectedCount,
 		PendingCount:  counts.Pending,
 		RequiredCount: requiredCount,
 		Required:      required,
@@ -170,16 +172,21 @@ func approvalCompletedDetails(action models.WorkflowAction, actionIndex int, obj
 		details.ObjectType = obj.Type
 	}
 	if !success {
-		details.ErrorMessage = approvalFailureMessage(counts, requiredCount)
+		details.ErrorMessage = failureMsg(counts, requiredCount)
 	}
 
 	return details
 }
 
+// approvalCompletedDetails builds action completion details for approval actions
+func approvalCompletedDetails(action models.WorkflowAction, actionIndex int, obj *workflows.Object, counts AssignmentStatusCounts, requiredCount int, assignmentIDs, targetUserIDs []string, success bool, label string, required bool) actionCompletedDetails {
+	return gatedActionCompletedDetails(enums.WorkflowActionTypeApproval, action, actionIndex, obj, counts, requiredCount, assignmentIDs, targetUserIDs, success, label, required, counts.Rejected, approvalFailureMessage)
+}
+
 // approvalFailureMessage returns a user-facing failure message for approvals
 func approvalFailureMessage(counts AssignmentStatusCounts, requiredCount int) string {
 	if counts.ChangesRequestedRequired {
-		return approvalChangesRequested
+		return changesRequestedMessage
 	}
 	if counts.RejectedRequired {
 		return approvalRejectedMessage
@@ -193,35 +200,13 @@ func approvalFailureMessage(counts AssignmentStatusCounts, requiredCount int) st
 
 // reviewCompletedDetails builds action completion details for review actions
 func reviewCompletedDetails(action models.WorkflowAction, actionIndex int, obj *workflows.Object, counts AssignmentStatusCounts, requiredCount int, assignmentIDs, targetUserIDs []string, success bool, label string, required bool) actionCompletedDetails {
-	details := actionCompletedDetails{
-		ActionKey:     action.Key,
-		ActionIndex:   actionIndex,
-		ActionType:    enums.WorkflowActionTypeReview,
-		Success:       success,
-		AssignmentIDs: assignmentIDs,
-		TargetUserIDs: targetUserIDs,
-		ApprovedCount: counts.Approved,
-		RejectedCount: counts.Rejected + counts.ChangesRequested,
-		PendingCount:  counts.Pending,
-		RequiredCount: requiredCount,
-		Required:      required,
-		Label:         label,
-	}
-	if obj != nil {
-		details.ObjectID = obj.ID
-		details.ObjectType = obj.Type
-	}
-	if !success {
-		details.ErrorMessage = reviewFailureMessage(counts, requiredCount)
-	}
-
-	return details
+	return gatedActionCompletedDetails(enums.WorkflowActionTypeReview, action, actionIndex, obj, counts, requiredCount, assignmentIDs, targetUserIDs, success, label, required, counts.Rejected+counts.ChangesRequested, reviewFailureMessage)
 }
 
 // reviewFailureMessage returns a user-facing failure message for reviews
 func reviewFailureMessage(counts AssignmentStatusCounts, requiredCount int) string {
 	if counts.ChangesRequestedRequired {
-		return reviewChangesRequested
+		return changesRequestedMessage
 	}
 	if counts.RejectedRequired {
 		return reviewRejectedMessage

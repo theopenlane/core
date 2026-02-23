@@ -12,7 +12,7 @@ type Config struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// CEL contains configuration for CEL evaluation and validation
 	CEL CELConfig `json:"cel" koanf:"cel"`
-	// Gala enables optional River-backed durable gala runtime and dual-emit behavior
+	// Gala controls gala runtime wiring for workflow and mutation eventing.
 	Gala GalaConfig `json:"gala" koanf:"gala"`
 }
 
@@ -48,15 +48,15 @@ type CELConfig struct {
 
 // GalaConfig controls optional gala runtime wiring.
 type GalaConfig struct {
-	// Enabled toggles gala worker and runtime initialization
+	// Enabled toggles gala worker and runtime initialization.
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// WorkerCount configures default queue worker concurrency when gala workers are enabled
+	// WorkerCount configures queue worker concurrency when gala workers are enabled.
 	WorkerCount int `json:"workercount" koanf:"workercount" default:"10"`
-	// MaxRetries sets River job max attempts for gala dispatch jobs
+	// MaxRetries sets River job max attempts for gala dispatch jobs.
 	MaxRetries int `json:"maxretries" koanf:"maxretries" default:"5"`
-	// FailOnEnqueueError enables strict-mode logging when gala enqueue fails
+	// FailOnEnqueueError is kept for backward config compatibility and currently has no runtime effect.
 	FailOnEnqueueError bool `json:"failonenqueueerror" koanf:"failonenqueueerror" default:"false"`
-	// QueueName optionally overrides queue selection for durable gala dispatch jobs
+	// QueueName optionally overrides queue selection for durable gala dispatch jobs.
 	QueueName string `json:"queuename" koanf:"queuename" default:"events"`
 }
 

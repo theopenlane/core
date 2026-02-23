@@ -11,12 +11,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
-	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // emitAssignmentCreated emits assignment created events and records enqueue failures
 func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *generated.WorkflowInstance, obj *workflows.Object, assignmentID string, userID string, actionType enums.WorkflowActionType) {
-	payload := soiree.WorkflowAssignmentCreatedPayload{
+	payload := gala.WorkflowAssignmentCreatedPayload{
 		AssignmentID: assignmentID,
 		InstanceID:   instance.ID,
 		TargetType:   enums.WorkflowTargetTypeUser,
@@ -24,6 +24,7 @@ func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *ge
 		ObjectID:     obj.ID,
 		ObjectType:   obj.Type,
 	}
+
 	meta := workflows.EmitFailureMeta{
 		EventType:   enums.WorkflowEventTypeAssignmentCreated,
 		ActionKey:   "",
@@ -31,20 +32,22 @@ func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *ge
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
-	emitEngineEvent(ctx, e, observability.OpExecuteAction, actionType.String(), instance, meta, soiree.WorkflowAssignmentCreatedTopic, payload, observability.Fields{
+
+	emitEngineEvent(ctx, e, observability.OpExecuteAction, actionType.String(), instance, meta, gala.TopicWorkflowAssignmentCreated, payload, observability.Fields{
 		workflowassignmenttarget.FieldTargetUserID: userID,
 	})
 }
 
-// emitActionStarted emits action started event
+// emitActionStarted emits action started event.
 func (l *WorkflowListeners) emitActionStarted(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, actionIndex int, actionType enums.WorkflowActionType, obj *workflows.Object) {
-	payload := soiree.WorkflowActionStartedPayload{
+	payload := gala.WorkflowActionStartedPayload{
 		InstanceID:  instance.ID,
 		ActionIndex: actionIndex,
 		ActionType:  actionType,
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
+
 	meta := workflows.EmitFailureMeta{
 		EventType:   enums.WorkflowEventTypeActionStarted,
 		ActionKey:   actionKey,
@@ -52,12 +55,13 @@ func (l *WorkflowListeners) emitActionStarted(scope *observability.Scope, instan
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
-	emitListenerEvent(scope, l, instance, meta, soiree.WorkflowActionStartedTopic, payload)
+
+	emitListenerEvent(scope, l, instance, meta, gala.TopicWorkflowActionStarted, payload)
 }
 
-// emitActionCompleted emits action completed event
+// emitActionCompleted emits action completed event.
 func (l *WorkflowListeners) emitActionCompleted(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, actionIndex int, actionType enums.WorkflowActionType, obj *workflows.Object, execErr error, skipped bool) {
-	payload := soiree.WorkflowActionCompletedPayload{
+	payload := gala.WorkflowActionCompletedPayload{
 		InstanceID:  instance.ID,
 		ActionIndex: actionIndex,
 		ActionType:  actionType,
@@ -66,10 +70,10 @@ func (l *WorkflowListeners) emitActionCompleted(scope *observability.Scope, inst
 		Success:     execErr == nil,
 		Skipped:     skipped,
 	}
-
 	if execErr != nil {
 		payload.ErrorMessage = execErr.Error()
 	}
+
 	meta := workflows.EmitFailureMeta{
 		EventType:   enums.WorkflowEventTypeActionCompleted,
 		ActionKey:   actionKey,
@@ -77,17 +81,19 @@ func (l *WorkflowListeners) emitActionCompleted(scope *observability.Scope, inst
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
-	emitListenerEvent(scope, l, instance, meta, soiree.WorkflowActionCompletedTopic, payload)
+
+	emitListenerEvent(scope, l, instance, meta, gala.TopicWorkflowActionCompleted, payload)
 }
 
-// emitInstanceCompleted emits instance completed event
+// emitInstanceCompleted emits instance completed event.
 func (l *WorkflowListeners) emitInstanceCompleted(scope *observability.Scope, instance *generated.WorkflowInstance, state enums.WorkflowInstanceState, obj *workflows.Object) {
-	payload := soiree.WorkflowInstanceCompletedPayload{
+	payload := gala.WorkflowInstanceCompletedPayload{
 		InstanceID: instance.ID,
 		State:      state,
 		ObjectID:   obj.ID,
 		ObjectType: obj.Type,
 	}
+
 	meta := workflows.EmitFailureMeta{
 		EventType:   enums.WorkflowEventTypeInstanceCompleted,
 		ActionKey:   "",
@@ -95,12 +101,13 @@ func (l *WorkflowListeners) emitInstanceCompleted(scope *observability.Scope, in
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
-	emitListenerEvent(scope, l, instance, meta, soiree.WorkflowInstanceCompletedTopic, payload)
+
+	emitListenerEvent(scope, l, instance, meta, gala.TopicWorkflowInstanceCompleted, payload)
 }
 
-// emitWorkflowTriggered emits workflow.triggered for a workflow instance
+// emitWorkflowTriggered emits workflow.command.trigger for a workflow instance.
 func (e *WorkflowEngine) emitWorkflowTriggered(ctx context.Context, op observability.OperationName, trigger string, instance *generated.WorkflowInstance, defID string, obj *workflows.Object, changedFields []string) {
-	payload := soiree.WorkflowTriggeredPayload{
+	payload := gala.WorkflowTriggeredPayload{
 		InstanceID:           instance.ID,
 		DefinitionID:         defID,
 		ObjectID:             obj.ID,
@@ -108,6 +115,7 @@ func (e *WorkflowEngine) emitWorkflowTriggered(ctx context.Context, op observabi
 		TriggerEventType:     trigger,
 		TriggerChangedFields: changedFields,
 	}
+
 	meta := workflows.EmitFailureMeta{
 		EventType:   enums.WorkflowEventTypeInstanceTriggered,
 		ActionKey:   "",
@@ -115,39 +123,40 @@ func (e *WorkflowEngine) emitWorkflowTriggered(ctx context.Context, op observabi
 		ObjectID:    obj.ID,
 		ObjectType:  obj.Type,
 	}
-	emitEngineEvent(ctx, e, op, trigger, instance, meta, soiree.WorkflowTriggeredTopic, payload, observability.Fields{
+
+	emitEngineEvent(ctx, e, op, trigger, instance, meta, gala.TopicWorkflowTriggered, payload, observability.Fields{
 		workflowevent.FieldWorkflowInstanceID: instance.ID,
 	})
 }
 
-// emitEngineEvent emits a typed event and records enqueue failures for engine operations
-func emitEngineEvent[T any](ctx context.Context, engine *WorkflowEngine, op observability.OperationName, trigger string, instance *generated.WorkflowInstance, meta workflows.EmitFailureMeta, topic soiree.TypedTopic[T], payload T, warnFields observability.Fields) {
-	receipt := workflows.EmitWorkflowEvent(ctx, engine.emitter, topic, payload, engine.client)
+// emitEngineEvent emits an event and records enqueue failures for engine operations.
+func emitEngineEvent(ctx context.Context, engine *WorkflowEngine, op observability.OperationName, trigger string, instance *generated.WorkflowInstance, meta workflows.EmitFailureMeta, topic gala.TopicName, payload any, warnFields observability.Fields) {
+	receipt := workflows.EmitWorkflowEvent(ctx, engine.gala, topic, payload)
 	if receipt.Err == nil {
 		return
 	}
 
-	recordEmitFailure(ctx, engine.client, instance, meta, topic.Name(), payload, receipt)
+	recordEmitFailure(ctx, engine.client, instance, meta, string(topic), payload, receipt)
 	observability.WarnEngine(ctx, op, trigger, warnFields, receipt.Err)
 }
 
-// emitListenerEvent emits a typed event and records enqueue failures for listener operations
-func emitListenerEvent[T any](scope *observability.Scope, listeners *WorkflowListeners, instance *generated.WorkflowInstance, meta workflows.EmitFailureMeta, topic soiree.TypedTopic[T], payload T) {
-	receipt := workflows.EmitWorkflowEvent(scope.Context(), listeners.emitter, topic, payload, listeners.client)
+// emitListenerEvent emits an event and records enqueue failures for listener operations.
+func emitListenerEvent(scope *observability.Scope, listeners *WorkflowListeners, instance *generated.WorkflowInstance, meta workflows.EmitFailureMeta, topic gala.TopicName, payload any) {
+	receipt := workflows.EmitWorkflowEvent(scope.Context(), listeners.gala, topic, payload)
 	if receipt.Err == nil {
 		return
 	}
 
-	listeners.recordEmitFailure(scope, instance, meta, topic.Name(), payload, receipt)
+	listeners.recordEmitFailure(scope, instance, meta, string(topic), payload, receipt)
 }
 
-// recordActionFailure records a failed action outcome and emits instance failure
+// recordActionFailure records a failed action outcome and emits instance failure.
 func (l *WorkflowListeners) recordActionFailure(scope *observability.Scope, instance *generated.WorkflowInstance, details actionCompletedDetails, obj *workflows.Object) {
 	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, details.ActionKey, details)
 	l.emitInstanceCompleted(scope, instance, enums.WorkflowInstanceStateFailed, obj)
 }
 
-// loadActionObject resolves the workflow object for a workflow instance
+// loadActionObject resolves the workflow object for a workflow instance.
 func (l *WorkflowListeners) loadActionObject(ctx context.Context, instanceID, orgID string) (*workflows.Object, error) {
 	objRef, err := loadWorkflowObjectRef(ctx, l.client, instanceID, orgID)
 	if err != nil {
@@ -157,7 +166,7 @@ func (l *WorkflowListeners) loadActionObject(ctx context.Context, instanceID, or
 	return workflows.ObjectFromRef(objRef)
 }
 
-// evaluateActionWhen resolves the action object and evaluates When expressions
+// evaluateActionWhen resolves the action object and evaluates When expressions.
 func (l *WorkflowListeners) evaluateActionWhen(ctx context.Context, instance *generated.WorkflowInstance, action models.WorkflowAction, obj *workflows.Object, orgID string) (*workflows.Object, bool, error) {
 	if action.When == "" {
 		return obj, true, nil
@@ -176,7 +185,7 @@ func (l *WorkflowListeners) evaluateActionWhen(ctx context.Context, instance *ge
 	return loadedObj, shouldExecute, nil
 }
 
-// recordEvent persists a workflow event for auditing and debugging
+// recordEvent persists a workflow event for auditing and debugging.
 func (l *WorkflowListeners) recordEvent(scope *observability.Scope, instance *generated.WorkflowInstance, eventType enums.WorkflowEventType, actionKey string, details any) {
 	if err := persistWorkflowEvent(scope.Context(), l.client, instance, eventType, actionKey, details); err != nil {
 		scope.Warn(err, observability.Fields{
@@ -186,7 +195,7 @@ func (l *WorkflowListeners) recordEvent(scope *observability.Scope, instance *ge
 	}
 }
 
-// recordEmitFailure records an enqueue failure for listener-emitted events
+// recordEmitFailure records an enqueue failure for listener-emitted events.
 func (l *WorkflowListeners) recordEmitFailure(scope *observability.Scope, instance *generated.WorkflowInstance, meta workflows.EmitFailureMeta, topic string, payload any, receipt workflows.EmitReceipt) {
 	details, err := workflows.NewEmitFailureDetails(topic, receipt.EventID, payload, meta, receipt.Err)
 	if err != nil {
@@ -200,7 +209,7 @@ func (l *WorkflowListeners) recordEmitFailure(scope *observability.Scope, instan
 	l.recordEvent(scope, instance, enums.WorkflowEventTypeEmitFailed, meta.ActionKey, details)
 }
 
-// persistWorkflowEvent stores a workflow event payload for an instance
+// persistWorkflowEvent stores a workflow event payload for an instance.
 func persistWorkflowEvent(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance, eventType enums.WorkflowEventType, actionKey string, details any) error {
 	allowCtx := workflows.AllowContext(ctx)
 
@@ -225,12 +234,13 @@ func persistWorkflowEvent(ctx context.Context, client *generated.Client, instanc
 	if ownerErr != nil {
 		return ownerErr
 	}
+
 	create.SetOwnerID(ownerID)
 
 	return create.Exec(allowCtx)
 }
 
-// recordEmitFailure records an enqueue failure for engine-emitted events
+// recordEmitFailure records an enqueue failure for engine-emitted events.
 func recordEmitFailure(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance, meta workflows.EmitFailureMeta, topic string, payload any, receipt workflows.EmitReceipt) {
 	details, err := workflows.NewEmitFailureDetails(topic, receipt.EventID, payload, meta, receipt.Err)
 	if err != nil {
@@ -247,7 +257,7 @@ func recordEmitFailure(ctx context.Context, client *generated.Client, instance *
 	}
 }
 
-// recordAssignmentsCreated stores a single assignment-created event for UI history
+// recordAssignmentsCreated stores a single assignment-created event for UI history.
 func (e *WorkflowEngine) recordAssignmentsCreated(ctx context.Context, instance *generated.WorkflowInstance, details assignmentCreatedDetails) {
 	if err := persistWorkflowEvent(ctx, e.client, instance, enums.WorkflowEventTypeAssignmentCreated, details.ActionKey, details); err != nil {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, enums.WorkflowActionTypeApproval.String(), observability.Fields{
