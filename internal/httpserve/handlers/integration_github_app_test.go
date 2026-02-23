@@ -102,14 +102,16 @@ func TestGitHubAppInstallURLMissingSlug(t *testing.T) {
 	assert.ErrorIs(t, err, rout.ErrMissingField)
 }
 
-// TestBuildGitHubAppInstallSlackMessage verifies Slack notification message formatting.
-func TestBuildGitHubAppInstallSlackMessage(t *testing.T) {
-	msg := buildGitHubAppInstallSlackMessage("acme-corp", "Organization", "Acme", "org_123")
+// TestRenderGitHubAppInstallSlackMessage verifies Slack notification message formatting.
+func TestRenderGitHubAppInstallSlackMessage(t *testing.T) {
+	msg, err := renderGitHubAppInstallSlackMessage("acme-corp", "Organization", "Acme", "org_123")
+	assert.NoError(t, err)
 	assert.Contains(t, msg, "GitHub organization: acme-corp")
 	assert.Contains(t, msg, "GitHub account type: Organization")
 	assert.Contains(t, msg, "Openlane organization: Acme (org_123)")
 
-	msg = buildGitHubAppInstallSlackMessage("", "", "", "org_123")
+	msg, err = renderGitHubAppInstallSlackMessage("", "", "", "org_123")
+	assert.NoError(t, err)
 	assert.Contains(t, msg, "GitHub organization: unknown")
 	assert.Contains(t, msg, "Openlane organization: org_123")
 }

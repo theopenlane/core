@@ -24,7 +24,7 @@ func githubClientDescriptors(provider types.ProviderType) []types.ClientDescript
 		provider,
 		ClientGitHubGraphQL,
 		"GitHub GraphQL API client",
-		buildGitHubGraphQLClient(defaultGitHubGraphQLEndpoint),
+		buildGitHubGraphQLClient(),
 	))
 
 	return descriptors

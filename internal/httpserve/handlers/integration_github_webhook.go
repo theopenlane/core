@@ -305,7 +305,12 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 
 	openlaneOrgID := integrationRecord.OwnerID
 	openlaneOrgName := h.resolveOpenlaneOrganizationName(ctx.Request().Context(), openlaneOrgID)
-	message := buildGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID)
+	message, err := renderGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID)
+	if err != nil {
+		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_failed")
+
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+	}
 
 	if err := hooks.SendSlackNotification(ctx.Request().Context(), message); err != nil {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_failed")

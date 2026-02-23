@@ -11,8 +11,6 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
-const defaultGitHubGraphQLEndpoint = "https://api.github.com/graphql"
-
 // githubHeaderTransport injects static headers into outgoing GitHub requests.
 type githubHeaderTransport struct {
 	// next is the wrapped transport.
@@ -39,19 +37,19 @@ func (t githubHeaderTransport) RoundTrip(req *http.Request) (*http.Response, err
 }
 
 // buildGitHubGraphQLClient returns a pooled client builder for the GitHub GraphQL API.
-func buildGitHubGraphQLClient(endpoint string) types.ClientBuilderFunc {
+func buildGitHubGraphQLClient() types.ClientBuilderFunc {
 	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
 		token, err := auth.OAuthTokenFromPayload(payload)
 		if err != nil {
 			return nil, err
 		}
 
-		return newGitHubGraphQLClient(token, endpoint), nil
+		return newGitHubGraphQLClient(token), nil
 	}
 }
 
 // newGitHubGraphQLClient initializes an authenticated GitHub GraphQL client.
-func newGitHubGraphQLClient(token, endpoint string) *githubv4.Client {
+func newGitHubGraphQLClient(token string) *githubv4.Client {
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	httpClient := oauth2.NewClient(context.Background(), source)
 	httpClient.Transport = githubHeaderTransport{
@@ -59,7 +57,7 @@ func newGitHubGraphQLClient(token, endpoint string) *githubv4.Client {
 		headers: githubClientHeaders,
 	}
 
-	return githubv4.NewEnterpriseClient(endpoint, httpClient)
+	return githubv4.NewClient(httpClient)
 }
 
 // githubGraphQLClientFromAny attempts to unwrap a GraphQL client from an arbitrary value.

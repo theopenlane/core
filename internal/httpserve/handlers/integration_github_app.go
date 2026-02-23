@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"text/template"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -20,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
 // GitHub App cookie names used during install callbacks.
@@ -330,8 +332,22 @@ func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID str
 	return orgID
 }
 
-// buildGitHubAppInstallSlackMessage builds the Slack payload for completed GitHub App installs.
-func buildGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID string) string {
+// githubAppInstallSlackTemplateData captures template data for install notifications.
+type githubAppInstallSlackTemplateData struct {
+	// GitHubOrganization is the installed GitHub account login.
+	GitHubOrganization string
+	// GitHubAccountType is the GitHub account type (User or Organization).
+	GitHubAccountType string
+	// OpenlaneOrganization is the Openlane organization display name.
+	OpenlaneOrganization string
+	// OpenlaneOrganizationID is the Openlane organization identifier.
+	OpenlaneOrganizationID string
+	// ShowOpenlaneOrganizationID controls whether to append the organization ID in Slack text.
+	ShowOpenlaneOrganizationID bool
+}
+
+// renderGitHubAppInstallSlackMessage renders the Slack payload for completed GitHub App installs.
+func renderGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID string) (string, error) {
 	if githubOrg == "" {
 		githubOrg = "unknown"
 	}
@@ -339,18 +355,25 @@ func buildGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrg
 		openlaneOrgName = openlaneOrgID
 	}
 
-	var b strings.Builder
-	b.WriteString("Openlane GitHub App installation completed\n")
-	fmt.Fprintf(&b, "GitHub organization: %s\n", githubOrg)
-	if githubAccountType != "" {
-		fmt.Fprintf(&b, "GitHub account type: %s\n", githubAccountType)
-	}
-	fmt.Fprintf(&b, "Openlane organization: %s", openlaneOrgName)
-	if openlaneOrgID != "" && openlaneOrgID != openlaneOrgName {
-		fmt.Fprintf(&b, " (%s)", openlaneOrgID)
+	tmpl, err := template.ParseFS(slacktemplates.Templates, slacktemplates.GitHubAppInstallName)
+	if err != nil {
+		return "", err
 	}
 
-	return b.String()
+	data := githubAppInstallSlackTemplateData{
+		GitHubOrganization:         githubOrg,
+		GitHubAccountType:          githubAccountType,
+		OpenlaneOrganization:       openlaneOrgName,
+		OpenlaneOrganizationID:     openlaneOrgID,
+		ShowOpenlaneOrganizationID: openlaneOrgID != "" && openlaneOrgID != openlaneOrgName,
+	}
+
+	var b strings.Builder
+	if err := tmpl.Execute(&b, data); err != nil {
+		return "", err
+	}
+
+	return b.String(), nil
 }
 
 const defaultHealthOperation types.OperationName = "health.default"

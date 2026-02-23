@@ -8,6 +8,7 @@ const (
 	// provided, so include the templates directory prefix here.
 	SubscriberTemplateName = "templates/new_subscriber.tmpl"
 	UserTemplateName       = "templates/new_user.tmpl"
+	GitHubAppInstallName   = "templates/github_app_installation.tmpl"
 )
 
 // Templates holds embedded Slack notification templates.

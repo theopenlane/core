@@ -200,5 +200,5 @@ func githubGraphQLClientForOperation(input types.OperationInput) (*githubv4.Clie
 		return nil, err
 	}
 
-	return newGitHubGraphQLClient(token, defaultGitHubGraphQLEndpoint), nil
+	return newGitHubGraphQLClient(token), nil
 }
