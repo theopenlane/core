@@ -1664,7 +1664,9 @@ type Asset struct {
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType enums.AssetType `json:"assetType"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
-	Name        string  `json:"name"`
+	Name string `json:"name"`
+	// the display name of the asset
+	DisplayName *string `json:"displayName,omitempty"`
 	Description *string `json:"description,omitempty"`
 	// unique identifier like domain, device id, etc
 	Identifier *string `json:"identifier,omitempty"`
@@ -2230,6 +2232,22 @@ type AssetWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// display_name field predicates
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGt           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGte          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLt           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLte          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 	// description field predicates
 	Description             *string  `json:"description,omitempty"`
 	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
@@ -5548,7 +5566,9 @@ type CreateAssetInput struct {
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType *enums.AssetType `json:"assetType,omitempty"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
-	Name        string  `json:"name"`
+	Name string `json:"name"`
+	// the display name of the asset
+	DisplayName *string `json:"displayName,omitempty"`
 	Description *string `json:"description,omitempty"`
 	// unique identifier like domain, device id, etc
 	Identifier *string `json:"identifier,omitempty"`
@@ -36351,7 +36371,10 @@ type UpdateAssetInput struct {
 	// the type of the asset, e.g. technology, domain, device, etc
 	AssetType *enums.AssetType `json:"assetType,omitempty"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
-	Name             *string `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
+	// the display name of the asset
+	DisplayName      *string `json:"displayName,omitempty"`
+	ClearDisplayName *bool   `json:"clearDisplayName,omitempty"`
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// unique identifier like domain, device id, etc
@@ -45880,6 +45903,7 @@ const (
 	AssetOrderFieldInternalOwner        AssetOrderField = "internal_owner"
 	AssetOrderFieldAssetType            AssetOrderField = "ASSET_TYPE"
 	AssetOrderFieldName                 AssetOrderField = "name"
+	AssetOrderFieldDisplayName          AssetOrderField = "display_name"
 	AssetOrderFieldPhysicalLocation     AssetOrderField = "physical_location"
 	AssetOrderFieldRegion               AssetOrderField = "region"
 	AssetOrderFieldContainsPii          AssetOrderField = "contains_pii"
@@ -45896,6 +45920,7 @@ var AllAssetOrderField = []AssetOrderField{
 	AssetOrderFieldInternalOwner,
 	AssetOrderFieldAssetType,
 	AssetOrderFieldName,
+	AssetOrderFieldDisplayName,
 	AssetOrderFieldPhysicalLocation,
 	AssetOrderFieldRegion,
 	AssetOrderFieldContainsPii,
@@ -45908,7 +45933,7 @@ var AllAssetOrderField = []AssetOrderField{
 
 func (e AssetOrderField) IsValid() bool {
 	switch e {
-	case AssetOrderFieldCreatedAt, AssetOrderFieldUpdatedAt, AssetOrderFieldInternalOwner, AssetOrderFieldAssetType, AssetOrderFieldName, AssetOrderFieldPhysicalLocation, AssetOrderFieldRegion, AssetOrderFieldContainsPii, AssetOrderFieldSourceType, AssetOrderFieldSourceIdentifier, AssetOrderFieldCostCenter, AssetOrderFieldEstimatedMonthlyCost, AssetOrderFieldPurchaseDate:
+	case AssetOrderFieldCreatedAt, AssetOrderFieldUpdatedAt, AssetOrderFieldInternalOwner, AssetOrderFieldAssetType, AssetOrderFieldName, AssetOrderFieldDisplayName, AssetOrderFieldPhysicalLocation, AssetOrderFieldRegion, AssetOrderFieldContainsPii, AssetOrderFieldSourceType, AssetOrderFieldSourceIdentifier, AssetOrderFieldCostCenter, AssetOrderFieldEstimatedMonthlyCost, AssetOrderFieldPurchaseDate:
 		return true
 	}
 	return false

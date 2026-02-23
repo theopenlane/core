@@ -270,6 +270,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assethistory.FieldSystemInternalID:            {Type: field.TypeString, Column: assethistory.FieldSystemInternalID},
 			assethistory.FieldAssetType:                   {Type: field.TypeEnum, Column: assethistory.FieldAssetType},
 			assethistory.FieldName:                        {Type: field.TypeString, Column: assethistory.FieldName},
+			assethistory.FieldDisplayName:                 {Type: field.TypeString, Column: assethistory.FieldDisplayName},
 			assethistory.FieldDescription:                 {Type: field.TypeString, Column: assethistory.FieldDescription},
 			assethistory.FieldIdentifier:                  {Type: field.TypeString, Column: assethistory.FieldIdentifier},
 			assethistory.FieldWebsite:                     {Type: field.TypeString, Column: assethistory.FieldWebsite},
@@ -3880,6 +3881,11 @@ func (f *AssetHistoryFilter) WhereAssetType(p entql.StringP) {
 // WhereName applies the entql string predicate on the name field.
 func (f *AssetHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(assethistory.FieldName))
+}
+
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *AssetHistoryFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(assethistory.FieldDisplayName))
 }
 
 // WhereDescription applies the entql string predicate on the description field.

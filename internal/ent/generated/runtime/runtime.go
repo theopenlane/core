@@ -550,6 +550,7 @@ func init() {
 	assetMixinHooks14 := assetMixin[14].Hooks()
 	assetMixinHooks15 := assetMixin[15].Hooks()
 	assetMixinHooks16 := assetMixin[16].Hooks()
+	assetHooks := schema.Asset{}.Hooks()
 
 	asset.Hooks[1] = assetMixinHooks0[0]
 
@@ -584,6 +585,8 @@ func init() {
 	asset.Hooks[16] = assetMixinHooks15[0]
 
 	asset.Hooks[17] = assetMixinHooks16[0]
+
+	asset.Hooks[18] = assetHooks[0]
 	assetMixinInters1 := assetMixin[1].Interceptors()
 	assetMixinInters5 := assetMixin[5].Interceptors()
 	asset.Interceptors[0] = assetMixinInters1[0]
@@ -627,8 +630,26 @@ func init() {
 	assetDescName := assetFields[1].Descriptor()
 	// asset.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	asset.NameValidator = assetDescName.Validators[0].(func(string) error)
+	// assetDescDisplayName is the schema descriptor for display_name field.
+	assetDescDisplayName := assetFields[2].Descriptor()
+	// asset.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	asset.DisplayNameValidator = func() func(string) error {
+		validators := assetDescDisplayName.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(display_name string) error {
+			for _, fn := range fns {
+				if err := fn(display_name); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// assetDescContainsPii is the schema descriptor for contains_pii field.
-	assetDescContainsPii := assetFields[7].Descriptor()
+	assetDescContainsPii := assetFields[8].Descriptor()
 	// asset.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	asset.DefaultContainsPii = assetDescContainsPii.Default.(bool)
 	// assetDescID is the schema descriptor for id field.

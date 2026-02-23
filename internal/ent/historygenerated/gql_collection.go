@@ -969,6 +969,11 @@ func (_q *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, assethistory.FieldName)
 				fieldSeen[assethistory.FieldName] = struct{}{}
 			}
+		case "displayName":
+			if _, ok := fieldSeen[assethistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldDisplayName)
+				fieldSeen[assethistory.FieldDisplayName] = struct{}{}
+			}
 		case "description":
 			if _, ok := fieldSeen[assethistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, assethistory.FieldDescription)

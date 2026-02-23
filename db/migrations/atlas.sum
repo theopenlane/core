@@ -1,4 +1,4 @@
-h1:WbadzANZn2jPQDPGlhDMvgTgcOQ7pG8mNjCfRSbipwM=
+h1:pWf3njc/IcRtki6dOeeLDgPiKFOlVLEYzcMDkJ42FgM=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -54,3 +54,5 @@ h1:WbadzANZn2jPQDPGlhDMvgTgcOQ7pG8mNjCfRSbipwM=
 20260220150249_trustcenter_faqs_history.sql h1:aP9ltnlWLN/kHALSzLIlSVbwLHbCc8x+Pc0WdAE/jlI=
 20260220180510_tscontrols.sql h1:QyRfv+YtPAmMLEV16/XIIyBfE3UqnOhxt+xDTXv4uWY=
 20260220180514_tscontrols_history.sql h1:oGrdJT1pps2WnAKgOB3OVyPPb5AyBNEWbN+Im7AUS14=
+20260223191715_asset_display_name.sql h1:pmz+hxCz28mDRQRjewFgFVJJF52hVzU3+k70nBWx2IY=
+20260223191723_asset_display_name_history.sql h1:a4W/dZDWbJ4QKmI3j9uXUqrJ+lNPbVDYFkQgttB097Y=

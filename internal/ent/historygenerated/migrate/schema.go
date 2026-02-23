@@ -195,6 +195,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"}, Default: "TECHNOLOGY"},
 		{Name: "name", Type: field.TypeString},
+		{Name: "display_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "identifier", Type: field.TypeString, Nullable: true},
 		{Name: "website", Type: field.TypeString, Nullable: true},

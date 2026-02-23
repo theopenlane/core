@@ -2771,6 +2771,10 @@ type Asset implements Node {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String!
+  """
+  the display name of the asset
+  """
+  displayName: String
   description: String
   """
   unique identifier like domain, device id, etc
@@ -3239,6 +3243,7 @@ enum AssetOrderField {
   internal_owner
   ASSET_TYPE
   name
+  display_name
   physical_location
   region
   contains_pii
@@ -3766,6 +3771,24 @@ input AssetWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
   """
   description field predicates
   """
@@ -9568,6 +9591,10 @@ input CreateAssetInput {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String!
+  """
+  the display name of the asset
+  """
+  displayName: String
   description: String
   """
   unique identifier like domain, device id, etc
@@ -66395,6 +66422,11 @@ input UpdateAssetInput {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String
+  """
+  the display name of the asset
+  """
+  displayName: String
+  clearDisplayName: Boolean
   description: String
   clearDescription: Boolean
   """

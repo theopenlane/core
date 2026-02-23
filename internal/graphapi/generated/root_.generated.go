@@ -389,6 +389,7 @@ type ComplexityRoot struct {
 		CriticalityID               func(childComplexity int) int
 		CriticalityName             func(childComplexity int) int
 		Description                 func(childComplexity int) int
+		DisplayName                 func(childComplexity int) int
 		Editors                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EncryptionStatus            func(childComplexity int) int
 		EncryptionStatusID          func(childComplexity int) int
@@ -8734,6 +8735,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Asset.Description(childComplexity), true
+
+	case "Asset.displayName":
+		if e.complexity.Asset.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.Asset.DisplayName(childComplexity), true
 
 	case "Asset.editors":
 		if e.complexity.Asset.Editors == nil {
@@ -55187,6 +55195,10 @@ type Asset implements Node {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String!
+  """
+  the display name of the asset
+  """
+  displayName: String
   description: String
   """
   unique identifier like domain, device id, etc
@@ -55655,6 +55667,7 @@ enum AssetOrderField {
   internal_owner
   ASSET_TYPE
   name
+  display_name
   physical_location
   region
   contains_pii
@@ -56182,6 +56195,24 @@ input AssetWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
   """
   description field predicates
   """
@@ -61984,6 +62015,10 @@ input CreateAssetInput {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String!
+  """
+  the display name of the asset
+  """
+  displayName: String
   description: String
   """
   unique identifier like domain, device id, etc
@@ -118811,6 +118846,11 @@ input UpdateAssetInput {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String
+  """
+  the display name of the asset
+  """
+  displayName: String
+  clearDisplayName: Boolean
   description: String
   clearDescription: Boolean
   """

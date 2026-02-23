@@ -197,6 +197,7 @@ type ComplexityRoot struct {
 		CriticalityID               func(childComplexity int) int
 		CriticalityName             func(childComplexity int) int
 		Description                 func(childComplexity int) int
+		DisplayName                 func(childComplexity int) int
 		EncryptionStatusID          func(childComplexity int) int
 		EncryptionStatusName        func(childComplexity int) int
 		EnvironmentID               func(childComplexity int) int
@@ -3988,6 +3989,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssetHistory.Description(childComplexity), true
+
+	case "AssetHistory.displayName":
+		if e.complexity.AssetHistory.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.DisplayName(childComplexity), true
 
 	case "AssetHistory.encryptionStatusID":
 		if e.complexity.AssetHistory.EncryptionStatusID == nil {
@@ -22285,6 +22293,10 @@ type AssetHistory implements Node {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String!
+  """
+  the display name of the asset
+  """
+  displayName: String
   description: String
   """
   unique identifier like domain, device id, etc
@@ -22409,6 +22421,7 @@ enum AssetHistoryOrderField {
   internal_owner
   ASSET_TYPE
   name
+  display_name
   physical_location
   region
   contains_pii
@@ -22972,6 +22985,24 @@ input AssetHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
   """
   description field predicates
   """
