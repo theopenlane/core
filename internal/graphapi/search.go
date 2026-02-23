@@ -239,12 +239,13 @@ func searchAssets(ctx context.Context, query string, after *entgql.Cursor[string
 	request := withTransactionalMutation(ctx).Asset.Query().
 		Where(
 			asset.Or(
+				asset.DisplayNameContainsFold(query),   // search by DisplayName
 				asset.ID(query),                        // search equal to ID
 				asset.InternalOwnerContainsFold(query), // search by InternalOwner
 				asset.NameContainsFold(query),          // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -285,6 +286,7 @@ func adminSearchAssets(ctx context.Context, query string, after *entgql.Cursor[s
 				asset.InternalNotesContainsFold(query),               // search by InternalNotes
 				asset.SystemInternalIDContainsFold(query),            // search by SystemInternalID
 				asset.NameContainsFold(query),                        // search by Name
+				asset.DisplayNameContainsFold(query),                 // search by DisplayName
 				asset.DescriptionContainsFold(query),                 // search by Description
 				asset.IdentifierContainsFold(query),                  // search by Identifier
 				asset.WebsiteContainsFold(query),                     // search by Website
@@ -295,7 +297,7 @@ func adminSearchAssets(ctx context.Context, query string, after *entgql.Cursor[s
 				asset.CostCenterContainsFold(query),                  // search by CostCenter
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(categories)::text LIKE $34", likeQuery)) // search by Categories
+					s.Where(sql.ExprP("(categories)::text LIKE $35", likeQuery)) // search by Categories
 				},
 			),
 		)

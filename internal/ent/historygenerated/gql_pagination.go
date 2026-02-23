@@ -1934,6 +1934,20 @@ var (
 			}
 		},
 	}
+	// AssetHistoryOrderFieldDisplayName orders AssetHistory by display_name.
+	AssetHistoryOrderFieldDisplayName = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: assethistory.FieldDisplayName,
+		toTerm: assethistory.ByDisplayName,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
 	// AssetHistoryOrderFieldPhysicalLocation orders AssetHistory by physical_location.
 	AssetHistoryOrderFieldPhysicalLocation = &AssetHistoryOrderField{
 		Value: func(_m *AssetHistory) (ent.Value, error) {
@@ -2077,6 +2091,8 @@ func (f AssetHistoryOrderField) String() string {
 		str = "ASSET_TYPE"
 	case AssetHistoryOrderFieldName.column:
 		str = "name"
+	case AssetHistoryOrderFieldDisplayName.column:
+		str = "display_name"
 	case AssetHistoryOrderFieldPhysicalLocation.column:
 		str = "physical_location"
 	case AssetHistoryOrderFieldRegion.column:
@@ -2121,6 +2137,8 @@ func (f *AssetHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetHistoryOrderFieldAssetType
 	case "name":
 		*f = *AssetHistoryOrderFieldName
+	case "display_name":
+		*f = *AssetHistoryOrderFieldDisplayName
 	case "physical_location":
 		*f = *AssetHistoryOrderFieldPhysicalLocation
 	case "region":

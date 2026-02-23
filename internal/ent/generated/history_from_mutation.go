@@ -1393,6 +1393,10 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetName(name)
 	}
 
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
+	}
+
 	if description, exists := m.Description(); exists {
 		create = create.SetDescription(description)
 	}
@@ -1672,6 +1676,12 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetName(asset.Name)
 		}
 
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(asset.DisplayName)
+		}
+
 		if description, exists := m.Description(); exists {
 			create = create.SetDescription(description)
 		} else {
@@ -1823,6 +1833,7 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableSystemInternalID(asset.SystemInternalID).
 			SetAssetType(asset.AssetType).
 			SetName(asset.Name).
+			SetDisplayName(asset.DisplayName).
 			SetDescription(asset.Description).
 			SetIdentifier(asset.Identifier).
 			SetWebsite(asset.Website).

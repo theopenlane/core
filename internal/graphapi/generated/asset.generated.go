@@ -114,6 +114,8 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":
 				return ec.fieldContext_Asset_name(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Asset_displayName(ctx, field)
 			case "description":
 				return ec.fieldContext_Asset_description(ctx, field)
 			case "identifier":
@@ -310,6 +312,8 @@ func (ec *executionContext) fieldContext_AssetBulkUpdatePayload_assets(_ context
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":
 				return ec.fieldContext_Asset_name(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Asset_displayName(ctx, field)
 			case "description":
 				return ec.fieldContext_Asset_description(ctx, field)
 			case "identifier":
@@ -506,6 +510,8 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":
 				return ec.fieldContext_Asset_name(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Asset_displayName(ctx, field)
 			case "description":
 				return ec.fieldContext_Asset_description(ctx, field)
 			case "identifier":
@@ -702,6 +708,8 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_assetType(ctx, field)
 			case "name":
 				return ec.fieldContext_Asset_name(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Asset_displayName(ctx, field)
 			case "description":
 				return ec.fieldContext_Asset_description(ctx, field)
 			case "identifier":

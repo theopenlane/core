@@ -1189,6 +1189,7 @@ type CreateAssetInput struct {
 	SystemInternalID            *string
 	AssetType                   *enums.AssetType
 	Name                        string
+	DisplayName                 *string
 	Description                 *string
 	Identifier                  *string
 	Website                     *string
@@ -1269,6 +1270,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 		m.SetAssetType(*v)
 	}
 	m.SetName(i.Name)
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
@@ -1414,6 +1418,8 @@ type UpdateAssetInput struct {
 	SystemInternalID                 *string
 	AssetType                        *enums.AssetType
 	Name                             *string
+	ClearDisplayName                 bool
+	DisplayName                      *string
 	ClearDescription                 bool
 	Description                      *string
 	ClearIdentifier                  bool
@@ -1579,6 +1585,12 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()

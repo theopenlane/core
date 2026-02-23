@@ -580,6 +580,26 @@ func (_u *AssetUpdate) SetNillableName(v *string) *AssetUpdate {
 	return _u
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_u *AssetUpdate) SetDisplayName(v string) *AssetUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableDisplayName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssetUpdate) ClearDisplayName() *AssetUpdate {
+	_u.mutation.ClearDisplayName()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *AssetUpdate) SetDescription(v string) *AssetUpdate {
 	_u.mutation.SetDescription(v)
@@ -1435,6 +1455,11 @@ func (_u *AssetUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.DisplayName(); ok {
+		if err := asset.DisplayNameValidator(v); err != nil {
+			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Asset.display_name": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.SourceType(); ok {
 		if err := asset.SourceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "source_type", err: fmt.Errorf(`generated: validator failed for field "Asset.source_type": %w`, err)}
@@ -1576,6 +1601,12 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(asset.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(asset.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(asset.FieldDisplayName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(asset.FieldDescription, field.TypeString, value)
@@ -3091,6 +3122,26 @@ func (_u *AssetUpdateOne) SetNillableName(v *string) *AssetUpdateOne {
 	return _u
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_u *AssetUpdateOne) SetDisplayName(v string) *AssetUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableDisplayName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssetUpdateOne) ClearDisplayName() *AssetUpdateOne {
+	_u.mutation.ClearDisplayName()
+	return _u
+}
+
 // SetDescription sets the "description" field.
 func (_u *AssetUpdateOne) SetDescription(v string) *AssetUpdateOne {
 	_u.mutation.SetDescription(v)
@@ -3959,6 +4010,11 @@ func (_u *AssetUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.DisplayName(); ok {
+		if err := asset.DisplayNameValidator(v); err != nil {
+			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Asset.display_name": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.SourceType(); ok {
 		if err := asset.SourceTypeValidator(v); err != nil {
 			return &ValidationError{Name: "source_type", err: fmt.Errorf(`generated: validator failed for field "Asset.source_type": %w`, err)}
@@ -4117,6 +4173,12 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(asset.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(asset.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(asset.FieldDisplayName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(asset.FieldDescription, field.TypeString, value)

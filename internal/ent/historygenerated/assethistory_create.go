@@ -491,6 +491,20 @@ func (_c *AssetHistoryCreate) SetName(v string) *AssetHistoryCreate {
 	return _c
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_c *AssetHistoryCreate) SetDisplayName(v string) *AssetHistoryCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableDisplayName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
+	}
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *AssetHistoryCreate) SetDescription(v string) *AssetHistoryCreate {
 	_c.mutation.SetDescription(v)
@@ -988,6 +1002,10 @@ func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(assethistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.DisplayName(); ok {
+		_spec.SetField(assethistory.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(assethistory.FieldDescription, field.TypeString, value)
