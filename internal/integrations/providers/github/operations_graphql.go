@@ -145,9 +145,11 @@ func listGitHubOrganizationRepositories(ctx context.Context, client *githubv4.Cl
 			} `graphql:"organization(login: $organization)"`
 		}
 
+		graphqlPageSize := githubv4.Int(pageSize) // #nosec G115 -- pageSize is clamped to maxPerPage (100)
+
 		variables := map[string]any{
 			"organization": githubv4.String(organization.String()),
-			"pageSize":     githubv4.Int(pageSize),
+			"pageSize":     graphqlPageSize,
 			"cursor":       cursor,
 		}
 

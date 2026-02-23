@@ -75,7 +75,7 @@ func RenderGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOr
 		openlaneOrgName = openlaneOrgID
 	}
 
-	tmpl, err := loadSlackTemplate(nil, "", slacktemplates.GitHubAppInstallName)
+	tmpl, err := loadSlackTemplate(context.Background(), "", slacktemplates.GitHubAppInstallName)
 	if err != nil {
 		return "", err
 	}
