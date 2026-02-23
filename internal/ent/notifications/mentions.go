@@ -27,52 +27,52 @@ import (
 // risk, policy, or evidence). The parent relationship fields are mutually exclusive -
 // only one will be populated based on where the note was created.
 type noteFields struct {
-	// text is the plain text content of the note.
+	// text is the plain text content of the note
 	text string
-	// textJSON is the JSON-serialized Slate content of the note.
+	// textJSON is the JSON-serialized Slate content of the note
 	textJSON string
-	// oldText is the previous plain text content (for update comparisons).
+	// oldText is the previous plain text content (for update comparisons)
 	oldText string
-	// oldTextJSON is the previous JSON-serialized content (for update comparisons).
+	// oldTextJSON is the previous JSON-serialized content (for update comparisons)
 	oldTextJSON string
-	// entityID is the unique identifier of the note itself.
+	// entityID is the unique identifier of the note itself
 	entityID string
-	// ownerID is the organization owner of the note.
+	// ownerID is the organization owner of the note
 	ownerID string
-	// taskID is set when the note is a comment on a task.
+	// taskID is set when the note is a comment on a task
 	taskID string
-	// controlID is set when the note is a comment on a control.
+	// controlID is set when the note is a comment on a control
 	controlID string
-	// procedureID is set when the note is a comment on a procedure.
+	// procedureID is set when the note is a comment on a procedure
 	procedureID string
-	// riskID is set when the note is a comment on a risk.
+	// riskID is set when the note is a comment on a risk
 	riskID string
-	// policyID is set when the note is a comment on an internal policy.
+	// policyID is set when the note is a comment on an internal policy
 	policyID string
-	// evidenceID is set when the note is a comment on evidence.
+	// evidenceID is set when the note is a comment on evidence
 	evidenceID string
 }
 
 // mentionNotificationInput carries all data required to create notifications
 // for users mentioned in an object (for example, a note or task).
 type mentionNotificationInput struct {
-	// mentionedUserIDs contains the IDs of users that were mentioned and should receive a notification.
+	// mentionedUserIDs contains the IDs of users that were mentioned and should receive a notification
 	mentionedUserIDs []string
-	// objectType describes the type of entity where the mention occurred.
+	// objectType describes the type of entity where the mention occurred
 	objectType string
-	// objectID is the identifier of the entity where the mention occurred.
+	// objectID is the identifier of the entity where the mention occurred
 	objectID string
-	// objectName is a human-readable name/title used in notification content.
+	// objectName is a human-readable name/title used in notification content
 	objectName string
-	// ownerID is the ID of the user who created the mention.
+	// ownerID is the ID of the user who created the mention
 	ownerID string
-	// noteID is the ID of the note associated with the mention, when applicable.
+	// noteID is the ID of the note associated with the mention, when applicable
 	noteID string
-	// isComment indicates whether the mention occurred within a comment/note.
+	// isComment indicates whether the mention occurred within a comment/note
 	isComment bool
 }
 
-// handleNoteMutation processes note mutations and creates notifications for mentioned users.
+// handleNoteMutation processes note mutations and creates notifications for mentioned users
 func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
@@ -87,7 +87,7 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 		return err
 	}
 
-	// Determine which text field to use (prefer text_json if available and valid).
+	// Determine which text field to use (prefer text_json if available and valid)
 	newText := fields.text
 	oldText := fields.oldText
 
@@ -99,7 +99,7 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 		oldText = fields.oldTextJSON
 	}
 
-	// If no valid text, nothing to process.
+	// If no valid text, nothing to process
 	if newText == "" {
 		return nil
 	}
@@ -149,7 +149,7 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 	return nil
 }
 
-// fetchNoteFields retrieves note fields from payload metadata, header properties, or DB fallback.
+// fetchNoteFields retrieves note fields from payload metadata, header properties, or DB fallback
 func fetchNoteFields(ctx context.Context, client *generated.Client, props map[string]string, payload eventqueue.MutationGalaPayload) (*noteFields, error) {
 	fields := &noteFields{}
 
@@ -192,7 +192,7 @@ func needsNoteDBQuery(fields *noteFields) bool {
 	return fields.entityID == "" || fields.ownerID == "" || missingParent
 }
 
-// extractNoteFromPayload extracts note fields from mutation payload metadata.
+// extractNoteFromPayload extracts note fields from mutation payload metadata
 func extractNoteFromPayload(payload eventqueue.MutationGalaPayload, fields *noteFields) {
 	if fields == nil {
 		return
@@ -239,7 +239,7 @@ func extractNoteFromPayload(payload eventqueue.MutationGalaPayload, fields *note
 	}
 }
 
-// extractNoteFromProps extracts note fields from mutation properties.
+// extractNoteFromProps extracts note fields from mutation properties
 func extractNoteFromProps(props map[string]string, fields *noteFields) {
 	if fields == nil {
 		return
@@ -282,7 +282,7 @@ func extractNoteFromProps(props map[string]string, fields *noteFields) {
 	}
 }
 
-// queryNoteOldText queries the database to get old note text before update.
+// queryNoteOldText queries the database to get old note text before update
 func queryNoteOldText(ctx context.Context, client *generated.Client, fields *noteFields) error {
 	if fields == nil || fields.entityID == "" {
 		return nil
@@ -304,7 +304,7 @@ func queryNoteOldText(ctx context.Context, client *generated.Client, fields *not
 	return nil
 }
 
-// queryNoteFromDB queries note and relationships to fill missing fields.
+// queryNoteFromDB queries note and relationships to fill missing fields
 func queryNoteFromDB(ctx context.Context, client *generated.Client, fields *noteFields) error {
 	if fields == nil || fields.entityID == "" {
 		return ErrEntityIDNotFound
@@ -359,7 +359,7 @@ func queryNoteFromDB(ctx context.Context, client *generated.Client, fields *note
 	return nil
 }
 
-// getParentObjectInfo determines the parent object type and ID for a note.
+// getParentObjectInfo determines the parent object type and ID for a note
 func getParentObjectInfo(ctx context.Context, client *generated.Client, fields *noteFields) (string, string, string, error) {
 	if client == nil {
 		return "", "", "", ErrFailedToGetClient
@@ -418,7 +418,7 @@ func getParentObjectInfo(ctx context.Context, client *generated.Client, fields *
 	return generated.TypeNote, fields.entityID, "Comment", nil
 }
 
-// addMentionNotification creates notifications for all mentioned users.
+// addMentionNotification creates notifications for all mentioned users
 func addMentionNotification(ctx context.Context, client *generated.Client, input mentionNotificationInput) error {
 	if client == nil {
 		return ErrFailedToGetClient
@@ -472,7 +472,7 @@ func addMentionNotification(ctx context.Context, client *generated.Client, input
 	return newNotificationCreation(ctx, client, filteredMentionedUserIDs, notifInput)
 }
 
-// objectMentionDetails holds extracted details for mention processing.
+// objectMentionDetails holds extracted details for mention processing
 type objectMentionDetails struct {
 	objectID       string
 	objectType     string
@@ -486,7 +486,7 @@ type objectMentionDetails struct {
 	valid      bool
 }
 
-// oldDocumentDetails holds old document details fetched from the database.
+// oldDocumentDetails holds old document details fetched from the database
 type oldDocumentDetails struct {
 	name        string
 	ownerID     string

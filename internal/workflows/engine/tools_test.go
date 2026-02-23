@@ -166,14 +166,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	workflows.RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
 
-	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
-	clientOpts := []entdb.Option{
-		entdb.WithWorkflows(workflowCfg),
-	}
-
-	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
-	s.Require().NoError(err)
-
 	runtime, err := gala.NewGala(s.ctx, gala.Config{
 		DispatchMode:      gala.DispatchModeDurable,
 		ConnectionURI:     s.tf.URI,
@@ -183,6 +175,14 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		FetchCooldown:     time.Millisecond,
 		FetchPollInterval: 10 * time.Millisecond,
 	})
+	s.Require().NoError(err)
+
+	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
+	clientOpts := []entdb.Option{
+		entdb.WithWorkflows(workflowCfg, runtime),
+	}
+
+	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
 	s.Require().NoError(err)
 
 	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
@@ -195,8 +195,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
 	s.Require().True(ok, "workflow engine not initialized")
 	s.Require().NotNil(wfEngine, "workflow engine not initialized")
-
-	wfEngine.SetGala(runtime)
 
 	do.ProvideValue(runtime.Injector(), runtime)
 	do.ProvideValue(runtime.Injector(), db)

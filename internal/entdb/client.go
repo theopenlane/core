@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/gala"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
@@ -56,10 +57,10 @@ type client struct {
 type Option func(*ent.Client)
 
 // WithWorkflows wires workflow-related hooks and optionally configures the workflow engine.
-func WithWorkflows(workflowConfig *workflows.Config) Option {
+func WithWorkflows(workflowConfig *workflows.Config, galaRuntime *gala.Gala) Option {
 	return func(c *ent.Client) {
 		if workflowConfig != nil && workflowConfig.Enabled {
-			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, nil, workflowConfig)
+			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, galaRuntime, workflowConfig)
 			if err != nil {
 				log.Fatal().Err(err).Msg("failed to create workflow engine")
 			}

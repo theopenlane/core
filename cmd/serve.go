@@ -172,12 +172,17 @@ func serve(ctx context.Context) error {
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")
 
+	galaApp, notifGala, err := serveropts.NewGalaRuntimes(ctx, so)
+	if err != nil {
+		return err
+	}
+
 	jobOpts := []riverqueue.Option{
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
 	clientOpts := []entdb.Option{
-		entdb.WithWorkflows(&so.Config.Settings.Workflows),
+		entdb.WithWorkflows(&so.Config.Settings.Workflows, galaApp),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -187,14 +192,12 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	galaApp, err := serveropts.WithGala(ctx, so, dbClient)
-	if err != nil {
+	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
 		return err
 	}
 
 	if so.Config.Settings.Workflows.Enabled {
 		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
-			wfEngine.SetGala(galaApp)
 			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
 			log.Info().Msg("workflow engine initialized")
 		}

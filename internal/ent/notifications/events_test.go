@@ -23,6 +23,30 @@ func TestNeedsTaskDBQuery(t *testing.T) {
 	}{
 		{name: "all fields empty", fields: &taskFields{}, expected: true},
 		{
+			name: "missing title",
+			fields: &taskFields{
+				entityID: "task-1",
+				ownerID:  "owner-1",
+			},
+			expected: true,
+		},
+		{
+			name: "missing entity ID",
+			fields: &taskFields{
+				title:   "Task",
+				ownerID: "owner-1",
+			},
+			expected: true,
+		},
+		{
+			name: "missing owner ID",
+			fields: &taskFields{
+				title:    "Task",
+				entityID: "task-1",
+			},
+			expected: true,
+		},
+		{
 			name: "all fields present",
 			fields: &taskFields{
 				title:    "Task",
@@ -47,6 +71,24 @@ func TestNeedsDocumentDBQuery(t *testing.T) {
 		expected bool
 	}{
 		{name: "all fields empty", fields: &documentFields{}, expected: true},
+		{
+			name: "missing name",
+			fields: &documentFields{
+				entityID:   "policy-1",
+				ownerID:    "owner-1",
+				approverID: "approver-1",
+			},
+			expected: true,
+		},
+		{
+			name: "missing approver ID",
+			fields: &documentFields{
+				name:     "Policy",
+				entityID: "policy-1",
+				ownerID:  "owner-1",
+			},
+			expected: true,
+		},
 		{
 			name: "all fields present",
 			fields: &documentFields{

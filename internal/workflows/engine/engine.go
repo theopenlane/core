@@ -84,16 +84,6 @@ func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, c
 	}, nil
 }
 
-// SetGala updates the runtime used for workflow and integration dispatch.
-// This must only be called during initialization before the engine serves requests.
-func (e *WorkflowEngine) SetGala(runtime *gala.Gala) {
-	if e == nil {
-		return
-	}
-
-	e.gala = runtime
-}
-
 // TriggerWorkflow starts a new workflow instance
 func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, input TriggerInput) (instance *generated.WorkflowInstance, err error) {
 	scope := observability.BeginEngine(ctx, e.observer, observability.OpTriggerWorkflow, input.EventType, lo.Assign(observability.Fields(obj.ObservabilityFields()), observability.Fields{

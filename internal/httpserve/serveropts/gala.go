@@ -14,12 +14,12 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// WithGala configures Gala mutation emission and, when enabled, starts Gala workers.
-func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*gala.Gala, error) {
-	workflowCfg := so.Config.Settings.Workflows
-	galaCfg := workflowCfg.Gala
+// NewGalaRuntimes creates the main and notification gala runtimes from configuration.
+// It does not wire the runtimes to the database client; call ConfigureGala for that.
+func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.Gala, error) {
+	galaCfg := so.Config.Settings.Workflows.Gala
 	if !galaCfg.Enabled {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	galaQueueName := galaCfg.QueueName
@@ -38,7 +38,7 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 		MaxRetries: galaCfg.MaxRetries,
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	notificationGala, err := gala.NewGala(ctx, gala.Config{
@@ -50,8 +50,22 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 			log.Warn().Err(closeErr).Msg("failed to close gala after in-memory runtime creation failure")
 		}
 
-		return nil, err
+		return nil, nil, err
 	}
+
+	so.Config.Handler.Gala = galaApp
+
+	return galaApp, notificationGala, nil
+}
+
+// ConfigureGala wires the gala runtimes to the database client, registers all listeners,
+// and starts workers. It must be called after the database client is created.
+func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, dbClient *ent.Client, so *ServerOptions) error {
+	if galaApp == nil {
+		return nil
+	}
+
+	galaCfg := so.Config.Settings.Workflows.Gala
 
 	closeRuntimes := func() {
 		if closeErr := notificationGala.Close(); closeErr != nil {
@@ -63,13 +77,11 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 		}
 	}
 
-	// slightly weird signature but same registration of a new ent hook
 	dbClient.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
 		return galaApp
 	}, func() *gala.Gala {
 		return notificationGala
 	}))
-	so.Config.Handler.Gala = galaApp
 
 	provideGalaDependencies(galaApp.Injector(), galaApp, dbClient, true)
 	provideGalaDependencies(notificationGala.Injector(), notificationGala, dbClient, false)
@@ -85,40 +97,40 @@ func WithGala(ctx context.Context, so *ServerOptions, dbClient *ent.Client) (*ga
 	}
 
 	if err := register(galaApp, hooks.RegisterGalaEntitlementListeners); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := register(galaApp, hooks.RegisterGalaTrustCenterCacheListeners); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := register(galaApp, hooks.RegisterGalaWorkflowListeners); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := register(galaApp, hooks.RegisterGalaSlackListeners); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := register(notificationGala, hooks.RegisterGalaNotificationListeners); err != nil {
-		return nil, err
+		return err
 	}
 
 	if _, err := ingest.RegisterIngestListeners(galaApp.Registry(), dbClient); err != nil {
 		closeRuntimes()
 
-		return nil, err
+		return err
 	}
 
 	if err := galaApp.StartWorkers(ctx); err != nil {
 		closeRuntimes()
 
-		return nil, err
+		return err
 	}
 
-	log.Info().Int("gala_worker_count", max(galaCfg.WorkerCount, 1)).Str("gala_queue", galaQueueName).Msg("gala worker client started")
+	log.Info().Int("gala_worker_count", max(galaCfg.WorkerCount, 1)).Str("gala_queue", galaCfg.QueueName).Msg("gala worker client started")
 
-	return galaApp, nil
+	return nil
 }
 
 // provideGalaDependencies registers explicit dependencies that gala listeners resolve via samber/do.
@@ -137,7 +149,6 @@ func provideGalaDependencies(injector do.Injector, galaApp *gala.Gala, dbClient 
 	}
 
 	if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
-		wfEngine.SetGala(galaApp)
 		do.ProvideValue(injector, wfEngine)
 	}
 }
