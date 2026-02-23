@@ -24,6 +24,20 @@ type SlackConfig struct {
 
 var slackCfg SlackConfig
 
+// githubAppInstallSlackTemplateData captures template data for GitHub App install notifications.
+type githubAppInstallSlackTemplateData struct {
+	// GitHubOrganization is the installed GitHub account login.
+	GitHubOrganization string
+	// GitHubAccountType is the GitHub account type (User or Organization).
+	GitHubAccountType string
+	// OpenlaneOrganization is the Openlane organization display name.
+	OpenlaneOrganization string
+	// OpenlaneOrganizationID is the Openlane organization identifier.
+	OpenlaneOrganizationID string
+	// ShowOpenlaneOrganizationID controls whether to append the organization ID in Slack text.
+	ShowOpenlaneOrganizationID bool
+}
+
 // SetSlackConfig replaces the active Slack notification configuration
 func SetSlackConfig(cfg SlackConfig) {
 	slackCfg = cfg
@@ -49,6 +63,37 @@ func SendSlackNotification(ctx context.Context, message string) error {
 	}
 
 	return slack.New(slackCfg.WebhookURL).Post(ctx, &slack.Payload{Text: message})
+}
+
+// RenderGitHubAppInstallSlackMessage renders the GitHub App installation Slack message.
+func RenderGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID string) (string, error) {
+	if githubOrg == "" {
+		githubOrg = "unknown"
+	}
+
+	if openlaneOrgName == "" {
+		openlaneOrgName = openlaneOrgID
+	}
+
+	tmpl, err := loadSlackTemplate(nil, "", slacktemplates.GitHubAppInstallName)
+	if err != nil {
+		return "", err
+	}
+
+	data := githubAppInstallSlackTemplateData{
+		GitHubOrganization:         githubOrg,
+		GitHubAccountType:          githubAccountType,
+		OpenlaneOrganization:       openlaneOrgName,
+		OpenlaneOrganizationID:     openlaneOrgID,
+		ShowOpenlaneOrganizationID: openlaneOrgID != "" && openlaneOrgID != openlaneOrgName,
+	}
+
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }
 
 // sendSlackNotificationWithEmail renders and posts a Slack message using explicit email and context values.
