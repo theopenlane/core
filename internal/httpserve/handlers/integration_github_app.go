@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/pkg/logx"
@@ -304,6 +305,52 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID 
 		).
 		SetProviderState(statePayload).
 		Exec(ctx)
+}
+
+// resolveOpenlaneOrganizationName returns display_name, then name, then ID.
+func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID string) string {
+	if orgID == "" || h == nil || h.DBClient == nil {
+		return orgID
+	}
+
+	org, err := h.DBClient.Organization.Query().Where(organization.ID(orgID)).Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("organization_id", orgID).Msg("failed to resolve openlane organization name")
+		return orgID
+	}
+
+	if org.DisplayName != "" {
+		return org.DisplayName
+	}
+
+	if org.Name != "" {
+		return org.Name
+	}
+
+	return orgID
+}
+
+// buildGitHubAppInstallSlackMessage builds the Slack payload for completed GitHub App installs.
+func buildGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID string) string {
+	if githubOrg == "" {
+		githubOrg = "unknown"
+	}
+	if openlaneOrgName == "" {
+		openlaneOrgName = openlaneOrgID
+	}
+
+	var b strings.Builder
+	b.WriteString("Openlane GitHub App installation completed\n")
+	fmt.Fprintf(&b, "GitHub organization: %s\n", githubOrg)
+	if githubAccountType != "" {
+		fmt.Fprintf(&b, "GitHub account type: %s\n", githubAccountType)
+	}
+	fmt.Fprintf(&b, "Openlane organization: %s", openlaneOrgName)
+	if openlaneOrgID != "" && openlaneOrgID != openlaneOrgName {
+		fmt.Fprintf(&b, " (%s)", openlaneOrgID)
+	}
+
+	return b.String()
 }
 
 const defaultHealthOperation types.OperationName = "health.default"

@@ -1,10 +1,12 @@
 package github
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 )
@@ -36,4 +38,28 @@ func TestGitHubAppCredentialsFromPayload(t *testing.T) {
 	require.Equal(t, "123", appID)
 	require.Equal(t, "456", installationID)
 	require.Equal(t, "line1\nline2", privateKey)
+}
+
+// TestAppBuilderClientDescriptors verifies GitHub App providers publish pooled REST and GraphQL clients.
+func TestAppBuilderClientDescriptors(t *testing.T) {
+	spec := config.ProviderSpec{
+		Name:     string(TypeGitHubApp),
+		AuthType: types.AuthKindGitHubApp,
+		GitHubApp: &config.GitHubAppSpec{
+			BaseURL: "https://api.github.com",
+		},
+	}
+
+	provider, err := AppBuilder().Build(context.Background(), spec)
+	require.NoError(t, err)
+	require.NotNil(t, provider)
+	require.True(t, provider.Capabilities().SupportsClientPooling)
+
+	clientProvider, ok := provider.(types.ClientProvider)
+	require.True(t, ok)
+
+	descriptors := clientProvider.ClientDescriptors()
+	require.Len(t, descriptors, 2)
+	require.Equal(t, ClientGitHubAPI, descriptors[0].Name)
+	require.Equal(t, ClientGitHubGraphQL, descriptors[1].Name)
 }

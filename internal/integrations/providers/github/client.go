@@ -8,6 +8,8 @@ import (
 const (
 	// ClientGitHubAPI identifies the GitHub REST API client.
 	ClientGitHubAPI types.ClientName = "api"
+	// ClientGitHubGraphQL identifies the GitHub GraphQL API client.
+	ClientGitHubGraphQL types.ClientName = "graphql"
 )
 
 var githubClientHeaders = map[string]string{
@@ -17,5 +19,13 @@ var githubClientHeaders = map[string]string{
 
 // githubClientDescriptors returns the client descriptors for the GitHub provider.
 func githubClientDescriptors(provider types.ProviderType) []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", auth.OAuthClientBuilder(githubClientHeaders))
+	descriptors := auth.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", auth.OAuthClientBuilder(githubClientHeaders))
+	descriptors = append(descriptors, auth.DefaultClientDescriptor(
+		provider,
+		ClientGitHubGraphQL,
+		"GitHub GraphQL API client",
+		buildGitHubGraphQLClient(defaultGitHubGraphQLEndpoint),
+	))
+
+	return descriptors
 }

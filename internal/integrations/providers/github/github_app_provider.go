@@ -29,6 +29,8 @@ const (
 	TypeGitHubApp = types.ProviderType("github_app")
 )
 
+var _ types.ClientProvider = (*appProvider)(nil)
+
 // Default GitHub App API configuration values.
 const (
 	defaultGitHubAPIBaseURL = "https://api.github.com"
@@ -54,14 +56,17 @@ func AppBuilder() providers.Builder {
 				tokenTTL = spec.GitHubApp.TokenTTL
 			}
 
+			clients := operations.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptors(TypeGitHubApp))
+
 			provider := &appProvider{
 				provider:  TypeGitHubApp,
 				baseURL:   baseURL,
 				tokenTTL:  tokenTTL,
 				requester: httpsling.MustNew(httpsling.Client(httpclient.Timeout(defaultHTTPTimeout))),
+				clients:   clients,
 				caps: types.ProviderCapabilities{
 					SupportsRefreshTokens: true,
-					SupportsClientPooling: false,
+					SupportsClientPooling: len(clients) > 0,
 					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 				},
 			}
@@ -84,6 +89,8 @@ type appProvider struct {
 	requester *httpsling.Requester
 	// caps advertises provider capabilities.
 	caps types.ProviderCapabilities
+	// clients enumerates supported pooled clients.
+	clients []types.ClientDescriptor
 	// operations enumerates supported provider operations.
 	operations []types.OperationDescriptor
 }
@@ -96,6 +103,18 @@ func (p *appProvider) Type() types.ProviderType {
 // Capabilities returns the supported capabilities.
 func (p *appProvider) Capabilities() types.ProviderCapabilities {
 	return p.caps
+}
+
+// ClientDescriptors returns provider-published client descriptors.
+func (p *appProvider) ClientDescriptors() []types.ClientDescriptor {
+	if len(p.clients) == 0 {
+		return nil
+	}
+
+	out := make([]types.ClientDescriptor, len(p.clients))
+	copy(out, p.clients)
+
+	return out
 }
 
 // Operations returns the provider operation descriptors.
