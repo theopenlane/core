@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -56,6 +57,15 @@ func (Asset) Fields() []ent.Field {
 			Comment("the name of the asset, e.g. matts computer, office router, IP address, etc").
 			NotEmpty().
 			Annotations(entgql.OrderField("name"), entx.FieldSearchable()),
+		field.String("display_name").
+			Comment("the display name of the asset").
+			MaxLen(nameMaxLen).
+			Optional().
+			NotEmpty().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("display_name"),
+			),
 		field.String("description").
 			Optional(),
 		field.String("identifier").
@@ -200,6 +210,12 @@ func (a Asset) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogEntityManagementModule,
 		models.CatalogComplianceModule,
+	}
+}
+
+func (Asset) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookAssetCreate(),
 	}
 }
 

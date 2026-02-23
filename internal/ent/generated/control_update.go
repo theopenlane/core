@@ -861,26 +861,6 @@ func (_u *ControlUpdate) ClearTrustCenterVisibility() *ControlUpdate {
 	return _u
 }
 
-// SetIsTrustCenterControl sets the "is_trust_center_control" field.
-func (_u *ControlUpdate) SetIsTrustCenterControl(v bool) *ControlUpdate {
-	_u.mutation.SetIsTrustCenterControl(v)
-	return _u
-}
-
-// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
-func (_u *ControlUpdate) SetNillableIsTrustCenterControl(v *bool) *ControlUpdate {
-	if v != nil {
-		_u.SetIsTrustCenterControl(*v)
-	}
-	return _u
-}
-
-// ClearIsTrustCenterControl clears the value of the "is_trust_center_control" field.
-func (_u *ControlUpdate) ClearIsTrustCenterControl() *ControlUpdate {
-	_u.mutation.ClearIsTrustCenterControl()
-	return _u
-}
-
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *ControlUpdate) AddEvidenceIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -2192,9 +2172,6 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.TrustCenterVisibilityCleared() {
 		_spec.ClearField(control.FieldTrustCenterVisibility, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.IsTrustCenterControl(); ok {
-		_spec.SetField(control.FieldIsTrustCenterControl, field.TypeBool, value)
 	}
 	if _u.mutation.IsTrustCenterControlCleared() {
 		_spec.ClearField(control.FieldIsTrustCenterControl, field.TypeBool)
@@ -4415,26 +4392,6 @@ func (_u *ControlUpdateOne) ClearTrustCenterVisibility() *ControlUpdateOne {
 	return _u
 }
 
-// SetIsTrustCenterControl sets the "is_trust_center_control" field.
-func (_u *ControlUpdateOne) SetIsTrustCenterControl(v bool) *ControlUpdateOne {
-	_u.mutation.SetIsTrustCenterControl(v)
-	return _u
-}
-
-// SetNillableIsTrustCenterControl sets the "is_trust_center_control" field if the given value is not nil.
-func (_u *ControlUpdateOne) SetNillableIsTrustCenterControl(v *bool) *ControlUpdateOne {
-	if v != nil {
-		_u.SetIsTrustCenterControl(*v)
-	}
-	return _u
-}
-
-// ClearIsTrustCenterControl clears the value of the "is_trust_center_control" field.
-func (_u *ControlUpdateOne) ClearIsTrustCenterControl() *ControlUpdateOne {
-	_u.mutation.ClearIsTrustCenterControl()
-	return _u
-}
-
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_u *ControlUpdateOne) AddEvidenceIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddEvidenceIDs(ids...)
@@ -5776,9 +5733,6 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.TrustCenterVisibilityCleared() {
 		_spec.ClearField(control.FieldTrustCenterVisibility, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.IsTrustCenterControl(); ok {
-		_spec.SetField(control.FieldIsTrustCenterControl, field.TypeBool, value)
 	}
 	if _u.mutation.IsTrustCenterControlCleared() {
 		_spec.ClearField(control.FieldIsTrustCenterControl, field.TypeBool)

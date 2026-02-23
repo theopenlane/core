@@ -93,6 +93,8 @@ type AssetHistory struct {
 	AssetType enums.AssetType `json:"asset_type,omitempty"`
 	// the name of the asset, e.g. matts computer, office router, IP address, etc
 	Name string `json:"name,omitempty"`
+	// the display name of the asset
+	DisplayName string `json:"display_name,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// unique identifier like domain, device id, etc
@@ -139,7 +141,7 @@ func (*AssetHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case assethistory.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldDeletedBy, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe:
+		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldDeletedBy, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDisplayName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe:
 			values[i] = new(sql.NullString)
 		case assethistory.FieldHistoryTime, assethistory.FieldCreatedAt, assethistory.FieldUpdatedAt, assethistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -378,6 +380,12 @@ func (_m *AssetHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case assethistory.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				_m.DisplayName = value.String
+			}
 		case assethistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
@@ -609,6 +617,9 @@ func (_m *AssetHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(_m.DisplayName)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)

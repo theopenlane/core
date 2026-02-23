@@ -4452,6 +4452,11 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, asset.FieldName)
 				fieldSeen[asset.FieldName] = struct{}{}
 			}
+		case "displayName":
+			if _, ok := fieldSeen[asset.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, asset.FieldDisplayName)
+				fieldSeen[asset.FieldDisplayName] = struct{}{}
+			}
 		case "description":
 			if _, ok := fieldSeen[asset.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, asset.FieldDescription)
