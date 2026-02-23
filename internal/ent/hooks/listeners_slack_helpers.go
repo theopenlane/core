@@ -29,9 +29,31 @@ func SetSlackConfig(cfg SlackConfig) {
 	slackCfg = cfg
 }
 
+// SlackNotificationsEnabled reports whether a Slack webhook is configured.
+func SlackNotificationsEnabled() bool {
+	return slackCfg.WebhookURL != ""
+}
+
+// SendSlackNotification posts a plain Slack message when webhook notifications are configured.
+func SendSlackNotification(ctx context.Context, message string) error {
+	if !SlackNotificationsEnabled() {
+		return nil
+	}
+
+	if message == "" {
+		return nil
+	}
+
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	return slack.New(slackCfg.WebhookURL).Post(ctx, &slack.Payload{Text: message})
+}
+
 // sendSlackNotificationWithEmail renders and posts a Slack message using explicit email and context values.
 func sendSlackNotificationWithEmail(ctx context.Context, email, overrideFile, embeddedTemplate string) error {
-	if slackCfg.WebhookURL == "" {
+	if !SlackNotificationsEnabled() {
 		return nil
 	}
 
