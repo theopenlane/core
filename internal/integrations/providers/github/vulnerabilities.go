@@ -14,6 +14,12 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+const (
+	githubAlertTypeDependabot     = "dependabot"
+	githubAlertTypeCodeScanning   = "code_scanning"
+	githubAlertTypeSecretScanning = "secret_scanning"
+)
+
 type githubInstallationRepositoriesResponse struct {
 	// TotalCount is the number of repositories returned by GitHub
 	TotalCount int `json:"total_count"`
@@ -90,40 +96,40 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	)
 
 	for _, repo := range repoNames {
-		if alertTypeRequested(alertTypes, operations.GitHubAlertTypeDependabot) {
+		if alertTypeRequested(alertTypes, githubAlertTypeDependabot) {
 			batch, err := listDependabotAlerts(ctx, client, token, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, map[string]any{
 					"repository": repo,
 				})
 			}
-			envelopes = appendAlertEnvelopes(envelopes, operations.GitHubAlertTypeDependabot, repo, batch)
+			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeDependabot, repo, batch)
 			totalAlerts += len(batch)
-			alertTypeCounts[operations.GitHubAlertTypeDependabot] += len(batch)
+			alertTypeCounts[githubAlertTypeDependabot] += len(batch)
 		}
 
-		if alertTypeRequested(alertTypes, operations.GitHubAlertTypeCodeScanning) {
+		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
 			batch, err := listCodeScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub code scanning alert collection failed", err, map[string]any{
 					"repository": repo,
 				})
 			}
-			envelopes = appendAlertEnvelopes(envelopes, operations.GitHubAlertTypeCodeScanning, repo, batch)
+			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeCodeScanning, repo, batch)
 			totalAlerts += len(batch)
-			alertTypeCounts[operations.GitHubAlertTypeCodeScanning] += len(batch)
+			alertTypeCounts[githubAlertTypeCodeScanning] += len(batch)
 		}
 
-		if alertTypeRequested(alertTypes, operations.GitHubAlertTypeSecretScanning) {
+		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
 			batch, err := listSecretScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, map[string]any{
 					"repository": repo,
 				})
 			}
-			envelopes = appendAlertEnvelopes(envelopes, operations.GitHubAlertTypeSecretScanning, repo, batch)
+			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeSecretScanning, repo, batch)
 			totalAlerts += len(batch)
-			alertTypeCounts[operations.GitHubAlertTypeSecretScanning] += len(batch)
+			alertTypeCounts[githubAlertTypeSecretScanning] += len(batch)
 		}
 	}
 
@@ -160,6 +166,7 @@ func listGitHubInstallationRepos(ctx context.Context, client *auth.Authenticated
 		if err := fetchGitHubResource(ctx, client, token, "installation/repositories", params, &batch); err != nil {
 			return nil, err
 		}
+
 		return batch.Repositories, nil
 	}, func(batch []githubRepoResponse) error {
 		out = append(out, batch...)
@@ -193,6 +200,7 @@ func listGitHubRepos(ctx context.Context, client *auth.AuthenticatedClient, toke
 		return batch, nil
 	}, func(batch []githubRepoResponse) error {
 		out = append(out, batch...)
+
 		return nil
 	})
 	if err != nil {
@@ -294,6 +302,7 @@ func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page
 		if len(batch) < perPage {
 			return nil
 		}
+
 		page++
 	}
 }
@@ -324,6 +333,7 @@ func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []st
 		if ownerFilter == "" {
 			return full, true
 		}
+
 		return full, strings.HasPrefix(full, ownerFilter+"/") || strings.EqualFold(repo.Owner.Login, ownerFilter)
 	})
 }
@@ -337,9 +347,11 @@ func alertTypesFromConfig(values []types.LowerString) []string {
 		normalized := normalizeAlertType(value.String())
 		return normalized, normalized != ""
 	}))
+
 	if len(out) == 0 {
 		return defaultAlertTypes
 	}
+
 	return out
 }
 
@@ -348,11 +360,29 @@ func alertTypeRequested(alertTypes []string, target string) bool {
 	if len(alertTypes) == 0 {
 		return true
 	}
-	needle := operations.NormalizeGitHubAlertType(target)
+
+	needle := normalizeAlertType(target)
 	if needle == "" {
 		return false
 	}
+
 	return lo.ContainsBy(alertTypes, func(value string) bool {
-		return operations.NormalizeGitHubAlertType(value) == needle
+		return normalizeAlertType(value) == needle
 	})
+}
+
+// normalizeAlertType standardizes alert type identifiers
+func normalizeAlertType(value string) string {
+	value = strings.ReplaceAll(value, "-", "_")
+	value = strings.ReplaceAll(value, " ", "_")
+	switch value {
+	case "dependabot_alerts":
+		return githubAlertTypeDependabot
+	case "code_scanning_alerts":
+		return githubAlertTypeCodeScanning
+	case "secret_scanning_alerts":
+		return githubAlertTypeSecretScanning
+	}
+
+	return value
 }
