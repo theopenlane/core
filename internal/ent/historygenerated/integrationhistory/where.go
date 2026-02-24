@@ -167,6 +167,11 @@ func IntegrationType(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldIntegrationType, v))
 }
 
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1520,6 +1525,81 @@ func IntegrationTypeEqualFold(v string) predicate.IntegrationHistory {
 // IntegrationTypeContainsFold applies the ContainsFold predicate on the "integration_type" field.
 func IntegrationTypeContainsFold(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldIntegrationType, v))
+}
+
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldContainsFold(FieldPlatformID, v))
 }
 
 // ProviderMetadataIsNil applies the IsNil predicate on the "provider_metadata" field.

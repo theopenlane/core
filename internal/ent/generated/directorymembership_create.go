@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
@@ -164,6 +165,20 @@ func (_c *DirectoryMembershipCreate) SetNillableScopeID(v *string) *DirectoryMem
 // SetIntegrationID sets the "integration_id" field.
 func (_c *DirectoryMembershipCreate) SetIntegrationID(v string) *DirectoryMembershipCreate {
 	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *DirectoryMembershipCreate) SetPlatformID(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillablePlatformID(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
 	return _c
 }
 
@@ -314,6 +329,11 @@ func (_c *DirectoryMembershipCreate) SetDirectorySyncRun(v *DirectorySyncRun) *D
 	return _c.SetDirectorySyncRunID(v.ID)
 }
 
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_c *DirectoryMembershipCreate) SetPlatform(v *Platform) *DirectoryMembershipCreate {
+	return _c.SetPlatformID(v.ID)
+}
+
 // SetDirectoryAccount sets the "directory_account" edge to the DirectoryAccount entity.
 func (_c *DirectoryMembershipCreate) SetDirectoryAccount(v *DirectoryAccount) *DirectoryMembershipCreate {
 	return _c.SetDirectoryAccountID(v.ID)
@@ -449,6 +469,11 @@ func (_c *DirectoryMembershipCreate) check() error {
 			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.integration_id": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.PlatformID(); ok {
+		if err := directorymembership.PlatformIDValidator(v); err != nil {
+			return &ValidationError{Name: "platform_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.platform_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.DirectorySyncRunID(); !ok {
 		return &ValidationError{Name: "directory_sync_run_id", err: errors.New(`generated: missing required field "DirectoryMembership.directory_sync_run_id"`)}
 	}
@@ -460,8 +485,18 @@ func (_c *DirectoryMembershipCreate) check() error {
 	if _, ok := _c.mutation.DirectoryAccountID(); !ok {
 		return &ValidationError{Name: "directory_account_id", err: errors.New(`generated: missing required field "DirectoryMembership.directory_account_id"`)}
 	}
+	if v, ok := _c.mutation.DirectoryAccountID(); ok {
+		if err := directorymembership.DirectoryAccountIDValidator(v); err != nil {
+			return &ValidationError{Name: "directory_account_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.directory_account_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.DirectoryGroupID(); !ok {
 		return &ValidationError{Name: "directory_group_id", err: errors.New(`generated: missing required field "DirectoryMembership.directory_group_id"`)}
+	}
+	if v, ok := _c.mutation.DirectoryGroupID(); ok {
+		if err := directorymembership.DirectoryGroupIDValidator(v); err != nil {
+			return &ValidationError{Name: "directory_group_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.directory_group_id": %w`, err)}
+		}
 	}
 	if v, ok := _c.mutation.Role(); ok {
 		if err := directorymembership.RoleValidator(v); err != nil {
@@ -632,7 +667,7 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorymembership.IntegrationTable,
 			Columns: []string{directorymembership.IntegrationColumn},
 			Bidi:    false,
@@ -650,7 +685,7 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if nodes := _c.mutation.DirectorySyncRunIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorymembership.DirectorySyncRunTable,
 			Columns: []string{directorymembership.DirectorySyncRunColumn},
 			Bidi:    false,
@@ -663,6 +698,24 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DirectorySyncRunID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorymembership.PlatformTable,
+			Columns: []string{directorymembership.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PlatformID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.DirectoryAccountIDs(); len(nodes) > 0 {

@@ -3626,6 +3626,64 @@ func HasTasksWith(preds ...predicate.Task) predicate.Finding {
 	})
 }
 
+// HasDirectoryAccounts applies the HasEdge predicate on the "directory_accounts" edge.
+func HasDirectoryAccounts() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, DirectoryAccountsTable, DirectoryAccountsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryAccountsWith applies the HasEdge predicate on the "directory_accounts" edge with a given conditions (other predicates).
+func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newDirectoryAccountsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolders applies the HasEdge predicate on the "identity_holders" edge.
+func HasIdentityHolders() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.FindingIdentityHolders
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHoldersWith applies the HasEdge predicate on the "identity_holders" edge with a given conditions (other predicates).
+func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newIdentityHoldersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.FindingIdentityHolders
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRemediations applies the HasEdge predicate on the "remediations" edge.
 func HasRemediations() predicate.Finding {
 	return predicate.Finding(func(s *sql.Selector) {

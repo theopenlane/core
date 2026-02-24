@@ -549,6 +549,21 @@ func (_c *OrganizationCreate) AddRiskCreators(v ...*Group) *OrganizationCreate {
 	return _c.AddRiskCreatorIDs(ids...)
 }
 
+// AddIdentityHolderCreatorIDs adds the "identity_holder_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddIdentityHolderCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIdentityHolderCreatorIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolderCreators adds the "identity_holder_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddIdentityHolderCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderCreatorIDs(ids...)
+}
+
 // AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddScheduledJobCreatorIDs(ids...)
@@ -2389,6 +2404,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.RiskCreatorsTable,
 			Columns: []string{organization.RiskCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IdentityHolderCreatorsTable,
+			Columns: []string{organization.IdentityHolderCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

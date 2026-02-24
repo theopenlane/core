@@ -128,6 +128,21 @@ func DirectorySyncRunID(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldDirectorySyncRunID, v))
 }
 
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// IdentityHolderID applies equality check predicate on the "identity_holder_id" field. It's identical to IdentityHolderIDEQ.
+func IdentityHolderID(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// DirectoryName applies equality check predicate on the "directory_name" field. It's identical to DirectoryNameEQ.
+func DirectoryName(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldDirectoryName, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldExternalID, v))
@@ -146,6 +161,21 @@ func CanonicalEmail(v string) predicate.DirectoryAccount {
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldDisplayName, v))
+}
+
+// AvatarRemoteURL applies equality check predicate on the "avatar_remote_url" field. It's identical to AvatarRemoteURLEQ.
+func AvatarRemoteURL(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarLocalFileID applies equality check predicate on the "avatar_local_file_id" field. It's identical to AvatarLocalFileIDEQ.
+func AvatarLocalFileID(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAt applies equality check predicate on the "avatar_updated_at" field. It's identical to AvatarUpdatedAtEQ.
+func AvatarUpdatedAt(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldAvatarUpdatedAt, v))
 }
 
 // GivenName applies equality check predicate on the "given_name" field. It's identical to GivenNameEQ.
@@ -958,6 +988,16 @@ func IntegrationIDHasSuffix(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldIntegrationID, v))
 }
 
+// IntegrationIDIsNil applies the IsNil predicate on the "integration_id" field.
+func IntegrationIDIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldIntegrationID))
+}
+
+// IntegrationIDNotNil applies the NotNil predicate on the "integration_id" field.
+func IntegrationIDNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldIntegrationID))
+}
+
 // IntegrationIDEqualFold applies the EqualFold predicate on the "integration_id" field.
 func IntegrationIDEqualFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldIntegrationID, v))
@@ -1023,6 +1063,16 @@ func DirectorySyncRunIDHasSuffix(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldDirectorySyncRunID, v))
 }
 
+// DirectorySyncRunIDIsNil applies the IsNil predicate on the "directory_sync_run_id" field.
+func DirectorySyncRunIDIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldDirectorySyncRunID))
+}
+
+// DirectorySyncRunIDNotNil applies the NotNil predicate on the "directory_sync_run_id" field.
+func DirectorySyncRunIDNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldDirectorySyncRunID))
+}
+
 // DirectorySyncRunIDEqualFold applies the EqualFold predicate on the "directory_sync_run_id" field.
 func DirectorySyncRunIDEqualFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldDirectorySyncRunID, v))
@@ -1031,6 +1081,231 @@ func DirectorySyncRunIDEqualFold(v string) predicate.DirectoryAccount {
 // DirectorySyncRunIDContainsFold applies the ContainsFold predicate on the "directory_sync_run_id" field.
 func DirectorySyncRunIDContainsFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldDirectorySyncRunID, v))
+}
+
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
+// IdentityHolderIDEQ applies the EQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDNEQ applies the NEQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIn applies the In predicate on the "identity_holder_id" field.
+func IdentityHolderIDIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDNotIn applies the NotIn predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDGT applies the GT predicate on the "identity_holder_id" field.
+func IdentityHolderIDGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDGTE applies the GTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLT applies the LT predicate on the "identity_holder_id" field.
+func IdentityHolderIDLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLTE applies the LTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContains applies the Contains predicate on the "identity_holder_id" field.
+func IdentityHolderIDContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasPrefix applies the HasPrefix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasSuffix applies the HasSuffix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIsNil applies the IsNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDNotNil applies the NotNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDEqualFold applies the EqualFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContainsFold applies the ContainsFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldIdentityHolderID, v))
+}
+
+// DirectoryNameEQ applies the EQ predicate on the "directory_name" field.
+func DirectoryNameEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameNEQ applies the NEQ predicate on the "directory_name" field.
+func DirectoryNameNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameIn applies the In predicate on the "directory_name" field.
+func DirectoryNameIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameNotIn applies the NotIn predicate on the "directory_name" field.
+func DirectoryNameNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameGT applies the GT predicate on the "directory_name" field.
+func DirectoryNameGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldDirectoryName, v))
+}
+
+// DirectoryNameGTE applies the GTE predicate on the "directory_name" field.
+func DirectoryNameGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameLT applies the LT predicate on the "directory_name" field.
+func DirectoryNameLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldDirectoryName, v))
+}
+
+// DirectoryNameLTE applies the LTE predicate on the "directory_name" field.
+func DirectoryNameLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameContains applies the Contains predicate on the "directory_name" field.
+func DirectoryNameContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasPrefix applies the HasPrefix predicate on the "directory_name" field.
+func DirectoryNameHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasSuffix applies the HasSuffix predicate on the "directory_name" field.
+func DirectoryNameHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldDirectoryName, v))
+}
+
+// DirectoryNameIsNil applies the IsNil predicate on the "directory_name" field.
+func DirectoryNameIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldDirectoryName))
+}
+
+// DirectoryNameNotNil applies the NotNil predicate on the "directory_name" field.
+func DirectoryNameNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldDirectoryName))
+}
+
+// DirectoryNameEqualFold applies the EqualFold predicate on the "directory_name" field.
+func DirectoryNameEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldDirectoryName, v))
+}
+
+// DirectoryNameContainsFold applies the ContainsFold predicate on the "directory_name" field.
+func DirectoryNameContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldDirectoryName, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
@@ -1321,6 +1596,206 @@ func DisplayNameEqualFold(v string) predicate.DirectoryAccount {
 // DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
 func DisplayNameContainsFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// AvatarRemoteURLEQ applies the EQ predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLNEQ applies the NEQ predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLIn applies the In predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldAvatarRemoteURL, vs...))
+}
+
+// AvatarRemoteURLNotIn applies the NotIn predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldAvatarRemoteURL, vs...))
+}
+
+// AvatarRemoteURLGT applies the GT predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLGTE applies the GTE predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLLT applies the LT predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLLTE applies the LTE predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLContains applies the Contains predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLHasPrefix applies the HasPrefix predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLHasSuffix applies the HasSuffix predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLIsNil applies the IsNil predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldAvatarRemoteURL))
+}
+
+// AvatarRemoteURLNotNil applies the NotNil predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldAvatarRemoteURL))
+}
+
+// AvatarRemoteURLEqualFold applies the EqualFold predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLContainsFold applies the ContainsFold predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldAvatarRemoteURL, v))
+}
+
+// AvatarLocalFileIDEQ applies the EQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDNEQ applies the NEQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIn applies the In predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDNotIn applies the NotIn predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDGT applies the GT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDGTE applies the GTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLT applies the LT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLTE applies the LTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContains applies the Contains predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasPrefix applies the HasPrefix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasSuffix applies the HasSuffix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIsNil applies the IsNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDNotNil applies the NotNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDEqualFold applies the EqualFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContainsFold applies the ContainsFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarUpdatedAtEQ applies the EQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtEQ(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtNEQ applies the NEQ predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNEQ(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIn applies the In predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIn(vs ...time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtNotIn applies the NotIn predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotIn(vs ...time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldAvatarUpdatedAt, vs...))
+}
+
+// AvatarUpdatedAtGT applies the GT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGT(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtGTE applies the GTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtGTE(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLT applies the LT predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLT(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtLTE applies the LTE predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtLTE(v time.Time) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldAvatarUpdatedAt, v))
+}
+
+// AvatarUpdatedAtIsNil applies the IsNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldAvatarUpdatedAt))
+}
+
+// AvatarUpdatedAtNotNil applies the NotNil predicate on the "avatar_updated_at" field.
+func AvatarUpdatedAtNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldAvatarUpdatedAt))
 }
 
 // GivenNameEQ applies the EQ predicate on the "given_name" field.
@@ -2280,7 +2755,7 @@ func HasIntegration() predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, IntegrationTable, IntegrationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Integration
@@ -2309,7 +2784,7 @@ func HasDirectorySyncRun() predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, DirectorySyncRunTable, DirectorySyncRunColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectorySyncRun
@@ -2324,6 +2799,93 @@ func HasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) predicate.Dire
 		step := newDirectorySyncRunStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatform applies the HasEdge predicate on the "platform" edge.
+func HasPlatform() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformWith applies the HasEdge predicate on the "platform" edge with a given conditions (other predicates).
+func HasPlatformWith(preds ...predicate.Platform) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := newPlatformStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolder applies the HasEdge predicate on the "identity_holder" edge.
+func HasIdentityHolder() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, IdentityHolderTable, IdentityHolderColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHolderWith applies the HasEdge predicate on the "identity_holder" edge with a given conditions (other predicates).
+func HasIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := newIdentityHolderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAvatarFile applies the HasEdge predicate on the "avatar_file" edge.
+func HasAvatarFile() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAvatarFileWith applies the HasEdge predicate on the "avatar_file" edge with a given conditions (other predicates).
+func HasAvatarFileWith(preds ...predicate.File) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := newAvatarFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.DirectoryAccount
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -2354,6 +2916,35 @@ func HasGroupsWith(preds ...predicate.DirectoryGroup) predicate.DirectoryAccount
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectoryGroup
 		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

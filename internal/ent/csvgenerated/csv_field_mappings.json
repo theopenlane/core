@@ -103,6 +103,13 @@
       "isSlice": false
     }
   ],
+  "DirectoryAccount": [
+    {
+      "csvColumn": "DirectoryAccountIdentityHolderEmail",
+      "targetField": "IdentityHolderID",
+      "isSlice": false
+    }
+  ],
   "Entity": [
     {
       "csvColumn": "InternalOwnerGroupName",

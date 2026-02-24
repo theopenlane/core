@@ -680,12 +680,18 @@ func init() {
 	directoryaccounthistoryDescTags := directoryaccounthistoryFields[9].Descriptor()
 	// directoryaccounthistory.DefaultTags holds the default value on creation for the tags field.
 	directoryaccounthistory.DefaultTags = directoryaccounthistoryDescTags.Default.([]string)
+	// directoryaccounthistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
+	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[26].Descriptor()
+	// directoryaccounthistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
+	directoryaccounthistory.DefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.Default.(func() time.Time)
+	// directoryaccounthistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
+	directoryaccounthistory.UpdateDefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// directoryaccounthistoryDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[31].Descriptor()
+	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[37].Descriptor()
 	// directoryaccounthistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccounthistory.DefaultObservedAt = directoryaccounthistoryDescObservedAt.Default.(func() time.Time)
 	// directoryaccounthistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[32].Descriptor()
+	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[38].Descriptor()
 	// directoryaccounthistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directoryaccounthistory.DefaultProfileHash = directoryaccounthistoryDescProfileHash.Default.(string)
 	// directoryaccounthistoryDescID is the schema descriptor for id field.
@@ -724,15 +730,15 @@ func init() {
 	// directorygrouphistory.DefaultTags holds the default value on creation for the tags field.
 	directorygrouphistory.DefaultTags = directorygrouphistoryDescTags.Default.([]string)
 	// directorygrouphistoryDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
-	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[23].Descriptor()
+	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[24].Descriptor()
 	// directorygrouphistory.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygrouphistory.DefaultExternalSharingAllowed = directorygrouphistoryDescExternalSharingAllowed.Default.(bool)
 	// directorygrouphistoryDescObservedAt is the schema descriptor for observed_at field.
-	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[25].Descriptor()
+	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[26].Descriptor()
 	// directorygrouphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygrouphistory.DefaultObservedAt = directorygrouphistoryDescObservedAt.Default.(func() time.Time)
 	// directorygrouphistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[26].Descriptor()
+	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[27].Descriptor()
 	// directorygrouphistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directorygrouphistory.DefaultProfileHash = directorygrouphistoryDescProfileHash.Default.(string)
 	// directorygrouphistoryDescID is the schema descriptor for id field.
@@ -767,7 +773,7 @@ func init() {
 	// directorymembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	directorymembershiphistory.UpdateDefaultUpdatedAt = directorymembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// directorymembershiphistoryDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[22].Descriptor()
+	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[23].Descriptor()
 	// directorymembershiphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembershiphistory.DefaultObservedAt = directorymembershiphistoryDescObservedAt.Default.(func() time.Time)
 	// directorymembershiphistoryDescID is the schema descriptor for id field.

@@ -6006,6 +6006,8 @@ type CreateDirectoryAccountInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_account
 	ScopeName *string `json:"scopeName,omitempty"`
+	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	DirectoryName *string `json:"directoryName,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"externalID"`
 	// optional secondary identifier such as Azure immutable ID
@@ -6014,6 +6016,10 @@ type CreateDirectoryAccountInput struct {
 	CanonicalEmail *string `json:"canonicalEmail,omitempty"`
 	// provider supplied display name
 	DisplayName *string `json:"displayName,omitempty"`
+	// URL of the avatar supplied by the directory provider
+	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// time the directory account avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// first name reported by the provider
 	GivenName *string `json:"givenName,omitempty"`
 	// last name reported by the provider
@@ -6045,9 +6051,13 @@ type CreateDirectoryAccountInput struct {
 	OwnerID              *string  `json:"ownerID,omitempty"`
 	EnvironmentID        *string  `json:"environmentID,omitempty"`
 	ScopeID              *string  `json:"scopeID,omitempty"`
-	IntegrationID        string   `json:"integrationID"`
-	DirectorySyncRunID   string   `json:"directorySyncRunID"`
+	IntegrationID        *string  `json:"integrationID,omitempty"`
+	DirectorySyncRunID   *string  `json:"directorySyncRunID,omitempty"`
+	PlatformID           *string  `json:"platformID,omitempty"`
+	IdentityHolderID     *string  `json:"identityHolderID,omitempty"`
+	AvatarFileID         *string  `json:"avatarFileID,omitempty"`
 	GroupIDs             []string `json:"groupIDs,omitempty"`
+	FindingIDs           []string `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
@@ -6089,6 +6099,7 @@ type CreateDirectoryGroupInput struct {
 	ScopeID              *string  `json:"scopeID,omitempty"`
 	IntegrationID        string   `json:"integrationID"`
 	DirectorySyncRunID   string   `json:"directorySyncRunID"`
+	PlatformID           *string  `json:"platformID,omitempty"`
 	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
@@ -6118,6 +6129,7 @@ type CreateDirectoryMembershipInput struct {
 	ScopeID              *string        `json:"scopeID,omitempty"`
 	IntegrationID        string         `json:"integrationID"`
 	DirectorySyncRunID   string         `json:"directorySyncRunID"`
+	PlatformID           *string        `json:"platformID,omitempty"`
 	DirectoryAccountID   string         `json:"directoryAccountID"`
 	DirectoryGroupID     string         `json:"directoryGroupID"`
 	EventIDs             []string       `json:"eventIDs,omitempty"`
@@ -6153,6 +6165,7 @@ type CreateDirectorySyncRunInput struct {
 	EnvironmentID       *string        `json:"environmentID,omitempty"`
 	ScopeID             *string        `json:"scopeID,omitempty"`
 	IntegrationID       string         `json:"integrationID"`
+	PlatformID          *string        `json:"platformID,omitempty"`
 	DirectoryAccountIDs []string       `json:"directoryAccountIDs,omitempty"`
 	DirectoryGroupIDs   []string       `json:"directoryGroupIDs,omitempty"`
 }
@@ -6679,6 +6692,8 @@ type CreateFindingInput struct {
 	EntityIDs            []string       `json:"entityIDs,omitempty"`
 	ScanIDs              []string       `json:"scanIDs,omitempty"`
 	TaskIDs              []string       `json:"taskIDs,omitempty"`
+	DirectoryAccountIDs  []string       `json:"directoryAccountIDs,omitempty"`
+	IdentityHolderIDs    []string       `json:"identityHolderIDs,omitempty"`
 	RemediationIDs       []string       `json:"remediationIDs,omitempty"`
 	ReviewIDs            []string       `json:"reviewIDs,omitempty"`
 	CommentIDs           []string       `json:"commentIDs,omitempty"`
@@ -6880,9 +6895,11 @@ type CreateIdentityHolderInput struct {
 	TemplateIDs           []string       `json:"templateIDs,omitempty"`
 	AssetIDs              []string       `json:"assetIDs,omitempty"`
 	EntityIDs             []string       `json:"entityIDs,omitempty"`
+	DirectoryAccountIDs   []string       `json:"directoryAccountIDs,omitempty"`
 	PlatformIDs           []string       `json:"platformIDs,omitempty"`
 	CampaignIDs           []string       `json:"campaignIDs,omitempty"`
 	TaskIDs               []string       `json:"taskIDs,omitempty"`
+	FindingIDs            []string       `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
 	AccessPlatformIDs     []string       `json:"accessPlatformIDs,omitempty"`
 	UserID                *string        `json:"userID,omitempty"`
@@ -7348,6 +7365,7 @@ type CreateOrganizationInput struct {
 	ProcedureCreatorIDs               []string                        `json:"procedureCreatorIDs,omitempty"`
 	ProgramCreatorIDs                 []string                        `json:"programCreatorIDs,omitempty"`
 	RiskCreatorIDs                    []string                        `json:"riskCreatorIDs,omitempty"`
+	IdentityHolderCreatorIDs          []string                        `json:"identityHolderCreatorIDs,omitempty"`
 	ScheduledJobCreatorIDs            []string                        `json:"scheduledJobCreatorIDs,omitempty"`
 	StandardCreatorIDs                []string                        `json:"standardCreatorIDs,omitempty"`
 	TemplateCreatorIDs                []string                        `json:"templateCreatorIDs,omitempty"`
@@ -7600,6 +7618,10 @@ type CreatePlatformInput struct {
 	ScanIDs                      []string       `json:"scanIDs,omitempty"`
 	TaskIDs                      []string       `json:"taskIDs,omitempty"`
 	IdentityHolderIDs            []string       `json:"identityHolderIDs,omitempty"`
+	IntegrationIDs               []string       `json:"integrationIDs,omitempty"`
+	DirectorySyncRunIDs          []string       `json:"directorySyncRunIDs,omitempty"`
+	DirectoryAccountIDs          []string       `json:"directoryAccountIDs,omitempty"`
+	DirectoryGroupIDs            []string       `json:"directoryGroupIDs,omitempty"`
 	WorkflowObjectRefIDs         []string       `json:"workflowObjectRefIDs,omitempty"`
 	SourceAssetIDs               []string       `json:"sourceAssetIDs,omitempty"`
 	SourceEntityIDs              []string       `json:"sourceEntityIDs,omitempty"`
@@ -9768,10 +9790,16 @@ type DirectoryAccount struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the directory_account
 	ScopeID *string `json:"scopeID,omitempty"`
-	// integration that owns this directory account
-	IntegrationID string `json:"integrationID"`
-	// sync run that produced this snapshot
-	DirectorySyncRunID string `json:"directorySyncRunID"`
+	// optional integration that owns this directory account when sourced by an integration
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// optional sync run that produced this snapshot
+	DirectorySyncRunID *string `json:"directorySyncRunID,omitempty"`
+	// optional platform associated with this directory account
+	PlatformID *string `json:"platformID,omitempty"`
+	// deduplicated identity holder linked to this directory account
+	IdentityHolderID *string `json:"identityHolderID,omitempty"`
+	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	DirectoryName *string `json:"directoryName,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"externalID"`
 	// optional secondary identifier such as Azure immutable ID
@@ -9780,6 +9808,12 @@ type DirectoryAccount struct {
 	CanonicalEmail *string `json:"canonicalEmail,omitempty"`
 	// provider supplied display name
 	DisplayName *string `json:"displayName,omitempty"`
+	// URL of the avatar supplied by the directory provider
+	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
+	// local avatar file identifier, takes precedence over avatar_remote_url
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
+	// time the directory account avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
 	// first name reported by the provider
 	GivenName *string `json:"givenName,omitempty"`
 	// last name reported by the provider
@@ -9814,10 +9848,17 @@ type DirectoryAccount struct {
 	Environment   *CustomTypeEnum `json:"environment,omitempty"`
 	Scope         *CustomTypeEnum `json:"scope,omitempty"`
 	// integration that owns this directory account
-	Integration *Integration `json:"integration"`
+	Integration *Integration `json:"integration,omitempty"`
 	// sync run that produced this snapshot
-	DirectorySyncRun   *DirectorySyncRun              `json:"directorySyncRun"`
+	DirectorySyncRun *DirectorySyncRun `json:"directorySyncRun,omitempty"`
+	// platform associated with this directory account
+	Platform *Platform `json:"platform,omitempty"`
+	// identity holder linked to this directory account
+	IdentityHolder *IdentityHolder `json:"identityHolder,omitempty"`
+	// local avatar file for the directory account
+	AvatarFile         *File                          `json:"avatarFile,omitempty"`
 	Groups             *DirectoryGroupConnection      `json:"groups"`
+	Findings           *FindingConnection             `json:"findings"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection   `json:"workflowObjectRefs"`
 	Memberships        *DirectoryMembershipConnection `json:"memberships"`
 }
@@ -10051,6 +10092,8 @@ type DirectoryAccountWhereInput struct {
 	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
 	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
 	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
 	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
 	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
 	// directory_sync_run_id field predicates
@@ -10065,8 +10108,58 @@ type DirectoryAccountWhereInput struct {
 	DirectorySyncRunIDContains     *string  `json:"directorySyncRunIDContains,omitempty"`
 	DirectorySyncRunIDHasPrefix    *string  `json:"directorySyncRunIDHasPrefix,omitempty"`
 	DirectorySyncRunIDHasSuffix    *string  `json:"directorySyncRunIDHasSuffix,omitempty"`
+	DirectorySyncRunIDIsNil        *bool    `json:"directorySyncRunIDIsNil,omitempty"`
+	DirectorySyncRunIDNotNil       *bool    `json:"directorySyncRunIDNotNil,omitempty"`
 	DirectorySyncRunIDEqualFold    *string  `json:"directorySyncRunIDEqualFold,omitempty"`
 	DirectorySyncRunIDContainsFold *string  `json:"directorySyncRunIDContainsFold,omitempty"`
+	// platform_id field predicates
+	PlatformID             *string  `json:"platformID,omitempty"`
+	PlatformIdneq          *string  `json:"platformIDNEQ,omitempty"`
+	PlatformIDIn           []string `json:"platformIDIn,omitempty"`
+	PlatformIDNotIn        []string `json:"platformIDNotIn,omitempty"`
+	PlatformIdgt           *string  `json:"platformIDGT,omitempty"`
+	PlatformIdgte          *string  `json:"platformIDGTE,omitempty"`
+	PlatformIdlt           *string  `json:"platformIDLT,omitempty"`
+	PlatformIdlte          *string  `json:"platformIDLTE,omitempty"`
+	PlatformIDContains     *string  `json:"platformIDContains,omitempty"`
+	PlatformIDHasPrefix    *string  `json:"platformIDHasPrefix,omitempty"`
+	PlatformIDHasSuffix    *string  `json:"platformIDHasSuffix,omitempty"`
+	PlatformIDIsNil        *bool    `json:"platformIDIsNil,omitempty"`
+	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
+	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
+	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
+	// identity_holder_id field predicates
+	IdentityHolderID             *string  `json:"identityHolderID,omitempty"`
+	IdentityHolderIdneq          *string  `json:"identityHolderIDNEQ,omitempty"`
+	IdentityHolderIDIn           []string `json:"identityHolderIDIn,omitempty"`
+	IdentityHolderIDNotIn        []string `json:"identityHolderIDNotIn,omitempty"`
+	IdentityHolderIdgt           *string  `json:"identityHolderIDGT,omitempty"`
+	IdentityHolderIdgte          *string  `json:"identityHolderIDGTE,omitempty"`
+	IdentityHolderIdlt           *string  `json:"identityHolderIDLT,omitempty"`
+	IdentityHolderIdlte          *string  `json:"identityHolderIDLTE,omitempty"`
+	IdentityHolderIDContains     *string  `json:"identityHolderIDContains,omitempty"`
+	IdentityHolderIDHasPrefix    *string  `json:"identityHolderIDHasPrefix,omitempty"`
+	IdentityHolderIDHasSuffix    *string  `json:"identityHolderIDHasSuffix,omitempty"`
+	IdentityHolderIDIsNil        *bool    `json:"identityHolderIDIsNil,omitempty"`
+	IdentityHolderIDNotNil       *bool    `json:"identityHolderIDNotNil,omitempty"`
+	IdentityHolderIDEqualFold    *string  `json:"identityHolderIDEqualFold,omitempty"`
+	IdentityHolderIDContainsFold *string  `json:"identityHolderIDContainsFold,omitempty"`
+	// directory_name field predicates
+	DirectoryName             *string  `json:"directoryName,omitempty"`
+	DirectoryNameNeq          *string  `json:"directoryNameNEQ,omitempty"`
+	DirectoryNameIn           []string `json:"directoryNameIn,omitempty"`
+	DirectoryNameNotIn        []string `json:"directoryNameNotIn,omitempty"`
+	DirectoryNameGt           *string  `json:"directoryNameGT,omitempty"`
+	DirectoryNameGte          *string  `json:"directoryNameGTE,omitempty"`
+	DirectoryNameLt           *string  `json:"directoryNameLT,omitempty"`
+	DirectoryNameLte          *string  `json:"directoryNameLTE,omitempty"`
+	DirectoryNameContains     *string  `json:"directoryNameContains,omitempty"`
+	DirectoryNameHasPrefix    *string  `json:"directoryNameHasPrefix,omitempty"`
+	DirectoryNameHasSuffix    *string  `json:"directoryNameHasSuffix,omitempty"`
+	DirectoryNameIsNil        *bool    `json:"directoryNameIsNil,omitempty"`
+	DirectoryNameNotNil       *bool    `json:"directoryNameNotNil,omitempty"`
+	DirectoryNameEqualFold    *string  `json:"directoryNameEqualFold,omitempty"`
+	DirectoryNameContainsFold *string  `json:"directoryNameContainsFold,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -10129,6 +10222,49 @@ type DirectoryAccountWhereInput struct {
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+	// avatar_remote_url field predicates
+	AvatarRemoteURL             *string  `json:"avatarRemoteURL,omitempty"`
+	AvatarRemoteURLNeq          *string  `json:"avatarRemoteURLNEQ,omitempty"`
+	AvatarRemoteURLIn           []string `json:"avatarRemoteURLIn,omitempty"`
+	AvatarRemoteURLNotIn        []string `json:"avatarRemoteURLNotIn,omitempty"`
+	AvatarRemoteURLGt           *string  `json:"avatarRemoteURLGT,omitempty"`
+	AvatarRemoteURLGte          *string  `json:"avatarRemoteURLGTE,omitempty"`
+	AvatarRemoteURLLt           *string  `json:"avatarRemoteURLLT,omitempty"`
+	AvatarRemoteURLLte          *string  `json:"avatarRemoteURLLTE,omitempty"`
+	AvatarRemoteURLContains     *string  `json:"avatarRemoteURLContains,omitempty"`
+	AvatarRemoteURLHasPrefix    *string  `json:"avatarRemoteURLHasPrefix,omitempty"`
+	AvatarRemoteURLHasSuffix    *string  `json:"avatarRemoteURLHasSuffix,omitempty"`
+	AvatarRemoteURLIsNil        *bool    `json:"avatarRemoteURLIsNil,omitempty"`
+	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
+	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
+	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// avatar_local_file_id field predicates
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIdgt           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIdgte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIdlt           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIdlte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        *bool    `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       *bool    `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
+	// avatar_updated_at field predicates
+	AvatarUpdatedAt       *time.Time   `json:"avatarUpdatedAt,omitempty"`
+	AvatarUpdatedAtNeq    *time.Time   `json:"avatarUpdatedAtNEQ,omitempty"`
+	AvatarUpdatedAtIn     []*time.Time `json:"avatarUpdatedAtIn,omitempty"`
+	AvatarUpdatedAtNotIn  []*time.Time `json:"avatarUpdatedAtNotIn,omitempty"`
+	AvatarUpdatedAtGt     *time.Time   `json:"avatarUpdatedAtGT,omitempty"`
+	AvatarUpdatedAtGte    *time.Time   `json:"avatarUpdatedAtGTE,omitempty"`
+	AvatarUpdatedAtLt     *time.Time   `json:"avatarUpdatedAtLT,omitempty"`
+	AvatarUpdatedAtLte    *time.Time   `json:"avatarUpdatedAtLTE,omitempty"`
+	AvatarUpdatedAtIsNil  *bool        `json:"avatarUpdatedAtIsNil,omitempty"`
+	AvatarUpdatedAtNotNil *bool        `json:"avatarUpdatedAtNotNil,omitempty"`
 	// given_name field predicates
 	GivenName             *string  `json:"givenName,omitempty"`
 	GivenNameNeq          *string  `json:"givenNameNEQ,omitempty"`
@@ -10307,9 +10443,21 @@ type DirectoryAccountWhereInput struct {
 	// directory_sync_run edge predicates
 	HasDirectorySyncRun     *bool                         `json:"hasDirectorySyncRun,omitempty"`
 	HasDirectorySyncRunWith []*DirectorySyncRunWhereInput `json:"hasDirectorySyncRunWith,omitempty"`
+	// platform edge predicates
+	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
+	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
+	// identity_holder edge predicates
+	HasIdentityHolder     *bool                       `json:"hasIdentityHolder,omitempty"`
+	HasIdentityHolderWith []*IdentityHolderWhereInput `json:"hasIdentityHolderWith,omitempty"`
+	// avatar_file edge predicates
+	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
+	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
 	// groups edge predicates
 	HasGroups     *bool                       `json:"hasGroups,omitempty"`
 	HasGroupsWith []*DirectoryGroupWhereInput `json:"hasGroupsWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -10342,6 +10490,8 @@ type DirectoryGroup struct {
 	ScopeID *string `json:"scopeID,omitempty"`
 	// integration that owns this directory group
 	IntegrationID string `json:"integrationID"`
+	// optional platform associated with this directory group
+	PlatformID *string `json:"platformID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// stable identifier from the directory system
@@ -10376,7 +10526,9 @@ type DirectoryGroup struct {
 	// integration that owns this directory group
 	Integration *Integration `json:"integration"`
 	// sync run that produced this snapshot
-	DirectorySyncRun   *DirectorySyncRun              `json:"directorySyncRun"`
+	DirectorySyncRun *DirectorySyncRun `json:"directorySyncRun"`
+	// platform associated with this directory group
+	Platform           *Platform                      `json:"platform,omitempty"`
 	Accounts           *DirectoryAccountConnection    `json:"accounts"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection   `json:"workflowObjectRefs"`
 	Members            *DirectoryMembershipConnection `json:"members"`
@@ -10613,6 +10765,22 @@ type DirectoryGroupWhereInput struct {
 	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
 	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
 	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// platform_id field predicates
+	PlatformID             *string  `json:"platformID,omitempty"`
+	PlatformIdneq          *string  `json:"platformIDNEQ,omitempty"`
+	PlatformIDIn           []string `json:"platformIDIn,omitempty"`
+	PlatformIDNotIn        []string `json:"platformIDNotIn,omitempty"`
+	PlatformIdgt           *string  `json:"platformIDGT,omitempty"`
+	PlatformIdgte          *string  `json:"platformIDGTE,omitempty"`
+	PlatformIdlt           *string  `json:"platformIDLT,omitempty"`
+	PlatformIdlte          *string  `json:"platformIDLTE,omitempty"`
+	PlatformIDContains     *string  `json:"platformIDContains,omitempty"`
+	PlatformIDHasPrefix    *string  `json:"platformIDHasPrefix,omitempty"`
+	PlatformIDHasSuffix    *string  `json:"platformIDHasSuffix,omitempty"`
+	PlatformIDIsNil        *bool    `json:"platformIDIsNil,omitempty"`
+	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
+	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
+	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
 	// directory_sync_run_id field predicates
 	DirectorySyncRunID             *string  `json:"directorySyncRunID,omitempty"`
 	DirectorySyncRunIdneq          *string  `json:"directorySyncRunIDNEQ,omitempty"`
@@ -10753,6 +10921,9 @@ type DirectoryGroupWhereInput struct {
 	// directory_sync_run edge predicates
 	HasDirectorySyncRun     *bool                         `json:"hasDirectorySyncRun,omitempty"`
 	HasDirectorySyncRunWith []*DirectorySyncRunWhereInput `json:"hasDirectorySyncRunWith,omitempty"`
+	// platform edge predicates
+	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
+	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
 	// accounts edge predicates
 	HasAccounts     *bool                         `json:"hasAccounts,omitempty"`
 	HasAccountsWith []*DirectoryAccountWhereInput `json:"hasAccountsWith,omitempty"`
@@ -10786,6 +10957,8 @@ type DirectoryMembership struct {
 	ScopeID *string `json:"scopeID,omitempty"`
 	// integration that owns this directory membership
 	IntegrationID string `json:"integrationID"`
+	// optional platform associated with this directory membership
+	PlatformID *string `json:"platformID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// directory account participating in this membership
@@ -10812,7 +10985,9 @@ type DirectoryMembership struct {
 	// integration that owns this directory membership
 	Integration *Integration `json:"integration"`
 	// sync run that produced this snapshot
-	DirectorySyncRun   *DirectorySyncRun            `json:"directorySyncRun"`
+	DirectorySyncRun *DirectorySyncRun `json:"directorySyncRun"`
+	// platform associated with this directory membership
+	Platform           *Platform                    `json:"platform,omitempty"`
 	DirectoryAccount   *DirectoryAccount            `json:"directoryAccount"`
 	DirectoryGroup     *DirectoryGroup              `json:"directoryGroup"`
 	Events             *EventConnection             `json:"events"`
@@ -11080,6 +11255,8 @@ type DirectorySyncRun struct {
 	ScopeID *string `json:"scopeID,omitempty"`
 	// integration this sync run executed for
 	IntegrationID string `json:"integrationID"`
+	// optional platform associated with this sync run
+	PlatformID *string `json:"platformID,omitempty"`
 	// current state of the sync run
 	Status enums.DirectorySyncRunStatus `json:"status"`
 	// time the sync started
@@ -11102,7 +11279,9 @@ type DirectorySyncRun struct {
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	Scope       *CustomTypeEnum `json:"scope,omitempty"`
 	// integration that executed this sync run
-	Integration          *Integration                   `json:"integration"`
+	Integration *Integration `json:"integration"`
+	// platform associated with this sync run
+	Platform             *Platform                      `json:"platform,omitempty"`
 	DirectoryAccounts    *DirectoryAccountConnection    `json:"directoryAccounts"`
 	DirectoryGroups      *DirectoryGroupConnection      `json:"directoryGroups"`
 	DirectoryMemberships *DirectoryMembershipConnection `json:"directoryMemberships"`
@@ -11339,6 +11518,22 @@ type DirectorySyncRunWhereInput struct {
 	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
 	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
 	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// platform_id field predicates
+	PlatformID             *string  `json:"platformID,omitempty"`
+	PlatformIdneq          *string  `json:"platformIDNEQ,omitempty"`
+	PlatformIDIn           []string `json:"platformIDIn,omitempty"`
+	PlatformIDNotIn        []string `json:"platformIDNotIn,omitempty"`
+	PlatformIdgt           *string  `json:"platformIDGT,omitempty"`
+	PlatformIdgte          *string  `json:"platformIDGTE,omitempty"`
+	PlatformIdlt           *string  `json:"platformIDLT,omitempty"`
+	PlatformIdlte          *string  `json:"platformIDLTE,omitempty"`
+	PlatformIDContains     *string  `json:"platformIDContains,omitempty"`
+	PlatformIDHasPrefix    *string  `json:"platformIDHasPrefix,omitempty"`
+	PlatformIDHasSuffix    *string  `json:"platformIDHasSuffix,omitempty"`
+	PlatformIDIsNil        *bool    `json:"platformIDIsNil,omitempty"`
+	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
+	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
+	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
 	// status field predicates
 	Status      *enums.DirectorySyncRunStatus  `json:"status,omitempty"`
 	StatusNeq   *enums.DirectorySyncRunStatus  `json:"statusNEQ,omitempty"`
@@ -11442,6 +11637,9 @@ type DirectorySyncRunWhereInput struct {
 	// integration edge predicates
 	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
 	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
+	// platform edge predicates
+	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
+	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
 	// directory_accounts edge predicates
 	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
 	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
@@ -15666,6 +15864,8 @@ type Finding struct {
 	Entities           *EntityConnection            `json:"entities"`
 	Scans              *ScanConnection              `json:"scans"`
 	Tasks              *TaskConnection              `json:"tasks"`
+	DirectoryAccounts  *DirectoryAccountConnection  `json:"directoryAccounts"`
+	IdentityHolders    *IdentityHolderConnection    `json:"identityHolders"`
 	Remediations       *RemediationConnection       `json:"remediations"`
 	Reviews            *ReviewConnection            `json:"reviews"`
 	Comments           *NoteConnection              `json:"comments"`
@@ -16593,6 +16793,12 @@ type FindingWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// directory_accounts edge predicates
+	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
+	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
+	// identity_holders edge predicates
+	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
+	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
 	// remediations edge predicates
 	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
 	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
@@ -17956,9 +18162,11 @@ type IdentityHolder struct {
 	Templates           *TemplateConnection           `json:"templates"`
 	Assets              *AssetConnection              `json:"assets"`
 	Entities            *EntityConnection             `json:"entities"`
+	DirectoryAccounts   *DirectoryAccountConnection   `json:"directoryAccounts"`
 	Platforms           *PlatformConnection           `json:"platforms"`
 	Campaigns           *CampaignConnection           `json:"campaigns"`
 	Tasks               *TaskConnection               `json:"tasks"`
+	Findings            *FindingConnection            `json:"findings"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	AccessPlatforms     *PlatformConnection           `json:"accessPlatforms"`
 	User                *User                         `json:"user,omitempty"`
@@ -18526,6 +18734,9 @@ type IdentityHolderWhereInput struct {
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// directory_accounts edge predicates
+	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
+	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
@@ -18535,6 +18746,9 @@ type IdentityHolderWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// findings edge predicates
+	HasFindings     *bool                `json:"hasFindings,omitempty"`
+	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -18580,24 +18794,28 @@ type Integration struct {
 	Kind *string `json:"kind,omitempty"`
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType *string `json:"integrationType,omitempty"`
+	// optional platform associated with this integration for downstream inventory linkage
+	PlatformID *string `json:"platformID,omitempty"`
 	// additional metadata about the integration
-	Metadata              map[string]any                  `json:"metadata,omitempty"`
-	Owner                 *Organization                   `json:"owner,omitempty"`
-	Environment           *CustomTypeEnum                 `json:"environment,omitempty"`
-	Scope                 *CustomTypeEnum                 `json:"scope,omitempty"`
-	Secrets               *HushConnection                 `json:"secrets"`
-	Files                 *FileConnection                 `json:"files"`
-	Events                *EventConnection                `json:"events"`
-	Findings              *FindingConnection              `json:"findings"`
-	Vulnerabilities       *VulnerabilityConnection        `json:"vulnerabilities"`
-	Reviews               *ReviewConnection               `json:"reviews"`
-	Remediations          *RemediationConnection          `json:"remediations"`
-	Tasks                 *TaskConnection                 `json:"tasks"`
-	ActionPlans           *ActionPlanConnection           `json:"actionPlans"`
-	DirectoryAccounts     *DirectoryAccountConnection     `json:"directoryAccounts"`
-	DirectoryGroups       *DirectoryGroupConnection       `json:"directoryGroups"`
-	DirectoryMemberships  *DirectoryMembershipConnection  `json:"directoryMemberships"`
-	DirectorySyncRuns     *DirectorySyncRunConnection     `json:"directorySyncRuns"`
+	Metadata             map[string]any                 `json:"metadata,omitempty"`
+	Owner                *Organization                  `json:"owner,omitempty"`
+	Environment          *CustomTypeEnum                `json:"environment,omitempty"`
+	Scope                *CustomTypeEnum                `json:"scope,omitempty"`
+	Secrets              *HushConnection                `json:"secrets"`
+	Files                *FileConnection                `json:"files"`
+	Events               *EventConnection               `json:"events"`
+	Findings             *FindingConnection             `json:"findings"`
+	Vulnerabilities      *VulnerabilityConnection       `json:"vulnerabilities"`
+	Reviews              *ReviewConnection              `json:"reviews"`
+	Remediations         *RemediationConnection         `json:"remediations"`
+	Tasks                *TaskConnection                `json:"tasks"`
+	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
+	DirectoryAccounts    *DirectoryAccountConnection    `json:"directoryAccounts"`
+	DirectoryGroups      *DirectoryGroupConnection      `json:"directoryGroups"`
+	DirectoryMemberships *DirectoryMembershipConnection `json:"directoryMemberships"`
+	DirectorySyncRuns    *DirectorySyncRunConnection    `json:"directorySyncRuns"`
+	// platform associated with this integration
+	Platform              *Platform                       `json:"platform,omitempty"`
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
 	Entities              *EntityConnection               `json:"entities"`
@@ -18871,6 +19089,22 @@ type IntegrationWhereInput struct {
 	IntegrationTypeNotNil       *bool    `json:"integrationTypeNotNil,omitempty"`
 	IntegrationTypeEqualFold    *string  `json:"integrationTypeEqualFold,omitempty"`
 	IntegrationTypeContainsFold *string  `json:"integrationTypeContainsFold,omitempty"`
+	// platform_id field predicates
+	PlatformID             *string  `json:"platformID,omitempty"`
+	PlatformIdneq          *string  `json:"platformIDNEQ,omitempty"`
+	PlatformIDIn           []string `json:"platformIDIn,omitempty"`
+	PlatformIDNotIn        []string `json:"platformIDNotIn,omitempty"`
+	PlatformIdgt           *string  `json:"platformIDGT,omitempty"`
+	PlatformIdgte          *string  `json:"platformIDGTE,omitempty"`
+	PlatformIdlt           *string  `json:"platformIDLT,omitempty"`
+	PlatformIdlte          *string  `json:"platformIDLTE,omitempty"`
+	PlatformIDContains     *string  `json:"platformIDContains,omitempty"`
+	PlatformIDHasPrefix    *string  `json:"platformIDHasPrefix,omitempty"`
+	PlatformIDHasSuffix    *string  `json:"platformIDHasSuffix,omitempty"`
+	PlatformIDIsNil        *bool    `json:"platformIDIsNil,omitempty"`
+	PlatformIDNotNil       *bool    `json:"platformIDNotNil,omitempty"`
+	PlatformIDEqualFold    *string  `json:"platformIDEqualFold,omitempty"`
+	PlatformIDContainsFold *string  `json:"platformIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -18919,6 +19153,9 @@ type IntegrationWhereInput struct {
 	// directory_sync_runs edge predicates
 	HasDirectorySyncRuns     *bool                         `json:"hasDirectorySyncRuns,omitempty"`
 	HasDirectorySyncRunsWith []*DirectorySyncRunWhereInput `json:"hasDirectorySyncRunsWith,omitempty"`
+	// platform edge predicates
+	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
+	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
 	// notification_templates edge predicates
 	HasNotificationTemplates     *bool                             `json:"hasNotificationTemplates,omitempty"`
 	HasNotificationTemplatesWith []*NotificationTemplateWhereInput `json:"hasNotificationTemplatesWith,omitempty"`
@@ -23608,6 +23845,7 @@ type Organization struct {
 	ProcedureCreators               *GroupConnection                      `json:"procedureCreators"`
 	ProgramCreators                 *GroupConnection                      `json:"programCreators"`
 	RiskCreators                    *GroupConnection                      `json:"riskCreators"`
+	IdentityHolderCreators          *GroupConnection                      `json:"identityHolderCreators"`
 	ScheduledJobCreators            *GroupConnection                      `json:"scheduledJobCreators"`
 	StandardCreators                *GroupConnection                      `json:"standardCreators"`
 	TemplateCreators                *GroupConnection                      `json:"templateCreators"`
@@ -24416,6 +24654,9 @@ type OrganizationWhereInput struct {
 	// risk_creators edge predicates
 	HasRiskCreators     *bool              `json:"hasRiskCreators,omitempty"`
 	HasRiskCreatorsWith []*GroupWhereInput `json:"hasRiskCreatorsWith,omitempty"`
+	// identity_holder_creators edge predicates
+	HasIdentityHolderCreators     *bool              `json:"hasIdentityHolderCreators,omitempty"`
+	HasIdentityHolderCreatorsWith []*GroupWhereInput `json:"hasIdentityHolderCreatorsWith,omitempty"`
 	// scheduled_job_creators edge predicates
 	HasScheduledJobCreators     *bool              `json:"hasScheduledJobCreators,omitempty"`
 	HasScheduledJobCreatorsWith []*GroupWhereInput `json:"hasScheduledJobCreatorsWith,omitempty"`
@@ -25047,45 +25288,50 @@ type Platform struct {
 	// external identifier for the platform from an upstream inventory
 	ExternalReferenceID *string `json:"externalReferenceID,omitempty"`
 	// additional metadata about the platform
-	Metadata                   map[string]any               `json:"metadata,omitempty"`
-	Owner                      *Organization                `json:"owner,omitempty"`
-	BlockedGroups              *GroupConnection             `json:"blockedGroups"`
-	Editors                    *GroupConnection             `json:"editors"`
-	Viewers                    *GroupConnection             `json:"viewers"`
-	InternalOwnerUser          *User                        `json:"internalOwnerUser,omitempty"`
-	InternalOwnerGroup         *Group                       `json:"internalOwnerGroup,omitempty"`
-	BusinessOwnerUser          *User                        `json:"businessOwnerUser,omitempty"`
-	BusinessOwnerGroup         *Group                       `json:"businessOwnerGroup,omitempty"`
-	TechnicalOwnerUser         *User                        `json:"technicalOwnerUser,omitempty"`
-	TechnicalOwnerGroup        *Group                       `json:"technicalOwnerGroup,omitempty"`
-	SecurityOwnerUser          *User                        `json:"securityOwnerUser,omitempty"`
-	SecurityOwnerGroup         *Group                       `json:"securityOwnerGroup,omitempty"`
-	PlatformKind               *CustomTypeEnum              `json:"platformKind,omitempty"`
-	PlatformDataClassification *CustomTypeEnum              `json:"platformDataClassification,omitempty"`
-	Environment                *CustomTypeEnum              `json:"environment,omitempty"`
-	Scope                      *CustomTypeEnum              `json:"scope,omitempty"`
-	AccessModel                *CustomTypeEnum              `json:"accessModel,omitempty"`
-	EncryptionStatus           *CustomTypeEnum              `json:"encryptionStatus,omitempty"`
-	SecurityTier               *CustomTypeEnum              `json:"securityTier,omitempty"`
-	Criticality                *CustomTypeEnum              `json:"criticality,omitempty"`
-	Assets                     *AssetConnection             `json:"assets"`
-	Entities                   *EntityConnection            `json:"entities"`
-	Evidence                   *EvidenceConnection          `json:"evidence"`
-	Files                      *FileConnection              `json:"files"`
-	Risks                      *RiskConnection              `json:"risks"`
-	Controls                   *ControlConnection           `json:"controls"`
-	Assessments                *AssessmentConnection        `json:"assessments"`
-	Scans                      *ScanConnection              `json:"scans"`
-	Tasks                      *TaskConnection              `json:"tasks"`
-	IdentityHolders            *IdentityHolderConnection    `json:"identityHolders"`
-	WorkflowObjectRefs         *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
-	SourceAssets               *AssetConnection             `json:"sourceAssets"`
-	SourceEntities             *EntityConnection            `json:"sourceEntities"`
-	OutOfScopeAssets           *AssetConnection             `json:"outOfScopeAssets"`
-	OutOfScopeVendors          *EntityConnection            `json:"outOfScopeVendors"`
-	ApplicableFrameworks       *StandardConnection          `json:"applicableFrameworks"`
-	GeneratedScans             *ScanConnection              `json:"generatedScans"`
-	PlatformOwner              *User                        `json:"platformOwner,omitempty"`
+	Metadata                   map[string]any                 `json:"metadata,omitempty"`
+	Owner                      *Organization                  `json:"owner,omitempty"`
+	BlockedGroups              *GroupConnection               `json:"blockedGroups"`
+	Editors                    *GroupConnection               `json:"editors"`
+	Viewers                    *GroupConnection               `json:"viewers"`
+	InternalOwnerUser          *User                          `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup         *Group                         `json:"internalOwnerGroup,omitempty"`
+	BusinessOwnerUser          *User                          `json:"businessOwnerUser,omitempty"`
+	BusinessOwnerGroup         *Group                         `json:"businessOwnerGroup,omitempty"`
+	TechnicalOwnerUser         *User                          `json:"technicalOwnerUser,omitempty"`
+	TechnicalOwnerGroup        *Group                         `json:"technicalOwnerGroup,omitempty"`
+	SecurityOwnerUser          *User                          `json:"securityOwnerUser,omitempty"`
+	SecurityOwnerGroup         *Group                         `json:"securityOwnerGroup,omitempty"`
+	PlatformKind               *CustomTypeEnum                `json:"platformKind,omitempty"`
+	PlatformDataClassification *CustomTypeEnum                `json:"platformDataClassification,omitempty"`
+	Environment                *CustomTypeEnum                `json:"environment,omitempty"`
+	Scope                      *CustomTypeEnum                `json:"scope,omitempty"`
+	AccessModel                *CustomTypeEnum                `json:"accessModel,omitempty"`
+	EncryptionStatus           *CustomTypeEnum                `json:"encryptionStatus,omitempty"`
+	SecurityTier               *CustomTypeEnum                `json:"securityTier,omitempty"`
+	Criticality                *CustomTypeEnum                `json:"criticality,omitempty"`
+	Assets                     *AssetConnection               `json:"assets"`
+	Entities                   *EntityConnection              `json:"entities"`
+	Evidence                   *EvidenceConnection            `json:"evidence"`
+	Files                      *FileConnection                `json:"files"`
+	Risks                      *RiskConnection                `json:"risks"`
+	Controls                   *ControlConnection             `json:"controls"`
+	Assessments                *AssessmentConnection          `json:"assessments"`
+	Scans                      *ScanConnection                `json:"scans"`
+	Tasks                      *TaskConnection                `json:"tasks"`
+	IdentityHolders            *IdentityHolderConnection      `json:"identityHolders"`
+	Integrations               *IntegrationConnection         `json:"integrations"`
+	DirectorySyncRuns          *DirectorySyncRunConnection    `json:"directorySyncRuns"`
+	DirectoryAccounts          *DirectoryAccountConnection    `json:"directoryAccounts"`
+	DirectoryGroups            *DirectoryGroupConnection      `json:"directoryGroups"`
+	DirectoryMemberships       *DirectoryMembershipConnection `json:"directoryMemberships"`
+	WorkflowObjectRefs         *WorkflowObjectRefConnection   `json:"workflowObjectRefs"`
+	SourceAssets               *AssetConnection               `json:"sourceAssets"`
+	SourceEntities             *EntityConnection              `json:"sourceEntities"`
+	OutOfScopeAssets           *AssetConnection               `json:"outOfScopeAssets"`
+	OutOfScopeVendors          *EntityConnection              `json:"outOfScopeVendors"`
+	ApplicableFrameworks       *StandardConnection            `json:"applicableFrameworks"`
+	GeneratedScans             *ScanConnection                `json:"generatedScans"`
+	PlatformOwner              *User                          `json:"platformOwner,omitempty"`
 	// Indicates if this platform has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this platform has any workflow history (completed or failed instances)
@@ -25971,6 +26217,21 @@ type PlatformWhereInput struct {
 	// identity_holders edge predicates
 	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
 	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// integrations edge predicates
+	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
+	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// directory_sync_runs edge predicates
+	HasDirectorySyncRuns     *bool                         `json:"hasDirectorySyncRuns,omitempty"`
+	HasDirectorySyncRunsWith []*DirectorySyncRunWhereInput `json:"hasDirectorySyncRunsWith,omitempty"`
+	// directory_accounts edge predicates
+	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
+	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
+	// directory_groups edge predicates
+	HasDirectoryGroups     *bool                       `json:"hasDirectoryGroups,omitempty"`
+	HasDirectoryGroupsWith []*DirectoryGroupWhereInput `json:"hasDirectoryGroupsWith,omitempty"`
+	// directory_memberships edge predicates
+	HasDirectoryMemberships     *bool                            `json:"hasDirectoryMemberships,omitempty"`
+	HasDirectoryMembershipsWith []*DirectoryMembershipWhereInput `json:"hasDirectoryMembershipsWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -37104,6 +37365,9 @@ type UpdateDirectoryAccountInput struct {
 	// the scope of the directory_account
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	DirectoryName      *string `json:"directoryName,omitempty"`
+	ClearDirectoryName *bool   `json:"clearDirectoryName,omitempty"`
 	// optional secondary identifier such as Azure immutable ID
 	SecondaryKey      *string `json:"secondaryKey,omitempty"`
 	ClearSecondaryKey *bool   `json:"clearSecondaryKey,omitempty"`
@@ -37113,6 +37377,12 @@ type UpdateDirectoryAccountInput struct {
 	// provider supplied display name
 	DisplayName      *string `json:"displayName,omitempty"`
 	ClearDisplayName *bool   `json:"clearDisplayName,omitempty"`
+	// URL of the avatar supplied by the directory provider
+	AvatarRemoteURL      *string `json:"avatarRemoteURL,omitempty"`
+	ClearAvatarRemoteURL *bool   `json:"clearAvatarRemoteURL,omitempty"`
+	// time the directory account avatar was last updated
+	AvatarUpdatedAt      *time.Time `json:"avatarUpdatedAt,omitempty"`
+	ClearAvatarUpdatedAt *bool      `json:"clearAvatarUpdatedAt,omitempty"`
 	// first name reported by the provider
 	GivenName      *string `json:"givenName,omitempty"`
 	ClearGivenName *bool   `json:"clearGivenName,omitempty"`
@@ -37155,9 +37425,16 @@ type UpdateDirectoryAccountInput struct {
 	ClearEnvironment           *bool    `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string  `json:"scopeID,omitempty"`
 	ClearScope                 *bool    `json:"clearScope,omitempty"`
+	IdentityHolderID           *string  `json:"identityHolderID,omitempty"`
+	ClearIdentityHolder        *bool    `json:"clearIdentityHolder,omitempty"`
+	AvatarFileID               *string  `json:"avatarFileID,omitempty"`
+	ClearAvatarFile            *bool    `json:"clearAvatarFile,omitempty"`
 	AddGroupIDs                []string `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs             []string `json:"removeGroupIDs,omitempty"`
 	ClearGroups                *bool    `json:"clearGroups,omitempty"`
+	AddFindingIDs              []string `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs           []string `json:"removeFindingIDs,omitempty"`
+	ClearFindings              *bool    `json:"clearFindings,omitempty"`
 	AddWorkflowObjectRefIDs    []string `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs []string `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs    *bool    `json:"clearWorkflowObjectRefs,omitempty"`
@@ -38186,6 +38463,12 @@ type UpdateFindingInput struct {
 	AddTaskIDs                 []string       `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs              []string       `json:"removeTaskIDs,omitempty"`
 	ClearTasks                 *bool          `json:"clearTasks,omitempty"`
+	AddDirectoryAccountIDs     []string       `json:"addDirectoryAccountIDs,omitempty"`
+	RemoveDirectoryAccountIDs  []string       `json:"removeDirectoryAccountIDs,omitempty"`
+	ClearDirectoryAccounts     *bool          `json:"clearDirectoryAccounts,omitempty"`
+	AddIdentityHolderIDs       []string       `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs    []string       `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders       *bool          `json:"clearIdentityHolders,omitempty"`
 	AddRemediationIDs          []string       `json:"addRemediationIDs,omitempty"`
 	RemoveRemediationIDs       []string       `json:"removeRemediationIDs,omitempty"`
 	ClearRemediations          *bool          `json:"clearRemediations,omitempty"`
@@ -38542,6 +38825,9 @@ type UpdateIdentityHolderInput struct {
 	AddEntityIDs                []string       `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs             []string       `json:"removeEntityIDs,omitempty"`
 	ClearEntities               *bool          `json:"clearEntities,omitempty"`
+	AddDirectoryAccountIDs      []string       `json:"addDirectoryAccountIDs,omitempty"`
+	RemoveDirectoryAccountIDs   []string       `json:"removeDirectoryAccountIDs,omitempty"`
+	ClearDirectoryAccounts      *bool          `json:"clearDirectoryAccounts,omitempty"`
 	AddPlatformIDs              []string       `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs           []string       `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms              *bool          `json:"clearPlatforms,omitempty"`
@@ -38551,6 +38837,9 @@ type UpdateIdentityHolderInput struct {
 	AddTaskIDs                  []string       `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs               []string       `json:"removeTaskIDs,omitempty"`
 	ClearTasks                  *bool          `json:"clearTasks,omitempty"`
+	AddFindingIDs               []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs            []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings               *bool          `json:"clearFindings,omitempty"`
 	AddWorkflowObjectRefIDs     []string       `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs  []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs     *bool          `json:"clearWorkflowObjectRefs,omitempty"`
@@ -39202,6 +39491,9 @@ type UpdateOrganizationInput struct {
 	AddRiskCreatorIDs                       []string                        `json:"addRiskCreatorIDs,omitempty"`
 	RemoveRiskCreatorIDs                    []string                        `json:"removeRiskCreatorIDs,omitempty"`
 	ClearRiskCreators                       *bool                           `json:"clearRiskCreators,omitempty"`
+	AddIdentityHolderCreatorIDs             []string                        `json:"addIdentityHolderCreatorIDs,omitempty"`
+	RemoveIdentityHolderCreatorIDs          []string                        `json:"removeIdentityHolderCreatorIDs,omitempty"`
+	ClearIdentityHolderCreators             *bool                           `json:"clearIdentityHolderCreators,omitempty"`
 	AddScheduledJobCreatorIDs               []string                        `json:"addScheduledJobCreatorIDs,omitempty"`
 	RemoveScheduledJobCreatorIDs            []string                        `json:"removeScheduledJobCreatorIDs,omitempty"`
 	ClearScheduledJobCreators               *bool                           `json:"clearScheduledJobCreators,omitempty"`
@@ -39724,6 +40016,18 @@ type UpdatePlatformInput struct {
 	AddIdentityHolderIDs            []string       `json:"addIdentityHolderIDs,omitempty"`
 	RemoveIdentityHolderIDs         []string       `json:"removeIdentityHolderIDs,omitempty"`
 	ClearIdentityHolders            *bool          `json:"clearIdentityHolders,omitempty"`
+	AddIntegrationIDs               []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs            []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations               *bool          `json:"clearIntegrations,omitempty"`
+	AddDirectorySyncRunIDs          []string       `json:"addDirectorySyncRunIDs,omitempty"`
+	RemoveDirectorySyncRunIDs       []string       `json:"removeDirectorySyncRunIDs,omitempty"`
+	ClearDirectorySyncRuns          *bool          `json:"clearDirectorySyncRuns,omitempty"`
+	AddDirectoryAccountIDs          []string       `json:"addDirectoryAccountIDs,omitempty"`
+	RemoveDirectoryAccountIDs       []string       `json:"removeDirectoryAccountIDs,omitempty"`
+	ClearDirectoryAccounts          *bool          `json:"clearDirectoryAccounts,omitempty"`
+	AddDirectoryGroupIDs            []string       `json:"addDirectoryGroupIDs,omitempty"`
+	RemoveDirectoryGroupIDs         []string       `json:"removeDirectoryGroupIDs,omitempty"`
+	ClearDirectoryGroups            *bool          `json:"clearDirectoryGroups,omitempty"`
 	AddWorkflowObjectRefIDs         []string       `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs      []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs         *bool          `json:"clearWorkflowObjectRefs,omitempty"`
@@ -46648,6 +46952,7 @@ type DirectoryAccountOrderField string
 const (
 	DirectoryAccountOrderFieldCreatedAt      DirectoryAccountOrderField = "created_at"
 	DirectoryAccountOrderFieldUpdatedAt      DirectoryAccountOrderField = "updated_at"
+	DirectoryAccountOrderFieldDirectoryName  DirectoryAccountOrderField = "directory_name"
 	DirectoryAccountOrderFieldExternalID     DirectoryAccountOrderField = "external_id"
 	DirectoryAccountOrderFieldCanonicalEmail DirectoryAccountOrderField = "canonical_email"
 	DirectoryAccountOrderFieldDisplayName    DirectoryAccountOrderField = "display_name"
@@ -46656,6 +46961,7 @@ const (
 var AllDirectoryAccountOrderField = []DirectoryAccountOrderField{
 	DirectoryAccountOrderFieldCreatedAt,
 	DirectoryAccountOrderFieldUpdatedAt,
+	DirectoryAccountOrderFieldDirectoryName,
 	DirectoryAccountOrderFieldExternalID,
 	DirectoryAccountOrderFieldCanonicalEmail,
 	DirectoryAccountOrderFieldDisplayName,
@@ -46663,7 +46969,7 @@ var AllDirectoryAccountOrderField = []DirectoryAccountOrderField{
 
 func (e DirectoryAccountOrderField) IsValid() bool {
 	switch e {
-	case DirectoryAccountOrderFieldCreatedAt, DirectoryAccountOrderFieldUpdatedAt, DirectoryAccountOrderFieldExternalID, DirectoryAccountOrderFieldCanonicalEmail, DirectoryAccountOrderFieldDisplayName:
+	case DirectoryAccountOrderFieldCreatedAt, DirectoryAccountOrderFieldUpdatedAt, DirectoryAccountOrderFieldDirectoryName, DirectoryAccountOrderFieldExternalID, DirectoryAccountOrderFieldCanonicalEmail, DirectoryAccountOrderFieldDisplayName:
 		return true
 	}
 	return false

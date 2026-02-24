@@ -681,10 +681,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldScopeID:            {Type: field.TypeString, Column: directoryaccount.FieldScopeID},
 			directoryaccount.FieldIntegrationID:      {Type: field.TypeString, Column: directoryaccount.FieldIntegrationID},
 			directoryaccount.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directoryaccount.FieldDirectorySyncRunID},
+			directoryaccount.FieldPlatformID:         {Type: field.TypeString, Column: directoryaccount.FieldPlatformID},
+			directoryaccount.FieldIdentityHolderID:   {Type: field.TypeString, Column: directoryaccount.FieldIdentityHolderID},
+			directoryaccount.FieldDirectoryName:      {Type: field.TypeString, Column: directoryaccount.FieldDirectoryName},
 			directoryaccount.FieldExternalID:         {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
 			directoryaccount.FieldSecondaryKey:       {Type: field.TypeString, Column: directoryaccount.FieldSecondaryKey},
 			directoryaccount.FieldCanonicalEmail:     {Type: field.TypeString, Column: directoryaccount.FieldCanonicalEmail},
 			directoryaccount.FieldDisplayName:        {Type: field.TypeString, Column: directoryaccount.FieldDisplayName},
+			directoryaccount.FieldAvatarRemoteURL:    {Type: field.TypeString, Column: directoryaccount.FieldAvatarRemoteURL},
+			directoryaccount.FieldAvatarLocalFileID:  {Type: field.TypeString, Column: directoryaccount.FieldAvatarLocalFileID},
+			directoryaccount.FieldAvatarUpdatedAt:    {Type: field.TypeTime, Column: directoryaccount.FieldAvatarUpdatedAt},
 			directoryaccount.FieldGivenName:          {Type: field.TypeString, Column: directoryaccount.FieldGivenName},
 			directoryaccount.FieldFamilyName:         {Type: field.TypeString, Column: directoryaccount.FieldFamilyName},
 			directoryaccount.FieldJobTitle:           {Type: field.TypeString, Column: directoryaccount.FieldJobTitle},
@@ -725,6 +731,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygroup.FieldScopeName:              {Type: field.TypeString, Column: directorygroup.FieldScopeName},
 			directorygroup.FieldScopeID:                {Type: field.TypeString, Column: directorygroup.FieldScopeID},
 			directorygroup.FieldIntegrationID:          {Type: field.TypeString, Column: directorygroup.FieldIntegrationID},
+			directorygroup.FieldPlatformID:             {Type: field.TypeString, Column: directorygroup.FieldPlatformID},
 			directorygroup.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygroup.FieldDirectorySyncRunID},
 			directorygroup.FieldExternalID:             {Type: field.TypeString, Column: directorygroup.FieldExternalID},
 			directorygroup.FieldEmail:                  {Type: field.TypeString, Column: directorygroup.FieldEmail},
@@ -763,6 +770,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorymembership.FieldScopeName:          {Type: field.TypeString, Column: directorymembership.FieldScopeName},
 			directorymembership.FieldScopeID:            {Type: field.TypeString, Column: directorymembership.FieldScopeID},
 			directorymembership.FieldIntegrationID:      {Type: field.TypeString, Column: directorymembership.FieldIntegrationID},
+			directorymembership.FieldPlatformID:         {Type: field.TypeString, Column: directorymembership.FieldPlatformID},
 			directorymembership.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directorymembership.FieldDirectorySyncRunID},
 			directorymembership.FieldDirectoryAccountID: {Type: field.TypeString, Column: directorymembership.FieldDirectoryAccountID},
 			directorymembership.FieldDirectoryGroupID:   {Type: field.TypeString, Column: directorymembership.FieldDirectoryGroupID},
@@ -797,6 +805,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorysyncrun.FieldScopeName:         {Type: field.TypeString, Column: directorysyncrun.FieldScopeName},
 			directorysyncrun.FieldScopeID:           {Type: field.TypeString, Column: directorysyncrun.FieldScopeID},
 			directorysyncrun.FieldIntegrationID:     {Type: field.TypeString, Column: directorysyncrun.FieldIntegrationID},
+			directorysyncrun.FieldPlatformID:        {Type: field.TypeString, Column: directorysyncrun.FieldPlatformID},
 			directorysyncrun.FieldStatus:            {Type: field.TypeEnum, Column: directorysyncrun.FieldStatus},
 			directorysyncrun.FieldStartedAt:         {Type: field.TypeTime, Column: directorysyncrun.FieldStartedAt},
 			directorysyncrun.FieldCompletedAt:       {Type: field.TypeTime, Column: directorysyncrun.FieldCompletedAt},
@@ -1516,6 +1525,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldDescription:      {Type: field.TypeString, Column: integration.FieldDescription},
 			integration.FieldKind:             {Type: field.TypeString, Column: integration.FieldKind},
 			integration.FieldIntegrationType:  {Type: field.TypeString, Column: integration.FieldIntegrationType},
+			integration.FieldPlatformID:       {Type: field.TypeString, Column: integration.FieldPlatformID},
 			integration.FieldProviderMetadata: {Type: field.TypeJSON, Column: integration.FieldProviderMetadata},
 			integration.FieldConfig:           {Type: field.TypeJSON, Column: integration.FieldConfig},
 			integration.FieldProviderState:    {Type: field.TypeJSON, Column: integration.FieldProviderState},
@@ -5554,7 +5564,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"integration",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directoryaccount.IntegrationTable,
 			Columns: []string{directoryaccount.IntegrationColumn},
 			Bidi:    false,
@@ -5566,13 +5576,49 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"directory_sync_run",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directoryaccount.DirectorySyncRunTable,
 			Columns: []string{directoryaccount.DirectorySyncRunColumn},
 			Bidi:    false,
 		},
 		"DirectoryAccount",
 		"DirectorySyncRun",
+	)
+	graph.MustAddE(
+		"platform",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.PlatformTable,
+			Columns: []string{directoryaccount.PlatformColumn},
+			Bidi:    false,
+		},
+		"DirectoryAccount",
+		"Platform",
+	)
+	graph.MustAddE(
+		"identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IdentityHolderTable,
+			Columns: []string{directoryaccount.IdentityHolderColumn},
+			Bidi:    false,
+		},
+		"DirectoryAccount",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"avatar_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.AvatarFileTable,
+			Columns: []string{directoryaccount.AvatarFileColumn},
+			Bidi:    false,
+		},
+		"DirectoryAccount",
+		"File",
 	)
 	graph.MustAddE(
 		"groups",
@@ -5585,6 +5631,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"DirectoryAccount",
 		"DirectoryGroup",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"DirectoryAccount",
+		"Finding",
 	)
 	graph.MustAddE(
 		"workflow_object_refs",
@@ -5650,7 +5708,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"integration",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorygroup.IntegrationTable,
 			Columns: []string{directorygroup.IntegrationColumn},
 			Bidi:    false,
@@ -5662,13 +5720,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"directory_sync_run",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorygroup.DirectorySyncRunTable,
 			Columns: []string{directorygroup.DirectorySyncRunColumn},
 			Bidi:    false,
 		},
 		"DirectoryGroup",
 		"DirectorySyncRun",
+	)
+	graph.MustAddE(
+		"platform",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorygroup.PlatformTable,
+			Columns: []string{directorygroup.PlatformColumn},
+			Bidi:    false,
+		},
+		"DirectoryGroup",
+		"Platform",
 	)
 	graph.MustAddE(
 		"accounts",
@@ -5746,7 +5816,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"integration",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorymembership.IntegrationTable,
 			Columns: []string{directorymembership.IntegrationColumn},
 			Bidi:    false,
@@ -5758,13 +5828,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"directory_sync_run",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorymembership.DirectorySyncRunTable,
 			Columns: []string{directorymembership.DirectorySyncRunColumn},
 			Bidi:    false,
 		},
 		"DirectoryMembership",
 		"DirectorySyncRun",
+	)
+	graph.MustAddE(
+		"platform",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorymembership.PlatformTable,
+			Columns: []string{directorymembership.PlatformColumn},
+			Bidi:    false,
+		},
+		"DirectoryMembership",
+		"Platform",
 	)
 	graph.MustAddE(
 		"directory_account",
@@ -5854,13 +5936,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"integration",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorysyncrun.IntegrationTable,
 			Columns: []string{directorysyncrun.IntegrationColumn},
 			Bidi:    false,
 		},
 		"DirectorySyncRun",
 		"Integration",
+	)
+	graph.MustAddE(
+		"platform",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorysyncrun.PlatformTable,
+			Columns: []string{directorysyncrun.PlatformColumn},
+			Bidi:    false,
+		},
+		"DirectorySyncRun",
+		"Platform",
 	)
 	graph.MustAddE(
 		"directory_accounts",
@@ -7399,6 +7493,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
+		"directory_accounts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.DirectoryAccountsTable,
+			Columns: finding.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+		},
+		"Finding",
+		"DirectoryAccount",
+	)
+	graph.MustAddE(
+		"identity_holders",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IdentityHoldersTable,
+			Columns: finding.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+		},
+		"Finding",
+		"IdentityHolder",
+	)
+	graph.MustAddE(
 		"remediations",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8371,6 +8489,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
+		"directory_accounts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+		},
+		"IdentityHolder",
+		"DirectoryAccount",
+	)
+	graph.MustAddE(
 		"platforms",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8405,6 +8535,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"IdentityHolder",
 		"Task",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"IdentityHolder",
+		"Finding",
 	)
 	graph.MustAddE(
 		"workflow_object_refs",
@@ -8669,6 +8811,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Integration",
 		"DirectorySyncRun",
+	)
+	graph.MustAddE(
+		"platform",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   integration.PlatformTable,
+			Columns: []string{integration.PlatformColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"Platform",
 	)
 	graph.MustAddE(
 		"notification_templates",
@@ -10117,6 +10271,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   organization.RiskCreatorsTable,
 			Columns: []string{organization.RiskCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
+		"identity_holder_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IdentityHolderCreatorsTable,
+			Columns: []string{organization.IdentityHolderCreatorsColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -11669,6 +11835,66 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Platform",
 		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.IntegrationsTable,
+			Columns: []string{platform.IntegrationsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"Integration",
+	)
+	graph.MustAddE(
+		"directory_sync_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectorySyncRunsTable,
+			Columns: []string{platform.DirectorySyncRunsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"DirectorySyncRun",
+	)
+	graph.MustAddE(
+		"directory_accounts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryAccountsTable,
+			Columns: []string{platform.DirectoryAccountsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"DirectoryAccount",
+	)
+	graph.MustAddE(
+		"directory_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryGroupsTable,
+			Columns: []string{platform.DirectoryGroupsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"DirectoryGroup",
+	)
+	graph.MustAddE(
+		"directory_memberships",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   platform.DirectoryMembershipsTable,
+			Columns: []string{platform.DirectoryMembershipsColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"DirectoryMembership",
 	)
 	graph.MustAddE(
 		"workflow_object_refs",
@@ -20840,6 +21066,21 @@ func (f *DirectoryAccountFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldDirectorySyncRunID))
 }
 
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectoryAccountFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldPlatformID))
+}
+
+// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
+func (f *DirectoryAccountFilter) WhereIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldIdentityHolderID))
+}
+
+// WhereDirectoryName applies the entql string predicate on the directory_name field.
+func (f *DirectoryAccountFilter) WhereDirectoryName(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldDirectoryName))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *DirectoryAccountFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldExternalID))
@@ -20858,6 +21099,21 @@ func (f *DirectoryAccountFilter) WhereCanonicalEmail(p entql.StringP) {
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *DirectoryAccountFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldDisplayName))
+}
+
+// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
+func (f *DirectoryAccountFilter) WhereAvatarRemoteURL(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldAvatarRemoteURL))
+}
+
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *DirectoryAccountFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldAvatarLocalFileID))
+}
+
+// WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
+func (f *DirectoryAccountFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccount.FieldAvatarUpdatedAt))
 }
 
 // WhereGivenName applies the entql string predicate on the given_name field.
@@ -21005,6 +21261,48 @@ func (f *DirectoryAccountFilter) WhereHasDirectorySyncRunWith(preds ...predicate
 	})))
 }
 
+// WhereHasPlatform applies a predicate to check if query has an edge platform.
+func (f *DirectoryAccountFilter) WhereHasPlatform() {
+	f.Where(entql.HasEdge("platform"))
+}
+
+// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
+func (f *DirectoryAccountFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIdentityHolder applies a predicate to check if query has an edge identity_holder.
+func (f *DirectoryAccountFilter) WhereHasIdentityHolder() {
+	f.Where(entql.HasEdge("identity_holder"))
+}
+
+// WhereHasIdentityHolderWith applies a predicate to check if query has an edge identity_holder with a given conditions (other predicates).
+func (f *DirectoryAccountFilter) WhereHasIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAvatarFile applies a predicate to check if query has an edge avatar_file.
+func (f *DirectoryAccountFilter) WhereHasAvatarFile() {
+	f.Where(entql.HasEdge("avatar_file"))
+}
+
+// WhereHasAvatarFileWith applies a predicate to check if query has an edge avatar_file with a given conditions (other predicates).
+func (f *DirectoryAccountFilter) WhereHasAvatarFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("avatar_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasGroups applies a predicate to check if query has an edge groups.
 func (f *DirectoryAccountFilter) WhereHasGroups() {
 	f.Where(entql.HasEdge("groups"))
@@ -21013,6 +21311,20 @@ func (f *DirectoryAccountFilter) WhereHasGroups() {
 // WhereHasGroupsWith applies a predicate to check if query has an edge groups with a given conditions (other predicates).
 func (f *DirectoryAccountFilter) WhereHasGroupsWith(preds ...predicate.DirectoryGroup) {
 	f.Where(entql.HasEdgeWith("groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *DirectoryAccountFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *DirectoryAccountFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -21145,6 +21457,11 @@ func (f *DirectoryGroupFilter) WhereScopeID(p entql.StringP) {
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *DirectoryGroupFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldIntegrationID))
+}
+
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectoryGroupFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directorygroup.FieldPlatformID))
 }
 
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
@@ -21281,6 +21598,20 @@ func (f *DirectoryGroupFilter) WhereHasDirectorySyncRun() {
 // WhereHasDirectorySyncRunWith applies a predicate to check if query has an edge directory_sync_run with a given conditions (other predicates).
 func (f *DirectoryGroupFilter) WhereHasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) {
 	f.Where(entql.HasEdgeWith("directory_sync_run", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatform applies a predicate to check if query has an edge platform.
+func (f *DirectoryGroupFilter) WhereHasPlatform() {
+	f.Where(entql.HasEdge("platform"))
+}
+
+// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
+func (f *DirectoryGroupFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -21424,6 +21755,11 @@ func (f *DirectoryMembershipFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(directorymembership.FieldIntegrationID))
 }
 
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectoryMembershipFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directorymembership.FieldPlatformID))
+}
+
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryMembershipFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorymembership.FieldDirectorySyncRunID))
@@ -21538,6 +21874,20 @@ func (f *DirectoryMembershipFilter) WhereHasDirectorySyncRun() {
 // WhereHasDirectorySyncRunWith applies a predicate to check if query has an edge directory_sync_run with a given conditions (other predicates).
 func (f *DirectoryMembershipFilter) WhereHasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) {
 	f.Where(entql.HasEdgeWith("directory_sync_run", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatform applies a predicate to check if query has an edge platform.
+func (f *DirectoryMembershipFilter) WhereHasPlatform() {
+	f.Where(entql.HasEdge("platform"))
+}
+
+// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
+func (f *DirectoryMembershipFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -21695,6 +22045,11 @@ func (f *DirectorySyncRunFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(directorysyncrun.FieldIntegrationID))
 }
 
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectorySyncRunFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directorysyncrun.FieldPlatformID))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *DirectorySyncRunFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(directorysyncrun.FieldStatus))
@@ -21790,6 +22145,20 @@ func (f *DirectorySyncRunFilter) WhereHasIntegration() {
 // WhereHasIntegrationWith applies a predicate to check if query has an edge integration with a given conditions (other predicates).
 func (f *DirectorySyncRunFilter) WhereHasIntegrationWith(preds ...predicate.Integration) {
 	f.Where(entql.HasEdgeWith("integration", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatform applies a predicate to check if query has an edge platform.
+func (f *DirectorySyncRunFilter) WhereHasPlatform() {
+	f.Where(entql.HasEdge("platform"))
+}
+
+// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
+func (f *DirectorySyncRunFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -25593,6 +25962,34 @@ func (f *FindingFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	})))
 }
 
+// WhereHasDirectoryAccounts applies a predicate to check if query has an edge directory_accounts.
+func (f *FindingFilter) WhereHasDirectoryAccounts() {
+	f.Where(entql.HasEdge("directory_accounts"))
+}
+
+// WhereHasDirectoryAccountsWith applies a predicate to check if query has an edge directory_accounts with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) {
+	f.Where(entql.HasEdgeWith("directory_accounts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIdentityHolders applies a predicate to check if query has an edge identity_holders.
+func (f *FindingFilter) WhereHasIdentityHolders() {
+	f.Where(entql.HasEdge("identity_holders"))
+}
+
+// WhereHasIdentityHoldersWith applies a predicate to check if query has an edge identity_holders with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasIdentityHoldersWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("identity_holders", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasRemediations applies a predicate to check if query has an edge remediations.
 func (f *FindingFilter) WhereHasRemediations() {
 	f.Where(entql.HasEdge("remediations"))
@@ -27492,6 +27889,20 @@ func (f *IdentityHolderFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 	})))
 }
 
+// WhereHasDirectoryAccounts applies a predicate to check if query has an edge directory_accounts.
+func (f *IdentityHolderFilter) WhereHasDirectoryAccounts() {
+	f.Where(entql.HasEdge("directory_accounts"))
+}
+
+// WhereHasDirectoryAccountsWith applies a predicate to check if query has an edge directory_accounts with a given conditions (other predicates).
+func (f *IdentityHolderFilter) WhereHasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) {
+	f.Where(entql.HasEdgeWith("directory_accounts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasPlatforms applies a predicate to check if query has an edge platforms.
 func (f *IdentityHolderFilter) WhereHasPlatforms() {
 	f.Where(entql.HasEdge("platforms"))
@@ -27528,6 +27939,20 @@ func (f *IdentityHolderFilter) WhereHasTasks() {
 // WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
 func (f *IdentityHolderFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *IdentityHolderFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *IdentityHolderFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -27873,6 +28298,11 @@ func (f *IntegrationFilter) WhereIntegrationType(p entql.StringP) {
 	f.Where(p.Field(integration.FieldIntegrationType))
 }
 
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *IntegrationFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(integration.FieldPlatformID))
+}
+
 // WhereProviderMetadata applies the entql json.RawMessage predicate on the provider_metadata field.
 func (f *IntegrationFilter) WhereProviderMetadata(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldProviderMetadata))
@@ -28111,6 +28541,20 @@ func (f *IntegrationFilter) WhereHasDirectorySyncRuns() {
 // WhereHasDirectorySyncRunsWith applies a predicate to check if query has an edge directory_sync_runs with a given conditions (other predicates).
 func (f *IntegrationFilter) WhereHasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) {
 	f.Where(entql.HasEdgeWith("directory_sync_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatform applies a predicate to check if query has an edge platform.
+func (f *IntegrationFilter) WhereHasPlatform() {
+	f.Where(entql.HasEdge("platform"))
+}
+
+// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -32696,6 +33140,20 @@ func (f *OrganizationFilter) WhereHasRiskCreatorsWith(preds ...predicate.Group) 
 	})))
 }
 
+// WhereHasIdentityHolderCreators applies a predicate to check if query has an edge identity_holder_creators.
+func (f *OrganizationFilter) WhereHasIdentityHolderCreators() {
+	f.Where(entql.HasEdge("identity_holder_creators"))
+}
+
+// WhereHasIdentityHolderCreatorsWith applies a predicate to check if query has an edge identity_holder_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasIdentityHolderCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("identity_holder_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasScheduledJobCreators applies a predicate to check if query has an edge scheduled_job_creators.
 func (f *OrganizationFilter) WhereHasScheduledJobCreators() {
 	f.Where(entql.HasEdge("scheduled_job_creators"))
@@ -35246,6 +35704,76 @@ func (f *PlatformFilter) WhereHasIdentityHolders() {
 // WhereHasIdentityHoldersWith applies a predicate to check if query has an edge identity_holders with a given conditions (other predicates).
 func (f *PlatformFilter) WhereHasIdentityHoldersWith(preds ...predicate.IdentityHolder) {
 	f.Where(entql.HasEdgeWith("identity_holders", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *PlatformFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDirectorySyncRuns applies a predicate to check if query has an edge directory_sync_runs.
+func (f *PlatformFilter) WhereHasDirectorySyncRuns() {
+	f.Where(entql.HasEdge("directory_sync_runs"))
+}
+
+// WhereHasDirectorySyncRunsWith applies a predicate to check if query has an edge directory_sync_runs with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) {
+	f.Where(entql.HasEdgeWith("directory_sync_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDirectoryAccounts applies a predicate to check if query has an edge directory_accounts.
+func (f *PlatformFilter) WhereHasDirectoryAccounts() {
+	f.Where(entql.HasEdge("directory_accounts"))
+}
+
+// WhereHasDirectoryAccountsWith applies a predicate to check if query has an edge directory_accounts with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) {
+	f.Where(entql.HasEdgeWith("directory_accounts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDirectoryGroups applies a predicate to check if query has an edge directory_groups.
+func (f *PlatformFilter) WhereHasDirectoryGroups() {
+	f.Where(entql.HasEdge("directory_groups"))
+}
+
+// WhereHasDirectoryGroupsWith applies a predicate to check if query has an edge directory_groups with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) {
+	f.Where(entql.HasEdgeWith("directory_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDirectoryMemberships applies a predicate to check if query has an edge directory_memberships.
+func (f *PlatformFilter) WhereHasDirectoryMemberships() {
+	f.Where(entql.HasEdge("directory_memberships"))
+}
+
+// WhereHasDirectoryMembershipsWith applies a predicate to check if query has an edge directory_memberships with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) {
+	f.Where(entql.HasEdgeWith("directory_memberships", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

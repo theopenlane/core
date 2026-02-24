@@ -190,6 +190,10 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_scans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
 			case "remediations":
 				return ec.fieldContext_Finding_remediations(ctx, field)
 			case "reviews":
@@ -371,6 +375,10 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
 			case "remediations":
 				return ec.fieldContext_Finding_remediations(ctx, field)
 			case "reviews":
@@ -581,6 +589,10 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_scans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Finding_tasks(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Finding_directoryAccounts(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Finding_identityHolders(ctx, field)
 			case "remediations":
 				return ec.fieldContext_Finding_remediations(ctx, field)
 			case "reviews":

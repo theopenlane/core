@@ -190,6 +190,16 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
 	EdgeIdentityHolders = "identity_holders"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
+	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
+	EdgeDirectorySyncRuns = "directory_sync_runs"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
+	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
+	EdgeDirectoryMemberships = "directory_memberships"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// EdgeSourceAssets holds the string denoting the source_assets edge name in mutations.
@@ -392,6 +402,41 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
+	// IntegrationsTable is the table that holds the integrations relation/edge.
+	IntegrationsTable = "integrations"
+	// IntegrationsInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationsInverseTable = "integrations"
+	// IntegrationsColumn is the table column denoting the integrations relation/edge.
+	IntegrationsColumn = "platform_id"
+	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
+	DirectorySyncRunsTable = "directory_sync_runs"
+	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
+	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
+	DirectorySyncRunsInverseTable = "directory_sync_runs"
+	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
+	DirectorySyncRunsColumn = "platform_id"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
+	DirectoryAccountsTable = "directory_accounts"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
+	DirectoryAccountsColumn = "platform_id"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
+	DirectoryGroupsTable = "directory_groups"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
+	DirectoryGroupsColumn = "platform_id"
+	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
+	DirectoryMembershipsTable = "directory_memberships"
+	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
+	DirectoryMembershipsInverseTable = "directory_memberships"
+	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
+	DirectoryMembershipsColumn = "platform_id"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -1213,6 +1258,76 @@ func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
+	}
+}
+
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
+func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
+	}
+}
+
+// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
+func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
+	}
+}
+
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryMembershipsCount orders the results by directory_memberships count.
+func ByDirectoryMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryMembershipsStep(), opts...)
+	}
+}
+
+// ByDirectoryMemberships orders the results by directory_memberships terms.
+func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1525,6 +1640,41 @@ func newIdentityHoldersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
+func newIntegrationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+	)
+}
+func newDirectorySyncRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+	)
+}
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+	)
+}
+func newDirectoryGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
+	)
+}
+func newDirectoryMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

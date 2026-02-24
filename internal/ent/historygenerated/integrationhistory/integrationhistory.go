@@ -63,6 +63,8 @@ const (
 	FieldKind = "kind"
 	// FieldIntegrationType holds the string denoting the integration_type field in the database.
 	FieldIntegrationType = "integration_type"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// FieldProviderMetadata holds the string denoting the provider_metadata field in the database.
 	FieldProviderMetadata = "provider_metadata"
 	// FieldConfig holds the string denoting the config field in the database.
@@ -100,6 +102,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldKind,
 	FieldIntegrationType,
+	FieldPlatformID,
 	FieldProviderMetadata,
 	FieldConfig,
 	FieldProviderState,
@@ -262,6 +265,11 @@ func ByKind(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationType orders the results by the integration_type field.
 func ByIntegrationType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationType, opts...).ToFunc()
+}
+
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
 var (
