@@ -262,13 +262,30 @@ func TestMutationUpdateAsset(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update not allowed, not enough permissions",
+			name: "update not allowed, not enough permissions as view only user",
 			request: testclient.UpdateAssetInput{
 				InternalOwnerUserID: &viewOnlyUser.ID,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "update not allowed, not allowed to add edge to without access to group",
+			request: testclient.UpdateAssetInput{
+				InternalOwnerGroupID: &viewOnlyUser2.GroupID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "update allowed to add edge to group if user has access to group",
+			request: testclient.UpdateAssetInput{
+				InternalOwnerGroupID: &testUser1.GroupID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions",
