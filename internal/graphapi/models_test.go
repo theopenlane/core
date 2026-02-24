@@ -409,6 +409,13 @@ type CustomTypeEnumBuilder struct {
 	Field       string
 }
 
+type AssetBuilder struct {
+	client *client
+
+	// Fields
+	Name string
+}
+
 // Faker structs with random injected data
 type Faker struct {
 	Name string
@@ -2499,4 +2506,19 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	requireNoError(t, err)
 
 	return customTypeEnum
+}
+
+// MustNew asset builder is used to create, without authz checks, assets in the database
+func (a *AssetBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Asset {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if a.Name == "" {
+		a.Name = gofakeit.AppName()
+	}
+
+	asset := a.client.db.Asset.Create().
+		SetName(a.Name).
+		SaveX(ctx)
+
+	return asset
 }
