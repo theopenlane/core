@@ -103,7 +103,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			),
 		field.String("avatar_remote_url").
 			Comment("URL of the avatar supplied by the directory provider").
-			MaxLen(2048).
+			MaxLen(2048). //nolint:mnd
 			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
