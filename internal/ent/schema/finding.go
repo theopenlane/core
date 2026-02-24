@@ -211,6 +211,8 @@ func (f Finding) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(f, Entity{}),
 		defaultEdgeToWithPagination(f, Scan{}),
 		defaultEdgeToWithPagination(f, Task{}),
+		defaultEdgeToWithPagination(f, DirectoryAccount{}),
+		defaultEdgeToWithPagination(f, IdentityHolder{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: f,
 			edgeSchema: Remediation{},
@@ -258,6 +260,8 @@ func (f Finding) Mixin() []ent.Mixin {
 					Asset{},
 					Entity{},
 					Scan{},
+					DirectoryAccount{},
+					IdentityHolder{},
 				),
 				withOrganizationOwner(true),
 			),

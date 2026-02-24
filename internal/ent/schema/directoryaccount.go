@@ -15,7 +15,9 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 // DirectoryAccount captures one normalized identity fetched from an external directory provider
@@ -47,13 +49,34 @@ func (DirectoryAccount) PluralName() string {
 func (DirectoryAccount) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("integration_id").
-			Comment("integration that owns this directory account").
+			Comment("optional integration that owns this directory account when sourced by an integration").
+			Optional().
 			NotEmpty().
 			Immutable(),
 		field.String("directory_sync_run_id").
-			Comment("sync run that produced this snapshot").
+			Comment("optional sync run that produced this snapshot").
+			Optional().
 			NotEmpty().
 			Immutable(),
+		field.String("platform_id").
+			Comment("optional platform associated with this directory account").
+			Optional().
+			NotEmpty().
+			Immutable(),
+		field.String("identity_holder_id").
+			Comment("deduplicated identity holder linked to this directory account").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.CSVRef().FromColumn("DirectoryAccountIdentityHolderEmail").MatchOn("email"),
+			),
+		field.String("directory_name").
+			Comment("directory source label set by the integration (e.g. google_workspace, github, slack)").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("directory_name"),
+			),
 		field.String("external_id").
 			Comment("stable identifier from the directory system").
 			NotEmpty().
@@ -78,6 +101,25 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("display_name"),
 			),
+		field.String("avatar_remote_url").
+			Comment("URL of the avatar supplied by the directory provider").
+			MaxLen(2048).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
+		field.String("avatar_local_file_id").
+			Comment("local avatar file identifier, takes precedence over avatar_remote_url").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.Time("avatar_updated_at").
+			Comment("time the directory account avatar was last updated").
+			Default(time.Now).
+			UpdateDefault(time.Now).
+			Optional().
+			Nillable(),
 		field.String("given_name").
 			Comment("first name reported by the provider").
 			Optional().
@@ -159,21 +201,42 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 // Edges of the DirectoryAccount
 func (d DirectoryAccount) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,
 			edgeSchema: Integration{},
 			field:      "integration_id",
-			required:   true,
 			immutable:  true,
 			comment:    "integration that owns this directory account",
 		}),
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,
 			edgeSchema: DirectorySyncRun{},
 			field:      "directory_sync_run_id",
-			required:   true,
 			immutable:  true,
 			comment:    "sync run that produced this snapshot",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: d,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			immutable:  true,
+			comment:    "platform associated with this directory account",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: d,
+			edgeSchema: IdentityHolder{},
+			field:      "identity_holder_id",
+			comment:    "identity holder linked to this directory account",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(IdentityHolder{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: d,
+			name:       "avatar_file",
+			t:          File.Type,
+			field:      "avatar_local_file_id",
+			comment:    "local avatar file for the directory account",
 		}),
 		edge.To("groups", DirectoryGroup.Type).
 			Annotations(
@@ -183,6 +246,7 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 				accessmap.EdgeNoAuthCheck(),
 			).
 			Through("memberships", DirectoryMembership.Type),
+		defaultEdgeFromWithPagination(d, Finding{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: DirectoryAccount{},
 			edgeSchema: WorkflowObjectRef{},
@@ -197,9 +261,20 @@ func (DirectoryAccount) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "external_id", "directory_sync_run_id").
 			Unique(),
+		index.Fields("platform_id", "external_id"),
 		index.Fields("directory_sync_run_id", "canonical_email"),
 		index.Fields("integration_id", "canonical_email"),
+		index.Fields("platform_id", "canonical_email"),
+		index.Fields("identity_holder_id"),
+		index.Fields("identity_holder_id", "directory_name"),
 		index.Fields(ownerFieldName, "canonical_email"),
+	}
+}
+
+// Hooks of the DirectoryAccount
+func (DirectoryAccount) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookDirectoryAccount(),
 	}
 }
 
@@ -224,5 +299,7 @@ func (d DirectoryAccount) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.IntegrationMappingSchema().
+			UpsertKeys("external_id", "canonical_email"),
 	}
 }
