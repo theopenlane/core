@@ -8,4 +8,6 @@ use (
 	// common contains shared code between core and other components, anything that needs to be imported by other modules should
 	// be placed here to prevent circular dependencies.
 	./common
+	// iam is the identity and access management module, referenced locally during development
+	../iam
 )

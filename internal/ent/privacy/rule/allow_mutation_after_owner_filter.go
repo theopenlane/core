@@ -23,10 +23,12 @@ func AllowMutationAfterApplyingOwnerFilter() privacy.MutationRule {
 				return privacy.Denyf("unable to cast to owner filter")
 			}
 
-			viewerID, err := auth.GetSubjectIDFromContext(ctx)
-			if err != nil {
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil || caller.SubjectID == "" {
 				return privacy.Skip
 			}
+
+			viewerID := caller.SubjectID
 
 			ownerFilter.WhereHasOwnerWith(user.ID(viewerID))
 

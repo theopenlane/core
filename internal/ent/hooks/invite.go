@@ -399,11 +399,9 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		return err
 	}
 
-	authType := auth.GetAuthzSubjectType(ctx)
-
 	var inviterName string
 
-	switch authType {
+	switch auth.GetAuthzSubjectType(ctx) {
 	case auth.UserSubjectType:
 		requestor, err := m.Client().User.Query().
 			Where(user.ID(reqID)).

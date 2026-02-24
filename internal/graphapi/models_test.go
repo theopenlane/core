@@ -16,7 +16,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -492,7 +491,8 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 
 	// Special handling for standards - update them to be private before deletion
 	// Only do this for system admins
-	if _, ok := any(c.client).(*ent.StandardClient); ok && auth.IsSystemAdminFromContext(ctx) {
+	stdAdminCaller, stdAdminOk := auth.CallerFromContext(ctx)
+	if _, ok := any(c.client).(*ent.StandardClient); ok && stdAdminOk && stdAdminCaller != nil && stdAdminCaller.Has(auth.CapSystemAdmin) {
 		if c.ID != "" {
 			err := suite.client.db.Standard.UpdateOneID(c.ID).SetIsPublic(false).Exec(ctx)
 			requireNoError(t, err)
@@ -1930,10 +1930,11 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	// Create the organization parent tuple for the trust center
 	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		requireNoError(t, err)
+	orgCaller, orgCallerOk := auth.CallerFromContext(ctx)
+	if !orgCallerOk || orgCaller == nil {
+		requireNoError(t, auth.ErrNoAuthUser)
 	}
+	orgID := orgCaller.OrganizationID
 
 	parentReq := fgax.TupleRequest{
 		SubjectID:   orgID,
@@ -2316,7 +2317,7 @@ func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ass
 }
 
 // MustNew assessment response builder creates responses without authz checks
-// This uses the QuestionnaireContextKey to bypass auth, simulating anonymous user creation
+// This uses a questionnaire caller to bypass auth, simulating anonymous user creation
 func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T) *ent.AssessmentResponse {
 	ctx = setContext(ctx, arb.client.db)
 
@@ -2340,9 +2341,9 @@ func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T)
 		arb.OwnerID = assessment.OwnerID
 	}
 
-	// Use QuestionnaireContextKey to bypass auth checks (simulates anonymous JWT)
+	// Use questionnaire caller to bypass auth checks (simulates anonymous JWT)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(arb.OwnerID, "", "", ""))
 
 	mutation := arb.client.db.AssessmentResponse.Create().
 		SetAssessmentID(arb.AssessmentID).

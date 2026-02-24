@@ -80,9 +80,11 @@ func HookWorkflowProposalInvalidateAssignments() ent.Hook {
 			}
 
 			// Get the user making this change - may be empty for system operations
-			invalidatedByUserID, err := auth.GetSubjectIDFromContext(ctx)
-			if err != nil {
-				log.Ctx(ctx).Debug().Err(err).Msg("invalidate hook: no user in context, using empty user ID")
+			var invalidatedByUserID string
+			if wpCaller, callerOK := auth.CallerFromContext(ctx); callerOK && wpCaller != nil {
+				invalidatedByUserID = wpCaller.SubjectID
+			} else {
+				log.Ctx(ctx).Debug().Msg("invalidate hook: no user in context, using empty user ID")
 			}
 
 			// Get the old hash before mutation

@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -15,9 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-// ManagedContextKey is the context key name for managed group updates
-type ManagedContextKey struct{}
 
 const (
 	// AdminsGroup is the group name for all organization admins and owner, these users have full read and write access in the organization
@@ -118,9 +114,14 @@ type OrgMember struct {
 
 // updateManagedGroupMembers groups adds or removes the org members to the managed system groups
 func updateManagedGroupMembers(ctx context.Context, m *generated.OrgMembershipMutation) error {
-	// set a context key to indicate that this is a managed group update
-	// and allowed to skip the check for managed groups
-	managedCtx := contextx.With(ctx, ManagedContextKey{})
+	// add managed group bypass capability to the caller for downstream hook checks
+	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
+	var managedCtx context.Context
+	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
+		managedCtx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
+	} else {
+		managedCtx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
+	}
 
 	op := m.Op()
 

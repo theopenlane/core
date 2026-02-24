@@ -15,22 +15,24 @@ func TrustCenterScopePredicate() func(*sql.Selector) {
 	return func(s *sql.Selector) {
 		ctx := s.Context()
 
-		if auth.IsSystemAdminFromContext(ctx) {
+		caller, ok := auth.CallerFromContext(ctx)
+		if ok && caller != nil && caller.Has(auth.CapSystemAdmin) {
 			return
 		}
 
-		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+		if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
 			if anon.TrustCenterID != "" {
 				s.Where(sql.EQ(s.C("trust_center_id"), anon.TrustCenterID))
 				return
 			}
 		}
 
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Err(err).Msg("could not fetch org ids when scoping trustcenter")
+		if !ok || caller == nil {
+			logx.FromContext(ctx).Warn().Msg("could not fetch caller when scoping trustcenter")
 			return
 		}
+
+		orgIDs := caller.OrgIDs()
 
 		t := sql.Table(trustcenter.Table)
 

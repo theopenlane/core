@@ -23,9 +23,13 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 	}
 
 	// get the userID from the context
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tfasetting"})
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionCreate, Object: "tfasetting"})
+	}
+	userID := caller.SubjectID
+	if userID == "" {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionCreate, Object: "tfasetting"})
 	}
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Create().SetInput(input).Save(ctx)
@@ -62,9 +66,13 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 	}
 
 	// get the userID from the context
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
+	}
+	userID := caller.SubjectID
+	if userID == "" {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Query().
@@ -119,9 +127,13 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 	}
 
 	// get the userID from the context
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "tfasetting"})
+	}
+	userID := caller.SubjectID
+	if userID == "" {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 	}
 
 	if id != nil && *id != "" {

@@ -45,9 +45,14 @@ type AuthSnapshot struct {
 	IsSystemAdmin bool `json:"is_system_admin,omitempty"`
 }
 
-// ToAuthenticatedUser converts a snapshot into an auth.AuthenticatedUser payload
-func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
-	return &auth.AuthenticatedUser{
+// toCaller converts a snapshot into an auth.Caller
+func (s AuthSnapshot) toCaller() *auth.Caller {
+	var caps auth.Capability
+	if s.IsSystemAdmin {
+		caps |= auth.CapSystemAdmin
+	}
+
+	return &auth.Caller{
 		SubjectID:          s.SubjectID,
 		SubjectName:        s.SubjectName,
 		SubjectEmail:       s.SubjectEmail,
@@ -56,26 +61,26 @@ func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
 		OrganizationIDs:    append([]string(nil), s.OrganizationIDs...),
 		AuthenticationType: auth.AuthenticationType(s.AuthenticationType),
 		OrganizationRole:   auth.OrganizationRoleType(s.OrganizationRole),
-		IsSystemAdmin:      s.IsSystemAdmin,
+		Capabilities:       caps,
 	}
 }
 
-// authSnapshotFromUser converts an auth.AuthenticatedUser into a JSON-safe snapshot
-func authSnapshotFromUser(user *auth.AuthenticatedUser) *AuthSnapshot {
-	if user == nil {
+// authSnapshotFromCaller converts an auth.Caller into a JSON-safe snapshot
+func authSnapshotFromCaller(caller *auth.Caller) *AuthSnapshot {
+	if caller == nil {
 		return nil
 	}
 
 	return &AuthSnapshot{
-		SubjectID:          user.SubjectID,
-		SubjectName:        user.SubjectName,
-		SubjectEmail:       user.SubjectEmail,
-		OrganizationID:     user.OrganizationID,
-		OrganizationName:   user.OrganizationName,
-		OrganizationIDs:    append([]string(nil), user.OrganizationIDs...),
-		AuthenticationType: string(user.AuthenticationType),
-		OrganizationRole:   string(user.OrganizationRole),
-		IsSystemAdmin:      user.IsSystemAdmin,
+		SubjectID:          caller.SubjectID,
+		SubjectName:        caller.SubjectName,
+		SubjectEmail:       caller.SubjectEmail,
+		OrganizationID:     caller.OrganizationID,
+		OrganizationName:   caller.OrganizationName,
+		OrganizationIDs:    append([]string(nil), caller.OrgIDs()...),
+		AuthenticationType: string(caller.AuthenticationType),
+		OrganizationRole:   string(caller.OrganizationRole),
+		IsSystemAdmin:      caller.Has(auth.CapSystemAdmin),
 	}
 }
 
@@ -98,8 +103,8 @@ func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, 
 	hasData := false
 
 	// Capture auth context
-	if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && au != nil {
-		snapshot.Auth = authSnapshotFromUser(au)
+	if caller, callerOk := auth.CallerFromContext(ctx); callerOk && caller != nil {
+		snapshot.Auth = authSnapshotFromCaller(caller)
 		hasData = true
 	}
 
@@ -131,7 +136,7 @@ func (DurableContextCodec) Restore(ctx context.Context, raw json.RawMessage) (co
 
 	// Restore auth context
 	if snapshot.Auth != nil {
-		ctx = auth.WithAuthenticatedUser(ctx, snapshot.Auth.ToAuthenticatedUser())
+		ctx = auth.WithCaller(ctx, snapshot.Auth.toCaller())
 	}
 
 	// Restore logger with captured fields

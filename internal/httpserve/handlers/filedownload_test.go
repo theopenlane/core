@@ -237,11 +237,11 @@ func TestValidateTokenAuthorization_NoUserID(t *testing.T) {
 func TestValidateTokenAuthorization_WithMatchingUser(t *testing.T) {
 	userULID := ulids.New()
 
-	authUser := &auth.AuthenticatedUser{
+	authUser := &auth.Caller{
 		SubjectID: userULID.String(),
 	}
 
-	ctx := auth.WithAuthenticatedUser(context.Background(), authUser)
+	ctx := auth.WithCaller(context.Background(), authUser)
 
 	downloadToken := &tokens.DownloadToken{
 		UserID: userULID,
@@ -255,11 +255,11 @@ func TestValidateTokenAuthorization_WithMismatchedUser(t *testing.T) {
 	userULID1 := ulids.New()
 	userULID2 := ulids.New()
 
-	authUser := &auth.AuthenticatedUser{
+	authUser := &auth.Caller{
 		SubjectID: userULID1.String(),
 	}
 
-	ctx := auth.WithAuthenticatedUser(context.Background(), authUser)
+	ctx := auth.WithCaller(context.Background(), authUser)
 
 	downloadToken := &tokens.DownloadToken{
 		UserID: userULID2,

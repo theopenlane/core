@@ -35,6 +35,8 @@ const (
 	authenticatedUserSSOCookieValue = "1"
 )
 
+var ssoNonceContextKey = contextx.NewKey[nonce]()
+
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
 // It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
 // see docs/SSO.md for more details on the SSO flow
@@ -120,7 +122,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	}
 
 	// attach nonce to context for OIDC token validation
-	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
+	nonceCtx := ssoNonceContextKey.Set(reqCtx, nonce(nonceCookie.Value))
 	// exchange the code for OIDC tokens
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg)
 	if err != nil {
@@ -180,14 +182,16 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 			return h.BadRequest(ctx, err)
 		}
 
-		// we set it on top so will always be here
-		user, _ := auth.AuthenticatedUserFromContext(userCtx)
+		ssoCaller, ok := auth.CallerFromContext(userCtx)
+		if !ok || ssoCaller == nil {
+			logx.FromContext(reqCtx).Error().Msg("missing caller context for SSO token authorization")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
 
-		// make sure every value is set correctly
-		user.OrganizationIDs = []string{orgCookie.Value}
-		user.OrganizationID = orgCookie.Value
+		ssoCaller.OrganizationIDs = []string{orgCookie.Value}
+		ssoCaller.OrganizationID = orgCookie.Value
 
-		userCtx = auth.WithAuthenticatedUser(userCtx, user)
+		userCtx = auth.WithCaller(userCtx, ssoCaller)
 
 		aErr := h.authorizeTokenSSO(privacy.DecisionContext(userCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
 		if aErr != nil {
@@ -316,7 +320,7 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 
 	// construct the oidc relying party configuration with options
 	verifierOpt := rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
-		if n, ok := contextx.From[nonce](ctx); ok {
+		if n, ok := ssoNonceContextKey.Get(ctx); ok {
 			return string(n)
 		}
 

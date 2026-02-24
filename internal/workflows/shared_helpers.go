@@ -47,12 +47,12 @@ func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
 		return ownerID, nil
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return "", err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return "", auth.ErrNoAuthUser
 	}
 
-	return orgID, nil
+	return caller.OrganizationID, nil
 }
 
 // WorkflowInstanceBuilderParams defines the inputs for creating a workflow instance + object ref.
@@ -140,9 +140,9 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 		return nil, nil
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, err
+	proposalCaller, proposalOk := auth.CallerFromContext(ctx)
+	if !proposalOk || proposalCaller == nil || proposalCaller.OrganizationID == "" {
+		return nil, auth.ErrNoAuthUser
 	}
 
 	queryBase := func() *generated.WorkflowProposalQuery {
@@ -150,7 +150,7 @@ func FindProposalForObjectRefs(ctx context.Context, client *generated.Client, ob
 			Where(
 				workflowproposal.WorkflowObjectRefIDIn(objRefIDs...),
 				workflowproposal.DomainKeyEQ(domainKey),
-				workflowproposal.OwnerIDEQ(orgID),
+				workflowproposal.OwnerIDEQ(proposalCaller.OrganizationID),
 			)
 	}
 

@@ -2,8 +2,6 @@ package token
 
 import (
 	"context"
-
-	"github.com/theopenlane/utils/contextx"
 )
 
 // OauthTooToken that implements the PrivacyToken interface
@@ -34,7 +32,7 @@ func (token *OauthTooToken) SetEmail(email string) {
 // parent context and a oauth2 token as parameters and returns a new context with
 // the oauth2 token added
 func NewContextWithOauthTooToken(parent context.Context, email string) context.Context {
-	return contextx.With(parent, &OauthTooToken{
+	return oauthTooTokenContextKey.Set(parent, &OauthTooToken{
 		email: email,
 	})
 }
@@ -44,7 +42,7 @@ func NewContextWithOauthTooToken(parent context.Context, email string) context.C
 // It then type asserts the value to an OauthTooToken and returns it. If the
 // value is not of type OauthTooToken, it returns nil
 func OauthTooTokenFromContext(ctx context.Context) *OauthTooToken {
-	token, ok := contextx.From[*OauthTooToken](ctx)
+	token, ok := oauthTooTokenContextKey.Get(ctx)
 	if !ok {
 		return nil
 	}

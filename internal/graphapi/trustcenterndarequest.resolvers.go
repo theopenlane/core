@@ -18,30 +18,19 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
 func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error) {
-	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+	if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
 		if input.TrustCenterID == nil || *input.TrustCenterID != anon.TrustCenterID {
 			return nil, rout.ErrPermissionDenied
 		}
 
-		ctx = contextx.With(
-			privacy.DecisionContext(
-				auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
-					SubjectID:          anon.SubjectID,
-					SubjectName:        anon.SubjectName,
-					SubjectEmail:       anon.SubjectEmail,
-					OrganizationID:     anon.OrganizationID,
-					OrganizationIDs:    []string{anon.OrganizationID},
-					AuthenticationType: anon.AuthenticationType,
-				}),
-				privacy.Allow,
-			),
-			auth.TrustCenterNDAContextKey{OrgID: anon.OrganizationID},
+		ctx = auth.WithCaller(
+			privacy.DecisionContext(ctx, privacy.Allow),
+			auth.NewTrustCenterCaller(anon.OrganizationID, anon.SubjectID, anon.SubjectName, anon.SubjectEmail),
 		)
 	}
 
@@ -178,7 +167,7 @@ func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, 
 // RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
 func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error) {
 	// check if the nda for the user and trust center combination is signed
-	anonReq, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
+	anonReq, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey)
 	if !ok {
 		return nil, rout.ErrPermissionDenied
 	}

@@ -57,9 +57,9 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	}
 
 	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(userCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	if h.IntegrationStore == nil {
@@ -70,7 +70,7 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	state, err := h.generateOAuthState(user.OrganizationID, string(github.TypeGitHubApp))
+	state, err := h.generateOAuthState(caller.OrganizationID, string(github.TypeGitHubApp))
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Msg("error generating github app state")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -84,8 +84,8 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	cfg := h.getOauthCookieConfig()
 	h.setOAuthCookies(ctx, cfg, map[string]string{
 		githubAppStateCookieName:  state,
-		githubAppOrgIDCookieName:  user.OrganizationID,
-		githubAppUserIDCookieName: user.SubjectID,
+		githubAppOrgIDCookieName:  caller.OrganizationID,
+		githubAppUserIDCookieName: caller.SubjectID,
 	})
 
 	out := openapi.GitHubAppInstallResponse{
@@ -161,12 +161,12 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	// Mirror integration_flow behavior: use cookie/state context to set the authenticated user.
-	auth.SetAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
+	ctx.SetRequest(ctx.Request().WithContext(auth.WithCaller(ctx.Request().Context(), &auth.Caller{
 		SubjectID:          userCookie.Value,
 		OrganizationID:     orgID,
 		OrganizationIDs:    []string{orgID},
 		AuthenticationType: auth.JWTAuthentication,
-	})
+	})))
 	reqCtx = ctx.Request().Context()
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)

@@ -41,7 +41,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				// assessments do not require a template id to be there
 				// because not all assessments are tied to a template,
 				// some are created from scratch
-				_, ok := auth.AnonymousQuestionnaireUserFromContext(ctx)
+				_, ok := auth.ContextValue(ctx, auth.AnonymousQuestionnaireUserKey)
 				if ok {
 					return next.Mutate(ctx, m)
 				}
@@ -58,7 +58,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
+			anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey)
 			if !ok || anon.SubjectEmail == "" || anon.TrustCenterID == "" || anon.OrganizationID == "" {
 				return nil, errMustBeAnonymousUser
 			}
@@ -171,12 +171,15 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errOnlyOneDocumentData
 			}
 
-			// first checks the authenticated user context,
-			// second checks specifically for the SystemAdminContextKey key in the context
-			if !auth.IsSystemAdminFromContext(ctx) {
-				if user, ok := auth.SystemAdminFromContext(ctx); ok && !user.IsSystemAdmin {
-					return nil, generated.ErrPermissionDenied
+			isSystemAdmin := auth.IsSystemAdminFromContext(ctx)
+			if !isSystemAdmin {
+				if admin, ok := auth.OriginalSystemAdminCallerFromContext(ctx); ok && admin != nil && admin.Has(auth.CapSystemAdmin) {
+					isSystemAdmin = true
 				}
+			}
+
+			if !isSystemAdmin {
+				return nil, generated.ErrPermissionDenied
 			}
 
 			id, err := m.OldTemplateID(ctx)

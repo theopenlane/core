@@ -65,16 +65,16 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		tokens.WithDownloadTokenExpiresIn(duration),
 	}
 
-	authUser, ok := auth.AuthenticatedUserFromContext(ctx)
-	if !ok {
+	proxyCaller, proxyOk := auth.CallerFromContext(ctx)
+	if !proxyOk || proxyCaller == nil {
 		return "", ErrAuthenticatedUserRequired
 	}
 
-	if userID, err := ulid.Parse(authUser.SubjectID); err == nil {
+	if userID, err := ulid.Parse(proxyCaller.SubjectID); err == nil {
 		options = append(options, tokens.WithDownloadTokenUserID(userID))
 	}
 
-	if orgID, err := ulid.Parse(authUser.OrganizationID); err == nil {
+	if orgID, err := ulid.Parse(proxyCaller.OrganizationID); err == nil {
 		options = append(options, tokens.WithDownloadTokenOrgID(orgID))
 	}
 
@@ -93,7 +93,7 @@ func GenerateDownloadURL(ctx context.Context, file *storagetypes.File, duration 
 		SetFileID(file.ID).
 		SetSecret(secret)
 
-	create.SetOwnerID(authUser.SubjectID)
+	create.SetOwnerID(proxyCaller.SubjectID)
 
 	if !downloadToken.ExpiresAt.IsZero() {
 		create.SetTTL(downloadToken.ExpiresAt.UTC().Truncate(time.Microsecond))

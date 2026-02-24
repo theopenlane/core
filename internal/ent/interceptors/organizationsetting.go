@@ -26,10 +26,12 @@ func InterceptorOrganizationSetting() ent.Interceptor {
 			return nil
 		}
 
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			return err
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		orgIDs := caller.OrgIDs()
 
 		// sets the organization id on the query for the current organization
 		q.WhereP(organizationsetting.OrganizationIDIn(orgIDs...))

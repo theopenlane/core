@@ -1103,9 +1103,11 @@ func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 
 	// If no input provided, fallback to a single authorized org (e.g., API token with one org)
 	if inputOrgID == nil {
-		if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil {
-			if len(au.OrganizationIDs) == 1 && au.OrganizationIDs[0] != "" {
-				return auth.SetOrganizationIDInAuthContext(ctx, au.OrganizationIDs[0])
+		if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+			orgIDs := caller.OrgIDs()
+			if len(orgIDs) == 1 && orgIDs[0] != "" {
+				caller.OrganizationID = orgIDs[0]
+				return auth.SetOrganizationIDInAuthContext(ctx, orgIDs[0])
 			}
 		}
 	}
@@ -1143,8 +1145,8 @@ func checkOrgInContext(ctx context.Context) (bool, error) {
 		return true, nil
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err == nil && orgID != "" {
+	caller, ok := auth.CallerFromContext(ctx)
+	if ok && caller != nil && caller.OrganizationID != "" {
 		return true, nil
 	}
 
@@ -1160,17 +1162,17 @@ func setOrgFromInputInContext(ctx context.Context, inputOrgID *string) error {
 	}
 
 	// ensure this org is authenticated
-	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-	if err != nil {
-		return err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return auth.ErrNoAuthUser
 	}
+	orgIDs := caller.OrgIDs()
 
 	if !lo.Contains(orgIDs, *inputOrgID) {
 		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, *inputOrgID)
 	}
 
-	err = auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID)
-	if err != nil {
+	if err := auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID); err != nil {
 		return err
 	}
 
@@ -1180,12 +1182,12 @@ func setOrgFromInputInContext(ctx context.Context, inputOrgID *string) error {
 // CheckAllowedAuthType checks how the user is authenticated and returns an error
 // if the user is authenticated with an API token for a user owned setting
 func CheckAllowedAuthType(ctx context.Context) error {
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return auth.ErrNoAuthUser
 	}
 
-	if ac.AuthenticationType == auth.APITokenAuthentication {
+	if caller.AuthenticationType == auth.APITokenAuthentication {
 		return fmt.Errorf("%w: unable to use API token to update user settings", rout.ErrBadRequest)
 	}
 
@@ -1322,7 +1324,7 @@ func ConvertToObject[J any](obj any) (*J, error) {
 // setOrganizationForUploads ensures an organization is present in the auth context
 // we want this for token-authenticated requests where the active org is not pre-selected (e.g., PATs)
 func setOrganizationForUploads(ctx context.Context, variables map[string]any, inputKey string) error {
-	if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil && orgID != "" {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
 		return nil
 	}
 

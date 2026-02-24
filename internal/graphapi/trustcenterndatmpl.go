@@ -10,7 +10,6 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
@@ -191,14 +190,12 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 // submitTrustCenterNDAResponse submits a trust center NDA response
 func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
-	anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
+	anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey)
 	if !ok || anon.SubjectEmail == "" || anon.TrustCenterID == "" || anon.OrganizationID == "" {
 		return nil, newPermissionDeniedError()
 	}
 
-	allowCtx := contextx.With(privacy.DecisionContext(ctx, privacy.Allow), auth.TrustCenterNDAContextKey{
-		OrgID: anon.OrganizationID,
-	})
+	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), auth.NewTrustCenterCaller(anon.OrganizationID, anon.SubjectID, anon.SubjectName, anon.SubjectEmail))
 
 	txnCtx := withTransactionalMutation(allowCtx)
 

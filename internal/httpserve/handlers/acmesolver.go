@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -26,7 +25,7 @@ func (h *Handler) ACMESolverHandler(ctx echo.Context, openapi *OpenAPIContext) e
 	}
 
 	allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow) // bypass privacy policy
-	allowCtx = contextx.With(allowCtx, auth.AcmeSolverContextKey{})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewAcmeSolverCaller(""))
 
 	res, err := h.DBClient.DNSVerification.Query().Where(
 		dnsverification.AcmeChallengePathEQ(in.Path),

@@ -37,12 +37,12 @@ func InterceptorOrganization() ent.Interceptor {
 		// Authenticated users should have their organizations IDs set in their auth context
 		// after logging in, check this first before using the AddIDPredicate and requiring a
 		// query to fga
-		au, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err == nil && len(au.OrganizationIDs) > 0 {
+		caller, ok := auth.CallerFromContext(ctx)
+		if ok && caller != nil && len(caller.OrgIDs()) > 0 {
 			// if the request is not using a JWT, we can restrict to the authorized orgs
 			// from the context
-			if au.AuthenticationType != auth.JWTAuthentication {
-				q.WhereP(organization.IDIn(au.OrganizationIDs...))
+			if caller.AuthenticationType != auth.JWTAuthentication {
+				q.WhereP(organization.IDIn(caller.OrgIDs()...))
 
 				return nil
 			}
@@ -81,7 +81,7 @@ func InterceptorOrganization() ent.Interceptor {
 			}
 
 			// other requests can fall back to the authorized orgs
-			q.WhereP(organization.IDIn(au.OrganizationIDs...))
+			q.WhereP(organization.IDIn(caller.OrgIDs()...))
 
 			return nil
 		}

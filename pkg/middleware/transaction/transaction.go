@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/logx"
@@ -26,17 +27,17 @@ type Client struct {
 	EntDBClient *ent.Client
 }
 
-type entClientCtxKey struct{}
+var entClientContextKey = contextx.NewKey[*ent.Tx]()
 
 // FromContext returns a TX Client stored inside a context, or nil if there isn't one
 func FromContext(ctx context.Context) *ent.Tx {
-	c, _ := ctx.Value(entClientCtxKey{}).(*ent.Tx)
+	c, _ := entClientContextKey.Get(ctx)
 	return c
 }
 
 // NewContext returns a new context with the given TX Client attached
 func NewContext(parent context.Context, c *ent.Tx) context.Context {
-	return context.WithValue(parent, entClientCtxKey{}, c)
+	return entClientContextKey.Set(parent, c)
 }
 
 // Middleware returns a middleware function for transactions on REST endpoints

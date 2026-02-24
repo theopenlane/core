@@ -57,7 +57,10 @@ func (e *WorkflowEngine) EvaluateConditions(ctx context.Context, def *generated.
 		return true, nil
 	}
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx)
+	userID := ""
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+		userID = caller.SubjectID
+	}
 
 	vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
 
@@ -230,7 +233,10 @@ func (e *WorkflowEngine) matchesTriggers(ctx context.Context, scope *observabili
 
 		// Evaluate trigger expression if present
 		if trigger.Expression != "" {
-			userID, _ := auth.GetSubjectIDFromContext(ctx)
+			userID := ""
+			if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+				userID = caller.SubjectID
+			}
 			vars := workflows.BuildCELVars(obj, changedFields, changedEdges, addedIDs, removedIDs, eventType, userID, proposedChanges)
 
 			result, err := e.celEvaluator.Evaluate(ctx, trigger.Expression, vars)

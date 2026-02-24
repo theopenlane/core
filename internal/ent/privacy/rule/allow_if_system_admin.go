@@ -29,20 +29,11 @@ func AllowQueryIfSystemAdmin() privacy.QueryRule {
 // it uses the context, instead of checking the authz client directly
 // this value will be set my the auth middleware
 func systemAdminCheck(ctx context.Context) error {
-	allow, err := CheckIsSystemAdminWithContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	if allow {
+	if auth.IsSystemAdminFromContext(ctx) {
 		return privacy.Allow
 	}
 
-	// this covers the impersonation path where the
-	// auth context is no longer an admin, but
-	// the original user was an admin
-	admin, ok := auth.SystemAdminFromContext(ctx)
-	if ok && admin.IsSystemAdmin {
+	if admin, ok := auth.OriginalSystemAdminCallerFromContext(ctx); ok && admin != nil && admin.Has(auth.CapSystemAdmin) {
 		return privacy.Allow
 	}
 

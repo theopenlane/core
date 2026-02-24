@@ -88,10 +88,12 @@ func (h *UserHandler) Create(r *http.Request, attributes scim.ResourceAttributes
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return scim.Resource{}, ErrOrgNotFound
 	}
+
+	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
@@ -171,10 +173,12 @@ func (h *UserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return scim.Resource{}, ErrOrgNotFound
 	}
+
+	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
@@ -197,10 +201,12 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return scim.Page{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return scim.Page{}, ErrOrgNotFound
 	}
+
+	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Page{}, err
@@ -250,10 +256,12 @@ func (h *UserHandler) Replace(r *http.Request, id string, attributes scim.Resour
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return scim.Resource{}, ErrOrgNotFound
 	}
+
+	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
@@ -332,10 +340,12 @@ func (h *UserHandler) Delete(r *http.Request, id string) error {
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return ErrOrgNotFound
 	}
+
+	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return err
@@ -363,10 +373,12 @@ func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchO
 	ctx = context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
 	client := transaction.FromContext(ctx)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return scim.Resource{}, fmt.Errorf("%w: %w", ErrOrgNotFound, err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return scim.Resource{}, ErrOrgNotFound
 	}
+
+	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err

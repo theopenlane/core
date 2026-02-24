@@ -53,7 +53,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	emitCtx := gala.WithFlag(context.Background(), gala.ContextFlagWorkflowBypass)
 	emitCtx = gala.WithFlag(emitCtx, gala.ContextFlagWorkflowAllowEventEmission)
 	emitCtx = contextx.With(emitCtx, galaAdapterTestActor{ID: "actor_123"})
-	emitCtx = auth.WithAuthenticatedUser(emitCtx, &auth.AuthenticatedUser{
+	emitCtx = auth.WithCaller(emitCtx, &auth.Caller{
 		SubjectID:          "subject_123",
 		OrganizationID:     "org_123",
 		OrganizationRole:   auth.OwnerRole,
@@ -78,10 +78,10 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	restoredContext, err := runtime.ContextManager().Restore(context.Background(), envelope.ContextSnapshot)
 	assert.NoError(t, err)
 
-	restoredUser, err := auth.GetAuthenticatedUserFromContext(restoredContext)
-	assert.NoError(t, err)
-	assert.Equal(t, "subject_123", restoredUser.SubjectID)
-	assert.Equal(t, "org_123", restoredUser.OrganizationID)
+	restoredCaller, restoredOk := auth.CallerFromContext(restoredContext)
+	require.True(t, restoredOk)
+	require.Equal(t, "subject_123", restoredCaller.SubjectID)
+	require.Equal(t, "org_123", restoredCaller.OrganizationID)
 
 	decodedAny, err := runtime.Registry().DecodePayload(topic.Name, envelope.Payload)
 	assert.NoError(t, err)

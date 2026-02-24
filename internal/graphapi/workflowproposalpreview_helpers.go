@@ -40,8 +40,8 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		return nil, nil
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	instanceCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || instanceCaller == nil || instanceCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
 
@@ -49,14 +49,14 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		ObjectType:  fgax.Kind(strcase.SnakeCase(objectType.String())),
 		ObjectID:    objectID,
 		Relation:    fgax.CanEdit,
-		SubjectID:   userID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   instanceCaller.SubjectID,
+		SubjectType: instanceCaller.SubjectType(),
 	})
 	if err != nil {
 		return nil, err
 	}
 	if !allow {
-		isApprover, err := workflowInstanceHasApprover(ctx, r.db, instance.ID, userID)
+		isApprover, err := workflowInstanceHasApprover(ctx, r.db, instance.ID, instanceCaller.SubjectID)
 		if err != nil {
 			return nil, err
 		}
@@ -89,8 +89,8 @@ func (r *Resolver) workflowProposalPreview(ctx context.Context, proposal *genera
 		return nil, nil
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	proposalCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || proposalCaller == nil || proposalCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
 
@@ -98,14 +98,14 @@ func (r *Resolver) workflowProposalPreview(ctx context.Context, proposal *genera
 		ObjectType:  fgax.Kind(strcase.SnakeCase(objectType.String())),
 		ObjectID:    objectID,
 		Relation:    fgax.CanEdit,
-		SubjectID:   userID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   proposalCaller.SubjectID,
+		SubjectType: proposalCaller.SubjectType(),
 	})
 	if err != nil {
 		return nil, err
 	}
 	if !allow {
-		isApprover, err := workflowProposalHasApprover(ctx, r.db, proposal.ID, userID)
+		isApprover, err := workflowProposalHasApprover(ctx, r.db, proposal.ID, proposalCaller.SubjectID)
 		if err != nil {
 			return nil, err
 		}

@@ -2,8 +2,6 @@ package token
 
 import (
 	"context"
-
-	"github.com/theopenlane/utils/contextx"
 )
 
 // DownloadToken that implements the PrivacyToken interface
@@ -32,14 +30,14 @@ func (token *DownloadToken) SetToken(t string) {
 
 // NewContextWithDownloadToken returns a new context with the verify token inside
 func NewContextWithDownloadToken(parent context.Context, downloadToken string) context.Context {
-	return contextx.With(parent, &DownloadToken{
+	return downloadTokenContextKey.Set(parent, &DownloadToken{
 		token: downloadToken,
 	})
 }
 
 // DownloadTokenFromContext parses a context for a verify token and returns the token
 func DownloadTokenFromContext(ctx context.Context) *DownloadToken {
-	token, ok := contextx.From[*DownloadToken](ctx)
+	token, ok := downloadTokenContextKey.Get(ctx)
 	if !ok {
 		return nil
 	}

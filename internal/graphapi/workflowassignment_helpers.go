@@ -47,7 +47,10 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 		return nil, rout.ErrPermissionDenied
 	}
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx) // error already validated by assertAssignmentActor
+	var userID string
+	if assignCaller, ok := auth.CallerFromContext(ctx); ok && assignCaller != nil {
+		userID = assignCaller.SubjectID
+	}
 
 	return &AssignmentDecisionContext{
 		Assignment: assignment,
@@ -58,10 +61,11 @@ func (r *mutationResolver) validateAssignmentDecision(ctx context.Context, id st
 
 // assertAssignmentActor checks that the user in the context is a valid actor for the given assignment
 func (r *mutationResolver) assertAssignmentActor(ctx context.Context, assignment *generated.WorkflowAssignment) error {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	actorCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || actorCaller == nil || actorCaller.SubjectID == "" {
 		return rout.ErrPermissionDenied
 	}
+	userID := actorCaller.SubjectID
 
 	directTarget, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().
 		Where(

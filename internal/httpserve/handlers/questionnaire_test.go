@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -72,11 +71,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 
 	testEmail := "test@example.com"
 
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", testEmail))
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
@@ -215,11 +210,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 
 	testEmail := "notemplate@example.com"
 
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", testEmail))
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
@@ -295,12 +286,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
 	}
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	questionnaireCtx = auth.WithContextValue(questionnaireCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	documentData, err := suite.db.DocumentData.Create().
 		SetTemplateID(template.ID).
@@ -325,12 +312,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	require.NotNil(t, job)
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
-	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
-	allowCtx = auth.WithAuthenticatedUser(allowCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	allowCtx = auth.WithContextValue(allowCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	assessmentResponse, err = suite.db.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).
@@ -426,12 +409,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireReturnsDraftData() {
 		AssessmentID:   assessment.ID,
 	}
 
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      anonUser.SubjectID,
-		OrganizationID: anonUser.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	questionnaireCtx = auth.WithContextValue(questionnaireCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
@@ -606,12 +585,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 		AssessmentID:   assessment.ID,
 	}
 
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	questionnaireCtx = auth.WithContextValue(questionnaireCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
@@ -781,12 +756,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		OrganizationID: testUser1.OrganizationID,
 		AssessmentID:   assessment.ID,
 	}
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	questionnaireCtx = auth.WithContextValue(questionnaireCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	documentData, err := suite.db.DocumentData.Create().
 		SetTemplateID(template.ID).
@@ -811,8 +782,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	require.NotNil(t, job)
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
-	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+	allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	allowCtx = auth.WithContextValue(allowCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	assessmentResponse, err = suite.db.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).
@@ -975,7 +946,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAuthenticatedUser() {
 			req.Header.Set("Content-Type", "application/json")
 
 			reqCtx := testUser1.UserCtx
-			reqCtx = auth.WithAuthenticatedUser(reqCtx, &auth.AuthenticatedUser{
+			reqCtx = auth.WithCaller(reqCtx, &auth.Caller{
 				SubjectID:      testUser1.ID,
 				SubjectEmail:   testUser1.UserInfo.Email,
 				OrganizationID: testUser1.OrganizationID,
@@ -1077,12 +1048,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireDraft() {
 		AssessmentID:   assessment.ID,
 	}
 
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      anonUser.SubjectID,
-		OrganizationID: anonUser.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
+	questionnaireCtx = auth.WithContextValue(questionnaireCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).

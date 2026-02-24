@@ -19,7 +19,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/entx/accessmap"
 
@@ -376,11 +375,7 @@ var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutat
 		return true
 	}
 
-	if _, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); ok {
-		return true
-	}
-
-	if _, ok := contextx.From[auth.QuestionnaireContextKey](ctx); ok {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassFGA) {
 		return true
 	}
 

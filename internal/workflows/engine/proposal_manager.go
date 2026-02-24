@@ -149,10 +149,12 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 func (m *ProposalManager) Apply(scope *observability.Scope, proposalID string, obj *workflows.Object) error {
 	ctx := scope.Context()
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return auth.ErrNoAuthUser
 	}
+
+	orgID := caller.OrganizationID
 
 	allowCtx := workflows.AllowContext(ctx)
 	proposal, err := m.client.WorkflowProposal.Query().

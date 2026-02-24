@@ -34,8 +34,8 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 	ownerID := ""
 	if input.OwnerID != nil {
 		ownerID = *input.OwnerID
-	} else if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil {
-		ownerID = orgID
+	} else if wdCaller, ok := auth.CallerFromContext(ctx); ok && wdCaller != nil {
+		ownerID = wdCaller.OrganizationID
 	}
 
 	if err := validateWorkflowDefinitionTemplateRefs(ctx, withTransactionalMutation(ctx), input.DefinitionJSON, ownerID); err != nil {

@@ -44,13 +44,13 @@ func HookMembershipSelf(table string) ent.Hook {
 			}
 
 			// check if group member is the authenticated user
-			au, err := auth.GetAuthenticatedUserFromContext(ctx)
-			if err != nil {
-				return nil, err
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil {
+				return nil, auth.ErrNoAuthUser
 			}
 
 			// if the user is an org owner, skip the check
-			if au.OrganizationRole == auth.OwnerRole {
+			if caller.OrganizationRole == auth.OwnerRole {
 				// ensure this is not an org membership mutation, owners cannot update their own membership
 				// in the organization, it must be done via a transfer
 				if m.Type() != generated.TypeOrgMembership {
@@ -60,7 +60,7 @@ func HookMembershipSelf(table string) ent.Hook {
 
 			// fallback to fgax check for owner relation access if org role is not available
 			// in the context
-			if au.OrganizationRole == "" {
+			if caller.OrganizationRole == "" {
 				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
 					// ensure this is not an org membership mutation, owners cannot update their own membership
 					// in the organization, it must be done via a transfer
@@ -76,14 +76,14 @@ func HookMembershipSelf(table string) ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				if err := createMembershipCheck(mutationMember, au.SubjectID); err != nil {
+				if err := createMembershipCheck(mutationMember, caller.SubjectID); err != nil {
 					logx.FromContext(ctx).Error().Msg("cannot create membership")
 
 					return nil, err
 				}
 			}
 
-			if err := updateMembershipCheck(ctx, mutationMember, table, au.SubjectID); err != nil {
+			if err := updateMembershipCheck(ctx, mutationMember, table, caller.SubjectID); err != nil {
 				return nil, err
 			}
 

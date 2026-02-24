@@ -6,8 +6,6 @@ import (
 
 	"entgo.io/ent/entql"
 
-	"github.com/theopenlane/utils/contextx"
-
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -30,7 +28,7 @@ func AllowIfContextHasPrivacyTokenOfType[T token.PrivacyToken]() privacy.QueryMu
 
 // ContextHasPrivacyTokenOfType checks the context for the token type and returns true if they match
 func ContextHasPrivacyTokenOfType[T token.PrivacyToken](ctx context.Context) bool {
-	_, ok := contextx.From[T](ctx)
+	_, ok := privacyTokenFromContext[T](ctx)
 	if !ok {
 		return false
 	}
@@ -59,7 +57,7 @@ func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken]() privacy.QueryMutatio
 				return privacy.Denyf("unable to cast to token filter")
 			}
 
-			actualToken, ok := contextx.From[T](ctx)
+			actualToken, ok := privacyTokenFromContext[T](ctx)
 
 			if ok {
 				tokenFilter.WhereToken(entql.StringEQ(actualToken.GetToken()))
@@ -79,33 +77,59 @@ func AllowAfterApplyingPrivacyTokenFilter[T PrivacyToken]() privacy.QueryMutatio
 // of a token in the context
 func SkipTokenInContext(ctx context.Context, skipTypes []token.PrivacyToken) bool {
 	for _, tokenType := range skipTypes {
-		switch reflect.TypeOf(tokenType) {
-		case reflect.TypeOf(&token.VerifyToken{}):
-			if ContextHasPrivacyTokenOfType[*token.VerifyToken](ctx) {
-				return true
-			}
-		case reflect.TypeOf(&token.OrgInviteToken{}):
-			if ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx) {
-				return true
-			}
-		case reflect.TypeOf(&token.SignUpToken{}):
-			if ContextHasPrivacyTokenOfType[*token.SignUpToken](ctx) {
-				return true
-			}
-		case reflect.TypeOf(&token.OauthTooToken{}):
-			if ContextHasPrivacyTokenOfType[*token.OauthTooToken](ctx) {
-				return true
-			}
-		case reflect.TypeOf(&token.ResetToken{}):
-			if ContextHasPrivacyTokenOfType[*token.ResetToken](ctx) {
-				return true
-			}
-		case reflect.TypeOf(&token.JobRunnerRegistrationToken{}):
-			if ContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](ctx) {
-				return true
-			}
+		if tokenType == nil {
+			continue
+		}
+
+		if _, ok := privacyTokenFromContextByType(ctx, reflect.TypeOf(tokenType)); ok {
+			return true
 		}
 	}
 
 	return false
+}
+
+func privacyTokenFromContext[T any](ctx context.Context) (T, bool) {
+	var zero T
+
+	tokenType := reflect.TypeOf((*T)(nil)).Elem()
+	rawToken, ok := privacyTokenFromContextByType(ctx, tokenType)
+	if !ok {
+		return zero, false
+	}
+
+	typedToken, ok := rawToken.(T)
+	if !ok {
+		return zero, false
+	}
+
+	return typedToken, true
+}
+
+func privacyTokenFromContextByType(ctx context.Context, tokenType reflect.Type) (any, bool) {
+	switch tokenType {
+	case reflect.TypeOf(&token.VerifyToken{}):
+		t := token.VerifyTokenFromContext(ctx)
+		return t, t != nil
+	case reflect.TypeOf(&token.OrgInviteToken{}):
+		t := token.OrgInviteTokenFromContext(ctx)
+		return t, t != nil
+	case reflect.TypeOf(&token.SignUpToken{}):
+		t := token.EmailSignUpTokenFromContext(ctx)
+		return t, t != nil
+	case reflect.TypeOf(&token.OauthTooToken{}):
+		t := token.OauthTooTokenFromContext(ctx)
+		return t, t != nil
+	case reflect.TypeOf(&token.ResetToken{}):
+		t := token.ResetTokenFromContext(ctx)
+		return t, t != nil
+	case reflect.TypeOf(&token.JobRunnerRegistrationToken{}):
+		t := token.JobRunnerRegistrationTokenFromContext(ctx)
+		return t, t != nil
+	case reflect.TypeOf(&token.DownloadToken{}):
+		t := token.DownloadTokenFromContext(ctx)
+		return t, t != nil
+	default:
+		return nil, false
+	}
 }

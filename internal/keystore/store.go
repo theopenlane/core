@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // Store persists credential payloads using Ent-backed integrations and hush secrets
@@ -53,7 +52,7 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	systemCtx = contextx.With(systemCtx, auth.KeyStoreContextKey{})
+	systemCtx = auth.WithCaller(systemCtx, auth.NewKeystoreCaller())
 
 	integrationRecord, err := s.ensureIntegration(systemCtx, orgID, payload.Provider)
 	if err != nil {

@@ -53,7 +53,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			email, _ := m.Email()
 
 			queryCtx := ctx
-			if _, isAnon := auth.AnonymousTrustCenterUserFromContext(ctx); isAnon {
+			if _, isAnon := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); isAnon {
 				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
 			}
 

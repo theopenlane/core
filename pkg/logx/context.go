@@ -12,6 +12,8 @@ import (
 // LogFields holds structured log fields that can be captured and restored.
 type LogFields map[string]any
 
+var logFieldsContextKey = contextx.NewKey[LogFields]()
+
 // WithContext returns a new context with the provided logger
 func (l Logger) WithContext(ctx context.Context) context.Context {
 	zerologger := l.Unwrap()
@@ -64,7 +66,7 @@ func WithField(ctx context.Context, key string, value any) context.Context {
 
 	logger := FromContext(ctx).With().Interface(key, value).Logger()
 
-	ctx = contextx.With(ctx, fields)
+	ctx = logFieldsContextKey.Set(ctx, fields)
 
 	return logger.WithContext(ctx)
 }
@@ -90,7 +92,7 @@ func WithFields(ctx context.Context, fields map[string]any) context.Context {
 		logCtx = logCtx.Interface(k, v)
 	}
 
-	ctx = contextx.With(ctx, merged)
+	ctx = logFieldsContextKey.Set(ctx, existing)
 
 	return logCtx.Logger().WithContext(ctx)
 }
@@ -101,7 +103,7 @@ func FieldsFromContext(ctx context.Context) LogFields {
 		return nil
 	}
 
-	fields, _ := contextx.From[LogFields](ctx)
+	fields, _ := logFieldsContextKey.Get(ctx)
 
 	return fields
 }

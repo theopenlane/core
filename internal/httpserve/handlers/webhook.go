@@ -15,7 +15,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -158,7 +157,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	}
 
 	newCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
-	newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
+	newCtx = auth.WithCaller(newCtx, auth.NewWebhookCaller(""))
 
 	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
@@ -256,8 +255,8 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 
 // invalidateAPITokens invalidates all API tokens for an organization
 func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)              // bypass privacy policy
-	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{}) // bypass org owned interceptor
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(orgID))
 
 	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
@@ -278,8 +277,8 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 
 // invalidatePersonalAccessTokens invalidates all personal access tokens tokens for an organization
 func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID string) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)              // bypass privacy policy
-	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{}) // bypass org owned interceptor
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(orgID))
 
 	num, err := h.DBClient.PersonalAccessToken.Update().
 		RemoveOrganizationIDs(orgID).
@@ -360,7 +359,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
 
 	orgSubscription, err := transaction.FromContext(ctx).OrgSubscription.Query().
 		Where(orgsubscription.StripeSubscriptionID(subscription.ID)).Only(allowCtx)

@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // convertEchoPathToOpenAPI converts Echo's :param syntax to OpenAPI's {param} syntax
@@ -344,7 +343,7 @@ type registrationContext struct {
 // newRegistrationContext creates a new registration context with the HTTP method
 func newRegistrationContext(method string) *registrationContext {
 	// Create a base context with registration marker
-	baseCtx := contextx.With(context.Background(), common.RegistrationMarker{})
+	baseCtx := common.WithRegistrationMarker(context.Background())
 
 	return &registrationContext{
 		Context: echo.New().NewContext(nil, nil),

@@ -8,7 +8,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 )
@@ -56,8 +55,8 @@ func createAnonymousTrustCenterContext(trustCenterID, organizationID string) con
 	}
 
 	ctx := context.Background()
-	ctx = auth.WithAnonymousTrustCenterUser(ctx, anonUser)
-	return contextx.With(ctx, auth.TrustCenterContextKey{})
+	ctx = auth.WithContextValue(ctx, auth.AnonymousTrustCenterUserKey, anonUser)
+	return auth.WithCaller(ctx, auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", ""))
 }
 
 // createAnonymousTrustCenterContextWithEmail creates a context for an anonymous trust center user with subject email
@@ -74,7 +73,7 @@ func createAnonymousTrustCenterContextWithEmail(trustCenterID, organizationID, e
 	}
 
 	ctx := context.Background()
-	ctx = auth.WithAnonymousTrustCenterUser(ctx, anonUser)
-	ctx = contextx.With(ctx, auth.TrustCenterContextKey{})
+	ctx = auth.WithContextValue(ctx, auth.AnonymousTrustCenterUserKey, anonUser)
+	ctx = auth.WithCaller(ctx, auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", email))
 	return ctx, anonUser
 }

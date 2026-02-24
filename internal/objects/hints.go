@@ -22,6 +22,14 @@ type KnownProviderHint storagetypes.ProviderType
 type SizeBytesHint int64
 type TemplateKindHint enums.TemplateKind
 
+var (
+	moduleHintContextKey            = contextx.NewKey[ModuleHint]()
+	preferredProviderHintContextKey = contextx.NewKey[PreferredProviderHint]()
+	knownProviderHintContextKey     = contextx.NewKey[KnownProviderHint]()
+	sizeBytesHintContextKey         = contextx.NewKey[SizeBytesHint]()
+	templateKindHintContextKey      = contextx.NewKey[TemplateKindHint]()
+)
+
 const TemplateKindMetadataKey = "template_kind"
 
 // PopulateProviderHints ensures standard metadata is present on the file's provider hints
@@ -98,28 +106,68 @@ func ApplyProviderHints(ctx context.Context, hints *storagetypes.ProviderHints) 
 	}
 
 	if module, ok := moduleFromHints(hints); ok {
-		ctx = contextx.With(ctx, ModuleHint(module))
+		ctx = moduleHintContextKey.Set(ctx, ModuleHint(module))
 	}
 
 	if hints.PreferredProvider != "" {
-		ctx = contextx.With(ctx, PreferredProviderHint(hints.PreferredProvider))
+		ctx = preferredProviderHintContextKey.Set(ctx, PreferredProviderHint(hints.PreferredProvider))
 	}
 
 	if hints.KnownProvider != "" {
-		ctx = contextx.With(ctx, KnownProviderHint(hints.KnownProvider))
+		ctx = knownProviderHintContextKey.Set(ctx, KnownProviderHint(hints.KnownProvider))
 	}
 
 	if sizeStr, ok := hints.Metadata["size_bytes"]; ok {
 		if size, err := strconv.ParseInt(sizeStr, 10, 64); err == nil {
-			ctx = contextx.With(ctx, SizeBytesHint(size))
+			ctx = sizeBytesHintContextKey.Set(ctx, SizeBytesHint(size))
 		}
 	}
 
 	if kind, ok := templateKindFromHints(hints); ok {
-		ctx = contextx.With(ctx, TemplateKindHint(kind))
+		ctx = templateKindHintContextKey.Set(ctx, TemplateKindHint(kind))
 	}
 
 	return ctx
+}
+
+// ModuleHintFromContext returns the module hint when present.
+func ModuleHintFromContext(ctx context.Context) (ModuleHint, bool) {
+	return moduleHintContextKey.Get(ctx)
+}
+
+// WithModuleHint returns a context with the module hint set.
+func WithModuleHint(ctx context.Context, module models.OrgModule) context.Context {
+	return moduleHintContextKey.Set(ctx, ModuleHint(module))
+}
+
+// PreferredProviderHintFromContext returns the preferred provider hint when present.
+func PreferredProviderHintFromContext(ctx context.Context) (PreferredProviderHint, bool) {
+	return preferredProviderHintContextKey.Get(ctx)
+}
+
+// KnownProviderHintFromContext returns the known provider hint when present.
+func KnownProviderHintFromContext(ctx context.Context) (KnownProviderHint, bool) {
+	return knownProviderHintContextKey.Get(ctx)
+}
+
+// WithKnownProviderHint returns a context with the known provider hint set.
+func WithKnownProviderHint(ctx context.Context, provider storagetypes.ProviderType) context.Context {
+	return knownProviderHintContextKey.Set(ctx, KnownProviderHint(provider))
+}
+
+// SizeBytesHintFromContext returns the size hint when present.
+func SizeBytesHintFromContext(ctx context.Context) (SizeBytesHint, bool) {
+	return sizeBytesHintContextKey.Get(ctx)
+}
+
+// TemplateKindHintFromContext returns the template kind hint when present.
+func TemplateKindHintFromContext(ctx context.Context) (TemplateKindHint, bool) {
+	return templateKindHintContextKey.Get(ctx)
+}
+
+// WithTemplateKindHint returns a context with the template kind hint set.
+func WithTemplateKindHint(ctx context.Context, kind enums.TemplateKind) context.Context {
+	return templateKindHintContextKey.Set(ctx, TemplateKindHint(kind))
 }
 
 func moduleFromHints(hints *storagetypes.ProviderHints) (models.OrgModule, bool) {

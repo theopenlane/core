@@ -126,18 +126,19 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 
 	// If the actor is a system admin, prefer deriving the organization from the
 	// correlated object rather than using the admin's org from context
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return "", err
+	persistCaller, persistOk := auth.CallerFromContext(ctx)
+	if !persistOk || persistCaller == nil {
+		return "", ErrMissingOrganizationID
 	}
 
-	if !au.IsSystemAdmin {
-		if au.OrganizationID != "" {
-			return au.OrganizationID, nil
+	if !persistCaller.Has(auth.CapSystemAdmin) {
+		if persistCaller.OrganizationID != "" {
+			return persistCaller.OrganizationID, nil
 		}
 
-		if len(au.OrganizationIDs) == 1 {
-			return au.OrganizationIDs[0], nil
+		orgIDs := persistCaller.OrgIDs()
+		if len(orgIDs) == 1 {
+			return orgIDs[0], nil
 		}
 	}
 
@@ -180,7 +181,7 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	// use system admin org if the user is a system admin and we got to here
-	if au.IsSystemAdmin {
+	if persistCaller.Has(auth.CapSystemAdmin) {
 		return consts.SystemAdminOrgID, nil
 	}
 

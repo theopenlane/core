@@ -41,15 +41,15 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUse
 
 			if skip := skipCreateUserPermissions(ctx, m); !skip {
 				// add user permissions to the object on creation
-				subjectID, err := auth.GetSubjectIDFromContext(ctx)
-				if err != nil {
-					return nil, err
+				objCaller, ok := auth.CallerFromContext(ctx)
+				if !ok || objCaller == nil {
+					return nil, auth.ErrNoAuthUser
 				}
 
 				// add user permissions to the object as the parent on creation
 				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
-					SubjectID:   subjectID,
-					SubjectType: auth.GetAuthzSubjectType(ctx),
+					SubjectID:   objCaller.SubjectID,
+					SubjectType: objCaller.SubjectType(),
 					ObjectID:    objectID,                        // this is the object id being created
 					ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 					Relation:    ownerRelation,

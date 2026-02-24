@@ -22,14 +22,14 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 			return privacy.Skipf("mutation is not a create operation, skipping")
 		}
 
-		au, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil || caller.IsAnonymous() {
+			logx.FromContext(ctx).Info().Msg("unable to get caller from context")
 
-			return err
+			return auth.ErrNoAuthUser
 		}
 
-		if au.OrganizationID == "" {
+		if caller.OrganizationID == "" {
 			return privacy.Skipf("no organization set on request, skipping")
 		}
 
@@ -37,12 +37,12 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 		relation := fmt.Sprintf("can_create_%s", strcase.SnakeCase(m.Type()))
 
 		ac := fgax.AccessCheck{
-			SubjectID:   au.SubjectID,
-			SubjectType: auth.GetAuthzSubjectType(ctx),
-			ObjectID:    au.OrganizationID,
+			SubjectID:   caller.SubjectID,
+			SubjectType: caller.SubjectType(),
+			ObjectID:    caller.OrganizationID,
 			ObjectType:  generated.TypeOrganization,
 			Relation:    relation,
-			Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+			Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 		}
 
 		access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
@@ -54,7 +54,7 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 
 		if !access {
 			// deny if the user does not have access to create the object
-			logx.FromContext(ctx).Error().Str("relation", relation).Str("organization_id", au.OrganizationID).Str("user_id", au.SubjectID).Str("email", au.SubjectEmail).Msg("access denied to create object in organization")
+			logx.FromContext(ctx).Error().Str("relation", relation).Str("organization_id", caller.OrganizationID).Str("user_id", caller.SubjectID).Str("email", caller.SubjectEmail).Msg("access denied to create object in organization")
 
 			return generated.ErrPermissionDenied
 		}

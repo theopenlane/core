@@ -64,18 +64,18 @@ func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
 
 // checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
 func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.IsAnonymous() {
+		return auth.ErrNoAuthUser
 	}
 
 	ac := fgax.AccessCheck{
-		SubjectID:   au.SubjectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
 		Relation:    relation,
 		ObjectType:  fgax.Kind(strcase.SnakeCase(generated.TypeTrustCenter)),
 		ObjectID:    trustCenterID,
-		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)

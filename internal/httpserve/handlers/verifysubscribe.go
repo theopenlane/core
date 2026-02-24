@@ -47,7 +47,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 	}
 
 	// add org to the authenticated context
-	reqCtx = auth.WithAuthenticatedUser(ctxWithToken, &auth.AuthenticatedUser{
+	reqCtx = auth.WithCaller(ctxWithToken, &auth.Caller{
 		OrganizationID:  entSubscriber.OwnerID,
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})
