@@ -40,11 +40,19 @@ type responsibilityOption func(*ResponsibilityMixin)
 
 // newResponsibilityMixin creates a ResponsibilityMixin for a schema
 func newResponsibilityMixin(schemaType any, opts ...responsibilityOption) ResponsibilityMixin {
+	accessMapAnnotation := func(objectType string) schema.Annotation {
+		if objectType == "user" {
+			// users are not necessarily viewable, only org members so we need to turn off the auth check
+			// interceptors already filter out non-org members
+			return accessmap.EdgeNoAuthCheck()
+		}
+
+		return accessmap.EdgeViewCheck(objectType)
+	}
+
 	r := ResponsibilityMixin{
-		schemaType: schemaType,
-		accessCheckAnnotation: func(objectType string) schema.Annotation {
-			return accessmap.EdgeViewCheck(objectType)
-		},
+		schemaType:            schemaType,
+		accessCheckAnnotation: accessMapAnnotation,
 	}
 
 	for _, opt := range opts {

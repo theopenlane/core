@@ -172,9 +172,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "internal_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "internal_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "internal_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -265,9 +265,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "internal_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "internal_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "internal_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -907,17 +907,17 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "internal_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "internal_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "internal_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "reviewed_by_user": {
-	ObjectType:      "user",
+	ObjectType:      "reviewed_by_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "reviewed_by_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -1580,9 +1580,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "internal_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "internal_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "internal_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -2645,33 +2645,33 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "internal_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "internal_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "internal_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "business_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "business_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "business_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "technical_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "technical_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "technical_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "security_owner_user": {
-	ObjectType:      "user",
+	ObjectType:      "security_owner_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "security_owner_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -3232,17 +3232,17 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "reviewed_by_user": {
-	ObjectType:      "user",
+	ObjectType:      "reviewed_by_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "reviewed_by_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "assigned_to_user": {
-	ObjectType:      "user",
+	ObjectType:      "assigned_to_user",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "assigned_to_group": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
