@@ -18,14 +18,14 @@ import (
 // AccountAccessHandler checks if a subject has access to an object
 func (h *Handler) AccountAccessHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountAccessRequest, models.ExampleAccountAccessReply,
-		func(reqCtx context.Context, in *models.AccountAccessRequest, subject *auth.AuthenticatedUser) (*models.AccountAccessReply, error) {
+		func(reqCtx context.Context, in *models.AccountAccessRequest, caller *auth.Caller) (*models.AccountAccessReply, error) {
 			req := fgax.AccessCheck{
 				SubjectType: in.SubjectType,
 				Relation:    in.Relation,
 				ObjectID:    in.ObjectID,
 				ObjectType:  fgax.Kind(in.ObjectType),
-				SubjectID:   subject.SubjectID,
-				Context:     utils.NewOrganizationContextKey(subject.SubjectEmail),
+				SubjectID:   caller.SubjectID,
+				Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 			}
 
 			allow, err := h.DBClient.Authz.CheckAccess(reqCtx, req)

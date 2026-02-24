@@ -21,9 +21,13 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 		return nil, common.ErrInternalServerError
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user ID from context: %w", err)
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
+	}
+	userID := caller.SubjectID
+	if userID == "" {
+		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
 
 	// Create a channel with the interface type for the subscription manager

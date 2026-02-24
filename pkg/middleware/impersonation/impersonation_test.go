@@ -271,7 +271,7 @@ func TestRequireImpersonationScope(t *testing.T) {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -289,7 +289,7 @@ func TestRequireImpersonationScope(t *testing.T) {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -307,7 +307,7 @@ func TestRequireImpersonationScope(t *testing.T) {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -373,7 +373,7 @@ func TestBlockImpersonation(t *testing.T) {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -441,7 +441,7 @@ func TestAllowOnlyImpersonationType(t *testing.T) {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -458,7 +458,7 @@ func TestAllowOnlyImpersonationType(t *testing.T) {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -524,11 +524,10 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 			name: "non-admin user - passes through",
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
-					SubjectID:     "user123",
-					IsSystemAdmin: false,
+				user := &auth.Caller{
+					SubjectID: "user123",
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			expectedStatus: http.StatusOK,
 		},
@@ -536,11 +535,11 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 			name: "system admin without headers - passes through",
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
-					SubjectID:     "admin123",
-					IsSystemAdmin: true,
+				user := &auth.Caller{
+					SubjectID:    "admin123",
+					Capabilities: auth.CapSystemAdmin,
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			expectedStatus: http.StatusOK,
 		},
@@ -548,13 +547,13 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 			name: "system admin with user context headers - switches context",
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
+				user := &auth.Caller{
 					SubjectID:      "admin123",
 					SubjectEmail:   "admin@example.com",
 					OrganizationID: "org-admin",
-					IsSystemAdmin:  true,
+					Capabilities:   auth.CapSystemAdmin,
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			setupHeaders: func(r *http.Request) {
 				r.Header.Set("X-User-ID", "target-user-456")
@@ -563,17 +562,17 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 			expectedStatus: http.StatusOK,
 			checkContext: func(t *testing.T, c echo.Context) {
 				// Check that the user context was switched
-				user, ok := auth.AuthenticatedUserFromContext(c.Request().Context())
+				user, ok := auth.CallerFromContext(c.Request().Context())
 				assert.True(t, ok)
 				assert.Equal(t, "target-user-456", user.SubjectID)
 				assert.Equal(t, "target-org-789", user.OrganizationID)
-				assert.False(t, user.IsSystemAdmin) // Target user should not inherit admin status
+				assert.False(t, user.Has(auth.CapSystemAdmin)) // Target user should not inherit admin status
 
-				// Check that original admin is stored
-				adminUser, ok := auth.SystemAdminFromContext(c.Request().Context())
+				// Check that original admin is preserved for downstream fallback checks.
+				adminUser, ok := auth.OriginalSystemAdminCallerFromContext(c.Request().Context())
 				assert.True(t, ok)
 				assert.Equal(t, "admin123", adminUser.SubjectID)
-				assert.True(t, adminUser.IsSystemAdmin)
+				assert.True(t, adminUser.Has(auth.CapSystemAdmin))
 			},
 		},
 	}

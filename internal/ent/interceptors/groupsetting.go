@@ -30,10 +30,12 @@ func InterceptorGroupSetting() ent.Interceptor {
 			return nil
 		}
 
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			return err
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		orgIDs := caller.OrgIDs()
 
 		q.WhereP(
 			groupsetting.Or(

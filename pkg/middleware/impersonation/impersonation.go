@@ -63,7 +63,7 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 // createImpersonatedUser creates an ImpersonatedUser from impersonation claims
 func (m *Middleware) createImpersonatedUser(claims *tokens.ImpersonationClaims) (*auth.ImpersonatedUser, error) {
 	// Create the target user (who is being impersonated)
-	targetUser := &auth.AuthenticatedUser{
+	targetUser := &auth.Caller{
 		SubjectID:          claims.UserID,
 		SubjectEmail:       claims.TargetUserEmail,
 		OrganizationID:     claims.OrgID,
@@ -71,7 +71,7 @@ func (m *Middleware) createImpersonatedUser(claims *tokens.ImpersonationClaims) 
 	}
 
 	// Create the original user (who is doing the impersonation)
-	originalUser := &auth.AuthenticatedUser{
+	originalUser := &auth.Caller{
 		SubjectID:          claims.ImpersonatorID,
 		SubjectEmail:       claims.ImpersonatorEmail,
 		OrganizationID:     claims.OrgID,
@@ -94,7 +94,7 @@ func (m *Middleware) createImpersonatedUser(claims *tokens.ImpersonationClaims) 
 
 	// Create the impersonated user
 	impersonatedUser := &auth.ImpersonatedUser{
-		AuthenticatedUser:    targetUser,
+		Caller:               targetUser,
 		ImpersonationContext: impersonationContext,
 		OriginalUser:         originalUser,
 	}
@@ -177,15 +177,15 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			// Check if there's already an authenticated user (from previous middleware)
-			currentUser, hasUser := auth.AuthenticatedUserFromContext(ctx)
-			if !hasUser {
-				// No authenticated user, continue normally
+			// Check if there's already an authenticated caller (from previous middleware)
+			caller, hasUser := auth.CallerFromContext(ctx)
+			if !hasUser || caller == nil {
+				// No authenticated caller, continue normally
 				return next(c)
 			}
 
 			// Only proceed if the current user is a system admin
-			if !currentUser.IsSystemAdmin {
+			if !caller.Has(auth.CapSystemAdmin) {
 				return next(c)
 			}
 
@@ -196,25 +196,20 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 
 			targetUserID, targetOrgID := auth.GetUserContextHeaders(c)
 
-			// Create user context for the target user
-			targetUser := &auth.AuthenticatedUser{
+			// Preserve the original admin caller for downstream admin-only checks.
+			ctx = auth.WithOriginalSystemAdminCaller(ctx, caller)
+
+			// Replace the caller in the context with the target user
+			ctx = auth.WithCaller(ctx, &auth.Caller{
 				SubjectID:          targetUserID,
-				SubjectEmail:       "", // Will be populated by subsequent middleware if needed
 				OrganizationID:     targetOrgID,
 				OrganizationIDs:    []string{targetOrgID},
 				AuthenticationType: auth.PATAuthentication,
-				IsSystemAdmin:      false, // Target user runs with their own permissions
-			}
-
-			// Store the original admin user in context before switching
-			ctx = auth.WithSystemAdminContext(ctx, currentUser)
-
-			// Replace the authenticated user in the context
-			ctx = auth.WithAuthenticatedUser(ctx, targetUser)
+			})
 			c.SetRequest(c.Request().WithContext(ctx))
 
 			// Log the system admin user context switch
-			log.Info().Str("admin", currentUser.SubjectID).Str("user", targetUserID).Msg("system admin user context")
+			log.Info().Str("admin", caller.SubjectID).Str("user", targetUserID).Msg("system admin user context")
 
 			return next(c)
 		}

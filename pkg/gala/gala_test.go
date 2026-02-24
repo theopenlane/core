@@ -147,24 +147,24 @@ func TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	var observed auth.AuthenticatedUser
+	var observed *auth.Caller
 	if _, err := AttachListener(runtime.Registry(), Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "runtime.test.auth.listener",
 		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
-			au, err := auth.GetAuthenticatedUserFromContext(handlerContext.Context)
-			if err != nil {
-				return err
+			caller, ok := auth.CallerFromContext(handlerContext.Context)
+			if !ok || caller == nil {
+				return auth.ErrNoAuthUser
 			}
 
-			observed = *au
+			observed = caller
 			return nil
 		},
 	}); err != nil {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	emitContext := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	emitContext := auth.WithCaller(context.Background(), &auth.Caller{
 		SubjectID:          "subject_123",
 		SubjectName:        "Codex User",
 		SubjectEmail:       "codex@example.com",
@@ -173,7 +173,7 @@ func TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext(t *testing.T) {
 		OrganizationIDs:    []string{"org_123", "org_234"},
 		AuthenticationType: auth.JWTAuthentication,
 		OrganizationRole:   auth.OwnerRole,
-		IsSystemAdmin:      true,
+		Capabilities:       auth.CapSystemAdmin,
 	})
 
 	encodedPayload, err := runtime.Registry().EncodePayload(topic.Name, runtimeTestPayload{Message: "auth"})
@@ -207,7 +207,7 @@ func TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext(t *testing.T) {
 		t.Fatalf("unexpected organization role %q", observed.OrganizationRole)
 	}
 
-	if !observed.IsSystemAdmin {
+	if !observed.Has(auth.CapSystemAdmin) {
 		t.Fatalf("expected system admin flag to be true")
 	}
 }
@@ -1868,11 +1868,12 @@ func TestContextCodecCaptureWithoutAuthContext(t *testing.T) {
 func TestContextCodecCaptureAndRestore(t *testing.T) {
 	codec := NewContextCodec()
 
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
-		SubjectID:       "subject_test",
-		OrganizationID:  "org_test",
-		OrganizationIDs: []string{"org_1", "org_2"},
-		IsSystemAdmin:   true,
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
+		SubjectID:        "subject_test",
+		OrganizationID:   "org_test",
+		OrganizationName: "org_name_test",
+		OrganizationIDs:  []string{"org_1", "org_2"},
+		Capabilities:     auth.CapSystemAdmin,
 	})
 
 	raw, present, err := codec.Capture(ctx)
@@ -1889,20 +1890,24 @@ func TestContextCodecCaptureAndRestore(t *testing.T) {
 		t.Fatalf("restore failed: %v", err)
 	}
 
-	user, err := auth.GetAuthenticatedUserFromContext(restored)
-	if err != nil {
-		t.Fatalf("failed to get user from restored context: %v", err)
+	restoredCaller, restoredCallerOk := auth.CallerFromContext(restored)
+	if !restoredCallerOk || restoredCaller == nil {
+		t.Fatalf("failed to get caller from restored context")
 	}
 
-	if user.SubjectID != "subject_test" {
-		t.Fatalf("expected subject ID 'subject_test', got %q", user.SubjectID)
+	if restoredCaller.SubjectID != "subject_test" {
+		t.Fatalf("expected subject ID 'subject_test', got %q", restoredCaller.SubjectID)
 	}
 
-	if len(user.OrganizationIDs) != 2 {
-		t.Fatalf("expected 2 organization IDs, got %d", len(user.OrganizationIDs))
+	if len(restoredCaller.OrgIDs()) != 2 {
+		t.Fatalf("expected 2 organization IDs, got %d", len(restoredCaller.OrgIDs()))
 	}
 
-	if !user.IsSystemAdmin {
+	if restoredCaller.OrganizationName != "org_name_test" {
+		t.Fatalf("expected organization name 'org_name_test', got %q", restoredCaller.OrganizationName)
+	}
+
+	if !restoredCaller.Has(auth.CapSystemAdmin) {
 		t.Fatalf("expected IsSystemAdmin to be true")
 	}
 }
@@ -1916,7 +1921,7 @@ func TestContextCodecRestoreInvalidJSON(t *testing.T) {
 	}
 }
 
-func TestAuthContextSnapshotToAuthenticatedUser(t *testing.T) {
+func TestAuthContextSnapshotToCaller(t *testing.T) {
 	snapshot := AuthSnapshot{
 		SubjectID:          "sub_123",
 		SubjectName:        "Test User",
@@ -1929,18 +1934,22 @@ func TestAuthContextSnapshotToAuthenticatedUser(t *testing.T) {
 		IsSystemAdmin:      true,
 	}
 
-	user := snapshot.ToAuthenticatedUser()
+	caller := snapshot.toCaller()
 
-	if user.SubjectID != "sub_123" {
-		t.Fatalf("expected subject ID 'sub_123', got %q", user.SubjectID)
+	if caller.SubjectID != "sub_123" {
+		t.Fatalf("expected subject ID 'sub_123', got %q", caller.SubjectID)
 	}
 
-	if user.AuthenticationType != auth.JWTAuthentication {
+	if caller.AuthenticationType != auth.JWTAuthentication {
 		t.Fatalf("expected JWT authentication type")
 	}
 
-	if user.OrganizationRole != auth.OwnerRole {
+	if caller.OrganizationRole != auth.OwnerRole {
 		t.Fatalf("expected owner role")
+	}
+
+	if !caller.Has(auth.CapSystemAdmin) {
+		t.Fatalf("expected system admin capability to be set")
 	}
 }
 

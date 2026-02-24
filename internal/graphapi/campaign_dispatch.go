@@ -359,8 +359,8 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, campa
 		ScheduledAt: scheduledAt,
 	}
 
-	if subjectID, err := auth.GetSubjectIDFromContext(ctx); err == nil {
-		args.RequestedBy = subjectID
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
+		args.RequestedBy = caller.SubjectID
 	}
 
 	opts := args.InsertOpts()
@@ -407,8 +407,8 @@ func (r *mutationResolver) recordCampaignDispatchEvent(ctx context.Context, camp
 		OrganizationIDs: []string{campaignObj.OwnerID},
 	}
 
-	if subjectID, err := auth.GetSubjectIDFromContext(ctx); err == nil && subjectID != "" {
-		input.UserIDs = []string{subjectID}
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
+		input.UserIDs = []string{caller.SubjectID}
 	}
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -419,21 +419,25 @@ func (r *mutationResolver) recordCampaignDispatchEvent(ctx context.Context, camp
 
 // ensureCampaignEditAccess verifies the caller can edit the campaign.
 func (r *mutationResolver) ensureCampaignEditAccess(ctx context.Context, campaignID string) error {
-	if auth.IsSystemAdminFromContext(ctx) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return auth.ErrNoAuthUser
+	}
+
+	if caller.Has(auth.CapSystemAdmin) {
 		return nil
 	}
 
-	subjectID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "user"})
+	if caller.SubjectID == "" {
+		return parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionGet, Object: "user"})
 	}
 
 	allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
 		ObjectType:  generated.TypeCampaign,
 		ObjectID:    campaignID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
-		SubjectID:   subjectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
 	})
 	if err != nil {
 		return err

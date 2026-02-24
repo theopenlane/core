@@ -33,9 +33,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("provider"), openapiCtx)
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(requestCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(requestCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
+	}
+
+	orgID := caller.OrganizationID
+	if orgID == "" {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	if h.IntegrationRegistry == nil {

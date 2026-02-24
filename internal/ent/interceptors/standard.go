@@ -19,7 +19,7 @@ import (
 // TraverseStandard only returns public standards and standards owned by the organization
 func TraverseStandard() ent.Interceptor {
 	return intercept.TraverseStandard(func(ctx context.Context, q *generated.StandardQuery) error {
-		anon, isAnon := auth.AnonymousTrustCenterUserFromContext(ctx)
+		anon, isAnon := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey)
 		if isAnon {
 			q.Where(
 				standard.HasTrustCenterCompliancesWith(
@@ -32,10 +32,12 @@ func TraverseStandard() ent.Interceptor {
 			return nil
 		}
 
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			return err
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		orgIDs := caller.OrgIDs()
 
 		systemStandardPredicates := []predicate.Standard{
 			standard.OwnerIDIsNil(),

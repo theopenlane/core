@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
@@ -44,7 +43,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	reqCtx := ctx.Request().Context()
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
 
 	out := &models.ResendReply{
 		Reply:   rout.Reply{Success: true},

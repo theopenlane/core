@@ -28,10 +28,12 @@ func TraverseOrgMembers() ent.Interceptor {
 			return nil
 		}
 
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			return err
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		orgIDs := caller.OrgIDs()
 
 		// get all parent orgs to ensure we get all OrgMembers in the org tree
 		allOrgsIDs, err := getAllParentOrgIDs(ctx, orgIDs)

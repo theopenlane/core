@@ -597,7 +597,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 
 	tests := []struct {
 		name        string
-		authUser    *auth.AuthenticatedUser
+		caller      *auth.Caller
 		variables   map[string]any
 		inputKey    string
 		expectedOrg string
@@ -605,7 +605,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 	}{
 		{
 			name: "Org already set in context",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationID:     primaryOrg,
 				AuthenticationType: auth.PATAuthentication,
 			},
@@ -615,7 +615,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "PAT requires explicit owner",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
 				AuthenticationType: auth.PATAuthentication,
 			},
@@ -629,7 +629,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "PAT missing owner errors",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
 				AuthenticationType: auth.PATAuthentication,
 			},
@@ -639,7 +639,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "Non-PAT single authorized org fallback",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg},
 				AuthenticationType: auth.APITokenAuthentication,
 			},
@@ -649,7 +649,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "Non-PAT multiple orgs require owner input",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
 				AuthenticationType: auth.APITokenAuthentication,
 			},
@@ -661,7 +661,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := auth.WithAuthenticatedUser(context.Background(), tt.authUser)
+			ctx := auth.WithCaller(context.Background(), tt.caller)
 
 			err := setOrganizationForUploads(ctx, tt.variables, tt.inputKey)
 			if tt.expectedErr != nil {
@@ -670,9 +670,9 @@ func TestSetOrganizationForUploads(t *testing.T) {
 			}
 
 			assert.NilError(t, err)
-			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			assert.NilError(t, err)
-			assert.Check(t, is.Equal(tt.expectedOrg, orgID))
+			helpersTestCaller, helpersTestCallerOk := auth.CallerFromContext(ctx)
+			assert.Check(t, helpersTestCallerOk)
+			assert.Check(t, is.Equal(tt.expectedOrg, helpersTestCaller.OrganizationID))
 		})
 	}
 }

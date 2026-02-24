@@ -268,10 +268,11 @@ func (r *queryResolver) MyWorkflowAssignments(ctx context.Context, after *entgql
 		where = &generated.WorkflowAssignmentWhereInput{}
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	myCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || myCaller == nil || myCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
+	userID := myCaller.SubjectID
 
 	groupIDs, err := withTransactionalMutation(ctx).GroupMembership.Query().
 		Where(groupmembership.UserIDEQ(userID)).

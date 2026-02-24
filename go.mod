@@ -10,7 +10,10 @@ tool (
 	gotest.tools/gotestsum
 )
 
-replace github.com/theopenlane/core/common => ./common
+replace (
+	github.com/theopenlane/core/common => ./common
+	github.com/theopenlane/iam => ../iam
+)
 
 require (
 	ariga.io/entcache v0.1.0

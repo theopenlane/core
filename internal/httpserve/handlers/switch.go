@@ -30,20 +30,20 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 
 	reqCtx := ctx.Request().Context()
 
-	ac, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
+		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	// ensure the user is not already in the target organization
-	if ac.OrganizationID == in.TargetOrganizationID {
+	if caller.OrganizationID == in.TargetOrganizationID {
 		return h.BadRequest(ctx, ErrAlreadySwitchedIntoOrg, openapi)
 	}
 
 	// get user from database by subject
-	user, err := h.getUserDetailsByID(reqCtx, ac.SubjectID)
+	user, err := h.getUserDetailsByID(reqCtx, caller.SubjectID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by subject")
 

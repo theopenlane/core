@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -40,11 +39,20 @@ func HookOrganization() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// existingCaller is captured here so it can be mutated after org creation
+			// to propagate the new org ID back to the original caller pointer
+			var existingCaller *auth.Caller
+
 			if m.Op().Is(ent.OpCreate) {
-				// set the context value to indicate this is an organization creation
-				// this is useful for skipping the hooks on the owner field if its part of the
-				// initial creation of the organization
-				ctx = contextx.With(ctx, auth.OrganizationCreationContextKey{})
+				// add bypass capabilities to the caller for the duration of org creation
+				// so that downstream hooks skip owner-field and managed-group guards
+				const orgCreationCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+				if caller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
+					existingCaller = caller
+					ctx = auth.WithCaller(ctx, caller.WithCapabilities(orgCreationCaps))
+				} else {
+					ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: orgCreationCaps})
+				}
 
 				// generate a default org setting schema if not provided
 				if err := createOrgSettings(ctx, m); err != nil {
@@ -123,6 +131,12 @@ func HookOrganization() ent.Hook {
 					am := authmanager.New(m.Client())
 					if err := updateUserAuthSession(ctx, am, orgCreated.ID); err != nil {
 						return v, err
+					}
+
+					// propagate the new org ID back through the original caller pointer
+					// so that callers holding the same *Caller see the updated org
+					if existingCaller != nil {
+						existingCaller.OrganizationID = orgCreated.ID
 					}
 
 					if err := postOrganizationCreation(ctx, orgCreated, m); err != nil {
@@ -232,7 +246,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 // createOrgSubscription creates the default organization subscription for a new org
 func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgCreated.ID))
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
@@ -345,8 +359,7 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
-		err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
-		if err != nil {
+		if err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg); err != nil {
 			return err
 		}
 	}

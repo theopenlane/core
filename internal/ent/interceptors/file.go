@@ -28,22 +28,22 @@ func InterceptorFile() ent.Interceptor {
 		logx.FromContext(ctx).Debug().Msg("InterceptorFile")
 
 		var orgs []string
-		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+		if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
 			// q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
 			orgs = []string{anon.OrganizationID}
 		} else {
-			au, err := auth.GetAuthenticatedUserFromContext(ctx)
-			if err != nil {
-				return err
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil {
+				return auth.ErrNoAuthUser
 			}
 
-			if au.IsSystemAdmin {
+			if caller.Has(auth.CapSystemAdmin) {
 				logx.FromContext(ctx).Debug().Msg("user is system admin, skipping organization filter")
 
 				return nil
 			}
 
-			orgs = au.OrganizationIDs
+			orgs = caller.OrgIDs()
 		}
 
 		if len(orgs) == 0 {

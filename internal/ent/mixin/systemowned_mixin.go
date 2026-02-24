@@ -184,14 +184,14 @@ func HookSystemOwnedCreate() ent.Hook {
 			if !ok || ownerID == "" {
 				logx.FromContext(ctx).Debug().Msg("non system admin creating object without owner ID, attempting to set")
 
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
-				if err != nil || orgID == "" {
-					logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization ID from context for non system admin creating object")
+				caller, callerOk := auth.CallerFromContext(ctx)
+				if !callerOk || caller == nil || caller.OrganizationID == "" {
+					logx.FromContext(ctx).Error().Msg("unable to get organization ID from context for non system admin creating object")
 
 					return nil, generated.ErrPermissionDenied
 				}
 
-				orgMut.SetOwnerID(orgID)
+				orgMut.SetOwnerID(caller.OrganizationID)
 			}
 
 			return next.Mutate(ctx, m)

@@ -22,15 +22,15 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 		return ErrInternalServerError
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return err
+	sessionCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || sessionCaller == nil {
+		return auth.ErrNoAuthUser
 	}
 
 	user, err := generated.FromContext(ctx).User.
 		Query().
 		WithSetting().
-		Where(user.ID(au.SubjectID)).
+		Where(user.ID(sessionCaller.SubjectID)).
 		Only(ctx)
 	if err != nil {
 		return err
@@ -49,6 +49,8 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	}
 
 	// add the organization ID to the authenticated user context
+	sessionCaller.OrganizationID = newOrgID
+
 	err = auth.SetOrganizationIDInAuthContext(ctx, newOrgID)
 	if err != nil {
 		return err
@@ -58,7 +60,8 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	auth.SetAuthCookies(ec.Response().Writer, out.AccessToken, out.RefreshToken, *am.GetSessionConfig().CookieConfig)
 
 	// update the context with the new tokens and session
-	auth.WithAccessAndRefreshToken(ctx, out.AccessToken, out.RefreshToken)
+	auth.WithContextValue(ctx, auth.AccessTokenKey, out.AccessToken)
+	auth.WithContextValue(ctx, auth.RefreshTokenKey, out.RefreshToken)
 
 	return err
 }

@@ -202,9 +202,8 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 	details := p.Sanitize(detailsStr)
 
 	orgName := ""
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err == nil {
-		org, err := m.Client().Organization.Get(ctx, orgID)
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+		org, err := m.Client().Organization.Get(ctx, caller.OrganizationID)
 		if err != nil {
 			return err
 		}
@@ -394,9 +393,9 @@ func HookStatusApproval() ent.Hook {
 			}
 
 			// Get the authenticated user
-			actor, err := auth.GetAuthenticatedUserFromContext(ctx)
-			if err != nil {
-				return nil, err
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil {
+				return nil, auth.ErrNoAuthUser
 			}
 
 			// Determine the approver and delegate group IDs based on operation type
@@ -408,7 +407,7 @@ func HookStatusApproval() ent.Hook {
 			}
 
 			// Check if the user is a member of either the approver or delegate group
-			isMember, err := checkUserInApproverGroups(ctx, mut.Client(), actor.SubjectID, approverID, delegateID)
+			isMember, err := checkUserInApproverGroups(ctx, mut.Client(), caller.SubjectID, approverID, delegateID)
 			if err != nil {
 				return nil, err
 			}

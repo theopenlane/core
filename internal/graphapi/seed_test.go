@@ -202,13 +202,13 @@ func resetContext(ctx context.Context, t *testing.T) context.Context {
 		return ctx
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	assert.NilError(t, err)
+	caller, callerOk := auth.CallerFromContext(ctx)
+	assert.Check(t, callerOk, "caller not found in context")
 
 	// ensure system admin context is kept in the new context
-	if au.IsSystemAdmin {
-		return auth.NewTestContextForSystemAdmin(au.SubjectID, au.OrganizationID)
+	if caller.Has(auth.CapSystemAdmin) {
+		return auth.NewTestContextForSystemAdmin(caller.SubjectID, caller.OrganizationID)
 	}
 
-	return auth.NewTestContextWithOrgID(au.SubjectID, au.OrganizationID)
+	return auth.NewTestContextWithOrgID(caller.SubjectID, caller.OrganizationID)
 }

@@ -28,17 +28,17 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 
 		client := generated.FromContext(ctx)
 
-		if !utils.PaymentMethodCheckRequired(client) || auth.IsSystemAdminFromContext(ctx) {
-			return privacy.Skip
-		}
-
-		au, ok := auth.AuthenticatedUserFromContext(ctx)
-		if !ok {
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
 			return auth.ErrNoAuthUser
 		}
 
+		if !utils.PaymentMethodCheckRequired(client) || caller.Has(auth.CapSystemAdmin) {
+			return privacy.Skip
+		}
+
 		orgSetting, err := client.OrganizationSetting.Query().
-			Where(organizationsetting.OrganizationID(au.OrganizationID)).
+			Where(organizationsetting.OrganizationID(caller.OrganizationID)).
 			Select(organizationsetting.FieldPaymentMethodAdded).
 			Only(ctx)
 		if err != nil {
@@ -52,7 +52,7 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			return privacy.Skip
 		}
 
-		emailDomain := strings.SplitAfter(au.SubjectEmail, "@")[1]
+		emailDomain := strings.SplitAfter(caller.SubjectEmail, "@")[1]
 
 		if slices.Contains(client.EntConfig.Billing.BypassEmailDomains, emailDomain) {
 			return privacy.Skip

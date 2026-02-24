@@ -83,7 +83,7 @@ var csrfSkipperFunc = func(c echo.Context) bool {
 		return true
 	}
 
-	if _, ok := auth.GetAnonymousTrustCenterUserContext(c); ok {
+	if _, ok := auth.EchoContextValue(c, auth.AnonymousTrustCenterUserKey); ok {
 		return true
 	}
 

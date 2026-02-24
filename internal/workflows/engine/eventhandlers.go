@@ -423,10 +423,12 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 	scopeCtx := scope.Context()
 	defer scope.End(err, nil)
 
-	orgID, err := auth.GetOrganizationIDFromContext(scopeCtx)
-	if err != nil {
-		return scope.Fail(err, nil)
+	assignCaller, assignOk := auth.CallerFromContext(scopeCtx)
+	if !assignOk || assignCaller == nil || assignCaller.OrganizationID == "" {
+		return scope.Fail(auth.ErrNoAuthUser, nil)
 	}
+
+	orgID := assignCaller.OrganizationID
 
 	assignment, err := l.client.WorkflowAssignment.Query().
 		Where(
@@ -1062,10 +1064,12 @@ func requiredApprovalCount(action models.WorkflowAction, meta models.WorkflowAss
 func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, instanceID string) (*generated.WorkflowInstance, string, error) {
 	ctx := scope.Context()
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, "", err
+	instanceCaller, instanceOk := auth.CallerFromContext(ctx)
+	if !instanceOk || instanceCaller == nil || instanceCaller.OrganizationID == "" {
+		return nil, "", auth.ErrNoAuthUser
 	}
+
+	orgID := instanceCaller.OrganizationID
 
 	allowCtx := workflows.AllowContext(ctx)
 

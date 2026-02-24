@@ -581,8 +581,8 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	ctxClient := generated.FromContext(ctx)
 	s.Require().NotNil(ctxClient, "seed context missing ent client")
 	s.Require().NotNil(ctxClient.WorkflowEngine, "seed context missing workflow engine")
-	_, err := auth.GetOrganizationIDFromContext(ctx)
-	s.Require().NoError(err, "seed context missing org")
+	seedCaller, seedCallerOk := auth.CallerFromContext(ctx)
+	s.Require().True(seedCallerOk && seedCaller != nil && seedCaller.OrganizationID != "", "seed context missing org")
 	return ctx
 }
 

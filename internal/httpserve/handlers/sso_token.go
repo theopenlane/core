@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
@@ -112,7 +111,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
+	nonceCtx := ssoNonceContextKey.Set(reqCtx, nonce(nonceCookie.Value))
 	if _, err = rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg); err != nil {
 		return h.BadRequest(ctx, err, openapi)
 	}

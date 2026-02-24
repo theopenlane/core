@@ -188,19 +188,19 @@ func getRequestID(ctx context.Context) string {
 // getAuthData retrieves the auth data from the context if available
 // all errors are ignored because the auth data is optional
 func getAuthData(ctx context.Context) Auth {
-	ac, _ := auth.GetAuthenticatedUserFromContext(ctx)
-	if ac == nil {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
 		// return early to prevent nil pointer panics
 		return Auth{}
 	}
 
-	at, _ := auth.AccessTokenFromContext(ctx)
-	rt, _ := auth.RefreshTokenFromContext(ctx)
+	at, _ := auth.ContextValue(ctx, auth.AccessTokenKey)
+	rt, _ := auth.ContextValue(ctx, auth.RefreshTokenKey)
 	session, _ := sessions.SessionToken(ctx)
 
 	return Auth{
-		AuthenticationType:      ac.AuthenticationType,
-		AuthorizedOrganizations: ac.OrganizationIDs,
+		AuthenticationType:      caller.AuthenticationType,
+		AuthorizedOrganizations: caller.OrgIDs(),
 		AccessToken:             at,
 		RefreshToken:            rt,
 		SessionID:               session,

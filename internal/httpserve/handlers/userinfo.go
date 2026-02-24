@@ -16,12 +16,14 @@ func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
 	// setup view context
 	reqCtx := ctx.Request().Context()
 
-	userID, err := auth.GetSubjectIDFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil || caller.SubjectID == "" {
+		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
+
+	userID := caller.SubjectID
 
 	// get user from database by subject
 	user, err := h.getUserDetailsByID(reqCtx, userID)

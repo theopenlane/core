@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // RegisterGalaEntitlementListeners registers entitlement mutation listeners on Gala.
@@ -189,7 +188,7 @@ func (inv *entitlementInvocation) Allow() context.Context {
 func orgAllowContext(ctx context.Context) context.Context {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	return contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
+	return auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
 }
 
 // softDeleteAllowContext extends orgAllowContext to include soft-deleted records.

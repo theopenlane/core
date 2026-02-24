@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -268,24 +267,24 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 		return orgID, nil
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get authenticated user context")
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context")
 
-		return "", err
+		return "", auth.ErrNoAuthUser
 	}
 
 	// if no org is provided, check with the authenticated org
 	if orgID == "" {
-		orgID = au.OrganizationID
+		orgID = caller.OrganizationID
 	}
 
 	// ensure user is already a member of the destination organization
 	req := fgax.AccessCheck{
-		SubjectID:   au.SubjectID,
+		SubjectID:   caller.SubjectID,
 		SubjectType: auth.UserSubjectType,
 		ObjectID:    orgID,
-		Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+		Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	allow, err := a.db.Authz.CheckOrgReadAccess(ctx, req)
@@ -421,8 +420,8 @@ func skipOrgValidation(ctx context.Context) bool {
 		return true
 	}
 
-	// skip on org creation
-	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+	// skip on internal operations (e.g. org creation)
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation) {
 		return true
 	}
 

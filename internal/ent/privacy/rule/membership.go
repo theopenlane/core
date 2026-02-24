@@ -12,10 +12,12 @@ import (
 // AllowSelfOrgMembershipDelete allows users to delete only their own org membership
 func AllowSelfOrgMembershipDelete() privacy.OrgMembershipMutationRuleFunc {
 	return privacy.OrgMembershipMutationRuleFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) error {
-		userID, err := auth.GetSubjectIDFromContext(ctx)
-		if err != nil {
-			return privacy.Skipf("unable to get user ID from context: %v", err)
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil || caller.SubjectID == "" {
+			return privacy.Skipf("unable to get user ID from context")
 		}
+
+		userID := caller.SubjectID
 
 		id, ok := m.ID()
 		if !ok {

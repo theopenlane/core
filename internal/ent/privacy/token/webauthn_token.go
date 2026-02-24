@@ -2,8 +2,6 @@ package token
 
 import (
 	"context"
-
-	"github.com/theopenlane/utils/contextx"
 )
 
 type WebauthnCreationContextKey struct {
@@ -14,11 +12,11 @@ func NewWebauthnCreationContextKeyWithEmail() WebauthnCreationContextKey {
 }
 
 func NewContextWithWebauthnCreationContextKey(parent context.Context) context.Context {
-	return contextx.With(parent, &WebauthnCreationContextKey{})
+	return webauthnCreationContextKey.Set(parent, &WebauthnCreationContextKey{})
 }
 
 func WebauthnCreationContextKeyFromContext(ctx context.Context) *WebauthnCreationContextKey {
-	w, ok := contextx.From[*WebauthnCreationContextKey](ctx)
+	w, ok := webauthnCreationContextKey.Get(ctx)
 	if !ok {
 		return nil
 	}

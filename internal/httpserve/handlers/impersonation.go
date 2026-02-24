@@ -30,26 +30,26 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	reqCtx := ctx.Request().Context()
 
 	// Get the current authenticated user (the impersonator)
-	currentUser, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired, openapi)
 	}
 
 	// Validate permissions for impersonation
-	if err := h.validateImpersonationPermissions(currentUser, *req); err != nil {
+	if err := h.validateImpersonationPermissions(caller, *req); err != nil {
 		return h.Forbidden(ctx, err, openapi)
 	}
 
 	// Determine organization context
 	orgID := req.OrganizationID
 	if orgID == "" {
-		orgID = currentUser.OrganizationID
+		orgID = caller.OrganizationID
 	}
 
 	// Additional validation for cross-organization impersonation
 	// System admins can impersonate across organizations, but we should validate
 	// that the target user exists in the specified organization
-	if orgID != currentUser.OrganizationID && !currentUser.IsSystemAdmin {
+	if orgID != caller.OrganizationID && !caller.Has(auth.CapSystemAdmin) {
 		return ctx.JSON(http.StatusForbidden, map[string]string{
 			"error": "cross-organization impersonation requires system admin privileges",
 		})
@@ -84,8 +84,8 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 
 	// Create impersonation token with proper claims
 	token, err := h.TokenManager.CreateImpersonationToken(reqCtx, tokens.CreateImpersonationTokenOptions{
-		ImpersonatorID:    currentUser.SubjectID,
-		ImpersonatorEmail: currentUser.SubjectEmail,
+		ImpersonatorID:    caller.SubjectID,
+		ImpersonatorEmail: caller.SubjectEmail,
 		TargetUserID:      req.TargetUserID,
 		TargetUserEmail:   targetUser.Email,
 		OrganizationID:    orgID,
@@ -113,8 +113,8 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	// Log impersonation start with enhanced context for system admin tokens
 	auditLog := &auth.ImpersonationAuditLog{
 		Type:              auth.ImpersonationType(req.Type),
-		ImpersonatorID:    currentUser.SubjectID,
-		ImpersonatorEmail: currentUser.SubjectEmail,
+		ImpersonatorID:    caller.SubjectID,
+		ImpersonatorEmail: caller.SubjectEmail,
 		TargetUserID:      req.TargetUserID,
 		TargetUserEmail:   targetUser.Email,
 		Action:            "start",
@@ -126,7 +126,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		Scopes:            scopes,
 	}
 
-	if currentUser.IsSystemAdmin {
+	if caller.Has(auth.CapSystemAdmin) {
 		logx.FromContext(reqCtx).Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
 	}
 
@@ -194,21 +194,18 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 }
 
 // validateImpersonationPermissions checks if the current user can impersonate the target user
-func (h *Handler) validateImpersonationPermissions(currentUser *auth.AuthenticatedUser, req models.StartImpersonationRequest) error {
+func (h *Handler) validateImpersonationPermissions(caller *auth.Caller, req models.StartImpersonationRequest) error {
 	switch req.Type {
 	case "support":
-		// Currently only system admins can perform support impersonation
-		if !currentUser.IsSystemAdmin {
+		if !caller.Has(auth.CapSystemAdmin) {
 			return ErrInsufficientPermissionsSupport
 		}
 	case "admin":
-		// Only system admins can perform admin impersonation
-		if !currentUser.IsSystemAdmin {
+		if !caller.Has(auth.CapSystemAdmin) {
 			return ErrInsufficientPermissionsAdmin
 		}
 	case "job":
-		// Job impersonation is typically done by the system, but may be allowed for testing
-		if !currentUser.IsSystemAdmin {
+		if !caller.Has(auth.CapSystemAdmin) {
 			return ErrJobImpersonationAdminOnly
 		}
 	default:

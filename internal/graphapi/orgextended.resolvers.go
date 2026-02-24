@@ -65,17 +65,17 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 // TransferOrganizationOwnership is the resolver for the transferOrganizationOwnership field.
 func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string) (*model.OrganizationTransferOwnershipPayload, error) {
 	// Step 1: Get current user from context
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionCreate, Object: "invite"})
 	}
 
-	currentUserID := au.SubjectID
-	organizationID := au.OrganizationID
+	currentUserID := caller.SubjectID
+	organizationID := caller.OrganizationID
 
 	if organizationID == "" {
 		logx.FromContext(ctx).Error().Msg("unable to determine organization for ownership transfer")
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
+		return nil, parseRequestError(ctx, auth.ErrNoAuthUser, common.Action{Action: common.ActionCreate, Object: "invite"})
 	}
 
 	c := withTransactionalMutation(ctx)

@@ -88,13 +88,13 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
+				user := &auth.Caller{
 					SubjectID:      adminUser.ID,
 					SubjectEmail:   adminUser.Email,
 					OrganizationID: orgID,
-					IsSystemAdmin:  true, // System admin can perform impersonation
+					Capabilities:   auth.CapSystemAdmin,
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			expectedStatus: http.StatusOK,
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
@@ -115,11 +115,11 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
-					SubjectID:     adminUser.ID,
-					IsSystemAdmin: true,
+				user := &auth.Caller{
+					SubjectID:    adminUser.ID,
+					Capabilities: auth.CapSystemAdmin,
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			expectedStatus: http.StatusBadRequest,
 		},
@@ -144,11 +144,10 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
-					SubjectID:     "user-456",
-					IsSystemAdmin: false,
+				user := &auth.Caller{
+					SubjectID: "user-456",
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			expectedStatus: http.StatusForbidden,
 		},
@@ -161,11 +160,11 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				user := &auth.AuthenticatedUser{
-					SubjectID:     adminUser.ID,
-					IsSystemAdmin: true,
+				user := &auth.Caller{
+					SubjectID:    adminUser.ID,
+					Capabilities: auth.CapSystemAdmin,
 				}
-				return auth.WithAuthenticatedUser(ctx, user)
+				return auth.WithCaller(ctx, user)
 			},
 			expectedStatus: http.StatusInternalServerError,
 		},
@@ -224,7 +223,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user-123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -236,7 +235,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 						Type:              auth.SupportImpersonation,
 						Scopes:            []string{"read", "debug"},
 					},
-					OriginalUser: &auth.AuthenticatedUser{
+					OriginalUser: &auth.Caller{
 						SubjectID: "admin-456",
 					},
 				}
@@ -279,7 +278,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			setupContext: func() context.Context {
 				ctx := context.Background()
 				impUser := &auth.ImpersonatedUser{
-					AuthenticatedUser: &auth.AuthenticatedUser{
+					Caller: &auth.Caller{
 						SubjectID: "user-123",
 					},
 					ImpersonationContext: &auth.ImpersonationContext{
@@ -404,13 +403,13 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	require.NoError(t, err)
 
 	testCtx := context.Background()
-	user := &auth.AuthenticatedUser{
+	user := &auth.Caller{
 		SubjectID:      adminUser.ID,
 		SubjectEmail:   adminUser.Email,
 		OrganizationID: ulids.New().String(),
-		IsSystemAdmin:  true,
+		Capabilities:   auth.CapSystemAdmin,
 	}
-	testCtx = auth.WithAuthenticatedUser(testCtx, user)
+	testCtx = auth.WithCaller(testCtx, user)
 
 	req := httptest.NewRequest(http.MethodPost, "/impersonation/start", bytes.NewReader(reqBody))
 	req.Header.Set("Content-Type", "application/json")

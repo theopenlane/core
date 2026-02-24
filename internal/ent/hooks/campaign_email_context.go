@@ -13,12 +13,14 @@ type CampaignEmailContextKey struct {
 	CampaignTargetID string
 }
 
+var campaignEmailContextKey = contextx.NewKey[CampaignEmailContextKey]()
+
 // WithCampaignEmailContext attaches campaign email metadata to the context.
 func WithCampaignEmailContext(ctx context.Context, data CampaignEmailContextKey) context.Context {
-	return contextx.With(ctx, data)
+	return campaignEmailContextKey.Set(ctx, data)
 }
 
 // CampaignEmailContextFrom returns campaign email metadata when present.
 func CampaignEmailContextFrom(ctx context.Context) (CampaignEmailContextKey, bool) {
-	return contextx.From[CampaignEmailContextKey](ctx)
+	return campaignEmailContextKey.Get(ctx)
 }
