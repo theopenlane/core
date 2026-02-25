@@ -418,6 +418,12 @@ const (
 
 // enqueueCacheRefresh triggers a cache refresh by hitting the trust center URL with ?fresh=1
 func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenterID string) error {
+	// In durable dispatch the context is reconstructed from a snapshot that does not include the
+	// ent client, so interceptors relying on generated.FromContext (e.g. the FGA authz client used
+	// by the modules feature-check interceptor) would get a nil client and return empty features,
+	// causing the trust_center_module check to fail even when the module is enabled.
+	ctx = entgen.NewContext(ctx, client)
+
 	tc, err := client.TrustCenter.Query().
 		Where(trustcenter.ID(trustCenterID)).
 		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug).

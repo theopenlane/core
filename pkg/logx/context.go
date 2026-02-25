@@ -2,6 +2,7 @@ package logx
 
 import (
 	"context"
+	"maps"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -52,11 +53,12 @@ func SeedContext(ctx context.Context) context.Context {
 }
 
 // WithField adds a single field to both the logger and the durable field store on the context.
+// A new LogFields map is allocated on each call so that sibling contexts do not share mutable state.
 func WithField(ctx context.Context, key string, value any) context.Context {
-	fields := FieldsFromContext(ctx)
-	if fields == nil {
-		fields = LogFields{}
-	}
+	existing := FieldsFromContext(ctx)
+	fields := make(LogFields, len(existing)+1)
+
+	maps.Copy(fields, existing)
 
 	fields[key] = value
 
@@ -68,24 +70,27 @@ func WithField(ctx context.Context, key string, value any) context.Context {
 }
 
 // WithFields adds multiple fields to both the logger and the durable field store on the context.
+// A new LogFields map is allocated on each call so that sibling contexts do not share mutable state.
 func WithFields(ctx context.Context, fields map[string]any) context.Context {
 	if len(fields) == 0 {
 		return ctx
 	}
 
 	existing := FieldsFromContext(ctx)
-	if existing == nil {
-		existing = LogFields{}
+	merged := make(LogFields, len(existing)+len(fields))
+
+	for k, v := range existing {
+		merged[k] = v
 	}
 
 	logCtx := FromContext(ctx).With()
 
 	for k, v := range fields {
-		existing[k] = v
+		merged[k] = v
 		logCtx = logCtx.Interface(k, v)
 	}
 
-	ctx = contextx.With(ctx, existing)
+	ctx = contextx.With(ctx, merged)
 
 	return logCtx.Logger().WithContext(ctx)
 }
