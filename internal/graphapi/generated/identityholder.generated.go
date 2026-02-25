@@ -150,12 +150,16 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 				return ec.fieldContext_IdentityHolder_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
 			case "tasks":
 				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
+			case "findings":
+				return ec.fieldContext_IdentityHolder_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
 			case "accessPlatforms":
@@ -328,12 +332,16 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identit
 				return ec.fieldContext_IdentityHolder_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
 			case "tasks":
 				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
+			case "findings":
+				return ec.fieldContext_IdentityHolder_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
 			case "accessPlatforms":
@@ -506,12 +514,16 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
 			case "tasks":
 				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
+			case "findings":
+				return ec.fieldContext_IdentityHolder_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
 			case "accessPlatforms":
@@ -684,12 +696,16 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_assets(ctx, field)
 			case "entities":
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
 				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
 			case "tasks":
 				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
+			case "findings":
+				return ec.fieldContext_IdentityHolder_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
 			case "accessPlatforms":

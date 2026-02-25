@@ -50,10 +50,16 @@ type DirectoryAccountHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the directory_account
 	ScopeID string `json:"scope_id,omitempty"`
-	// integration that owns this directory account
+	// optional integration that owns this directory account when sourced by an integration
 	IntegrationID string `json:"integration_id,omitempty"`
-	// sync run that produced this snapshot
+	// optional sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
+	// optional platform associated with this directory account
+	PlatformID string `json:"platform_id,omitempty"`
+	// deduplicated identity holder linked to this directory account
+	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
+	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	DirectoryName *string `json:"directory_name,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"external_id,omitempty"`
 	// optional secondary identifier such as Azure immutable ID
@@ -62,6 +68,12 @@ type DirectoryAccountHistory struct {
 	CanonicalEmail *string `json:"canonical_email,omitempty"`
 	// provider supplied display name
 	DisplayName string `json:"display_name,omitempty"`
+	// URL of the avatar supplied by the directory provider
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	// local avatar file identifier, takes precedence over avatar_remote_url
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
+	// time the directory account avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// first name reported by the provider
 	GivenName *string `json:"given_name,omitempty"`
 	// last name reported by the provider
@@ -104,9 +116,9 @@ func (*DirectoryAccountHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directoryaccounthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
+		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
-		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldObservedAt:
+		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldAvatarUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -227,6 +239,26 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				_m.DirectorySyncRunID = value.String
 			}
+		case directoryaccounthistory.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
+		case directoryaccounthistory.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = new(string)
+				*_m.IdentityHolderID = value.String
+			}
+		case directoryaccounthistory.FieldDirectoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_name", values[i])
+			} else if value.Valid {
+				_m.DirectoryName = new(string)
+				*_m.DirectoryName = value.String
+			}
 		case directoryaccounthistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
@@ -252,6 +284,27 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				_m.DisplayName = value.String
+			}
+		case directoryaccounthistory.FieldAvatarRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
+			} else if value.Valid {
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
+			}
+		case directoryaccounthistory.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
+			}
+		case directoryaccounthistory.FieldAvatarUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
+			} else if value.Valid {
+				_m.AvatarUpdatedAt = new(time.Time)
+				*_m.AvatarUpdatedAt = value.Time
 			}
 		case directoryaccounthistory.FieldGivenName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -438,6 +491,19 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)
 	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
+	builder.WriteString(", ")
+	if v := _m.IdentityHolderID; v != nil {
+		builder.WriteString("identity_holder_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DirectoryName; v != nil {
+		builder.WriteString("directory_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
@@ -453,6 +519,21 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)
+	builder.WriteString(", ")
+	if v := _m.AvatarRemoteURL; v != nil {
+		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.AvatarUpdatedAt; v != nil {
+		builder.WriteString("avatar_updated_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	if v := _m.GivenName; v != nil {
 		builder.WriteString("given_name=")

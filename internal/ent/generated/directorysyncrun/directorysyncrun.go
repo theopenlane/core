@@ -40,6 +40,8 @@ const (
 	FieldScopeID = "scope_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldStartedAt holds the string denoting the started_at field in the database.
@@ -66,6 +68,8 @@ const (
 	EdgeScope = "scope"
 	// EdgeIntegration holds the string denoting the integration edge name in mutations.
 	EdgeIntegration = "integration"
+	// EdgePlatform holds the string denoting the platform edge name in mutations.
+	EdgePlatform = "platform"
 	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
 	EdgeDirectoryAccounts = "directory_accounts"
 	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
@@ -102,27 +106,34 @@ const (
 	IntegrationInverseTable = "integrations"
 	// IntegrationColumn is the table column denoting the integration relation/edge.
 	IntegrationColumn = "integration_id"
+	// PlatformTable is the table that holds the platform relation/edge.
+	PlatformTable = "directory_sync_runs"
+	// PlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformInverseTable = "platforms"
+	// PlatformColumn is the table column denoting the platform relation/edge.
+	PlatformColumn = "platform_id"
 	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
 	DirectoryAccountsTable = "directory_accounts"
 	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
 	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
 	DirectoryAccountsInverseTable = "directory_accounts"
 	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
-	DirectoryAccountsColumn = "directory_sync_run_directory_accounts"
+	DirectoryAccountsColumn = "directory_sync_run_id"
 	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
 	DirectoryGroupsTable = "directory_groups"
 	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
 	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
 	DirectoryGroupsInverseTable = "directory_groups"
 	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
-	DirectoryGroupsColumn = "directory_sync_run_directory_groups"
+	DirectoryGroupsColumn = "directory_sync_run_id"
 	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
 	DirectoryMembershipsTable = "directory_memberships"
 	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
 	DirectoryMembershipsInverseTable = "directory_memberships"
 	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
-	DirectoryMembershipsColumn = "directory_sync_run_directory_memberships"
+	DirectoryMembershipsColumn = "directory_sync_run_id"
 )
 
 // Columns holds all SQL columns for directorysyncrun fields.
@@ -139,6 +150,7 @@ var Columns = []string{
 	FieldScopeName,
 	FieldScopeID,
 	FieldIntegrationID,
+	FieldPlatformID,
 	FieldStatus,
 	FieldStartedAt,
 	FieldCompletedAt,
@@ -150,21 +162,10 @@ var Columns = []string{
 	FieldStats,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "directory_sync_runs"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"integration_directory_sync_runs",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -192,6 +193,8 @@ var (
 	OwnerIDValidator func(string) error
 	// IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
 	IntegrationIDValidator func(string) error
+	// PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
+	PlatformIDValidator func(string) error
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
 	DefaultStartedAt func() time.Time
 	// DefaultFullCount holds the default value on creation for the "full_count" field.
@@ -277,6 +280,11 @@ func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
 }
 
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -342,6 +350,13 @@ func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newIntegrationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByPlatformField orders the results by platform field.
+func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -411,7 +426,14 @@ func newIntegrationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, IntegrationTable, IntegrationColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
+	)
+}
+func newPlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
 	)
 }
 func newDirectoryAccountsStep() *sqlgraph.Step {

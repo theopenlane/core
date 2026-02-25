@@ -233,9 +233,11 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Template{}),
 		defaultEdgeToWithPagination(p, Asset{}),
 		defaultEdgeToWithPagination(p, Entity{}),
+		defaultEdgeToWithPagination(p, DirectoryAccount{}),
 		defaultEdgeFromWithPagination(p, Platform{}),
 		defaultEdgeFromWithPagination(p, Campaign{}),
 		defaultEdgeToWithPagination(p, Task{}),
+		defaultEdgeFromWithPagination(p, Finding{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: p,
 			edgeSchema: WorkflowObjectRef{},
@@ -290,10 +292,10 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 func (IdentityHolder) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				Platform{}.PluralName(),
 			}),
+			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.IdentityHolderMutation](),
 		),
 	)

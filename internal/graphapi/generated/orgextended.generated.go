@@ -110,6 +110,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "identityHolderCreators":
+				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
 			case "scheduledJobCreators":
 				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
 			case "standardCreators":

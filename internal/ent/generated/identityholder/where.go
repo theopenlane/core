@@ -2785,6 +2785,35 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.IdentityHolder {
 	})
 }
 
+// HasDirectoryAccounts applies the HasEdge predicate on the "directory_accounts" edge.
+func HasDirectoryAccounts() predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryAccountsWith applies the HasEdge predicate on the "directory_accounts" edge with a given conditions (other predicates).
+func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := newDirectoryAccountsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPlatforms applies the HasEdge predicate on the "platforms" edge.
 func HasPlatforms() predicate.IdentityHolder {
 	return predicate.IdentityHolder(func(s *sql.Selector) {
@@ -2864,6 +2893,35 @@ func HasTasksWith(preds ...predicate.Task) predicate.IdentityHolder {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.IdentityHolderTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingIdentityHolders
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingIdentityHolders
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

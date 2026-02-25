@@ -309,6 +309,20 @@ func (_c *IntegrationHistoryCreate) SetNillableIntegrationType(v *string) *Integ
 	return _c
 }
 
+// SetPlatformID sets the "platform_id" field.
+func (_c *IntegrationHistoryCreate) SetPlatformID(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillablePlatformID(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
+	return _c
+}
+
 // SetProviderMetadata sets the "provider_metadata" field.
 func (_c *IntegrationHistoryCreate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationHistoryCreate {
 	_c.mutation.SetProviderMetadata(v)
@@ -586,6 +600,10 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.IntegrationType(); ok {
 		_spec.SetField(integrationhistory.FieldIntegrationType, field.TypeString, value)
 		_node.IntegrationType = value
+	}
+	if value, ok := _c.mutation.PlatformID(); ok {
+		_spec.SetField(integrationhistory.FieldPlatformID, field.TypeString, value)
+		_node.PlatformID = value
 	}
 	if value, ok := _c.mutation.ProviderMetadata(); ok {
 		_spec.SetField(integrationhistory.FieldProviderMetadata, field.TypeJSON, value)

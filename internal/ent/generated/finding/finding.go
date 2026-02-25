@@ -155,6 +155,10 @@ const (
 	EdgeScans = "scans"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
 	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
 	EdgeRemediations = "remediations"
 	// EdgeReviews holds the string denoting the reviews edge name in mutations.
@@ -282,6 +286,16 @@ const (
 	TasksInverseTable = "tasks"
 	// TasksColumn is the table column denoting the tasks relation/edge.
 	TasksColumn = "finding_tasks"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge. The primary key declared below.
+	DirectoryAccountsTable = "finding_directory_accounts"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge. The primary key declared below.
+	IdentityHoldersTable = "finding_identity_holders"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
 	// RemediationsTable is the table that holds the remediations relation/edge.
 	RemediationsTable = "remediations"
 	// RemediationsInverseTable is the table name for the Remediation entity.
@@ -402,6 +416,12 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"finding_id", "control_id"}
+	// DirectoryAccountsPrimaryKey and DirectoryAccountsColumn2 are the table columns denoting the
+	// primary key for the directory_accounts relation (M2M).
+	DirectoryAccountsPrimaryKey = []string{"finding_id", "directory_account_id"}
+	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
+	// primary key for the identity_holders relation (M2M).
+	IdentityHoldersPrimaryKey = []string{"finding_id", "identity_holder_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -906,6 +926,34 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByRemediationsCount orders the results by remediations count.
 func ByRemediationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1106,6 +1154,20 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+	)
+}
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, DirectoryAccountsTable, DirectoryAccountsPrimaryKey...),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
 	)
 }
 func newRemediationsStep() *sqlgraph.Step {

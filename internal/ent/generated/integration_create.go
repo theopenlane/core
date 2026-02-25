@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -288,6 +289,20 @@ func (_c *IntegrationCreate) SetIntegrationType(v string) *IntegrationCreate {
 func (_c *IntegrationCreate) SetNillableIntegrationType(v *string) *IntegrationCreate {
 	if v != nil {
 		_c.SetIntegrationType(*v)
+	}
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *IntegrationCreate) SetPlatformID(v string) *IntegrationCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillablePlatformID(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
 	}
 	return _c
 }
@@ -564,6 +579,11 @@ func (_c *IntegrationCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *Integ
 	return _c.AddDirectorySyncRunIDs(ids...)
 }
 
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_c *IntegrationCreate) SetPlatform(v *Platform) *IntegrationCreate {
+	return _c.SetPlatformID(v.ID)
+}
+
 // AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
 func (_c *IntegrationCreate) AddNotificationTemplateIDs(ids ...string) *IntegrationCreate {
 	_c.mutation.AddNotificationTemplateIDs(ids...)
@@ -716,6 +736,11 @@ func (_c *IntegrationCreate) check() error {
 	if v, ok := _c.mutation.Name(); ok {
 		if err := integration.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PlatformID(); ok {
+		if err := integration.PlatformIDValidator(v); err != nil {
+			return &ValidationError{Name: "platform_id", err: fmt.Errorf(`generated: validator failed for field "Integration.platform_id": %w`, err)}
 		}
 	}
 	return nil
@@ -1107,6 +1132,24 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   integration.PlatformTable,
+			Columns: []string{integration.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PlatformID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.NotificationTemplatesIDs(); len(nodes) > 0 {

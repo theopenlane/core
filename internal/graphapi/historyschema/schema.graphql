@@ -6802,13 +6802,25 @@ type DirectoryAccountHistory implements Node {
 	"""
 	scopeID: String
 	"""
-	integration that owns this directory account
+	optional integration that owns this directory account when sourced by an integration
 	"""
-	integrationID: String!
+	integrationID: String
 	"""
-	sync run that produced this snapshot
+	optional sync run that produced this snapshot
 	"""
-	directorySyncRunID: String!
+	directorySyncRunID: String
+	"""
+	optional platform associated with this directory account
+	"""
+	platformID: String
+	"""
+	deduplicated identity holder linked to this directory account
+	"""
+	identityHolderID: String
+	"""
+	directory source label set by the integration (e.g. google_workspace, github, slack)
+	"""
+	directoryName: String
 	"""
 	stable identifier from the directory system
 	"""
@@ -6825,6 +6837,18 @@ type DirectoryAccountHistory implements Node {
 	provider supplied display name
 	"""
 	displayName: String
+	"""
+	URL of the avatar supplied by the directory provider
+	"""
+	avatarRemoteURL: String
+	"""
+	local avatar file identifier, takes precedence over avatar_remote_url
+	"""
+	avatarLocalFileID: String
+	"""
+	time the directory account avatar was last updated
+	"""
+	avatarUpdatedAt: Time
 	"""
 	first name reported by the provider
 	"""
@@ -6971,6 +6995,7 @@ enum DirectoryAccountHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	directory_name
 	external_id
 	canonical_email
 	display_name
@@ -7214,6 +7239,8 @@ input DirectoryAccountHistoryWhereInput {
 	integrationIDContains: String
 	integrationIDHasPrefix: String
 	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
 	integrationIDEqualFold: String
 	integrationIDContainsFold: String
 	"""
@@ -7230,8 +7257,64 @@ input DirectoryAccountHistoryWhereInput {
 	directorySyncRunIDContains: String
 	directorySyncRunIDHasPrefix: String
 	directorySyncRunIDHasSuffix: String
+	directorySyncRunIDIsNil: Boolean
+	directorySyncRunIDNotNil: Boolean
 	directorySyncRunIDEqualFold: String
 	directorySyncRunIDContainsFold: String
+	"""
+	platform_id field predicates
+	"""
+	platformID: String
+	platformIDNEQ: String
+	platformIDIn: [String!]
+	platformIDNotIn: [String!]
+	platformIDGT: String
+	platformIDGTE: String
+	platformIDLT: String
+	platformIDLTE: String
+	platformIDContains: String
+	platformIDHasPrefix: String
+	platformIDHasSuffix: String
+	platformIDIsNil: Boolean
+	platformIDNotNil: Boolean
+	platformIDEqualFold: String
+	platformIDContainsFold: String
+	"""
+	identity_holder_id field predicates
+	"""
+	identityHolderID: String
+	identityHolderIDNEQ: String
+	identityHolderIDIn: [String!]
+	identityHolderIDNotIn: [String!]
+	identityHolderIDGT: String
+	identityHolderIDGTE: String
+	identityHolderIDLT: String
+	identityHolderIDLTE: String
+	identityHolderIDContains: String
+	identityHolderIDHasPrefix: String
+	identityHolderIDHasSuffix: String
+	identityHolderIDIsNil: Boolean
+	identityHolderIDNotNil: Boolean
+	identityHolderIDEqualFold: String
+	identityHolderIDContainsFold: String
+	"""
+	directory_name field predicates
+	"""
+	directoryName: String
+	directoryNameNEQ: String
+	directoryNameIn: [String!]
+	directoryNameNotIn: [String!]
+	directoryNameGT: String
+	directoryNameGTE: String
+	directoryNameLT: String
+	directoryNameLTE: String
+	directoryNameContains: String
+	directoryNameHasPrefix: String
+	directoryNameHasSuffix: String
+	directoryNameIsNil: Boolean
+	directoryNameNotNil: Boolean
+	directoryNameEqualFold: String
+	directoryNameContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -7302,6 +7385,55 @@ input DirectoryAccountHistoryWhereInput {
 	displayNameNotNil: Boolean
 	displayNameEqualFold: String
 	displayNameContainsFold: String
+	"""
+	avatar_remote_url field predicates
+	"""
+	avatarRemoteURL: String
+	avatarRemoteURLNEQ: String
+	avatarRemoteURLIn: [String!]
+	avatarRemoteURLNotIn: [String!]
+	avatarRemoteURLGT: String
+	avatarRemoteURLGTE: String
+	avatarRemoteURLLT: String
+	avatarRemoteURLLTE: String
+	avatarRemoteURLContains: String
+	avatarRemoteURLHasPrefix: String
+	avatarRemoteURLHasSuffix: String
+	avatarRemoteURLIsNil: Boolean
+	avatarRemoteURLNotNil: Boolean
+	avatarRemoteURLEqualFold: String
+	avatarRemoteURLContainsFold: String
+	"""
+	avatar_local_file_id field predicates
+	"""
+	avatarLocalFileID: String
+	avatarLocalFileIDNEQ: String
+	avatarLocalFileIDIn: [String!]
+	avatarLocalFileIDNotIn: [String!]
+	avatarLocalFileIDGT: String
+	avatarLocalFileIDGTE: String
+	avatarLocalFileIDLT: String
+	avatarLocalFileIDLTE: String
+	avatarLocalFileIDContains: String
+	avatarLocalFileIDHasPrefix: String
+	avatarLocalFileIDHasSuffix: String
+	avatarLocalFileIDIsNil: Boolean
+	avatarLocalFileIDNotNil: Boolean
+	avatarLocalFileIDEqualFold: String
+	avatarLocalFileIDContainsFold: String
+	"""
+	avatar_updated_at field predicates
+	"""
+	avatarUpdatedAt: Time
+	avatarUpdatedAtNEQ: Time
+	avatarUpdatedAtIn: [Time!]
+	avatarUpdatedAtNotIn: [Time!]
+	avatarUpdatedAtGT: Time
+	avatarUpdatedAtGTE: Time
+	avatarUpdatedAtLT: Time
+	avatarUpdatedAtLTE: Time
+	avatarUpdatedAtIsNil: Boolean
+	avatarUpdatedAtNotNil: Boolean
 	"""
 	given_name field predicates
 	"""
@@ -7533,6 +7665,10 @@ type DirectoryGroupHistory implements Node {
 	integration that owns this directory group
 	"""
 	integrationID: String!
+	"""
+	optional platform associated with this directory group
+	"""
+	platformID: String
 	"""
 	sync run that produced this snapshot
 	"""
@@ -7911,6 +8047,24 @@ input DirectoryGroupHistoryWhereInput {
 	integrationIDEqualFold: String
 	integrationIDContainsFold: String
 	"""
+	platform_id field predicates
+	"""
+	platformID: String
+	platformIDNEQ: String
+	platformIDIn: [String!]
+	platformIDNotIn: [String!]
+	platformIDGT: String
+	platformIDGTE: String
+	platformIDLT: String
+	platformIDLTE: String
+	platformIDContains: String
+	platformIDHasPrefix: String
+	platformIDHasSuffix: String
+	platformIDIsNil: Boolean
+	platformIDNotNil: Boolean
+	platformIDEqualFold: String
+	platformIDContainsFold: String
+	"""
 	directory_sync_run_id field predicates
 	"""
 	directorySyncRunID: String
@@ -8095,6 +8249,10 @@ type DirectoryMembershipHistory implements Node {
 	integration that owns this directory membership
 	"""
 	integrationID: String!
+	"""
+	optional platform associated with this directory membership
+	"""
+	platformID: String
 	"""
 	sync run that produced this snapshot
 	"""
@@ -8444,6 +8602,24 @@ input DirectoryMembershipHistoryWhereInput {
 	integrationIDHasSuffix: String
 	integrationIDEqualFold: String
 	integrationIDContainsFold: String
+	"""
+	platform_id field predicates
+	"""
+	platformID: String
+	platformIDNEQ: String
+	platformIDIn: [String!]
+	platformIDNotIn: [String!]
+	platformIDGT: String
+	platformIDGTE: String
+	platformIDLT: String
+	platformIDLTE: String
+	platformIDContains: String
+	platformIDHasPrefix: String
+	platformIDHasSuffix: String
+	platformIDIsNil: Boolean
+	platformIDNotNil: Boolean
+	platformIDEqualFold: String
+	platformIDContainsFold: String
 	"""
 	directory_sync_run_id field predicates
 	"""
@@ -16264,6 +16440,10 @@ type IntegrationHistory implements Node {
 	"""
 	integrationType: String
 	"""
+	optional platform associated with this integration for downstream inventory linkage
+	"""
+	platformID: String
+	"""
 	additional metadata about the integration
 	"""
 	metadata: Map
@@ -16634,6 +16814,24 @@ input IntegrationHistoryWhereInput {
 	integrationTypeNotNil: Boolean
 	integrationTypeEqualFold: String
 	integrationTypeContainsFold: String
+	"""
+	platform_id field predicates
+	"""
+	platformID: String
+	platformIDNEQ: String
+	platformIDIn: [String!]
+	platformIDNotIn: [String!]
+	platformIDGT: String
+	platformIDGTE: String
+	platformIDLT: String
+	platformIDLTE: String
+	platformIDContains: String
+	platformIDHasPrefix: String
+	platformIDHasSuffix: String
+	platformIDIsNil: Boolean
+	platformIDNotNil: Boolean
+	platformIDEqualFold: String
+	platformIDContainsFold: String
 }
 type InternalPolicyHistory implements Node {
 	id: ID!

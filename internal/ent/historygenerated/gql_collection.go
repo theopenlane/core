@@ -2870,6 +2870,21 @@ func (_q *DirectoryAccountHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldDirectorySyncRunID)
 				fieldSeen[directoryaccounthistory.FieldDirectorySyncRunID] = struct{}{}
 			}
+		case "platformID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldPlatformID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldPlatformID)
+				fieldSeen[directoryaccounthistory.FieldPlatformID] = struct{}{}
+			}
+		case "identityHolderID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldIdentityHolderID)
+				fieldSeen[directoryaccounthistory.FieldIdentityHolderID] = struct{}{}
+			}
+		case "directoryName":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldDirectoryName]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldDirectoryName)
+				fieldSeen[directoryaccounthistory.FieldDirectoryName] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[directoryaccounthistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldExternalID)
@@ -2889,6 +2904,21 @@ func (_q *DirectoryAccountHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[directoryaccounthistory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldDisplayName)
 				fieldSeen[directoryaccounthistory.FieldDisplayName] = struct{}{}
+			}
+		case "avatarRemoteURL":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldAvatarRemoteURL]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldAvatarRemoteURL)
+				fieldSeen[directoryaccounthistory.FieldAvatarRemoteURL] = struct{}{}
+			}
+		case "avatarLocalFileID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldAvatarLocalFileID)
+				fieldSeen[directoryaccounthistory.FieldAvatarLocalFileID] = struct{}{}
+			}
+		case "avatarUpdatedAt":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldAvatarUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldAvatarUpdatedAt)
+				fieldSeen[directoryaccounthistory.FieldAvatarUpdatedAt] = struct{}{}
 			}
 		case "givenName":
 			if _, ok := fieldSeen[directoryaccounthistory.FieldGivenName]; !ok {
@@ -3124,6 +3154,11 @@ func (_q *DirectoryGroupHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, directorygrouphistory.FieldIntegrationID)
 				fieldSeen[directorygrouphistory.FieldIntegrationID] = struct{}{}
 			}
+		case "platformID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldPlatformID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldPlatformID)
+				fieldSeen[directorygrouphistory.FieldPlatformID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorygrouphistory.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorygrouphistory.FieldDirectorySyncRunID)
@@ -3347,6 +3382,11 @@ func (_q *DirectoryMembershipHistoryQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[directorymembershiphistory.FieldIntegrationID]; !ok {
 				selectedFields = append(selectedFields, directorymembershiphistory.FieldIntegrationID)
 				fieldSeen[directorymembershiphistory.FieldIntegrationID] = struct{}{}
+			}
+		case "platformID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldPlatformID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldPlatformID)
+				fieldSeen[directorymembershiphistory.FieldPlatformID] = struct{}{}
 			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectorySyncRunID]; !ok {
@@ -6701,6 +6741,11 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[integrationhistory.FieldIntegrationType]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldIntegrationType)
 				fieldSeen[integrationhistory.FieldIntegrationType] = struct{}{}
+			}
+		case "platformID":
+			if _, ok := fieldSeen[integrationhistory.FieldPlatformID]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldPlatformID)
+				fieldSeen[integrationhistory.FieldPlatformID] = struct{}{}
 			}
 		case "metadata":
 			if _, ok := fieldSeen[integrationhistory.FieldMetadata]; !ok {

@@ -133,12 +133,16 @@ type IdentityHolderEdges struct {
 	Assets []*Asset `json:"assets,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
+	// DirectoryAccounts holds the value of the directory_accounts edge.
+	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// platforms the identity holder has access to
@@ -147,9 +151,9 @@ type IdentityHolderEdges struct {
 	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [22]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -159,9 +163,11 @@ type IdentityHolderEdges struct {
 	namedTemplates           map[string][]*Template
 	namedAssets              map[string][]*Asset
 	namedEntities            map[string][]*Entity
+	namedDirectoryAccounts   map[string][]*DirectoryAccount
 	namedPlatforms           map[string][]*Platform
 	namedCampaigns           map[string][]*Campaign
 	namedTasks               map[string][]*Task
+	namedFindings            map[string][]*Finding
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 	namedAccessPlatforms     map[string][]*Platform
 }
@@ -304,10 +310,19 @@ func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
 	return nil, &NotLoadedError{edge: "entities"}
 }
 
+// DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
+	if e.loadedTypes[14] {
+		return e.DirectoryAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_accounts"}
+}
+
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -316,7 +331,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -325,16 +340,25 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[18] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -343,7 +367,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -354,7 +378,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[19] {
+	} else if e.loadedTypes[21] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -701,6 +725,11 @@ func (_m *IdentityHolder) QueryEntities() *EntityQuery {
 	return NewIdentityHolderClient(_m.config).QueryEntities(_m)
 }
 
+// QueryDirectoryAccounts queries the "directory_accounts" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	return NewIdentityHolderClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
 // QueryPlatforms queries the "platforms" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryPlatforms() *PlatformQuery {
 	return NewIdentityHolderClient(_m.config).QueryPlatforms(_m)
@@ -714,6 +743,11 @@ func (_m *IdentityHolder) QueryCampaigns() *CampaignQuery {
 // QueryTasks queries the "tasks" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryTasks() *TaskQuery {
 	return NewIdentityHolderClient(_m.config).QueryTasks(_m)
+}
+
+// QueryFindings queries the "findings" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryFindings() *FindingQuery {
+	return NewIdentityHolderClient(_m.config).QueryFindings(_m)
 }
 
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the IdentityHolder entity.
@@ -1061,6 +1095,30 @@ func (_m *IdentityHolder) appendNamedEntities(name string, edges ...*Entity) {
 	}
 }
 
+// NamedDirectoryAccounts returns the DirectoryAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedDirectoryAccounts(name string) ([]*DirectoryAccount, error) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedDirectoryAccounts(name string, edges ...*DirectoryAccount) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		_m.Edges.namedDirectoryAccounts = make(map[string][]*DirectoryAccount)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
+	} else {
+		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
 // NamedPlatforms returns the Platforms named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *IdentityHolder) NamedPlatforms(name string) ([]*Platform, error) {
@@ -1130,6 +1188,30 @@ func (_m *IdentityHolder) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
 	}
 }
 

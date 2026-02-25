@@ -404,6 +404,9 @@ func (_u *DirectoryMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldScopeID, field.TypeString)
 	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(directorymembershiphistory.FieldPlatformID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembershiphistory.FieldRole, field.TypeEnum, value)
 	}
@@ -863,6 +866,9 @@ func (_u *DirectoryMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldScopeID, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(directorymembershiphistory.FieldPlatformID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembershiphistory.FieldRole, field.TypeEnum, value)

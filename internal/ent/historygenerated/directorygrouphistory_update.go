@@ -528,6 +528,9 @@ func (_u *DirectoryGroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(directorygrouphistory.FieldScopeID, field.TypeString)
 	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(directorygrouphistory.FieldPlatformID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(directorygrouphistory.FieldEmail, field.TypeString, value)
 	}
@@ -1134,6 +1137,9 @@ func (_u *DirectoryGroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *D
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(directorygrouphistory.FieldScopeID, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(directorygrouphistory.FieldPlatformID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(directorygrouphistory.FieldEmail, field.TypeString, value)

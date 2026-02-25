@@ -16,8 +16,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
@@ -172,9 +176,67 @@ func (_c *DirectoryAccountCreate) SetIntegrationID(v string) *DirectoryAccountCr
 	return _c
 }
 
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableIntegrationID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
 // SetDirectorySyncRunID sets the "directory_sync_run_id" field.
 func (_c *DirectoryAccountCreate) SetDirectorySyncRunID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetDirectorySyncRunID(v)
+	return _c
+}
+
+// SetNillableDirectorySyncRunID sets the "directory_sync_run_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableDirectorySyncRunID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetDirectorySyncRunID(*v)
+	}
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *DirectoryAccountCreate) SetPlatformID(v string) *DirectoryAccountCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillablePlatformID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
+	return _c
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *DirectoryAccountCreate) SetIdentityHolderID(v string) *DirectoryAccountCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableIdentityHolderID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_c *DirectoryAccountCreate) SetDirectoryName(v string) *DirectoryAccountCreate {
+	_c.mutation.SetDirectoryName(v)
+	return _c
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableDirectoryName(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetDirectoryName(*v)
+	}
 	return _c
 }
 
@@ -222,6 +284,48 @@ func (_c *DirectoryAccountCreate) SetDisplayName(v string) *DirectoryAccountCrea
 func (_c *DirectoryAccountCreate) SetNillableDisplayName(v *string) *DirectoryAccountCreate {
 	if v != nil {
 		_c.SetDisplayName(*v)
+	}
+	return _c
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_c *DirectoryAccountCreate) SetAvatarRemoteURL(v string) *DirectoryAccountCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableAvatarRemoteURL(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
+	}
+	return _c
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_c *DirectoryAccountCreate) SetAvatarLocalFileID(v string) *DirectoryAccountCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableAvatarLocalFileID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
+	}
+	return _c
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (_c *DirectoryAccountCreate) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountCreate {
+	_c.mutation.SetAvatarUpdatedAt(v)
+	return _c
+}
+
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableAvatarUpdatedAt(v *time.Time) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetAvatarUpdatedAt(*v)
 	}
 	return _c
 }
@@ -467,6 +571,35 @@ func (_c *DirectoryAccountCreate) SetDirectorySyncRun(v *DirectorySyncRun) *Dire
 	return _c.SetDirectorySyncRunID(v.ID)
 }
 
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_c *DirectoryAccountCreate) SetPlatform(v *Platform) *DirectoryAccountCreate {
+	return _c.SetPlatformID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_c *DirectoryAccountCreate) SetIdentityHolder(v *IdentityHolder) *DirectoryAccountCreate {
+	return _c.SetIdentityHolderID(v.ID)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_c *DirectoryAccountCreate) SetAvatarFileID(id string) *DirectoryAccountCreate {
+	_c.mutation.SetAvatarFileID(id)
+	return _c
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableAvatarFileID(id *string) *DirectoryAccountCreate {
+	if id != nil {
+		_c = _c.SetAvatarFileID(*id)
+	}
+	return _c
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_c *DirectoryAccountCreate) SetAvatarFile(v *File) *DirectoryAccountCreate {
+	return _c.SetAvatarFileID(v.ID)
+}
+
 // AddGroupIDs adds the "groups" edge to the DirectoryGroup entity by IDs.
 func (_c *DirectoryAccountCreate) AddGroupIDs(ids ...string) *DirectoryAccountCreate {
 	_c.mutation.AddGroupIDs(ids...)
@@ -480,6 +613,21 @@ func (_c *DirectoryAccountCreate) AddGroups(v ...*DirectoryGroup) *DirectoryAcco
 		ids[i] = v[i].ID
 	}
 	return _c.AddGroupIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *DirectoryAccountCreate) AddFindingIDs(ids ...string) *DirectoryAccountCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *DirectoryAccountCreate) AddFindings(v ...*Finding) *DirectoryAccountCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -567,6 +715,13 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
+		if directoryaccount.DefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := directoryaccount.DefaultAvatarUpdatedAt()
+		_c.mutation.SetAvatarUpdatedAt(v)
+	}
 	if _, ok := _c.mutation.AccountType(); !ok {
 		v := directoryaccount.DefaultAccountType
 		_c.mutation.SetAccountType(v)
@@ -615,20 +770,19 @@ func (_c *DirectoryAccountCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.IntegrationID(); !ok {
-		return &ValidationError{Name: "integration_id", err: errors.New(`generated: missing required field "DirectoryAccount.integration_id"`)}
-	}
 	if v, ok := _c.mutation.IntegrationID(); ok {
 		if err := directoryaccount.IntegrationIDValidator(v); err != nil {
 			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.integration_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.DirectorySyncRunID(); !ok {
-		return &ValidationError{Name: "directory_sync_run_id", err: errors.New(`generated: missing required field "DirectoryAccount.directory_sync_run_id"`)}
-	}
 	if v, ok := _c.mutation.DirectorySyncRunID(); ok {
 		if err := directoryaccount.DirectorySyncRunIDValidator(v); err != nil {
 			return &ValidationError{Name: "directory_sync_run_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.directory_sync_run_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PlatformID(); ok {
+		if err := directoryaccount.PlatformIDValidator(v); err != nil {
+			return &ValidationError{Name: "platform_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.platform_id": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.ExternalID(); !ok {
@@ -637,6 +791,11 @@ func (_c *DirectoryAccountCreate) check() error {
 	if v, ok := _c.mutation.ExternalID(); ok {
 		if err := directoryaccount.ExternalIDValidator(v); err != nil {
 			return &ValidationError{Name: "external_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.external_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.AvatarRemoteURL(); ok {
+		if err := directoryaccount.AvatarRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.avatar_remote_url": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.AccountType(); ok {
@@ -665,12 +824,6 @@ func (_c *DirectoryAccountCreate) check() error {
 	}
 	if _, ok := _c.mutation.ProfileHash(); !ok {
 		return &ValidationError{Name: "profile_hash", err: errors.New(`generated: missing required field "DirectoryAccount.profile_hash"`)}
-	}
-	if len(_c.mutation.IntegrationIDs()) == 0 {
-		return &ValidationError{Name: "integration", err: errors.New(`generated: missing required edge "DirectoryAccount.integration"`)}
-	}
-	if len(_c.mutation.DirectorySyncRunIDs()) == 0 {
-		return &ValidationError{Name: "directory_sync_run", err: errors.New(`generated: missing required edge "DirectoryAccount.directory_sync_run"`)}
 	}
 	return nil
 }
@@ -740,6 +893,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		_spec.SetField(directoryaccount.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
+	if value, ok := _c.mutation.DirectoryName(); ok {
+		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
+		_node.DirectoryName = &value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(directoryaccount.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
@@ -755,6 +912,14 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(directoryaccount.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(directoryaccount.FieldAvatarRemoteURL, field.TypeString, value)
+		_node.AvatarRemoteURL = &value
+	}
+	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(directoryaccount.FieldAvatarUpdatedAt, field.TypeTime, value)
+		_node.AvatarUpdatedAt = &value
 	}
 	if value, ok := _c.mutation.GivenName(); ok {
 		_spec.SetField(directoryaccount.FieldGivenName, field.TypeString, value)
@@ -873,7 +1038,7 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directoryaccount.IntegrationTable,
 			Columns: []string{directoryaccount.IntegrationColumn},
 			Bidi:    false,
@@ -891,7 +1056,7 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if nodes := _c.mutation.DirectorySyncRunIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directoryaccount.DirectorySyncRunTable,
 			Columns: []string{directoryaccount.DirectorySyncRunColumn},
 			Bidi:    false,
@@ -904,6 +1069,60 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DirectorySyncRunID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.PlatformTable,
+			Columns: []string{directoryaccount.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IdentityHolderTable,
+			Columns: []string{directoryaccount.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IdentityHolderID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.AvatarFileTable,
+			Columns: []string{directoryaccount.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AvatarLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.GroupsIDs(); len(nodes) > 0 {
@@ -927,6 +1146,23 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}

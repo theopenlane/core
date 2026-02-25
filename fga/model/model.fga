@@ -523,7 +523,7 @@ type integration
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [organization]
+    define parent: [organization, platform]
 
 # webhooks configured for integrations
 type integration_webhook
@@ -547,6 +547,51 @@ type integration_run
     define parent: [user, service, organization, integration]
     define viewer: can_view from parent
     define blocked: [user, group#member]
+
+# directory sync run history is service-driven but visible through the parent integration
+type directory_sync_run
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+# directory accounts are internal snapshots of user identities from external systems
+type directory_account
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, directory_sync_run, identity_holder, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+# directory groups are internal snapshots of group identities from external systems
+type directory_group
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, directory_sync_run, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+# directory memberships are service-managed joins between directory accounts and groups
+type directory_membership
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, directory_sync_run, directory_account, directory_group, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
 # entities are always assigned to an organization and permissions are inherited from the organization
 # individual users or groups can also be given permission to an entity
 type entity
@@ -571,7 +616,8 @@ type asset
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
     define parent: [user, service, organization, platform, entity]
-# findings can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
+# findings can be associated with programs, controls, subcontrols, risks, assets, entities,
+# scans, directory accounts, or identity holders
 # permissions are inherited from the parent object or organization
 type finding
   relations
@@ -582,7 +628,7 @@ type finding
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity]
+    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity, scan, directory_account, identity_holder]
 # vulnerabilities can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
 # permissions are inherited from the parent object or organization
 type vulnerability
@@ -594,7 +640,7 @@ type vulnerability
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity]
+    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity, scan]
 # reviews can be associated with programs, controls, subcontrols, risks, action_plans, findings, vulnerabilities, assets, entities, or tasks
 # permissions are inherited from the parent object or organization
 type review
@@ -944,7 +990,7 @@ type workflow_object_ref
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_instance, control, internal_policy, evidence]
+    define parent: [user, service, organization, workflow_instance, control, internal_policy, evidence, subcontrol, action_plan, procedure, campaign, campaign_target, directory_account, directory_group, directory_membership, identity_holder, platform]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 

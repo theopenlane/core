@@ -56,6 +56,9 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 	params := url.Values{}
 	params.Set("customer", "my_customer")
 	params.Set("maxResults", "5")
+	params.Set("projection", "full")
+	params.Set("viewType", "admin_view")
+	params.Set("fields", "users(primaryEmail,name/fullName,thumbnailPhotoUrl)")
 
 	endpoint := "https://admin.googleapis.com/admin/directory/v1/users?" + params.Encode()
 	var resp struct {
@@ -68,6 +71,8 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 				// FullName is the user's full display name
 				FullName string `json:"fullName"`
 			} `json:"name"`
+			// ThumbnailPhotoURL is the user avatar URL from Google Directory.
+			ThumbnailPhotoURL string `json:"thumbnailPhotoUrl"`
 		} `json:"users"`
 	}
 
@@ -78,8 +83,9 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 	samples := make([]map[string]any, 0, len(resp.Users))
 	for _, user := range resp.Users {
 		samples = append(samples, map[string]any{
-			"email": user.PrimaryEmail,
-			"name":  user.Name.FullName,
+			"email":             user.PrimaryEmail,
+			"name":              user.Name.FullName,
+			"avatar_remote_url": user.ThumbnailPhotoURL,
 		})
 	}
 

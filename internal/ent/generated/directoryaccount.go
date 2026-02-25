@@ -14,8 +14,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 )
 
 // DirectoryAccount is the model entity for the DirectoryAccount schema.
@@ -45,10 +48,16 @@ type DirectoryAccount struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the directory_account
 	ScopeID string `json:"scope_id,omitempty"`
-	// integration that owns this directory account
+	// optional integration that owns this directory account when sourced by an integration
 	IntegrationID string `json:"integration_id,omitempty"`
-	// sync run that produced this snapshot
+	// optional sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
+	// optional platform associated with this directory account
+	PlatformID string `json:"platform_id,omitempty"`
+	// deduplicated identity holder linked to this directory account
+	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
+	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	DirectoryName *string `json:"directory_name,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"external_id,omitempty"`
 	// optional secondary identifier such as Azure immutable ID
@@ -57,6 +66,12 @@ type DirectoryAccount struct {
 	CanonicalEmail *string `json:"canonical_email,omitempty"`
 	// provider supplied display name
 	DisplayName string `json:"display_name,omitempty"`
+	// URL of the avatar supplied by the directory provider
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	// local avatar file identifier, takes precedence over avatar_remote_url
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
+	// time the directory account avatar was last updated
+	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// first name reported by the provider
 	GivenName *string `json:"given_name,omitempty"`
 	// last name reported by the provider
@@ -89,10 +104,8 @@ type DirectoryAccount struct {
 	SourceVersion *string `json:"source_version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DirectoryAccountQuery when eager-loading is set.
-	Edges                                 DirectoryAccountEdges `json:"edges"`
-	directory_sync_run_directory_accounts *string
-	integration_directory_accounts        *string
-	selectValues                          sql.SelectValues
+	Edges        DirectoryAccountEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // DirectoryAccountEdges holds the relations/edges for other nodes in the graph.
@@ -107,19 +120,28 @@ type DirectoryAccountEdges struct {
 	Integration *Integration `json:"integration,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRun *DirectorySyncRun `json:"directory_sync_run,omitempty"`
+	// platform associated with this directory account
+	Platform *Platform `json:"platform,omitempty"`
+	// identity holder linked to this directory account
+	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
+	// local avatar file for the directory account
+	AvatarFile *File `json:"avatar_file,omitempty"`
 	// Groups holds the value of the groups edge.
 	Groups []*DirectoryGroup `json:"groups,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// Memberships holds the value of the memberships edge.
 	Memberships []*DirectoryMembership `json:"memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [12]map[string]int
 
 	namedGroups             map[string][]*DirectoryGroup
+	namedFindings           map[string][]*Finding
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 	namedMemberships        map[string][]*DirectoryMembership
 }
@@ -179,19 +201,61 @@ func (e DirectoryAccountEdges) DirectorySyncRunOrErr() (*DirectorySyncRun, error
 	return nil, &NotLoadedError{edge: "directory_sync_run"}
 }
 
+// PlatformOrErr returns the Platform value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryAccountEdges) PlatformOrErr() (*Platform, error) {
+	if e.Platform != nil {
+		return e.Platform, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: platform.Label}
+	}
+	return nil, &NotLoadedError{edge: "platform"}
+}
+
+// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryAccountEdges) IdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.IdentityHolder != nil {
+		return e.IdentityHolder, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "identity_holder"}
+}
+
+// AvatarFileOrErr returns the AvatarFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryAccountEdges) AvatarFileOrErr() (*File, error) {
+	if e.AvatarFile != nil {
+		return e.AvatarFile, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "avatar_file"}
+}
+
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryAccountEdges) GroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[8] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
 }
 
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e DirectoryAccountEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[9] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryAccountEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[10] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -200,7 +264,7 @@ func (e DirectoryAccountEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, 
 // MembershipsOrErr returns the Memberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryAccountEdges) MembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[11] {
 		return e.Memberships, nil
 	}
 	return nil, &NotLoadedError{edge: "memberships"}
@@ -213,14 +277,10 @@ func (*DirectoryAccount) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case directoryaccount.FieldTags, directoryaccount.FieldProfile:
 			values[i] = new([]byte)
-		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldDisplayID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldDirectorySyncRunID, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldDisplayName, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldProfileHash, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
+		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldDisplayID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldDirectorySyncRunID, directoryaccount.FieldPlatformID, directoryaccount.FieldIdentityHolderID, directoryaccount.FieldDirectoryName, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldDisplayName, directoryaccount.FieldAvatarRemoteURL, directoryaccount.FieldAvatarLocalFileID, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldProfileHash, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
 			values[i] = new(sql.NullString)
-		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldLastLoginAt, directoryaccount.FieldObservedAt:
+		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldAvatarUpdatedAt, directoryaccount.FieldLastLoginAt, directoryaccount.FieldObservedAt:
 			values[i] = new(sql.NullTime)
-		case directoryaccount.ForeignKeys[0]: // directory_sync_run_directory_accounts
-			values[i] = new(sql.NullString)
-		case directoryaccount.ForeignKeys[1]: // integration_directory_accounts
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -322,6 +382,26 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DirectorySyncRunID = value.String
 			}
+		case directoryaccount.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
+		case directoryaccount.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = new(string)
+				*_m.IdentityHolderID = value.String
+			}
+		case directoryaccount.FieldDirectoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_name", values[i])
+			} else if value.Valid {
+				_m.DirectoryName = new(string)
+				*_m.DirectoryName = value.String
+			}
 		case directoryaccount.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
@@ -347,6 +427,27 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
 			} else if value.Valid {
 				_m.DisplayName = value.String
+			}
+		case directoryaccount.FieldAvatarRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
+			} else if value.Valid {
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
+			}
+		case directoryaccount.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
+			}
+		case directoryaccount.FieldAvatarUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
+			} else if value.Valid {
+				_m.AvatarUpdatedAt = new(time.Time)
+				*_m.AvatarUpdatedAt = value.Time
 			}
 		case directoryaccount.FieldGivenName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -449,20 +550,6 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
-		case directoryaccount.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field directory_sync_run_directory_accounts", values[i])
-			} else if value.Valid {
-				_m.directory_sync_run_directory_accounts = new(string)
-				*_m.directory_sync_run_directory_accounts = value.String
-			}
-		case directoryaccount.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field integration_directory_accounts", values[i])
-			} else if value.Valid {
-				_m.integration_directory_accounts = new(string)
-				*_m.integration_directory_accounts = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -501,9 +588,29 @@ func (_m *DirectoryAccount) QueryDirectorySyncRun() *DirectorySyncRunQuery {
 	return NewDirectoryAccountClient(_m.config).QueryDirectorySyncRun(_m)
 }
 
+// QueryPlatform queries the "platform" edge of the DirectoryAccount entity.
+func (_m *DirectoryAccount) QueryPlatform() *PlatformQuery {
+	return NewDirectoryAccountClient(_m.config).QueryPlatform(_m)
+}
+
+// QueryIdentityHolder queries the "identity_holder" edge of the DirectoryAccount entity.
+func (_m *DirectoryAccount) QueryIdentityHolder() *IdentityHolderQuery {
+	return NewDirectoryAccountClient(_m.config).QueryIdentityHolder(_m)
+}
+
+// QueryAvatarFile queries the "avatar_file" edge of the DirectoryAccount entity.
+func (_m *DirectoryAccount) QueryAvatarFile() *FileQuery {
+	return NewDirectoryAccountClient(_m.config).QueryAvatarFile(_m)
+}
+
 // QueryGroups queries the "groups" edge of the DirectoryAccount entity.
 func (_m *DirectoryAccount) QueryGroups() *DirectoryGroupQuery {
 	return NewDirectoryAccountClient(_m.config).QueryGroups(_m)
+}
+
+// QueryFindings queries the "findings" edge of the DirectoryAccount entity.
+func (_m *DirectoryAccount) QueryFindings() *FindingQuery {
+	return NewDirectoryAccountClient(_m.config).QueryFindings(_m)
 }
 
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the DirectoryAccount entity.
@@ -578,6 +685,19 @@ func (_m *DirectoryAccount) String() string {
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)
 	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
+	builder.WriteString(", ")
+	if v := _m.IdentityHolderID; v != nil {
+		builder.WriteString("identity_holder_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DirectoryName; v != nil {
+		builder.WriteString("directory_name=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
@@ -593,6 +713,21 @@ func (_m *DirectoryAccount) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)
+	builder.WriteString(", ")
+	if v := _m.AvatarRemoteURL; v != nil {
+		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.AvatarUpdatedAt; v != nil {
+		builder.WriteString("avatar_updated_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	if v := _m.GivenName; v != nil {
 		builder.WriteString("given_name=")
@@ -681,6 +816,30 @@ func (_m *DirectoryAccount) appendNamedGroups(name string, edges ...*DirectoryGr
 		_m.Edges.namedGroups[name] = []*DirectoryGroup{}
 	} else {
 		_m.Edges.namedGroups[name] = append(_m.Edges.namedGroups[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *DirectoryAccount) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *DirectoryAccount) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
 	}
 }
 

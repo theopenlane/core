@@ -24,3 +24,11 @@
 - user: organization:openlane#owner
   relation: editor
   object: finding:finding-2
+
+# finding-3 is associated with a scan
+- user: organization:openlane
+  relation: parent
+  object: scan:scan-1
+- user: scan:scan-1
+  relation: parent
+  object: finding:finding-3

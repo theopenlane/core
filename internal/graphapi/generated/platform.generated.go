@@ -222,6 +222,16 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_tasks(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Platform_identityHolders(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Platform_integrations(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Platform_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
 			case "sourceAssets":
@@ -447,6 +457,16 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_tasks(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Platform_identityHolders(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Platform_integrations(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Platform_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
 			case "sourceAssets":
@@ -701,6 +721,16 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_tasks(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Platform_identityHolders(ctx, field)
+			case "integrations":
+				return ec.fieldContext_Platform_integrations(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Platform_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
 			case "sourceAssets":

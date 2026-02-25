@@ -7383,6 +7383,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
+	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryName == nil {
+				return nil, nil
+			}
+			return _m.DirectoryName, nil
+		},
+		column: directoryaccount.FieldDirectoryName,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByDirectoryName(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.DirectoryName == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryName,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldExternalID orders DirectoryAccount by external_id.
 	DirectoryAccountOrderFieldExternalID = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -7448,6 +7475,8 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountOrderFieldDirectoryName.column:
+		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryAccountOrderFieldCanonicalEmail.column:
@@ -7474,6 +7503,8 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "directory_name":
+		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
 		*f = *DirectoryAccountOrderFieldExternalID
 	case "canonical_email":

@@ -53,6 +53,8 @@ const (
 	FieldKind = "kind"
 	// FieldIntegrationType holds the string denoting the integration_type field in the database.
 	FieldIntegrationType = "integration_type"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// FieldProviderMetadata holds the string denoting the provider_metadata field in the database.
 	FieldProviderMetadata = "provider_metadata"
 	// FieldConfig holds the string denoting the config field in the database.
@@ -93,6 +95,8 @@ const (
 	EdgeDirectoryMemberships = "directory_memberships"
 	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
 	EdgeDirectorySyncRuns = "directory_sync_runs"
+	// EdgePlatform holds the string denoting the platform edge name in mutations.
+	EdgePlatform = "platform"
 	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
 	EdgeNotificationTemplates = "notification_templates"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
@@ -181,28 +185,35 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
 	DirectoryAccountsInverseTable = "directory_accounts"
 	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
-	DirectoryAccountsColumn = "integration_directory_accounts"
+	DirectoryAccountsColumn = "integration_id"
 	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
 	DirectoryGroupsTable = "directory_groups"
 	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
 	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
 	DirectoryGroupsInverseTable = "directory_groups"
 	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
-	DirectoryGroupsColumn = "integration_directory_groups"
+	DirectoryGroupsColumn = "integration_id"
 	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
 	DirectoryMembershipsTable = "directory_memberships"
 	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
 	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
 	DirectoryMembershipsInverseTable = "directory_memberships"
 	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
-	DirectoryMembershipsColumn = "integration_directory_memberships"
+	DirectoryMembershipsColumn = "integration_id"
 	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
 	DirectorySyncRunsTable = "directory_sync_runs"
 	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
 	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
 	DirectorySyncRunsInverseTable = "directory_sync_runs"
 	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
-	DirectorySyncRunsColumn = "integration_directory_sync_runs"
+	DirectorySyncRunsColumn = "integration_id"
+	// PlatformTable is the table that holds the platform relation/edge.
+	PlatformTable = "integrations"
+	// PlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformInverseTable = "platforms"
+	// PlatformColumn is the table column denoting the platform relation/edge.
+	PlatformColumn = "platform_id"
 	// NotificationTemplatesTable is the table that holds the notification_templates relation/edge.
 	NotificationTemplatesTable = "notification_templates"
 	// NotificationTemplatesInverseTable is the table name for the NotificationTemplate entity.
@@ -260,6 +271,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldKind,
 	FieldIntegrationType,
+	FieldPlatformID,
 	FieldProviderMetadata,
 	FieldConfig,
 	FieldProviderState,
@@ -336,6 +348,8 @@ var (
 	DefaultSystemOwned bool
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
+	PlatformIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -436,6 +450,11 @@ func ByKind(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationType orders the results by the integration_type field.
 func ByIntegrationType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationType, opts...).ToFunc()
+}
+
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -641,6 +660,13 @@ func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByPlatformField orders the results by platform field.
+func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByNotificationTemplatesCount orders the results by notification_templates count.
 func ByNotificationTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -820,6 +846,13 @@ func newDirectorySyncRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+	)
+}
+func newPlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
 	)
 }
 func newNotificationTemplatesStep() *sqlgraph.Step {
