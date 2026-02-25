@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const directoryAccountIdentityHolderField = "identity_holder_id"
@@ -44,16 +45,22 @@ func HookDirectoryAccount() ent.Hook {
 
 			holder, err := getOrCreateIdentityHolder(allowCtx, m.Client(), ownerID, canonicalEmail, account.DisplayName, account.JobTitle, account.Department)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get or create identity holder for directory account")
+
 				return nil, err
 			}
 
 			// Keep a direct link from directory account -> identity holder
 			update := m.Client().DirectoryAccount.UpdateOneID(account.ID)
 			if err := update.Mutation().SetField(directoryAccountIdentityHolderField, holder.ID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to set identity holder edge field on directory account mutation")
+
 				return nil, err
 			}
 
 			if err := update.Exec(allowCtx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to link directory account to identity holder")
+
 				return nil, err
 			}
 
@@ -73,6 +80,8 @@ func getOrCreateIdentityHolder(ctx context.Context, client *generated.Client, ow
 	}
 
 	if !generated.IsNotFound(err) {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to query for existing identity holder")
+
 		return nil, err
 	}
 
@@ -97,6 +106,8 @@ func getOrCreateIdentityHolder(ctx context.Context, client *generated.Client, ow
 	}
 
 	if !generated.IsConstraintError(err) {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create identity holder")
+
 		return nil, err
 	}
 
