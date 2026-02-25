@@ -71,6 +71,11 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("integration_type"),
 			),
+		field.String("platform_id").
+			Comment("optional platform associated with this integration for downstream inventory linkage").
+			Optional().
+			NotEmpty().
+			Immutable(),
 		field.JSON("provider_metadata", openapi.IntegrationProviderMetadata{}).
 			Comment("cached provider metadata for UI and registry access").
 			Optional().
@@ -125,6 +130,13 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, DirectoryGroup{}),
 		defaultEdgeToWithPagination(i, DirectoryMembership{}),
 		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			immutable:  true,
+			comment:    "platform associated with this integration",
+		}),
 		defaultEdgeToWithPagination(i, NotificationTemplate{}),
 		defaultEdgeToWithPagination(i, EmailTemplate{}),
 		edgeToWithPagination(&edgeDefinition{
@@ -150,6 +162,7 @@ func (Integration) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields(ownerFieldName, "kind").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("platform_id"),
 	}
 }
 

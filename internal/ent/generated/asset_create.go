@@ -463,6 +463,20 @@ func (_c *AssetCreate) SetName(v string) *AssetCreate {
 	return _c
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_c *AssetCreate) SetDisplayName(v string) *AssetCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableDisplayName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
+	}
+	return _c
+}
+
 // SetDescription sets the "description" field.
 func (_c *AssetCreate) SetDescription(v string) *AssetCreate {
 	_c.mutation.SetDescription(v)
@@ -994,6 +1008,11 @@ func (_c *AssetCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.DisplayName(); ok {
+		if err := asset.DisplayNameValidator(v); err != nil {
+			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Asset.display_name": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.SourceType(); !ok {
 		return &ValidationError{Name: "source_type", err: errors.New(`generated: missing required field "Asset.source_type"`)}
 	}
@@ -1121,6 +1140,10 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(asset.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.DisplayName(); ok {
+		_spec.SetField(asset.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
 	}
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(asset.FieldDescription, field.TypeString, value)

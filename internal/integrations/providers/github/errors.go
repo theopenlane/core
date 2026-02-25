@@ -39,4 +39,6 @@ var (
 	ErrAppJWTSign = errors.New("github: app jwt sign failed")
 	// ErrProviderNotInitialized indicates the provider instance is nil
 	ErrProviderNotInitialized = errors.New("github: provider not initialized")
+	// ErrOrganizationRequired indicates an organization login is required for organization-scoped operations.
+	ErrOrganizationRequired = errors.New("github: organization required")
 )

@@ -60,6 +60,7 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          displayName
           id
           internalOwner
           name

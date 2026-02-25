@@ -20,7 +20,42 @@ type IntegrationMappingSchema struct {
 }
 
 const (
+	IntegrationMappingSchemaDirectoryAccount = "DirectoryAccount"
 	IntegrationMappingSchemaVulnerability = "Vulnerability"
+)
+
+// Integration mapping keys for DirectoryAccount.
+const (
+	IntegrationMappingDirectoryAccountAccountType = "accountType"
+	IntegrationMappingDirectoryAccountAvatarRemoteURL = "avatarRemoteURL"
+	IntegrationMappingDirectoryAccountAvatarUpdatedAt = "avatarUpdatedAt"
+	IntegrationMappingDirectoryAccountCanonicalEmail = "canonicalEmail"
+	IntegrationMappingDirectoryAccountDepartment = "department"
+	IntegrationMappingDirectoryAccountDirectoryName = "directoryName"
+	IntegrationMappingDirectoryAccountDirectorySyncRunID = "directorySyncRunID"
+	IntegrationMappingDirectoryAccountDisplayName = "displayName"
+	IntegrationMappingDirectoryAccountEnvironmentID = "environmentID"
+	IntegrationMappingDirectoryAccountEnvironmentName = "environmentName"
+	IntegrationMappingDirectoryAccountExternalID = "externalID"
+	IntegrationMappingDirectoryAccountFamilyName = "familyName"
+	IntegrationMappingDirectoryAccountGivenName = "givenName"
+	IntegrationMappingDirectoryAccountIdentityHolderID = "identityHolderID"
+	IntegrationMappingDirectoryAccountIntegrationID = "integrationID"
+	IntegrationMappingDirectoryAccountJobTitle = "jobTitle"
+	IntegrationMappingDirectoryAccountLastLoginAt = "lastLoginAt"
+	IntegrationMappingDirectoryAccountLastSeenIP = "lastSeenIP"
+	IntegrationMappingDirectoryAccountMfaState = "mfaState"
+	IntegrationMappingDirectoryAccountObservedAt = "observedAt"
+	IntegrationMappingDirectoryAccountOrganizationUnit = "organizationUnit"
+	IntegrationMappingDirectoryAccountPlatformID = "platformID"
+	IntegrationMappingDirectoryAccountProfile = "profile"
+	IntegrationMappingDirectoryAccountProfileHash = "profileHash"
+	IntegrationMappingDirectoryAccountScopeID = "scopeID"
+	IntegrationMappingDirectoryAccountScopeName = "scopeName"
+	IntegrationMappingDirectoryAccountSecondaryKey = "secondaryKey"
+	IntegrationMappingDirectoryAccountSourceVersion = "sourceVersion"
+	IntegrationMappingDirectoryAccountStatus = "status"
+	IntegrationMappingDirectoryAccountTags = "tags"
 )
 
 // Integration mapping keys for Vulnerability.
@@ -65,6 +100,264 @@ const (
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata.
 var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
+	"DirectoryAccount": {
+		Name: "DirectoryAccount",
+		Fields: []IntegrationMappingField{
+			{
+				InputKey: "accountType",
+				EntField: "account_type",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "avatarRemoteURL",
+				EntField: "avatar_remote_url",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "avatarUpdatedAt",
+				EntField: "avatar_updated_at",
+				Type: "time.Time",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "canonicalEmail",
+				EntField: "canonical_email",
+				Type: "string",
+				Required: false,
+				UpsertKey: true,
+			},
+			{
+				InputKey: "department",
+				EntField: "department",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "directoryName",
+				EntField: "directory_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "directorySyncRunID",
+				EntField: "directory_sync_run_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "displayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "environmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "environmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "externalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: true,
+				UpsertKey: true,
+			},
+			{
+				InputKey: "familyName",
+				EntField: "family_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "givenName",
+				EntField: "given_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "identityHolderID",
+				EntField: "identity_holder_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "integrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "jobTitle",
+				EntField: "job_title",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "lastLoginAt",
+				EntField: "last_login_at",
+				Type: "time.Time",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "lastSeenIP",
+				EntField: "last_seen_ip",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "mfaState",
+				EntField: "mfa_state",
+				Type: "string",
+				Required: true,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "observedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: true,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "organizationUnit",
+				EntField: "organization_unit",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "platformID",
+				EntField: "platform_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "profile",
+				EntField: "profile",
+				Type: "json.RawMessage",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "profileHash",
+				EntField: "profile_hash",
+				Type: "string",
+				Required: true,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "scopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "scopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "secondaryKey",
+				EntField: "secondary_key",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "sourceVersion",
+				EntField: "source_version",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "status",
+				EntField: "status",
+				Type: "string",
+				Required: true,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
+				UpsertKey: false,
+			},
+		},
+		AllowedKeys: map[string]struct{}{
+			"accountType": {},
+			"avatarRemoteURL": {},
+			"avatarUpdatedAt": {},
+			"canonicalEmail": {},
+			"department": {},
+			"directoryName": {},
+			"directorySyncRunID": {},
+			"displayName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"externalID": {},
+			"familyName": {},
+			"givenName": {},
+			"identityHolderID": {},
+			"integrationID": {},
+			"jobTitle": {},
+			"lastLoginAt": {},
+			"lastSeenIP": {},
+			"mfaState": {},
+			"observedAt": {},
+			"organizationUnit": {},
+			"platformID": {},
+			"profile": {},
+			"profileHash": {},
+			"scopeID": {},
+			"scopeName": {},
+			"secondaryKey": {},
+			"sourceVersion": {},
+			"status": {},
+			"tags": {},
+		},
+		RequiredKeys: []string{
+			"externalID",
+			"mfaState",
+			"observedAt",
+			"profileHash",
+			"status",
+		},
+		UpsertKeys: []string{
+			"canonicalEmail",
+			"externalID",
+		},
+	},
 	"Vulnerability": {
 		Name: "Vulnerability",
 		Fields: []IntegrationMappingField{

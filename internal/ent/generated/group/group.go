@@ -466,6 +466,7 @@ var ForeignKeys = []string{
 	"organization_procedure_creators",
 	"organization_program_creators",
 	"organization_risk_creators",
+	"organization_identity_holder_creators",
 	"organization_scheduled_job_creators",
 	"organization_standard_creators",
 	"organization_template_creators",

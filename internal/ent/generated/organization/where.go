@@ -1523,6 +1523,35 @@ func HasRiskCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
+// HasIdentityHolderCreators applies the HasEdge predicate on the "identity_holder_creators" edge.
+func HasIdentityHolderCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IdentityHolderCreatorsTable, IdentityHolderCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHolderCreatorsWith applies the HasEdge predicate on the "identity_holder_creators" edge with a given conditions (other predicates).
+func HasIdentityHolderCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newIdentityHolderCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasScheduledJobCreators applies the HasEdge predicate on the "scheduled_job_creators" edge.
 func HasScheduledJobCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

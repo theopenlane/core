@@ -3,6 +3,7 @@ package gala
 import (
 	"context"
 	"encoding/json"
+	"maps"
 
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -102,9 +103,10 @@ func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, 
 		hasData = true
 	}
 
-	// Capture logger fields if available
+	// Capture logger fields if available. Clone to avoid aliasing the live context map,
+	// which may be written concurrently by pool workers restoring context snapshots.
 	if fields := logx.FieldsFromContext(ctx); len(fields) > 0 {
-		snapshot.LogFields = fields
+		snapshot.LogFields = maps.Clone(fields)
 		hasData = true
 	}
 

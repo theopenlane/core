@@ -270,6 +270,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assethistory.FieldSystemInternalID:            {Type: field.TypeString, Column: assethistory.FieldSystemInternalID},
 			assethistory.FieldAssetType:                   {Type: field.TypeEnum, Column: assethistory.FieldAssetType},
 			assethistory.FieldName:                        {Type: field.TypeString, Column: assethistory.FieldName},
+			assethistory.FieldDisplayName:                 {Type: field.TypeString, Column: assethistory.FieldDisplayName},
 			assethistory.FieldDescription:                 {Type: field.TypeString, Column: assethistory.FieldDescription},
 			assethistory.FieldIdentifier:                  {Type: field.TypeString, Column: assethistory.FieldIdentifier},
 			assethistory.FieldWebsite:                     {Type: field.TypeString, Column: assethistory.FieldWebsite},
@@ -631,10 +632,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccounthistory.FieldScopeID:            {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeID},
 			directoryaccounthistory.FieldIntegrationID:      {Type: field.TypeString, Column: directoryaccounthistory.FieldIntegrationID},
 			directoryaccounthistory.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectorySyncRunID},
+			directoryaccounthistory.FieldPlatformID:         {Type: field.TypeString, Column: directoryaccounthistory.FieldPlatformID},
+			directoryaccounthistory.FieldIdentityHolderID:   {Type: field.TypeString, Column: directoryaccounthistory.FieldIdentityHolderID},
+			directoryaccounthistory.FieldDirectoryName:      {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectoryName},
 			directoryaccounthistory.FieldExternalID:         {Type: field.TypeString, Column: directoryaccounthistory.FieldExternalID},
 			directoryaccounthistory.FieldSecondaryKey:       {Type: field.TypeString, Column: directoryaccounthistory.FieldSecondaryKey},
 			directoryaccounthistory.FieldCanonicalEmail:     {Type: field.TypeString, Column: directoryaccounthistory.FieldCanonicalEmail},
 			directoryaccounthistory.FieldDisplayName:        {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayName},
+			directoryaccounthistory.FieldAvatarRemoteURL:    {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarRemoteURL},
+			directoryaccounthistory.FieldAvatarLocalFileID:  {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarLocalFileID},
+			directoryaccounthistory.FieldAvatarUpdatedAt:    {Type: field.TypeTime, Column: directoryaccounthistory.FieldAvatarUpdatedAt},
 			directoryaccounthistory.FieldGivenName:          {Type: field.TypeString, Column: directoryaccounthistory.FieldGivenName},
 			directoryaccounthistory.FieldFamilyName:         {Type: field.TypeString, Column: directoryaccounthistory.FieldFamilyName},
 			directoryaccounthistory.FieldJobTitle:           {Type: field.TypeString, Column: directoryaccounthistory.FieldJobTitle},
@@ -678,6 +685,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygrouphistory.FieldScopeName:              {Type: field.TypeString, Column: directorygrouphistory.FieldScopeName},
 			directorygrouphistory.FieldScopeID:                {Type: field.TypeString, Column: directorygrouphistory.FieldScopeID},
 			directorygrouphistory.FieldIntegrationID:          {Type: field.TypeString, Column: directorygrouphistory.FieldIntegrationID},
+			directorygrouphistory.FieldPlatformID:             {Type: field.TypeString, Column: directorygrouphistory.FieldPlatformID},
 			directorygrouphistory.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygrouphistory.FieldDirectorySyncRunID},
 			directorygrouphistory.FieldExternalID:             {Type: field.TypeString, Column: directorygrouphistory.FieldExternalID},
 			directorygrouphistory.FieldEmail:                  {Type: field.TypeString, Column: directorygrouphistory.FieldEmail},
@@ -719,6 +727,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorymembershiphistory.FieldScopeName:          {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeName},
 			directorymembershiphistory.FieldScopeID:            {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeID},
 			directorymembershiphistory.FieldIntegrationID:      {Type: field.TypeString, Column: directorymembershiphistory.FieldIntegrationID},
+			directorymembershiphistory.FieldPlatformID:         {Type: field.TypeString, Column: directorymembershiphistory.FieldPlatformID},
 			directorymembershiphistory.FieldDirectorySyncRunID: {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectorySyncRunID},
 			directorymembershiphistory.FieldDirectoryAccountID: {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryAccountID},
 			directorymembershiphistory.FieldDirectoryGroupID:   {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryGroupID},
@@ -1359,6 +1368,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldDescription:      {Type: field.TypeString, Column: integrationhistory.FieldDescription},
 			integrationhistory.FieldKind:             {Type: field.TypeString, Column: integrationhistory.FieldKind},
 			integrationhistory.FieldIntegrationType:  {Type: field.TypeString, Column: integrationhistory.FieldIntegrationType},
+			integrationhistory.FieldPlatformID:       {Type: field.TypeString, Column: integrationhistory.FieldPlatformID},
 			integrationhistory.FieldProviderMetadata: {Type: field.TypeJSON, Column: integrationhistory.FieldProviderMetadata},
 			integrationhistory.FieldConfig:           {Type: field.TypeJSON, Column: integrationhistory.FieldConfig},
 			integrationhistory.FieldProviderState:    {Type: field.TypeJSON, Column: integrationhistory.FieldProviderState},
@@ -3882,6 +3892,11 @@ func (f *AssetHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(assethistory.FieldName))
 }
 
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *AssetHistoryFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(assethistory.FieldDisplayName))
+}
+
 // WhereDescription applies the entql string predicate on the description field.
 func (f *AssetHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(assethistory.FieldDescription))
@@ -5462,6 +5477,21 @@ func (f *DirectoryAccountHistoryFilter) WhereDirectorySyncRunID(p entql.StringP)
 	f.Where(p.Field(directoryaccounthistory.FieldDirectorySyncRunID))
 }
 
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectoryAccountHistoryFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldPlatformID))
+}
+
+// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
+func (f *DirectoryAccountHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldIdentityHolderID))
+}
+
+// WhereDirectoryName applies the entql string predicate on the directory_name field.
+func (f *DirectoryAccountHistoryFilter) WhereDirectoryName(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldDirectoryName))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *DirectoryAccountHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(directoryaccounthistory.FieldExternalID))
@@ -5480,6 +5510,21 @@ func (f *DirectoryAccountHistoryFilter) WhereCanonicalEmail(p entql.StringP) {
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *DirectoryAccountHistoryFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(directoryaccounthistory.FieldDisplayName))
+}
+
+// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
+func (f *DirectoryAccountHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldAvatarRemoteURL))
+}
+
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *DirectoryAccountHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldAvatarLocalFileID))
+}
+
+// WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
+func (f *DirectoryAccountHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(directoryaccounthistory.FieldAvatarUpdatedAt))
 }
 
 // WhereGivenName applies the entql string predicate on the given_name field.
@@ -5672,6 +5717,11 @@ func (f *DirectoryGroupHistoryFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(directorygrouphistory.FieldIntegrationID))
 }
 
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectoryGroupHistoryFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directorygrouphistory.FieldPlatformID))
+}
+
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryGroupHistoryFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorygrouphistory.FieldDirectorySyncRunID))
@@ -5850,6 +5900,11 @@ func (f *DirectoryMembershipHistoryFilter) WhereScopeID(p entql.StringP) {
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *DirectoryMembershipHistoryFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(directorymembershiphistory.FieldIntegrationID))
+}
+
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *DirectoryMembershipHistoryFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(directorymembershiphistory.FieldPlatformID))
 }
 
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
@@ -8650,6 +8705,11 @@ func (f *IntegrationHistoryFilter) WhereKind(p entql.StringP) {
 // WhereIntegrationType applies the entql string predicate on the integration_type field.
 func (f *IntegrationHistoryFilter) WhereIntegrationType(p entql.StringP) {
 	f.Where(p.Field(integrationhistory.FieldIntegrationType))
+}
+
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *IntegrationHistoryFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(integrationhistory.FieldPlatformID))
 }
 
 // WhereProviderMetadata applies the entql json.RawMessage predicate on the provider_metadata field.

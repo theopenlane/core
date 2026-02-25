@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
@@ -63,6 +64,7 @@ type IntegrationQuery struct {
 	withDirectoryGroups            *DirectoryGroupQuery
 	withDirectoryMemberships       *DirectoryMembershipQuery
 	withDirectorySyncRuns          *DirectorySyncRunQuery
+	withPlatform                   *PlatformQuery
 	withNotificationTemplates      *NotificationTemplateQuery
 	withEmailTemplates             *EmailTemplateQuery
 	withIntegrationWebhooks        *IntegrationWebhookQuery
@@ -525,6 +527,31 @@ func (_q *IntegrationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return query
 }
 
+// QueryPlatform chains the current query on the "platform" edge.
+func (_q *IntegrationQuery) QueryPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, integration.PlatformTable, integration.PlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Integration
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryNotificationTemplates chains the current query on the "notification_templates" edge.
 func (_q *IntegrationQuery) QueryNotificationTemplates() *NotificationTemplateQuery {
 	query := (&NotificationTemplateClient{config: _q.config}).Query()
@@ -858,6 +885,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withDirectoryGroups:       _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:  _q.withDirectoryMemberships.Clone(),
 		withDirectorySyncRuns:     _q.withDirectorySyncRuns.Clone(),
+		withPlatform:              _q.withPlatform.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
 		withEmailTemplates:        _q.withEmailTemplates.Clone(),
 		withIntegrationWebhooks:   _q.withIntegrationWebhooks.Clone(),
@@ -1046,6 +1074,17 @@ func (_q *IntegrationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRun
 	return _q
 }
 
+// WithPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithPlatform(opts ...func(*PlatformQuery)) *IntegrationQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatform = query
+	return _q
+}
+
 // WithNotificationTemplates tells the query-builder to eager-load the nodes that are connected to
 // the "notification_templates" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IntegrationQuery) WithNotificationTemplates(opts ...func(*NotificationTemplateQuery)) *IntegrationQuery {
@@ -1186,7 +1225,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [21]bool{
+		loadedTypes = [22]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1203,6 +1242,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
 			_q.withDirectorySyncRuns != nil,
+			_q.withPlatform != nil,
 			_q.withNotificationTemplates != nil,
 			_q.withEmailTemplates != nil,
 			_q.withIntegrationWebhooks != nil,
@@ -1348,6 +1388,12 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			func(n *Integration, e *DirectorySyncRun) {
 				n.Edges.DirectorySyncRuns = append(n.Edges.DirectorySyncRuns, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatform; query != nil {
+		if err := _q.loadPlatform(ctx, query, nodes, nil,
+			func(n *Integration, e *Platform) { n.Edges.Platform = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2117,7 +2163,9 @@ func (_q *IntegrationQuery) loadDirectoryAccounts(ctx context.Context, query *Di
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directoryaccount.FieldIntegrationID)
+	}
 	query.Where(predicate.DirectoryAccount(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(integration.DirectoryAccountsColumn), fks...))
 	}))
@@ -2126,13 +2174,10 @@ func (_q *IntegrationQuery) loadDirectoryAccounts(ctx context.Context, query *Di
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.integration_directory_accounts
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "integration_directory_accounts" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "integration_directory_accounts" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -2148,7 +2193,9 @@ func (_q *IntegrationQuery) loadDirectoryGroups(ctx context.Context, query *Dire
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorygroup.FieldIntegrationID)
+	}
 	query.Where(predicate.DirectoryGroup(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(integration.DirectoryGroupsColumn), fks...))
 	}))
@@ -2157,13 +2204,10 @@ func (_q *IntegrationQuery) loadDirectoryGroups(ctx context.Context, query *Dire
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.integration_directory_groups
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "integration_directory_groups" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "integration_directory_groups" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -2179,7 +2223,9 @@ func (_q *IntegrationQuery) loadDirectoryMemberships(ctx context.Context, query 
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorymembership.FieldIntegrationID)
+	}
 	query.Where(predicate.DirectoryMembership(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(integration.DirectoryMembershipsColumn), fks...))
 	}))
@@ -2188,13 +2234,10 @@ func (_q *IntegrationQuery) loadDirectoryMemberships(ctx context.Context, query 
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.integration_directory_memberships
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "integration_directory_memberships" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "integration_directory_memberships" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -2210,7 +2253,9 @@ func (_q *IntegrationQuery) loadDirectorySyncRuns(ctx context.Context, query *Di
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorysyncrun.FieldIntegrationID)
+	}
 	query.Where(predicate.DirectorySyncRun(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(integration.DirectorySyncRunsColumn), fks...))
 	}))
@@ -2219,15 +2264,41 @@ func (_q *IntegrationQuery) loadDirectorySyncRuns(ctx context.Context, query *Di
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.integration_directory_sync_runs
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "integration_directory_sync_runs" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "integration_directory_sync_runs" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (_q *IntegrationQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Integration)
+	for i := range nodes {
+		fk := nodes[i].PlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }
@@ -2452,6 +2523,9 @@ func (_q *IntegrationQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withScope != nil {
 			_spec.Node.AddColumnOnce(integration.FieldScopeID)
+		}
+		if _q.withPlatform != nil {
+			_spec.Node.AddColumnOnce(integration.FieldPlatformID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

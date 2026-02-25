@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"context"
+	"errors"
+	"net/http"
+	"sync"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -101,15 +104,23 @@ func serve(ctx context.Context) error {
 	// Setup Redis connection
 	redisClient := cache.New(so.Config.Settings.Redis)
 
+	// closeRedis ensures the redis client is closed exactly once; both the shutdown
+	// goroutine and the defer call this, and sync.Once guarantees only one executes
+	var closeRedisOnce sync.Once
+	closeRedis := func() {
+		closeRedisOnce.Do(func() {
+			if err := redisClient.Close(); err != nil {
+				log.Error().Err(err).Msg("error closing redis")
+			}
+		})
+	}
+
 	go func() {
 		<-ctx.Done()
-
-		if err := redisClient.Close(); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error closing redis")
-		}
+		closeRedis()
 	}()
 
-	defer redisClient.Close()
+	defer closeRedis()
 
 	// Setup pool if max workers is greater than 0
 	var pool *gala.Pool
@@ -209,6 +220,17 @@ func serve(ctx context.Context) error {
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
 
+	// closeDB ensures the database client is closed exactly once; both the shutdown
+	// goroutine and the defer call this, and sync.Once guarantees only one executes
+	var closeDBOnce sync.Once
+	closeDB := func() {
+		closeDBOnce.Do(func() {
+			if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
+				log.Error().Err(err).Msg("error closing database")
+			}
+		})
+	}
+
 	go func() {
 		<-ctx.Done()
 
@@ -218,23 +240,21 @@ func serve(ctx context.Context) error {
 
 		if galaApp != nil {
 			stopCtx, cancel := context.WithTimeout(context.Background(), galaShutdownTimeout)
+			defer cancel()
+
 			if stopErr := galaApp.StopWorkers(stopCtx); stopErr != nil {
 				log.Error().Err(stopErr).Msg("error stopping gala worker client")
 			}
-			cancel()
 
 			if closeErr := galaApp.Close(); closeErr != nil {
-				log.Ctx(ctx).Error().Err(closeErr).Msg("error closing gala runtime")
+				log.Error().Err(closeErr).Msg("error closing gala runtime")
 			}
 		}
 
-		if err := entdb.GracefulClose(context.Background(), dbClient, time.Second); err != nil {
-			log.Ctx(ctx).Error().Err(err).Msg("error closing database")
-		}
-
+		closeDB()
 	}()
 
-	defer entdb.GracefulClose(context.Background(), dbClient, time.Second)
+	defer closeDB()
 
 	// add auth session manager
 	so.Config.Handler.AuthManager = authmanager.New(dbClient)
@@ -293,7 +313,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithHistoryGraphRoute(srv, historyClient),
 	)
 
-	if err := srv.StartEchoServer(ctx); err != nil {
+	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")
 	}
 

@@ -42,6 +42,8 @@ const (
 	FieldScopeID = "scope_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
@@ -80,6 +82,8 @@ const (
 	EdgeIntegration = "integration"
 	// EdgeDirectorySyncRun holds the string denoting the directory_sync_run edge name in mutations.
 	EdgeDirectorySyncRun = "directory_sync_run"
+	// EdgePlatform holds the string denoting the platform edge name in mutations.
+	EdgePlatform = "platform"
 	// EdgeAccounts holds the string denoting the accounts edge name in mutations.
 	EdgeAccounts = "accounts"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
@@ -123,6 +127,13 @@ const (
 	DirectorySyncRunInverseTable = "directory_sync_runs"
 	// DirectorySyncRunColumn is the table column denoting the directory_sync_run relation/edge.
 	DirectorySyncRunColumn = "directory_sync_run_id"
+	// PlatformTable is the table that holds the platform relation/edge.
+	PlatformTable = "directory_groups"
+	// PlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformInverseTable = "platforms"
+	// PlatformColumn is the table column denoting the platform relation/edge.
+	PlatformColumn = "platform_id"
 	// AccountsTable is the table that holds the accounts relation/edge. The primary key declared below.
 	AccountsTable = "directory_memberships"
 	// AccountsInverseTable is the table name for the DirectoryAccount entity.
@@ -159,6 +170,7 @@ var Columns = []string{
 	FieldScopeName,
 	FieldScopeID,
 	FieldIntegrationID,
+	FieldPlatformID,
 	FieldDirectorySyncRunID,
 	FieldExternalID,
 	FieldEmail,
@@ -175,13 +187,6 @@ var Columns = []string{
 	FieldSourceVersion,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "directory_groups"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"directory_sync_run_directory_groups",
-	"integration_directory_groups",
-}
-
 var (
 	// AccountsPrimaryKey and AccountsColumn2 are the table columns denoting the
 	// primary key for the accounts relation (M2M).
@@ -192,11 +197,6 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -226,6 +226,8 @@ var (
 	OwnerIDValidator func(string) error
 	// IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
 	IntegrationIDValidator func(string) error
+	// PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
+	PlatformIDValidator func(string) error
 	// DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
 	DirectorySyncRunIDValidator func(string) error
 	// ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
@@ -329,6 +331,11 @@ func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
 }
 
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
 // ByDirectorySyncRunID orders the results by the directory_sync_run_id field.
 func ByDirectorySyncRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectorySyncRunID, opts...).ToFunc()
@@ -429,6 +436,13 @@ func ByDirectorySyncRunField(field string, opts ...sql.OrderTermOption) OrderOpt
 	}
 }
 
+// ByPlatformField orders the results by platform field.
+func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByAccountsCount orders the results by accounts count.
 func ByAccountsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -495,14 +509,21 @@ func newIntegrationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, IntegrationTable, IntegrationColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 	)
 }
 func newDirectorySyncRunStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectorySyncRunInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, DirectorySyncRunTable, DirectorySyncRunColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
+	)
+}
+func newPlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
 	)
 }
 func newAccountsStep() *sqlgraph.Step {

@@ -205,6 +205,11 @@ func (s Platform) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(s, Scan{}),
 		defaultEdgeToWithPagination(s, Task{}),
 		defaultEdgeToWithPagination(s, IdentityHolder{}),
+		defaultEdgeToWithPagination(s, Integration{}),
+		defaultEdgeToWithPagination(s, DirectorySyncRun{}),
+		defaultEdgeToWithPagination(s, DirectoryAccount{}),
+		defaultEdgeToWithPagination(s, DirectoryGroup{}),
+		defaultEdgeToWithPagination(s, DirectoryMembership{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: WorkflowObjectRef{},

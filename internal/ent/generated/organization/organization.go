@@ -77,6 +77,8 @@ const (
 	EdgeProgramCreators = "program_creators"
 	// EdgeRiskCreators holds the string denoting the risk_creators edge name in mutations.
 	EdgeRiskCreators = "risk_creators"
+	// EdgeIdentityHolderCreators holds the string denoting the identity_holder_creators edge name in mutations.
+	EdgeIdentityHolderCreators = "identity_holder_creators"
 	// EdgeScheduledJobCreators holds the string denoting the scheduled_job_creators edge name in mutations.
 	EdgeScheduledJobCreators = "scheduled_job_creators"
 	// EdgeStandardCreators holds the string denoting the standard_creators edge name in mutations.
@@ -363,6 +365,13 @@ const (
 	RiskCreatorsInverseTable = "groups"
 	// RiskCreatorsColumn is the table column denoting the risk_creators relation/edge.
 	RiskCreatorsColumn = "organization_risk_creators"
+	// IdentityHolderCreatorsTable is the table that holds the identity_holder_creators relation/edge.
+	IdentityHolderCreatorsTable = "groups"
+	// IdentityHolderCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	IdentityHolderCreatorsInverseTable = "groups"
+	// IdentityHolderCreatorsColumn is the table column denoting the identity_holder_creators relation/edge.
+	IdentityHolderCreatorsColumn = "organization_identity_holder_creators"
 	// ScheduledJobCreatorsTable is the table that holds the scheduled_job_creators relation/edge.
 	ScheduledJobCreatorsTable = "groups"
 	// ScheduledJobCreatorsInverseTable is the table name for the Group entity.
@@ -1055,7 +1064,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [28]ent.Hook
+	Hooks        [29]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1367,6 +1376,20 @@ func ByRiskCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByRiskCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newRiskCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHolderCreatorsCount orders the results by identity_holder_creators count.
+func ByIdentityHolderCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHolderCreatorsStep(), opts...)
+	}
+}
+
+// ByIdentityHolderCreators orders the results by identity_holder_creators terms.
+func ByIdentityHolderCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHolderCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2746,6 +2769,13 @@ func newRiskCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RiskCreatorsTable, RiskCreatorsColumn),
+	)
+}
+func newIdentityHolderCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHolderCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IdentityHolderCreatorsTable, IdentityHolderCreatorsColumn),
 	)
 }
 func newScheduledJobCreatorsStep() *sqlgraph.Step {

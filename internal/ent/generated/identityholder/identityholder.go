@@ -118,12 +118,16 @@ const (
 	EdgeAssets = "assets"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
 	EdgePlatforms = "platforms"
 	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
 	EdgeCampaigns = "campaigns"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// EdgeAccessPlatforms holds the string denoting the access_platforms edge name in mutations.
@@ -222,6 +226,13 @@ const (
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
+	DirectoryAccountsTable = "directory_accounts"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
+	DirectoryAccountsColumn = "identity_holder_id"
 	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
 	PlatformsTable = "platform_identity_holders"
 	// PlatformsInverseTable is the table name for the Platform entity.
@@ -237,6 +248,11 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_identity_holders"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -323,6 +339,9 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"identity_holder_id", "task_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "identity_holder_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -730,6 +749,20 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPlatformsCount orders the results by platforms count.
 func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -769,6 +802,20 @@ func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -904,6 +951,13 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+	)
+}
 func newPlatformsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -923,6 +977,13 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

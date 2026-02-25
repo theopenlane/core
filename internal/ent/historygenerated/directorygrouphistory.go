@@ -52,6 +52,8 @@ type DirectoryGroupHistory struct {
 	ScopeID string `json:"scope_id,omitempty"`
 	// integration that owns this directory group
 	IntegrationID string `json:"integration_id,omitempty"`
+	// optional platform associated with this directory group
+	PlatformID string `json:"platform_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// stable identifier from the directory system
@@ -96,7 +98,7 @@ func (*DirectoryGroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygrouphistory.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
+		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directorygrouphistory.FieldHistoryTime, directorygrouphistory.FieldCreatedAt, directorygrouphistory.FieldUpdatedAt, directorygrouphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -212,6 +214,12 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationID = value.String
+			}
+		case directorygrouphistory.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
 			}
 		case directorygrouphistory.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -383,6 +391,9 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
 	builder.WriteString("directory_sync_run_id=")
 	builder.WriteString(_m.DirectorySyncRunID)

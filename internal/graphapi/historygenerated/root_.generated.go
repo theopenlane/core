@@ -197,6 +197,7 @@ type ComplexityRoot struct {
 		CriticalityID               func(childComplexity int) int
 		CriticalityName             func(childComplexity int) int
 		Description                 func(childComplexity int) int
+		DisplayName                 func(childComplexity int) int
 		EncryptionStatusID          func(childComplexity int) int
 		EncryptionStatusName        func(childComplexity int) int
 		EnvironmentID               func(childComplexity int) int
@@ -562,10 +563,14 @@ type ComplexityRoot struct {
 
 	DirectoryAccountHistory struct {
 		AccountType        func(childComplexity int) int
+		AvatarLocalFileID  func(childComplexity int) int
+		AvatarRemoteURL    func(childComplexity int) int
+		AvatarUpdatedAt    func(childComplexity int) int
 		CanonicalEmail     func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Department         func(childComplexity int) int
+		DirectoryName      func(childComplexity int) int
 		DirectorySyncRunID func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
@@ -576,6 +581,7 @@ type ComplexityRoot struct {
 		GivenName          func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
+		IdentityHolderID   func(childComplexity int) int
 		IntegrationID      func(childComplexity int) int
 		JobTitle           func(childComplexity int) int
 		LastLoginAt        func(childComplexity int) int
@@ -585,6 +591,7 @@ type ComplexityRoot struct {
 		Operation          func(childComplexity int) int
 		OrganizationUnit   func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
+		PlatformID         func(childComplexity int) int
 		Profile            func(childComplexity int) int
 		ProfileHash        func(childComplexity int) int
 		RawProfileFileID   func(childComplexity int) int
@@ -630,6 +637,7 @@ type ComplexityRoot struct {
 		ObservedAt             func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
+		PlatformID             func(childComplexity int) int
 		Profile                func(childComplexity int) int
 		ProfileHash            func(childComplexity int) int
 		RawProfileFileID       func(childComplexity int) int
@@ -673,6 +681,7 @@ type ComplexityRoot struct {
 		ObservedAt         func(childComplexity int) int
 		Operation          func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
+		PlatformID         func(childComplexity int) int
 		Ref                func(childComplexity int) int
 		Role               func(childComplexity int) int
 		ScopeID            func(childComplexity int) int
@@ -1305,6 +1314,7 @@ type ComplexityRoot struct {
 		Name             func(childComplexity int) int
 		Operation        func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
+		PlatformID       func(childComplexity int) int
 		Ref              func(childComplexity int) int
 		ScopeID          func(childComplexity int) int
 		ScopeName        func(childComplexity int) int
@@ -3989,6 +3999,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssetHistory.Description(childComplexity), true
 
+	case "AssetHistory.displayName":
+		if e.complexity.AssetHistory.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.DisplayName(childComplexity), true
+
 	case "AssetHistory.encryptionStatusID":
 		if e.complexity.AssetHistory.EncryptionStatusID == nil {
 			break
@@ -5977,6 +5994,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryAccountHistory.AccountType(childComplexity), true
 
+	case "DirectoryAccountHistory.avatarLocalFileID":
+		if e.complexity.DirectoryAccountHistory.AvatarLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.AvatarLocalFileID(childComplexity), true
+
+	case "DirectoryAccountHistory.avatarRemoteURL":
+		if e.complexity.DirectoryAccountHistory.AvatarRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.AvatarRemoteURL(childComplexity), true
+
+	case "DirectoryAccountHistory.avatarUpdatedAt":
+		if e.complexity.DirectoryAccountHistory.AvatarUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.AvatarUpdatedAt(childComplexity), true
+
 	case "DirectoryAccountHistory.canonicalEmail":
 		if e.complexity.DirectoryAccountHistory.CanonicalEmail == nil {
 			break
@@ -6004,6 +6042,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccountHistory.Department(childComplexity), true
+
+	case "DirectoryAccountHistory.directoryName":
+		if e.complexity.DirectoryAccountHistory.DirectoryName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.DirectoryName(childComplexity), true
 
 	case "DirectoryAccountHistory.directorySyncRunID":
 		if e.complexity.DirectoryAccountHistory.DirectorySyncRunID == nil {
@@ -6075,6 +6120,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryAccountHistory.ID(childComplexity), true
 
+	case "DirectoryAccountHistory.identityHolderID":
+		if e.complexity.DirectoryAccountHistory.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.IdentityHolderID(childComplexity), true
+
 	case "DirectoryAccountHistory.integrationID":
 		if e.complexity.DirectoryAccountHistory.IntegrationID == nil {
 			break
@@ -6137,6 +6189,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccountHistory.OwnerID(childComplexity), true
+
+	case "DirectoryAccountHistory.platformID":
+		if e.complexity.DirectoryAccountHistory.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.PlatformID(childComplexity), true
 
 	case "DirectoryAccountHistory.profile":
 		if e.complexity.DirectoryAccountHistory.Profile == nil {
@@ -6390,6 +6449,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryGroupHistory.OwnerID(childComplexity), true
 
+	case "DirectoryGroupHistory.platformID":
+		if e.complexity.DirectoryGroupHistory.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.PlatformID(childComplexity), true
+
 	case "DirectoryGroupHistory.profile":
 		if e.complexity.DirectoryGroupHistory.Profile == nil {
 			break
@@ -6627,6 +6693,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryMembershipHistory.OwnerID(childComplexity), true
+
+	case "DirectoryMembershipHistory.platformID":
+		if e.complexity.DirectoryMembershipHistory.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.PlatformID(childComplexity), true
 
 	case "DirectoryMembershipHistory.ref":
 		if e.complexity.DirectoryMembershipHistory.Ref == nil {
@@ -10043,6 +10116,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationHistory.OwnerID(childComplexity), true
+
+	case "IntegrationHistory.platformID":
+		if e.complexity.IntegrationHistory.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.IntegrationHistory.PlatformID(childComplexity), true
 
 	case "IntegrationHistory.ref":
 		if e.complexity.IntegrationHistory.Ref == nil {
@@ -22285,6 +22365,10 @@ type AssetHistory implements Node {
   the name of the asset, e.g. matts computer, office router, IP address, etc
   """
   name: String!
+  """
+  the display name of the asset
+  """
+  displayName: String
   description: String
   """
   unique identifier like domain, device id, etc
@@ -22409,6 +22493,7 @@ enum AssetHistoryOrderField {
   internal_owner
   ASSET_TYPE
   name
+  display_name
   physical_location
   region
   contains_pii
@@ -22972,6 +23057,24 @@ input AssetHistoryWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
   """
   description field predicates
   """
@@ -27266,13 +27369,25 @@ type DirectoryAccountHistory implements Node {
   """
   scopeID: String
   """
-  integration that owns this directory account
+  optional integration that owns this directory account when sourced by an integration
   """
-  integrationID: String!
+  integrationID: String
   """
-  sync run that produced this snapshot
+  optional sync run that produced this snapshot
   """
-  directorySyncRunID: String!
+  directorySyncRunID: String
+  """
+  optional platform associated with this directory account
+  """
+  platformID: String
+  """
+  deduplicated identity holder linked to this directory account
+  """
+  identityHolderID: String
+  """
+  directory source label set by the integration (e.g. google_workspace, github, slack)
+  """
+  directoryName: String
   """
   stable identifier from the directory system
   """
@@ -27289,6 +27404,18 @@ type DirectoryAccountHistory implements Node {
   provider supplied display name
   """
   displayName: String
+  """
+  URL of the avatar supplied by the directory provider
+  """
+  avatarRemoteURL: String
+  """
+  local avatar file identifier, takes precedence over avatar_remote_url
+  """
+  avatarLocalFileID: String
+  """
+  time the directory account avatar was last updated
+  """
+  avatarUpdatedAt: Time
   """
   first name reported by the provider
   """
@@ -27435,6 +27562,7 @@ enum DirectoryAccountHistoryOrderField {
   history_time
   created_at
   updated_at
+  directory_name
   external_id
   canonical_email
   display_name
@@ -27678,6 +27806,8 @@ input DirectoryAccountHistoryWhereInput {
   integrationIDContains: String
   integrationIDHasPrefix: String
   integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
   integrationIDEqualFold: String
   integrationIDContainsFold: String
   """
@@ -27694,8 +27824,64 @@ input DirectoryAccountHistoryWhereInput {
   directorySyncRunIDContains: String
   directorySyncRunIDHasPrefix: String
   directorySyncRunIDHasSuffix: String
+  directorySyncRunIDIsNil: Boolean
+  directorySyncRunIDNotNil: Boolean
   directorySyncRunIDEqualFold: String
   directorySyncRunIDContainsFold: String
+  """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: String
+  identityHolderIDNEQ: String
+  identityHolderIDIn: [String!]
+  identityHolderIDNotIn: [String!]
+  identityHolderIDGT: String
+  identityHolderIDGTE: String
+  identityHolderIDLT: String
+  identityHolderIDLTE: String
+  identityHolderIDContains: String
+  identityHolderIDHasPrefix: String
+  identityHolderIDHasSuffix: String
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: String
+  identityHolderIDContainsFold: String
+  """
+  directory_name field predicates
+  """
+  directoryName: String
+  directoryNameNEQ: String
+  directoryNameIn: [String!]
+  directoryNameNotIn: [String!]
+  directoryNameGT: String
+  directoryNameGTE: String
+  directoryNameLT: String
+  directoryNameLTE: String
+  directoryNameContains: String
+  directoryNameHasPrefix: String
+  directoryNameHasSuffix: String
+  directoryNameIsNil: Boolean
+  directoryNameNotNil: Boolean
+  directoryNameEqualFold: String
+  directoryNameContainsFold: String
   """
   external_id field predicates
   """
@@ -27766,6 +27952,55 @@ input DirectoryAccountHistoryWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
+  """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: String
+  avatarLocalFileIDNEQ: String
+  avatarLocalFileIDIn: [String!]
+  avatarLocalFileIDNotIn: [String!]
+  avatarLocalFileIDGT: String
+  avatarLocalFileIDGTE: String
+  avatarLocalFileIDLT: String
+  avatarLocalFileIDLTE: String
+  avatarLocalFileIDContains: String
+  avatarLocalFileIDHasPrefix: String
+  avatarLocalFileIDHasSuffix: String
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: String
+  avatarLocalFileIDContainsFold: String
+  """
+  avatar_updated_at field predicates
+  """
+  avatarUpdatedAt: Time
+  avatarUpdatedAtNEQ: Time
+  avatarUpdatedAtIn: [Time!]
+  avatarUpdatedAtNotIn: [Time!]
+  avatarUpdatedAtGT: Time
+  avatarUpdatedAtGTE: Time
+  avatarUpdatedAtLT: Time
+  avatarUpdatedAtLTE: Time
+  avatarUpdatedAtIsNil: Boolean
+  avatarUpdatedAtNotNil: Boolean
   """
   given_name field predicates
   """
@@ -27997,6 +28232,10 @@ type DirectoryGroupHistory implements Node {
   integration that owns this directory group
   """
   integrationID: String!
+  """
+  optional platform associated with this directory group
+  """
+  platformID: String
   """
   sync run that produced this snapshot
   """
@@ -28375,6 +28614,24 @@ input DirectoryGroupHistoryWhereInput {
   integrationIDEqualFold: String
   integrationIDContainsFold: String
   """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
+  """
   directory_sync_run_id field predicates
   """
   directorySyncRunID: String
@@ -28559,6 +28816,10 @@ type DirectoryMembershipHistory implements Node {
   integration that owns this directory membership
   """
   integrationID: String!
+  """
+  optional platform associated with this directory membership
+  """
+  platformID: String
   """
   sync run that produced this snapshot
   """
@@ -28908,6 +29169,24 @@ input DirectoryMembershipHistoryWhereInput {
   integrationIDHasSuffix: String
   integrationIDEqualFold: String
   integrationIDContainsFold: String
+  """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
   """
   directory_sync_run_id field predicates
   """
@@ -36716,6 +36995,10 @@ type IntegrationHistory implements Node {
   """
   integrationType: String
   """
+  optional platform associated with this integration for downstream inventory linkage
+  """
+  platformID: String
+  """
   additional metadata about the integration
   """
   metadata: Map
@@ -37086,6 +37369,24 @@ input IntegrationHistoryWhereInput {
   integrationTypeNotNil: Boolean
   integrationTypeEqualFold: String
   integrationTypeContainsFold: String
+  """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
 }
 type InternalPolicyHistory implements Node {
   id: ID!

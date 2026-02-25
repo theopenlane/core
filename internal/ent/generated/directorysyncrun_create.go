@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 )
 
 // DirectorySyncRunCreate is the builder for creating a DirectorySyncRun entity.
@@ -162,6 +163,20 @@ func (_c *DirectorySyncRunCreate) SetNillableScopeID(v *string) *DirectorySyncRu
 // SetIntegrationID sets the "integration_id" field.
 func (_c *DirectorySyncRunCreate) SetIntegrationID(v string) *DirectorySyncRunCreate {
 	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *DirectorySyncRunCreate) SetPlatformID(v string) *DirectorySyncRunCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *DirectorySyncRunCreate) SetNillablePlatformID(v *string) *DirectorySyncRunCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
 	return _c
 }
 
@@ -317,6 +332,11 @@ func (_c *DirectorySyncRunCreate) SetIntegration(v *Integration) *DirectorySyncR
 	return _c.SetIntegrationID(v.ID)
 }
 
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_c *DirectorySyncRunCreate) SetPlatform(v *Platform) *DirectorySyncRunCreate {
+	return _c.SetPlatformID(v.ID)
+}
+
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
 func (_c *DirectorySyncRunCreate) AddDirectoryAccountIDs(ids ...string) *DirectorySyncRunCreate {
 	_c.mutation.AddDirectoryAccountIDs(ids...)
@@ -463,6 +483,11 @@ func (_c *DirectorySyncRunCreate) check() error {
 	if v, ok := _c.mutation.IntegrationID(); ok {
 		if err := directorysyncrun.IntegrationIDValidator(v); err != nil {
 			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectorySyncRun.integration_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PlatformID(); ok {
+		if err := directorysyncrun.PlatformIDValidator(v); err != nil {
+			return &ValidationError{Name: "platform_id", err: fmt.Errorf(`generated: validator failed for field "DirectorySyncRun.platform_id": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
@@ -642,7 +667,7 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   directorysyncrun.IntegrationTable,
 			Columns: []string{directorysyncrun.IntegrationColumn},
 			Bidi:    false,
@@ -655,6 +680,24 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.IntegrationID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorysyncrun.PlatformTable,
+			Columns: []string{directorysyncrun.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PlatformID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {

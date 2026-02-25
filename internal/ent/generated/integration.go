@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 )
 
 // Integration is the model entity for the Integration schema.
@@ -60,6 +61,8 @@ type Integration struct {
 	Kind string `json:"kind,omitempty"`
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType string `json:"integration_type,omitempty"`
+	// optional platform associated with this integration for downstream inventory linkage
+	PlatformID string `json:"platform_id,omitempty"`
 	// cached provider metadata for UI and registry access
 	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// runtime configuration for operations, scheduling, and mappings
@@ -110,6 +113,8 @@ type IntegrationEdges struct {
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
 	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
+	// platform associated with this integration
+	Platform *Platform `json:"platform,omitempty"`
 	// NotificationTemplates holds the value of the notification_templates edge.
 	NotificationTemplates []*NotificationTemplate `json:"notification_templates,omitempty"`
 	// EmailTemplates holds the value of the email_templates edge.
@@ -122,9 +127,9 @@ type IntegrationEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedSecrets               map[string][]*Hush
 	namedFiles                 map[string][]*File
@@ -296,10 +301,21 @@ func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) 
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
 }
 
+// PlatformOrErr returns the Platform value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
+	if e.Platform != nil {
+		return e.Platform, nil
+	} else if e.loadedTypes[16] {
+		return nil, &NotFoundError{label: platform.Label}
+	}
+	return nil, &NotLoadedError{edge: "platform"}
+}
+
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -308,7 +324,7 @@ func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate,
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -317,7 +333,7 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.IntegrationWebhooks, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_webhooks"}
@@ -326,7 +342,7 @@ func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, err
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.IntegrationRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_runs"}
@@ -335,7 +351,7 @@ func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -350,7 +366,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType:
+		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID:
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -497,6 +513,12 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationType = value.String
 			}
+		case integration.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
 		case integration.FieldProviderMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field provider_metadata", values[i])
@@ -636,6 +658,11 @@ func (_m *Integration) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return NewIntegrationClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
+// QueryPlatform queries the "platform" edge of the Integration entity.
+func (_m *Integration) QueryPlatform() *PlatformQuery {
+	return NewIntegrationClient(_m.config).QueryPlatform(_m)
+}
+
 // QueryNotificationTemplates queries the "notification_templates" edge of the Integration entity.
 func (_m *Integration) QueryNotificationTemplates() *NotificationTemplateQuery {
 	return NewIntegrationClient(_m.config).QueryNotificationTemplates(_m)
@@ -744,6 +771,9 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_type=")
 	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadata))

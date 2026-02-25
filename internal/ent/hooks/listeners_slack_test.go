@@ -115,6 +115,27 @@ func TestHandleUserMutationGalaUsesTemplateOverride(t *testing.T) {
 	assert.Contains(t, recorder.Bodies()[0], "Custom user: custom.user@example.com")
 }
 
+// TestSlackNotificationsEnabled verifies webhook configuration detection.
+func TestSlackNotificationsEnabled(t *testing.T) {
+	setSlackConfigForTest(t, SlackConfig{})
+	assert.False(t, SlackNotificationsEnabled())
+
+	setSlackConfigForTest(t, SlackConfig{WebhookURL: "https://example.com/hook"})
+	assert.True(t, SlackNotificationsEnabled())
+}
+
+// TestSendSlackNotification verifies plain-text Slack notifications are posted.
+func TestSendSlackNotification(t *testing.T) {
+	recorder := newSlackWebhookRecorder(t)
+	defer recorder.Close()
+
+	setSlackConfigForTest(t, SlackConfig{WebhookURL: recorder.URL()})
+
+	require.NoError(t, SendSlackNotification(context.Background(), "github app installed"))
+	require.Len(t, recorder.Bodies(), 1)
+	assert.Contains(t, recorder.Bodies()[0], "github app installed")
+}
+
 // setSlackConfigForTest sets Slack config for a test and restores the previous value.
 func setSlackConfigForTest(t *testing.T, cfg SlackConfig) {
 	t.Helper()

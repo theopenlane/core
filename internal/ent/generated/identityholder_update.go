@@ -19,7 +19,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -797,6 +799,21 @@ func (_u *IdentityHolderUpdate) AddEntities(v ...*Entity) *IdentityHolderUpdate 
 	return _u.AddEntityIDs(ids...)
 }
 
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *IdentityHolderUpdate) AddDirectoryAccountIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IdentityHolderUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *IdentityHolderUpdate) AddPlatformIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -840,6 +857,21 @@ func (_u *IdentityHolderUpdate) AddTasks(v ...*Task) *IdentityHolderUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *IdentityHolderUpdate) AddFindingIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *IdentityHolderUpdate) AddFindings(v ...*Finding) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -1080,6 +1112,27 @@ func (_u *IdentityHolderUpdate) RemoveEntities(v ...*Entity) *IdentityHolderUpda
 	return _u.RemoveEntityIDs(ids...)
 }
 
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IdentityHolderUpdate) ClearDirectoryAccounts() *IdentityHolderUpdate {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveDirectoryAccountIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *IdentityHolderUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *IdentityHolderUpdate) ClearPlatforms() *IdentityHolderUpdate {
 	_u.mutation.ClearPlatforms()
@@ -1141,6 +1194,27 @@ func (_u *IdentityHolderUpdate) RemoveTasks(v ...*Task) *IdentityHolderUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *IdentityHolderUpdate) ClearFindings() *IdentityHolderUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveFindingIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *IdentityHolderUpdate) RemoveFindings(v ...*Finding) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -1977,6 +2051,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2116,6 +2238,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolderTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3023,6 +3193,21 @@ func (_u *IdentityHolderUpdateOne) AddEntities(v ...*Entity) *IdentityHolderUpda
 	return _u.AddEntityIDs(ids...)
 }
 
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddDirectoryAccountIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IdentityHolderUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddPlatformIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -3066,6 +3251,21 @@ func (_u *IdentityHolderUpdateOne) AddTasks(v ...*Task) *IdentityHolderUpdateOne
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddFindingIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *IdentityHolderUpdateOne) AddFindings(v ...*Finding) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -3306,6 +3506,27 @@ func (_u *IdentityHolderUpdateOne) RemoveEntities(v ...*Entity) *IdentityHolderU
 	return _u.RemoveEntityIDs(ids...)
 }
 
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IdentityHolderUpdateOne) ClearDirectoryAccounts() *IdentityHolderUpdateOne {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveDirectoryAccountIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *IdentityHolderUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccount) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *IdentityHolderUpdateOne) ClearPlatforms() *IdentityHolderUpdateOne {
 	_u.mutation.ClearPlatforms()
@@ -3367,6 +3588,27 @@ func (_u *IdentityHolderUpdateOne) RemoveTasks(v ...*Task) *IdentityHolderUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *IdentityHolderUpdateOne) ClearFindings() *IdentityHolderUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveFindingIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *IdentityHolderUpdateOne) RemoveFindings(v ...*Finding) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -4233,6 +4475,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4372,6 +4662,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolderTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

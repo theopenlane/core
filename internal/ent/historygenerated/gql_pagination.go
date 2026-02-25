@@ -1934,6 +1934,20 @@ var (
 			}
 		},
 	}
+	// AssetHistoryOrderFieldDisplayName orders AssetHistory by display_name.
+	AssetHistoryOrderFieldDisplayName = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: assethistory.FieldDisplayName,
+		toTerm: assethistory.ByDisplayName,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
 	// AssetHistoryOrderFieldPhysicalLocation orders AssetHistory by physical_location.
 	AssetHistoryOrderFieldPhysicalLocation = &AssetHistoryOrderField{
 		Value: func(_m *AssetHistory) (ent.Value, error) {
@@ -2077,6 +2091,8 @@ func (f AssetHistoryOrderField) String() string {
 		str = "ASSET_TYPE"
 	case AssetHistoryOrderFieldName.column:
 		str = "name"
+	case AssetHistoryOrderFieldDisplayName.column:
+		str = "display_name"
 	case AssetHistoryOrderFieldPhysicalLocation.column:
 		str = "physical_location"
 	case AssetHistoryOrderFieldRegion.column:
@@ -2121,6 +2137,8 @@ func (f *AssetHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetHistoryOrderFieldAssetType
 	case "name":
 		*f = *AssetHistoryOrderFieldName
+	case "display_name":
+		*f = *AssetHistoryOrderFieldDisplayName
 	case "physical_location":
 		*f = *AssetHistoryOrderFieldPhysicalLocation
 	case "region":
@@ -6098,6 +6116,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountHistoryOrderFieldDirectoryName orders DirectoryAccountHistory by directory_name.
+	DirectoryAccountHistoryOrderFieldDirectoryName = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryName == nil {
+				return nil, nil
+			}
+			return _m.DirectoryName, nil
+		},
+		column: directoryaccounthistory.FieldDirectoryName,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccounthistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccounthistory.ByDirectoryName(opts...)
+		},
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			if _m.DirectoryName == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryName,
+			}
+		},
+	}
 	// DirectoryAccountHistoryOrderFieldExternalID orders DirectoryAccountHistory by external_id.
 	DirectoryAccountHistoryOrderFieldExternalID = &DirectoryAccountHistoryOrderField{
 		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
@@ -6165,6 +6210,8 @@ func (f DirectoryAccountHistoryOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountHistoryOrderFieldDirectoryName.column:
+		str = "directory_name"
 	case DirectoryAccountHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryAccountHistoryOrderFieldCanonicalEmail.column:
@@ -6193,6 +6240,8 @@ func (f *DirectoryAccountHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountHistoryOrderFieldUpdatedAt
+	case "directory_name":
+		*f = *DirectoryAccountHistoryOrderFieldDirectoryName
 	case "external_id":
 		*f = *DirectoryAccountHistoryOrderFieldExternalID
 	case "canonical_email":

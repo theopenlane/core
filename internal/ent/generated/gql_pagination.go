@@ -2500,6 +2500,20 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldDisplayName orders Asset by display_name.
+	AssetOrderFieldDisplayName = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: asset.FieldDisplayName,
+		toTerm: asset.ByDisplayName,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
 	// AssetOrderFieldPhysicalLocation orders Asset by physical_location.
 	AssetOrderFieldPhysicalLocation = &AssetOrderField{
 		Value: func(_m *Asset) (ent.Value, error) {
@@ -2641,6 +2655,8 @@ func (f AssetOrderField) String() string {
 		str = "ASSET_TYPE"
 	case AssetOrderFieldName.column:
 		str = "name"
+	case AssetOrderFieldDisplayName.column:
+		str = "display_name"
 	case AssetOrderFieldPhysicalLocation.column:
 		str = "physical_location"
 	case AssetOrderFieldRegion.column:
@@ -2683,6 +2699,8 @@ func (f *AssetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetOrderFieldAssetType
 	case "name":
 		*f = *AssetOrderFieldName
+	case "display_name":
+		*f = *AssetOrderFieldDisplayName
 	case "physical_location":
 		*f = *AssetOrderFieldPhysicalLocation
 	case "region":
@@ -7365,6 +7383,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
+	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryName == nil {
+				return nil, nil
+			}
+			return _m.DirectoryName, nil
+		},
+		column: directoryaccount.FieldDirectoryName,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByDirectoryName(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.DirectoryName == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryName,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldExternalID orders DirectoryAccount by external_id.
 	DirectoryAccountOrderFieldExternalID = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -7430,6 +7475,8 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountOrderFieldDirectoryName.column:
+		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryAccountOrderFieldCanonicalEmail.column:
@@ -7456,6 +7503,8 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "directory_name":
+		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
 		*f = *DirectoryAccountOrderFieldExternalID
 	case "canonical_email":

@@ -185,6 +185,46 @@ func (_u *DirectoryAccountHistoryUpdate) ClearScopeID() *DirectoryAccountHistory
 	return _u
 }
 
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *DirectoryAccountHistoryUpdate) SetIdentityHolderID(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableIdentityHolderID(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearIdentityHolderID() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryAccountHistoryUpdate) SetDirectoryName(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableDirectoryName(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearDirectoryName() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetSecondaryKey sets the "secondary_key" field.
 func (_u *DirectoryAccountHistoryUpdate) SetSecondaryKey(v string) *DirectoryAccountHistoryUpdate {
 	_u.mutation.SetSecondaryKey(v)
@@ -242,6 +282,58 @@ func (_u *DirectoryAccountHistoryUpdate) SetNillableDisplayName(v *string) *Dire
 // ClearDisplayName clears the value of the "display_name" field.
 func (_u *DirectoryAccountHistoryUpdate) ClearDisplayName() *DirectoryAccountHistoryUpdate {
 	_u.mutation.ClearDisplayName()
+	return _u
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *DirectoryAccountHistoryUpdate) SetAvatarRemoteURL(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableAvatarRemoteURL(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearAvatarRemoteURL() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *DirectoryAccountHistoryUpdate) SetAvatarLocalFileID(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableAvatarLocalFileID(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearAvatarLocalFileID() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (_u *DirectoryAccountHistoryUpdate) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearAvatarUpdatedAt() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearAvatarUpdatedAt()
 	return _u
 }
 
@@ -543,6 +635,13 @@ func (_u *DirectoryAccountHistoryUpdate) defaults() error {
 		v := directoryaccounthistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
+		if directoryaccounthistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized directoryaccounthistory.UpdateDefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
+		v := directoryaccounthistory.UpdateDefaultAvatarUpdatedAt()
+		_u.mutation.SetAvatarUpdatedAt(v)
+	}
 	return nil
 }
 
@@ -646,6 +745,27 @@ func (_u *DirectoryAccountHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldScopeID, field.TypeString)
 	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldIntegrationID, field.TypeString)
+	}
+	if _u.mutation.DirectorySyncRunIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldDirectorySyncRunID, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldPlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IdentityHolderID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldIdentityHolderID, field.TypeString, value)
+	}
+	if _u.mutation.IdentityHolderIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldIdentityHolderID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldDirectoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccounthistory.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -663,6 +783,24 @@ func (_u *DirectoryAccountHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	}
 	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldAvatarLocalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.GivenName(); ok {
 		_spec.SetField(directoryaccounthistory.FieldGivenName, field.TypeString, value)
@@ -913,6 +1051,46 @@ func (_u *DirectoryAccountHistoryUpdateOne) ClearScopeID() *DirectoryAccountHist
 	return _u
 }
 
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetIdentityHolderID(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableIdentityHolderID(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearIdentityHolderID() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetDirectoryName(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableDirectoryName(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearDirectoryName() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetSecondaryKey sets the "secondary_key" field.
 func (_u *DirectoryAccountHistoryUpdateOne) SetSecondaryKey(v string) *DirectoryAccountHistoryUpdateOne {
 	_u.mutation.SetSecondaryKey(v)
@@ -970,6 +1148,58 @@ func (_u *DirectoryAccountHistoryUpdateOne) SetNillableDisplayName(v *string) *D
 // ClearDisplayName clears the value of the "display_name" field.
 func (_u *DirectoryAccountHistoryUpdateOne) ClearDisplayName() *DirectoryAccountHistoryUpdateOne {
 	_u.mutation.ClearDisplayName()
+	return _u
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetAvatarRemoteURL(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableAvatarRemoteURL(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearAvatarRemoteURL() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetAvatarLocalFileID(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableAvatarLocalFileID(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearAvatarLocalFileID() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearAvatarUpdatedAt() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearAvatarUpdatedAt()
 	return _u
 }
 
@@ -1284,6 +1514,13 @@ func (_u *DirectoryAccountHistoryUpdateOne) defaults() error {
 		v := directoryaccounthistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
+		if directoryaccounthistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized directoryaccounthistory.UpdateDefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
+		v := directoryaccounthistory.UpdateDefaultAvatarUpdatedAt()
+		_u.mutation.SetAvatarUpdatedAt(v)
+	}
 	return nil
 }
 
@@ -1404,6 +1641,27 @@ func (_u *DirectoryAccountHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldScopeID, field.TypeString)
 	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldIntegrationID, field.TypeString)
+	}
+	if _u.mutation.DirectorySyncRunIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldDirectorySyncRunID, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldPlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IdentityHolderID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldIdentityHolderID, field.TypeString, value)
+	}
+	if _u.mutation.IdentityHolderIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldIdentityHolderID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldDirectoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccounthistory.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -1421,6 +1679,24 @@ func (_u *DirectoryAccountHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldAvatarLocalFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(directoryaccounthistory.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.GivenName(); ok {
 		_spec.SetField(directoryaccounthistory.FieldGivenName, field.TypeString, value)

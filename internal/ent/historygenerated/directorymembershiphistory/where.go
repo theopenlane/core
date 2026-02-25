@@ -133,6 +133,11 @@ func IntegrationID(v string) predicate.DirectoryMembershipHistory {
 	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldIntegrationID, v))
 }
 
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
 // DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
 func DirectorySyncRunID(v string) predicate.DirectoryMembershipHistory {
 	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -1061,6 +1066,81 @@ func IntegrationIDEqualFold(v string) predicate.DirectoryMembershipHistory {
 // IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
 func IntegrationIDContainsFold(v string) predicate.DirectoryMembershipHistory {
 	return predicate.DirectoryMembershipHistory(sql.FieldContainsFold(FieldIntegrationID, v))
+}
+
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.DirectoryMembershipHistory {
+	return predicate.DirectoryMembershipHistory(sql.FieldContainsFold(FieldPlatformID, v))
 }
 
 // DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.

@@ -123,6 +123,11 @@ func IntegrationID(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldIntegrationID, v))
 }
 
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldPlatformID, v))
+}
+
 // DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
 func DirectorySyncRunID(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -918,6 +923,81 @@ func IntegrationIDContainsFold(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldIntegrationID, v))
 }
 
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
 // DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.
 func DirectorySyncRunIDEQ(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -1545,7 +1625,7 @@ func HasIntegration() predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, IntegrationTable, IntegrationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Integration
@@ -1574,7 +1654,7 @@ func HasDirectorySyncRun() predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, DirectorySyncRunTable, DirectorySyncRunColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectorySyncRun
@@ -1589,6 +1669,35 @@ func HasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) predicate.Dire
 		step := newDirectorySyncRunStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatform applies the HasEdge predicate on the "platform" edge.
+func HasPlatform() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformWith applies the HasEdge predicate on the "platform" edge with a given conditions (other predicates).
+func HasPlatformWith(preds ...predicate.Platform) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(func(s *sql.Selector) {
+		step := newPlatformStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
 		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

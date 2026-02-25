@@ -1189,6 +1189,7 @@ type CreateAssetInput struct {
 	SystemInternalID            *string
 	AssetType                   *enums.AssetType
 	Name                        string
+	DisplayName                 *string
 	Description                 *string
 	Identifier                  *string
 	Website                     *string
@@ -1269,6 +1270,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 		m.SetAssetType(*v)
 	}
 	m.SetName(i.Name)
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
@@ -1414,6 +1418,8 @@ type UpdateAssetInput struct {
 	SystemInternalID                 *string
 	AssetType                        *enums.AssetType
 	Name                             *string
+	ClearDisplayName                 bool
+	DisplayName                      *string
 	ClearDescription                 bool
 	Description                      *string
 	ClearIdentifier                  bool
@@ -1579,6 +1585,12 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -4800,10 +4812,13 @@ type CreateDirectoryAccountInput struct {
 	Tags                 []string
 	EnvironmentName      *string
 	ScopeName            *string
+	DirectoryName        *string
 	ExternalID           string
 	SecondaryKey         *string
 	CanonicalEmail       *string
 	DisplayName          *string
+	AvatarRemoteURL      *string
+	AvatarUpdatedAt      *time.Time
 	GivenName            *string
 	FamilyName           *string
 	JobTitle             *string
@@ -4821,9 +4836,13 @@ type CreateDirectoryAccountInput struct {
 	OwnerID              *string
 	EnvironmentID        *string
 	ScopeID              *string
-	IntegrationID        string
-	DirectorySyncRunID   string
+	IntegrationID        *string
+	DirectorySyncRunID   *string
+	PlatformID           *string
+	IdentityHolderID     *string
+	AvatarFileID         *string
 	GroupIDs             []string
+	FindingIDs           []string
 	WorkflowObjectRefIDs []string
 }
 
@@ -4838,6 +4857,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
+	if v := i.DirectoryName; v != nil {
+		m.SetDirectoryName(*v)
+	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.SecondaryKey; v != nil {
 		m.SetSecondaryKey(*v)
@@ -4847,6 +4869,12 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
+	}
+	if v := i.AvatarUpdatedAt; v != nil {
+		m.SetAvatarUpdatedAt(*v)
 	}
 	if v := i.GivenName; v != nil {
 		m.SetGivenName(*v)
@@ -4899,10 +4927,26 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
 	}
-	m.SetIntegrationID(i.IntegrationID)
-	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.DirectorySyncRunID; v != nil {
+		m.SetDirectorySyncRunID(*v)
+	}
+	if v := i.PlatformID; v != nil {
+		m.SetPlatformID(*v)
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
+	}
 	if v := i.GroupIDs; len(v) > 0 {
 		m.AddGroupIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
 	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
@@ -4924,12 +4968,18 @@ type UpdateDirectoryAccountInput struct {
 	EnvironmentName            *string
 	ClearScopeName             bool
 	ScopeName                  *string
+	ClearDirectoryName         bool
+	DirectoryName              *string
 	ClearSecondaryKey          bool
 	SecondaryKey               *string
 	ClearCanonicalEmail        bool
 	CanonicalEmail             *string
 	ClearDisplayName           bool
 	DisplayName                *string
+	ClearAvatarRemoteURL       bool
+	AvatarRemoteURL            *string
+	ClearAvatarUpdatedAt       bool
+	AvatarUpdatedAt            *time.Time
 	ClearGivenName             bool
 	GivenName                  *string
 	ClearFamilyName            bool
@@ -4959,9 +5009,16 @@ type UpdateDirectoryAccountInput struct {
 	EnvironmentID              *string
 	ClearScope                 bool
 	ScopeID                    *string
+	ClearIdentityHolder        bool
+	IdentityHolderID           *string
+	ClearAvatarFile            bool
+	AvatarFileID               *string
 	ClearGroups                bool
 	AddGroupIDs                []string
 	RemoveGroupIDs             []string
+	ClearFindings              bool
+	AddFindingIDs              []string
+	RemoveFindingIDs           []string
 	ClearWorkflowObjectRefs    bool
 	AddWorkflowObjectRefIDs    []string
 	RemoveWorkflowObjectRefIDs []string
@@ -4990,6 +5047,12 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
+	if i.ClearDirectoryName {
+		m.ClearDirectoryName()
+	}
+	if v := i.DirectoryName; v != nil {
+		m.SetDirectoryName(*v)
+	}
 	if i.ClearSecondaryKey {
 		m.ClearSecondaryKey()
 	}
@@ -5007,6 +5070,18 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
+	}
+	if i.ClearAvatarRemoteURL {
+		m.ClearAvatarRemoteURL()
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
+	}
+	if i.ClearAvatarUpdatedAt {
+		m.ClearAvatarUpdatedAt()
+	}
+	if v := i.AvatarUpdatedAt; v != nil {
+		m.SetAvatarUpdatedAt(*v)
 	}
 	if i.ClearGivenName {
 		m.ClearGivenName()
@@ -5095,6 +5170,18 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
 	}
+	if i.ClearIdentityHolder {
+		m.ClearIdentityHolder()
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
+	if i.ClearAvatarFile {
+		m.ClearAvatarFile()
+	}
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
+	}
 	if i.ClearGroups {
 		m.ClearGroups()
 	}
@@ -5103,6 +5190,15 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.RemoveGroupIDs; len(v) > 0 {
 		m.RemoveGroupIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -5149,6 +5245,7 @@ type CreateDirectoryGroupInput struct {
 	ScopeID                *string
 	IntegrationID          string
 	DirectorySyncRunID     string
+	PlatformID             *string
 	WorkflowObjectRefIDs   []string
 }
 
@@ -5208,6 +5305,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	m.SetIntegrationID(i.IntegrationID)
 	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
+	if v := i.PlatformID; v != nil {
+		m.SetPlatformID(*v)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -5387,6 +5487,7 @@ type CreateDirectoryMembershipInput struct {
 	ScopeID              *string
 	IntegrationID        string
 	DirectorySyncRunID   string
+	PlatformID           *string
 	DirectoryAccountID   string
 	DirectoryGroupID     string
 	EventIDs             []string
@@ -5433,6 +5534,9 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	m.SetIntegrationID(i.IntegrationID)
 	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
+	if v := i.PlatformID; v != nil {
+		m.SetPlatformID(*v)
+	}
 	m.SetDirectoryAccountID(i.DirectoryAccountID)
 	m.SetDirectoryGroupID(i.DirectoryGroupID)
 	if v := i.EventIDs; len(v) > 0 {
@@ -5598,6 +5702,7 @@ type CreateDirectorySyncRunInput struct {
 	EnvironmentID       *string
 	ScopeID             *string
 	IntegrationID       string
+	PlatformID          *string
 	DirectoryAccountIDs []string
 	DirectoryGroupIDs   []string
 }
@@ -5647,6 +5752,9 @@ func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
 		m.SetScopeID(*v)
 	}
 	m.SetIntegrationID(i.IntegrationID)
+	if v := i.PlatformID; v != nil {
+		m.SetPlatformID(*v)
+	}
 	if v := i.DirectoryAccountIDs; len(v) > 0 {
 		m.AddDirectoryAccountIDs(v...)
 	}
@@ -9110,6 +9218,8 @@ type CreateFindingInput struct {
 	EntityIDs            []string
 	ScanIDs              []string
 	TaskIDs              []string
+	DirectoryAccountIDs  []string
+	IdentityHolderIDs    []string
 	RemediationIDs       []string
 	ReviewIDs            []string
 	CommentIDs           []string
@@ -9296,6 +9406,12 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.DirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
 	if v := i.RemediationIDs; len(v) > 0 {
 		m.AddRemediationIDs(v...)
 	}
@@ -9456,6 +9572,12 @@ type UpdateFindingInput struct {
 	ClearTasks                 bool
 	AddTaskIDs                 []string
 	RemoveTaskIDs              []string
+	ClearDirectoryAccounts     bool
+	AddDirectoryAccountIDs     []string
+	RemoveDirectoryAccountIDs  []string
+	ClearIdentityHolders       bool
+	AddIdentityHolderIDs       []string
+	RemoveIdentityHolderIDs    []string
 	ClearRemediations          bool
 	AddRemediationIDs          []string
 	RemoveRemediationIDs       []string
@@ -9879,6 +10001,24 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearDirectoryAccounts {
+		m.ClearDirectoryAccounts()
+	}
+	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
+		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
 	}
 	if i.ClearRemediations {
 		m.ClearRemediations()
@@ -11307,9 +11447,11 @@ type CreateIdentityHolderInput struct {
 	TemplateIDs            []string
 	AssetIDs               []string
 	EntityIDs              []string
+	DirectoryAccountIDs    []string
 	PlatformIDs            []string
 	CampaignIDs            []string
 	TaskIDs                []string
+	FindingIDs             []string
 	WorkflowObjectRefIDs   []string
 	AccessPlatformIDs      []string
 	UserID                 *string
@@ -11421,6 +11563,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
+	if v := i.DirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -11429,6 +11574,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
 	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
@@ -11523,6 +11671,9 @@ type UpdateIdentityHolderInput struct {
 	ClearEntities               bool
 	AddEntityIDs                []string
 	RemoveEntityIDs             []string
+	ClearDirectoryAccounts      bool
+	AddDirectoryAccountIDs      []string
+	RemoveDirectoryAccountIDs   []string
 	ClearPlatforms              bool
 	AddPlatformIDs              []string
 	RemovePlatformIDs           []string
@@ -11532,6 +11683,9 @@ type UpdateIdentityHolderInput struct {
 	ClearTasks                  bool
 	AddTaskIDs                  []string
 	RemoveTaskIDs               []string
+	ClearFindings               bool
+	AddFindingIDs               []string
+	RemoveFindingIDs            []string
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string
 	RemoveWorkflowObjectRefIDs  []string
@@ -11766,6 +11920,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
+	if i.ClearDirectoryAccounts {
+		m.ClearDirectoryAccounts()
+	}
+	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
+		m.RemoveDirectoryAccountIDs(v...)
+	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
 	}
@@ -11792,6 +11955,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -14713,6 +14885,7 @@ type CreateOrganizationInput struct {
 	ProcedureCreatorIDs               []string
 	ProgramCreatorIDs                 []string
 	RiskCreatorIDs                    []string
+	IdentityHolderCreatorIDs          []string
 	ScheduledJobCreatorIDs            []string
 	StandardCreatorIDs                []string
 	TemplateCreatorIDs                []string
@@ -14862,6 +15035,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RiskCreatorIDs; len(v) > 0 {
 		m.AddRiskCreatorIDs(v...)
+	}
+	if v := i.IdentityHolderCreatorIDs; len(v) > 0 {
+		m.AddIdentityHolderCreatorIDs(v...)
 	}
 	if v := i.ScheduledJobCreatorIDs; len(v) > 0 {
 		m.AddScheduledJobCreatorIDs(v...)
@@ -15172,6 +15348,9 @@ type UpdateOrganizationInput struct {
 	ClearRiskCreators                       bool
 	AddRiskCreatorIDs                       []string
 	RemoveRiskCreatorIDs                    []string
+	ClearIdentityHolderCreators             bool
+	AddIdentityHolderCreatorIDs             []string
+	RemoveIdentityHolderCreatorIDs          []string
 	ClearScheduledJobCreators               bool
 	AddScheduledJobCreatorIDs               []string
 	RemoveScheduledJobCreatorIDs            []string
@@ -15575,6 +15754,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveRiskCreatorIDs; len(v) > 0 {
 		m.RemoveRiskCreatorIDs(v...)
+	}
+	if i.ClearIdentityHolderCreators {
+		m.ClearIdentityHolderCreators()
+	}
+	if v := i.AddIdentityHolderCreatorIDs; len(v) > 0 {
+		m.AddIdentityHolderCreatorIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderCreatorIDs; len(v) > 0 {
+		m.RemoveIdentityHolderCreatorIDs(v...)
 	}
 	if i.ClearScheduledJobCreators {
 		m.ClearScheduledJobCreators()
@@ -16870,6 +17058,10 @@ type CreatePlatformInput struct {
 	ScanIDs                        []string
 	TaskIDs                        []string
 	IdentityHolderIDs              []string
+	IntegrationIDs                 []string
+	DirectorySyncRunIDs            []string
+	DirectoryAccountIDs            []string
+	DirectoryGroupIDs              []string
 	WorkflowObjectRefIDs           []string
 	SourceAssetIDs                 []string
 	SourceEntityIDs                []string
@@ -17063,6 +17255,18 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.IdentityHolderIDs; len(v) > 0 {
 		m.AddIdentityHolderIDs(v...)
 	}
+	if v := i.IntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.DirectorySyncRunIDs; len(v) > 0 {
+		m.AddDirectorySyncRunIDs(v...)
+	}
+	if v := i.DirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.DirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -17228,6 +17432,18 @@ type UpdatePlatformInput struct {
 	ClearIdentityHolders                bool
 	AddIdentityHolderIDs                []string
 	RemoveIdentityHolderIDs             []string
+	ClearIntegrations                   bool
+	AddIntegrationIDs                   []string
+	RemoveIntegrationIDs                []string
+	ClearDirectorySyncRuns              bool
+	AddDirectorySyncRunIDs              []string
+	RemoveDirectorySyncRunIDs           []string
+	ClearDirectoryAccounts              bool
+	AddDirectoryAccountIDs              []string
+	RemoveDirectoryAccountIDs           []string
+	ClearDirectoryGroups                bool
+	AddDirectoryGroupIDs                []string
+	RemoveDirectoryGroupIDs             []string
 	ClearWorkflowObjectRefs             bool
 	AddWorkflowObjectRefIDs             []string
 	RemoveWorkflowObjectRefIDs          []string
@@ -17647,6 +17863,42 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
 		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearIntegrations {
+		m.ClearIntegrations()
+	}
+	if v := i.AddIntegrationIDs; len(v) > 0 {
+		m.AddIntegrationIDs(v...)
+	}
+	if v := i.RemoveIntegrationIDs; len(v) > 0 {
+		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearDirectorySyncRuns {
+		m.ClearDirectorySyncRuns()
+	}
+	if v := i.AddDirectorySyncRunIDs; len(v) > 0 {
+		m.AddDirectorySyncRunIDs(v...)
+	}
+	if v := i.RemoveDirectorySyncRunIDs; len(v) > 0 {
+		m.RemoveDirectorySyncRunIDs(v...)
+	}
+	if i.ClearDirectoryAccounts {
+		m.ClearDirectoryAccounts()
+	}
+	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
+		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearDirectoryGroups {
+		m.ClearDirectoryGroups()
+	}
+	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
+		m.RemoveDirectoryGroupIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()

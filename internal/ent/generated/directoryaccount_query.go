@@ -18,8 +18,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -39,13 +43,17 @@ type DirectoryAccountQuery struct {
 	withScope                   *CustomTypeEnumQuery
 	withIntegration             *IntegrationQuery
 	withDirectorySyncRun        *DirectorySyncRunQuery
+	withPlatform                *PlatformQuery
+	withIdentityHolder          *IdentityHolderQuery
+	withAvatarFile              *FileQuery
 	withGroups                  *DirectoryGroupQuery
+	withFindings                *FindingQuery
 	withWorkflowObjectRefs      *WorkflowObjectRefQuery
 	withMemberships             *DirectoryMembershipQuery
-	withFKs                     bool
 	loadTotal                   []func(context.Context, []*DirectoryAccount) error
 	modifiers                   []func(*sql.Selector)
 	withNamedGroups             map[string]*DirectoryGroupQuery
+	withNamedFindings           map[string]*FindingQuery
 	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
 	withNamedMemberships        map[string]*DirectoryMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -173,7 +181,7 @@ func (_q *DirectoryAccountQuery) QueryIntegration() *IntegrationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, selector),
 			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.IntegrationTable, directoryaccount.IntegrationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.IntegrationTable, directoryaccount.IntegrationColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Integration
@@ -198,10 +206,85 @@ func (_q *DirectoryAccountQuery) QueryDirectorySyncRun() *DirectorySyncRunQuery 
 		step := sqlgraph.NewStep(
 			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, selector),
 			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.DirectorySyncRunTable, directoryaccount.DirectorySyncRunColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.DirectorySyncRunTable, directoryaccount.DirectorySyncRunColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatform chains the current query on the "platform" edge.
+func (_q *DirectoryAccountQuery) QueryPlatform() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.PlatformTable, directoryaccount.PlatformColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder chains the current query on the "identity_holder" edge.
+func (_q *DirectoryAccountQuery) QueryIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.IdentityHolderTable, directoryaccount.IdentityHolderColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAvatarFile chains the current query on the "avatar_file" edge.
+func (_q *DirectoryAccountQuery) QueryAvatarFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.AvatarFileTable, directoryaccount.AvatarFileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.DirectoryAccount
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -228,6 +311,31 @@ func (_q *DirectoryAccountQuery) QueryGroups() *DirectoryGroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.DirectoryGroup
 		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *DirectoryAccountQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, directoryaccount.FindingsTable, directoryaccount.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -481,7 +589,11 @@ func (_q *DirectoryAccountQuery) Clone() *DirectoryAccountQuery {
 		withScope:              _q.withScope.Clone(),
 		withIntegration:        _q.withIntegration.Clone(),
 		withDirectorySyncRun:   _q.withDirectorySyncRun.Clone(),
+		withPlatform:           _q.withPlatform.Clone(),
+		withIdentityHolder:     _q.withIdentityHolder.Clone(),
+		withAvatarFile:         _q.withAvatarFile.Clone(),
 		withGroups:             _q.withGroups.Clone(),
+		withFindings:           _q.withFindings.Clone(),
 		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
 		withMemberships:        _q.withMemberships.Clone(),
 		// clone intermediate query.
@@ -546,6 +658,39 @@ func (_q *DirectoryAccountQuery) WithDirectorySyncRun(opts ...func(*DirectorySyn
 	return _q
 }
 
+// WithPlatform tells the query-builder to eager-load the nodes that are connected to
+// the "platform" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryAccountQuery) WithPlatform(opts ...func(*PlatformQuery)) *DirectoryAccountQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatform = query
+	return _q
+}
+
+// WithIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryAccountQuery) WithIdentityHolder(opts ...func(*IdentityHolderQuery)) *DirectoryAccountQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolder = query
+	return _q
+}
+
+// WithAvatarFile tells the query-builder to eager-load the nodes that are connected to
+// the "avatar_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryAccountQuery) WithAvatarFile(opts ...func(*FileQuery)) *DirectoryAccountQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAvatarFile = query
+	return _q
+}
+
 // WithGroups tells the query-builder to eager-load the nodes that are connected to
 // the "groups" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *DirectoryAccountQuery) WithGroups(opts ...func(*DirectoryGroupQuery)) *DirectoryAccountQuery {
@@ -554,6 +699,17 @@ func (_q *DirectoryAccountQuery) WithGroups(opts ...func(*DirectoryGroupQuery)) 
 		opt(query)
 	}
 	_q.withGroups = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryAccountQuery) WithFindings(opts ...func(*FindingQuery)) *DirectoryAccountQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
 	return _q
 }
 
@@ -662,22 +818,22 @@ func (_q *DirectoryAccountQuery) prepareQuery(ctx context.Context) error {
 func (_q *DirectoryAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DirectoryAccount, error) {
 	var (
 		nodes       = []*DirectoryAccount{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [12]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withIntegration != nil,
 			_q.withDirectorySyncRun != nil,
+			_q.withPlatform != nil,
+			_q.withIdentityHolder != nil,
+			_q.withAvatarFile != nil,
 			_q.withGroups != nil,
+			_q.withFindings != nil,
 			_q.withWorkflowObjectRefs != nil,
 			_q.withMemberships != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, directoryaccount.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DirectoryAccount).scanValues(nil, columns)
 	}
@@ -731,10 +887,35 @@ func (_q *DirectoryAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			return nil, err
 		}
 	}
+	if query := _q.withPlatform; query != nil {
+		if err := _q.loadPlatform(ctx, query, nodes, nil,
+			func(n *DirectoryAccount, e *Platform) { n.Edges.Platform = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolder; query != nil {
+		if err := _q.loadIdentityHolder(ctx, query, nodes, nil,
+			func(n *DirectoryAccount, e *IdentityHolder) { n.Edges.IdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAvatarFile; query != nil {
+		if err := _q.loadAvatarFile(ctx, query, nodes, nil,
+			func(n *DirectoryAccount, e *File) { n.Edges.AvatarFile = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withGroups; query != nil {
 		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *DirectoryAccount) { n.Edges.Groups = []*DirectoryGroup{} },
 			func(n *DirectoryAccount, e *DirectoryGroup) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *DirectoryAccount) { n.Edges.Findings = []*Finding{} },
+			func(n *DirectoryAccount, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -760,6 +941,13 @@ func (_q *DirectoryAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		if err := _q.loadGroups(ctx, query, nodes,
 			func(n *DirectoryAccount) { n.appendNamedGroups(name) },
 			func(n *DirectoryAccount, e *DirectoryGroup) { n.appendNamedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *DirectoryAccount) { n.appendNamedFindings(name) },
+			func(n *DirectoryAccount, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -930,6 +1118,99 @@ func (_q *DirectoryAccountQuery) loadDirectorySyncRun(ctx context.Context, query
 	}
 	return nil
 }
+func (_q *DirectoryAccountQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*DirectoryAccount, init func(*DirectoryAccount), assign func(*DirectoryAccount, *Platform)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectoryAccount)
+	for i := range nodes {
+		fk := nodes[i].PlatformID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(platform.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "platform_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *DirectoryAccountQuery) loadIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*DirectoryAccount, init func(*DirectoryAccount), assign func(*DirectoryAccount, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectoryAccount)
+	for i := range nodes {
+		if nodes[i].IdentityHolderID == nil {
+			continue
+		}
+		fk := *nodes[i].IdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *DirectoryAccountQuery) loadAvatarFile(ctx context.Context, query *FileQuery, nodes []*DirectoryAccount, init func(*DirectoryAccount), assign func(*DirectoryAccount, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*DirectoryAccount)
+	for i := range nodes {
+		if nodes[i].AvatarLocalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].AvatarLocalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "avatar_local_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *DirectoryAccountQuery) loadGroups(ctx context.Context, query *DirectoryGroupQuery, nodes []*DirectoryAccount, init func(*DirectoryAccount), assign func(*DirectoryAccount, *DirectoryGroup)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*DirectoryAccount)
@@ -992,6 +1273,68 @@ func (_q *DirectoryAccountQuery) loadGroups(ctx context.Context, query *Director
 	}
 	return nil
 }
+func (_q *DirectoryAccountQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*DirectoryAccount, init func(*DirectoryAccount), assign func(*DirectoryAccount, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*DirectoryAccount)
+	nids := make(map[string]map[*DirectoryAccount]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(directoryaccount.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingDirectoryAccounts)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(directoryaccount.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(directoryaccount.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(directoryaccount.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*DirectoryAccount]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *DirectoryAccountQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*DirectoryAccount, init func(*DirectoryAccount), assign func(*DirectoryAccount, *WorkflowObjectRef)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*DirectoryAccount)
@@ -1033,7 +1376,6 @@ func (_q *DirectoryAccountQuery) loadMemberships(ctx context.Context, query *Dir
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorymembership.FieldDirectoryAccountID)
 	}
@@ -1099,6 +1441,15 @@ func (_q *DirectoryAccountQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withDirectorySyncRun != nil {
 			_spec.Node.AddColumnOnce(directoryaccount.FieldDirectorySyncRunID)
+		}
+		if _q.withPlatform != nil {
+			_spec.Node.AddColumnOnce(directoryaccount.FieldPlatformID)
+		}
+		if _q.withIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(directoryaccount.FieldIdentityHolderID)
+		}
+		if _q.withAvatarFile != nil {
+			_spec.Node.AddColumnOnce(directoryaccount.FieldAvatarLocalFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -1179,6 +1530,20 @@ func (_q *DirectoryAccountQuery) WithNamedGroups(name string, opts ...func(*Dire
 		_q.withNamedGroups = make(map[string]*DirectoryGroupQuery)
 	}
 	_q.withNamedGroups[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *DirectoryAccountQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *DirectoryAccountQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
 	return _q
 }
 

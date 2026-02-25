@@ -668,6 +668,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	"DirectoryAccount": {
 		SchemaName: "DirectoryAccount",
 		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "DirectoryAccountIdentityHolderEmail",
+				TargetField:     "IdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"DirectoryGroup": {
@@ -1672,6 +1680,7 @@ func (DNSVerificationCSVUpdateInput) CSVInputWrapper() {}
 // DirectoryAccountCSVInput wraps CreateDirectoryAccountInput with CSV reference columns.
 type DirectoryAccountCSVInput struct {
 	Input generated.CreateDirectoryAccountInput
+	DirectoryAccountIdentityHolderEmail string `csv:"DirectoryAccountIdentityHolderEmail"`
 }
 
 // CSVInputWrapper marks DirectoryAccountCSVInput for CSV header preprocessing.
@@ -1682,6 +1691,7 @@ type DirectoryAccountCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateDirectoryAccountInput
+	DirectoryAccountIdentityHolderEmail string `csv:"DirectoryAccountIdentityHolderEmail"`
 }
 
 // CSVInputWrapper marks DirectoryAccountCSVUpdateInput for CSV header preprocessing.

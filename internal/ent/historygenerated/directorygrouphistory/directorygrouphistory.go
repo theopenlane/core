@@ -50,6 +50,8 @@ const (
 	FieldScopeID = "scope_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
+	// FieldPlatformID holds the string denoting the platform_id field in the database.
+	FieldPlatformID = "platform_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
@@ -100,6 +102,7 @@ var Columns = []string{
 	FieldScopeName,
 	FieldScopeID,
 	FieldIntegrationID,
+	FieldPlatformID,
 	FieldDirectorySyncRunID,
 	FieldExternalID,
 	FieldEmail,
@@ -265,6 +268,11 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationID orders the results by the integration_id field.
 func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByPlatformID orders the results by the platform_id field.
+func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
 }
 
 // ByDirectorySyncRunID orders the results by the directory_sync_run_id field.
