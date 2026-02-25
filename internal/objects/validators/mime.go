@@ -35,7 +35,7 @@ var validMimeTypes = map[string][]string{
 	"faviconFile":        {"image/jpeg", "image/png", "image/x-icon"},
 	"evidenceFiles":      sharedMimeTypes,
 	"noteFiles":          sharedMimeTypes,
-	"exportFiles":        {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8"},
+	"exportFiles":        {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8", "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/markdown", "text/x-markdown"},
 	"procedureFile":      importSchemaMimeTypes,
 	"internalPolicyFile": importSchemaMimeTypes,
 	"actionPlanFile":     importSchemaMimeTypes,
