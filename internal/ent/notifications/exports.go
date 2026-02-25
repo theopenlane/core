@@ -26,7 +26,7 @@ type exportFields struct {
 
 // handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED.
 func handleExportMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := eventqueue.ClientFromHandler(ctx)
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}

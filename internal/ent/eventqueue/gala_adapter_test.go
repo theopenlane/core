@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
@@ -24,11 +24,11 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	runtime, err := gala.NewGala(context.Background(), gala.Config{
 		DispatchMode: gala.DispatchModeInMemory,
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	t.Cleanup(func() { _ = runtime.Close() })
 
-	require.NoError(t, runtime.ContextManager().Register(
+	assert.NoError(t, runtime.ContextManager().Register(
 		gala.NewTypedContextCodec[galaAdapterTestActor]("adapter_actor"),
 	))
 
@@ -37,7 +37,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 		Topic: topic,
 		Codec: gala.JSONCodec[MutationGalaPayload]{},
 	})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	payload := MutationGalaPayload{
 		MutationType:  "organization",
@@ -62,34 +62,34 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 
 	metadata := NewMutationGalaMetadata("evt_123", payload)
 	envelope, err := NewMutationGalaEnvelope(emitCtx, runtime, topic, payload, metadata)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
-	require.Equal(t, gala.EventID("evt_123"), envelope.ID)
-	require.Equal(t, topic.Name, envelope.Topic)
-	require.Equal(t, "evt_123", envelope.Headers.IdempotencyKey)
-	require.Equal(t, "name", envelope.Headers.Properties["mutation_field"])
-	require.Equal(t, "7", envelope.Headers.Properties["count"])
-	require.Equal(t, payload.EntityID, envelope.Headers.Properties[MutationPropertyEntityID])
-	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowBypass])
-	require.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowAllowEventEmission])
-	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("adapter_actor"))
-	require.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("durable"))
+	assert.Equal(t, gala.EventID("evt_123"), envelope.ID)
+	assert.Equal(t, topic.Name, envelope.Topic)
+	assert.Equal(t, "evt_123", envelope.Headers.IdempotencyKey)
+	assert.Equal(t, "name", envelope.Headers.Properties["mutation_field"])
+	assert.Equal(t, "7", envelope.Headers.Properties["count"])
+	assert.Equal(t, payload.EntityID, envelope.Headers.Properties[MutationPropertyEntityID])
+	assert.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowBypass])
+	assert.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowAllowEventEmission])
+	assert.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("adapter_actor"))
+	assert.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("durable"))
 
 	restoredContext, err := runtime.ContextManager().Restore(context.Background(), envelope.ContextSnapshot)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	restoredUser, err := auth.GetAuthenticatedUserFromContext(restoredContext)
-	require.NoError(t, err)
-	require.Equal(t, "subject_123", restoredUser.SubjectID)
-	require.Equal(t, "org_123", restoredUser.OrganizationID)
+	assert.NoError(t, err)
+	assert.Equal(t, "subject_123", restoredUser.SubjectID)
+	assert.Equal(t, "org_123", restoredUser.OrganizationID)
 
 	decodedAny, err := runtime.Registry().DecodePayload(topic.Name, envelope.Payload)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	decoded, ok := decodedAny.(MutationGalaPayload)
-	require.True(t, ok)
-	require.Equal(t, payload.EntityID, decoded.EntityID)
-	require.Equal(t, payload.Operation, decoded.Operation)
+	assert.True(t, ok)
+	assert.Equal(t, payload.EntityID, decoded.EntityID)
+	assert.Equal(t, payload.Operation, decoded.Operation)
 }
 
 // TestNewGalaHeadersFromMutationMetadata verifies property normalization for gala headers
@@ -105,11 +105,11 @@ func TestNewGalaHeadersFromMutationMetadata(t *testing.T) {
 		},
 	})
 
-	require.Equal(t, "evt_456", headers.IdempotencyKey)
-	require.Equal(t, "true", headers.Properties["active"])
-	require.Equal(t, "5", headers.Properties["count"])
+	assert.Equal(t, "evt_456", headers.IdempotencyKey)
+	assert.Equal(t, "true", headers.Properties["active"])
+	assert.Equal(t, "5", headers.Properties["count"])
 	_, exists := headers.Properties[""]
-	require.False(t, exists)
+	assert.False(t, exists)
 }
 
 // TestMutationGalaPayloadChangeSetRoundTrip verifies payload change-set projections preserve values and clone maps/slices
@@ -135,15 +135,15 @@ func TestMutationGalaPayloadChangeSetRoundTrip(t *testing.T) {
 	changeSet.AddedIDs["controls"][0] = "mutated"
 	changeSet.ProposedChanges["status"] = "mutated"
 
-	require.Equal(t, "status", payload.ChangedFields[0])
-	require.Equal(t, "one", payload.AddedIDs["controls"][0])
-	require.Equal(t, "approved", payload.ProposedChanges["status"])
+	assert.Equal(t, "status", payload.ChangedFields[0])
+	assert.Equal(t, "one", payload.AddedIDs["controls"][0])
+	assert.Equal(t, "approved", payload.ProposedChanges["status"])
 
 	var roundTrip MutationGalaPayload
 	roundTrip.SetChangeSet(payload.ChangeSet())
-	require.Equal(t, payload.ChangedFields, roundTrip.ChangedFields)
-	require.Equal(t, payload.ChangedEdges, roundTrip.ChangedEdges)
-	require.Equal(t, payload.AddedIDs, roundTrip.AddedIDs)
-	require.Equal(t, payload.RemovedIDs, roundTrip.RemovedIDs)
-	require.Equal(t, payload.ProposedChanges, roundTrip.ProposedChanges)
+	assert.Equal(t, payload.ChangedFields, roundTrip.ChangedFields)
+	assert.Equal(t, payload.ChangedEdges, roundTrip.ChangedEdges)
+	assert.Equal(t, payload.AddedIDs, roundTrip.AddedIDs)
+	assert.Equal(t, payload.RemovedIDs, roundTrip.RemovedIDs)
+	assert.Equal(t, payload.ProposedChanges, roundTrip.ProposedChanges)
 }
