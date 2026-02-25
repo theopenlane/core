@@ -91,6 +91,8 @@ type riverJobMetadata struct {
 	Topic string `json:"topic"`
 	// EventID is the gala event identifier
 	EventID string `json:"event_id"`
+	// Listeners are the registered listener names for the topic
+	Listeners []string `json:"listeners,omitempty"`
 	// Properties contains envelope header properties (entity_id, operation, mutation_type, etc.)
 	Properties map[string]string `json:"properties,omitempty"`
 }
@@ -119,6 +121,7 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 	meta, err := json.Marshal(riverJobMetadata{
 		Topic:      string(envelope.Topic),
 		EventID:    string(envelope.ID),
+		Listeners:  envelope.Headers.Listeners,
 		Properties: envelope.Headers.Properties,
 	})
 	if err != nil {
