@@ -123,9 +123,13 @@ func handleTrustCenterDocMutationGala(ctx gala.HandlerContext, payload eventqueu
 				Where(trustcenterdoc.ID(docID)).
 				Select(trustcenterdoc.FieldTrustCenterID).
 				Only(ctx.Context)
-			if err == nil && doc != nil {
-				trustCenterID = doc.TrustCenterID
+			if err != nil || doc == nil {
+				logx.FromContext(ctx.Context).Warn().Err(err).Str("doc_id", docID).Msg("failed to query trust center doc for cache invalidation")
+
+				return nil
 			}
+
+			trustCenterID = doc.TrustCenterID
 		}
 	}
 
@@ -212,9 +216,12 @@ func handleTrustCenterSubprocessorMutationGala(ctx gala.HandlerContext, payload 
 		entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && entityID != "" {
 			entity, err := client.TrustCenterSubprocessor.Get(ctx.Context, entityID)
-			if err == nil && entity != nil {
-				trustCenterID = entity.TrustCenterID
+			if err != nil || entity == nil {
+				logx.FromContext(ctx.Context).Warn().Err(err).Str("subprocessor_id", entityID).Msg("failed to query trust center subprocessor for cache invalidation")
+				return nil
 			}
+
+			trustCenterID = entity.TrustCenterID
 		}
 	}
 
@@ -237,9 +244,13 @@ func handleTrustCenterComplianceMutationGala(ctx gala.HandlerContext, payload ev
 		entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && entityID != "" {
 			entity, err := client.TrustCenterCompliance.Get(ctx.Context, entityID)
-			if err == nil && entity != nil {
-				trustCenterID = entity.TrustCenterID
+			if err != nil || entity == nil {
+				logx.FromContext(ctx.Context).Warn().Err(err).Str("compliance_id", entityID).Msg("failed to query trust center compliance for cache invalidation")
+
+				return nil
 			}
+
+			trustCenterID = entity.TrustCenterID
 		}
 	}
 
@@ -272,6 +283,7 @@ func handleSubprocessorMutationGala(ctx gala.HandlerContext, payload eventqueue.
 		All(ctx.Context)
 	if err != nil {
 		logx.FromContext(ctx.Context).Warn().Err(err).Str("subprocessor_id", subprocessorID).Msg("failed to query trust center subprocessors")
+
 		return nil
 	}
 
@@ -314,6 +326,7 @@ func handleStandardMutationGala(ctx gala.HandlerContext, payload eventqueue.Muta
 		All(ctx.Context)
 	if err != nil {
 		logx.FromContext(ctx.Context).Warn().Err(err).Str("standard_id", standardID).Msg("failed to query trust center docs")
+
 		return nil
 	}
 
@@ -346,9 +359,12 @@ func handleTrustCenterSettingMutationGala(ctx gala.HandlerContext, payload event
 		settingID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
 		if ok && settingID != "" {
 			setting, err := client.TrustCenterSetting.Get(ctx.Context, settingID)
-			if err == nil && setting != nil {
-				trustCenterID = setting.TrustCenterID
+			if err != nil || setting == nil {
+				logx.FromContext(ctx.Context).Warn().Err(err).Str("setting_id", settingID).Msg("failed to query trust center setting for cache invalidation")
+				return nil
 			}
+
+			trustCenterID = setting.TrustCenterID
 		}
 	}
 
