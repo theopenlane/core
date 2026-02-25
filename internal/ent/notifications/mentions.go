@@ -74,7 +74,7 @@ type mentionNotificationInput struct {
 
 // handleNoteMutation processes note mutations and creates notifications for mentioned users
 func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := eventqueue.ClientFromHandler(ctx)
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
@@ -496,7 +496,7 @@ type oldDocumentDetails struct {
 
 // handleObjectMentions checks mentions in object details fields (task/risk/procedure/policy).
 func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := eventqueue.ClientFromHandler(ctx)
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}

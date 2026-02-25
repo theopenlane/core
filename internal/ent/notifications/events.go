@@ -70,7 +70,7 @@ type documentNotificationInput struct {
 
 // handleTaskMutation processes task mutations and creates notifications when assignee changes or mentions are added.
 func handleTaskMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	client, ok := eventqueue.ClientFromHandler(ctx)
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
@@ -229,7 +229,7 @@ func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.Mut
 		return nil
 	}
 
-	client, ok := eventqueue.ClientFromHandler(ctx)
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}

@@ -62,12 +62,25 @@ type MutationGalaMetadata struct {
 // NewMutationGalaMetadata builds metadata for Gala mutation envelopes from mutation payload data
 func NewMutationGalaMetadata(eventID string, payload MutationGalaPayload) MutationGalaMetadata {
 	properties := mutationMetadataProperties(payload)
+
 	entityID := strings.TrimSpace(payload.EntityID)
-	if entityID != "" {
+
+	if entityID != "" || payload.Operation != "" || payload.MutationType != "" {
 		if properties == nil {
 			properties = map[string]string{}
 		}
-		properties[MutationPropertyEntityID] = entityID
+
+		if entityID != "" {
+			properties[MutationPropertyEntityID] = entityID
+		}
+
+		if payload.Operation != "" {
+			properties[MutationPropertyOperation] = payload.Operation
+		}
+
+		if payload.MutationType != "" {
+			properties[MutationPropertyMutationType] = payload.MutationType
+		}
 	}
 
 	return MutationGalaMetadata{
@@ -81,9 +94,20 @@ func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Head
 	properties := normalizeMutationMetadataProperties(metadata.Properties)
 	eventID := strings.TrimSpace(metadata.EventID)
 
+	var tags []string
+
+	if mt := metadata.Properties[MutationPropertyMutationType]; mt != "" {
+		tags = append(tags, mt)
+	}
+
+	if op := metadata.Properties[MutationPropertyOperation]; op != "" {
+		tags = append(tags, op)
+	}
+
 	return gala.Headers{
 		IdempotencyKey: eventID,
 		Properties:     properties,
+		Tags:           tags,
 	}
 }
 
