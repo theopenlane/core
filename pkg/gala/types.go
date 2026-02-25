@@ -11,6 +11,10 @@ type Headers struct {
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// Properties stores additional typed metadata projected to string values
 	Properties map[string]string `json:"properties,omitempty"`
+	// Tags are low-cardinality labels forwarded to the transport layer (e.g. River job tags)
+	Tags []string `json:"tags,omitempty"`
+	// Listeners are the registered listener names for the topic, populated at dispatch time
+	Listeners []string `json:"listeners,omitempty"`
 	// Queue optionally overrides the River queue used for dispatch.
 	Queue string `json:"queue,omitempty"`
 	// MaxAttempts optionally overrides River max attempts for this envelope.

@@ -201,7 +201,7 @@ func softDeleteAllowContext(ctx context.Context) context.Context {
 
 // newEntitlementInvocation gathers prerequisites for entitlement mutation handling.
 func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue.MutationGalaPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
-	client, ok := eventqueue.ClientFromHandler(handlerCtx)
+	handlerCtx, client, ok := eventqueue.ClientFromHandler(handlerCtx)
 	if !ok || client.EntitlementManager == nil {
 		return nil, false
 	}
@@ -222,7 +222,8 @@ func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue
 	if strings.TrimSpace(payload.MutationType) == entgen.TypeOrganizationSetting {
 		setting, err := client.OrganizationSetting.Get(allowCtx, entityID)
 		if err != nil {
-			logx.FromContext(handlerCtx.Context).Err(err).Str("organization_setting_id", entityID).Msg("failed to resolve organization from organization setting")
+			logx.FromContext(handlerCtx.Context).Error().Err(err).Str("organization_setting_id", entityID).Msg("failed to resolve organization from organization setting")
+
 			return nil, false
 		}
 

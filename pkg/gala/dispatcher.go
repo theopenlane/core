@@ -85,6 +85,18 @@ func NewRiverDispatchWorker(galaProvider Provider) *RiverDispatchWorker {
 	return &RiverDispatchWorker{galaProvider: galaProvider}
 }
 
+// riverJobMetadata is the JSON structure attached to River jobs for UI visibility
+type riverJobMetadata struct {
+	// Topic is the gala topic name
+	Topic string `json:"topic"`
+	// EventID is the gala event identifier
+	EventID string `json:"event_id"`
+	// Listeners are the registered listener names for the topic
+	Listeners []string `json:"listeners,omitempty"`
+	// Properties contains envelope header properties (entity_id, operation, mutation_type, etc.)
+	Properties map[string]string `json:"properties,omitempty"`
+}
+
 // Dispatch dispatches an envelope to River for processing by a Worker
 func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error {
 	args, err := NewRiverDispatchArgs(envelope)
@@ -99,11 +111,24 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 
 	insertOpts := &river.InsertOpts{
 		Queue: queueName,
+		Tags:  envelope.Headers.Tags,
 	}
 
 	if envelope.Headers.MaxAttempts > 0 {
 		insertOpts.MaxAttempts = envelope.Headers.MaxAttempts
 	}
+
+	meta, err := json.Marshal(riverJobMetadata{
+		Topic:      string(envelope.Topic),
+		EventID:    string(envelope.ID),
+		Listeners:  envelope.Headers.Listeners,
+		Properties: envelope.Headers.Properties,
+	})
+	if err != nil {
+		return ErrRiverEnvelopeEncodeFailed
+	}
+
+	insertOpts.Metadata = meta
 
 	if _, err = d.jobClient.Insert(ctx, args, insertOpts); err != nil {
 		return ErrRiverDispatchInsertFailed

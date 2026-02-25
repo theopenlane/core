@@ -207,7 +207,7 @@ func handleWorkflowInstanceCompletedGala(ctx gala.HandlerContext, payload gala.W
 // workflowListenersFromGala resolves workflow listener dependencies from the gala injector
 // and enriches the handler context so the ent client is available to interceptors
 func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerContext, *engine.WorkflowListeners, bool) {
-	client, ok := eventqueue.ClientFromHandler(handlerCtx)
+	handlerCtx, client, ok := eventqueue.ClientFromHandler(handlerCtx)
 	if !ok {
 		return handlerCtx, nil, false
 	}
@@ -221,12 +221,6 @@ func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerCont
 	if err != nil {
 		return handlerCtx, nil, false
 	}
-
-	// Ensure the ent client is in context for interceptors and privacy checks.
-	// In durable dispatch the context is reconstructed from a snapshot that does
-	// not include the ent client, so interceptors like FGA auth would get a nil
-	// client from generated.FromContext.
-	handlerCtx.Context = generated.NewContext(handlerCtx.Context, client)
 
 	return handlerCtx, engine.NewWorkflowListeners(client, wfEngine, runtime), true
 }

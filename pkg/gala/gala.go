@@ -277,6 +277,8 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 		return EmitReceipt{EventID: envelope.ID, Err: ErrDispatcherRequired}
 	}
 
+	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(topic)
+
 	if err := g.dispatcher.Dispatch(ctx, envelope); err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(topic)).Msg("gala event dispatch failed")
 
@@ -308,6 +310,8 @@ func (g *Gala) EmitEnvelope(ctx context.Context, envelope Envelope) error {
 
 		envelope.ContextSnapshot = snapshot
 	}
+
+	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(envelope.Topic)
 
 	return g.dispatcher.Dispatch(ctx, envelope)
 }
@@ -353,7 +357,7 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 		}
 	}
 
-	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Int("listener_count", len(listeners)).Msg("gala event processed")
+	logx.FromContext(restoredContext).Info().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Int("listener_count", len(listeners)).Msg("gala event processed")
 
 	return nil
 }

@@ -142,6 +142,21 @@ func (r *Registry) DecodePayload(topic TopicName, payload []byte) (any, error) {
 	return registration.decode(payload)
 }
 
+// listenerNamesForTopic returns the registered listener names for a topic
+func (r *Registry) listenerNamesForTopic(topic TopicName) []string {
+	listeners := r.registeredListeners(topic)
+	if len(listeners) == 0 {
+		return nil
+	}
+
+	names := make([]string, len(listeners))
+	for i, l := range listeners {
+		names[i] = l.name
+	}
+
+	return names
+}
+
 // registeredListeners returns a snapshot of listeners for one topic.
 func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
 	r.mu.RLock()
