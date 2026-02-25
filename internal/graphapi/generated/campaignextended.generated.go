@@ -716,7 +716,6 @@ func (ec *executionContext) unmarshalInputCreateCampaignWithTargetsInput(ctx con
 			it.Targets = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -757,7 +756,6 @@ func (ec *executionContext) unmarshalInputLaunchCampaignInput(ctx context.Contex
 			it.ScheduledAt = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -791,7 +789,6 @@ func (ec *executionContext) unmarshalInputResendCampaignIncompleteInput(ctx cont
 			it.ScheduledAt = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -825,7 +822,6 @@ func (ec *executionContext) unmarshalInputSendCampaignTestEmailInput(ctx context
 			it.Emails = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -864,10 +860,10 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -913,10 +909,10 @@ func (ec *executionContext) _CampaignLaunchPayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -962,10 +958,10 @@ func (ec *executionContext) _CampaignTestEmailPayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

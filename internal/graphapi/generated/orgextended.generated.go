@@ -352,7 +352,6 @@ func (ec *executionContext) unmarshalInputOrgMembersInput(ctx context.Context, o
 			it.UserID = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -394,10 +393,10 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

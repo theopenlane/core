@@ -30,7 +30,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		return nil
 	}
 
-	client, ok := eventqueue.ClientFromHandler(ctx)
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
