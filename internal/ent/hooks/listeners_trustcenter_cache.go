@@ -521,7 +521,7 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 			defer resp.Body.Close()
 
 			if httpsling.IsSuccess(resp) {
-				logx.FromContext(ctx).Info().Str("target_url", targetURL).Int("status_code", resp.StatusCode).Msg("successfully triggered cache refresh")
+				logx.FromContext(ctx).Debug().Str("target_url", targetURL).Int("status_code", resp.StatusCode).Msg("successfully triggered cache refresh")
 				return nil
 			}
 
@@ -538,6 +538,7 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 			}
 
 			logx.FromContext(ctx).Error().Str("target_url", targetURL).Msg("failed to trigger cache refresh after maximum retries")
+
 			return ErrCacheRefreshFailed
 		}
 
