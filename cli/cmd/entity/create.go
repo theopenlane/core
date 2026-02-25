@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -53,17 +54,6 @@ func createValidation(ctx context.Context) (input graphclient.CreateEntityInput,
 		input.DisplayName = &displayName
 	}
 
-	entityType := cmd.Config.String("type")
-	if entityType != "" {
-		// get the entity type id
-		id, err := getEntityTypeID(ctx, entityType)
-		cobra.CheckErr(err)
-
-		fmt.Println("Entity Type ID: ", id)
-
-		input.EntityTypeID = &id
-	}
-
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
@@ -71,7 +61,7 @@ func createValidation(ctx context.Context) (input graphclient.CreateEntityInput,
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToEntityStatus(status)
 	}
 
 	domains := cmd.Config.Strings("domains")
@@ -108,7 +98,9 @@ func create(ctx context.Context) error {
 	input, err := createValidation(ctx)
 	cobra.CheckErr(err)
 
-	o, err := client.CreateEntity(ctx, input)
+	entityType := cmd.Config.String("type")
+
+	o, err := client.CreateEntity(ctx, input, &entityType)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)
