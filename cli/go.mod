@@ -3,7 +3,7 @@ module github.com/theopenlane/core/cli
 go 1.25.7
 
 require (
-	github.com/99designs/gqlgen v0.17.86
+	github.com/99designs/gqlgen v0.17.87
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v1.0.9
 	github.com/theopenlane/go-client v0.8.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.24.1
+	github.com/theopenlane/iam v0.25.0
 	github.com/theopenlane/utils v0.7.0
 	golang.org/x/oauth2 v0.35.0
 	golang.org/x/term v0.40.0
@@ -88,7 +88,7 @@ require (
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/vektah/gqlparser/v2 v2.5.31 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.32 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
@@ -101,6 +101,7 @@ require (
 	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	golang.org/x/time v0.14.0 // indirect

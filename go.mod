@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
-	github.com/99designs/gqlgen v0.17.86
+	github.com/99designs/gqlgen v0.17.87
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/alicebob/miniredis/v2 v2.36.1
 	github.com/alitto/pond/v2 v2.6.2
@@ -96,13 +96,13 @@ require (
 	github.com/theopenlane/go-client v0.8.4
 	github.com/theopenlane/gqlgen-plugins v0.14.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.24.1
+	github.com/theopenlane/iam v0.25.0
 	github.com/theopenlane/newman v0.2.2
 	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.7.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2
-	github.com/vektah/gqlparser/v2 v2.5.31
+	github.com/vektah/gqlparser/v2 v2.5.32
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.4
 	gocloud.dev v0.44.0
