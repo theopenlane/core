@@ -80,3 +80,29 @@ func TestWithFieldAccumulates(t *testing.T) {
 	assert.Equal(t, "value1", fields["field1"])
 	assert.Equal(t, "value2", fields["field2"])
 }
+
+func TestWithFieldDoesNotMutateParentContext(t *testing.T) {
+	parent := logx.WithField(context.Background(), "key", "original")
+
+	child := logx.WithField(parent, "key", "updated")
+
+	parentFields := logx.FieldsFromContext(parent)
+	childFields := logx.FieldsFromContext(child)
+
+	assert.Equal(t, "original", parentFields["key"])
+	assert.Equal(t, "updated", childFields["key"])
+}
+
+func TestWithFieldsDoesNotMutateParentContext(t *testing.T) {
+	parent := logx.WithField(context.Background(), "key", "original")
+
+	child := logx.WithFields(parent, map[string]any{"key": "updated", "extra": "value"})
+
+	parentFields := logx.FieldsFromContext(parent)
+	childFields := logx.FieldsFromContext(child)
+
+	assert.Equal(t, "original", parentFields["key"])
+	assert.NotContains(t, parentFields, "extra")
+	assert.Equal(t, "updated", childFields["key"])
+	assert.Equal(t, "value", childFields["extra"])
+}
