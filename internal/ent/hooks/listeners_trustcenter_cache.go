@@ -484,6 +484,7 @@ func buildTrustCenterURL(customDomain, slug string) string {
 func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 	requester, err := httpsling.New(httpsling.Client(httpclient.Timeout(cacheRefreshTimeout)))
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("target_url", targetURL).Msg("failed to create HTTP client for cache refresh")
 		return err
 	}
 
@@ -504,19 +505,23 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 			defer resp.Body.Close()
 
 			if httpsling.IsSuccess(resp) {
+				logx.FromContext(ctx).Info().Str("target_url", targetURL).Int("status_code", resp.StatusCode).Msg("successfully triggered cache refresh")
 				return nil
 			}
 
 			if resp.StatusCode >= http.StatusBadRequest && resp.StatusCode < http.StatusInternalServerError {
+				logx.FromContext(ctx).Warn().Str("target_url", targetURL).Int("status_code", resp.StatusCode).Msg("cache refresh request failed with client error, will not retry")
 				return ErrCacheRefreshFailed
 			}
 		}
 
 		if attempt == cacheRefreshMaxRetries-1 {
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("target_url", targetURL).Msg("failed to trigger cache refresh after maximum retries")
 				return fmt.Errorf("%w: %w", ErrCacheRefreshFailed, err)
 			}
 
+			logx.FromContext(ctx).Error().Str("target_url", targetURL).Msg("failed to trigger cache refresh after maximum retries")
 			return ErrCacheRefreshFailed
 		}
 
