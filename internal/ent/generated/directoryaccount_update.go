@@ -17,6 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -188,6 +191,46 @@ func (_u *DirectoryAccountUpdate) ClearScopeID() *DirectoryAccountUpdate {
 	return _u
 }
 
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *DirectoryAccountUpdate) SetIdentityHolderID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableIdentityHolderID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *DirectoryAccountUpdate) ClearIdentityHolderID() *DirectoryAccountUpdate {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryAccountUpdate) SetDirectoryName(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableDirectoryName(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryAccountUpdate) ClearDirectoryName() *DirectoryAccountUpdate {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetSecondaryKey sets the "secondary_key" field.
 func (_u *DirectoryAccountUpdate) SetSecondaryKey(v string) *DirectoryAccountUpdate {
 	_u.mutation.SetSecondaryKey(v)
@@ -245,6 +288,58 @@ func (_u *DirectoryAccountUpdate) SetNillableDisplayName(v *string) *DirectoryAc
 // ClearDisplayName clears the value of the "display_name" field.
 func (_u *DirectoryAccountUpdate) ClearDisplayName() *DirectoryAccountUpdate {
 	_u.mutation.ClearDisplayName()
+	return _u
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *DirectoryAccountUpdate) SetAvatarRemoteURL(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableAvatarRemoteURL(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *DirectoryAccountUpdate) ClearAvatarRemoteURL() *DirectoryAccountUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *DirectoryAccountUpdate) SetAvatarLocalFileID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableAvatarLocalFileID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *DirectoryAccountUpdate) ClearAvatarLocalFileID() *DirectoryAccountUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (_u *DirectoryAccountUpdate) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountUpdate {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (_u *DirectoryAccountUpdate) ClearAvatarUpdatedAt() *DirectoryAccountUpdate {
+	_u.mutation.ClearAvatarUpdatedAt()
 	return _u
 }
 
@@ -517,6 +612,30 @@ func (_u *DirectoryAccountUpdate) SetScope(v *CustomTypeEnum) *DirectoryAccountU
 	return _u.SetScopeID(v.ID)
 }
 
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_u *DirectoryAccountUpdate) SetIdentityHolder(v *IdentityHolder) *DirectoryAccountUpdate {
+	return _u.SetIdentityHolderID(v.ID)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_u *DirectoryAccountUpdate) SetAvatarFileID(id string) *DirectoryAccountUpdate {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableAvatarFileID(id *string) *DirectoryAccountUpdate {
+	if id != nil {
+		_u = _u.SetAvatarFileID(*id)
+	}
+	return _u
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_u *DirectoryAccountUpdate) SetAvatarFile(v *File) *DirectoryAccountUpdate {
+	return _u.SetAvatarFileID(v.ID)
+}
+
 // AddGroupIDs adds the "groups" edge to the DirectoryGroup entity by IDs.
 func (_u *DirectoryAccountUpdate) AddGroupIDs(ids ...string) *DirectoryAccountUpdate {
 	_u.mutation.AddGroupIDs(ids...)
@@ -530,6 +649,21 @@ func (_u *DirectoryAccountUpdate) AddGroups(v ...*DirectoryGroup) *DirectoryAcco
 		ids[i] = v[i].ID
 	}
 	return _u.AddGroupIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *DirectoryAccountUpdate) AddFindingIDs(ids ...string) *DirectoryAccountUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *DirectoryAccountUpdate) AddFindings(v ...*Finding) *DirectoryAccountUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -585,6 +719,18 @@ func (_u *DirectoryAccountUpdate) ClearScope() *DirectoryAccountUpdate {
 	return _u
 }
 
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (_u *DirectoryAccountUpdate) ClearIdentityHolder() *DirectoryAccountUpdate {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (_u *DirectoryAccountUpdate) ClearAvatarFile() *DirectoryAccountUpdate {
+	_u.mutation.ClearAvatarFile()
+	return _u
+}
+
 // ClearGroups clears all "groups" edges to the DirectoryGroup entity.
 func (_u *DirectoryAccountUpdate) ClearGroups() *DirectoryAccountUpdate {
 	_u.mutation.ClearGroups()
@@ -604,6 +750,27 @@ func (_u *DirectoryAccountUpdate) RemoveGroups(v ...*DirectoryGroup) *DirectoryA
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveGroupIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *DirectoryAccountUpdate) ClearFindings() *DirectoryAccountUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *DirectoryAccountUpdate) RemoveFindingIDs(ids ...string) *DirectoryAccountUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *DirectoryAccountUpdate) RemoveFindings(v ...*Finding) *DirectoryAccountUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -687,6 +854,13 @@ func (_u *DirectoryAccountUpdate) defaults() error {
 		v := directoryaccount.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
+		if directoryaccount.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized directoryaccount.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := directoryaccount.UpdateDefaultAvatarUpdatedAt()
+		_u.mutation.SetAvatarUpdatedAt(v)
+	}
 	return nil
 }
 
@@ -695,6 +869,11 @@ func (_u *DirectoryAccountUpdate) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := directoryaccount.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
+		if err := directoryaccount.AvatarRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.avatar_remote_url": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.AccountType(); ok {
@@ -711,12 +890,6 @@ func (_u *DirectoryAccountUpdate) check() error {
 		if err := directoryaccount.MfaStateValidator(v); err != nil {
 			return &ValidationError{Name: "mfa_state", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.mfa_state": %w`, err)}
 		}
-	}
-	if _u.mutation.IntegrationCleared() && len(_u.mutation.IntegrationIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DirectoryAccount.integration"`)
-	}
-	if _u.mutation.DirectorySyncRunCleared() && len(_u.mutation.DirectorySyncRunIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DirectoryAccount.directory_sync_run"`)
 	}
 	return nil
 }
@@ -780,6 +953,12 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directoryaccount.FieldDirectoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccount.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -797,6 +976,18 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(directoryaccount.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(directoryaccount.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(directoryaccount.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(directoryaccount.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(directoryaccount.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.GivenName(); ok {
 		_spec.SetField(directoryaccount.FieldGivenName, field.TypeString, value)
@@ -966,6 +1157,68 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IdentityHolderTable,
+			Columns: []string{directoryaccount.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IdentityHolderTable,
+			Columns: []string{directoryaccount.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.AvatarFileTable,
+			Columns: []string{directoryaccount.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.AvatarFileTable,
+			Columns: []string{directoryaccount.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1032,6 +1285,54 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
@@ -1305,6 +1606,46 @@ func (_u *DirectoryAccountUpdateOne) ClearScopeID() *DirectoryAccountUpdateOne {
 	return _u
 }
 
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_u *DirectoryAccountUpdateOne) SetIdentityHolderID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableIdentityHolderID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearIdentityHolderID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearIdentityHolderID()
+	return _u
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryAccountUpdateOne) SetDirectoryName(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableDirectoryName(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryAccountUpdateOne) ClearDirectoryName() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetSecondaryKey sets the "secondary_key" field.
 func (_u *DirectoryAccountUpdateOne) SetSecondaryKey(v string) *DirectoryAccountUpdateOne {
 	_u.mutation.SetSecondaryKey(v)
@@ -1362,6 +1703,58 @@ func (_u *DirectoryAccountUpdateOne) SetNillableDisplayName(v *string) *Director
 // ClearDisplayName clears the value of the "display_name" field.
 func (_u *DirectoryAccountUpdateOne) ClearDisplayName() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearDisplayName()
+	return _u
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *DirectoryAccountUpdateOne) SetAvatarRemoteURL(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableAvatarRemoteURL(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *DirectoryAccountUpdateOne) ClearAvatarRemoteURL() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *DirectoryAccountUpdateOne) SetAvatarLocalFileID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableAvatarLocalFileID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearAvatarLocalFileID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
+// SetAvatarUpdatedAt sets the "avatar_updated_at" field.
+func (_u *DirectoryAccountUpdateOne) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountUpdateOne {
+	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
+}
+
+// ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
+func (_u *DirectoryAccountUpdateOne) ClearAvatarUpdatedAt() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearAvatarUpdatedAt()
 	return _u
 }
 
@@ -1634,6 +2027,30 @@ func (_u *DirectoryAccountUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryAccou
 	return _u.SetScopeID(v.ID)
 }
 
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_u *DirectoryAccountUpdateOne) SetIdentityHolder(v *IdentityHolder) *DirectoryAccountUpdateOne {
+	return _u.SetIdentityHolderID(v.ID)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_u *DirectoryAccountUpdateOne) SetAvatarFileID(id string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableAvatarFileID(id *string) *DirectoryAccountUpdateOne {
+	if id != nil {
+		_u = _u.SetAvatarFileID(*id)
+	}
+	return _u
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_u *DirectoryAccountUpdateOne) SetAvatarFile(v *File) *DirectoryAccountUpdateOne {
+	return _u.SetAvatarFileID(v.ID)
+}
+
 // AddGroupIDs adds the "groups" edge to the DirectoryGroup entity by IDs.
 func (_u *DirectoryAccountUpdateOne) AddGroupIDs(ids ...string) *DirectoryAccountUpdateOne {
 	_u.mutation.AddGroupIDs(ids...)
@@ -1647,6 +2064,21 @@ func (_u *DirectoryAccountUpdateOne) AddGroups(v ...*DirectoryGroup) *DirectoryA
 		ids[i] = v[i].ID
 	}
 	return _u.AddGroupIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *DirectoryAccountUpdateOne) AddFindingIDs(ids ...string) *DirectoryAccountUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *DirectoryAccountUpdateOne) AddFindings(v ...*Finding) *DirectoryAccountUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -1702,6 +2134,18 @@ func (_u *DirectoryAccountUpdateOne) ClearScope() *DirectoryAccountUpdateOne {
 	return _u
 }
 
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (_u *DirectoryAccountUpdateOne) ClearIdentityHolder() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (_u *DirectoryAccountUpdateOne) ClearAvatarFile() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearAvatarFile()
+	return _u
+}
+
 // ClearGroups clears all "groups" edges to the DirectoryGroup entity.
 func (_u *DirectoryAccountUpdateOne) ClearGroups() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearGroups()
@@ -1721,6 +2165,27 @@ func (_u *DirectoryAccountUpdateOne) RemoveGroups(v ...*DirectoryGroup) *Directo
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveGroupIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *DirectoryAccountUpdateOne) ClearFindings() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *DirectoryAccountUpdateOne) RemoveFindingIDs(ids ...string) *DirectoryAccountUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *DirectoryAccountUpdateOne) RemoveFindings(v ...*Finding) *DirectoryAccountUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -1817,6 +2282,13 @@ func (_u *DirectoryAccountUpdateOne) defaults() error {
 		v := directoryaccount.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
+		if directoryaccount.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized directoryaccount.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
+		v := directoryaccount.UpdateDefaultAvatarUpdatedAt()
+		_u.mutation.SetAvatarUpdatedAt(v)
+	}
 	return nil
 }
 
@@ -1825,6 +2297,11 @@ func (_u *DirectoryAccountUpdateOne) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := directoryaccount.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
+		if err := directoryaccount.AvatarRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.avatar_remote_url": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.AccountType(); ok {
@@ -1841,12 +2318,6 @@ func (_u *DirectoryAccountUpdateOne) check() error {
 		if err := directoryaccount.MfaStateValidator(v); err != nil {
 			return &ValidationError{Name: "mfa_state", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.mfa_state": %w`, err)}
 		}
-	}
-	if _u.mutation.IntegrationCleared() && len(_u.mutation.IntegrationIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DirectoryAccount.integration"`)
-	}
-	if _u.mutation.DirectorySyncRunCleared() && len(_u.mutation.DirectorySyncRunIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DirectoryAccount.directory_sync_run"`)
 	}
 	return nil
 }
@@ -1927,6 +2398,12 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directoryaccount.FieldDirectoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccount.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -1944,6 +2421,18 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(directoryaccount.FieldDisplayName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(directoryaccount.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(directoryaccount.FieldAvatarRemoteURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarUpdatedAt(); ok {
+		_spec.SetField(directoryaccount.FieldAvatarUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.AvatarUpdatedAtCleared() {
+		_spec.ClearField(directoryaccount.FieldAvatarUpdatedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.GivenName(); ok {
 		_spec.SetField(directoryaccount.FieldGivenName, field.TypeString, value)
@@ -2113,6 +2602,68 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IdentityHolderTable,
+			Columns: []string{directoryaccount.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IdentityHolderTable,
+			Columns: []string{directoryaccount.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.AvatarFileTable,
+			Columns: []string{directoryaccount.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   directoryaccount.AvatarFileTable,
+			Columns: []string{directoryaccount.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.GroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2179,6 +2730,54 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   directoryaccount.FindingsTable,
+			Columns: directoryaccount.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingDirectoryAccounts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}

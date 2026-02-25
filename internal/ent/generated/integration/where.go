@@ -157,6 +157,11 @@ func IntegrationType(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldIntegrationType, v))
 }
 
+// PlatformID applies equality check predicate on the "platform_id" field. It's identical to PlatformIDEQ.
+func PlatformID(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldPlatformID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldCreatedAt, v))
@@ -1377,6 +1382,81 @@ func IntegrationTypeContainsFold(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldContainsFold(FieldIntegrationType, v))
 }
 
+// PlatformIDEQ applies the EQ predicate on the "platform_id" field.
+func PlatformIDEQ(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldPlatformID, v))
+}
+
+// PlatformIDNEQ applies the NEQ predicate on the "platform_id" field.
+func PlatformIDNEQ(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldNEQ(FieldPlatformID, v))
+}
+
+// PlatformIDIn applies the In predicate on the "platform_id" field.
+func PlatformIDIn(vs ...string) predicate.Integration {
+	return predicate.Integration(sql.FieldIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDNotIn applies the NotIn predicate on the "platform_id" field.
+func PlatformIDNotIn(vs ...string) predicate.Integration {
+	return predicate.Integration(sql.FieldNotIn(FieldPlatformID, vs...))
+}
+
+// PlatformIDGT applies the GT predicate on the "platform_id" field.
+func PlatformIDGT(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldGT(FieldPlatformID, v))
+}
+
+// PlatformIDGTE applies the GTE predicate on the "platform_id" field.
+func PlatformIDGTE(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldGTE(FieldPlatformID, v))
+}
+
+// PlatformIDLT applies the LT predicate on the "platform_id" field.
+func PlatformIDLT(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldLT(FieldPlatformID, v))
+}
+
+// PlatformIDLTE applies the LTE predicate on the "platform_id" field.
+func PlatformIDLTE(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldLTE(FieldPlatformID, v))
+}
+
+// PlatformIDContains applies the Contains predicate on the "platform_id" field.
+func PlatformIDContains(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldContains(FieldPlatformID, v))
+}
+
+// PlatformIDHasPrefix applies the HasPrefix predicate on the "platform_id" field.
+func PlatformIDHasPrefix(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldHasPrefix(FieldPlatformID, v))
+}
+
+// PlatformIDHasSuffix applies the HasSuffix predicate on the "platform_id" field.
+func PlatformIDHasSuffix(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldHasSuffix(FieldPlatformID, v))
+}
+
+// PlatformIDIsNil applies the IsNil predicate on the "platform_id" field.
+func PlatformIDIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldPlatformID))
+}
+
+// PlatformIDNotNil applies the NotNil predicate on the "platform_id" field.
+func PlatformIDNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldPlatformID))
+}
+
+// PlatformIDEqualFold applies the EqualFold predicate on the "platform_id" field.
+func PlatformIDEqualFold(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldEqualFold(FieldPlatformID, v))
+}
+
+// PlatformIDContainsFold applies the ContainsFold predicate on the "platform_id" field.
+func PlatformIDContainsFold(v string) predicate.Integration {
+	return predicate.Integration(sql.FieldContainsFold(FieldPlatformID, v))
+}
+
 // ProviderMetadataIsNil applies the IsNil predicate on the "provider_metadata" field.
 func ProviderMetadataIsNil() predicate.Integration {
 	return predicate.Integration(sql.FieldIsNull(FieldProviderMetadata))
@@ -1873,6 +1953,35 @@ func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Int
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectorySyncRun
 		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlatform applies the HasEdge predicate on the "platform" edge.
+func HasPlatform() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Integration
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlatformWith applies the HasEdge predicate on the "platform" edge with a given conditions (other predicates).
+func HasPlatformWith(preds ...predicate.Platform) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newPlatformStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Integration
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

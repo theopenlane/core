@@ -1078,6 +1078,7 @@ func adminSearchIntegrations(ctx context.Context, query string, after *entgql.Cu
 				integration.NameContainsFold(query),             // search by Name
 				integration.KindContainsFold(query),             // search by Kind
 				integration.IntegrationTypeContainsFold(query),  // search by IntegrationType
+				integration.PlatformIDContainsFold(query),       // search by PlatformID
 			),
 		)
 

@@ -907,6 +907,12 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+      - user: user:ulid-of-owner # org owner has full access to scan-associated finding
+        object: finding:finding-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: vulnerability
     description: vulnerabilities can be associated with organizations or programs and permissions are inherited accordingly
     tuple_file: tuples/vulnerabilities.yaml
@@ -940,6 +946,12 @@ tests:
           can_delete: false
       - user: user:ulid-of-owner # org owner has full access to program-associated vulnerability
         object: vulnerability:vulnerability-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner # org owner has full access to scan-associated vulnerability
+        object: vulnerability:vulnerability-3
         assertions:
           can_view: true
           can_edit: true

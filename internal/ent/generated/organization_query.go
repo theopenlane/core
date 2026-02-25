@@ -124,6 +124,7 @@ type OrganizationQuery struct {
 	withProcedureCreators                    *GroupQuery
 	withProgramCreators                      *GroupQuery
 	withRiskCreators                         *GroupQuery
+	withIdentityHolderCreators               *GroupQuery
 	withScheduledJobCreators                 *GroupQuery
 	withStandardCreators                     *GroupQuery
 	withTemplateCreators                     *GroupQuery
@@ -233,6 +234,7 @@ type OrganizationQuery struct {
 	withNamedProcedureCreators               map[string]*GroupQuery
 	withNamedProgramCreators                 map[string]*GroupQuery
 	withNamedRiskCreators                    map[string]*GroupQuery
+	withNamedIdentityHolderCreators          map[string]*GroupQuery
 	withNamedScheduledJobCreators            map[string]*GroupQuery
 	withNamedStandardCreators                map[string]*GroupQuery
 	withNamedTemplateCreators                map[string]*GroupQuery
@@ -699,6 +701,31 @@ func (_q *OrganizationQuery) QueryRiskCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskCreatorsTable, organization.RiskCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryIdentityHolderCreators chains the current query on the "identity_holder_creators" edge.
+func (_q *OrganizationQuery) QueryIdentityHolderCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IdentityHolderCreatorsTable, organization.IdentityHolderCreatorsColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -3240,6 +3267,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withProcedureCreators:               _q.withProcedureCreators.Clone(),
 		withProgramCreators:                 _q.withProgramCreators.Clone(),
 		withRiskCreators:                    _q.withRiskCreators.Clone(),
+		withIdentityHolderCreators:          _q.withIdentityHolderCreators.Clone(),
 		withScheduledJobCreators:            _q.withScheduledJobCreators.Clone(),
 		withStandardCreators:                _q.withStandardCreators.Clone(),
 		withTemplateCreators:                _q.withTemplateCreators.Clone(),
@@ -3491,6 +3519,17 @@ func (_q *OrganizationQuery) WithRiskCreators(opts ...func(*GroupQuery)) *Organi
 		opt(query)
 	}
 	_q.withRiskCreators = query
+	return _q
+}
+
+// WithIdentityHolderCreators tells the query-builder to eager-load the nodes that are connected to
+// the "identity_holder_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIdentityHolderCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIdentityHolderCreators = query
 	return _q
 }
 
@@ -4601,7 +4640,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [107]bool{
+		loadedTypes = [108]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4616,6 +4655,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withProcedureCreators != nil,
 			_q.withProgramCreators != nil,
 			_q.withRiskCreators != nil,
+			_q.withIdentityHolderCreators != nil,
 			_q.withScheduledJobCreators != nil,
 			_q.withStandardCreators != nil,
 			_q.withTemplateCreators != nil,
@@ -4839,6 +4879,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadRiskCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.RiskCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.RiskCreators = append(n.Edges.RiskCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIdentityHolderCreators; query != nil {
+		if err := _q.loadIdentityHolderCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IdentityHolderCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.IdentityHolderCreators = append(n.Edges.IdentityHolderCreators, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -5639,6 +5688,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadRiskCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedRiskCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedRiskCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIdentityHolderCreators {
+		if err := _q.loadIdentityHolderCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIdentityHolderCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedIdentityHolderCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6713,6 +6769,37 @@ func (_q *OrganizationQuery) loadRiskCreators(ctx context.Context, query *GroupQ
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_risk_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadIdentityHolderCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IdentityHolderCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_identity_holder_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_identity_holder_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_identity_holder_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -9502,7 +9589,6 @@ func (_q *OrganizationQuery) loadDirectoryAccounts(ctx context.Context, query *D
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directoryaccount.FieldOwnerID)
 	}
@@ -9533,7 +9619,6 @@ func (_q *OrganizationQuery) loadDirectoryGroups(ctx context.Context, query *Dir
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorygroup.FieldOwnerID)
 	}
@@ -9564,7 +9649,6 @@ func (_q *OrganizationQuery) loadDirectoryMemberships(ctx context.Context, query
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorymembership.FieldOwnerID)
 	}
@@ -9595,7 +9679,6 @@ func (_q *OrganizationQuery) loadDirectorySyncRuns(ctx context.Context, query *D
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorysyncrun.FieldOwnerID)
 	}
@@ -9975,6 +10058,20 @@ func (_q *OrganizationQuery) WithNamedRiskCreators(name string, opts ...func(*Gr
 		_q.withNamedRiskCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedRiskCreators[name] = query
+	return _q
+}
+
+// WithNamedIdentityHolderCreators tells the query-builder to eager-load the nodes that are connected to the "identity_holder_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIdentityHolderCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIdentityHolderCreators == nil {
+		_q.withNamedIdentityHolderCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedIdentityHolderCreators[name] = query
 	return _q
 }
 

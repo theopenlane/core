@@ -110,6 +110,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "identityHolderCreators":
+				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
 			case "scheduledJobCreators":
 				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
 			case "standardCreators":
@@ -369,6 +371,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "identityHolderCreators":
+				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
 			case "scheduledJobCreators":
 				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
 			case "standardCreators":
@@ -657,6 +661,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_programCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
+			case "identityHolderCreators":
+				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
 			case "scheduledJobCreators":
 				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
 			case "standardCreators":

@@ -67,6 +67,8 @@ type IntegrationHistory struct {
 	Kind string `json:"kind,omitempty"`
 	// the type of integration, such as communicattion, storage, SCM, etc.
 	IntegrationType string `json:"integration_type,omitempty"`
+	// optional platform associated with this integration for downstream inventory linkage
+	PlatformID string `json:"platform_id,omitempty"`
 	// cached provider metadata for UI and registry access
 	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// runtime configuration for operations, scheduling, and mappings
@@ -89,7 +91,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case integrationhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldEnvironmentName, integrationhistory.FieldEnvironmentID, integrationhistory.FieldScopeName, integrationhistory.FieldScopeID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType:
+		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldEnvironmentName, integrationhistory.FieldEnvironmentID, integrationhistory.FieldScopeName, integrationhistory.FieldScopeID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType, integrationhistory.FieldPlatformID:
 			values[i] = new(sql.NullString)
 		case integrationhistory.FieldHistoryTime, integrationhistory.FieldCreatedAt, integrationhistory.FieldUpdatedAt, integrationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -250,6 +252,12 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.IntegrationType = value.String
 			}
+		case integrationhistory.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
 		case integrationhistory.FieldProviderMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field provider_metadata", values[i])
@@ -387,6 +395,9 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_type=")
 	builder.WriteString(_m.IntegrationType)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadata))

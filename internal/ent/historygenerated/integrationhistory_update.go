@@ -584,6 +584,9 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.IntegrationTypeCleared() {
 		_spec.ClearField(integrationhistory.FieldIntegrationType, field.TypeString)
 	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(integrationhistory.FieldPlatformID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProviderMetadata(); ok {
 		_spec.SetField(integrationhistory.FieldProviderMetadata, field.TypeJSON, value)
 	}
@@ -1209,6 +1212,9 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if _u.mutation.IntegrationTypeCleared() {
 		_spec.ClearField(integrationhistory.FieldIntegrationType, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(integrationhistory.FieldPlatformID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProviderMetadata(); ok {
 		_spec.SetField(integrationhistory.FieldProviderMetadata, field.TypeJSON, value)

@@ -80,6 +80,12 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryAccount_directoryName(ctx, field)
 			case "externalID":
 				return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
 			case "secondaryKey":
@@ -88,6 +94,12 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
 			case "displayName":
 				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_DirectoryAccount_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_DirectoryAccount_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_DirectoryAccount_avatarUpdatedAt(ctx, field)
 			case "givenName":
 				return ec.fieldContext_DirectoryAccount_givenName(ctx, field)
 			case "familyName":
@@ -128,8 +140,16 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
 			case "directorySyncRun":
 				return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectoryAccount_platform(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_DirectoryAccount_identityHolder(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_DirectoryAccount_avatarFile(ctx, field)
 			case "groups":
 				return ec.fieldContext_DirectoryAccount_groups(ctx, field)
+			case "findings":
+				return ec.fieldContext_DirectoryAccount_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_DirectoryAccount_workflowObjectRefs(ctx, field)
 			case "memberships":
@@ -193,6 +213,12 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryAccount_directoryName(ctx, field)
 			case "externalID":
 				return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
 			case "secondaryKey":
@@ -201,6 +227,12 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
 			case "displayName":
 				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_DirectoryAccount_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_DirectoryAccount_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_DirectoryAccount_avatarUpdatedAt(ctx, field)
 			case "givenName":
 				return ec.fieldContext_DirectoryAccount_givenName(ctx, field)
 			case "familyName":
@@ -241,8 +273,16 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
 			case "directorySyncRun":
 				return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectoryAccount_platform(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_DirectoryAccount_identityHolder(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_DirectoryAccount_avatarFile(ctx, field)
 			case "groups":
 				return ec.fieldContext_DirectoryAccount_groups(ctx, field)
+			case "findings":
+				return ec.fieldContext_DirectoryAccount_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_DirectoryAccount_workflowObjectRefs(ctx, field)
 			case "memberships":
@@ -335,6 +375,12 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryAccount_directoryName(ctx, field)
 			case "externalID":
 				return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
 			case "secondaryKey":
@@ -343,6 +389,12 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
 			case "displayName":
 				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_DirectoryAccount_avatarRemoteURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_DirectoryAccount_avatarLocalFileID(ctx, field)
+			case "avatarUpdatedAt":
+				return ec.fieldContext_DirectoryAccount_avatarUpdatedAt(ctx, field)
 			case "givenName":
 				return ec.fieldContext_DirectoryAccount_givenName(ctx, field)
 			case "familyName":
@@ -383,8 +435,16 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
 			case "directorySyncRun":
 				return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
+			case "platform":
+				return ec.fieldContext_DirectoryAccount_platform(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_DirectoryAccount_identityHolder(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_DirectoryAccount_avatarFile(ctx, field)
 			case "groups":
 				return ec.fieldContext_DirectoryAccount_groups(ctx, field)
+			case "findings":
+				return ec.fieldContext_DirectoryAccount_findings(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_DirectoryAccount_workflowObjectRefs(ctx, field)
 			case "memberships":

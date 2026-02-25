@@ -48,15 +48,22 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Comment("integration that owns this directory membership").
 			NotEmpty().
 			Immutable(),
+		field.String("platform_id").
+			Comment("optional platform associated with this directory membership").
+			Optional().
+			NotEmpty().
+			Immutable(),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
 			Immutable(),
 		field.String("directory_account_id").
 			Comment("directory account participating in this membership").
+			NotEmpty().
 			Immutable(),
 		field.String("directory_group_id").
 			Comment("directory group associated with this membership").
+			NotEmpty().
 			Immutable(),
 		field.Enum("role").
 			Comment("membership role reported by the provider").
@@ -106,7 +113,7 @@ func (m DirectoryMembership) Mixin() []ent.Mixin {
 // Edges of the DirectoryMembership
 func (m DirectoryMembership) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: m,
 			edgeSchema: Integration{},
 			field:      "integration_id",
@@ -114,13 +121,20 @@ func (m DirectoryMembership) Edges() []ent.Edge {
 			immutable:  true,
 			comment:    "integration that owns this directory membership",
 		}),
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: m,
 			edgeSchema: DirectorySyncRun{},
 			field:      "directory_sync_run_id",
 			required:   true,
 			immutable:  true,
 			comment:    "sync run that produced this snapshot",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: m,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			immutable:  true,
+			comment:    "platform associated with this directory membership",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: m,
@@ -159,6 +173,7 @@ func (DirectoryMembership) Indexes() []ent.Index {
 			Unique(),
 		index.Fields("directory_sync_run_id"),
 		index.Fields("integration_id", "directory_sync_run_id"),
+		index.Fields("platform_id", "directory_sync_run_id"),
 	}
 }
 

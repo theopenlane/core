@@ -17,7 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -677,6 +679,21 @@ func (_c *IdentityHolderCreate) AddEntities(v ...*Entity) *IdentityHolderCreate 
 	return _c.AddEntityIDs(ids...)
 }
 
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_c *IdentityHolderCreate) AddDirectoryAccountIDs(ids ...string) *IdentityHolderCreate {
+	_c.mutation.AddDirectoryAccountIDs(ids...)
+	return _c
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_c *IdentityHolderCreate) AddDirectoryAccounts(v ...*DirectoryAccount) *IdentityHolderCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryAccountIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_c *IdentityHolderCreate) AddPlatformIDs(ids ...string) *IdentityHolderCreate {
 	_c.mutation.AddPlatformIDs(ids...)
@@ -720,6 +737,21 @@ func (_c *IdentityHolderCreate) AddTasks(v ...*Task) *IdentityHolderCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddTaskIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *IdentityHolderCreate) AddFindingIDs(ids ...string) *IdentityHolderCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *IdentityHolderCreate) AddFindings(v ...*Finding) *IdentityHolderCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -1298,6 +1330,23 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryAccountsTable,
+			Columns: []string{identityholder.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1344,6 +1393,23 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 			},
 		}
 		edge.Schema = _c.schemaConfig.IdentityHolderTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.FindingsTable,
+			Columns: identityholder.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

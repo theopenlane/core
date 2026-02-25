@@ -4743,6 +4743,18 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDirectorySyncRunID(directorySyncRunID)
 	}
 
+	if platformID, exists := m.PlatformID(); exists {
+		create = create.SetPlatformID(platformID)
+	}
+
+	if identityHolderID, exists := m.IdentityHolderID(); exists {
+		create = create.SetNillableIdentityHolderID(&identityHolderID)
+	}
+
+	if directoryName, exists := m.DirectoryName(); exists {
+		create = create.SetNillableDirectoryName(&directoryName)
+	}
+
 	if externalID, exists := m.ExternalID(); exists {
 		create = create.SetExternalID(externalID)
 	}
@@ -4757,6 +4769,18 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if displayName, exists := m.DisplayName(); exists {
 		create = create.SetDisplayName(displayName)
+	}
+
+	if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
+		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
+	}
+
+	if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+		create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+	}
+
+	if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
+		create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
 	}
 
 	if givenName, exists := m.GivenName(); exists {
@@ -4928,6 +4952,24 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID)
 		}
 
+		if platformID, exists := m.PlatformID(); exists {
+			create = create.SetPlatformID(platformID)
+		} else {
+			create = create.SetPlatformID(directoryaccount.PlatformID)
+		}
+
+		if identityHolderID, exists := m.IdentityHolderID(); exists {
+			create = create.SetNillableIdentityHolderID(&identityHolderID)
+		} else {
+			create = create.SetNillableIdentityHolderID(directoryaccount.IdentityHolderID)
+		}
+
+		if directoryName, exists := m.DirectoryName(); exists {
+			create = create.SetNillableDirectoryName(&directoryName)
+		} else {
+			create = create.SetNillableDirectoryName(directoryaccount.DirectoryName)
+		}
+
 		if externalID, exists := m.ExternalID(); exists {
 			create = create.SetExternalID(externalID)
 		} else {
@@ -4950,6 +4992,24 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDisplayName(displayName)
 		} else {
 			create = create.SetDisplayName(directoryaccount.DisplayName)
+		}
+
+		if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
+			create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
+		} else {
+			create = create.SetNillableAvatarRemoteURL(directoryaccount.AvatarRemoteURL)
+		}
+
+		if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+			create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+		} else {
+			create = create.SetNillableAvatarLocalFileID(directoryaccount.AvatarLocalFileID)
+		}
+
+		if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
+			create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
+		} else {
+			create = create.SetNillableAvatarUpdatedAt(directoryaccount.AvatarUpdatedAt)
 		}
 
 		if givenName, exists := m.GivenName(); exists {
@@ -5090,10 +5150,16 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetScopeID(directoryaccount.ScopeID).
 			SetIntegrationID(directoryaccount.IntegrationID).
 			SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID).
+			SetPlatformID(directoryaccount.PlatformID).
+			SetNillableIdentityHolderID(directoryaccount.IdentityHolderID).
+			SetNillableDirectoryName(directoryaccount.DirectoryName).
 			SetExternalID(directoryaccount.ExternalID).
 			SetNillableSecondaryKey(directoryaccount.SecondaryKey).
 			SetNillableCanonicalEmail(directoryaccount.CanonicalEmail).
 			SetDisplayName(directoryaccount.DisplayName).
+			SetNillableAvatarRemoteURL(directoryaccount.AvatarRemoteURL).
+			SetNillableAvatarLocalFileID(directoryaccount.AvatarLocalFileID).
+			SetNillableAvatarUpdatedAt(directoryaccount.AvatarUpdatedAt).
 			SetNillableGivenName(directoryaccount.GivenName).
 			SetNillableFamilyName(directoryaccount.FamilyName).
 			SetNillableJobTitle(directoryaccount.JobTitle).
@@ -5180,6 +5246,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if integrationID, exists := m.IntegrationID(); exists {
 		create = create.SetIntegrationID(integrationID)
+	}
+
+	if platformID, exists := m.PlatformID(); exists {
+		create = create.SetPlatformID(platformID)
 	}
 
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
@@ -5341,6 +5411,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetIntegrationID(directorygroup.IntegrationID)
 		}
 
+		if platformID, exists := m.PlatformID(); exists {
+			create = create.SetPlatformID(platformID)
+		} else {
+			create = create.SetPlatformID(directorygroup.PlatformID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -5472,6 +5548,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetScopeName(directorygroup.ScopeName).
 			SetScopeID(directorygroup.ScopeID).
 			SetIntegrationID(directorygroup.IntegrationID).
+			SetPlatformID(directorygroup.PlatformID).
 			SetDirectorySyncRunID(directorygroup.DirectorySyncRunID).
 			SetExternalID(directorygroup.ExternalID).
 			SetNillableEmail(directorygroup.Email).
@@ -5553,6 +5630,10 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if integrationID, exists := m.IntegrationID(); exists {
 		create = create.SetIntegrationID(integrationID)
+	}
+
+	if platformID, exists := m.PlatformID(); exists {
+		create = create.SetPlatformID(platformID)
 	}
 
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
@@ -5692,6 +5773,12 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetIntegrationID(directorymembership.IntegrationID)
 		}
 
+		if platformID, exists := m.PlatformID(); exists {
+			create = create.SetPlatformID(platformID)
+		} else {
+			create = create.SetPlatformID(directorymembership.PlatformID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -5798,6 +5885,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetScopeName(directorymembership.ScopeName).
 			SetScopeID(directorymembership.ScopeID).
 			SetIntegrationID(directorymembership.IntegrationID).
+			SetPlatformID(directorymembership.PlatformID).
 			SetDirectorySyncRunID(directorymembership.DirectorySyncRunID).
 			SetDirectoryAccountID(directorymembership.DirectoryAccountID).
 			SetDirectoryGroupID(directorymembership.DirectoryGroupID).
@@ -11179,6 +11267,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetIntegrationType(integrationType)
 	}
 
+	if platformID, exists := m.PlatformID(); exists {
+		create = create.SetPlatformID(platformID)
+	}
+
 	if providerMetadata, exists := m.ProviderMetadata(); exists {
 		create = create.SetProviderMetadata(providerMetadata)
 	}
@@ -11340,6 +11432,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetIntegrationType(integration.IntegrationType)
 		}
 
+		if platformID, exists := m.PlatformID(); exists {
+			create = create.SetPlatformID(platformID)
+		} else {
+			create = create.SetPlatformID(integration.PlatformID)
+		}
+
 		if providerMetadata, exists := m.ProviderMetadata(); exists {
 			create = create.SetProviderMetadata(providerMetadata)
 		} else {
@@ -11418,6 +11516,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetDescription(integration.Description).
 			SetKind(integration.Kind).
 			SetIntegrationType(integration.IntegrationType).
+			SetPlatformID(integration.PlatformID).
 			SetProviderMetadata(integration.ProviderMetadata).
 			SetConfig(integration.Config).
 			SetProviderState(integration.ProviderState).

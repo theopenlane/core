@@ -172,6 +172,10 @@ type FindingEdges struct {
 	Scans []*Scan `json:"scans,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// DirectoryAccounts holds the value of the directory_accounts edge.
+	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// remediation efforts tracked against the finding
 	Remediations []*Remediation `json:"remediations,omitempty"`
 	// reviews performed for this finding
@@ -186,9 +190,9 @@ type FindingEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [25]map[string]int
 
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
@@ -204,6 +208,8 @@ type FindingEdges struct {
 	namedEntities           map[string][]*Entity
 	namedScans              map[string][]*Scan
 	namedTasks              map[string][]*Task
+	namedDirectoryAccounts  map[string][]*DirectoryAccount
+	namedIdentityHolders    map[string][]*IdentityHolder
 	namedRemediations       map[string][]*Remediation
 	namedReviews            map[string][]*Review
 	namedComments           map[string][]*Note
@@ -371,10 +377,28 @@ func (e FindingEdges) TasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
+	if e.loadedTypes[17] {
+		return e.DirectoryAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_accounts"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[18] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
+}
+
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -383,7 +407,7 @@ func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -392,7 +416,7 @@ func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[21] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -401,7 +425,7 @@ func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[22] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -410,7 +434,7 @@ func (e FindingEdges) FilesOrErr() ([]*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[23] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -419,7 +443,7 @@ func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[24] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -927,6 +951,16 @@ func (_m *Finding) QueryScans() *ScanQuery {
 // QueryTasks queries the "tasks" edge of the Finding entity.
 func (_m *Finding) QueryTasks() *TaskQuery {
 	return NewFindingClient(_m.config).QueryTasks(_m)
+}
+
+// QueryDirectoryAccounts queries the "directory_accounts" edge of the Finding entity.
+func (_m *Finding) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	return NewFindingClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the Finding entity.
+func (_m *Finding) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewFindingClient(_m.config).QueryIdentityHolders(_m)
 }
 
 // QueryRemediations queries the "remediations" edge of the Finding entity.
@@ -1487,6 +1521,54 @@ func (_m *Finding) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedDirectoryAccounts returns the DirectoryAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedDirectoryAccounts(name string) ([]*DirectoryAccount, error) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedDirectoryAccounts(name string, edges ...*DirectoryAccount) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		_m.Edges.namedDirectoryAccounts = make(map[string][]*DirectoryAccount)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
+	} else {
+		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
 	}
 }
 

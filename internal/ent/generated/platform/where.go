@@ -4924,6 +4924,151 @@ func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Platfor
 	})
 }
 
+// HasIntegrations applies the HasEdge predicate on the "integrations" edge.
+func HasIntegrations() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationsWith applies the HasEdge predicate on the "integrations" edge with a given conditions (other predicates).
+func HasIntegrationsWith(preds ...predicate.Integration) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newIntegrationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Integration
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectorySyncRuns applies the HasEdge predicate on the "directory_sync_runs" edge.
+func HasDirectorySyncRuns() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectorySyncRunsWith applies the HasEdge predicate on the "directory_sync_runs" edge with a given conditions (other predicates).
+func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newDirectorySyncRunsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryAccounts applies the HasEdge predicate on the "directory_accounts" edge.
+func HasDirectoryAccounts() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryAccountsWith applies the HasEdge predicate on the "directory_accounts" edge with a given conditions (other predicates).
+func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newDirectoryAccountsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryGroups applies the HasEdge predicate on the "directory_groups" edge.
+func HasDirectoryGroups() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryGroupsWith applies the HasEdge predicate on the "directory_groups" edge with a given conditions (other predicates).
+func HasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newDirectoryGroupsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryMemberships applies the HasEdge predicate on the "directory_memberships" edge.
+func HasDirectoryMemberships() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryMembershipsWith applies the HasEdge predicate on the "directory_memberships" edge with a given conditions (other predicates).
+func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newDirectoryMembershipsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
 func HasWorkflowObjectRefs() predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {

@@ -1156,10 +1156,15 @@ type ComplexityRoot struct {
 
 	DirectoryAccount struct {
 		AccountType        func(childComplexity int) int
+		AvatarFile         func(childComplexity int) int
+		AvatarLocalFileID  func(childComplexity int) int
+		AvatarRemoteURL    func(childComplexity int) int
+		AvatarUpdatedAt    func(childComplexity int) int
 		CanonicalEmail     func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Department         func(childComplexity int) int
+		DirectoryName      func(childComplexity int) int
 		DirectorySyncRun   func(childComplexity int) int
 		DirectorySyncRunID func(childComplexity int) int
 		DisplayID          func(childComplexity int) int
@@ -1169,9 +1174,12 @@ type ComplexityRoot struct {
 		EnvironmentName    func(childComplexity int) int
 		ExternalID         func(childComplexity int) int
 		FamilyName         func(childComplexity int) int
+		Findings           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		GivenName          func(childComplexity int) int
 		Groups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		ID                 func(childComplexity int) int
+		IdentityHolder     func(childComplexity int) int
+		IdentityHolderID   func(childComplexity int) int
 		Integration        func(childComplexity int) int
 		IntegrationID      func(childComplexity int) int
 		JobTitle           func(childComplexity int) int
@@ -1183,6 +1191,8 @@ type ComplexityRoot struct {
 		OrganizationUnit   func(childComplexity int) int
 		Owner              func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
+		Platform           func(childComplexity int) int
+		PlatformID         func(childComplexity int) int
 		Profile            func(childComplexity int) int
 		ProfileHash        func(childComplexity int) int
 		RawProfileFileID   func(childComplexity int) int
@@ -1249,6 +1259,8 @@ type ComplexityRoot struct {
 		ObservedAt             func(childComplexity int) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
+		Platform               func(childComplexity int) int
+		PlatformID             func(childComplexity int) int
 		Profile                func(childComplexity int) int
 		ProfileHash            func(childComplexity int) int
 		RawProfileFileID       func(childComplexity int) int
@@ -1314,6 +1326,8 @@ type ComplexityRoot struct {
 		ObservedAt         func(childComplexity int) int
 		Owner              func(childComplexity int) int
 		OwnerID            func(childComplexity int) int
+		Platform           func(childComplexity int) int
+		PlatformID         func(childComplexity int) int
 		Role               func(childComplexity int) int
 		Scope              func(childComplexity int) int
 		ScopeID            func(childComplexity int) int
@@ -1370,6 +1384,8 @@ type ComplexityRoot struct {
 		IntegrationID        func(childComplexity int) int
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		Platform             func(childComplexity int) int
+		PlatformID           func(childComplexity int) int
 		RawManifestFileID    func(childComplexity int) int
 		Scope                func(childComplexity int) int
 		ScopeID              func(childComplexity int) int
@@ -2101,6 +2117,7 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Description        func(childComplexity int) int
+		DirectoryAccounts  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
 		DisplayID          func(childComplexity int) int
 		DisplayName        func(childComplexity int) int
 		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -2116,6 +2133,7 @@ type ComplexityRoot struct {
 		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		FindingClass       func(childComplexity int) int
 		ID                 func(childComplexity int) int
+		IdentityHolders    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Impact             func(childComplexity int) int
 		Integrations       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes      func(childComplexity int) int
@@ -2536,6 +2554,7 @@ type ComplexityRoot struct {
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Department              func(childComplexity int) int
+		DirectoryAccounts       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
 		DisplayID               func(childComplexity int) int
 		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Email                   func(childComplexity int) int
@@ -2548,6 +2567,7 @@ type ComplexityRoot struct {
 		EnvironmentName         func(childComplexity int) int
 		ExternalReferenceID     func(childComplexity int) int
 		ExternalUserID          func(childComplexity int) int
+		Findings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		FullName                func(childComplexity int) int
 		HasPendingWorkflow      func(childComplexity int) int
 		HasWorkflowHistory      func(childComplexity int) int
@@ -2648,6 +2668,8 @@ type ComplexityRoot struct {
 		NotificationTemplates func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		Platform              func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
 		Remediations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		Reviews               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Scope                 func(childComplexity int) int
@@ -4164,6 +4186,7 @@ type ComplexityRoot struct {
 		GroupCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                              func(childComplexity int) int
+		IdentityHolderCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -4417,6 +4440,10 @@ type ComplexityRoot struct {
 		CriticalityName                func(childComplexity int) int
 		DataFlowSummary                func(childComplexity int) int
 		Description                    func(childComplexity int) int
+		DirectoryAccounts              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRuns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		DisplayID                      func(childComplexity int) int
 		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EncryptionStatus               func(childComplexity int) int
@@ -4435,6 +4462,7 @@ type ComplexityRoot struct {
 		HasWorkflowHistory             func(childComplexity int) int
 		ID                             func(childComplexity int) int
 		IdentityHolders                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		Integrations                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalOwner                  func(childComplexity int) int
 		InternalOwnerGroup             func(childComplexity int) int
 		InternalOwnerGroupID           func(childComplexity int) int
@@ -12490,6 +12518,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryAccount.AccountType(childComplexity), true
 
+	case "DirectoryAccount.avatarFile":
+		if e.complexity.DirectoryAccount.AvatarFile == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.AvatarFile(childComplexity), true
+
+	case "DirectoryAccount.avatarLocalFileID":
+		if e.complexity.DirectoryAccount.AvatarLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.AvatarLocalFileID(childComplexity), true
+
+	case "DirectoryAccount.avatarRemoteURL":
+		if e.complexity.DirectoryAccount.AvatarRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.AvatarRemoteURL(childComplexity), true
+
+	case "DirectoryAccount.avatarUpdatedAt":
+		if e.complexity.DirectoryAccount.AvatarUpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.AvatarUpdatedAt(childComplexity), true
+
 	case "DirectoryAccount.canonicalEmail":
 		if e.complexity.DirectoryAccount.CanonicalEmail == nil {
 			break
@@ -12517,6 +12573,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccount.Department(childComplexity), true
+
+	case "DirectoryAccount.directoryName":
+		if e.complexity.DirectoryAccount.DirectoryName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.DirectoryName(childComplexity), true
 
 	case "DirectoryAccount.directorySyncRun":
 		if e.complexity.DirectoryAccount.DirectorySyncRun == nil {
@@ -12581,6 +12644,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryAccount.FamilyName(childComplexity), true
 
+	case "DirectoryAccount.findings":
+		if e.complexity.DirectoryAccount.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryAccount_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryAccount.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "DirectoryAccount.givenName":
 		if e.complexity.DirectoryAccount.GivenName == nil {
 			break
@@ -12606,6 +12681,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccount.ID(childComplexity), true
+
+	case "DirectoryAccount.identityHolder":
+		if e.complexity.DirectoryAccount.IdentityHolder == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.IdentityHolder(childComplexity), true
+
+	case "DirectoryAccount.identityHolderID":
+		if e.complexity.DirectoryAccount.IdentityHolderID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.IdentityHolderID(childComplexity), true
 
 	case "DirectoryAccount.integration":
 		if e.complexity.DirectoryAccount.Integration == nil {
@@ -12688,6 +12777,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectoryAccount.OwnerID(childComplexity), true
+
+	case "DirectoryAccount.platform":
+		if e.complexity.DirectoryAccount.Platform == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Platform(childComplexity), true
+
+	case "DirectoryAccount.platformID":
+		if e.complexity.DirectoryAccount.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.PlatformID(childComplexity), true
 
 	case "DirectoryAccount.profile":
 		if e.complexity.DirectoryAccount.Profile == nil {
@@ -13019,6 +13122,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryGroup.OwnerID(childComplexity), true
 
+	case "DirectoryGroup.platform":
+		if e.complexity.DirectoryGroup.Platform == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Platform(childComplexity), true
+
+	case "DirectoryGroup.platformID":
+		if e.complexity.DirectoryGroup.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.PlatformID(childComplexity), true
+
 	case "DirectoryGroup.profile":
 		if e.complexity.DirectoryGroup.Profile == nil {
 			break
@@ -13337,6 +13454,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DirectoryMembership.OwnerID(childComplexity), true
 
+	case "DirectoryMembership.platform":
+		if e.complexity.DirectoryMembership.Platform == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Platform(childComplexity), true
+
+	case "DirectoryMembership.platformID":
+		if e.complexity.DirectoryMembership.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.PlatformID(childComplexity), true
+
 	case "DirectoryMembership.role":
 		if e.complexity.DirectoryMembership.Role == nil {
 			break
@@ -13601,6 +13732,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectorySyncRun.OwnerID(childComplexity), true
+
+	case "DirectorySyncRun.platform":
+		if e.complexity.DirectorySyncRun.Platform == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Platform(childComplexity), true
+
+	case "DirectorySyncRun.platformID":
+		if e.complexity.DirectorySyncRun.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.PlatformID(childComplexity), true
 
 	case "DirectorySyncRun.rawManifestFileID":
 		if e.complexity.DirectorySyncRun.RawManifestFileID == nil {
@@ -17185,6 +17330,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Description(childComplexity), true
 
+	case "Finding.directoryAccounts":
+		if e.complexity.Finding.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
 	case "Finding.displayID":
 		if e.complexity.Finding.DisplayID == nil {
 			break
@@ -17304,6 +17461,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Finding.ID(childComplexity), true
+
+	case "Finding.identityHolders":
+		if e.complexity.Finding.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
 
 	case "Finding.impact":
 		if e.complexity.Finding.Impact == nil {
@@ -19472,6 +19641,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IdentityHolder.Department(childComplexity), true
 
+	case "IdentityHolder.directoryAccounts":
+		if e.complexity.IdentityHolder.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
 	case "IdentityHolder.displayID":
 		if e.complexity.IdentityHolder.DisplayID == nil {
 			break
@@ -19565,6 +19746,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IdentityHolder.ExternalUserID(childComplexity), true
+
+	case "IdentityHolder.findings":
+		if e.complexity.IdentityHolder.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.IdentityHolder.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
 
 	case "IdentityHolder.fullName":
 		if e.complexity.IdentityHolder.FullName == nil {
@@ -20161,6 +20354,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Integration.OwnerID(childComplexity), true
+
+	case "Integration.platform":
+		if e.complexity.Integration.Platform == nil {
+			break
+		}
+
+		return e.complexity.Integration.Platform(childComplexity), true
+
+	case "Integration.platformID":
+		if e.complexity.Integration.PlatformID == nil {
+			break
+		}
+
+		return e.complexity.Integration.PlatformID(childComplexity), true
 
 	case "Integration.remediations":
 		if e.complexity.Integration.Remediations == nil {
@@ -31426,6 +31633,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.ID(childComplexity), true
 
+	case "Organization.identityHolderCreators":
+		if e.complexity.Organization.IdentityHolderCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_identityHolderCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.IdentityHolderCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Organization.identityHolders":
 		if e.complexity.Organization.IdentityHolders == nil {
 			break
@@ -32992,6 +33211,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Platform.Description(childComplexity), true
 
+	case "Platform.directoryAccounts":
+		if e.complexity.Platform.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
+	case "Platform.directoryGroups":
+		if e.complexity.Platform.DirectoryGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_directoryGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+
+	case "Platform.directoryMemberships":
+		if e.complexity.Platform.DirectoryMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_directoryMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "Platform.directorySyncRuns":
+		if e.complexity.Platform.DirectorySyncRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_directorySyncRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
+
 	case "Platform.displayID":
 		if e.complexity.Platform.DisplayID == nil {
 			break
@@ -33147,6 +33414,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Platform.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Platform.integrations":
+		if e.complexity.Platform.Integrations == nil {
+			break
+		}
+
+		args, err := ec.field_Platform_integrations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Platform.Integrations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationOrder), args["where"].(*generated.IntegrationWhereInput)), true
 
 	case "Platform.internalOwner":
 		if e.complexity.Platform.InternalOwner == nil {
@@ -62710,6 +62989,10 @@ input CreateDirectoryAccountInput {
   """
   scopeName: String
   """
+  directory source label set by the integration (e.g. google_workspace, github, slack)
+  """
+  directoryName: String
+  """
   stable identifier from the directory system
   """
   externalID: String!
@@ -62725,6 +63008,14 @@ input CreateDirectoryAccountInput {
   provider supplied display name
   """
   displayName: String
+  """
+  URL of the avatar supplied by the directory provider
+  """
+  avatarRemoteURL: String
+  """
+  time the directory account avatar was last updated
+  """
+  avatarUpdatedAt: Time
   """
   first name reported by the provider
   """
@@ -62784,9 +63075,13 @@ input CreateDirectoryAccountInput {
   ownerID: ID
   environmentID: ID
   scopeID: ID
-  integrationID: ID!
-  directorySyncRunID: ID!
+  integrationID: ID
+  directorySyncRunID: ID
+  platformID: ID
+  identityHolderID: ID
+  avatarFileID: ID
   groupIDs: [ID!]
+  findingIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -62859,6 +63154,7 @@ input CreateDirectoryGroupInput {
   scopeID: ID
   integrationID: ID!
   directorySyncRunID: ID!
+  platformID: ID
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -62907,6 +63203,7 @@ input CreateDirectoryMembershipInput {
   scopeID: ID
   integrationID: ID!
   directorySyncRunID: ID!
+  platformID: ID
   directoryAccountID: ID!
   directoryGroupID: ID!
   eventIDs: [ID!]
@@ -62965,6 +63262,7 @@ input CreateDirectorySyncRunInput {
   environmentID: ID
   scopeID: ID
   integrationID: ID!
+  platformID: ID
   directoryAccountIDs: [ID!]
   directoryGroupIDs: [ID!]
 }
@@ -63833,6 +64131,8 @@ input CreateFindingInput {
   entityIDs: [ID!]
   scanIDs: [ID!]
   taskIDs: [ID!]
+  directoryAccountIDs: [ID!]
+  identityHolderIDs: [ID!]
   remediationIDs: [ID!]
   reviewIDs: [ID!]
   commentIDs: [ID!]
@@ -64118,9 +64418,11 @@ input CreateIdentityHolderInput {
   templateIDs: [ID!]
   assetIDs: [ID!]
   entityIDs: [ID!]
+  directoryAccountIDs: [ID!]
   platformIDs: [ID!]
   campaignIDs: [ID!]
   taskIDs: [ID!]
+  findingIDs: [ID!]
   workflowObjectRefIDs: [ID!]
   accessPlatformIDs: [ID!]
   userID: ID
@@ -64860,6 +65162,7 @@ input CreateOrganizationInput {
   procedureCreatorIDs: [ID!]
   programCreatorIDs: [ID!]
   riskCreatorIDs: [ID!]
+  identityHolderCreatorIDs: [ID!]
   scheduledJobCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
@@ -65232,6 +65535,10 @@ input CreatePlatformInput {
   scanIDs: [ID!]
   taskIDs: [ID!]
   identityHolderIDs: [ID!]
+  integrationIDs: [ID!]
+  directorySyncRunIDs: [ID!]
+  directoryAccountIDs: [ID!]
+  directoryGroupIDs: [ID!]
   workflowObjectRefIDs: [ID!]
   sourceAssetIDs: [ID!]
   sourceEntityIDs: [ID!]
@@ -68580,13 +68887,25 @@ type DirectoryAccount implements Node {
   """
   scopeID: ID
   """
-  integration that owns this directory account
+  optional integration that owns this directory account when sourced by an integration
   """
-  integrationID: ID!
+  integrationID: ID
   """
-  sync run that produced this snapshot
+  optional sync run that produced this snapshot
   """
-  directorySyncRunID: ID!
+  directorySyncRunID: ID
+  """
+  optional platform associated with this directory account
+  """
+  platformID: ID
+  """
+  deduplicated identity holder linked to this directory account
+  """
+  identityHolderID: ID
+  """
+  directory source label set by the integration (e.g. google_workspace, github, slack)
+  """
+  directoryName: String
   """
   stable identifier from the directory system
   """
@@ -68603,6 +68922,18 @@ type DirectoryAccount implements Node {
   provider supplied display name
   """
   displayName: String
+  """
+  URL of the avatar supplied by the directory provider
+  """
+  avatarRemoteURL: String
+  """
+  local avatar file identifier, takes precedence over avatar_remote_url
+  """
+  avatarLocalFileID: ID
+  """
+  time the directory account avatar was last updated
+  """
+  avatarUpdatedAt: Time
   """
   first name reported by the provider
   """
@@ -68669,11 +69000,23 @@ type DirectoryAccount implements Node {
   """
   integration that owns this directory account
   """
-  integration: Integration!
+  integration: Integration
   """
   sync run that produced this snapshot
   """
-  directorySyncRun: DirectorySyncRun!
+  directorySyncRun: DirectorySyncRun
+  """
+  platform associated with this directory account
+  """
+  platform: Platform
+  """
+  identity holder linked to this directory account
+  """
+  identityHolder: IdentityHolder
+  """
+  local avatar file for the directory account
+  """
+  avatarFile: File
   groups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -68705,6 +69048,37 @@ type DirectoryAccount implements Node {
     """
     where: DirectoryGroupWhereInput
   ): DirectoryGroupConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -68844,6 +69218,7 @@ Properties by which DirectoryAccount connections can be ordered.
 enum DirectoryAccountOrderField {
   created_at
   updated_at
+  directory_name
   external_id
   canonical_email
   display_name
@@ -69051,6 +69426,8 @@ input DirectoryAccountWhereInput {
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
   integrationIDEqualFold: ID
   integrationIDContainsFold: ID
   """
@@ -69067,8 +69444,64 @@ input DirectoryAccountWhereInput {
   directorySyncRunIDContains: ID
   directorySyncRunIDHasPrefix: ID
   directorySyncRunIDHasSuffix: ID
+  directorySyncRunIDIsNil: Boolean
+  directorySyncRunIDNotNil: Boolean
   directorySyncRunIDEqualFold: ID
   directorySyncRunIDContainsFold: ID
+  """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: ID
+  identityHolderIDNEQ: ID
+  identityHolderIDIn: [ID!]
+  identityHolderIDNotIn: [ID!]
+  identityHolderIDGT: ID
+  identityHolderIDGTE: ID
+  identityHolderIDLT: ID
+  identityHolderIDLTE: ID
+  identityHolderIDContains: ID
+  identityHolderIDHasPrefix: ID
+  identityHolderIDHasSuffix: ID
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: ID
+  identityHolderIDContainsFold: ID
+  """
+  directory_name field predicates
+  """
+  directoryName: String
+  directoryNameNEQ: String
+  directoryNameIn: [String!]
+  directoryNameNotIn: [String!]
+  directoryNameGT: String
+  directoryNameGTE: String
+  directoryNameLT: String
+  directoryNameLTE: String
+  directoryNameContains: String
+  directoryNameHasPrefix: String
+  directoryNameHasSuffix: String
+  directoryNameIsNil: Boolean
+  directoryNameNotNil: Boolean
+  directoryNameEqualFold: String
+  directoryNameContainsFold: String
   """
   external_id field predicates
   """
@@ -69139,6 +69572,55 @@ input DirectoryAccountWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
+  """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: ID
+  avatarLocalFileIDNEQ: ID
+  avatarLocalFileIDIn: [ID!]
+  avatarLocalFileIDNotIn: [ID!]
+  avatarLocalFileIDGT: ID
+  avatarLocalFileIDGTE: ID
+  avatarLocalFileIDLT: ID
+  avatarLocalFileIDLTE: ID
+  avatarLocalFileIDContains: ID
+  avatarLocalFileIDHasPrefix: ID
+  avatarLocalFileIDHasSuffix: ID
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: ID
+  avatarLocalFileIDContainsFold: ID
+  """
+  avatar_updated_at field predicates
+  """
+  avatarUpdatedAt: Time
+  avatarUpdatedAtNEQ: Time
+  avatarUpdatedAtIn: [Time!]
+  avatarUpdatedAtNotIn: [Time!]
+  avatarUpdatedAtGT: Time
+  avatarUpdatedAtGTE: Time
+  avatarUpdatedAtLT: Time
+  avatarUpdatedAtLTE: Time
+  avatarUpdatedAtIsNil: Boolean
+  avatarUpdatedAtNotNil: Boolean
   """
   given_name field predicates
   """
@@ -69354,10 +69836,30 @@ input DirectoryAccountWhereInput {
   hasDirectorySyncRun: Boolean
   hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
   """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  avatar_file edge predicates
+  """
+  hasAvatarFile: Boolean
+  hasAvatarFileWith: [FileWhereInput!]
+  """
   groups edge predicates
   """
   hasGroups: Boolean
   hasGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -69411,6 +69913,10 @@ type DirectoryGroup implements Node {
   integration that owns this directory group
   """
   integrationID: ID!
+  """
+  optional platform associated with this directory group
+  """
+  platformID: ID
   """
   sync run that produced this snapshot
   """
@@ -69478,6 +69984,10 @@ type DirectoryGroup implements Node {
   sync run that produced this snapshot
   """
   directorySyncRun: DirectorySyncRun!
+  """
+  platform associated with this directory group
+  """
+  platform: Platform
   accounts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -69848,6 +70358,24 @@ input DirectoryGroupWhereInput {
   integrationIDEqualFold: ID
   integrationIDContainsFold: ID
   """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
   directory_sync_run_id field predicates
   """
   directorySyncRunID: ID
@@ -70020,6 +70548,11 @@ input DirectoryGroupWhereInput {
   hasDirectorySyncRun: Boolean
   hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
   """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
+  """
   accounts edge predicates
   """
   hasAccounts: Boolean
@@ -70074,6 +70607,10 @@ type DirectoryMembership implements Node {
   """
   integrationID: ID!
   """
+  optional platform associated with this directory membership
+  """
+  platformID: ID
+  """
   sync run that produced this snapshot
   """
   directorySyncRunID: ID!
@@ -70124,6 +70661,10 @@ type DirectoryMembership implements Node {
   sync run that produced this snapshot
   """
   directorySyncRun: DirectorySyncRun!
+  """
+  platform associated with this directory membership
+  """
+  platform: Platform
   directoryAccount: DirectoryAccount!
   directoryGroup: DirectoryGroup!
   events(
@@ -70500,6 +71041,10 @@ type DirectorySyncRun implements Node {
   """
   integrationID: ID!
   """
+  optional platform associated with this sync run
+  """
+  platformID: ID
+  """
   current state of the sync run
   """
   status: DirectorySyncRunDirectorySyncRunStatus!
@@ -70542,6 +71087,10 @@ type DirectorySyncRun implements Node {
   integration that executed this sync run
   """
   integration: Integration!
+  """
+  platform associated with this sync run
+  """
+  platform: Platform
   directoryAccounts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -70902,6 +71451,24 @@ input DirectorySyncRunWhereInput {
   integrationIDEqualFold: ID
   integrationIDContainsFold: ID
   """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
   status field predicates
   """
   status: DirectorySyncRunDirectorySyncRunStatus
@@ -71028,6 +71595,11 @@ input DirectorySyncRunWhereInput {
   """
   hasIntegration: Boolean
   hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
   """
   directory_accounts edge predicates
   """
@@ -78529,6 +79101,68 @@ type Finding implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
   remediations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -79797,6 +80431,16 @@ input FindingWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
   """
   remediations edge predicates
   """
@@ -83093,6 +83737,37 @@ type IdentityHolder implements Node {
     """
     where: EntityWhereInput
   ): EntityConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -83186,6 +83861,37 @@ type IdentityHolder implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -83918,6 +84624,11 @@ input IdentityHolderWhereInput {
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
   """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
   platforms edge predicates
   """
   hasPlatforms: Boolean
@@ -83932,6 +84643,11 @@ input IdentityHolderWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -84010,6 +84726,10 @@ type Integration implements Node {
   the type of integration, such as communicattion, storage, SCM, etc.
   """
   integrationType: String
+  """
+  optional platform associated with this integration for downstream inventory linkage
+  """
+  platformID: ID
   """
   additional metadata about the integration
   """
@@ -84420,6 +85140,10 @@ type Integration implements Node {
     """
     where: DirectorySyncRunWhereInput
   ): DirectorySyncRunConnection!
+  """
+  platform associated with this integration
+  """
+  platform: Platform
   notificationTemplates(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -84836,6 +85560,24 @@ input IntegrationWhereInput {
   integrationTypeEqualFold: String
   integrationTypeContainsFold: String
   """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -84915,6 +85657,11 @@ input IntegrationWhereInput {
   """
   hasDirectorySyncRuns: Boolean
   hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
+  """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
   """
   notification_templates edge predicates
   """
@@ -92276,6 +93023,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  identityHolderCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   scheduledJobCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -95707,6 +96485,11 @@ input OrganizationWhereInput {
   hasRiskCreators: Boolean
   hasRiskCreatorsWith: [GroupWhereInput!]
   """
+  identity_holder_creators edge predicates
+  """
+  hasIdentityHolderCreators: Boolean
+  hasIdentityHolderCreatorsWith: [GroupWhereInput!]
+  """
   scheduled_job_creators edge predicates
   """
   hasScheduledJobCreators: Boolean
@@ -97152,6 +97935,161 @@ type Platform implements Node {
     """
     where: IdentityHolderWhereInput
   ): IdentityHolderConnection!
+  integrations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Integrations returned from the connection.
+    """
+    orderBy: [IntegrationOrder!]
+
+    """
+    Filtering options for Integrations returned from the connection.
+    """
+    where: IntegrationWhereInput
+  ): IntegrationConnection!
+  directorySyncRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectorySyncRuns returned from the connection.
+    """
+    orderBy: [DirectorySyncRunOrder!]
+
+    """
+    Filtering options for DirectorySyncRuns returned from the connection.
+    """
+    where: DirectorySyncRunWhereInput
+  ): DirectorySyncRunConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  directoryGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98439,6 +99377,31 @@ input PlatformWhereInput {
   """
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  integrations edge predicates
+  """
+  hasIntegrations: Boolean
+  hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  directory_sync_runs edge predicates
+  """
+  hasDirectorySyncRuns: Boolean
+  hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
+  """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  directory_groups edge predicates
+  """
+  hasDirectoryGroups: Boolean
+  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  directory_memberships edge predicates
+  """
+  hasDirectoryMemberships: Boolean
+  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -119834,6 +120797,11 @@ input UpdateDirectoryAccountInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  directory source label set by the integration (e.g. google_workspace, github, slack)
+  """
+  directoryName: String
+  clearDirectoryName: Boolean
+  """
   optional secondary identifier such as Azure immutable ID
   """
   secondaryKey: String
@@ -119848,6 +120816,16 @@ input UpdateDirectoryAccountInput {
   """
   displayName: String
   clearDisplayName: Boolean
+  """
+  URL of the avatar supplied by the directory provider
+  """
+  avatarRemoteURL: String
+  clearAvatarRemoteURL: Boolean
+  """
+  time the directory account avatar was last updated
+  """
+  avatarUpdatedAt: Time
+  clearAvatarUpdatedAt: Boolean
   """
   first name reported by the provider
   """
@@ -119916,9 +120894,16 @@ input UpdateDirectoryAccountInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  identityHolderID: ID
+  clearIdentityHolder: Boolean
+  avatarFileID: ID
+  clearAvatarFile: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroups: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -121342,6 +122327,12 @@ input UpdateFindingInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addDirectoryAccountIDs: [ID!]
+  removeDirectoryAccountIDs: [ID!]
+  clearDirectoryAccounts: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
   addRemediationIDs: [ID!]
   removeRemediationIDs: [ID!]
   clearRemediations: Boolean
@@ -121783,6 +122774,9 @@ input UpdateIdentityHolderInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addDirectoryAccountIDs: [ID!]
+  removeDirectoryAccountIDs: [ID!]
+  clearDirectoryAccounts: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean
@@ -121792,6 +122786,9 @@ input UpdateIdentityHolderInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -122681,6 +123678,9 @@ input UpdateOrganizationInput {
   addRiskCreatorIDs: [ID!]
   removeRiskCreatorIDs: [ID!]
   clearRiskCreators: Boolean
+  addIdentityHolderCreatorIDs: [ID!]
+  removeIdentityHolderCreatorIDs: [ID!]
+  clearIdentityHolderCreators: Boolean
   addScheduledJobCreatorIDs: [ID!]
   removeScheduledJobCreatorIDs: [ID!]
   clearScheduledJobCreators: Boolean
@@ -123321,6 +124321,18 @@ input UpdatePlatformInput {
   addIdentityHolderIDs: [ID!]
   removeIdentityHolderIDs: [ID!]
   clearIdentityHolders: Boolean
+  addIntegrationIDs: [ID!]
+  removeIntegrationIDs: [ID!]
+  clearIntegrations: Boolean
+  addDirectorySyncRunIDs: [ID!]
+  removeDirectorySyncRunIDs: [ID!]
+  clearDirectorySyncRuns: Boolean
+  addDirectoryAccountIDs: [ID!]
+  removeDirectoryAccountIDs: [ID!]
+  clearDirectoryAccounts: Boolean
+  addDirectoryGroupIDs: [ID!]
+  removeDirectoryGroupIDs: [ID!]
+  clearDirectoryGroups: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean

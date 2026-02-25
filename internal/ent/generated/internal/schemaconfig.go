@@ -89,6 +89,8 @@ type SchemaConfig struct {
 	Finding                            string // Finding table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
+	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
+	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
 	FindingControl                     string // FindingControl table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.
