@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -86,7 +87,7 @@ func updateValidation(ctx context.Context) (id string, input graphclient.UpdateE
 
 	status := cmd.Config.String("status")
 	if status != "" {
-		input.Status = &status
+		input.Status = enums.ToEntityStatus(status)
 	}
 
 	return id, input, nil
