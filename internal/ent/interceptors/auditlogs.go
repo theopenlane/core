@@ -13,13 +13,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
 func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
-	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+	return TraverseFunc(func(ctx context.Context, q Query) error {
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
@@ -71,7 +70,7 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 }
 
 // addFilter adds a filter to the query based on the authenticated user's organization
-func addFilter(ctx context.Context, q intercept.Query, orgOwned, userOwed bool, allowedOrgs []string) error {
+func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, allowedOrgs []string) error {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err

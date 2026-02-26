@@ -111,7 +111,93 @@ extend type Mutation{
   ): ControlBulkCreatePayload!
 }
 
+"""
+ControlDiffInput is used to compare all controls under a standard across two revisions
+"""
+input ControlDiffInput {
+    """
+    ID of the standard to compare controls for
+    """
+    standardID: ID!
+    """
+    base revision to compare from (e.g. "v1.0.0")
+    """
+    oldRevision: String!
+    """
+    target revision to compare to (e.g. "v2.0.0")
+    """
+    newRevision: String!
+}
+
+"""
+ControlFieldDiff describes a single field that differs between two control revisions
+"""
+type ControlFieldDiff {
+    """
+    Field name (snake_case)
+    """
+    field: String!
+    """
+    Value in the old revision
+    """
+    oldValue: Any
+    """
+    Value in the new revision
+    """
+    newValue: Any
+    """
+    Unified diff text when applicable
+    """
+    diff: String
+}
+
+"""
+ControlChange describes the diffs for a single control identified by refCode
+"""
+type ControlChange {
+    """
+    The ref_code of the control
+    """
+    refCode: String!
+    """
+    The title of the control at the new revision
+    """
+    title: String!
+    """
+    Field-level diffs for this control
+    """
+    diffs: [ControlFieldDiff!]!
+}
+
+"""
+ControlDiffPayload contains the field-level diffs between two revisions of all controls under a standard
+"""
+type ControlDiffPayload {
+    """
+    The standard ID being compared
+    """
+    standardID: ID!
+    """
+    The base revision
+    """
+    oldRevision: String!
+    """
+    The target revision
+    """
+    newRevision: String!
+    """
+    Per-control changes between the two revisions
+    """
+    changes: [ControlChange!]!
+}
+
 extend type Query {
+    """
+    Compare a system-owned control between two framework revisions to see which fields changed
+    """
+    controlDiff(
+        input: ControlDiffInput!
+    ): ControlDiffPayload!
     """
     All existing categories or domains used in the organization @deprecated
     """

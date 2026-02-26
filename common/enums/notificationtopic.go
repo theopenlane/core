@@ -14,6 +14,8 @@ var (
 	NotificationTopicMention NotificationTopic = "MENTION"
 	// NotificationTopicExport represents an export notification
 	NotificationTopicExport NotificationTopic = "EXPORT"
+	// NotificationTopicStandardUpdate represents a standard update notification
+	NotificationTopicStandardUpdate NotificationTopic = "STANDARD_UPDATE"
 	// NotificationTopicInvalid represents an invalid notification topic
 	NotificationTopicInvalid NotificationTopic = "INVALID"
 )
@@ -21,6 +23,7 @@ var (
 var notificationTopicValues = []NotificationTopic{
 	NotificationTopicTaskAssignment, NotificationTopicApproval,
 	NotificationTopicMention, NotificationTopicExport,
+	NotificationTopicStandardUpdate,
 }
 
 // Values returns a slice of strings that represents all the possible values of the NotificationTopic enum.
