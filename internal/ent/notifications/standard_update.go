@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -42,7 +41,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		return ErrEntityIDNotFound
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
+	allowCtx := ctx.Context
 
 	std, err := client.Standard.Get(allowCtx, standardID)
 	if err != nil {
