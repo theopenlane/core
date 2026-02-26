@@ -293,7 +293,6 @@ func (ec *executionContext) unmarshalInputReassignWorkflowAssignmentInput(ctx co
 			it.Targets = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -334,7 +333,6 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetInput(ctx cont
 			it.ResolverKey = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -371,10 +369,10 @@ func (ec *executionContext) _WorkflowAssignmentReassignPayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -410,10 +408,10 @@ func (ec *executionContext) _WorkflowInstanceAdminPayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -449,10 +447,10 @@ func (ec *executionContext) _WorkflowInstanceBulkAdminPayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

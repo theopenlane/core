@@ -558,5 +558,10 @@ func RegisterGalaListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 			Name:   "notifications.export",
 			Handle: handleExportMutation,
 		},
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeStandard),
+			Name:   "notifications.standard_update",
+			Handle: handleStandardMutation,
+		},
 	)
 }

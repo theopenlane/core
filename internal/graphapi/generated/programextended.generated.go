@@ -57,7 +57,6 @@ func (ec *executionContext) unmarshalInputAddProgramMembershipInput(ctx context.
 			it.UserID = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -91,7 +90,6 @@ func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx 
 			it.Subcontrols = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -160,7 +158,6 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 			it.StandardID = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -194,7 +191,6 @@ func (ec *executionContext) unmarshalInputCreateMemberWithProgramInput(ctx conte
 			it.UserID = data
 		}
 	}
-
 	return it, nil
 }
 
@@ -256,7 +252,6 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 			it.Categories = data
 		}
 	}
-
 	return it, nil
 }
 
