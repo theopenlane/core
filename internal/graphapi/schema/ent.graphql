@@ -11094,6 +11094,14 @@ input CreateExportInput {
   the specific filters to run against the exported data. This should be a well formatted graphql query
   """
   filters: String
+  """
+  the mode of export, e.g., flat or folder
+  """
+  mode: ExportExportMode
+  """
+  metadata for the export record
+  """
+  exportMetadata: ExportMetadata
   ownerID: ID
   eventIDs: [ID!]
   fileIDs: [ID!]
@@ -24527,6 +24535,14 @@ type Export implements Node {
   if we try to export and it fails, the error message will be stored here
   """
   errorMessage: String
+  """
+  the mode of export, e.g., flat or folder
+  """
+  mode: ExportExportMode!
+  """
+  metadata for the export record
+  """
+  exportMetadata: ExportMetadata
   owner: Organization
   events(
     """
@@ -24628,6 +24644,13 @@ enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enum
   CSV
 }
 """
+ExportExportMode is enum for the field mode
+"""
+enum ExportExportMode @goModel(model: "github.com/theopenlane/core/common/enums.ExportMode") {
+  FLAT
+  FOLDER
+}
+"""
 ExportExportStatus is enum for the field status
 """
 enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ExportStatus") {
@@ -24681,6 +24704,7 @@ enum ExportOrderField {
   export_type
   format
   status
+  mode
 }
 """
 ExportWhereInput is used for filtering Export objects.
@@ -24858,6 +24882,13 @@ input ExportWhereInput {
   errorMessageNotNil: Boolean
   errorMessageEqualFold: String
   errorMessageContainsFold: String
+  """
+  mode field predicates
+  """
+  mode: ExportExportMode
+  modeNEQ: ExportExportMode
+  modeIn: [ExportExportMode!]
+  modeNotIn: [ExportExportMode!]
   """
   owner edge predicates
   """
@@ -69147,6 +69178,11 @@ input UpdateExportInput {
   """
   errorMessage: String
   clearErrorMessage: Boolean
+  """
+  metadata for the export record
+  """
+  exportMetadata: ExportMetadata
+  clearExportMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]

@@ -5,12 +5,10 @@ package gqlhistorygenerated
 import (
 	"bytes"
 	"context"
-	"errors"
 	"sync/atomic"
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	gqlparser "github.com/vektah/gqlparser/v2"
@@ -19,20 +17,10 @@ import (
 
 // NewExecutableSchema creates an ExecutableSchema from the ResolverRoot interface.
 func NewExecutableSchema(cfg Config) graphql.ExecutableSchema {
-	return &executableSchema{
-		schema:     cfg.Schema,
-		resolvers:  cfg.Resolvers,
-		directives: cfg.Directives,
-		complexity: cfg.Complexity,
-	}
+	return &executableSchema{SchemaData: cfg.Schema, Resolvers: cfg.Resolvers, Directives: cfg.Directives, ComplexityRoot: cfg.Complexity}
 }
 
-type Config struct {
-	Schema     *ast.Schema
-	Resolvers  ResolverRoot
-	Directives DirectiveRoot
-	Complexity ComplexityRoot
-}
+type Config = graphql.Config[ResolverRoot, DirectiveRoot, ComplexityRoot]
 
 type ResolverRoot interface {
 	Query() QueryResolver
@@ -3119,10471 +3107,10466 @@ type ComplexityRoot struct {
 	}
 }
 
-type executableSchema struct {
-	schema     *ast.Schema
-	resolvers  ResolverRoot
-	directives DirectiveRoot
-	complexity ComplexityRoot
-}
+type executableSchema graphql.ExecutableSchemaState[ResolverRoot, DirectiveRoot, ComplexityRoot]
 
 func (e *executableSchema) Schema() *ast.Schema {
-	if e.schema != nil {
-		return e.schema
+	if e.SchemaData != nil {
+		return e.SchemaData
 	}
 	return parsedSchema
 }
 
 func (e *executableSchema) Complexity(ctx context.Context, typeName, field string, childComplexity int, rawArgs map[string]any) (int, bool) {
-	ec := executionContext{nil, e, 0, 0, nil}
+	ec := newExecutionContext(nil, e, nil)
 	_ = ec
 	switch typeName + "." + field {
 
 	case "ActionPlanHistory.actionPlanKindID":
-		if e.complexity.ActionPlanHistory.ActionPlanKindID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ActionPlanKindID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ActionPlanKindID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ActionPlanKindID(childComplexity), true
 
 	case "ActionPlanHistory.actionPlanKindName":
-		if e.complexity.ActionPlanHistory.ActionPlanKindName == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ActionPlanKindName == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ActionPlanKindName(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ActionPlanKindName(childComplexity), true
 
 	case "ActionPlanHistory.approvalRequired":
-		if e.complexity.ActionPlanHistory.ApprovalRequired == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ApprovalRequired == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ApprovalRequired(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ApprovalRequired(childComplexity), true
 
 	case "ActionPlanHistory.approverID":
-		if e.complexity.ActionPlanHistory.ApproverID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ApproverID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ApproverID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ApproverID(childComplexity), true
 
 	case "ActionPlanHistory.blocked":
-		if e.complexity.ActionPlanHistory.Blocked == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Blocked == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Blocked(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Blocked(childComplexity), true
 
 	case "ActionPlanHistory.blockerReason":
-		if e.complexity.ActionPlanHistory.BlockerReason == nil {
+		if e.ComplexityRoot.ActionPlanHistory.BlockerReason == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.BlockerReason(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.BlockerReason(childComplexity), true
 
 	case "ActionPlanHistory.completedAt":
-		if e.complexity.ActionPlanHistory.CompletedAt == nil {
+		if e.ComplexityRoot.ActionPlanHistory.CompletedAt == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.CompletedAt(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.CompletedAt(childComplexity), true
 
 	case "ActionPlanHistory.controlSuggestions":
-		if e.complexity.ActionPlanHistory.ControlSuggestions == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ControlSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ControlSuggestions(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ControlSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.createdAt":
-		if e.complexity.ActionPlanHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ActionPlanHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.CreatedAt(childComplexity), true
 
 	case "ActionPlanHistory.createdBy":
-		if e.complexity.ActionPlanHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ActionPlanHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.CreatedBy(childComplexity), true
 
 	case "ActionPlanHistory.delegateID":
-		if e.complexity.ActionPlanHistory.DelegateID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.DelegateID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.DelegateID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.DelegateID(childComplexity), true
 
 	case "ActionPlanHistory.description":
-		if e.complexity.ActionPlanHistory.Description == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Description(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Description(childComplexity), true
 
 	case "ActionPlanHistory.details":
-		if e.complexity.ActionPlanHistory.Details == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Details(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Details(childComplexity), true
 
 	case "ActionPlanHistory.detailsJSON":
-		if e.complexity.ActionPlanHistory.DetailsJSON == nil {
+		if e.ComplexityRoot.ActionPlanHistory.DetailsJSON == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.DetailsJSON(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.DetailsJSON(childComplexity), true
 
 	case "ActionPlanHistory.dismissedControlSuggestions":
-		if e.complexity.ActionPlanHistory.DismissedControlSuggestions == nil {
+		if e.ComplexityRoot.ActionPlanHistory.DismissedControlSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.DismissedControlSuggestions(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.DismissedControlSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.dismissedImprovementSuggestions":
-		if e.complexity.ActionPlanHistory.DismissedImprovementSuggestions == nil {
+		if e.ComplexityRoot.ActionPlanHistory.DismissedImprovementSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.DismissedImprovementSuggestions(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.DismissedImprovementSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.dismissedTagSuggestions":
-		if e.complexity.ActionPlanHistory.DismissedTagSuggestions == nil {
+		if e.ComplexityRoot.ActionPlanHistory.DismissedTagSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.DismissedTagSuggestions(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.DismissedTagSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.dueDate":
-		if e.complexity.ActionPlanHistory.DueDate == nil {
+		if e.ComplexityRoot.ActionPlanHistory.DueDate == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.DueDate(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.DueDate(childComplexity), true
 
 	case "ActionPlanHistory.fileID":
-		if e.complexity.ActionPlanHistory.FileID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.FileID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.FileID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.FileID(childComplexity), true
 
 	case "ActionPlanHistory.historyTime":
-		if e.complexity.ActionPlanHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ActionPlanHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.HistoryTime(childComplexity), true
 
 	case "ActionPlanHistory.id":
-		if e.complexity.ActionPlanHistory.ID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ID(childComplexity), true
 
 	case "ActionPlanHistory.improvementSuggestions":
-		if e.complexity.ActionPlanHistory.ImprovementSuggestions == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ImprovementSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ImprovementSuggestions(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ImprovementSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.internalNotes":
-		if e.complexity.ActionPlanHistory.InternalNotes == nil {
+		if e.ComplexityRoot.ActionPlanHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.InternalNotes(childComplexity), true
 
 	case "ActionPlanHistory.metadata":
-		if e.complexity.ActionPlanHistory.Metadata == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Metadata(childComplexity), true
 
 	case "ActionPlanHistory.name":
-		if e.complexity.ActionPlanHistory.Name == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Name(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Name(childComplexity), true
 
 	case "ActionPlanHistory.operation":
-		if e.complexity.ActionPlanHistory.Operation == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Operation(childComplexity), true
 
 	case "ActionPlanHistory.ownerID":
-		if e.complexity.ActionPlanHistory.OwnerID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.OwnerID(childComplexity), true
 
 	case "ActionPlanHistory.priority":
-		if e.complexity.ActionPlanHistory.Priority == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Priority == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Priority(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Priority(childComplexity), true
 
 	case "ActionPlanHistory.rawPayload":
-		if e.complexity.ActionPlanHistory.RawPayload == nil {
+		if e.ComplexityRoot.ActionPlanHistory.RawPayload == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.RawPayload(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.RawPayload(childComplexity), true
 
 	case "ActionPlanHistory.ref":
-		if e.complexity.ActionPlanHistory.Ref == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Ref(childComplexity), true
 
 	case "ActionPlanHistory.requiresApproval":
-		if e.complexity.ActionPlanHistory.RequiresApproval == nil {
+		if e.ComplexityRoot.ActionPlanHistory.RequiresApproval == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.RequiresApproval(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.RequiresApproval(childComplexity), true
 
 	case "ActionPlanHistory.reviewDue":
-		if e.complexity.ActionPlanHistory.ReviewDue == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ReviewDue == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ReviewDue(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ReviewDue(childComplexity), true
 
 	case "ActionPlanHistory.reviewFrequency":
-		if e.complexity.ActionPlanHistory.ReviewFrequency == nil {
+		if e.ComplexityRoot.ActionPlanHistory.ReviewFrequency == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.ReviewFrequency(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.ReviewFrequency(childComplexity), true
 
 	case "ActionPlanHistory.revision":
-		if e.complexity.ActionPlanHistory.Revision == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Revision(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Revision(childComplexity), true
 
 	case "ActionPlanHistory.source":
-		if e.complexity.ActionPlanHistory.Source == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Source(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Source(childComplexity), true
 
 	case "ActionPlanHistory.status":
-		if e.complexity.ActionPlanHistory.Status == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Status(childComplexity), true
 
 	case "ActionPlanHistory.summary":
-		if e.complexity.ActionPlanHistory.Summary == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Summary == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Summary(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Summary(childComplexity), true
 
 	case "ActionPlanHistory.systemInternalID":
-		if e.complexity.ActionPlanHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.ActionPlanHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.SystemInternalID(childComplexity), true
 
 	case "ActionPlanHistory.systemOwned":
-		if e.complexity.ActionPlanHistory.SystemOwned == nil {
+		if e.ComplexityRoot.ActionPlanHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.SystemOwned(childComplexity), true
 
 	case "ActionPlanHistory.tagSuggestions":
-		if e.complexity.ActionPlanHistory.TagSuggestions == nil {
+		if e.ComplexityRoot.ActionPlanHistory.TagSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.TagSuggestions(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.TagSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.tags":
-		if e.complexity.ActionPlanHistory.Tags == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Tags(childComplexity), true
 
 	case "ActionPlanHistory.title":
-		if e.complexity.ActionPlanHistory.Title == nil {
+		if e.ComplexityRoot.ActionPlanHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.Title(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.Title(childComplexity), true
 
 	case "ActionPlanHistory.url":
-		if e.complexity.ActionPlanHistory.URL == nil {
+		if e.ComplexityRoot.ActionPlanHistory.URL == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.URL(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.URL(childComplexity), true
 
 	case "ActionPlanHistory.updatedAt":
-		if e.complexity.ActionPlanHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ActionPlanHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.UpdatedAt(childComplexity), true
 
 	case "ActionPlanHistory.updatedBy":
-		if e.complexity.ActionPlanHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ActionPlanHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.UpdatedBy(childComplexity), true
 
 	case "ActionPlanHistory.workflowEligibleMarker":
-		if e.complexity.ActionPlanHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.ActionPlanHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "ActionPlanHistoryConnection.edges":
-		if e.complexity.ActionPlanHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ActionPlanHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistoryConnection.Edges(childComplexity), true
 
 	case "ActionPlanHistoryConnection.pageInfo":
-		if e.complexity.ActionPlanHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ActionPlanHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistoryConnection.PageInfo(childComplexity), true
 
 	case "ActionPlanHistoryConnection.totalCount":
-		if e.complexity.ActionPlanHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ActionPlanHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistoryConnection.TotalCount(childComplexity), true
 
 	case "ActionPlanHistoryEdge.cursor":
-		if e.complexity.ActionPlanHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ActionPlanHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistoryEdge.Cursor(childComplexity), true
 
 	case "ActionPlanHistoryEdge.node":
-		if e.complexity.ActionPlanHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ActionPlanHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ActionPlanHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ActionPlanHistoryEdge.Node(childComplexity), true
 
 	case "AssessmentHistory.assessmentType":
-		if e.complexity.AssessmentHistory.AssessmentType == nil {
+		if e.ComplexityRoot.AssessmentHistory.AssessmentType == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.AssessmentType(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.AssessmentType(childComplexity), true
 
 	case "AssessmentHistory.createdAt":
-		if e.complexity.AssessmentHistory.CreatedAt == nil {
+		if e.ComplexityRoot.AssessmentHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.CreatedAt(childComplexity), true
 
 	case "AssessmentHistory.createdBy":
-		if e.complexity.AssessmentHistory.CreatedBy == nil {
+		if e.ComplexityRoot.AssessmentHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.CreatedBy(childComplexity), true
 
 	case "AssessmentHistory.historyTime":
-		if e.complexity.AssessmentHistory.HistoryTime == nil {
+		if e.ComplexityRoot.AssessmentHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.HistoryTime(childComplexity), true
 
 	case "AssessmentHistory.id":
-		if e.complexity.AssessmentHistory.ID == nil {
+		if e.ComplexityRoot.AssessmentHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.ID(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.ID(childComplexity), true
 
 	case "AssessmentHistory.jsonconfig":
-		if e.complexity.AssessmentHistory.Jsonconfig == nil {
+		if e.ComplexityRoot.AssessmentHistory.Jsonconfig == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.Jsonconfig(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.Jsonconfig(childComplexity), true
 
 	case "AssessmentHistory.name":
-		if e.complexity.AssessmentHistory.Name == nil {
+		if e.ComplexityRoot.AssessmentHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.Name(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.Name(childComplexity), true
 
 	case "AssessmentHistory.operation":
-		if e.complexity.AssessmentHistory.Operation == nil {
+		if e.ComplexityRoot.AssessmentHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.Operation(childComplexity), true
 
 	case "AssessmentHistory.ownerID":
-		if e.complexity.AssessmentHistory.OwnerID == nil {
+		if e.ComplexityRoot.AssessmentHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.OwnerID(childComplexity), true
 
 	case "AssessmentHistory.ref":
-		if e.complexity.AssessmentHistory.Ref == nil {
+		if e.ComplexityRoot.AssessmentHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.Ref(childComplexity), true
 
 	case "AssessmentHistory.responseDueDuration":
-		if e.complexity.AssessmentHistory.ResponseDueDuration == nil {
+		if e.ComplexityRoot.AssessmentHistory.ResponseDueDuration == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.ResponseDueDuration(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.ResponseDueDuration(childComplexity), true
 
 	case "AssessmentHistory.tags":
-		if e.complexity.AssessmentHistory.Tags == nil {
+		if e.ComplexityRoot.AssessmentHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.Tags(childComplexity), true
 
 	case "AssessmentHistory.templateID":
-		if e.complexity.AssessmentHistory.TemplateID == nil {
+		if e.ComplexityRoot.AssessmentHistory.TemplateID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.TemplateID(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.TemplateID(childComplexity), true
 
 	case "AssessmentHistory.uischema":
-		if e.complexity.AssessmentHistory.Uischema == nil {
+		if e.ComplexityRoot.AssessmentHistory.Uischema == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.Uischema(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.Uischema(childComplexity), true
 
 	case "AssessmentHistory.updatedAt":
-		if e.complexity.AssessmentHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.AssessmentHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.UpdatedAt(childComplexity), true
 
 	case "AssessmentHistory.updatedBy":
-		if e.complexity.AssessmentHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.AssessmentHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistory.UpdatedBy(childComplexity), true
 
 	case "AssessmentHistoryConnection.edges":
-		if e.complexity.AssessmentHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.AssessmentHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistoryConnection.Edges(childComplexity), true
 
 	case "AssessmentHistoryConnection.pageInfo":
-		if e.complexity.AssessmentHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.AssessmentHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistoryConnection.PageInfo(childComplexity), true
 
 	case "AssessmentHistoryConnection.totalCount":
-		if e.complexity.AssessmentHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.AssessmentHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistoryConnection.TotalCount(childComplexity), true
 
 	case "AssessmentHistoryEdge.cursor":
-		if e.complexity.AssessmentHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.AssessmentHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistoryEdge.Cursor(childComplexity), true
 
 	case "AssessmentHistoryEdge.node":
-		if e.complexity.AssessmentHistoryEdge.Node == nil {
+		if e.ComplexityRoot.AssessmentHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.AssessmentHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.AssessmentHistoryEdge.Node(childComplexity), true
 
 	case "AssessmentResponseHistory.assessmentID":
-		if e.complexity.AssessmentResponseHistory.AssessmentID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.AssessmentID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.AssessmentID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.AssessmentID(childComplexity), true
 
 	case "AssessmentResponseHistory.assignedAt":
-		if e.complexity.AssessmentResponseHistory.AssignedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.AssignedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.AssignedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.AssignedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.campaignID":
-		if e.complexity.AssessmentResponseHistory.CampaignID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.CampaignID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.CampaignID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.CampaignID(childComplexity), true
 
 	case "AssessmentResponseHistory.completedAt":
-		if e.complexity.AssessmentResponseHistory.CompletedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.CompletedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.CompletedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.CompletedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.createdAt":
-		if e.complexity.AssessmentResponseHistory.CreatedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.CreatedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.createdBy":
-		if e.complexity.AssessmentResponseHistory.CreatedBy == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.CreatedBy(childComplexity), true
 
 	case "AssessmentResponseHistory.documentDataID":
-		if e.complexity.AssessmentResponseHistory.DocumentDataID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.DocumentDataID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.DocumentDataID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.DocumentDataID(childComplexity), true
 
 	case "AssessmentResponseHistory.dueDate":
-		if e.complexity.AssessmentResponseHistory.DueDate == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.DueDate == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.DueDate(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.DueDate(childComplexity), true
 
 	case "AssessmentResponseHistory.email":
-		if e.complexity.AssessmentResponseHistory.Email == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.Email(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.Email(childComplexity), true
 
 	case "AssessmentResponseHistory.emailClickCount":
-		if e.complexity.AssessmentResponseHistory.EmailClickCount == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EmailClickCount == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EmailClickCount(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EmailClickCount(childComplexity), true
 
 	case "AssessmentResponseHistory.emailClickedAt":
-		if e.complexity.AssessmentResponseHistory.EmailClickedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EmailClickedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EmailClickedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EmailClickedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.emailDeliveredAt":
-		if e.complexity.AssessmentResponseHistory.EmailDeliveredAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EmailDeliveredAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EmailDeliveredAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EmailDeliveredAt(childComplexity), true
 
 	case "AssessmentResponseHistory.emailMetadata":
-		if e.complexity.AssessmentResponseHistory.EmailMetadata == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EmailMetadata == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EmailMetadata(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EmailMetadata(childComplexity), true
 
 	case "AssessmentResponseHistory.emailOpenCount":
-		if e.complexity.AssessmentResponseHistory.EmailOpenCount == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EmailOpenCount == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EmailOpenCount(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EmailOpenCount(childComplexity), true
 
 	case "AssessmentResponseHistory.emailOpenedAt":
-		if e.complexity.AssessmentResponseHistory.EmailOpenedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EmailOpenedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EmailOpenedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EmailOpenedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.entityID":
-		if e.complexity.AssessmentResponseHistory.EntityID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.EntityID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.EntityID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.EntityID(childComplexity), true
 
 	case "AssessmentResponseHistory.historyTime":
-		if e.complexity.AssessmentResponseHistory.HistoryTime == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.HistoryTime(childComplexity), true
 
 	case "AssessmentResponseHistory.id":
-		if e.complexity.AssessmentResponseHistory.ID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.ID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.ID(childComplexity), true
 
 	case "AssessmentResponseHistory.identityHolderID":
-		if e.complexity.AssessmentResponseHistory.IdentityHolderID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.IdentityHolderID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.IdentityHolderID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.IdentityHolderID(childComplexity), true
 
 	case "AssessmentResponseHistory.isDraft":
-		if e.complexity.AssessmentResponseHistory.IsDraft == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.IsDraft == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.IsDraft(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.IsDraft(childComplexity), true
 
 	case "AssessmentResponseHistory.isTest":
-		if e.complexity.AssessmentResponseHistory.IsTest == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.IsTest == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.IsTest(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.IsTest(childComplexity), true
 
 	case "AssessmentResponseHistory.lastEmailEventAt":
-		if e.complexity.AssessmentResponseHistory.LastEmailEventAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.LastEmailEventAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.LastEmailEventAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.LastEmailEventAt(childComplexity), true
 
 	case "AssessmentResponseHistory.operation":
-		if e.complexity.AssessmentResponseHistory.Operation == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.Operation(childComplexity), true
 
 	case "AssessmentResponseHistory.ownerID":
-		if e.complexity.AssessmentResponseHistory.OwnerID == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.OwnerID(childComplexity), true
 
 	case "AssessmentResponseHistory.ref":
-		if e.complexity.AssessmentResponseHistory.Ref == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.Ref(childComplexity), true
 
 	case "AssessmentResponseHistory.sendAttempts":
-		if e.complexity.AssessmentResponseHistory.SendAttempts == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.SendAttempts == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.SendAttempts(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.SendAttempts(childComplexity), true
 
 	case "AssessmentResponseHistory.startedAt":
-		if e.complexity.AssessmentResponseHistory.StartedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.StartedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.StartedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.StartedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.status":
-		if e.complexity.AssessmentResponseHistory.Status == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.Status(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.Status(childComplexity), true
 
 	case "AssessmentResponseHistory.updatedAt":
-		if e.complexity.AssessmentResponseHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.UpdatedAt(childComplexity), true
 
 	case "AssessmentResponseHistory.updatedBy":
-		if e.complexity.AssessmentResponseHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.AssessmentResponseHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistory.UpdatedBy(childComplexity), true
 
 	case "AssessmentResponseHistoryConnection.edges":
-		if e.complexity.AssessmentResponseHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.AssessmentResponseHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistoryConnection.Edges(childComplexity), true
 
 	case "AssessmentResponseHistoryConnection.pageInfo":
-		if e.complexity.AssessmentResponseHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.AssessmentResponseHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistoryConnection.PageInfo(childComplexity), true
 
 	case "AssessmentResponseHistoryConnection.totalCount":
-		if e.complexity.AssessmentResponseHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.AssessmentResponseHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistoryConnection.TotalCount(childComplexity), true
 
 	case "AssessmentResponseHistoryEdge.cursor":
-		if e.complexity.AssessmentResponseHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.AssessmentResponseHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistoryEdge.Cursor(childComplexity), true
 
 	case "AssessmentResponseHistoryEdge.node":
-		if e.complexity.AssessmentResponseHistoryEdge.Node == nil {
+		if e.ComplexityRoot.AssessmentResponseHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.AssessmentResponseHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.AssessmentResponseHistoryEdge.Node(childComplexity), true
 
 	case "AssetHistory.accessModelID":
-		if e.complexity.AssetHistory.AccessModelID == nil {
+		if e.ComplexityRoot.AssetHistory.AccessModelID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AccessModelID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AccessModelID(childComplexity), true
 
 	case "AssetHistory.accessModelName":
-		if e.complexity.AssetHistory.AccessModelName == nil {
+		if e.ComplexityRoot.AssetHistory.AccessModelName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AccessModelName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AccessModelName(childComplexity), true
 
 	case "AssetHistory.assetDataClassificationID":
-		if e.complexity.AssetHistory.AssetDataClassificationID == nil {
+		if e.ComplexityRoot.AssetHistory.AssetDataClassificationID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AssetDataClassificationID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AssetDataClassificationID(childComplexity), true
 
 	case "AssetHistory.assetDataClassificationName":
-		if e.complexity.AssetHistory.AssetDataClassificationName == nil {
+		if e.ComplexityRoot.AssetHistory.AssetDataClassificationName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AssetDataClassificationName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AssetDataClassificationName(childComplexity), true
 
 	case "AssetHistory.assetSubtypeID":
-		if e.complexity.AssetHistory.AssetSubtypeID == nil {
+		if e.ComplexityRoot.AssetHistory.AssetSubtypeID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AssetSubtypeID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AssetSubtypeID(childComplexity), true
 
 	case "AssetHistory.assetSubtypeName":
-		if e.complexity.AssetHistory.AssetSubtypeName == nil {
+		if e.ComplexityRoot.AssetHistory.AssetSubtypeName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AssetSubtypeName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AssetSubtypeName(childComplexity), true
 
 	case "AssetHistory.assetType":
-		if e.complexity.AssetHistory.AssetType == nil {
+		if e.ComplexityRoot.AssetHistory.AssetType == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.AssetType(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.AssetType(childComplexity), true
 
 	case "AssetHistory.categories":
-		if e.complexity.AssetHistory.Categories == nil {
+		if e.ComplexityRoot.AssetHistory.Categories == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Categories(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Categories(childComplexity), true
 
 	case "AssetHistory.containsPii":
-		if e.complexity.AssetHistory.ContainsPii == nil {
+		if e.ComplexityRoot.AssetHistory.ContainsPii == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.ContainsPii(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.ContainsPii(childComplexity), true
 
 	case "AssetHistory.costCenter":
-		if e.complexity.AssetHistory.CostCenter == nil {
+		if e.ComplexityRoot.AssetHistory.CostCenter == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.CostCenter(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.CostCenter(childComplexity), true
 
 	case "AssetHistory.cpe":
-		if e.complexity.AssetHistory.Cpe == nil {
+		if e.ComplexityRoot.AssetHistory.Cpe == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Cpe(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Cpe(childComplexity), true
 
 	case "AssetHistory.createdAt":
-		if e.complexity.AssetHistory.CreatedAt == nil {
+		if e.ComplexityRoot.AssetHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.CreatedAt(childComplexity), true
 
 	case "AssetHistory.createdBy":
-		if e.complexity.AssetHistory.CreatedBy == nil {
+		if e.ComplexityRoot.AssetHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.CreatedBy(childComplexity), true
 
 	case "AssetHistory.criticalityID":
-		if e.complexity.AssetHistory.CriticalityID == nil {
+		if e.ComplexityRoot.AssetHistory.CriticalityID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.CriticalityID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.CriticalityID(childComplexity), true
 
 	case "AssetHistory.criticalityName":
-		if e.complexity.AssetHistory.CriticalityName == nil {
+		if e.ComplexityRoot.AssetHistory.CriticalityName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.CriticalityName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.CriticalityName(childComplexity), true
 
 	case "AssetHistory.description":
-		if e.complexity.AssetHistory.Description == nil {
+		if e.ComplexityRoot.AssetHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Description(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Description(childComplexity), true
 
 	case "AssetHistory.displayName":
-		if e.complexity.AssetHistory.DisplayName == nil {
+		if e.ComplexityRoot.AssetHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.DisplayName(childComplexity), true
 
 	case "AssetHistory.encryptionStatusID":
-		if e.complexity.AssetHistory.EncryptionStatusID == nil {
+		if e.ComplexityRoot.AssetHistory.EncryptionStatusID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.EncryptionStatusID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.EncryptionStatusID(childComplexity), true
 
 	case "AssetHistory.encryptionStatusName":
-		if e.complexity.AssetHistory.EncryptionStatusName == nil {
+		if e.ComplexityRoot.AssetHistory.EncryptionStatusName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.EncryptionStatusName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.EncryptionStatusName(childComplexity), true
 
 	case "AssetHistory.environmentID":
-		if e.complexity.AssetHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.AssetHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.EnvironmentID(childComplexity), true
 
 	case "AssetHistory.environmentName":
-		if e.complexity.AssetHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.AssetHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.EnvironmentName(childComplexity), true
 
 	case "AssetHistory.estimatedMonthlyCost":
-		if e.complexity.AssetHistory.EstimatedMonthlyCost == nil {
+		if e.ComplexityRoot.AssetHistory.EstimatedMonthlyCost == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.EstimatedMonthlyCost(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.EstimatedMonthlyCost(childComplexity), true
 
 	case "AssetHistory.historyTime":
-		if e.complexity.AssetHistory.HistoryTime == nil {
+		if e.ComplexityRoot.AssetHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.HistoryTime(childComplexity), true
 
 	case "AssetHistory.id":
-		if e.complexity.AssetHistory.ID == nil {
+		if e.ComplexityRoot.AssetHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.ID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.ID(childComplexity), true
 
 	case "AssetHistory.identifier":
-		if e.complexity.AssetHistory.Identifier == nil {
+		if e.ComplexityRoot.AssetHistory.Identifier == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Identifier(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Identifier(childComplexity), true
 
 	case "AssetHistory.internalNotes":
-		if e.complexity.AssetHistory.InternalNotes == nil {
+		if e.ComplexityRoot.AssetHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.InternalNotes(childComplexity), true
 
 	case "AssetHistory.internalOwner":
-		if e.complexity.AssetHistory.InternalOwner == nil {
+		if e.ComplexityRoot.AssetHistory.InternalOwner == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.InternalOwner(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.InternalOwner(childComplexity), true
 
 	case "AssetHistory.internalOwnerGroupID":
-		if e.complexity.AssetHistory.InternalOwnerGroupID == nil {
+		if e.ComplexityRoot.AssetHistory.InternalOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.InternalOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.InternalOwnerGroupID(childComplexity), true
 
 	case "AssetHistory.internalOwnerUserID":
-		if e.complexity.AssetHistory.InternalOwnerUserID == nil {
+		if e.ComplexityRoot.AssetHistory.InternalOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.InternalOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.InternalOwnerUserID(childComplexity), true
 
 	case "AssetHistory.name":
-		if e.complexity.AssetHistory.Name == nil {
+		if e.ComplexityRoot.AssetHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Name(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Name(childComplexity), true
 
 	case "AssetHistory.operation":
-		if e.complexity.AssetHistory.Operation == nil {
+		if e.ComplexityRoot.AssetHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Operation(childComplexity), true
 
 	case "AssetHistory.ownerID":
-		if e.complexity.AssetHistory.OwnerID == nil {
+		if e.ComplexityRoot.AssetHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.OwnerID(childComplexity), true
 
 	case "AssetHistory.physicalLocation":
-		if e.complexity.AssetHistory.PhysicalLocation == nil {
+		if e.ComplexityRoot.AssetHistory.PhysicalLocation == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.PhysicalLocation(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.PhysicalLocation(childComplexity), true
 
 	case "AssetHistory.purchaseDate":
-		if e.complexity.AssetHistory.PurchaseDate == nil {
+		if e.ComplexityRoot.AssetHistory.PurchaseDate == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.PurchaseDate(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.PurchaseDate(childComplexity), true
 
 	case "AssetHistory.ref":
-		if e.complexity.AssetHistory.Ref == nil {
+		if e.ComplexityRoot.AssetHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Ref(childComplexity), true
 
 	case "AssetHistory.region":
-		if e.complexity.AssetHistory.Region == nil {
+		if e.ComplexityRoot.AssetHistory.Region == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Region(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Region(childComplexity), true
 
 	case "AssetHistory.scopeID":
-		if e.complexity.AssetHistory.ScopeID == nil {
+		if e.ComplexityRoot.AssetHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.ScopeID(childComplexity), true
 
 	case "AssetHistory.scopeName":
-		if e.complexity.AssetHistory.ScopeName == nil {
+		if e.ComplexityRoot.AssetHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.ScopeName(childComplexity), true
 
 	case "AssetHistory.securityTierID":
-		if e.complexity.AssetHistory.SecurityTierID == nil {
+		if e.ComplexityRoot.AssetHistory.SecurityTierID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SecurityTierID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SecurityTierID(childComplexity), true
 
 	case "AssetHistory.securityTierName":
-		if e.complexity.AssetHistory.SecurityTierName == nil {
+		if e.ComplexityRoot.AssetHistory.SecurityTierName == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SecurityTierName(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SecurityTierName(childComplexity), true
 
 	case "AssetHistory.sourceIdentifier":
-		if e.complexity.AssetHistory.SourceIdentifier == nil {
+		if e.ComplexityRoot.AssetHistory.SourceIdentifier == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SourceIdentifier(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SourceIdentifier(childComplexity), true
 
 	case "AssetHistory.sourcePlatformID":
-		if e.complexity.AssetHistory.SourcePlatformID == nil {
+		if e.ComplexityRoot.AssetHistory.SourcePlatformID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SourcePlatformID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SourcePlatformID(childComplexity), true
 
 	case "AssetHistory.sourceType":
-		if e.complexity.AssetHistory.SourceType == nil {
+		if e.ComplexityRoot.AssetHistory.SourceType == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SourceType(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SourceType(childComplexity), true
 
 	case "AssetHistory.systemInternalID":
-		if e.complexity.AssetHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.AssetHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SystemInternalID(childComplexity), true
 
 	case "AssetHistory.systemOwned":
-		if e.complexity.AssetHistory.SystemOwned == nil {
+		if e.ComplexityRoot.AssetHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.SystemOwned(childComplexity), true
 
 	case "AssetHistory.tags":
-		if e.complexity.AssetHistory.Tags == nil {
+		if e.ComplexityRoot.AssetHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Tags(childComplexity), true
 
 	case "AssetHistory.updatedAt":
-		if e.complexity.AssetHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.AssetHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.UpdatedAt(childComplexity), true
 
 	case "AssetHistory.updatedBy":
-		if e.complexity.AssetHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.AssetHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.UpdatedBy(childComplexity), true
 
 	case "AssetHistory.website":
-		if e.complexity.AssetHistory.Website == nil {
+		if e.ComplexityRoot.AssetHistory.Website == nil {
 			break
 		}
 
-		return e.complexity.AssetHistory.Website(childComplexity), true
+		return e.ComplexityRoot.AssetHistory.Website(childComplexity), true
 
 	case "AssetHistoryConnection.edges":
-		if e.complexity.AssetHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.AssetHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.AssetHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.AssetHistoryConnection.Edges(childComplexity), true
 
 	case "AssetHistoryConnection.pageInfo":
-		if e.complexity.AssetHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.AssetHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.AssetHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.AssetHistoryConnection.PageInfo(childComplexity), true
 
 	case "AssetHistoryConnection.totalCount":
-		if e.complexity.AssetHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.AssetHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.AssetHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.AssetHistoryConnection.TotalCount(childComplexity), true
 
 	case "AssetHistoryEdge.cursor":
-		if e.complexity.AssetHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.AssetHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.AssetHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.AssetHistoryEdge.Cursor(childComplexity), true
 
 	case "AssetHistoryEdge.node":
-		if e.complexity.AssetHistoryEdge.Node == nil {
+		if e.ComplexityRoot.AssetHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.AssetHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.AssetHistoryEdge.Node(childComplexity), true
 
 	case "CampaignHistory.assessmentID":
-		if e.complexity.CampaignHistory.AssessmentID == nil {
+		if e.ComplexityRoot.CampaignHistory.AssessmentID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.AssessmentID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.AssessmentID(childComplexity), true
 
 	case "CampaignHistory.campaignType":
-		if e.complexity.CampaignHistory.CampaignType == nil {
+		if e.ComplexityRoot.CampaignHistory.CampaignType == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.CampaignType(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.CampaignType(childComplexity), true
 
 	case "CampaignHistory.completedAt":
-		if e.complexity.CampaignHistory.CompletedAt == nil {
+		if e.ComplexityRoot.CampaignHistory.CompletedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.CompletedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.CompletedAt(childComplexity), true
 
 	case "CampaignHistory.createdAt":
-		if e.complexity.CampaignHistory.CreatedAt == nil {
+		if e.ComplexityRoot.CampaignHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.CreatedAt(childComplexity), true
 
 	case "CampaignHistory.createdBy":
-		if e.complexity.CampaignHistory.CreatedBy == nil {
+		if e.ComplexityRoot.CampaignHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.CreatedBy(childComplexity), true
 
 	case "CampaignHistory.description":
-		if e.complexity.CampaignHistory.Description == nil {
+		if e.ComplexityRoot.CampaignHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Description(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Description(childComplexity), true
 
 	case "CampaignHistory.displayID":
-		if e.complexity.CampaignHistory.DisplayID == nil {
+		if e.ComplexityRoot.CampaignHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.DisplayID(childComplexity), true
 
 	case "CampaignHistory.dueDate":
-		if e.complexity.CampaignHistory.DueDate == nil {
+		if e.ComplexityRoot.CampaignHistory.DueDate == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.DueDate(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.DueDate(childComplexity), true
 
 	case "CampaignHistory.emailBrandingID":
-		if e.complexity.CampaignHistory.EmailBrandingID == nil {
+		if e.ComplexityRoot.CampaignHistory.EmailBrandingID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.EmailBrandingID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.EmailBrandingID(childComplexity), true
 
 	case "CampaignHistory.emailTemplateID":
-		if e.complexity.CampaignHistory.EmailTemplateID == nil {
+		if e.ComplexityRoot.CampaignHistory.EmailTemplateID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.EmailTemplateID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.EmailTemplateID(childComplexity), true
 
 	case "CampaignHistory.entityID":
-		if e.complexity.CampaignHistory.EntityID == nil {
+		if e.ComplexityRoot.CampaignHistory.EntityID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.EntityID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.EntityID(childComplexity), true
 
 	case "CampaignHistory.historyTime":
-		if e.complexity.CampaignHistory.HistoryTime == nil {
+		if e.ComplexityRoot.CampaignHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.HistoryTime(childComplexity), true
 
 	case "CampaignHistory.id":
-		if e.complexity.CampaignHistory.ID == nil {
+		if e.ComplexityRoot.CampaignHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.ID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.ID(childComplexity), true
 
 	case "CampaignHistory.internalOwner":
-		if e.complexity.CampaignHistory.InternalOwner == nil {
+		if e.ComplexityRoot.CampaignHistory.InternalOwner == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.InternalOwner(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.InternalOwner(childComplexity), true
 
 	case "CampaignHistory.internalOwnerGroupID":
-		if e.complexity.CampaignHistory.InternalOwnerGroupID == nil {
+		if e.ComplexityRoot.CampaignHistory.InternalOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.InternalOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.InternalOwnerGroupID(childComplexity), true
 
 	case "CampaignHistory.internalOwnerUserID":
-		if e.complexity.CampaignHistory.InternalOwnerUserID == nil {
+		if e.ComplexityRoot.CampaignHistory.InternalOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.InternalOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.InternalOwnerUserID(childComplexity), true
 
 	case "CampaignHistory.isActive":
-		if e.complexity.CampaignHistory.IsActive == nil {
+		if e.ComplexityRoot.CampaignHistory.IsActive == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.IsActive(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.IsActive(childComplexity), true
 
 	case "CampaignHistory.isRecurring":
-		if e.complexity.CampaignHistory.IsRecurring == nil {
+		if e.ComplexityRoot.CampaignHistory.IsRecurring == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.IsRecurring(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.IsRecurring(childComplexity), true
 
 	case "CampaignHistory.lastResentAt":
-		if e.complexity.CampaignHistory.LastResentAt == nil {
+		if e.ComplexityRoot.CampaignHistory.LastResentAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.LastResentAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.LastResentAt(childComplexity), true
 
 	case "CampaignHistory.lastRunAt":
-		if e.complexity.CampaignHistory.LastRunAt == nil {
+		if e.ComplexityRoot.CampaignHistory.LastRunAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.LastRunAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.LastRunAt(childComplexity), true
 
 	case "CampaignHistory.launchedAt":
-		if e.complexity.CampaignHistory.LaunchedAt == nil {
+		if e.ComplexityRoot.CampaignHistory.LaunchedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.LaunchedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.LaunchedAt(childComplexity), true
 
 	case "CampaignHistory.metadata":
-		if e.complexity.CampaignHistory.Metadata == nil {
+		if e.ComplexityRoot.CampaignHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Metadata(childComplexity), true
 
 	case "CampaignHistory.name":
-		if e.complexity.CampaignHistory.Name == nil {
+		if e.ComplexityRoot.CampaignHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Name(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Name(childComplexity), true
 
 	case "CampaignHistory.nextRunAt":
-		if e.complexity.CampaignHistory.NextRunAt == nil {
+		if e.ComplexityRoot.CampaignHistory.NextRunAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.NextRunAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.NextRunAt(childComplexity), true
 
 	case "CampaignHistory.operation":
-		if e.complexity.CampaignHistory.Operation == nil {
+		if e.ComplexityRoot.CampaignHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Operation(childComplexity), true
 
 	case "CampaignHistory.ownerID":
-		if e.complexity.CampaignHistory.OwnerID == nil {
+		if e.ComplexityRoot.CampaignHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.OwnerID(childComplexity), true
 
 	case "CampaignHistory.recipientCount":
-		if e.complexity.CampaignHistory.RecipientCount == nil {
+		if e.ComplexityRoot.CampaignHistory.RecipientCount == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.RecipientCount(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.RecipientCount(childComplexity), true
 
 	case "CampaignHistory.recurrenceCron":
-		if e.complexity.CampaignHistory.RecurrenceCron == nil {
+		if e.ComplexityRoot.CampaignHistory.RecurrenceCron == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.RecurrenceCron(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.RecurrenceCron(childComplexity), true
 
 	case "CampaignHistory.recurrenceEndAt":
-		if e.complexity.CampaignHistory.RecurrenceEndAt == nil {
+		if e.ComplexityRoot.CampaignHistory.RecurrenceEndAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.RecurrenceEndAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.RecurrenceEndAt(childComplexity), true
 
 	case "CampaignHistory.recurrenceFrequency":
-		if e.complexity.CampaignHistory.RecurrenceFrequency == nil {
+		if e.ComplexityRoot.CampaignHistory.RecurrenceFrequency == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.RecurrenceFrequency(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.RecurrenceFrequency(childComplexity), true
 
 	case "CampaignHistory.recurrenceInterval":
-		if e.complexity.CampaignHistory.RecurrenceInterval == nil {
+		if e.ComplexityRoot.CampaignHistory.RecurrenceInterval == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.RecurrenceInterval(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.RecurrenceInterval(childComplexity), true
 
 	case "CampaignHistory.recurrenceTimezone":
-		if e.complexity.CampaignHistory.RecurrenceTimezone == nil {
+		if e.ComplexityRoot.CampaignHistory.RecurrenceTimezone == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.RecurrenceTimezone(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.RecurrenceTimezone(childComplexity), true
 
 	case "CampaignHistory.ref":
-		if e.complexity.CampaignHistory.Ref == nil {
+		if e.ComplexityRoot.CampaignHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Ref(childComplexity), true
 
 	case "CampaignHistory.resendCount":
-		if e.complexity.CampaignHistory.ResendCount == nil {
+		if e.ComplexityRoot.CampaignHistory.ResendCount == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.ResendCount(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.ResendCount(childComplexity), true
 
 	case "CampaignHistory.scheduledAt":
-		if e.complexity.CampaignHistory.ScheduledAt == nil {
+		if e.ComplexityRoot.CampaignHistory.ScheduledAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.ScheduledAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.ScheduledAt(childComplexity), true
 
 	case "CampaignHistory.status":
-		if e.complexity.CampaignHistory.Status == nil {
+		if e.ComplexityRoot.CampaignHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Status(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Status(childComplexity), true
 
 	case "CampaignHistory.tags":
-		if e.complexity.CampaignHistory.Tags == nil {
+		if e.ComplexityRoot.CampaignHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.Tags(childComplexity), true
 
 	case "CampaignHistory.templateID":
-		if e.complexity.CampaignHistory.TemplateID == nil {
+		if e.ComplexityRoot.CampaignHistory.TemplateID == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.TemplateID(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.TemplateID(childComplexity), true
 
 	case "CampaignHistory.updatedAt":
-		if e.complexity.CampaignHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.CampaignHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.UpdatedAt(childComplexity), true
 
 	case "CampaignHistory.updatedBy":
-		if e.complexity.CampaignHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.CampaignHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.UpdatedBy(childComplexity), true
 
 	case "CampaignHistory.workflowEligibleMarker":
-		if e.complexity.CampaignHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.CampaignHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.CampaignHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "CampaignHistoryConnection.edges":
-		if e.complexity.CampaignHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.CampaignHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.CampaignHistoryConnection.Edges(childComplexity), true
 
 	case "CampaignHistoryConnection.pageInfo":
-		if e.complexity.CampaignHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.CampaignHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.CampaignHistoryConnection.PageInfo(childComplexity), true
 
 	case "CampaignHistoryConnection.totalCount":
-		if e.complexity.CampaignHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.CampaignHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.CampaignHistoryConnection.TotalCount(childComplexity), true
 
 	case "CampaignHistoryEdge.cursor":
-		if e.complexity.CampaignHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.CampaignHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.CampaignHistoryEdge.Cursor(childComplexity), true
 
 	case "CampaignHistoryEdge.node":
-		if e.complexity.CampaignHistoryEdge.Node == nil {
+		if e.ComplexityRoot.CampaignHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.CampaignHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.CampaignHistoryEdge.Node(childComplexity), true
 
 	case "CampaignTargetHistory.campaignID":
-		if e.complexity.CampaignTargetHistory.CampaignID == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.CampaignID == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.CampaignID(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.CampaignID(childComplexity), true
 
 	case "CampaignTargetHistory.completedAt":
-		if e.complexity.CampaignTargetHistory.CompletedAt == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.CompletedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.CompletedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.CompletedAt(childComplexity), true
 
 	case "CampaignTargetHistory.contactID":
-		if e.complexity.CampaignTargetHistory.ContactID == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.ContactID == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.ContactID(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.ContactID(childComplexity), true
 
 	case "CampaignTargetHistory.createdAt":
-		if e.complexity.CampaignTargetHistory.CreatedAt == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.CreatedAt(childComplexity), true
 
 	case "CampaignTargetHistory.createdBy":
-		if e.complexity.CampaignTargetHistory.CreatedBy == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.CreatedBy(childComplexity), true
 
 	case "CampaignTargetHistory.email":
-		if e.complexity.CampaignTargetHistory.Email == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.Email(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.Email(childComplexity), true
 
 	case "CampaignTargetHistory.fullName":
-		if e.complexity.CampaignTargetHistory.FullName == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.FullName == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.FullName(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.FullName(childComplexity), true
 
 	case "CampaignTargetHistory.groupID":
-		if e.complexity.CampaignTargetHistory.GroupID == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.GroupID == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.GroupID(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.GroupID(childComplexity), true
 
 	case "CampaignTargetHistory.historyTime":
-		if e.complexity.CampaignTargetHistory.HistoryTime == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.HistoryTime(childComplexity), true
 
 	case "CampaignTargetHistory.id":
-		if e.complexity.CampaignTargetHistory.ID == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.ID(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.ID(childComplexity), true
 
 	case "CampaignTargetHistory.metadata":
-		if e.complexity.CampaignTargetHistory.Metadata == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.Metadata(childComplexity), true
 
 	case "CampaignTargetHistory.operation":
-		if e.complexity.CampaignTargetHistory.Operation == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.Operation(childComplexity), true
 
 	case "CampaignTargetHistory.ownerID":
-		if e.complexity.CampaignTargetHistory.OwnerID == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.OwnerID(childComplexity), true
 
 	case "CampaignTargetHistory.ref":
-		if e.complexity.CampaignTargetHistory.Ref == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.Ref(childComplexity), true
 
 	case "CampaignTargetHistory.sentAt":
-		if e.complexity.CampaignTargetHistory.SentAt == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.SentAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.SentAt(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.SentAt(childComplexity), true
 
 	case "CampaignTargetHistory.status":
-		if e.complexity.CampaignTargetHistory.Status == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.Status(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.Status(childComplexity), true
 
 	case "CampaignTargetHistory.updatedAt":
-		if e.complexity.CampaignTargetHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.UpdatedAt(childComplexity), true
 
 	case "CampaignTargetHistory.updatedBy":
-		if e.complexity.CampaignTargetHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.UpdatedBy(childComplexity), true
 
 	case "CampaignTargetHistory.userID":
-		if e.complexity.CampaignTargetHistory.UserID == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.UserID(childComplexity), true
 
 	case "CampaignTargetHistory.workflowEligibleMarker":
-		if e.complexity.CampaignTargetHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.CampaignTargetHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "CampaignTargetHistoryConnection.edges":
-		if e.complexity.CampaignTargetHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.CampaignTargetHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistoryConnection.Edges(childComplexity), true
 
 	case "CampaignTargetHistoryConnection.pageInfo":
-		if e.complexity.CampaignTargetHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.CampaignTargetHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistoryConnection.PageInfo(childComplexity), true
 
 	case "CampaignTargetHistoryConnection.totalCount":
-		if e.complexity.CampaignTargetHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.CampaignTargetHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistoryConnection.TotalCount(childComplexity), true
 
 	case "CampaignTargetHistoryEdge.cursor":
-		if e.complexity.CampaignTargetHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.CampaignTargetHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistoryEdge.Cursor(childComplexity), true
 
 	case "CampaignTargetHistoryEdge.node":
-		if e.complexity.CampaignTargetHistoryEdge.Node == nil {
+		if e.ComplexityRoot.CampaignTargetHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.CampaignTargetHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.CampaignTargetHistoryEdge.Node(childComplexity), true
 
 	case "ContactHistory.address":
-		if e.complexity.ContactHistory.Address == nil {
+		if e.ComplexityRoot.ContactHistory.Address == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Address(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Address(childComplexity), true
 
 	case "ContactHistory.company":
-		if e.complexity.ContactHistory.Company == nil {
+		if e.ComplexityRoot.ContactHistory.Company == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Company(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Company(childComplexity), true
 
 	case "ContactHistory.createdAt":
-		if e.complexity.ContactHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ContactHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.CreatedAt(childComplexity), true
 
 	case "ContactHistory.createdBy":
-		if e.complexity.ContactHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ContactHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.CreatedBy(childComplexity), true
 
 	case "ContactHistory.email":
-		if e.complexity.ContactHistory.Email == nil {
+		if e.ComplexityRoot.ContactHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Email(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Email(childComplexity), true
 
 	case "ContactHistory.fullName":
-		if e.complexity.ContactHistory.FullName == nil {
+		if e.ComplexityRoot.ContactHistory.FullName == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.FullName(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.FullName(childComplexity), true
 
 	case "ContactHistory.historyTime":
-		if e.complexity.ContactHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ContactHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.HistoryTime(childComplexity), true
 
 	case "ContactHistory.id":
-		if e.complexity.ContactHistory.ID == nil {
+		if e.ComplexityRoot.ContactHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.ID(childComplexity), true
 
 	case "ContactHistory.operation":
-		if e.complexity.ContactHistory.Operation == nil {
+		if e.ComplexityRoot.ContactHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Operation(childComplexity), true
 
 	case "ContactHistory.ownerID":
-		if e.complexity.ContactHistory.OwnerID == nil {
+		if e.ComplexityRoot.ContactHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.OwnerID(childComplexity), true
 
 	case "ContactHistory.phoneNumber":
-		if e.complexity.ContactHistory.PhoneNumber == nil {
+		if e.ComplexityRoot.ContactHistory.PhoneNumber == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.PhoneNumber(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.PhoneNumber(childComplexity), true
 
 	case "ContactHistory.ref":
-		if e.complexity.ContactHistory.Ref == nil {
+		if e.ComplexityRoot.ContactHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Ref(childComplexity), true
 
 	case "ContactHistory.status":
-		if e.complexity.ContactHistory.Status == nil {
+		if e.ComplexityRoot.ContactHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Status(childComplexity), true
 
 	case "ContactHistory.tags":
-		if e.complexity.ContactHistory.Tags == nil {
+		if e.ComplexityRoot.ContactHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Tags(childComplexity), true
 
 	case "ContactHistory.title":
-		if e.complexity.ContactHistory.Title == nil {
+		if e.ComplexityRoot.ContactHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.Title(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.Title(childComplexity), true
 
 	case "ContactHistory.updatedAt":
-		if e.complexity.ContactHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ContactHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.UpdatedAt(childComplexity), true
 
 	case "ContactHistory.updatedBy":
-		if e.complexity.ContactHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ContactHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ContactHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ContactHistory.UpdatedBy(childComplexity), true
 
 	case "ContactHistoryConnection.edges":
-		if e.complexity.ContactHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ContactHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ContactHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ContactHistoryConnection.Edges(childComplexity), true
 
 	case "ContactHistoryConnection.pageInfo":
-		if e.complexity.ContactHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ContactHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ContactHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ContactHistoryConnection.PageInfo(childComplexity), true
 
 	case "ContactHistoryConnection.totalCount":
-		if e.complexity.ContactHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ContactHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ContactHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ContactHistoryConnection.TotalCount(childComplexity), true
 
 	case "ContactHistoryEdge.cursor":
-		if e.complexity.ContactHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ContactHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ContactHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ContactHistoryEdge.Cursor(childComplexity), true
 
 	case "ContactHistoryEdge.node":
-		if e.complexity.ContactHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ContactHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ContactHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ContactHistoryEdge.Node(childComplexity), true
 
 	case "ControlHistory.aliases":
-		if e.complexity.ControlHistory.Aliases == nil {
+		if e.ComplexityRoot.ControlHistory.Aliases == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Aliases(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Aliases(childComplexity), true
 
 	case "ControlHistory.assessmentMethods":
-		if e.complexity.ControlHistory.AssessmentMethods == nil {
+		if e.ComplexityRoot.ControlHistory.AssessmentMethods == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.AssessmentMethods(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.AssessmentMethods(childComplexity), true
 
 	case "ControlHistory.assessmentObjectives":
-		if e.complexity.ControlHistory.AssessmentObjectives == nil {
+		if e.ComplexityRoot.ControlHistory.AssessmentObjectives == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.AssessmentObjectives(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.AssessmentObjectives(childComplexity), true
 
 	case "ControlHistory.auditorReferenceID":
-		if e.complexity.ControlHistory.AuditorReferenceID == nil {
+		if e.ComplexityRoot.ControlHistory.AuditorReferenceID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.AuditorReferenceID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.AuditorReferenceID(childComplexity), true
 
 	case "ControlHistory.category":
-		if e.complexity.ControlHistory.Category == nil {
+		if e.ComplexityRoot.ControlHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Category(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Category(childComplexity), true
 
 	case "ControlHistory.categoryID":
-		if e.complexity.ControlHistory.CategoryID == nil {
+		if e.ComplexityRoot.ControlHistory.CategoryID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.CategoryID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.CategoryID(childComplexity), true
 
 	case "ControlHistory.controlKindID":
-		if e.complexity.ControlHistory.ControlKindID == nil {
+		if e.ComplexityRoot.ControlHistory.ControlKindID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ControlKindID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ControlKindID(childComplexity), true
 
 	case "ControlHistory.controlKindName":
-		if e.complexity.ControlHistory.ControlKindName == nil {
+		if e.ComplexityRoot.ControlHistory.ControlKindName == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ControlKindName(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ControlKindName(childComplexity), true
 
 	case "ControlHistory.controlOwnerID":
-		if e.complexity.ControlHistory.ControlOwnerID == nil {
+		if e.ComplexityRoot.ControlHistory.ControlOwnerID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ControlOwnerID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ControlOwnerID(childComplexity), true
 
 	case "ControlHistory.controlQuestions":
-		if e.complexity.ControlHistory.ControlQuestions == nil {
+		if e.ComplexityRoot.ControlHistory.ControlQuestions == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ControlQuestions(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ControlQuestions(childComplexity), true
 
 	case "ControlHistory.createdAt":
-		if e.complexity.ControlHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ControlHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.CreatedAt(childComplexity), true
 
 	case "ControlHistory.createdBy":
-		if e.complexity.ControlHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ControlHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.CreatedBy(childComplexity), true
 
 	case "ControlHistory.delegateID":
-		if e.complexity.ControlHistory.DelegateID == nil {
+		if e.ComplexityRoot.ControlHistory.DelegateID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.DelegateID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.DelegateID(childComplexity), true
 
 	case "ControlHistory.description":
-		if e.complexity.ControlHistory.Description == nil {
+		if e.ComplexityRoot.ControlHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Description(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Description(childComplexity), true
 
 	case "ControlHistory.descriptionJSON":
-		if e.complexity.ControlHistory.DescriptionJSON == nil {
+		if e.ComplexityRoot.ControlHistory.DescriptionJSON == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.DescriptionJSON(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.DescriptionJSON(childComplexity), true
 
 	case "ControlHistory.displayID":
-		if e.complexity.ControlHistory.DisplayID == nil {
+		if e.ComplexityRoot.ControlHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.DisplayID(childComplexity), true
 
 	case "ControlHistory.environmentID":
-		if e.complexity.ControlHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.ControlHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.EnvironmentID(childComplexity), true
 
 	case "ControlHistory.environmentName":
-		if e.complexity.ControlHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.ControlHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.EnvironmentName(childComplexity), true
 
 	case "ControlHistory.evidenceRequests":
-		if e.complexity.ControlHistory.EvidenceRequests == nil {
+		if e.ComplexityRoot.ControlHistory.EvidenceRequests == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.EvidenceRequests(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.EvidenceRequests(childComplexity), true
 
 	case "ControlHistory.exampleEvidence":
-		if e.complexity.ControlHistory.ExampleEvidence == nil {
+		if e.ComplexityRoot.ControlHistory.ExampleEvidence == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ExampleEvidence(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ExampleEvidence(childComplexity), true
 
 	case "ControlHistory.historyTime":
-		if e.complexity.ControlHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ControlHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.HistoryTime(childComplexity), true
 
 	case "ControlHistory.id":
-		if e.complexity.ControlHistory.ID == nil {
+		if e.ComplexityRoot.ControlHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ID(childComplexity), true
 
 	case "ControlHistory.implementationGuidance":
-		if e.complexity.ControlHistory.ImplementationGuidance == nil {
+		if e.ComplexityRoot.ControlHistory.ImplementationGuidance == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ImplementationGuidance(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ImplementationGuidance(childComplexity), true
 
 	case "ControlHistory.internalNotes":
-		if e.complexity.ControlHistory.InternalNotes == nil {
+		if e.ComplexityRoot.ControlHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.InternalNotes(childComplexity), true
 
 	case "ControlHistory.isTrustCenterControl":
-		if e.complexity.ControlHistory.IsTrustCenterControl == nil {
+		if e.ComplexityRoot.ControlHistory.IsTrustCenterControl == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.IsTrustCenterControl(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.IsTrustCenterControl(childComplexity), true
 
 	case "ControlHistory.mappedCategories":
-		if e.complexity.ControlHistory.MappedCategories == nil {
+		if e.ComplexityRoot.ControlHistory.MappedCategories == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.MappedCategories(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.MappedCategories(childComplexity), true
 
 	case "ControlHistory.operation":
-		if e.complexity.ControlHistory.Operation == nil {
+		if e.ComplexityRoot.ControlHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Operation(childComplexity), true
 
 	case "ControlHistory.ownerID":
-		if e.complexity.ControlHistory.OwnerID == nil {
+		if e.ComplexityRoot.ControlHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.OwnerID(childComplexity), true
 
 	case "ControlHistory.ref":
-		if e.complexity.ControlHistory.Ref == nil {
+		if e.ComplexityRoot.ControlHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Ref(childComplexity), true
 
 	case "ControlHistory.refCode":
-		if e.complexity.ControlHistory.RefCode == nil {
+		if e.ComplexityRoot.ControlHistory.RefCode == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.RefCode(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.RefCode(childComplexity), true
 
 	case "ControlHistory.referenceFramework":
-		if e.complexity.ControlHistory.ReferenceFramework == nil {
+		if e.ComplexityRoot.ControlHistory.ReferenceFramework == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ReferenceFramework(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ReferenceFramework(childComplexity), true
 
 	case "ControlHistory.referenceFrameworkRevision":
-		if e.complexity.ControlHistory.ReferenceFrameworkRevision == nil {
+		if e.ComplexityRoot.ControlHistory.ReferenceFrameworkRevision == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ReferenceFrameworkRevision(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ReferenceFrameworkRevision(childComplexity), true
 
 	case "ControlHistory.referenceID":
-		if e.complexity.ControlHistory.ReferenceID == nil {
+		if e.ComplexityRoot.ControlHistory.ReferenceID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ReferenceID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ReferenceID(childComplexity), true
 
 	case "ControlHistory.references":
-		if e.complexity.ControlHistory.References == nil {
+		if e.ComplexityRoot.ControlHistory.References == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.References(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.References(childComplexity), true
 
 	case "ControlHistory.responsiblePartyID":
-		if e.complexity.ControlHistory.ResponsiblePartyID == nil {
+		if e.ComplexityRoot.ControlHistory.ResponsiblePartyID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ResponsiblePartyID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ResponsiblePartyID(childComplexity), true
 
 	case "ControlHistory.scopeID":
-		if e.complexity.ControlHistory.ScopeID == nil {
+		if e.ComplexityRoot.ControlHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ScopeID(childComplexity), true
 
 	case "ControlHistory.scopeName":
-		if e.complexity.ControlHistory.ScopeName == nil {
+		if e.ComplexityRoot.ControlHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.ScopeName(childComplexity), true
 
 	case "ControlHistory.source":
-		if e.complexity.ControlHistory.Source == nil {
+		if e.ComplexityRoot.ControlHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Source(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Source(childComplexity), true
 
 	case "ControlHistory.standardID":
-		if e.complexity.ControlHistory.StandardID == nil {
+		if e.ComplexityRoot.ControlHistory.StandardID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.StandardID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.StandardID(childComplexity), true
 
 	case "ControlHistory.status":
-		if e.complexity.ControlHistory.Status == nil {
+		if e.ComplexityRoot.ControlHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Status(childComplexity), true
 
 	case "ControlHistory.subcategory":
-		if e.complexity.ControlHistory.Subcategory == nil {
+		if e.ComplexityRoot.ControlHistory.Subcategory == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Subcategory(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Subcategory(childComplexity), true
 
 	case "ControlHistory.systemInternalID":
-		if e.complexity.ControlHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.ControlHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.SystemInternalID(childComplexity), true
 
 	case "ControlHistory.systemOwned":
-		if e.complexity.ControlHistory.SystemOwned == nil {
+		if e.ComplexityRoot.ControlHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.SystemOwned(childComplexity), true
 
 	case "ControlHistory.tags":
-		if e.complexity.ControlHistory.Tags == nil {
+		if e.ComplexityRoot.ControlHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Tags(childComplexity), true
 
 	case "ControlHistory.testingProcedures":
-		if e.complexity.ControlHistory.TestingProcedures == nil {
+		if e.ComplexityRoot.ControlHistory.TestingProcedures == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.TestingProcedures(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.TestingProcedures(childComplexity), true
 
 	case "ControlHistory.title":
-		if e.complexity.ControlHistory.Title == nil {
+		if e.ComplexityRoot.ControlHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.Title(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.Title(childComplexity), true
 
 	case "ControlHistory.trustCenterVisibility":
-		if e.complexity.ControlHistory.TrustCenterVisibility == nil {
+		if e.ComplexityRoot.ControlHistory.TrustCenterVisibility == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.TrustCenterVisibility(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.TrustCenterVisibility(childComplexity), true
 
 	case "ControlHistory.updatedAt":
-		if e.complexity.ControlHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ControlHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.UpdatedAt(childComplexity), true
 
 	case "ControlHistory.updatedBy":
-		if e.complexity.ControlHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ControlHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.UpdatedBy(childComplexity), true
 
 	case "ControlHistory.workflowEligibleMarker":
-		if e.complexity.ControlHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.ControlHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.ControlHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.ControlHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "ControlHistoryConnection.edges":
-		if e.complexity.ControlHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ControlHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ControlHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ControlHistoryConnection.Edges(childComplexity), true
 
 	case "ControlHistoryConnection.pageInfo":
-		if e.complexity.ControlHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ControlHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ControlHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ControlHistoryConnection.PageInfo(childComplexity), true
 
 	case "ControlHistoryConnection.totalCount":
-		if e.complexity.ControlHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ControlHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ControlHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ControlHistoryConnection.TotalCount(childComplexity), true
 
 	case "ControlHistoryEdge.cursor":
-		if e.complexity.ControlHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ControlHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ControlHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ControlHistoryEdge.Cursor(childComplexity), true
 
 	case "ControlHistoryEdge.node":
-		if e.complexity.ControlHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ControlHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ControlHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ControlHistoryEdge.Node(childComplexity), true
 
 	case "ControlImplementationHistory.createdAt":
-		if e.complexity.ControlImplementationHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.CreatedAt(childComplexity), true
 
 	case "ControlImplementationHistory.createdBy":
-		if e.complexity.ControlImplementationHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.CreatedBy(childComplexity), true
 
 	case "ControlImplementationHistory.details":
-		if e.complexity.ControlImplementationHistory.Details == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.Details(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.Details(childComplexity), true
 
 	case "ControlImplementationHistory.detailsJSON":
-		if e.complexity.ControlImplementationHistory.DetailsJSON == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.DetailsJSON == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.DetailsJSON(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.DetailsJSON(childComplexity), true
 
 	case "ControlImplementationHistory.historyTime":
-		if e.complexity.ControlImplementationHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.HistoryTime(childComplexity), true
 
 	case "ControlImplementationHistory.id":
-		if e.complexity.ControlImplementationHistory.ID == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.ID(childComplexity), true
 
 	case "ControlImplementationHistory.implementationDate":
-		if e.complexity.ControlImplementationHistory.ImplementationDate == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.ImplementationDate == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.ImplementationDate(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.ImplementationDate(childComplexity), true
 
 	case "ControlImplementationHistory.internalNotes":
-		if e.complexity.ControlImplementationHistory.InternalNotes == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.InternalNotes(childComplexity), true
 
 	case "ControlImplementationHistory.operation":
-		if e.complexity.ControlImplementationHistory.Operation == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.Operation(childComplexity), true
 
 	case "ControlImplementationHistory.ownerID":
-		if e.complexity.ControlImplementationHistory.OwnerID == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.OwnerID(childComplexity), true
 
 	case "ControlImplementationHistory.ref":
-		if e.complexity.ControlImplementationHistory.Ref == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.Ref(childComplexity), true
 
 	case "ControlImplementationHistory.status":
-		if e.complexity.ControlImplementationHistory.Status == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.Status(childComplexity), true
 
 	case "ControlImplementationHistory.systemInternalID":
-		if e.complexity.ControlImplementationHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.SystemInternalID(childComplexity), true
 
 	case "ControlImplementationHistory.systemOwned":
-		if e.complexity.ControlImplementationHistory.SystemOwned == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.SystemOwned(childComplexity), true
 
 	case "ControlImplementationHistory.tags":
-		if e.complexity.ControlImplementationHistory.Tags == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.Tags(childComplexity), true
 
 	case "ControlImplementationHistory.updatedAt":
-		if e.complexity.ControlImplementationHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.UpdatedAt(childComplexity), true
 
 	case "ControlImplementationHistory.updatedBy":
-		if e.complexity.ControlImplementationHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.UpdatedBy(childComplexity), true
 
 	case "ControlImplementationHistory.verificationDate":
-		if e.complexity.ControlImplementationHistory.VerificationDate == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.VerificationDate == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.VerificationDate(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.VerificationDate(childComplexity), true
 
 	case "ControlImplementationHistory.verified":
-		if e.complexity.ControlImplementationHistory.Verified == nil {
+		if e.ComplexityRoot.ControlImplementationHistory.Verified == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistory.Verified(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistory.Verified(childComplexity), true
 
 	case "ControlImplementationHistoryConnection.edges":
-		if e.complexity.ControlImplementationHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ControlImplementationHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistoryConnection.Edges(childComplexity), true
 
 	case "ControlImplementationHistoryConnection.pageInfo":
-		if e.complexity.ControlImplementationHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ControlImplementationHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistoryConnection.PageInfo(childComplexity), true
 
 	case "ControlImplementationHistoryConnection.totalCount":
-		if e.complexity.ControlImplementationHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ControlImplementationHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistoryConnection.TotalCount(childComplexity), true
 
 	case "ControlImplementationHistoryEdge.cursor":
-		if e.complexity.ControlImplementationHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ControlImplementationHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistoryEdge.Cursor(childComplexity), true
 
 	case "ControlImplementationHistoryEdge.node":
-		if e.complexity.ControlImplementationHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ControlImplementationHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ControlImplementationHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ControlImplementationHistoryEdge.Node(childComplexity), true
 
 	case "ControlObjectiveHistory.category":
-		if e.complexity.ControlObjectiveHistory.Category == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Category(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Category(childComplexity), true
 
 	case "ControlObjectiveHistory.controlObjectiveType":
-		if e.complexity.ControlObjectiveHistory.ControlObjectiveType == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.ControlObjectiveType == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.ControlObjectiveType(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.ControlObjectiveType(childComplexity), true
 
 	case "ControlObjectiveHistory.createdAt":
-		if e.complexity.ControlObjectiveHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.CreatedAt(childComplexity), true
 
 	case "ControlObjectiveHistory.createdBy":
-		if e.complexity.ControlObjectiveHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.CreatedBy(childComplexity), true
 
 	case "ControlObjectiveHistory.desiredOutcome":
-		if e.complexity.ControlObjectiveHistory.DesiredOutcome == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.DesiredOutcome == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.DesiredOutcome(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.DesiredOutcome(childComplexity), true
 
 	case "ControlObjectiveHistory.desiredOutcomeJSON":
-		if e.complexity.ControlObjectiveHistory.DesiredOutcomeJSON == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.DesiredOutcomeJSON == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.DesiredOutcomeJSON(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.DesiredOutcomeJSON(childComplexity), true
 
 	case "ControlObjectiveHistory.displayID":
-		if e.complexity.ControlObjectiveHistory.DisplayID == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.DisplayID(childComplexity), true
 
 	case "ControlObjectiveHistory.historyTime":
-		if e.complexity.ControlObjectiveHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.HistoryTime(childComplexity), true
 
 	case "ControlObjectiveHistory.id":
-		if e.complexity.ControlObjectiveHistory.ID == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.ID(childComplexity), true
 
 	case "ControlObjectiveHistory.internalNotes":
-		if e.complexity.ControlObjectiveHistory.InternalNotes == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.InternalNotes(childComplexity), true
 
 	case "ControlObjectiveHistory.name":
-		if e.complexity.ControlObjectiveHistory.Name == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Name(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Name(childComplexity), true
 
 	case "ControlObjectiveHistory.operation":
-		if e.complexity.ControlObjectiveHistory.Operation == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Operation(childComplexity), true
 
 	case "ControlObjectiveHistory.ownerID":
-		if e.complexity.ControlObjectiveHistory.OwnerID == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.OwnerID(childComplexity), true
 
 	case "ControlObjectiveHistory.ref":
-		if e.complexity.ControlObjectiveHistory.Ref == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Ref(childComplexity), true
 
 	case "ControlObjectiveHistory.revision":
-		if e.complexity.ControlObjectiveHistory.Revision == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Revision(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Revision(childComplexity), true
 
 	case "ControlObjectiveHistory.source":
-		if e.complexity.ControlObjectiveHistory.Source == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Source(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Source(childComplexity), true
 
 	case "ControlObjectiveHistory.status":
-		if e.complexity.ControlObjectiveHistory.Status == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Status(childComplexity), true
 
 	case "ControlObjectiveHistory.subcategory":
-		if e.complexity.ControlObjectiveHistory.Subcategory == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Subcategory == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Subcategory(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Subcategory(childComplexity), true
 
 	case "ControlObjectiveHistory.systemInternalID":
-		if e.complexity.ControlObjectiveHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.SystemInternalID(childComplexity), true
 
 	case "ControlObjectiveHistory.systemOwned":
-		if e.complexity.ControlObjectiveHistory.SystemOwned == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.SystemOwned(childComplexity), true
 
 	case "ControlObjectiveHistory.tags":
-		if e.complexity.ControlObjectiveHistory.Tags == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.Tags(childComplexity), true
 
 	case "ControlObjectiveHistory.updatedAt":
-		if e.complexity.ControlObjectiveHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.UpdatedAt(childComplexity), true
 
 	case "ControlObjectiveHistory.updatedBy":
-		if e.complexity.ControlObjectiveHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ControlObjectiveHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistory.UpdatedBy(childComplexity), true
 
 	case "ControlObjectiveHistoryConnection.edges":
-		if e.complexity.ControlObjectiveHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ControlObjectiveHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistoryConnection.Edges(childComplexity), true
 
 	case "ControlObjectiveHistoryConnection.pageInfo":
-		if e.complexity.ControlObjectiveHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ControlObjectiveHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistoryConnection.PageInfo(childComplexity), true
 
 	case "ControlObjectiveHistoryConnection.totalCount":
-		if e.complexity.ControlObjectiveHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ControlObjectiveHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistoryConnection.TotalCount(childComplexity), true
 
 	case "ControlObjectiveHistoryEdge.cursor":
-		if e.complexity.ControlObjectiveHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ControlObjectiveHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistoryEdge.Cursor(childComplexity), true
 
 	case "ControlObjectiveHistoryEdge.node":
-		if e.complexity.ControlObjectiveHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ControlObjectiveHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ControlObjectiveHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ControlObjectiveHistoryEdge.Node(childComplexity), true
 
 	case "CustomDomainHistory.cnameRecord":
-		if e.complexity.CustomDomainHistory.CnameRecord == nil {
+		if e.ComplexityRoot.CustomDomainHistory.CnameRecord == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.CnameRecord(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.CnameRecord(childComplexity), true
 
 	case "CustomDomainHistory.createdAt":
-		if e.complexity.CustomDomainHistory.CreatedAt == nil {
+		if e.ComplexityRoot.CustomDomainHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.CreatedAt(childComplexity), true
 
 	case "CustomDomainHistory.createdBy":
-		if e.complexity.CustomDomainHistory.CreatedBy == nil {
+		if e.ComplexityRoot.CustomDomainHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.CreatedBy(childComplexity), true
 
 	case "CustomDomainHistory.dnsVerificationID":
-		if e.complexity.CustomDomainHistory.DNSVerificationID == nil {
+		if e.ComplexityRoot.CustomDomainHistory.DNSVerificationID == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.DNSVerificationID(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.DNSVerificationID(childComplexity), true
 
 	case "CustomDomainHistory.historyTime":
-		if e.complexity.CustomDomainHistory.HistoryTime == nil {
+		if e.ComplexityRoot.CustomDomainHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.HistoryTime(childComplexity), true
 
 	case "CustomDomainHistory.id":
-		if e.complexity.CustomDomainHistory.ID == nil {
+		if e.ComplexityRoot.CustomDomainHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.ID(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.ID(childComplexity), true
 
 	case "CustomDomainHistory.internalNotes":
-		if e.complexity.CustomDomainHistory.InternalNotes == nil {
+		if e.ComplexityRoot.CustomDomainHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.InternalNotes(childComplexity), true
 
 	case "CustomDomainHistory.mappableDomainID":
-		if e.complexity.CustomDomainHistory.MappableDomainID == nil {
+		if e.ComplexityRoot.CustomDomainHistory.MappableDomainID == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.MappableDomainID(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.MappableDomainID(childComplexity), true
 
 	case "CustomDomainHistory.operation":
-		if e.complexity.CustomDomainHistory.Operation == nil {
+		if e.ComplexityRoot.CustomDomainHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.Operation(childComplexity), true
 
 	case "CustomDomainHistory.ownerID":
-		if e.complexity.CustomDomainHistory.OwnerID == nil {
+		if e.ComplexityRoot.CustomDomainHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.OwnerID(childComplexity), true
 
 	case "CustomDomainHistory.ref":
-		if e.complexity.CustomDomainHistory.Ref == nil {
+		if e.ComplexityRoot.CustomDomainHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.Ref(childComplexity), true
 
 	case "CustomDomainHistory.systemInternalID":
-		if e.complexity.CustomDomainHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.CustomDomainHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.SystemInternalID(childComplexity), true
 
 	case "CustomDomainHistory.systemOwned":
-		if e.complexity.CustomDomainHistory.SystemOwned == nil {
+		if e.ComplexityRoot.CustomDomainHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.SystemOwned(childComplexity), true
 
 	case "CustomDomainHistory.tags":
-		if e.complexity.CustomDomainHistory.Tags == nil {
+		if e.ComplexityRoot.CustomDomainHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.Tags(childComplexity), true
 
 	case "CustomDomainHistory.trustCenterID":
-		if e.complexity.CustomDomainHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.CustomDomainHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.TrustCenterID(childComplexity), true
 
 	case "CustomDomainHistory.updatedAt":
-		if e.complexity.CustomDomainHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.CustomDomainHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.UpdatedAt(childComplexity), true
 
 	case "CustomDomainHistory.updatedBy":
-		if e.complexity.CustomDomainHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.CustomDomainHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistory.UpdatedBy(childComplexity), true
 
 	case "CustomDomainHistoryConnection.edges":
-		if e.complexity.CustomDomainHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.CustomDomainHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistoryConnection.Edges(childComplexity), true
 
 	case "CustomDomainHistoryConnection.pageInfo":
-		if e.complexity.CustomDomainHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.CustomDomainHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistoryConnection.PageInfo(childComplexity), true
 
 	case "CustomDomainHistoryConnection.totalCount":
-		if e.complexity.CustomDomainHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.CustomDomainHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistoryConnection.TotalCount(childComplexity), true
 
 	case "CustomDomainHistoryEdge.cursor":
-		if e.complexity.CustomDomainHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.CustomDomainHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistoryEdge.Cursor(childComplexity), true
 
 	case "CustomDomainHistoryEdge.node":
-		if e.complexity.CustomDomainHistoryEdge.Node == nil {
+		if e.ComplexityRoot.CustomDomainHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.CustomDomainHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.CustomDomainHistoryEdge.Node(childComplexity), true
 
 	case "DNSVerificationHistory.acmeChallengePath":
-		if e.complexity.DNSVerificationHistory.AcmeChallengePath == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.AcmeChallengePath == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.AcmeChallengePath(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.AcmeChallengePath(childComplexity), true
 
 	case "DNSVerificationHistory.acmeChallengeStatus":
-		if e.complexity.DNSVerificationHistory.AcmeChallengeStatus == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.AcmeChallengeStatus == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.AcmeChallengeStatus(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.AcmeChallengeStatus(childComplexity), true
 
 	case "DNSVerificationHistory.acmeChallengeStatusReason":
-		if e.complexity.DNSVerificationHistory.AcmeChallengeStatusReason == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.AcmeChallengeStatusReason == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.AcmeChallengeStatusReason(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.AcmeChallengeStatusReason(childComplexity), true
 
 	case "DNSVerificationHistory.cloudflareHostnameID":
-		if e.complexity.DNSVerificationHistory.CloudflareHostnameID == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.CloudflareHostnameID == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.CloudflareHostnameID(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.CloudflareHostnameID(childComplexity), true
 
 	case "DNSVerificationHistory.createdAt":
-		if e.complexity.DNSVerificationHistory.CreatedAt == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.CreatedAt(childComplexity), true
 
 	case "DNSVerificationHistory.createdBy":
-		if e.complexity.DNSVerificationHistory.CreatedBy == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.CreatedBy(childComplexity), true
 
 	case "DNSVerificationHistory.dnsTxtRecord":
-		if e.complexity.DNSVerificationHistory.DNSTxtRecord == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.DNSTxtRecord == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.DNSTxtRecord(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.DNSTxtRecord(childComplexity), true
 
 	case "DNSVerificationHistory.dnsTxtValue":
-		if e.complexity.DNSVerificationHistory.DNSTxtValue == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.DNSTxtValue == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.DNSTxtValue(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.DNSTxtValue(childComplexity), true
 
 	case "DNSVerificationHistory.dnsVerificationStatus":
-		if e.complexity.DNSVerificationHistory.DNSVerificationStatus == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.DNSVerificationStatus == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.DNSVerificationStatus(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.DNSVerificationStatus(childComplexity), true
 
 	case "DNSVerificationHistory.dnsVerificationStatusReason":
-		if e.complexity.DNSVerificationHistory.DNSVerificationStatusReason == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.DNSVerificationStatusReason == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.DNSVerificationStatusReason(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.DNSVerificationStatusReason(childComplexity), true
 
 	case "DNSVerificationHistory.expectedAcmeChallengeValue":
-		if e.complexity.DNSVerificationHistory.ExpectedAcmeChallengeValue == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.ExpectedAcmeChallengeValue == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.ExpectedAcmeChallengeValue(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.ExpectedAcmeChallengeValue(childComplexity), true
 
 	case "DNSVerificationHistory.historyTime":
-		if e.complexity.DNSVerificationHistory.HistoryTime == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.HistoryTime(childComplexity), true
 
 	case "DNSVerificationHistory.id":
-		if e.complexity.DNSVerificationHistory.ID == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.ID(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.ID(childComplexity), true
 
 	case "DNSVerificationHistory.operation":
-		if e.complexity.DNSVerificationHistory.Operation == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.Operation(childComplexity), true
 
 	case "DNSVerificationHistory.ownerID":
-		if e.complexity.DNSVerificationHistory.OwnerID == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.OwnerID(childComplexity), true
 
 	case "DNSVerificationHistory.ref":
-		if e.complexity.DNSVerificationHistory.Ref == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.Ref(childComplexity), true
 
 	case "DNSVerificationHistory.tags":
-		if e.complexity.DNSVerificationHistory.Tags == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.Tags(childComplexity), true
 
 	case "DNSVerificationHistory.updatedAt":
-		if e.complexity.DNSVerificationHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.UpdatedAt(childComplexity), true
 
 	case "DNSVerificationHistory.updatedBy":
-		if e.complexity.DNSVerificationHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.DNSVerificationHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistory.UpdatedBy(childComplexity), true
 
 	case "DNSVerificationHistoryConnection.edges":
-		if e.complexity.DNSVerificationHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.DNSVerificationHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistoryConnection.Edges(childComplexity), true
 
 	case "DNSVerificationHistoryConnection.pageInfo":
-		if e.complexity.DNSVerificationHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.DNSVerificationHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistoryConnection.PageInfo(childComplexity), true
 
 	case "DNSVerificationHistoryConnection.totalCount":
-		if e.complexity.DNSVerificationHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.DNSVerificationHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistoryConnection.TotalCount(childComplexity), true
 
 	case "DNSVerificationHistoryEdge.cursor":
-		if e.complexity.DNSVerificationHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.DNSVerificationHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistoryEdge.Cursor(childComplexity), true
 
 	case "DNSVerificationHistoryEdge.node":
-		if e.complexity.DNSVerificationHistoryEdge.Node == nil {
+		if e.ComplexityRoot.DNSVerificationHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.DNSVerificationHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.DNSVerificationHistoryEdge.Node(childComplexity), true
 
 	case "DirectoryAccountHistory.accountType":
-		if e.complexity.DirectoryAccountHistory.AccountType == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.AccountType == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.AccountType(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.AccountType(childComplexity), true
 
 	case "DirectoryAccountHistory.avatarLocalFileID":
-		if e.complexity.DirectoryAccountHistory.AvatarLocalFileID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.AvatarLocalFileID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.AvatarLocalFileID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.AvatarLocalFileID(childComplexity), true
 
 	case "DirectoryAccountHistory.avatarRemoteURL":
-		if e.complexity.DirectoryAccountHistory.AvatarRemoteURL == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.AvatarRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.AvatarRemoteURL(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.AvatarRemoteURL(childComplexity), true
 
 	case "DirectoryAccountHistory.avatarUpdatedAt":
-		if e.complexity.DirectoryAccountHistory.AvatarUpdatedAt == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.AvatarUpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.AvatarUpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.AvatarUpdatedAt(childComplexity), true
 
 	case "DirectoryAccountHistory.canonicalEmail":
-		if e.complexity.DirectoryAccountHistory.CanonicalEmail == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.CanonicalEmail == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.CanonicalEmail(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.CanonicalEmail(childComplexity), true
 
 	case "DirectoryAccountHistory.createdAt":
-		if e.complexity.DirectoryAccountHistory.CreatedAt == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.CreatedAt(childComplexity), true
 
 	case "DirectoryAccountHistory.createdBy":
-		if e.complexity.DirectoryAccountHistory.CreatedBy == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.CreatedBy(childComplexity), true
 
 	case "DirectoryAccountHistory.department":
-		if e.complexity.DirectoryAccountHistory.Department == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.Department == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.Department(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.Department(childComplexity), true
 
 	case "DirectoryAccountHistory.directoryName":
-		if e.complexity.DirectoryAccountHistory.DirectoryName == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.DirectoryName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.DirectoryName(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.DirectoryName(childComplexity), true
 
 	case "DirectoryAccountHistory.directorySyncRunID":
-		if e.complexity.DirectoryAccountHistory.DirectorySyncRunID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.DirectorySyncRunID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.DirectorySyncRunID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.DirectorySyncRunID(childComplexity), true
 
 	case "DirectoryAccountHistory.displayID":
-		if e.complexity.DirectoryAccountHistory.DisplayID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.DisplayID(childComplexity), true
 
 	case "DirectoryAccountHistory.displayName":
-		if e.complexity.DirectoryAccountHistory.DisplayName == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.DisplayName(childComplexity), true
 
 	case "DirectoryAccountHistory.environmentID":
-		if e.complexity.DirectoryAccountHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.EnvironmentID(childComplexity), true
 
 	case "DirectoryAccountHistory.environmentName":
-		if e.complexity.DirectoryAccountHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.EnvironmentName(childComplexity), true
 
 	case "DirectoryAccountHistory.externalID":
-		if e.complexity.DirectoryAccountHistory.ExternalID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.ExternalID(childComplexity), true
 
 	case "DirectoryAccountHistory.familyName":
-		if e.complexity.DirectoryAccountHistory.FamilyName == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.FamilyName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.FamilyName(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.FamilyName(childComplexity), true
 
 	case "DirectoryAccountHistory.givenName":
-		if e.complexity.DirectoryAccountHistory.GivenName == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.GivenName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.GivenName(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.GivenName(childComplexity), true
 
 	case "DirectoryAccountHistory.historyTime":
-		if e.complexity.DirectoryAccountHistory.HistoryTime == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.HistoryTime(childComplexity), true
 
 	case "DirectoryAccountHistory.id":
-		if e.complexity.DirectoryAccountHistory.ID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.ID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.ID(childComplexity), true
 
 	case "DirectoryAccountHistory.identityHolderID":
-		if e.complexity.DirectoryAccountHistory.IdentityHolderID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.IdentityHolderID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.IdentityHolderID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.IdentityHolderID(childComplexity), true
 
 	case "DirectoryAccountHistory.integrationID":
-		if e.complexity.DirectoryAccountHistory.IntegrationID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.IntegrationID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.IntegrationID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.IntegrationID(childComplexity), true
 
 	case "DirectoryAccountHistory.jobTitle":
-		if e.complexity.DirectoryAccountHistory.JobTitle == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.JobTitle == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.JobTitle(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.JobTitle(childComplexity), true
 
 	case "DirectoryAccountHistory.lastLoginAt":
-		if e.complexity.DirectoryAccountHistory.LastLoginAt == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.LastLoginAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.LastLoginAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.LastLoginAt(childComplexity), true
 
 	case "DirectoryAccountHistory.lastSeenIP":
-		if e.complexity.DirectoryAccountHistory.LastSeenIP == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.LastSeenIP == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.LastSeenIP(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.LastSeenIP(childComplexity), true
 
 	case "DirectoryAccountHistory.mfaState":
-		if e.complexity.DirectoryAccountHistory.MfaState == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.MfaState == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.MfaState(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.MfaState(childComplexity), true
 
 	case "DirectoryAccountHistory.observedAt":
-		if e.complexity.DirectoryAccountHistory.ObservedAt == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.ObservedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.ObservedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.ObservedAt(childComplexity), true
 
 	case "DirectoryAccountHistory.operation":
-		if e.complexity.DirectoryAccountHistory.Operation == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.Operation(childComplexity), true
 
 	case "DirectoryAccountHistory.organizationUnit":
-		if e.complexity.DirectoryAccountHistory.OrganizationUnit == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.OrganizationUnit == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.OrganizationUnit(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.OrganizationUnit(childComplexity), true
 
 	case "DirectoryAccountHistory.ownerID":
-		if e.complexity.DirectoryAccountHistory.OwnerID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.OwnerID(childComplexity), true
 
 	case "DirectoryAccountHistory.platformID":
-		if e.complexity.DirectoryAccountHistory.PlatformID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.PlatformID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.PlatformID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.PlatformID(childComplexity), true
 
 	case "DirectoryAccountHistory.profile":
-		if e.complexity.DirectoryAccountHistory.Profile == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.Profile == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.Profile(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.Profile(childComplexity), true
 
 	case "DirectoryAccountHistory.profileHash":
-		if e.complexity.DirectoryAccountHistory.ProfileHash == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.ProfileHash == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.ProfileHash(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.ProfileHash(childComplexity), true
 
 	case "DirectoryAccountHistory.rawProfileFileID":
-		if e.complexity.DirectoryAccountHistory.RawProfileFileID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.RawProfileFileID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.RawProfileFileID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.RawProfileFileID(childComplexity), true
 
 	case "DirectoryAccountHistory.ref":
-		if e.complexity.DirectoryAccountHistory.Ref == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.Ref(childComplexity), true
 
 	case "DirectoryAccountHistory.scopeID":
-		if e.complexity.DirectoryAccountHistory.ScopeID == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.ScopeID(childComplexity), true
 
 	case "DirectoryAccountHistory.scopeName":
-		if e.complexity.DirectoryAccountHistory.ScopeName == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.ScopeName(childComplexity), true
 
 	case "DirectoryAccountHistory.secondaryKey":
-		if e.complexity.DirectoryAccountHistory.SecondaryKey == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.SecondaryKey == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.SecondaryKey(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.SecondaryKey(childComplexity), true
 
 	case "DirectoryAccountHistory.sourceVersion":
-		if e.complexity.DirectoryAccountHistory.SourceVersion == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.SourceVersion == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.SourceVersion(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.SourceVersion(childComplexity), true
 
 	case "DirectoryAccountHistory.status":
-		if e.complexity.DirectoryAccountHistory.Status == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.Status(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.Status(childComplexity), true
 
 	case "DirectoryAccountHistory.tags":
-		if e.complexity.DirectoryAccountHistory.Tags == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.Tags(childComplexity), true
 
 	case "DirectoryAccountHistory.updatedAt":
-		if e.complexity.DirectoryAccountHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.UpdatedAt(childComplexity), true
 
 	case "DirectoryAccountHistory.updatedBy":
-		if e.complexity.DirectoryAccountHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.DirectoryAccountHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistory.UpdatedBy(childComplexity), true
 
 	case "DirectoryAccountHistoryConnection.edges":
-		if e.complexity.DirectoryAccountHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.DirectoryAccountHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistoryConnection.Edges(childComplexity), true
 
 	case "DirectoryAccountHistoryConnection.pageInfo":
-		if e.complexity.DirectoryAccountHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.DirectoryAccountHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistoryConnection.PageInfo(childComplexity), true
 
 	case "DirectoryAccountHistoryConnection.totalCount":
-		if e.complexity.DirectoryAccountHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.DirectoryAccountHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistoryConnection.TotalCount(childComplexity), true
 
 	case "DirectoryAccountHistoryEdge.cursor":
-		if e.complexity.DirectoryAccountHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.DirectoryAccountHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistoryEdge.Cursor(childComplexity), true
 
 	case "DirectoryAccountHistoryEdge.node":
-		if e.complexity.DirectoryAccountHistoryEdge.Node == nil {
+		if e.ComplexityRoot.DirectoryAccountHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.DirectoryAccountHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.DirectoryAccountHistoryEdge.Node(childComplexity), true
 
 	case "DirectoryGroupHistory.classification":
-		if e.complexity.DirectoryGroupHistory.Classification == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Classification == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Classification(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Classification(childComplexity), true
 
 	case "DirectoryGroupHistory.createdAt":
-		if e.complexity.DirectoryGroupHistory.CreatedAt == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.CreatedAt(childComplexity), true
 
 	case "DirectoryGroupHistory.createdBy":
-		if e.complexity.DirectoryGroupHistory.CreatedBy == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.CreatedBy(childComplexity), true
 
 	case "DirectoryGroupHistory.description":
-		if e.complexity.DirectoryGroupHistory.Description == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Description(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Description(childComplexity), true
 
 	case "DirectoryGroupHistory.directorySyncRunID":
-		if e.complexity.DirectoryGroupHistory.DirectorySyncRunID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.DirectorySyncRunID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.DirectorySyncRunID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.DirectorySyncRunID(childComplexity), true
 
 	case "DirectoryGroupHistory.displayID":
-		if e.complexity.DirectoryGroupHistory.DisplayID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.DisplayID(childComplexity), true
 
 	case "DirectoryGroupHistory.displayName":
-		if e.complexity.DirectoryGroupHistory.DisplayName == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.DisplayName(childComplexity), true
 
 	case "DirectoryGroupHistory.email":
-		if e.complexity.DirectoryGroupHistory.Email == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Email(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Email(childComplexity), true
 
 	case "DirectoryGroupHistory.environmentID":
-		if e.complexity.DirectoryGroupHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.EnvironmentID(childComplexity), true
 
 	case "DirectoryGroupHistory.environmentName":
-		if e.complexity.DirectoryGroupHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.EnvironmentName(childComplexity), true
 
 	case "DirectoryGroupHistory.externalID":
-		if e.complexity.DirectoryGroupHistory.ExternalID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ExternalID(childComplexity), true
 
 	case "DirectoryGroupHistory.externalSharingAllowed":
-		if e.complexity.DirectoryGroupHistory.ExternalSharingAllowed == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ExternalSharingAllowed == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ExternalSharingAllowed(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ExternalSharingAllowed(childComplexity), true
 
 	case "DirectoryGroupHistory.historyTime":
-		if e.complexity.DirectoryGroupHistory.HistoryTime == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.HistoryTime(childComplexity), true
 
 	case "DirectoryGroupHistory.id":
-		if e.complexity.DirectoryGroupHistory.ID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ID(childComplexity), true
 
 	case "DirectoryGroupHistory.integrationID":
-		if e.complexity.DirectoryGroupHistory.IntegrationID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.IntegrationID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.IntegrationID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.IntegrationID(childComplexity), true
 
 	case "DirectoryGroupHistory.memberCount":
-		if e.complexity.DirectoryGroupHistory.MemberCount == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.MemberCount == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.MemberCount(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.MemberCount(childComplexity), true
 
 	case "DirectoryGroupHistory.observedAt":
-		if e.complexity.DirectoryGroupHistory.ObservedAt == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ObservedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ObservedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ObservedAt(childComplexity), true
 
 	case "DirectoryGroupHistory.operation":
-		if e.complexity.DirectoryGroupHistory.Operation == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Operation(childComplexity), true
 
 	case "DirectoryGroupHistory.ownerID":
-		if e.complexity.DirectoryGroupHistory.OwnerID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.OwnerID(childComplexity), true
 
 	case "DirectoryGroupHistory.platformID":
-		if e.complexity.DirectoryGroupHistory.PlatformID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.PlatformID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.PlatformID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.PlatformID(childComplexity), true
 
 	case "DirectoryGroupHistory.profile":
-		if e.complexity.DirectoryGroupHistory.Profile == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Profile == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Profile(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Profile(childComplexity), true
 
 	case "DirectoryGroupHistory.profileHash":
-		if e.complexity.DirectoryGroupHistory.ProfileHash == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ProfileHash == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ProfileHash(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ProfileHash(childComplexity), true
 
 	case "DirectoryGroupHistory.rawProfileFileID":
-		if e.complexity.DirectoryGroupHistory.RawProfileFileID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.RawProfileFileID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.RawProfileFileID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.RawProfileFileID(childComplexity), true
 
 	case "DirectoryGroupHistory.ref":
-		if e.complexity.DirectoryGroupHistory.Ref == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Ref(childComplexity), true
 
 	case "DirectoryGroupHistory.scopeID":
-		if e.complexity.DirectoryGroupHistory.ScopeID == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ScopeID(childComplexity), true
 
 	case "DirectoryGroupHistory.scopeName":
-		if e.complexity.DirectoryGroupHistory.ScopeName == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.ScopeName(childComplexity), true
 
 	case "DirectoryGroupHistory.sourceVersion":
-		if e.complexity.DirectoryGroupHistory.SourceVersion == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.SourceVersion == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.SourceVersion(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.SourceVersion(childComplexity), true
 
 	case "DirectoryGroupHistory.status":
-		if e.complexity.DirectoryGroupHistory.Status == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Status(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Status(childComplexity), true
 
 	case "DirectoryGroupHistory.tags":
-		if e.complexity.DirectoryGroupHistory.Tags == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.Tags(childComplexity), true
 
 	case "DirectoryGroupHistory.updatedAt":
-		if e.complexity.DirectoryGroupHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.UpdatedAt(childComplexity), true
 
 	case "DirectoryGroupHistory.updatedBy":
-		if e.complexity.DirectoryGroupHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.DirectoryGroupHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistory.UpdatedBy(childComplexity), true
 
 	case "DirectoryGroupHistoryConnection.edges":
-		if e.complexity.DirectoryGroupHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.DirectoryGroupHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistoryConnection.Edges(childComplexity), true
 
 	case "DirectoryGroupHistoryConnection.pageInfo":
-		if e.complexity.DirectoryGroupHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.DirectoryGroupHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistoryConnection.PageInfo(childComplexity), true
 
 	case "DirectoryGroupHistoryConnection.totalCount":
-		if e.complexity.DirectoryGroupHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.DirectoryGroupHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistoryConnection.TotalCount(childComplexity), true
 
 	case "DirectoryGroupHistoryEdge.cursor":
-		if e.complexity.DirectoryGroupHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.DirectoryGroupHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistoryEdge.Cursor(childComplexity), true
 
 	case "DirectoryGroupHistoryEdge.node":
-		if e.complexity.DirectoryGroupHistoryEdge.Node == nil {
+		if e.ComplexityRoot.DirectoryGroupHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.DirectoryGroupHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.DirectoryGroupHistoryEdge.Node(childComplexity), true
 
 	case "DirectoryMembershipHistory.createdAt":
-		if e.complexity.DirectoryMembershipHistory.CreatedAt == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.CreatedAt(childComplexity), true
 
 	case "DirectoryMembershipHistory.createdBy":
-		if e.complexity.DirectoryMembershipHistory.CreatedBy == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.CreatedBy(childComplexity), true
 
 	case "DirectoryMembershipHistory.directoryAccountID":
-		if e.complexity.DirectoryMembershipHistory.DirectoryAccountID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.DirectoryAccountID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.DirectoryAccountID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryAccountID(childComplexity), true
 
 	case "DirectoryMembershipHistory.directoryGroupID":
-		if e.complexity.DirectoryMembershipHistory.DirectoryGroupID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.DirectoryGroupID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.DirectoryGroupID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryGroupID(childComplexity), true
 
 	case "DirectoryMembershipHistory.directorySyncRunID":
-		if e.complexity.DirectoryMembershipHistory.DirectorySyncRunID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.DirectorySyncRunID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.DirectorySyncRunID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.DirectorySyncRunID(childComplexity), true
 
 	case "DirectoryMembershipHistory.displayID":
-		if e.complexity.DirectoryMembershipHistory.DisplayID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.DisplayID(childComplexity), true
 
 	case "DirectoryMembershipHistory.environmentID":
-		if e.complexity.DirectoryMembershipHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.EnvironmentID(childComplexity), true
 
 	case "DirectoryMembershipHistory.environmentName":
-		if e.complexity.DirectoryMembershipHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.EnvironmentName(childComplexity), true
 
 	case "DirectoryMembershipHistory.firstSeenAt":
-		if e.complexity.DirectoryMembershipHistory.FirstSeenAt == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.FirstSeenAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.FirstSeenAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.FirstSeenAt(childComplexity), true
 
 	case "DirectoryMembershipHistory.historyTime":
-		if e.complexity.DirectoryMembershipHistory.HistoryTime == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.HistoryTime(childComplexity), true
 
 	case "DirectoryMembershipHistory.id":
-		if e.complexity.DirectoryMembershipHistory.ID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.ID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.ID(childComplexity), true
 
 	case "DirectoryMembershipHistory.integrationID":
-		if e.complexity.DirectoryMembershipHistory.IntegrationID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.IntegrationID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.IntegrationID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.IntegrationID(childComplexity), true
 
 	case "DirectoryMembershipHistory.lastConfirmedRunID":
-		if e.complexity.DirectoryMembershipHistory.LastConfirmedRunID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.LastConfirmedRunID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.LastConfirmedRunID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.LastConfirmedRunID(childComplexity), true
 
 	case "DirectoryMembershipHistory.lastSeenAt":
-		if e.complexity.DirectoryMembershipHistory.LastSeenAt == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.LastSeenAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.LastSeenAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.LastSeenAt(childComplexity), true
 
 	case "DirectoryMembershipHistory.metadata":
-		if e.complexity.DirectoryMembershipHistory.Metadata == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.Metadata(childComplexity), true
 
 	case "DirectoryMembershipHistory.observedAt":
-		if e.complexity.DirectoryMembershipHistory.ObservedAt == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.ObservedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.ObservedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.ObservedAt(childComplexity), true
 
 	case "DirectoryMembershipHistory.operation":
-		if e.complexity.DirectoryMembershipHistory.Operation == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.Operation(childComplexity), true
 
 	case "DirectoryMembershipHistory.ownerID":
-		if e.complexity.DirectoryMembershipHistory.OwnerID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.OwnerID(childComplexity), true
 
 	case "DirectoryMembershipHistory.platformID":
-		if e.complexity.DirectoryMembershipHistory.PlatformID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.PlatformID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.PlatformID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.PlatformID(childComplexity), true
 
 	case "DirectoryMembershipHistory.ref":
-		if e.complexity.DirectoryMembershipHistory.Ref == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.Ref(childComplexity), true
 
 	case "DirectoryMembershipHistory.role":
-		if e.complexity.DirectoryMembershipHistory.Role == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.Role == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.Role(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.Role(childComplexity), true
 
 	case "DirectoryMembershipHistory.scopeID":
-		if e.complexity.DirectoryMembershipHistory.ScopeID == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.ScopeID(childComplexity), true
 
 	case "DirectoryMembershipHistory.scopeName":
-		if e.complexity.DirectoryMembershipHistory.ScopeName == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.ScopeName(childComplexity), true
 
 	case "DirectoryMembershipHistory.source":
-		if e.complexity.DirectoryMembershipHistory.Source == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.Source(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.Source(childComplexity), true
 
 	case "DirectoryMembershipHistory.updatedAt":
-		if e.complexity.DirectoryMembershipHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.UpdatedAt(childComplexity), true
 
 	case "DirectoryMembershipHistory.updatedBy":
-		if e.complexity.DirectoryMembershipHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistory.UpdatedBy(childComplexity), true
 
 	case "DirectoryMembershipHistoryConnection.edges":
-		if e.complexity.DirectoryMembershipHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistoryConnection.Edges(childComplexity), true
 
 	case "DirectoryMembershipHistoryConnection.pageInfo":
-		if e.complexity.DirectoryMembershipHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistoryConnection.PageInfo(childComplexity), true
 
 	case "DirectoryMembershipHistoryConnection.totalCount":
-		if e.complexity.DirectoryMembershipHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistoryConnection.TotalCount(childComplexity), true
 
 	case "DirectoryMembershipHistoryEdge.cursor":
-		if e.complexity.DirectoryMembershipHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistoryEdge.Cursor(childComplexity), true
 
 	case "DirectoryMembershipHistoryEdge.node":
-		if e.complexity.DirectoryMembershipHistoryEdge.Node == nil {
+		if e.ComplexityRoot.DirectoryMembershipHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.DirectoryMembershipHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembershipHistoryEdge.Node(childComplexity), true
 
 	case "DiscussionHistory.createdAt":
-		if e.complexity.DiscussionHistory.CreatedAt == nil {
+		if e.ComplexityRoot.DiscussionHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.CreatedAt(childComplexity), true
 
 	case "DiscussionHistory.createdBy":
-		if e.complexity.DiscussionHistory.CreatedBy == nil {
+		if e.ComplexityRoot.DiscussionHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.CreatedBy(childComplexity), true
 
 	case "DiscussionHistory.externalID":
-		if e.complexity.DiscussionHistory.ExternalID == nil {
+		if e.ComplexityRoot.DiscussionHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.ExternalID(childComplexity), true
 
 	case "DiscussionHistory.historyTime":
-		if e.complexity.DiscussionHistory.HistoryTime == nil {
+		if e.ComplexityRoot.DiscussionHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.HistoryTime(childComplexity), true
 
 	case "DiscussionHistory.id":
-		if e.complexity.DiscussionHistory.ID == nil {
+		if e.ComplexityRoot.DiscussionHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.ID(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.ID(childComplexity), true
 
 	case "DiscussionHistory.isResolved":
-		if e.complexity.DiscussionHistory.IsResolved == nil {
+		if e.ComplexityRoot.DiscussionHistory.IsResolved == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.IsResolved(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.IsResolved(childComplexity), true
 
 	case "DiscussionHistory.operation":
-		if e.complexity.DiscussionHistory.Operation == nil {
+		if e.ComplexityRoot.DiscussionHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.Operation(childComplexity), true
 
 	case "DiscussionHistory.ownerID":
-		if e.complexity.DiscussionHistory.OwnerID == nil {
+		if e.ComplexityRoot.DiscussionHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.OwnerID(childComplexity), true
 
 	case "DiscussionHistory.ref":
-		if e.complexity.DiscussionHistory.Ref == nil {
+		if e.ComplexityRoot.DiscussionHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.Ref(childComplexity), true
 
 	case "DiscussionHistory.updatedAt":
-		if e.complexity.DiscussionHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.DiscussionHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.UpdatedAt(childComplexity), true
 
 	case "DiscussionHistory.updatedBy":
-		if e.complexity.DiscussionHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.DiscussionHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistory.UpdatedBy(childComplexity), true
 
 	case "DiscussionHistoryConnection.edges":
-		if e.complexity.DiscussionHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.DiscussionHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistoryConnection.Edges(childComplexity), true
 
 	case "DiscussionHistoryConnection.pageInfo":
-		if e.complexity.DiscussionHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.DiscussionHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistoryConnection.PageInfo(childComplexity), true
 
 	case "DiscussionHistoryConnection.totalCount":
-		if e.complexity.DiscussionHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.DiscussionHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistoryConnection.TotalCount(childComplexity), true
 
 	case "DiscussionHistoryEdge.cursor":
-		if e.complexity.DiscussionHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.DiscussionHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistoryEdge.Cursor(childComplexity), true
 
 	case "DiscussionHistoryEdge.node":
-		if e.complexity.DiscussionHistoryEdge.Node == nil {
+		if e.ComplexityRoot.DiscussionHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.DiscussionHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.DiscussionHistoryEdge.Node(childComplexity), true
 
 	case "DocumentDataHistory.createdAt":
-		if e.complexity.DocumentDataHistory.CreatedAt == nil {
+		if e.ComplexityRoot.DocumentDataHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.CreatedAt(childComplexity), true
 
 	case "DocumentDataHistory.createdBy":
-		if e.complexity.DocumentDataHistory.CreatedBy == nil {
+		if e.ComplexityRoot.DocumentDataHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.CreatedBy(childComplexity), true
 
 	case "DocumentDataHistory.data":
-		if e.complexity.DocumentDataHistory.Data == nil {
+		if e.ComplexityRoot.DocumentDataHistory.Data == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.Data(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.Data(childComplexity), true
 
 	case "DocumentDataHistory.environmentID":
-		if e.complexity.DocumentDataHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.DocumentDataHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.EnvironmentID(childComplexity), true
 
 	case "DocumentDataHistory.environmentName":
-		if e.complexity.DocumentDataHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.DocumentDataHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.EnvironmentName(childComplexity), true
 
 	case "DocumentDataHistory.historyTime":
-		if e.complexity.DocumentDataHistory.HistoryTime == nil {
+		if e.ComplexityRoot.DocumentDataHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.HistoryTime(childComplexity), true
 
 	case "DocumentDataHistory.id":
-		if e.complexity.DocumentDataHistory.ID == nil {
+		if e.ComplexityRoot.DocumentDataHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.ID(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.ID(childComplexity), true
 
 	case "DocumentDataHistory.operation":
-		if e.complexity.DocumentDataHistory.Operation == nil {
+		if e.ComplexityRoot.DocumentDataHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.Operation(childComplexity), true
 
 	case "DocumentDataHistory.ownerID":
-		if e.complexity.DocumentDataHistory.OwnerID == nil {
+		if e.ComplexityRoot.DocumentDataHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.OwnerID(childComplexity), true
 
 	case "DocumentDataHistory.ref":
-		if e.complexity.DocumentDataHistory.Ref == nil {
+		if e.ComplexityRoot.DocumentDataHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.Ref(childComplexity), true
 
 	case "DocumentDataHistory.scopeID":
-		if e.complexity.DocumentDataHistory.ScopeID == nil {
+		if e.ComplexityRoot.DocumentDataHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.ScopeID(childComplexity), true
 
 	case "DocumentDataHistory.scopeName":
-		if e.complexity.DocumentDataHistory.ScopeName == nil {
+		if e.ComplexityRoot.DocumentDataHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.ScopeName(childComplexity), true
 
 	case "DocumentDataHistory.tags":
-		if e.complexity.DocumentDataHistory.Tags == nil {
+		if e.ComplexityRoot.DocumentDataHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.Tags(childComplexity), true
 
 	case "DocumentDataHistory.templateID":
-		if e.complexity.DocumentDataHistory.TemplateID == nil {
+		if e.ComplexityRoot.DocumentDataHistory.TemplateID == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.TemplateID(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.TemplateID(childComplexity), true
 
 	case "DocumentDataHistory.updatedAt":
-		if e.complexity.DocumentDataHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.DocumentDataHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.UpdatedAt(childComplexity), true
 
 	case "DocumentDataHistory.updatedBy":
-		if e.complexity.DocumentDataHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.DocumentDataHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistory.UpdatedBy(childComplexity), true
 
 	case "DocumentDataHistoryConnection.edges":
-		if e.complexity.DocumentDataHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.DocumentDataHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistoryConnection.Edges(childComplexity), true
 
 	case "DocumentDataHistoryConnection.pageInfo":
-		if e.complexity.DocumentDataHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.DocumentDataHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistoryConnection.PageInfo(childComplexity), true
 
 	case "DocumentDataHistoryConnection.totalCount":
-		if e.complexity.DocumentDataHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.DocumentDataHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistoryConnection.TotalCount(childComplexity), true
 
 	case "DocumentDataHistoryEdge.cursor":
-		if e.complexity.DocumentDataHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.DocumentDataHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistoryEdge.Cursor(childComplexity), true
 
 	case "DocumentDataHistoryEdge.node":
-		if e.complexity.DocumentDataHistoryEdge.Node == nil {
+		if e.ComplexityRoot.DocumentDataHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.DocumentDataHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.DocumentDataHistoryEdge.Node(childComplexity), true
 
 	case "EmailBrandingHistory.backgroundColor":
-		if e.complexity.EmailBrandingHistory.BackgroundColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.BackgroundColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.BackgroundColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.BackgroundColor(childComplexity), true
 
 	case "EmailBrandingHistory.brandName":
-		if e.complexity.EmailBrandingHistory.BrandName == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.BrandName == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.BrandName(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.BrandName(childComplexity), true
 
 	case "EmailBrandingHistory.buttonColor":
-		if e.complexity.EmailBrandingHistory.ButtonColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.ButtonColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.ButtonColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.ButtonColor(childComplexity), true
 
 	case "EmailBrandingHistory.buttonTextColor":
-		if e.complexity.EmailBrandingHistory.ButtonTextColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.ButtonTextColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.ButtonTextColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.ButtonTextColor(childComplexity), true
 
 	case "EmailBrandingHistory.createdAt":
-		if e.complexity.EmailBrandingHistory.CreatedAt == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.CreatedAt(childComplexity), true
 
 	case "EmailBrandingHistory.createdBy":
-		if e.complexity.EmailBrandingHistory.CreatedBy == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.CreatedBy(childComplexity), true
 
 	case "EmailBrandingHistory.fontFamily":
-		if e.complexity.EmailBrandingHistory.FontFamily == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.FontFamily == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.FontFamily(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.FontFamily(childComplexity), true
 
 	case "EmailBrandingHistory.historyTime":
-		if e.complexity.EmailBrandingHistory.HistoryTime == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.HistoryTime(childComplexity), true
 
 	case "EmailBrandingHistory.id":
-		if e.complexity.EmailBrandingHistory.ID == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.ID(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.ID(childComplexity), true
 
 	case "EmailBrandingHistory.isDefault":
-		if e.complexity.EmailBrandingHistory.IsDefault == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.IsDefault == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.IsDefault(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.IsDefault(childComplexity), true
 
 	case "EmailBrandingHistory.linkColor":
-		if e.complexity.EmailBrandingHistory.LinkColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.LinkColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.LinkColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.LinkColor(childComplexity), true
 
 	case "EmailBrandingHistory.logoRemoteURL":
-		if e.complexity.EmailBrandingHistory.LogoRemoteURL == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.LogoRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.LogoRemoteURL(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.LogoRemoteURL(childComplexity), true
 
 	case "EmailBrandingHistory.name":
-		if e.complexity.EmailBrandingHistory.Name == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.Name(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.Name(childComplexity), true
 
 	case "EmailBrandingHistory.operation":
-		if e.complexity.EmailBrandingHistory.Operation == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.Operation(childComplexity), true
 
 	case "EmailBrandingHistory.ownerID":
-		if e.complexity.EmailBrandingHistory.OwnerID == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.OwnerID(childComplexity), true
 
 	case "EmailBrandingHistory.primaryColor":
-		if e.complexity.EmailBrandingHistory.PrimaryColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.PrimaryColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.PrimaryColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.PrimaryColor(childComplexity), true
 
 	case "EmailBrandingHistory.ref":
-		if e.complexity.EmailBrandingHistory.Ref == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.Ref(childComplexity), true
 
 	case "EmailBrandingHistory.secondaryColor":
-		if e.complexity.EmailBrandingHistory.SecondaryColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.SecondaryColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.SecondaryColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.SecondaryColor(childComplexity), true
 
 	case "EmailBrandingHistory.tags":
-		if e.complexity.EmailBrandingHistory.Tags == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.Tags(childComplexity), true
 
 	case "EmailBrandingHistory.textColor":
-		if e.complexity.EmailBrandingHistory.TextColor == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.TextColor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.TextColor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.TextColor(childComplexity), true
 
 	case "EmailBrandingHistory.updatedAt":
-		if e.complexity.EmailBrandingHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.UpdatedAt(childComplexity), true
 
 	case "EmailBrandingHistory.updatedBy":
-		if e.complexity.EmailBrandingHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.EmailBrandingHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistory.UpdatedBy(childComplexity), true
 
 	case "EmailBrandingHistoryConnection.edges":
-		if e.complexity.EmailBrandingHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.EmailBrandingHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistoryConnection.Edges(childComplexity), true
 
 	case "EmailBrandingHistoryConnection.pageInfo":
-		if e.complexity.EmailBrandingHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.EmailBrandingHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistoryConnection.PageInfo(childComplexity), true
 
 	case "EmailBrandingHistoryConnection.totalCount":
-		if e.complexity.EmailBrandingHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.EmailBrandingHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistoryConnection.TotalCount(childComplexity), true
 
 	case "EmailBrandingHistoryEdge.cursor":
-		if e.complexity.EmailBrandingHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.EmailBrandingHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistoryEdge.Cursor(childComplexity), true
 
 	case "EmailBrandingHistoryEdge.node":
-		if e.complexity.EmailBrandingHistoryEdge.Node == nil {
+		if e.ComplexityRoot.EmailBrandingHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.EmailBrandingHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.EmailBrandingHistoryEdge.Node(childComplexity), true
 
 	case "EmailTemplateHistory.active":
-		if e.complexity.EmailTemplateHistory.Active == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Active == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Active(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Active(childComplexity), true
 
 	case "EmailTemplateHistory.bodyTemplate":
-		if e.complexity.EmailTemplateHistory.BodyTemplate == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.BodyTemplate == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.BodyTemplate(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.BodyTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.createdAt":
-		if e.complexity.EmailTemplateHistory.CreatedAt == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.CreatedAt(childComplexity), true
 
 	case "EmailTemplateHistory.createdBy":
-		if e.complexity.EmailTemplateHistory.CreatedBy == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.CreatedBy(childComplexity), true
 
 	case "EmailTemplateHistory.description":
-		if e.complexity.EmailTemplateHistory.Description == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Description(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Description(childComplexity), true
 
 	case "EmailTemplateHistory.emailBrandingID":
-		if e.complexity.EmailTemplateHistory.EmailBrandingID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.EmailBrandingID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.EmailBrandingID(childComplexity), true
 
 	case "EmailTemplateHistory.format":
-		if e.complexity.EmailTemplateHistory.Format == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Format == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Format(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Format(childComplexity), true
 
 	case "EmailTemplateHistory.historyTime":
-		if e.complexity.EmailTemplateHistory.HistoryTime == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.HistoryTime(childComplexity), true
 
 	case "EmailTemplateHistory.id":
-		if e.complexity.EmailTemplateHistory.ID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.ID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.ID(childComplexity), true
 
 	case "EmailTemplateHistory.integrationID":
-		if e.complexity.EmailTemplateHistory.IntegrationID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.IntegrationID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.IntegrationID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.IntegrationID(childComplexity), true
 
 	case "EmailTemplateHistory.internalNotes":
-		if e.complexity.EmailTemplateHistory.InternalNotes == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.InternalNotes(childComplexity), true
 
 	case "EmailTemplateHistory.jsonconfig":
-		if e.complexity.EmailTemplateHistory.Jsonconfig == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Jsonconfig == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Jsonconfig(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Jsonconfig(childComplexity), true
 
 	case "EmailTemplateHistory.key":
-		if e.complexity.EmailTemplateHistory.Key == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Key == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Key(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Key(childComplexity), true
 
 	case "EmailTemplateHistory.locale":
-		if e.complexity.EmailTemplateHistory.Locale == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Locale == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Locale(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Locale(childComplexity), true
 
 	case "EmailTemplateHistory.metadata":
-		if e.complexity.EmailTemplateHistory.Metadata == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Metadata(childComplexity), true
 
 	case "EmailTemplateHistory.name":
-		if e.complexity.EmailTemplateHistory.Name == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Name(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Name(childComplexity), true
 
 	case "EmailTemplateHistory.operation":
-		if e.complexity.EmailTemplateHistory.Operation == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Operation(childComplexity), true
 
 	case "EmailTemplateHistory.ownerID":
-		if e.complexity.EmailTemplateHistory.OwnerID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.OwnerID(childComplexity), true
 
 	case "EmailTemplateHistory.preheaderTemplate":
-		if e.complexity.EmailTemplateHistory.PreheaderTemplate == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.PreheaderTemplate == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.PreheaderTemplate(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.PreheaderTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.ref":
-		if e.complexity.EmailTemplateHistory.Ref == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Ref(childComplexity), true
 
 	case "EmailTemplateHistory.subjectTemplate":
-		if e.complexity.EmailTemplateHistory.SubjectTemplate == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.SubjectTemplate(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.systemInternalID":
-		if e.complexity.EmailTemplateHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.SystemInternalID(childComplexity), true
 
 	case "EmailTemplateHistory.systemOwned":
-		if e.complexity.EmailTemplateHistory.SystemOwned == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.SystemOwned(childComplexity), true
 
 	case "EmailTemplateHistory.textTemplate":
-		if e.complexity.EmailTemplateHistory.TextTemplate == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.TextTemplate == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.TextTemplate(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.TextTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.uischema":
-		if e.complexity.EmailTemplateHistory.Uischema == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Uischema == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Uischema(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Uischema(childComplexity), true
 
 	case "EmailTemplateHistory.updatedAt":
-		if e.complexity.EmailTemplateHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.UpdatedAt(childComplexity), true
 
 	case "EmailTemplateHistory.updatedBy":
-		if e.complexity.EmailTemplateHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.UpdatedBy(childComplexity), true
 
 	case "EmailTemplateHistory.version":
-		if e.complexity.EmailTemplateHistory.Version == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.Version == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.Version(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.Version(childComplexity), true
 
 	case "EmailTemplateHistory.workflowDefinitionID":
-		if e.complexity.EmailTemplateHistory.WorkflowDefinitionID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.WorkflowDefinitionID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.WorkflowDefinitionID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.WorkflowDefinitionID(childComplexity), true
 
 	case "EmailTemplateHistory.workflowInstanceID":
-		if e.complexity.EmailTemplateHistory.WorkflowInstanceID == nil {
+		if e.ComplexityRoot.EmailTemplateHistory.WorkflowInstanceID == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistory.WorkflowInstanceID(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistory.WorkflowInstanceID(childComplexity), true
 
 	case "EmailTemplateHistoryConnection.edges":
-		if e.complexity.EmailTemplateHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.EmailTemplateHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistoryConnection.Edges(childComplexity), true
 
 	case "EmailTemplateHistoryConnection.pageInfo":
-		if e.complexity.EmailTemplateHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.EmailTemplateHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistoryConnection.PageInfo(childComplexity), true
 
 	case "EmailTemplateHistoryConnection.totalCount":
-		if e.complexity.EmailTemplateHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.EmailTemplateHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistoryConnection.TotalCount(childComplexity), true
 
 	case "EmailTemplateHistoryEdge.cursor":
-		if e.complexity.EmailTemplateHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.EmailTemplateHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistoryEdge.Cursor(childComplexity), true
 
 	case "EmailTemplateHistoryEdge.node":
-		if e.complexity.EmailTemplateHistoryEdge.Node == nil {
+		if e.ComplexityRoot.EmailTemplateHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.EmailTemplateHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.EmailTemplateHistoryEdge.Node(childComplexity), true
 
 	case "EntityHistory.annualSpend":
-		if e.complexity.EntityHistory.AnnualSpend == nil {
+		if e.ComplexityRoot.EntityHistory.AnnualSpend == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.AnnualSpend(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.AnnualSpend(childComplexity), true
 
 	case "EntityHistory.approvedForUse":
-		if e.complexity.EntityHistory.ApprovedForUse == nil {
+		if e.ComplexityRoot.EntityHistory.ApprovedForUse == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ApprovedForUse(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ApprovedForUse(childComplexity), true
 
 	case "EntityHistory.autoRenews":
-		if e.complexity.EntityHistory.AutoRenews == nil {
+		if e.ComplexityRoot.EntityHistory.AutoRenews == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.AutoRenews(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.AutoRenews(childComplexity), true
 
 	case "EntityHistory.billingModel":
-		if e.complexity.EntityHistory.BillingModel == nil {
+		if e.ComplexityRoot.EntityHistory.BillingModel == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.BillingModel(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.BillingModel(childComplexity), true
 
 	case "EntityHistory.contractEndDate":
-		if e.complexity.EntityHistory.ContractEndDate == nil {
+		if e.ComplexityRoot.EntityHistory.ContractEndDate == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ContractEndDate(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ContractEndDate(childComplexity), true
 
 	case "EntityHistory.contractRenewalAt":
-		if e.complexity.EntityHistory.ContractRenewalAt == nil {
+		if e.ComplexityRoot.EntityHistory.ContractRenewalAt == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ContractRenewalAt(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ContractRenewalAt(childComplexity), true
 
 	case "EntityHistory.contractStartDate":
-		if e.complexity.EntityHistory.ContractStartDate == nil {
+		if e.ComplexityRoot.EntityHistory.ContractStartDate == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ContractStartDate(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ContractStartDate(childComplexity), true
 
 	case "EntityHistory.createdAt":
-		if e.complexity.EntityHistory.CreatedAt == nil {
+		if e.ComplexityRoot.EntityHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.CreatedAt(childComplexity), true
 
 	case "EntityHistory.createdBy":
-		if e.complexity.EntityHistory.CreatedBy == nil {
+		if e.ComplexityRoot.EntityHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.CreatedBy(childComplexity), true
 
 	case "EntityHistory.description":
-		if e.complexity.EntityHistory.Description == nil {
+		if e.ComplexityRoot.EntityHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Description(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Description(childComplexity), true
 
 	case "EntityHistory.displayName":
-		if e.complexity.EntityHistory.DisplayName == nil {
+		if e.ComplexityRoot.EntityHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.DisplayName(childComplexity), true
 
 	case "EntityHistory.domains":
-		if e.complexity.EntityHistory.Domains == nil {
+		if e.ComplexityRoot.EntityHistory.Domains == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Domains(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Domains(childComplexity), true
 
 	case "EntityHistory.entityRelationshipStateID":
-		if e.complexity.EntityHistory.EntityRelationshipStateID == nil {
+		if e.ComplexityRoot.EntityHistory.EntityRelationshipStateID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntityRelationshipStateID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntityRelationshipStateID(childComplexity), true
 
 	case "EntityHistory.entityRelationshipStateName":
-		if e.complexity.EntityHistory.EntityRelationshipStateName == nil {
+		if e.ComplexityRoot.EntityHistory.EntityRelationshipStateName == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntityRelationshipStateName(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntityRelationshipStateName(childComplexity), true
 
 	case "EntityHistory.entitySecurityQuestionnaireStatusID":
-		if e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusID == nil {
+		if e.ComplexityRoot.EntityHistory.EntitySecurityQuestionnaireStatusID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntitySecurityQuestionnaireStatusID(childComplexity), true
 
 	case "EntityHistory.entitySecurityQuestionnaireStatusName":
-		if e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusName == nil {
+		if e.ComplexityRoot.EntityHistory.EntitySecurityQuestionnaireStatusName == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntitySecurityQuestionnaireStatusName(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntitySecurityQuestionnaireStatusName(childComplexity), true
 
 	case "EntityHistory.entitySourceTypeID":
-		if e.complexity.EntityHistory.EntitySourceTypeID == nil {
+		if e.ComplexityRoot.EntityHistory.EntitySourceTypeID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntitySourceTypeID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntitySourceTypeID(childComplexity), true
 
 	case "EntityHistory.entitySourceTypeName":
-		if e.complexity.EntityHistory.EntitySourceTypeName == nil {
+		if e.ComplexityRoot.EntityHistory.EntitySourceTypeName == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntitySourceTypeName(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntitySourceTypeName(childComplexity), true
 
 	case "EntityHistory.entityTypeID":
-		if e.complexity.EntityHistory.EntityTypeID == nil {
+		if e.ComplexityRoot.EntityHistory.EntityTypeID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EntityTypeID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EntityTypeID(childComplexity), true
 
 	case "EntityHistory.environmentID":
-		if e.complexity.EntityHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.EntityHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EnvironmentID(childComplexity), true
 
 	case "EntityHistory.environmentName":
-		if e.complexity.EntityHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.EntityHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.EnvironmentName(childComplexity), true
 
 	case "EntityHistory.hasSoc2":
-		if e.complexity.EntityHistory.HasSoc2 == nil {
+		if e.ComplexityRoot.EntityHistory.HasSoc2 == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.HasSoc2(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.HasSoc2(childComplexity), true
 
 	case "EntityHistory.historyTime":
-		if e.complexity.EntityHistory.HistoryTime == nil {
+		if e.ComplexityRoot.EntityHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.HistoryTime(childComplexity), true
 
 	case "EntityHistory.id":
-		if e.complexity.EntityHistory.ID == nil {
+		if e.ComplexityRoot.EntityHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ID(childComplexity), true
 
 	case "EntityHistory.internalNotes":
-		if e.complexity.EntityHistory.InternalNotes == nil {
+		if e.ComplexityRoot.EntityHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.InternalNotes(childComplexity), true
 
 	case "EntityHistory.internalOwner":
-		if e.complexity.EntityHistory.InternalOwner == nil {
+		if e.ComplexityRoot.EntityHistory.InternalOwner == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.InternalOwner(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.InternalOwner(childComplexity), true
 
 	case "EntityHistory.internalOwnerGroupID":
-		if e.complexity.EntityHistory.InternalOwnerGroupID == nil {
+		if e.ComplexityRoot.EntityHistory.InternalOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.InternalOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.InternalOwnerGroupID(childComplexity), true
 
 	case "EntityHistory.internalOwnerUserID":
-		if e.complexity.EntityHistory.InternalOwnerUserID == nil {
+		if e.ComplexityRoot.EntityHistory.InternalOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.InternalOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.InternalOwnerUserID(childComplexity), true
 
 	case "EntityHistory.lastReviewedAt":
-		if e.complexity.EntityHistory.LastReviewedAt == nil {
+		if e.ComplexityRoot.EntityHistory.LastReviewedAt == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.LastReviewedAt(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.LastReviewedAt(childComplexity), true
 
 	case "EntityHistory.linkedAssetIds":
-		if e.complexity.EntityHistory.LinkedAssetIds == nil {
+		if e.ComplexityRoot.EntityHistory.LinkedAssetIds == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.LinkedAssetIds(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.LinkedAssetIds(childComplexity), true
 
 	case "EntityHistory.links":
-		if e.complexity.EntityHistory.Links == nil {
+		if e.ComplexityRoot.EntityHistory.Links == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Links(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Links(childComplexity), true
 
 	case "EntityHistory.mfaEnforced":
-		if e.complexity.EntityHistory.MfaEnforced == nil {
+		if e.ComplexityRoot.EntityHistory.MfaEnforced == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.MfaEnforced(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.MfaEnforced(childComplexity), true
 
 	case "EntityHistory.mfaSupported":
-		if e.complexity.EntityHistory.MfaSupported == nil {
+		if e.ComplexityRoot.EntityHistory.MfaSupported == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.MfaSupported(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.MfaSupported(childComplexity), true
 
 	case "EntityHistory.name":
-		if e.complexity.EntityHistory.Name == nil {
+		if e.ComplexityRoot.EntityHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Name(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Name(childComplexity), true
 
 	case "EntityHistory.nextReviewAt":
-		if e.complexity.EntityHistory.NextReviewAt == nil {
+		if e.ComplexityRoot.EntityHistory.NextReviewAt == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.NextReviewAt(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.NextReviewAt(childComplexity), true
 
 	case "EntityHistory.operation":
-		if e.complexity.EntityHistory.Operation == nil {
+		if e.ComplexityRoot.EntityHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Operation(childComplexity), true
 
 	case "EntityHistory.ownerID":
-		if e.complexity.EntityHistory.OwnerID == nil {
+		if e.ComplexityRoot.EntityHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.OwnerID(childComplexity), true
 
 	case "EntityHistory.providedServices":
-		if e.complexity.EntityHistory.ProvidedServices == nil {
+		if e.ComplexityRoot.EntityHistory.ProvidedServices == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ProvidedServices(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ProvidedServices(childComplexity), true
 
 	case "EntityHistory.ref":
-		if e.complexity.EntityHistory.Ref == nil {
+		if e.ComplexityRoot.EntityHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Ref(childComplexity), true
 
 	case "EntityHistory.renewalRisk":
-		if e.complexity.EntityHistory.RenewalRisk == nil {
+		if e.ComplexityRoot.EntityHistory.RenewalRisk == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.RenewalRisk(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.RenewalRisk(childComplexity), true
 
 	case "EntityHistory.reviewFrequency":
-		if e.complexity.EntityHistory.ReviewFrequency == nil {
+		if e.ComplexityRoot.EntityHistory.ReviewFrequency == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ReviewFrequency(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ReviewFrequency(childComplexity), true
 
 	case "EntityHistory.reviewedBy":
-		if e.complexity.EntityHistory.ReviewedBy == nil {
+		if e.ComplexityRoot.EntityHistory.ReviewedBy == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ReviewedBy(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ReviewedBy(childComplexity), true
 
 	case "EntityHistory.reviewedByGroupID":
-		if e.complexity.EntityHistory.ReviewedByGroupID == nil {
+		if e.ComplexityRoot.EntityHistory.ReviewedByGroupID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ReviewedByGroupID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ReviewedByGroupID(childComplexity), true
 
 	case "EntityHistory.reviewedByUserID":
-		if e.complexity.EntityHistory.ReviewedByUserID == nil {
+		if e.ComplexityRoot.EntityHistory.ReviewedByUserID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ReviewedByUserID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ReviewedByUserID(childComplexity), true
 
 	case "EntityHistory.riskRating":
-		if e.complexity.EntityHistory.RiskRating == nil {
+		if e.ComplexityRoot.EntityHistory.RiskRating == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.RiskRating(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.RiskRating(childComplexity), true
 
 	case "EntityHistory.riskScore":
-		if e.complexity.EntityHistory.RiskScore == nil {
+		if e.ComplexityRoot.EntityHistory.RiskScore == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.RiskScore(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.RiskScore(childComplexity), true
 
 	case "EntityHistory.ssoEnforced":
-		if e.complexity.EntityHistory.SSOEnforced == nil {
+		if e.ComplexityRoot.EntityHistory.SSOEnforced == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.SSOEnforced(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.SSOEnforced(childComplexity), true
 
 	case "EntityHistory.scopeID":
-		if e.complexity.EntityHistory.ScopeID == nil {
+		if e.ComplexityRoot.EntityHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ScopeID(childComplexity), true
 
 	case "EntityHistory.scopeName":
-		if e.complexity.EntityHistory.ScopeName == nil {
+		if e.ComplexityRoot.EntityHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.ScopeName(childComplexity), true
 
 	case "EntityHistory.soc2PeriodEnd":
-		if e.complexity.EntityHistory.Soc2PeriodEnd == nil {
+		if e.ComplexityRoot.EntityHistory.Soc2PeriodEnd == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Soc2PeriodEnd(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Soc2PeriodEnd(childComplexity), true
 
 	case "EntityHistory.spendCurrency":
-		if e.complexity.EntityHistory.SpendCurrency == nil {
+		if e.ComplexityRoot.EntityHistory.SpendCurrency == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.SpendCurrency(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.SpendCurrency(childComplexity), true
 
 	case "EntityHistory.status":
-		if e.complexity.EntityHistory.Status == nil {
+		if e.ComplexityRoot.EntityHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Status(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Status(childComplexity), true
 
 	case "EntityHistory.statusPageURL":
-		if e.complexity.EntityHistory.StatusPageURL == nil {
+		if e.ComplexityRoot.EntityHistory.StatusPageURL == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.StatusPageURL(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.StatusPageURL(childComplexity), true
 
 	case "EntityHistory.systemInternalID":
-		if e.complexity.EntityHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.EntityHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.SystemInternalID(childComplexity), true
 
 	case "EntityHistory.systemOwned":
-		if e.complexity.EntityHistory.SystemOwned == nil {
+		if e.ComplexityRoot.EntityHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.SystemOwned(childComplexity), true
 
 	case "EntityHistory.tags":
-		if e.complexity.EntityHistory.Tags == nil {
+		if e.ComplexityRoot.EntityHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Tags(childComplexity), true
 
 	case "EntityHistory.terminationNoticeDays":
-		if e.complexity.EntityHistory.TerminationNoticeDays == nil {
+		if e.ComplexityRoot.EntityHistory.TerminationNoticeDays == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.TerminationNoticeDays(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.TerminationNoticeDays(childComplexity), true
 
 	case "EntityHistory.tier":
-		if e.complexity.EntityHistory.Tier == nil {
+		if e.ComplexityRoot.EntityHistory.Tier == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.Tier(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.Tier(childComplexity), true
 
 	case "EntityHistory.updatedAt":
-		if e.complexity.EntityHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.EntityHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.UpdatedAt(childComplexity), true
 
 	case "EntityHistory.updatedBy":
-		if e.complexity.EntityHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.EntityHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.UpdatedBy(childComplexity), true
 
 	case "EntityHistory.vendorMetadata":
-		if e.complexity.EntityHistory.VendorMetadata == nil {
+		if e.ComplexityRoot.EntityHistory.VendorMetadata == nil {
 			break
 		}
 
-		return e.complexity.EntityHistory.VendorMetadata(childComplexity), true
+		return e.ComplexityRoot.EntityHistory.VendorMetadata(childComplexity), true
 
 	case "EntityHistoryConnection.edges":
-		if e.complexity.EntityHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.EntityHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.EntityHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.EntityHistoryConnection.Edges(childComplexity), true
 
 	case "EntityHistoryConnection.pageInfo":
-		if e.complexity.EntityHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.EntityHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.EntityHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.EntityHistoryConnection.PageInfo(childComplexity), true
 
 	case "EntityHistoryConnection.totalCount":
-		if e.complexity.EntityHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.EntityHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.EntityHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.EntityHistoryConnection.TotalCount(childComplexity), true
 
 	case "EntityHistoryEdge.cursor":
-		if e.complexity.EntityHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.EntityHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.EntityHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.EntityHistoryEdge.Cursor(childComplexity), true
 
 	case "EntityHistoryEdge.node":
-		if e.complexity.EntityHistoryEdge.Node == nil {
+		if e.ComplexityRoot.EntityHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.EntityHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.EntityHistoryEdge.Node(childComplexity), true
 
 	case "EntityTypeHistory.createdAt":
-		if e.complexity.EntityTypeHistory.CreatedAt == nil {
+		if e.ComplexityRoot.EntityTypeHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.CreatedAt(childComplexity), true
 
 	case "EntityTypeHistory.createdBy":
-		if e.complexity.EntityTypeHistory.CreatedBy == nil {
+		if e.ComplexityRoot.EntityTypeHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.CreatedBy(childComplexity), true
 
 	case "EntityTypeHistory.historyTime":
-		if e.complexity.EntityTypeHistory.HistoryTime == nil {
+		if e.ComplexityRoot.EntityTypeHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.HistoryTime(childComplexity), true
 
 	case "EntityTypeHistory.id":
-		if e.complexity.EntityTypeHistory.ID == nil {
+		if e.ComplexityRoot.EntityTypeHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.ID(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.ID(childComplexity), true
 
 	case "EntityTypeHistory.internalNotes":
-		if e.complexity.EntityTypeHistory.InternalNotes == nil {
+		if e.ComplexityRoot.EntityTypeHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.InternalNotes(childComplexity), true
 
 	case "EntityTypeHistory.name":
-		if e.complexity.EntityTypeHistory.Name == nil {
+		if e.ComplexityRoot.EntityTypeHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.Name(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.Name(childComplexity), true
 
 	case "EntityTypeHistory.operation":
-		if e.complexity.EntityTypeHistory.Operation == nil {
+		if e.ComplexityRoot.EntityTypeHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.Operation(childComplexity), true
 
 	case "EntityTypeHistory.ownerID":
-		if e.complexity.EntityTypeHistory.OwnerID == nil {
+		if e.ComplexityRoot.EntityTypeHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.OwnerID(childComplexity), true
 
 	case "EntityTypeHistory.ref":
-		if e.complexity.EntityTypeHistory.Ref == nil {
+		if e.ComplexityRoot.EntityTypeHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.Ref(childComplexity), true
 
 	case "EntityTypeHistory.systemInternalID":
-		if e.complexity.EntityTypeHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.EntityTypeHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.SystemInternalID(childComplexity), true
 
 	case "EntityTypeHistory.systemOwned":
-		if e.complexity.EntityTypeHistory.SystemOwned == nil {
+		if e.ComplexityRoot.EntityTypeHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.SystemOwned(childComplexity), true
 
 	case "EntityTypeHistory.tags":
-		if e.complexity.EntityTypeHistory.Tags == nil {
+		if e.ComplexityRoot.EntityTypeHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.Tags(childComplexity), true
 
 	case "EntityTypeHistory.updatedAt":
-		if e.complexity.EntityTypeHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.EntityTypeHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.UpdatedAt(childComplexity), true
 
 	case "EntityTypeHistory.updatedBy":
-		if e.complexity.EntityTypeHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.EntityTypeHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistory.UpdatedBy(childComplexity), true
 
 	case "EntityTypeHistoryConnection.edges":
-		if e.complexity.EntityTypeHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.EntityTypeHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistoryConnection.Edges(childComplexity), true
 
 	case "EntityTypeHistoryConnection.pageInfo":
-		if e.complexity.EntityTypeHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.EntityTypeHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistoryConnection.PageInfo(childComplexity), true
 
 	case "EntityTypeHistoryConnection.totalCount":
-		if e.complexity.EntityTypeHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.EntityTypeHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistoryConnection.TotalCount(childComplexity), true
 
 	case "EntityTypeHistoryEdge.cursor":
-		if e.complexity.EntityTypeHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.EntityTypeHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistoryEdge.Cursor(childComplexity), true
 
 	case "EntityTypeHistoryEdge.node":
-		if e.complexity.EntityTypeHistoryEdge.Node == nil {
+		if e.ComplexityRoot.EntityTypeHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.EntityTypeHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.EntityTypeHistoryEdge.Node(childComplexity), true
 
 	case "EvidenceHistory.collectionProcedure":
-		if e.complexity.EvidenceHistory.CollectionProcedure == nil {
+		if e.ComplexityRoot.EvidenceHistory.CollectionProcedure == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.CollectionProcedure(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.CollectionProcedure(childComplexity), true
 
 	case "EvidenceHistory.createdAt":
-		if e.complexity.EvidenceHistory.CreatedAt == nil {
+		if e.ComplexityRoot.EvidenceHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.CreatedAt(childComplexity), true
 
 	case "EvidenceHistory.createdBy":
-		if e.complexity.EvidenceHistory.CreatedBy == nil {
+		if e.ComplexityRoot.EvidenceHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.CreatedBy(childComplexity), true
 
 	case "EvidenceHistory.creationDate":
-		if e.complexity.EvidenceHistory.CreationDate == nil {
+		if e.ComplexityRoot.EvidenceHistory.CreationDate == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.CreationDate(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.CreationDate(childComplexity), true
 
 	case "EvidenceHistory.description":
-		if e.complexity.EvidenceHistory.Description == nil {
+		if e.ComplexityRoot.EvidenceHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Description(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Description(childComplexity), true
 
 	case "EvidenceHistory.displayID":
-		if e.complexity.EvidenceHistory.DisplayID == nil {
+		if e.ComplexityRoot.EvidenceHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.DisplayID(childComplexity), true
 
 	case "EvidenceHistory.environmentID":
-		if e.complexity.EvidenceHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.EvidenceHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.EnvironmentID(childComplexity), true
 
 	case "EvidenceHistory.environmentName":
-		if e.complexity.EvidenceHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.EvidenceHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.EnvironmentName(childComplexity), true
 
 	case "EvidenceHistory.historyTime":
-		if e.complexity.EvidenceHistory.HistoryTime == nil {
+		if e.ComplexityRoot.EvidenceHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.HistoryTime(childComplexity), true
 
 	case "EvidenceHistory.id":
-		if e.complexity.EvidenceHistory.ID == nil {
+		if e.ComplexityRoot.EvidenceHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.ID(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.ID(childComplexity), true
 
 	case "EvidenceHistory.isAutomated":
-		if e.complexity.EvidenceHistory.IsAutomated == nil {
+		if e.ComplexityRoot.EvidenceHistory.IsAutomated == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.IsAutomated(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.IsAutomated(childComplexity), true
 
 	case "EvidenceHistory.name":
-		if e.complexity.EvidenceHistory.Name == nil {
+		if e.ComplexityRoot.EvidenceHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Name(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Name(childComplexity), true
 
 	case "EvidenceHistory.operation":
-		if e.complexity.EvidenceHistory.Operation == nil {
+		if e.ComplexityRoot.EvidenceHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Operation(childComplexity), true
 
 	case "EvidenceHistory.ownerID":
-		if e.complexity.EvidenceHistory.OwnerID == nil {
+		if e.ComplexityRoot.EvidenceHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.OwnerID(childComplexity), true
 
 	case "EvidenceHistory.ref":
-		if e.complexity.EvidenceHistory.Ref == nil {
+		if e.ComplexityRoot.EvidenceHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Ref(childComplexity), true
 
 	case "EvidenceHistory.renewalDate":
-		if e.complexity.EvidenceHistory.RenewalDate == nil {
+		if e.ComplexityRoot.EvidenceHistory.RenewalDate == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.RenewalDate(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.RenewalDate(childComplexity), true
 
 	case "EvidenceHistory.scopeID":
-		if e.complexity.EvidenceHistory.ScopeID == nil {
+		if e.ComplexityRoot.EvidenceHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.ScopeID(childComplexity), true
 
 	case "EvidenceHistory.scopeName":
-		if e.complexity.EvidenceHistory.ScopeName == nil {
+		if e.ComplexityRoot.EvidenceHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.ScopeName(childComplexity), true
 
 	case "EvidenceHistory.source":
-		if e.complexity.EvidenceHistory.Source == nil {
+		if e.ComplexityRoot.EvidenceHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Source(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Source(childComplexity), true
 
 	case "EvidenceHistory.status":
-		if e.complexity.EvidenceHistory.Status == nil {
+		if e.ComplexityRoot.EvidenceHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Status(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Status(childComplexity), true
 
 	case "EvidenceHistory.tags":
-		if e.complexity.EvidenceHistory.Tags == nil {
+		if e.ComplexityRoot.EvidenceHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.Tags(childComplexity), true
 
 	case "EvidenceHistory.url":
-		if e.complexity.EvidenceHistory.URL == nil {
+		if e.ComplexityRoot.EvidenceHistory.URL == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.URL(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.URL(childComplexity), true
 
 	case "EvidenceHistory.updatedAt":
-		if e.complexity.EvidenceHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.EvidenceHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.UpdatedAt(childComplexity), true
 
 	case "EvidenceHistory.updatedBy":
-		if e.complexity.EvidenceHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.EvidenceHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.UpdatedBy(childComplexity), true
 
 	case "EvidenceHistory.workflowEligibleMarker":
-		if e.complexity.EvidenceHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.EvidenceHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "EvidenceHistoryConnection.edges":
-		if e.complexity.EvidenceHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.EvidenceHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistoryConnection.Edges(childComplexity), true
 
 	case "EvidenceHistoryConnection.pageInfo":
-		if e.complexity.EvidenceHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.EvidenceHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistoryConnection.PageInfo(childComplexity), true
 
 	case "EvidenceHistoryConnection.totalCount":
-		if e.complexity.EvidenceHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.EvidenceHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistoryConnection.TotalCount(childComplexity), true
 
 	case "EvidenceHistoryEdge.cursor":
-		if e.complexity.EvidenceHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.EvidenceHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistoryEdge.Cursor(childComplexity), true
 
 	case "EvidenceHistoryEdge.node":
-		if e.complexity.EvidenceHistoryEdge.Node == nil {
+		if e.ComplexityRoot.EvidenceHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.EvidenceHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.EvidenceHistoryEdge.Node(childComplexity), true
 
 	case "FileHistory.categoryType":
-		if e.complexity.FileHistory.CategoryType == nil {
+		if e.ComplexityRoot.FileHistory.CategoryType == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.CategoryType(childComplexity), true
+		return e.ComplexityRoot.FileHistory.CategoryType(childComplexity), true
 
 	case "FileHistory.createdAt":
-		if e.complexity.FileHistory.CreatedAt == nil {
+		if e.ComplexityRoot.FileHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.FileHistory.CreatedAt(childComplexity), true
 
 	case "FileHistory.createdBy":
-		if e.complexity.FileHistory.CreatedBy == nil {
+		if e.ComplexityRoot.FileHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.FileHistory.CreatedBy(childComplexity), true
 
 	case "FileHistory.detectedContentType":
-		if e.complexity.FileHistory.DetectedContentType == nil {
+		if e.ComplexityRoot.FileHistory.DetectedContentType == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.DetectedContentType(childComplexity), true
+		return e.ComplexityRoot.FileHistory.DetectedContentType(childComplexity), true
 
 	case "FileHistory.detectedMimeType":
-		if e.complexity.FileHistory.DetectedMimeType == nil {
+		if e.ComplexityRoot.FileHistory.DetectedMimeType == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.DetectedMimeType(childComplexity), true
+		return e.ComplexityRoot.FileHistory.DetectedMimeType(childComplexity), true
 
 	case "FileHistory.environmentID":
-		if e.complexity.FileHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.FileHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.FileHistory.EnvironmentID(childComplexity), true
 
 	case "FileHistory.environmentName":
-		if e.complexity.FileHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.FileHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.FileHistory.EnvironmentName(childComplexity), true
 
 	case "FileHistory.historyTime":
-		if e.complexity.FileHistory.HistoryTime == nil {
+		if e.ComplexityRoot.FileHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.FileHistory.HistoryTime(childComplexity), true
 
 	case "FileHistory.id":
-		if e.complexity.FileHistory.ID == nil {
+		if e.ComplexityRoot.FileHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.ID(childComplexity), true
+		return e.ComplexityRoot.FileHistory.ID(childComplexity), true
 
 	case "FileHistory.internalNotes":
-		if e.complexity.FileHistory.InternalNotes == nil {
+		if e.ComplexityRoot.FileHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.FileHistory.InternalNotes(childComplexity), true
 
 	case "FileHistory.lastAccessedAt":
-		if e.complexity.FileHistory.LastAccessedAt == nil {
+		if e.ComplexityRoot.FileHistory.LastAccessedAt == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.LastAccessedAt(childComplexity), true
+		return e.ComplexityRoot.FileHistory.LastAccessedAt(childComplexity), true
 
 	case "FileHistory.md5Hash":
-		if e.complexity.FileHistory.Md5Hash == nil {
+		if e.ComplexityRoot.FileHistory.Md5Hash == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.Md5Hash(childComplexity), true
+		return e.ComplexityRoot.FileHistory.Md5Hash(childComplexity), true
 
 	case "FileHistory.metadata":
-		if e.complexity.FileHistory.Metadata == nil {
+		if e.ComplexityRoot.FileHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.FileHistory.Metadata(childComplexity), true
 
 	case "FileHistory.operation":
-		if e.complexity.FileHistory.Operation == nil {
+		if e.ComplexityRoot.FileHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.FileHistory.Operation(childComplexity), true
 
 	case "FileHistory.persistedFileSize":
-		if e.complexity.FileHistory.PersistedFileSize == nil {
+		if e.ComplexityRoot.FileHistory.PersistedFileSize == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.PersistedFileSize(childComplexity), true
+		return e.ComplexityRoot.FileHistory.PersistedFileSize(childComplexity), true
 
 	case "FileHistory.providedFileExtension":
-		if e.complexity.FileHistory.ProvidedFileExtension == nil {
+		if e.ComplexityRoot.FileHistory.ProvidedFileExtension == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.ProvidedFileExtension(childComplexity), true
+		return e.ComplexityRoot.FileHistory.ProvidedFileExtension(childComplexity), true
 
 	case "FileHistory.providedFileName":
-		if e.complexity.FileHistory.ProvidedFileName == nil {
+		if e.ComplexityRoot.FileHistory.ProvidedFileName == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.ProvidedFileName(childComplexity), true
+		return e.ComplexityRoot.FileHistory.ProvidedFileName(childComplexity), true
 
 	case "FileHistory.providedFileSize":
-		if e.complexity.FileHistory.ProvidedFileSize == nil {
+		if e.ComplexityRoot.FileHistory.ProvidedFileSize == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.ProvidedFileSize(childComplexity), true
+		return e.ComplexityRoot.FileHistory.ProvidedFileSize(childComplexity), true
 
 	case "FileHistory.ref":
-		if e.complexity.FileHistory.Ref == nil {
+		if e.ComplexityRoot.FileHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.FileHistory.Ref(childComplexity), true
 
 	case "FileHistory.scopeID":
-		if e.complexity.FileHistory.ScopeID == nil {
+		if e.ComplexityRoot.FileHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.FileHistory.ScopeID(childComplexity), true
 
 	case "FileHistory.scopeName":
-		if e.complexity.FileHistory.ScopeName == nil {
+		if e.ComplexityRoot.FileHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.FileHistory.ScopeName(childComplexity), true
 
 	case "FileHistory.storagePath":
-		if e.complexity.FileHistory.StoragePath == nil {
+		if e.ComplexityRoot.FileHistory.StoragePath == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.StoragePath(childComplexity), true
+		return e.ComplexityRoot.FileHistory.StoragePath(childComplexity), true
 
 	case "FileHistory.storageProvider":
-		if e.complexity.FileHistory.StorageProvider == nil {
+		if e.ComplexityRoot.FileHistory.StorageProvider == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.StorageProvider(childComplexity), true
+		return e.ComplexityRoot.FileHistory.StorageProvider(childComplexity), true
 
 	case "FileHistory.storageRegion":
-		if e.complexity.FileHistory.StorageRegion == nil {
+		if e.ComplexityRoot.FileHistory.StorageRegion == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.StorageRegion(childComplexity), true
+		return e.ComplexityRoot.FileHistory.StorageRegion(childComplexity), true
 
 	case "FileHistory.storageScheme":
-		if e.complexity.FileHistory.StorageScheme == nil {
+		if e.ComplexityRoot.FileHistory.StorageScheme == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.StorageScheme(childComplexity), true
+		return e.ComplexityRoot.FileHistory.StorageScheme(childComplexity), true
 
 	case "FileHistory.storageVolume":
-		if e.complexity.FileHistory.StorageVolume == nil {
+		if e.ComplexityRoot.FileHistory.StorageVolume == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.StorageVolume(childComplexity), true
+		return e.ComplexityRoot.FileHistory.StorageVolume(childComplexity), true
 
 	case "FileHistory.storeKey":
-		if e.complexity.FileHistory.StoreKey == nil {
+		if e.ComplexityRoot.FileHistory.StoreKey == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.StoreKey(childComplexity), true
+		return e.ComplexityRoot.FileHistory.StoreKey(childComplexity), true
 
 	case "FileHistory.systemInternalID":
-		if e.complexity.FileHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.FileHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.FileHistory.SystemInternalID(childComplexity), true
 
 	case "FileHistory.systemOwned":
-		if e.complexity.FileHistory.SystemOwned == nil {
+		if e.ComplexityRoot.FileHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.FileHistory.SystemOwned(childComplexity), true
 
 	case "FileHistory.tags":
-		if e.complexity.FileHistory.Tags == nil {
+		if e.ComplexityRoot.FileHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.FileHistory.Tags(childComplexity), true
 
 	case "FileHistory.uri":
-		if e.complexity.FileHistory.URI == nil {
+		if e.ComplexityRoot.FileHistory.URI == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.URI(childComplexity), true
+		return e.ComplexityRoot.FileHistory.URI(childComplexity), true
 
 	case "FileHistory.updatedAt":
-		if e.complexity.FileHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.FileHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.FileHistory.UpdatedAt(childComplexity), true
 
 	case "FileHistory.updatedBy":
-		if e.complexity.FileHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.FileHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.FileHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.FileHistory.UpdatedBy(childComplexity), true
 
 	case "FileHistoryConnection.edges":
-		if e.complexity.FileHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.FileHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.FileHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.FileHistoryConnection.Edges(childComplexity), true
 
 	case "FileHistoryConnection.pageInfo":
-		if e.complexity.FileHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.FileHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.FileHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.FileHistoryConnection.PageInfo(childComplexity), true
 
 	case "FileHistoryConnection.totalCount":
-		if e.complexity.FileHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.FileHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.FileHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.FileHistoryConnection.TotalCount(childComplexity), true
 
 	case "FileHistoryEdge.cursor":
-		if e.complexity.FileHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.FileHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.FileHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.FileHistoryEdge.Cursor(childComplexity), true
 
 	case "FileHistoryEdge.node":
-		if e.complexity.FileHistoryEdge.Node == nil {
+		if e.ComplexityRoot.FileHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.FileHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.FileHistoryEdge.Node(childComplexity), true
 
 	case "FindingControlHistory.controlID":
-		if e.complexity.FindingControlHistory.ControlID == nil {
+		if e.ComplexityRoot.FindingControlHistory.ControlID == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.ControlID(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.ControlID(childComplexity), true
 
 	case "FindingControlHistory.createdAt":
-		if e.complexity.FindingControlHistory.CreatedAt == nil {
+		if e.ComplexityRoot.FindingControlHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.CreatedAt(childComplexity), true
 
 	case "FindingControlHistory.createdBy":
-		if e.complexity.FindingControlHistory.CreatedBy == nil {
+		if e.ComplexityRoot.FindingControlHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.CreatedBy(childComplexity), true
 
 	case "FindingControlHistory.discoveredAt":
-		if e.complexity.FindingControlHistory.DiscoveredAt == nil {
+		if e.ComplexityRoot.FindingControlHistory.DiscoveredAt == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.DiscoveredAt(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.DiscoveredAt(childComplexity), true
 
 	case "FindingControlHistory.externalControlID":
-		if e.complexity.FindingControlHistory.ExternalControlID == nil {
+		if e.ComplexityRoot.FindingControlHistory.ExternalControlID == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.ExternalControlID(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.ExternalControlID(childComplexity), true
 
 	case "FindingControlHistory.externalStandard":
-		if e.complexity.FindingControlHistory.ExternalStandard == nil {
+		if e.ComplexityRoot.FindingControlHistory.ExternalStandard == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.ExternalStandard(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.ExternalStandard(childComplexity), true
 
 	case "FindingControlHistory.externalStandardVersion":
-		if e.complexity.FindingControlHistory.ExternalStandardVersion == nil {
+		if e.ComplexityRoot.FindingControlHistory.ExternalStandardVersion == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.ExternalStandardVersion(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.ExternalStandardVersion(childComplexity), true
 
 	case "FindingControlHistory.findingID":
-		if e.complexity.FindingControlHistory.FindingID == nil {
+		if e.ComplexityRoot.FindingControlHistory.FindingID == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.FindingID(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.FindingID(childComplexity), true
 
 	case "FindingControlHistory.historyTime":
-		if e.complexity.FindingControlHistory.HistoryTime == nil {
+		if e.ComplexityRoot.FindingControlHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.HistoryTime(childComplexity), true
 
 	case "FindingControlHistory.id":
-		if e.complexity.FindingControlHistory.ID == nil {
+		if e.ComplexityRoot.FindingControlHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.ID(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.ID(childComplexity), true
 
 	case "FindingControlHistory.metadata":
-		if e.complexity.FindingControlHistory.Metadata == nil {
+		if e.ComplexityRoot.FindingControlHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.Metadata(childComplexity), true
 
 	case "FindingControlHistory.operation":
-		if e.complexity.FindingControlHistory.Operation == nil {
+		if e.ComplexityRoot.FindingControlHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.Operation(childComplexity), true
 
 	case "FindingControlHistory.ref":
-		if e.complexity.FindingControlHistory.Ref == nil {
+		if e.ComplexityRoot.FindingControlHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.Ref(childComplexity), true
 
 	case "FindingControlHistory.source":
-		if e.complexity.FindingControlHistory.Source == nil {
+		if e.ComplexityRoot.FindingControlHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.Source(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.Source(childComplexity), true
 
 	case "FindingControlHistory.standardID":
-		if e.complexity.FindingControlHistory.StandardID == nil {
+		if e.ComplexityRoot.FindingControlHistory.StandardID == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.StandardID(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.StandardID(childComplexity), true
 
 	case "FindingControlHistory.updatedAt":
-		if e.complexity.FindingControlHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.FindingControlHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.UpdatedAt(childComplexity), true
 
 	case "FindingControlHistory.updatedBy":
-		if e.complexity.FindingControlHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.FindingControlHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistory.UpdatedBy(childComplexity), true
 
 	case "FindingControlHistoryConnection.edges":
-		if e.complexity.FindingControlHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.FindingControlHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistoryConnection.Edges(childComplexity), true
 
 	case "FindingControlHistoryConnection.pageInfo":
-		if e.complexity.FindingControlHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.FindingControlHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistoryConnection.PageInfo(childComplexity), true
 
 	case "FindingControlHistoryConnection.totalCount":
-		if e.complexity.FindingControlHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.FindingControlHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistoryConnection.TotalCount(childComplexity), true
 
 	case "FindingControlHistoryEdge.cursor":
-		if e.complexity.FindingControlHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.FindingControlHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistoryEdge.Cursor(childComplexity), true
 
 	case "FindingControlHistoryEdge.node":
-		if e.complexity.FindingControlHistoryEdge.Node == nil {
+		if e.ComplexityRoot.FindingControlHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.FindingControlHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.FindingControlHistoryEdge.Node(childComplexity), true
 
 	case "FindingHistory.assessmentID":
-		if e.complexity.FindingHistory.AssessmentID == nil {
+		if e.ComplexityRoot.FindingHistory.AssessmentID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.AssessmentID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.AssessmentID(childComplexity), true
 
 	case "FindingHistory.blocksProduction":
-		if e.complexity.FindingHistory.BlocksProduction == nil {
+		if e.ComplexityRoot.FindingHistory.BlocksProduction == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.BlocksProduction(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.BlocksProduction(childComplexity), true
 
 	case "FindingHistory.categories":
-		if e.complexity.FindingHistory.Categories == nil {
+		if e.ComplexityRoot.FindingHistory.Categories == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Categories(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Categories(childComplexity), true
 
 	case "FindingHistory.category":
-		if e.complexity.FindingHistory.Category == nil {
+		if e.ComplexityRoot.FindingHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Category(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Category(childComplexity), true
 
 	case "FindingHistory.createdAt":
-		if e.complexity.FindingHistory.CreatedAt == nil {
+		if e.ComplexityRoot.FindingHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.CreatedAt(childComplexity), true
 
 	case "FindingHistory.createdBy":
-		if e.complexity.FindingHistory.CreatedBy == nil {
+		if e.ComplexityRoot.FindingHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.CreatedBy(childComplexity), true
 
 	case "FindingHistory.description":
-		if e.complexity.FindingHistory.Description == nil {
+		if e.ComplexityRoot.FindingHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Description(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Description(childComplexity), true
 
 	case "FindingHistory.displayID":
-		if e.complexity.FindingHistory.DisplayID == nil {
+		if e.ComplexityRoot.FindingHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.DisplayID(childComplexity), true
 
 	case "FindingHistory.displayName":
-		if e.complexity.FindingHistory.DisplayName == nil {
+		if e.ComplexityRoot.FindingHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.DisplayName(childComplexity), true
 
 	case "FindingHistory.environmentID":
-		if e.complexity.FindingHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.FindingHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.EnvironmentID(childComplexity), true
 
 	case "FindingHistory.environmentName":
-		if e.complexity.FindingHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.FindingHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.EnvironmentName(childComplexity), true
 
 	case "FindingHistory.eventTime":
-		if e.complexity.FindingHistory.EventTime == nil {
+		if e.ComplexityRoot.FindingHistory.EventTime == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.EventTime(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.EventTime(childComplexity), true
 
 	case "FindingHistory.exploitability":
-		if e.complexity.FindingHistory.Exploitability == nil {
+		if e.ComplexityRoot.FindingHistory.Exploitability == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Exploitability(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Exploitability(childComplexity), true
 
 	case "FindingHistory.externalID":
-		if e.complexity.FindingHistory.ExternalID == nil {
+		if e.ComplexityRoot.FindingHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ExternalID(childComplexity), true
 
 	case "FindingHistory.externalOwnerID":
-		if e.complexity.FindingHistory.ExternalOwnerID == nil {
+		if e.ComplexityRoot.FindingHistory.ExternalOwnerID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ExternalOwnerID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ExternalOwnerID(childComplexity), true
 
 	case "FindingHistory.externalURI":
-		if e.complexity.FindingHistory.ExternalURI == nil {
+		if e.ComplexityRoot.FindingHistory.ExternalURI == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ExternalURI(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ExternalURI(childComplexity), true
 
 	case "FindingHistory.findingClass":
-		if e.complexity.FindingHistory.FindingClass == nil {
+		if e.ComplexityRoot.FindingHistory.FindingClass == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.FindingClass(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.FindingClass(childComplexity), true
 
 	case "FindingHistory.historyTime":
-		if e.complexity.FindingHistory.HistoryTime == nil {
+		if e.ComplexityRoot.FindingHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.HistoryTime(childComplexity), true
 
 	case "FindingHistory.id":
-		if e.complexity.FindingHistory.ID == nil {
+		if e.ComplexityRoot.FindingHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ID(childComplexity), true
 
 	case "FindingHistory.impact":
-		if e.complexity.FindingHistory.Impact == nil {
+		if e.ComplexityRoot.FindingHistory.Impact == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Impact(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Impact(childComplexity), true
 
 	case "FindingHistory.internalNotes":
-		if e.complexity.FindingHistory.InternalNotes == nil {
+		if e.ComplexityRoot.FindingHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.InternalNotes(childComplexity), true
 
 	case "FindingHistory.metadata":
-		if e.complexity.FindingHistory.Metadata == nil {
+		if e.ComplexityRoot.FindingHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Metadata(childComplexity), true
 
 	case "FindingHistory.numericSeverity":
-		if e.complexity.FindingHistory.NumericSeverity == nil {
+		if e.ComplexityRoot.FindingHistory.NumericSeverity == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.NumericSeverity(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.NumericSeverity(childComplexity), true
 
 	case "FindingHistory.open":
-		if e.complexity.FindingHistory.Open == nil {
+		if e.ComplexityRoot.FindingHistory.Open == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Open(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Open(childComplexity), true
 
 	case "FindingHistory.operation":
-		if e.complexity.FindingHistory.Operation == nil {
+		if e.ComplexityRoot.FindingHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Operation(childComplexity), true
 
 	case "FindingHistory.ownerID":
-		if e.complexity.FindingHistory.OwnerID == nil {
+		if e.ComplexityRoot.FindingHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.OwnerID(childComplexity), true
 
 	case "FindingHistory.priority":
-		if e.complexity.FindingHistory.Priority == nil {
+		if e.ComplexityRoot.FindingHistory.Priority == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Priority(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Priority(childComplexity), true
 
 	case "FindingHistory.production":
-		if e.complexity.FindingHistory.Production == nil {
+		if e.ComplexityRoot.FindingHistory.Production == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Production(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Production(childComplexity), true
 
 	case "FindingHistory.public":
-		if e.complexity.FindingHistory.Public == nil {
+		if e.ComplexityRoot.FindingHistory.Public == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Public(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Public(childComplexity), true
 
 	case "FindingHistory.rawPayload":
-		if e.complexity.FindingHistory.RawPayload == nil {
+		if e.ComplexityRoot.FindingHistory.RawPayload == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.RawPayload(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.RawPayload(childComplexity), true
 
 	case "FindingHistory.recommendation":
-		if e.complexity.FindingHistory.Recommendation == nil {
+		if e.ComplexityRoot.FindingHistory.Recommendation == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Recommendation(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Recommendation(childComplexity), true
 
 	case "FindingHistory.recommendedActions":
-		if e.complexity.FindingHistory.RecommendedActions == nil {
+		if e.ComplexityRoot.FindingHistory.RecommendedActions == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.RecommendedActions(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.RecommendedActions(childComplexity), true
 
 	case "FindingHistory.ref":
-		if e.complexity.FindingHistory.Ref == nil {
+		if e.ComplexityRoot.FindingHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Ref(childComplexity), true
 
 	case "FindingHistory.references":
-		if e.complexity.FindingHistory.References == nil {
+		if e.ComplexityRoot.FindingHistory.References == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.References(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.References(childComplexity), true
 
 	case "FindingHistory.remediationSLA":
-		if e.complexity.FindingHistory.RemediationSLA == nil {
+		if e.ComplexityRoot.FindingHistory.RemediationSLA == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.RemediationSLA(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.RemediationSLA(childComplexity), true
 
 	case "FindingHistory.reportedAt":
-		if e.complexity.FindingHistory.ReportedAt == nil {
+		if e.ComplexityRoot.FindingHistory.ReportedAt == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ReportedAt(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ReportedAt(childComplexity), true
 
 	case "FindingHistory.resourceName":
-		if e.complexity.FindingHistory.ResourceName == nil {
+		if e.ComplexityRoot.FindingHistory.ResourceName == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ResourceName(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ResourceName(childComplexity), true
 
 	case "FindingHistory.scopeID":
-		if e.complexity.FindingHistory.ScopeID == nil {
+		if e.ComplexityRoot.FindingHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ScopeID(childComplexity), true
 
 	case "FindingHistory.scopeName":
-		if e.complexity.FindingHistory.ScopeName == nil {
+		if e.ComplexityRoot.FindingHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.ScopeName(childComplexity), true
 
 	case "FindingHistory.score":
-		if e.complexity.FindingHistory.Score == nil {
+		if e.ComplexityRoot.FindingHistory.Score == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Score(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Score(childComplexity), true
 
 	case "FindingHistory.severity":
-		if e.complexity.FindingHistory.Severity == nil {
+		if e.ComplexityRoot.FindingHistory.Severity == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Severity(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Severity(childComplexity), true
 
 	case "FindingHistory.source":
-		if e.complexity.FindingHistory.Source == nil {
+		if e.ComplexityRoot.FindingHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Source(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Source(childComplexity), true
 
 	case "FindingHistory.sourceUpdatedAt":
-		if e.complexity.FindingHistory.SourceUpdatedAt == nil {
+		if e.ComplexityRoot.FindingHistory.SourceUpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.SourceUpdatedAt(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.SourceUpdatedAt(childComplexity), true
 
 	case "FindingHistory.state":
-		if e.complexity.FindingHistory.State == nil {
+		if e.ComplexityRoot.FindingHistory.State == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.State(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.State(childComplexity), true
 
 	case "FindingHistory.status":
-		if e.complexity.FindingHistory.Status == nil {
+		if e.ComplexityRoot.FindingHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Status(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Status(childComplexity), true
 
 	case "FindingHistory.stepsToReproduce":
-		if e.complexity.FindingHistory.StepsToReproduce == nil {
+		if e.ComplexityRoot.FindingHistory.StepsToReproduce == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.StepsToReproduce(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.StepsToReproduce(childComplexity), true
 
 	case "FindingHistory.systemInternalID":
-		if e.complexity.FindingHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.FindingHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.SystemInternalID(childComplexity), true
 
 	case "FindingHistory.systemOwned":
-		if e.complexity.FindingHistory.SystemOwned == nil {
+		if e.ComplexityRoot.FindingHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.SystemOwned(childComplexity), true
 
 	case "FindingHistory.tags":
-		if e.complexity.FindingHistory.Tags == nil {
+		if e.ComplexityRoot.FindingHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Tags(childComplexity), true
 
 	case "FindingHistory.targetDetails":
-		if e.complexity.FindingHistory.TargetDetails == nil {
+		if e.ComplexityRoot.FindingHistory.TargetDetails == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.TargetDetails(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.TargetDetails(childComplexity), true
 
 	case "FindingHistory.targets":
-		if e.complexity.FindingHistory.Targets == nil {
+		if e.ComplexityRoot.FindingHistory.Targets == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Targets(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Targets(childComplexity), true
 
 	case "FindingHistory.updatedAt":
-		if e.complexity.FindingHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.FindingHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.UpdatedAt(childComplexity), true
 
 	case "FindingHistory.updatedBy":
-		if e.complexity.FindingHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.FindingHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.UpdatedBy(childComplexity), true
 
 	case "FindingHistory.validated":
-		if e.complexity.FindingHistory.Validated == nil {
+		if e.ComplexityRoot.FindingHistory.Validated == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Validated(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Validated(childComplexity), true
 
 	case "FindingHistory.vector":
-		if e.complexity.FindingHistory.Vector == nil {
+		if e.ComplexityRoot.FindingHistory.Vector == nil {
 			break
 		}
 
-		return e.complexity.FindingHistory.Vector(childComplexity), true
+		return e.ComplexityRoot.FindingHistory.Vector(childComplexity), true
 
 	case "FindingHistoryConnection.edges":
-		if e.complexity.FindingHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.FindingHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.FindingHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.FindingHistoryConnection.Edges(childComplexity), true
 
 	case "FindingHistoryConnection.pageInfo":
-		if e.complexity.FindingHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.FindingHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.FindingHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.FindingHistoryConnection.PageInfo(childComplexity), true
 
 	case "FindingHistoryConnection.totalCount":
-		if e.complexity.FindingHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.FindingHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.FindingHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.FindingHistoryConnection.TotalCount(childComplexity), true
 
 	case "FindingHistoryEdge.cursor":
-		if e.complexity.FindingHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.FindingHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.FindingHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.FindingHistoryEdge.Cursor(childComplexity), true
 
 	case "FindingHistoryEdge.node":
-		if e.complexity.FindingHistoryEdge.Node == nil {
+		if e.ComplexityRoot.FindingHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.FindingHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.FindingHistoryEdge.Node(childComplexity), true
 
 	case "GroupHistory.createdAt":
-		if e.complexity.GroupHistory.CreatedAt == nil {
+		if e.ComplexityRoot.GroupHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.CreatedAt(childComplexity), true
 
 	case "GroupHistory.createdBy":
-		if e.complexity.GroupHistory.CreatedBy == nil {
+		if e.ComplexityRoot.GroupHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.CreatedBy(childComplexity), true
 
 	case "GroupHistory.description":
-		if e.complexity.GroupHistory.Description == nil {
+		if e.ComplexityRoot.GroupHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.Description(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.Description(childComplexity), true
 
 	case "GroupHistory.displayID":
-		if e.complexity.GroupHistory.DisplayID == nil {
+		if e.ComplexityRoot.GroupHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.DisplayID(childComplexity), true
 
 	case "GroupHistory.displayName":
-		if e.complexity.GroupHistory.DisplayName == nil {
+		if e.ComplexityRoot.GroupHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.DisplayName(childComplexity), true
 
 	case "GroupHistory.gravatarLogoURL":
-		if e.complexity.GroupHistory.GravatarLogoURL == nil {
+		if e.ComplexityRoot.GroupHistory.GravatarLogoURL == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.GravatarLogoURL(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.GravatarLogoURL(childComplexity), true
 
 	case "GroupHistory.historyTime":
-		if e.complexity.GroupHistory.HistoryTime == nil {
+		if e.ComplexityRoot.GroupHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.HistoryTime(childComplexity), true
 
 	case "GroupHistory.id":
-		if e.complexity.GroupHistory.ID == nil {
+		if e.ComplexityRoot.GroupHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.ID(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.ID(childComplexity), true
 
 	case "GroupHistory.isManaged":
-		if e.complexity.GroupHistory.IsManaged == nil {
+		if e.ComplexityRoot.GroupHistory.IsManaged == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.IsManaged(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.IsManaged(childComplexity), true
 
 	case "GroupHistory.logoURL":
-		if e.complexity.GroupHistory.LogoURL == nil {
+		if e.ComplexityRoot.GroupHistory.LogoURL == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.LogoURL(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.LogoURL(childComplexity), true
 
 	case "GroupHistory.name":
-		if e.complexity.GroupHistory.Name == nil {
+		if e.ComplexityRoot.GroupHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.Name(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.Name(childComplexity), true
 
 	case "GroupHistory.operation":
-		if e.complexity.GroupHistory.Operation == nil {
+		if e.ComplexityRoot.GroupHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.Operation(childComplexity), true
 
 	case "GroupHistory.ownerID":
-		if e.complexity.GroupHistory.OwnerID == nil {
+		if e.ComplexityRoot.GroupHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.OwnerID(childComplexity), true
 
 	case "GroupHistory.ref":
-		if e.complexity.GroupHistory.Ref == nil {
+		if e.ComplexityRoot.GroupHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.Ref(childComplexity), true
 
 	case "GroupHistory.scimActive":
-		if e.complexity.GroupHistory.ScimActive == nil {
+		if e.ComplexityRoot.GroupHistory.ScimActive == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.ScimActive(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.ScimActive(childComplexity), true
 
 	case "GroupHistory.scimDisplayName":
-		if e.complexity.GroupHistory.ScimDisplayName == nil {
+		if e.ComplexityRoot.GroupHistory.ScimDisplayName == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.ScimDisplayName(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.ScimDisplayName(childComplexity), true
 
 	case "GroupHistory.scimExternalID":
-		if e.complexity.GroupHistory.ScimExternalID == nil {
+		if e.ComplexityRoot.GroupHistory.ScimExternalID == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.ScimExternalID(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.ScimExternalID(childComplexity), true
 
 	case "GroupHistory.scimGroupMailing":
-		if e.complexity.GroupHistory.ScimGroupMailing == nil {
+		if e.ComplexityRoot.GroupHistory.ScimGroupMailing == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.ScimGroupMailing(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.ScimGroupMailing(childComplexity), true
 
 	case "GroupHistory.tags":
-		if e.complexity.GroupHistory.Tags == nil {
+		if e.ComplexityRoot.GroupHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.Tags(childComplexity), true
 
 	case "GroupHistory.updatedAt":
-		if e.complexity.GroupHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.GroupHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.UpdatedAt(childComplexity), true
 
 	case "GroupHistory.updatedBy":
-		if e.complexity.GroupHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.GroupHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.GroupHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.GroupHistory.UpdatedBy(childComplexity), true
 
 	case "GroupHistoryConnection.edges":
-		if e.complexity.GroupHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.GroupHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.GroupHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.GroupHistoryConnection.Edges(childComplexity), true
 
 	case "GroupHistoryConnection.pageInfo":
-		if e.complexity.GroupHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.GroupHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.GroupHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.GroupHistoryConnection.PageInfo(childComplexity), true
 
 	case "GroupHistoryConnection.totalCount":
-		if e.complexity.GroupHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.GroupHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.GroupHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.GroupHistoryConnection.TotalCount(childComplexity), true
 
 	case "GroupHistoryEdge.cursor":
-		if e.complexity.GroupHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.GroupHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.GroupHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.GroupHistoryEdge.Cursor(childComplexity), true
 
 	case "GroupHistoryEdge.node":
-		if e.complexity.GroupHistoryEdge.Node == nil {
+		if e.ComplexityRoot.GroupHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.GroupHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.GroupHistoryEdge.Node(childComplexity), true
 
 	case "GroupMembershipHistory.createdAt":
-		if e.complexity.GroupMembershipHistory.CreatedAt == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.CreatedAt(childComplexity), true
 
 	case "GroupMembershipHistory.createdBy":
-		if e.complexity.GroupMembershipHistory.CreatedBy == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.CreatedBy(childComplexity), true
 
 	case "GroupMembershipHistory.groupID":
-		if e.complexity.GroupMembershipHistory.GroupID == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.GroupID == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.GroupID(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.GroupID(childComplexity), true
 
 	case "GroupMembershipHistory.historyTime":
-		if e.complexity.GroupMembershipHistory.HistoryTime == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.HistoryTime(childComplexity), true
 
 	case "GroupMembershipHistory.id":
-		if e.complexity.GroupMembershipHistory.ID == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.ID(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.ID(childComplexity), true
 
 	case "GroupMembershipHistory.operation":
-		if e.complexity.GroupMembershipHistory.Operation == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.Operation(childComplexity), true
 
 	case "GroupMembershipHistory.ref":
-		if e.complexity.GroupMembershipHistory.Ref == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.Ref(childComplexity), true
 
 	case "GroupMembershipHistory.role":
-		if e.complexity.GroupMembershipHistory.Role == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.Role == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.Role(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.Role(childComplexity), true
 
 	case "GroupMembershipHistory.updatedAt":
-		if e.complexity.GroupMembershipHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.UpdatedAt(childComplexity), true
 
 	case "GroupMembershipHistory.updatedBy":
-		if e.complexity.GroupMembershipHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.UpdatedBy(childComplexity), true
 
 	case "GroupMembershipHistory.userID":
-		if e.complexity.GroupMembershipHistory.UserID == nil {
+		if e.ComplexityRoot.GroupMembershipHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistory.UserID(childComplexity), true
 
 	case "GroupMembershipHistoryConnection.edges":
-		if e.complexity.GroupMembershipHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.GroupMembershipHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistoryConnection.Edges(childComplexity), true
 
 	case "GroupMembershipHistoryConnection.pageInfo":
-		if e.complexity.GroupMembershipHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.GroupMembershipHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistoryConnection.PageInfo(childComplexity), true
 
 	case "GroupMembershipHistoryConnection.totalCount":
-		if e.complexity.GroupMembershipHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.GroupMembershipHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistoryConnection.TotalCount(childComplexity), true
 
 	case "GroupMembershipHistoryEdge.cursor":
-		if e.complexity.GroupMembershipHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.GroupMembershipHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistoryEdge.Cursor(childComplexity), true
 
 	case "GroupMembershipHistoryEdge.node":
-		if e.complexity.GroupMembershipHistoryEdge.Node == nil {
+		if e.ComplexityRoot.GroupMembershipHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.GroupMembershipHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.GroupMembershipHistoryEdge.Node(childComplexity), true
 
 	case "GroupSettingHistory.createdAt":
-		if e.complexity.GroupSettingHistory.CreatedAt == nil {
+		if e.ComplexityRoot.GroupSettingHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.CreatedAt(childComplexity), true
 
 	case "GroupSettingHistory.createdBy":
-		if e.complexity.GroupSettingHistory.CreatedBy == nil {
+		if e.ComplexityRoot.GroupSettingHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.CreatedBy(childComplexity), true
 
 	case "GroupSettingHistory.groupID":
-		if e.complexity.GroupSettingHistory.GroupID == nil {
+		if e.ComplexityRoot.GroupSettingHistory.GroupID == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.GroupID(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.GroupID(childComplexity), true
 
 	case "GroupSettingHistory.historyTime":
-		if e.complexity.GroupSettingHistory.HistoryTime == nil {
+		if e.ComplexityRoot.GroupSettingHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.HistoryTime(childComplexity), true
 
 	case "GroupSettingHistory.id":
-		if e.complexity.GroupSettingHistory.ID == nil {
+		if e.ComplexityRoot.GroupSettingHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.ID(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.ID(childComplexity), true
 
 	case "GroupSettingHistory.joinPolicy":
-		if e.complexity.GroupSettingHistory.JoinPolicy == nil {
+		if e.ComplexityRoot.GroupSettingHistory.JoinPolicy == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.JoinPolicy(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.JoinPolicy(childComplexity), true
 
 	case "GroupSettingHistory.operation":
-		if e.complexity.GroupSettingHistory.Operation == nil {
+		if e.ComplexityRoot.GroupSettingHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.Operation(childComplexity), true
 
 	case "GroupSettingHistory.ref":
-		if e.complexity.GroupSettingHistory.Ref == nil {
+		if e.ComplexityRoot.GroupSettingHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.Ref(childComplexity), true
 
 	case "GroupSettingHistory.syncToGithub":
-		if e.complexity.GroupSettingHistory.SyncToGithub == nil {
+		if e.ComplexityRoot.GroupSettingHistory.SyncToGithub == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.SyncToGithub(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.SyncToGithub(childComplexity), true
 
 	case "GroupSettingHistory.syncToSlack":
-		if e.complexity.GroupSettingHistory.SyncToSlack == nil {
+		if e.ComplexityRoot.GroupSettingHistory.SyncToSlack == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.SyncToSlack(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.SyncToSlack(childComplexity), true
 
 	case "GroupSettingHistory.updatedAt":
-		if e.complexity.GroupSettingHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.GroupSettingHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.UpdatedAt(childComplexity), true
 
 	case "GroupSettingHistory.updatedBy":
-		if e.complexity.GroupSettingHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.GroupSettingHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.UpdatedBy(childComplexity), true
 
 	case "GroupSettingHistory.visibility":
-		if e.complexity.GroupSettingHistory.Visibility == nil {
+		if e.ComplexityRoot.GroupSettingHistory.Visibility == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistory.Visibility(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistory.Visibility(childComplexity), true
 
 	case "GroupSettingHistoryConnection.edges":
-		if e.complexity.GroupSettingHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.GroupSettingHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistoryConnection.Edges(childComplexity), true
 
 	case "GroupSettingHistoryConnection.pageInfo":
-		if e.complexity.GroupSettingHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.GroupSettingHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistoryConnection.PageInfo(childComplexity), true
 
 	case "GroupSettingHistoryConnection.totalCount":
-		if e.complexity.GroupSettingHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.GroupSettingHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistoryConnection.TotalCount(childComplexity), true
 
 	case "GroupSettingHistoryEdge.cursor":
-		if e.complexity.GroupSettingHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.GroupSettingHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistoryEdge.Cursor(childComplexity), true
 
 	case "GroupSettingHistoryEdge.node":
-		if e.complexity.GroupSettingHistoryEdge.Node == nil {
+		if e.ComplexityRoot.GroupSettingHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.GroupSettingHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.GroupSettingHistoryEdge.Node(childComplexity), true
 
 	case "HushHistory.createdAt":
-		if e.complexity.HushHistory.CreatedAt == nil {
+		if e.ComplexityRoot.HushHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.HushHistory.CreatedAt(childComplexity), true
 
 	case "HushHistory.createdBy":
-		if e.complexity.HushHistory.CreatedBy == nil {
+		if e.ComplexityRoot.HushHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.HushHistory.CreatedBy(childComplexity), true
 
 	case "HushHistory.credentialSet":
-		if e.complexity.HushHistory.CredentialSet == nil {
+		if e.ComplexityRoot.HushHistory.CredentialSet == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.CredentialSet(childComplexity), true
+		return e.ComplexityRoot.HushHistory.CredentialSet(childComplexity), true
 
 	case "HushHistory.description":
-		if e.complexity.HushHistory.Description == nil {
+		if e.ComplexityRoot.HushHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.Description(childComplexity), true
+		return e.ComplexityRoot.HushHistory.Description(childComplexity), true
 
 	case "HushHistory.expiresAt":
-		if e.complexity.HushHistory.ExpiresAt == nil {
+		if e.ComplexityRoot.HushHistory.ExpiresAt == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.ExpiresAt(childComplexity), true
+		return e.ComplexityRoot.HushHistory.ExpiresAt(childComplexity), true
 
 	case "HushHistory.historyTime":
-		if e.complexity.HushHistory.HistoryTime == nil {
+		if e.ComplexityRoot.HushHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.HushHistory.HistoryTime(childComplexity), true
 
 	case "HushHistory.id":
-		if e.complexity.HushHistory.ID == nil {
+		if e.ComplexityRoot.HushHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.ID(childComplexity), true
+		return e.ComplexityRoot.HushHistory.ID(childComplexity), true
 
 	case "HushHistory.internalNotes":
-		if e.complexity.HushHistory.InternalNotes == nil {
+		if e.ComplexityRoot.HushHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.HushHistory.InternalNotes(childComplexity), true
 
 	case "HushHistory.kind":
-		if e.complexity.HushHistory.Kind == nil {
+		if e.ComplexityRoot.HushHistory.Kind == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.Kind(childComplexity), true
+		return e.ComplexityRoot.HushHistory.Kind(childComplexity), true
 
 	case "HushHistory.lastUsedAt":
-		if e.complexity.HushHistory.LastUsedAt == nil {
+		if e.ComplexityRoot.HushHistory.LastUsedAt == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.LastUsedAt(childComplexity), true
+		return e.ComplexityRoot.HushHistory.LastUsedAt(childComplexity), true
 
 	case "HushHistory.metadata":
-		if e.complexity.HushHistory.Metadata == nil {
+		if e.ComplexityRoot.HushHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.HushHistory.Metadata(childComplexity), true
 
 	case "HushHistory.name":
-		if e.complexity.HushHistory.Name == nil {
+		if e.ComplexityRoot.HushHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.Name(childComplexity), true
+		return e.ComplexityRoot.HushHistory.Name(childComplexity), true
 
 	case "HushHistory.operation":
-		if e.complexity.HushHistory.Operation == nil {
+		if e.ComplexityRoot.HushHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.HushHistory.Operation(childComplexity), true
 
 	case "HushHistory.ownerID":
-		if e.complexity.HushHistory.OwnerID == nil {
+		if e.ComplexityRoot.HushHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.HushHistory.OwnerID(childComplexity), true
 
 	case "HushHistory.ref":
-		if e.complexity.HushHistory.Ref == nil {
+		if e.ComplexityRoot.HushHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.HushHistory.Ref(childComplexity), true
 
 	case "HushHistory.secretName":
-		if e.complexity.HushHistory.SecretName == nil {
+		if e.ComplexityRoot.HushHistory.SecretName == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.SecretName(childComplexity), true
+		return e.ComplexityRoot.HushHistory.SecretName(childComplexity), true
 
 	case "HushHistory.systemInternalID":
-		if e.complexity.HushHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.HushHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.HushHistory.SystemInternalID(childComplexity), true
 
 	case "HushHistory.systemOwned":
-		if e.complexity.HushHistory.SystemOwned == nil {
+		if e.ComplexityRoot.HushHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.HushHistory.SystemOwned(childComplexity), true
 
 	case "HushHistory.updatedAt":
-		if e.complexity.HushHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.HushHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.HushHistory.UpdatedAt(childComplexity), true
 
 	case "HushHistory.updatedBy":
-		if e.complexity.HushHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.HushHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.HushHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.HushHistory.UpdatedBy(childComplexity), true
 
 	case "HushHistoryConnection.edges":
-		if e.complexity.HushHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.HushHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.HushHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.HushHistoryConnection.Edges(childComplexity), true
 
 	case "HushHistoryConnection.pageInfo":
-		if e.complexity.HushHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.HushHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.HushHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.HushHistoryConnection.PageInfo(childComplexity), true
 
 	case "HushHistoryConnection.totalCount":
-		if e.complexity.HushHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.HushHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.HushHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.HushHistoryConnection.TotalCount(childComplexity), true
 
 	case "HushHistoryEdge.cursor":
-		if e.complexity.HushHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.HushHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.HushHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.HushHistoryEdge.Cursor(childComplexity), true
 
 	case "HushHistoryEdge.node":
-		if e.complexity.HushHistoryEdge.Node == nil {
+		if e.ComplexityRoot.HushHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.HushHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.HushHistoryEdge.Node(childComplexity), true
 
 	case "IdentityHolderHistory.alternateEmail":
-		if e.complexity.IdentityHolderHistory.AlternateEmail == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.AlternateEmail == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.AlternateEmail(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.AlternateEmail(childComplexity), true
 
 	case "IdentityHolderHistory.createdAt":
-		if e.complexity.IdentityHolderHistory.CreatedAt == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.CreatedAt(childComplexity), true
 
 	case "IdentityHolderHistory.createdBy":
-		if e.complexity.IdentityHolderHistory.CreatedBy == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.CreatedBy(childComplexity), true
 
 	case "IdentityHolderHistory.department":
-		if e.complexity.IdentityHolderHistory.Department == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Department == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Department(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Department(childComplexity), true
 
 	case "IdentityHolderHistory.displayID":
-		if e.complexity.IdentityHolderHistory.DisplayID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.DisplayID(childComplexity), true
 
 	case "IdentityHolderHistory.email":
-		if e.complexity.IdentityHolderHistory.Email == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Email(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Email(childComplexity), true
 
 	case "IdentityHolderHistory.employerEntityID":
-		if e.complexity.IdentityHolderHistory.EmployerEntityID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.EmployerEntityID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.EmployerEntityID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.EmployerEntityID(childComplexity), true
 
 	case "IdentityHolderHistory.endDate":
-		if e.complexity.IdentityHolderHistory.EndDate == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.EndDate == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.EndDate(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.EndDate(childComplexity), true
 
 	case "IdentityHolderHistory.environmentID":
-		if e.complexity.IdentityHolderHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.EnvironmentID(childComplexity), true
 
 	case "IdentityHolderHistory.environmentName":
-		if e.complexity.IdentityHolderHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.EnvironmentName(childComplexity), true
 
 	case "IdentityHolderHistory.externalReferenceID":
-		if e.complexity.IdentityHolderHistory.ExternalReferenceID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.ExternalReferenceID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.ExternalReferenceID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.ExternalReferenceID(childComplexity), true
 
 	case "IdentityHolderHistory.externalUserID":
-		if e.complexity.IdentityHolderHistory.ExternalUserID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.ExternalUserID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.ExternalUserID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.ExternalUserID(childComplexity), true
 
 	case "IdentityHolderHistory.fullName":
-		if e.complexity.IdentityHolderHistory.FullName == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.FullName == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.FullName(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.FullName(childComplexity), true
 
 	case "IdentityHolderHistory.historyTime":
-		if e.complexity.IdentityHolderHistory.HistoryTime == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.HistoryTime(childComplexity), true
 
 	case "IdentityHolderHistory.id":
-		if e.complexity.IdentityHolderHistory.ID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.ID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.ID(childComplexity), true
 
 	case "IdentityHolderHistory.identityHolderType":
-		if e.complexity.IdentityHolderHistory.IdentityHolderType == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.IdentityHolderType == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.IdentityHolderType(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.IdentityHolderType(childComplexity), true
 
 	case "IdentityHolderHistory.internalOwner":
-		if e.complexity.IdentityHolderHistory.InternalOwner == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.InternalOwner == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.InternalOwner(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.InternalOwner(childComplexity), true
 
 	case "IdentityHolderHistory.internalOwnerGroupID":
-		if e.complexity.IdentityHolderHistory.InternalOwnerGroupID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.InternalOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.InternalOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.InternalOwnerGroupID(childComplexity), true
 
 	case "IdentityHolderHistory.internalOwnerUserID":
-		if e.complexity.IdentityHolderHistory.InternalOwnerUserID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.InternalOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.InternalOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.InternalOwnerUserID(childComplexity), true
 
 	case "IdentityHolderHistory.isActive":
-		if e.complexity.IdentityHolderHistory.IsActive == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.IsActive == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.IsActive(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.IsActive(childComplexity), true
 
 	case "IdentityHolderHistory.isOpenlaneUser":
-		if e.complexity.IdentityHolderHistory.IsOpenlaneUser == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.IsOpenlaneUser == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.IsOpenlaneUser(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.IsOpenlaneUser(childComplexity), true
 
 	case "IdentityHolderHistory.location":
-		if e.complexity.IdentityHolderHistory.Location == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Location == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Location(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Location(childComplexity), true
 
 	case "IdentityHolderHistory.metadata":
-		if e.complexity.IdentityHolderHistory.Metadata == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Metadata(childComplexity), true
 
 	case "IdentityHolderHistory.operation":
-		if e.complexity.IdentityHolderHistory.Operation == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Operation(childComplexity), true
 
 	case "IdentityHolderHistory.ownerID":
-		if e.complexity.IdentityHolderHistory.OwnerID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.OwnerID(childComplexity), true
 
 	case "IdentityHolderHistory.phoneNumber":
-		if e.complexity.IdentityHolderHistory.PhoneNumber == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.PhoneNumber == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.PhoneNumber(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.PhoneNumber(childComplexity), true
 
 	case "IdentityHolderHistory.ref":
-		if e.complexity.IdentityHolderHistory.Ref == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Ref(childComplexity), true
 
 	case "IdentityHolderHistory.scopeID":
-		if e.complexity.IdentityHolderHistory.ScopeID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.ScopeID(childComplexity), true
 
 	case "IdentityHolderHistory.scopeName":
-		if e.complexity.IdentityHolderHistory.ScopeName == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.ScopeName(childComplexity), true
 
 	case "IdentityHolderHistory.startDate":
-		if e.complexity.IdentityHolderHistory.StartDate == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.StartDate == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.StartDate(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.StartDate(childComplexity), true
 
 	case "IdentityHolderHistory.status":
-		if e.complexity.IdentityHolderHistory.Status == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Status(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Status(childComplexity), true
 
 	case "IdentityHolderHistory.tags":
-		if e.complexity.IdentityHolderHistory.Tags == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Tags(childComplexity), true
 
 	case "IdentityHolderHistory.team":
-		if e.complexity.IdentityHolderHistory.Team == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Team == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Team(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Team(childComplexity), true
 
 	case "IdentityHolderHistory.title":
-		if e.complexity.IdentityHolderHistory.Title == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.Title(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.Title(childComplexity), true
 
 	case "IdentityHolderHistory.updatedAt":
-		if e.complexity.IdentityHolderHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.UpdatedAt(childComplexity), true
 
 	case "IdentityHolderHistory.updatedBy":
-		if e.complexity.IdentityHolderHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.UpdatedBy(childComplexity), true
 
 	case "IdentityHolderHistory.userID":
-		if e.complexity.IdentityHolderHistory.UserID == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.UserID(childComplexity), true
 
 	case "IdentityHolderHistory.workflowEligibleMarker":
-		if e.complexity.IdentityHolderHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.IdentityHolderHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "IdentityHolderHistoryConnection.edges":
-		if e.complexity.IdentityHolderHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.IdentityHolderHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistoryConnection.Edges(childComplexity), true
 
 	case "IdentityHolderHistoryConnection.pageInfo":
-		if e.complexity.IdentityHolderHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.IdentityHolderHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistoryConnection.PageInfo(childComplexity), true
 
 	case "IdentityHolderHistoryConnection.totalCount":
-		if e.complexity.IdentityHolderHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.IdentityHolderHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistoryConnection.TotalCount(childComplexity), true
 
 	case "IdentityHolderHistoryEdge.cursor":
-		if e.complexity.IdentityHolderHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.IdentityHolderHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistoryEdge.Cursor(childComplexity), true
 
 	case "IdentityHolderHistoryEdge.node":
-		if e.complexity.IdentityHolderHistoryEdge.Node == nil {
+		if e.ComplexityRoot.IdentityHolderHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.IdentityHolderHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.IdentityHolderHistoryEdge.Node(childComplexity), true
 
 	case "IntegrationHistory.createdAt":
-		if e.complexity.IntegrationHistory.CreatedAt == nil {
+		if e.ComplexityRoot.IntegrationHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.CreatedAt(childComplexity), true
 
 	case "IntegrationHistory.createdBy":
-		if e.complexity.IntegrationHistory.CreatedBy == nil {
+		if e.ComplexityRoot.IntegrationHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.CreatedBy(childComplexity), true
 
 	case "IntegrationHistory.description":
-		if e.complexity.IntegrationHistory.Description == nil {
+		if e.ComplexityRoot.IntegrationHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Description(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Description(childComplexity), true
 
 	case "IntegrationHistory.environmentID":
-		if e.complexity.IntegrationHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.IntegrationHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.EnvironmentID(childComplexity), true
 
 	case "IntegrationHistory.environmentName":
-		if e.complexity.IntegrationHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.IntegrationHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.EnvironmentName(childComplexity), true
 
 	case "IntegrationHistory.historyTime":
-		if e.complexity.IntegrationHistory.HistoryTime == nil {
+		if e.ComplexityRoot.IntegrationHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.HistoryTime(childComplexity), true
 
 	case "IntegrationHistory.id":
-		if e.complexity.IntegrationHistory.ID == nil {
+		if e.ComplexityRoot.IntegrationHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.ID(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.ID(childComplexity), true
 
 	case "IntegrationHistory.integrationType":
-		if e.complexity.IntegrationHistory.IntegrationType == nil {
+		if e.ComplexityRoot.IntegrationHistory.IntegrationType == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.IntegrationType(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.IntegrationType(childComplexity), true
 
 	case "IntegrationHistory.internalNotes":
-		if e.complexity.IntegrationHistory.InternalNotes == nil {
+		if e.ComplexityRoot.IntegrationHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.InternalNotes(childComplexity), true
 
 	case "IntegrationHistory.kind":
-		if e.complexity.IntegrationHistory.Kind == nil {
+		if e.ComplexityRoot.IntegrationHistory.Kind == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Kind(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Kind(childComplexity), true
 
 	case "IntegrationHistory.metadata":
-		if e.complexity.IntegrationHistory.Metadata == nil {
+		if e.ComplexityRoot.IntegrationHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Metadata(childComplexity), true
 
 	case "IntegrationHistory.name":
-		if e.complexity.IntegrationHistory.Name == nil {
+		if e.ComplexityRoot.IntegrationHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Name(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Name(childComplexity), true
 
 	case "IntegrationHistory.operation":
-		if e.complexity.IntegrationHistory.Operation == nil {
+		if e.ComplexityRoot.IntegrationHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Operation(childComplexity), true
 
 	case "IntegrationHistory.ownerID":
-		if e.complexity.IntegrationHistory.OwnerID == nil {
+		if e.ComplexityRoot.IntegrationHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.OwnerID(childComplexity), true
 
 	case "IntegrationHistory.platformID":
-		if e.complexity.IntegrationHistory.PlatformID == nil {
+		if e.ComplexityRoot.IntegrationHistory.PlatformID == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.PlatformID(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.PlatformID(childComplexity), true
 
 	case "IntegrationHistory.ref":
-		if e.complexity.IntegrationHistory.Ref == nil {
+		if e.ComplexityRoot.IntegrationHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Ref(childComplexity), true
 
 	case "IntegrationHistory.scopeID":
-		if e.complexity.IntegrationHistory.ScopeID == nil {
+		if e.ComplexityRoot.IntegrationHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.ScopeID(childComplexity), true
 
 	case "IntegrationHistory.scopeName":
-		if e.complexity.IntegrationHistory.ScopeName == nil {
+		if e.ComplexityRoot.IntegrationHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.ScopeName(childComplexity), true
 
 	case "IntegrationHistory.systemInternalID":
-		if e.complexity.IntegrationHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.IntegrationHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.SystemInternalID(childComplexity), true
 
 	case "IntegrationHistory.systemOwned":
-		if e.complexity.IntegrationHistory.SystemOwned == nil {
+		if e.ComplexityRoot.IntegrationHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.SystemOwned(childComplexity), true
 
 	case "IntegrationHistory.tags":
-		if e.complexity.IntegrationHistory.Tags == nil {
+		if e.ComplexityRoot.IntegrationHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.Tags(childComplexity), true
 
 	case "IntegrationHistory.updatedAt":
-		if e.complexity.IntegrationHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.IntegrationHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.UpdatedAt(childComplexity), true
 
 	case "IntegrationHistory.updatedBy":
-		if e.complexity.IntegrationHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.IntegrationHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistory.UpdatedBy(childComplexity), true
 
 	case "IntegrationHistoryConnection.edges":
-		if e.complexity.IntegrationHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.IntegrationHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistoryConnection.Edges(childComplexity), true
 
 	case "IntegrationHistoryConnection.pageInfo":
-		if e.complexity.IntegrationHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.IntegrationHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistoryConnection.PageInfo(childComplexity), true
 
 	case "IntegrationHistoryConnection.totalCount":
-		if e.complexity.IntegrationHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.IntegrationHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistoryConnection.TotalCount(childComplexity), true
 
 	case "IntegrationHistoryEdge.cursor":
-		if e.complexity.IntegrationHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.IntegrationHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistoryEdge.Cursor(childComplexity), true
 
 	case "IntegrationHistoryEdge.node":
-		if e.complexity.IntegrationHistoryEdge.Node == nil {
+		if e.ComplexityRoot.IntegrationHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.IntegrationHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.IntegrationHistoryEdge.Node(childComplexity), true
 
 	case "InternalPolicyHistory.approvalRequired":
-		if e.complexity.InternalPolicyHistory.ApprovalRequired == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ApprovalRequired == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ApprovalRequired(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ApprovalRequired(childComplexity), true
 
 	case "InternalPolicyHistory.approverID":
-		if e.complexity.InternalPolicyHistory.ApproverID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ApproverID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ApproverID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ApproverID(childComplexity), true
 
 	case "InternalPolicyHistory.controlSuggestions":
-		if e.complexity.InternalPolicyHistory.ControlSuggestions == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ControlSuggestions == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ControlSuggestions(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ControlSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.createdAt":
-		if e.complexity.InternalPolicyHistory.CreatedAt == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.CreatedAt(childComplexity), true
 
 	case "InternalPolicyHistory.createdBy":
-		if e.complexity.InternalPolicyHistory.CreatedBy == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.CreatedBy(childComplexity), true
 
 	case "InternalPolicyHistory.delegateID":
-		if e.complexity.InternalPolicyHistory.DelegateID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.DelegateID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.DelegateID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.DelegateID(childComplexity), true
 
 	case "InternalPolicyHistory.details":
-		if e.complexity.InternalPolicyHistory.Details == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Details(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Details(childComplexity), true
 
 	case "InternalPolicyHistory.detailsJSON":
-		if e.complexity.InternalPolicyHistory.DetailsJSON == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.DetailsJSON == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.DetailsJSON(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.DetailsJSON(childComplexity), true
 
 	case "InternalPolicyHistory.dismissedControlSuggestions":
-		if e.complexity.InternalPolicyHistory.DismissedControlSuggestions == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.DismissedControlSuggestions == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.DismissedControlSuggestions(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.DismissedControlSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.dismissedImprovementSuggestions":
-		if e.complexity.InternalPolicyHistory.DismissedImprovementSuggestions == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.DismissedImprovementSuggestions == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.DismissedImprovementSuggestions(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.DismissedImprovementSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.dismissedTagSuggestions":
-		if e.complexity.InternalPolicyHistory.DismissedTagSuggestions == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.DismissedTagSuggestions == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.DismissedTagSuggestions(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.DismissedTagSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.displayID":
-		if e.complexity.InternalPolicyHistory.DisplayID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.DisplayID(childComplexity), true
 
 	case "InternalPolicyHistory.environmentID":
-		if e.complexity.InternalPolicyHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.EnvironmentID(childComplexity), true
 
 	case "InternalPolicyHistory.environmentName":
-		if e.complexity.InternalPolicyHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.EnvironmentName(childComplexity), true
 
 	case "InternalPolicyHistory.fileID":
-		if e.complexity.InternalPolicyHistory.FileID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.FileID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.FileID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.FileID(childComplexity), true
 
 	case "InternalPolicyHistory.historyTime":
-		if e.complexity.InternalPolicyHistory.HistoryTime == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.HistoryTime(childComplexity), true
 
 	case "InternalPolicyHistory.id":
-		if e.complexity.InternalPolicyHistory.ID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ID(childComplexity), true
 
 	case "InternalPolicyHistory.improvementSuggestions":
-		if e.complexity.InternalPolicyHistory.ImprovementSuggestions == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ImprovementSuggestions == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ImprovementSuggestions(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ImprovementSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.internalNotes":
-		if e.complexity.InternalPolicyHistory.InternalNotes == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.InternalNotes(childComplexity), true
 
 	case "InternalPolicyHistory.internalPolicyKindID":
-		if e.complexity.InternalPolicyHistory.InternalPolicyKindID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.InternalPolicyKindID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.InternalPolicyKindID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.InternalPolicyKindID(childComplexity), true
 
 	case "InternalPolicyHistory.internalPolicyKindName":
-		if e.complexity.InternalPolicyHistory.InternalPolicyKindName == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.InternalPolicyKindName == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.InternalPolicyKindName(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.InternalPolicyKindName(childComplexity), true
 
 	case "InternalPolicyHistory.name":
-		if e.complexity.InternalPolicyHistory.Name == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Name(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Name(childComplexity), true
 
 	case "InternalPolicyHistory.operation":
-		if e.complexity.InternalPolicyHistory.Operation == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Operation(childComplexity), true
 
 	case "InternalPolicyHistory.ownerID":
-		if e.complexity.InternalPolicyHistory.OwnerID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.OwnerID(childComplexity), true
 
 	case "InternalPolicyHistory.ref":
-		if e.complexity.InternalPolicyHistory.Ref == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Ref(childComplexity), true
 
 	case "InternalPolicyHistory.reviewDue":
-		if e.complexity.InternalPolicyHistory.ReviewDue == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ReviewDue == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ReviewDue(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ReviewDue(childComplexity), true
 
 	case "InternalPolicyHistory.reviewFrequency":
-		if e.complexity.InternalPolicyHistory.ReviewFrequency == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ReviewFrequency == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ReviewFrequency(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ReviewFrequency(childComplexity), true
 
 	case "InternalPolicyHistory.revision":
-		if e.complexity.InternalPolicyHistory.Revision == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Revision(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Revision(childComplexity), true
 
 	case "InternalPolicyHistory.scopeID":
-		if e.complexity.InternalPolicyHistory.ScopeID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ScopeID(childComplexity), true
 
 	case "InternalPolicyHistory.scopeName":
-		if e.complexity.InternalPolicyHistory.ScopeName == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.ScopeName(childComplexity), true
 
 	case "InternalPolicyHistory.status":
-		if e.complexity.InternalPolicyHistory.Status == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Status(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Status(childComplexity), true
 
 	case "InternalPolicyHistory.summary":
-		if e.complexity.InternalPolicyHistory.Summary == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Summary == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Summary(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Summary(childComplexity), true
 
 	case "InternalPolicyHistory.systemInternalID":
-		if e.complexity.InternalPolicyHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.SystemInternalID(childComplexity), true
 
 	case "InternalPolicyHistory.systemOwned":
-		if e.complexity.InternalPolicyHistory.SystemOwned == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.SystemOwned(childComplexity), true
 
 	case "InternalPolicyHistory.tagSuggestions":
-		if e.complexity.InternalPolicyHistory.TagSuggestions == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.TagSuggestions == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.TagSuggestions(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.TagSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.tags":
-		if e.complexity.InternalPolicyHistory.Tags == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.Tags(childComplexity), true
 
 	case "InternalPolicyHistory.url":
-		if e.complexity.InternalPolicyHistory.URL == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.URL == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.URL(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.URL(childComplexity), true
 
 	case "InternalPolicyHistory.updatedAt":
-		if e.complexity.InternalPolicyHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.UpdatedAt(childComplexity), true
 
 	case "InternalPolicyHistory.updatedBy":
-		if e.complexity.InternalPolicyHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.UpdatedBy(childComplexity), true
 
 	case "InternalPolicyHistory.workflowEligibleMarker":
-		if e.complexity.InternalPolicyHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.InternalPolicyHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "InternalPolicyHistoryConnection.edges":
-		if e.complexity.InternalPolicyHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.InternalPolicyHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistoryConnection.Edges(childComplexity), true
 
 	case "InternalPolicyHistoryConnection.pageInfo":
-		if e.complexity.InternalPolicyHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.InternalPolicyHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistoryConnection.PageInfo(childComplexity), true
 
 	case "InternalPolicyHistoryConnection.totalCount":
-		if e.complexity.InternalPolicyHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.InternalPolicyHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistoryConnection.TotalCount(childComplexity), true
 
 	case "InternalPolicyHistoryEdge.cursor":
-		if e.complexity.InternalPolicyHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.InternalPolicyHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistoryEdge.Cursor(childComplexity), true
 
 	case "InternalPolicyHistoryEdge.node":
-		if e.complexity.InternalPolicyHistoryEdge.Node == nil {
+		if e.ComplexityRoot.InternalPolicyHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.InternalPolicyHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.InternalPolicyHistoryEdge.Node(childComplexity), true
 
 	case "JobTemplateHistory.configuration":
-		if e.complexity.JobTemplateHistory.Configuration == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Configuration == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Configuration(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Configuration(childComplexity), true
 
 	case "JobTemplateHistory.createdAt":
-		if e.complexity.JobTemplateHistory.CreatedAt == nil {
+		if e.ComplexityRoot.JobTemplateHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.CreatedAt(childComplexity), true
 
 	case "JobTemplateHistory.createdBy":
-		if e.complexity.JobTemplateHistory.CreatedBy == nil {
+		if e.ComplexityRoot.JobTemplateHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.CreatedBy(childComplexity), true
 
 	case "JobTemplateHistory.cron":
-		if e.complexity.JobTemplateHistory.Cron == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Cron == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Cron(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Cron(childComplexity), true
 
 	case "JobTemplateHistory.description":
-		if e.complexity.JobTemplateHistory.Description == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Description(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Description(childComplexity), true
 
 	case "JobTemplateHistory.displayID":
-		if e.complexity.JobTemplateHistory.DisplayID == nil {
+		if e.ComplexityRoot.JobTemplateHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.DisplayID(childComplexity), true
 
 	case "JobTemplateHistory.downloadURL":
-		if e.complexity.JobTemplateHistory.DownloadURL == nil {
+		if e.ComplexityRoot.JobTemplateHistory.DownloadURL == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.DownloadURL(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.DownloadURL(childComplexity), true
 
 	case "JobTemplateHistory.historyTime":
-		if e.complexity.JobTemplateHistory.HistoryTime == nil {
+		if e.ComplexityRoot.JobTemplateHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.HistoryTime(childComplexity), true
 
 	case "JobTemplateHistory.id":
-		if e.complexity.JobTemplateHistory.ID == nil {
+		if e.ComplexityRoot.JobTemplateHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.ID(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.ID(childComplexity), true
 
 	case "JobTemplateHistory.internalNotes":
-		if e.complexity.JobTemplateHistory.InternalNotes == nil {
+		if e.ComplexityRoot.JobTemplateHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.InternalNotes(childComplexity), true
 
 	case "JobTemplateHistory.operation":
-		if e.complexity.JobTemplateHistory.Operation == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Operation(childComplexity), true
 
 	case "JobTemplateHistory.ownerID":
-		if e.complexity.JobTemplateHistory.OwnerID == nil {
+		if e.ComplexityRoot.JobTemplateHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.OwnerID(childComplexity), true
 
 	case "JobTemplateHistory.platform":
-		if e.complexity.JobTemplateHistory.Platform == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Platform == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Platform(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Platform(childComplexity), true
 
 	case "JobTemplateHistory.ref":
-		if e.complexity.JobTemplateHistory.Ref == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Ref(childComplexity), true
 
 	case "JobTemplateHistory.systemInternalID":
-		if e.complexity.JobTemplateHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.JobTemplateHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.SystemInternalID(childComplexity), true
 
 	case "JobTemplateHistory.systemOwned":
-		if e.complexity.JobTemplateHistory.SystemOwned == nil {
+		if e.ComplexityRoot.JobTemplateHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.SystemOwned(childComplexity), true
 
 	case "JobTemplateHistory.tags":
-		if e.complexity.JobTemplateHistory.Tags == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Tags(childComplexity), true
 
 	case "JobTemplateHistory.title":
-		if e.complexity.JobTemplateHistory.Title == nil {
+		if e.ComplexityRoot.JobTemplateHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.Title(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.Title(childComplexity), true
 
 	case "JobTemplateHistory.updatedAt":
-		if e.complexity.JobTemplateHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.JobTemplateHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.UpdatedAt(childComplexity), true
 
 	case "JobTemplateHistory.updatedBy":
-		if e.complexity.JobTemplateHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.JobTemplateHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistory.UpdatedBy(childComplexity), true
 
 	case "JobTemplateHistoryConnection.edges":
-		if e.complexity.JobTemplateHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.JobTemplateHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistoryConnection.Edges(childComplexity), true
 
 	case "JobTemplateHistoryConnection.pageInfo":
-		if e.complexity.JobTemplateHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.JobTemplateHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistoryConnection.PageInfo(childComplexity), true
 
 	case "JobTemplateHistoryConnection.totalCount":
-		if e.complexity.JobTemplateHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.JobTemplateHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistoryConnection.TotalCount(childComplexity), true
 
 	case "JobTemplateHistoryEdge.cursor":
-		if e.complexity.JobTemplateHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.JobTemplateHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistoryEdge.Cursor(childComplexity), true
 
 	case "JobTemplateHistoryEdge.node":
-		if e.complexity.JobTemplateHistoryEdge.Node == nil {
+		if e.ComplexityRoot.JobTemplateHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.JobTemplateHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.JobTemplateHistoryEdge.Node(childComplexity), true
 
 	case "MappableDomainHistory.createdAt":
-		if e.complexity.MappableDomainHistory.CreatedAt == nil {
+		if e.ComplexityRoot.MappableDomainHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.CreatedAt(childComplexity), true
 
 	case "MappableDomainHistory.createdBy":
-		if e.complexity.MappableDomainHistory.CreatedBy == nil {
+		if e.ComplexityRoot.MappableDomainHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.CreatedBy(childComplexity), true
 
 	case "MappableDomainHistory.historyTime":
-		if e.complexity.MappableDomainHistory.HistoryTime == nil {
+		if e.ComplexityRoot.MappableDomainHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.HistoryTime(childComplexity), true
 
 	case "MappableDomainHistory.id":
-		if e.complexity.MappableDomainHistory.ID == nil {
+		if e.ComplexityRoot.MappableDomainHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.ID(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.ID(childComplexity), true
 
 	case "MappableDomainHistory.name":
-		if e.complexity.MappableDomainHistory.Name == nil {
+		if e.ComplexityRoot.MappableDomainHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.Name(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.Name(childComplexity), true
 
 	case "MappableDomainHistory.operation":
-		if e.complexity.MappableDomainHistory.Operation == nil {
+		if e.ComplexityRoot.MappableDomainHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.Operation(childComplexity), true
 
 	case "MappableDomainHistory.ref":
-		if e.complexity.MappableDomainHistory.Ref == nil {
+		if e.ComplexityRoot.MappableDomainHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.Ref(childComplexity), true
 
 	case "MappableDomainHistory.tags":
-		if e.complexity.MappableDomainHistory.Tags == nil {
+		if e.ComplexityRoot.MappableDomainHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.Tags(childComplexity), true
 
 	case "MappableDomainHistory.updatedAt":
-		if e.complexity.MappableDomainHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.MappableDomainHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.UpdatedAt(childComplexity), true
 
 	case "MappableDomainHistory.updatedBy":
-		if e.complexity.MappableDomainHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.MappableDomainHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.UpdatedBy(childComplexity), true
 
 	case "MappableDomainHistory.zoneID":
-		if e.complexity.MappableDomainHistory.ZoneID == nil {
+		if e.ComplexityRoot.MappableDomainHistory.ZoneID == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistory.ZoneID(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistory.ZoneID(childComplexity), true
 
 	case "MappableDomainHistoryConnection.edges":
-		if e.complexity.MappableDomainHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.MappableDomainHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistoryConnection.Edges(childComplexity), true
 
 	case "MappableDomainHistoryConnection.pageInfo":
-		if e.complexity.MappableDomainHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.MappableDomainHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistoryConnection.PageInfo(childComplexity), true
 
 	case "MappableDomainHistoryConnection.totalCount":
-		if e.complexity.MappableDomainHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.MappableDomainHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistoryConnection.TotalCount(childComplexity), true
 
 	case "MappableDomainHistoryEdge.cursor":
-		if e.complexity.MappableDomainHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.MappableDomainHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistoryEdge.Cursor(childComplexity), true
 
 	case "MappableDomainHistoryEdge.node":
-		if e.complexity.MappableDomainHistoryEdge.Node == nil {
+		if e.ComplexityRoot.MappableDomainHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.MappableDomainHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.MappableDomainHistoryEdge.Node(childComplexity), true
 
 	case "MappedControlHistory.confidence":
-		if e.complexity.MappedControlHistory.Confidence == nil {
+		if e.ComplexityRoot.MappedControlHistory.Confidence == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.Confidence(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.Confidence(childComplexity), true
 
 	case "MappedControlHistory.createdAt":
-		if e.complexity.MappedControlHistory.CreatedAt == nil {
+		if e.ComplexityRoot.MappedControlHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.CreatedAt(childComplexity), true
 
 	case "MappedControlHistory.createdBy":
-		if e.complexity.MappedControlHistory.CreatedBy == nil {
+		if e.ComplexityRoot.MappedControlHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.CreatedBy(childComplexity), true
 
 	case "MappedControlHistory.historyTime":
-		if e.complexity.MappedControlHistory.HistoryTime == nil {
+		if e.ComplexityRoot.MappedControlHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.HistoryTime(childComplexity), true
 
 	case "MappedControlHistory.id":
-		if e.complexity.MappedControlHistory.ID == nil {
+		if e.ComplexityRoot.MappedControlHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.ID(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.ID(childComplexity), true
 
 	case "MappedControlHistory.internalNotes":
-		if e.complexity.MappedControlHistory.InternalNotes == nil {
+		if e.ComplexityRoot.MappedControlHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.InternalNotes(childComplexity), true
 
 	case "MappedControlHistory.mappingType":
-		if e.complexity.MappedControlHistory.MappingType == nil {
+		if e.ComplexityRoot.MappedControlHistory.MappingType == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.MappingType(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.MappingType(childComplexity), true
 
 	case "MappedControlHistory.operation":
-		if e.complexity.MappedControlHistory.Operation == nil {
+		if e.ComplexityRoot.MappedControlHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.Operation(childComplexity), true
 
 	case "MappedControlHistory.ownerID":
-		if e.complexity.MappedControlHistory.OwnerID == nil {
+		if e.ComplexityRoot.MappedControlHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.OwnerID(childComplexity), true
 
 	case "MappedControlHistory.ref":
-		if e.complexity.MappedControlHistory.Ref == nil {
+		if e.ComplexityRoot.MappedControlHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.Ref(childComplexity), true
 
 	case "MappedControlHistory.relation":
-		if e.complexity.MappedControlHistory.Relation == nil {
+		if e.ComplexityRoot.MappedControlHistory.Relation == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.Relation(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.Relation(childComplexity), true
 
 	case "MappedControlHistory.source":
-		if e.complexity.MappedControlHistory.Source == nil {
+		if e.ComplexityRoot.MappedControlHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.Source(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.Source(childComplexity), true
 
 	case "MappedControlHistory.systemInternalID":
-		if e.complexity.MappedControlHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.MappedControlHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.SystemInternalID(childComplexity), true
 
 	case "MappedControlHistory.systemOwned":
-		if e.complexity.MappedControlHistory.SystemOwned == nil {
+		if e.ComplexityRoot.MappedControlHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.SystemOwned(childComplexity), true
 
 	case "MappedControlHistory.tags":
-		if e.complexity.MappedControlHistory.Tags == nil {
+		if e.ComplexityRoot.MappedControlHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.Tags(childComplexity), true
 
 	case "MappedControlHistory.updatedAt":
-		if e.complexity.MappedControlHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.MappedControlHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.UpdatedAt(childComplexity), true
 
 	case "MappedControlHistory.updatedBy":
-		if e.complexity.MappedControlHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.MappedControlHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistory.UpdatedBy(childComplexity), true
 
 	case "MappedControlHistoryConnection.edges":
-		if e.complexity.MappedControlHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.MappedControlHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistoryConnection.Edges(childComplexity), true
 
 	case "MappedControlHistoryConnection.pageInfo":
-		if e.complexity.MappedControlHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.MappedControlHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistoryConnection.PageInfo(childComplexity), true
 
 	case "MappedControlHistoryConnection.totalCount":
-		if e.complexity.MappedControlHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.MappedControlHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistoryConnection.TotalCount(childComplexity), true
 
 	case "MappedControlHistoryEdge.cursor":
-		if e.complexity.MappedControlHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.MappedControlHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistoryEdge.Cursor(childComplexity), true
 
 	case "MappedControlHistoryEdge.node":
-		if e.complexity.MappedControlHistoryEdge.Node == nil {
+		if e.ComplexityRoot.MappedControlHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.MappedControlHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.MappedControlHistoryEdge.Node(childComplexity), true
 
 	case "NarrativeHistory.createdAt":
-		if e.complexity.NarrativeHistory.CreatedAt == nil {
+		if e.ComplexityRoot.NarrativeHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.CreatedAt(childComplexity), true
 
 	case "NarrativeHistory.createdBy":
-		if e.complexity.NarrativeHistory.CreatedBy == nil {
+		if e.ComplexityRoot.NarrativeHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.CreatedBy(childComplexity), true
 
 	case "NarrativeHistory.description":
-		if e.complexity.NarrativeHistory.Description == nil {
+		if e.ComplexityRoot.NarrativeHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.Description(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.Description(childComplexity), true
 
 	case "NarrativeHistory.details":
-		if e.complexity.NarrativeHistory.Details == nil {
+		if e.ComplexityRoot.NarrativeHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.Details(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.Details(childComplexity), true
 
 	case "NarrativeHistory.displayID":
-		if e.complexity.NarrativeHistory.DisplayID == nil {
+		if e.ComplexityRoot.NarrativeHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.DisplayID(childComplexity), true
 
 	case "NarrativeHistory.historyTime":
-		if e.complexity.NarrativeHistory.HistoryTime == nil {
+		if e.ComplexityRoot.NarrativeHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.HistoryTime(childComplexity), true
 
 	case "NarrativeHistory.id":
-		if e.complexity.NarrativeHistory.ID == nil {
+		if e.ComplexityRoot.NarrativeHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.ID(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.ID(childComplexity), true
 
 	case "NarrativeHistory.internalNotes":
-		if e.complexity.NarrativeHistory.InternalNotes == nil {
+		if e.ComplexityRoot.NarrativeHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.InternalNotes(childComplexity), true
 
 	case "NarrativeHistory.name":
-		if e.complexity.NarrativeHistory.Name == nil {
+		if e.ComplexityRoot.NarrativeHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.Name(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.Name(childComplexity), true
 
 	case "NarrativeHistory.operation":
-		if e.complexity.NarrativeHistory.Operation == nil {
+		if e.ComplexityRoot.NarrativeHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.Operation(childComplexity), true
 
 	case "NarrativeHistory.ownerID":
-		if e.complexity.NarrativeHistory.OwnerID == nil {
+		if e.ComplexityRoot.NarrativeHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.OwnerID(childComplexity), true
 
 	case "NarrativeHistory.ref":
-		if e.complexity.NarrativeHistory.Ref == nil {
+		if e.ComplexityRoot.NarrativeHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.Ref(childComplexity), true
 
 	case "NarrativeHistory.systemInternalID":
-		if e.complexity.NarrativeHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.NarrativeHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.SystemInternalID(childComplexity), true
 
 	case "NarrativeHistory.systemOwned":
-		if e.complexity.NarrativeHistory.SystemOwned == nil {
+		if e.ComplexityRoot.NarrativeHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.SystemOwned(childComplexity), true
 
 	case "NarrativeHistory.tags":
-		if e.complexity.NarrativeHistory.Tags == nil {
+		if e.ComplexityRoot.NarrativeHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.Tags(childComplexity), true
 
 	case "NarrativeHistory.updatedAt":
-		if e.complexity.NarrativeHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.NarrativeHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.UpdatedAt(childComplexity), true
 
 	case "NarrativeHistory.updatedBy":
-		if e.complexity.NarrativeHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.NarrativeHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistory.UpdatedBy(childComplexity), true
 
 	case "NarrativeHistoryConnection.edges":
-		if e.complexity.NarrativeHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.NarrativeHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistoryConnection.Edges(childComplexity), true
 
 	case "NarrativeHistoryConnection.pageInfo":
-		if e.complexity.NarrativeHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.NarrativeHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistoryConnection.PageInfo(childComplexity), true
 
 	case "NarrativeHistoryConnection.totalCount":
-		if e.complexity.NarrativeHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.NarrativeHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistoryConnection.TotalCount(childComplexity), true
 
 	case "NarrativeHistoryEdge.cursor":
-		if e.complexity.NarrativeHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.NarrativeHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistoryEdge.Cursor(childComplexity), true
 
 	case "NarrativeHistoryEdge.node":
-		if e.complexity.NarrativeHistoryEdge.Node == nil {
+		if e.ComplexityRoot.NarrativeHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.NarrativeHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.NarrativeHistoryEdge.Node(childComplexity), true
 
 	case "NoteHistory.createdAt":
-		if e.complexity.NoteHistory.CreatedAt == nil {
+		if e.ComplexityRoot.NoteHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.CreatedAt(childComplexity), true
 
 	case "NoteHistory.createdBy":
-		if e.complexity.NoteHistory.CreatedBy == nil {
+		if e.ComplexityRoot.NoteHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.CreatedBy(childComplexity), true
 
 	case "NoteHistory.discussionID":
-		if e.complexity.NoteHistory.DiscussionID == nil {
+		if e.ComplexityRoot.NoteHistory.DiscussionID == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.DiscussionID(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.DiscussionID(childComplexity), true
 
 	case "NoteHistory.displayID":
-		if e.complexity.NoteHistory.DisplayID == nil {
+		if e.ComplexityRoot.NoteHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.DisplayID(childComplexity), true
 
 	case "NoteHistory.historyTime":
-		if e.complexity.NoteHistory.HistoryTime == nil {
+		if e.ComplexityRoot.NoteHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.HistoryTime(childComplexity), true
 
 	case "NoteHistory.id":
-		if e.complexity.NoteHistory.ID == nil {
+		if e.ComplexityRoot.NoteHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.ID(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.ID(childComplexity), true
 
 	case "NoteHistory.isEdited":
-		if e.complexity.NoteHistory.IsEdited == nil {
+		if e.ComplexityRoot.NoteHistory.IsEdited == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.IsEdited(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.IsEdited(childComplexity), true
 
 	case "NoteHistory.noteRef":
-		if e.complexity.NoteHistory.NoteRef == nil {
+		if e.ComplexityRoot.NoteHistory.NoteRef == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.NoteRef(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.NoteRef(childComplexity), true
 
 	case "NoteHistory.operation":
-		if e.complexity.NoteHistory.Operation == nil {
+		if e.ComplexityRoot.NoteHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.Operation(childComplexity), true
 
 	case "NoteHistory.ownerID":
-		if e.complexity.NoteHistory.OwnerID == nil {
+		if e.ComplexityRoot.NoteHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.OwnerID(childComplexity), true
 
 	case "NoteHistory.ref":
-		if e.complexity.NoteHistory.Ref == nil {
+		if e.ComplexityRoot.NoteHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.Ref(childComplexity), true
 
 	case "NoteHistory.text":
-		if e.complexity.NoteHistory.Text == nil {
+		if e.ComplexityRoot.NoteHistory.Text == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.Text(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.Text(childComplexity), true
 
 	case "NoteHistory.textJSON":
-		if e.complexity.NoteHistory.TextJSON == nil {
+		if e.ComplexityRoot.NoteHistory.TextJSON == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.TextJSON(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.TextJSON(childComplexity), true
 
 	case "NoteHistory.title":
-		if e.complexity.NoteHistory.Title == nil {
+		if e.ComplexityRoot.NoteHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.Title(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.Title(childComplexity), true
 
 	case "NoteHistory.trustCenterID":
-		if e.complexity.NoteHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.NoteHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.TrustCenterID(childComplexity), true
 
 	case "NoteHistory.updatedAt":
-		if e.complexity.NoteHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.NoteHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.UpdatedAt(childComplexity), true
 
 	case "NoteHistory.updatedBy":
-		if e.complexity.NoteHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.NoteHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.NoteHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.NoteHistory.UpdatedBy(childComplexity), true
 
 	case "NoteHistoryConnection.edges":
-		if e.complexity.NoteHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.NoteHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.NoteHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.NoteHistoryConnection.Edges(childComplexity), true
 
 	case "NoteHistoryConnection.pageInfo":
-		if e.complexity.NoteHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.NoteHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.NoteHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.NoteHistoryConnection.PageInfo(childComplexity), true
 
 	case "NoteHistoryConnection.totalCount":
-		if e.complexity.NoteHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.NoteHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.NoteHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.NoteHistoryConnection.TotalCount(childComplexity), true
 
 	case "NoteHistoryEdge.cursor":
-		if e.complexity.NoteHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.NoteHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.NoteHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.NoteHistoryEdge.Cursor(childComplexity), true
 
 	case "NoteHistoryEdge.node":
-		if e.complexity.NoteHistoryEdge.Node == nil {
+		if e.ComplexityRoot.NoteHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.NoteHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.NoteHistoryEdge.Node(childComplexity), true
 
 	case "NotificationPreferenceHistory.cadence":
-		if e.complexity.NotificationPreferenceHistory.Cadence == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Cadence == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Cadence(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Cadence(childComplexity), true
 
 	case "NotificationPreferenceHistory.channel":
-		if e.complexity.NotificationPreferenceHistory.Channel == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Channel == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Channel(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Channel(childComplexity), true
 
 	case "NotificationPreferenceHistory.config":
-		if e.complexity.NotificationPreferenceHistory.Config == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Config == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Config(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Config(childComplexity), true
 
 	case "NotificationPreferenceHistory.createdAt":
-		if e.complexity.NotificationPreferenceHistory.CreatedAt == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.CreatedAt(childComplexity), true
 
 	case "NotificationPreferenceHistory.createdBy":
-		if e.complexity.NotificationPreferenceHistory.CreatedBy == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.CreatedBy(childComplexity), true
 
 	case "NotificationPreferenceHistory.destination":
-		if e.complexity.NotificationPreferenceHistory.Destination == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Destination == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Destination(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Destination(childComplexity), true
 
 	case "NotificationPreferenceHistory.enabled":
-		if e.complexity.NotificationPreferenceHistory.Enabled == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Enabled == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Enabled(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Enabled(childComplexity), true
 
 	case "NotificationPreferenceHistory.historyTime":
-		if e.complexity.NotificationPreferenceHistory.HistoryTime == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.HistoryTime(childComplexity), true
 
 	case "NotificationPreferenceHistory.id":
-		if e.complexity.NotificationPreferenceHistory.ID == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.ID(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.ID(childComplexity), true
 
 	case "NotificationPreferenceHistory.isDefault":
-		if e.complexity.NotificationPreferenceHistory.IsDefault == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.IsDefault == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.IsDefault(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.IsDefault(childComplexity), true
 
 	case "NotificationPreferenceHistory.lastError":
-		if e.complexity.NotificationPreferenceHistory.LastError == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.LastError == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.LastError(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.LastError(childComplexity), true
 
 	case "NotificationPreferenceHistory.lastUsedAt":
-		if e.complexity.NotificationPreferenceHistory.LastUsedAt == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.LastUsedAt == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.LastUsedAt(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.LastUsedAt(childComplexity), true
 
 	case "NotificationPreferenceHistory.metadata":
-		if e.complexity.NotificationPreferenceHistory.Metadata == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Metadata(childComplexity), true
 
 	case "NotificationPreferenceHistory.muteUntil":
-		if e.complexity.NotificationPreferenceHistory.MuteUntil == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.MuteUntil == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.MuteUntil(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.MuteUntil(childComplexity), true
 
 	case "NotificationPreferenceHistory.operation":
-		if e.complexity.NotificationPreferenceHistory.Operation == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Operation(childComplexity), true
 
 	case "NotificationPreferenceHistory.ownerID":
-		if e.complexity.NotificationPreferenceHistory.OwnerID == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.OwnerID(childComplexity), true
 
 	case "NotificationPreferenceHistory.priority":
-		if e.complexity.NotificationPreferenceHistory.Priority == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Priority == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Priority(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Priority(childComplexity), true
 
 	case "NotificationPreferenceHistory.provider":
-		if e.complexity.NotificationPreferenceHistory.Provider == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Provider == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Provider(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Provider(childComplexity), true
 
 	case "NotificationPreferenceHistory.quietHoursEnd":
-		if e.complexity.NotificationPreferenceHistory.QuietHoursEnd == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.QuietHoursEnd == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.QuietHoursEnd(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.QuietHoursEnd(childComplexity), true
 
 	case "NotificationPreferenceHistory.quietHoursStart":
-		if e.complexity.NotificationPreferenceHistory.QuietHoursStart == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.QuietHoursStart == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.QuietHoursStart(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.QuietHoursStart(childComplexity), true
 
 	case "NotificationPreferenceHistory.ref":
-		if e.complexity.NotificationPreferenceHistory.Ref == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Ref(childComplexity), true
 
 	case "NotificationPreferenceHistory.status":
-		if e.complexity.NotificationPreferenceHistory.Status == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Status(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Status(childComplexity), true
 
 	case "NotificationPreferenceHistory.templateID":
-		if e.complexity.NotificationPreferenceHistory.TemplateID == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.TemplateID == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.TemplateID(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.TemplateID(childComplexity), true
 
 	case "NotificationPreferenceHistory.timezone":
-		if e.complexity.NotificationPreferenceHistory.Timezone == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.Timezone == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.Timezone(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.Timezone(childComplexity), true
 
 	case "NotificationPreferenceHistory.topicOverrides":
-		if e.complexity.NotificationPreferenceHistory.TopicOverrides == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.TopicOverrides == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.TopicOverrides(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.TopicOverrides(childComplexity), true
 
 	case "NotificationPreferenceHistory.topicPatterns":
-		if e.complexity.NotificationPreferenceHistory.TopicPatterns == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.TopicPatterns == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.TopicPatterns(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.TopicPatterns(childComplexity), true
 
 	case "NotificationPreferenceHistory.updatedAt":
-		if e.complexity.NotificationPreferenceHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.UpdatedAt(childComplexity), true
 
 	case "NotificationPreferenceHistory.updatedBy":
-		if e.complexity.NotificationPreferenceHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.UpdatedBy(childComplexity), true
 
 	case "NotificationPreferenceHistory.userID":
-		if e.complexity.NotificationPreferenceHistory.UserID == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.UserID(childComplexity), true
 
 	case "NotificationPreferenceHistory.verifiedAt":
-		if e.complexity.NotificationPreferenceHistory.VerifiedAt == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistory.VerifiedAt == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistory.VerifiedAt(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistory.VerifiedAt(childComplexity), true
 
 	case "NotificationPreferenceHistoryConnection.edges":
-		if e.complexity.NotificationPreferenceHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistoryConnection.Edges(childComplexity), true
 
 	case "NotificationPreferenceHistoryConnection.pageInfo":
-		if e.complexity.NotificationPreferenceHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistoryConnection.PageInfo(childComplexity), true
 
 	case "NotificationPreferenceHistoryConnection.totalCount":
-		if e.complexity.NotificationPreferenceHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistoryConnection.TotalCount(childComplexity), true
 
 	case "NotificationPreferenceHistoryEdge.cursor":
-		if e.complexity.NotificationPreferenceHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistoryEdge.Cursor(childComplexity), true
 
 	case "NotificationPreferenceHistoryEdge.node":
-		if e.complexity.NotificationPreferenceHistoryEdge.Node == nil {
+		if e.ComplexityRoot.NotificationPreferenceHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.NotificationPreferenceHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.NotificationPreferenceHistoryEdge.Node(childComplexity), true
 
 	case "NotificationTemplateHistory.active":
-		if e.complexity.NotificationTemplateHistory.Active == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Active == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Active(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Active(childComplexity), true
 
 	case "NotificationTemplateHistory.blocks":
-		if e.complexity.NotificationTemplateHistory.Blocks == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Blocks == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Blocks(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Blocks(childComplexity), true
 
 	case "NotificationTemplateHistory.bodyTemplate":
-		if e.complexity.NotificationTemplateHistory.BodyTemplate == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.BodyTemplate == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.BodyTemplate(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.BodyTemplate(childComplexity), true
 
 	case "NotificationTemplateHistory.channel":
-		if e.complexity.NotificationTemplateHistory.Channel == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Channel == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Channel(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Channel(childComplexity), true
 
 	case "NotificationTemplateHistory.createdAt":
-		if e.complexity.NotificationTemplateHistory.CreatedAt == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.CreatedAt(childComplexity), true
 
 	case "NotificationTemplateHistory.createdBy":
-		if e.complexity.NotificationTemplateHistory.CreatedBy == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.CreatedBy(childComplexity), true
 
 	case "NotificationTemplateHistory.description":
-		if e.complexity.NotificationTemplateHistory.Description == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Description(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Description(childComplexity), true
 
 	case "NotificationTemplateHistory.emailTemplateID":
-		if e.complexity.NotificationTemplateHistory.EmailTemplateID == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.EmailTemplateID == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.EmailTemplateID(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.EmailTemplateID(childComplexity), true
 
 	case "NotificationTemplateHistory.format":
-		if e.complexity.NotificationTemplateHistory.Format == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Format == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Format(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Format(childComplexity), true
 
 	case "NotificationTemplateHistory.historyTime":
-		if e.complexity.NotificationTemplateHistory.HistoryTime == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.HistoryTime(childComplexity), true
 
 	case "NotificationTemplateHistory.id":
-		if e.complexity.NotificationTemplateHistory.ID == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.ID(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.ID(childComplexity), true
 
 	case "NotificationTemplateHistory.integrationID":
-		if e.complexity.NotificationTemplateHistory.IntegrationID == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.IntegrationID == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.IntegrationID(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.IntegrationID(childComplexity), true
 
 	case "NotificationTemplateHistory.internalNotes":
-		if e.complexity.NotificationTemplateHistory.InternalNotes == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.InternalNotes(childComplexity), true
 
 	case "NotificationTemplateHistory.jsonconfig":
-		if e.complexity.NotificationTemplateHistory.Jsonconfig == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Jsonconfig == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Jsonconfig(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Jsonconfig(childComplexity), true
 
 	case "NotificationTemplateHistory.key":
-		if e.complexity.NotificationTemplateHistory.Key == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Key == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Key(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Key(childComplexity), true
 
 	case "NotificationTemplateHistory.locale":
-		if e.complexity.NotificationTemplateHistory.Locale == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Locale == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Locale(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Locale(childComplexity), true
 
 	case "NotificationTemplateHistory.metadata":
-		if e.complexity.NotificationTemplateHistory.Metadata == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Metadata(childComplexity), true
 
 	case "NotificationTemplateHistory.name":
-		if e.complexity.NotificationTemplateHistory.Name == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Name(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Name(childComplexity), true
 
 	case "NotificationTemplateHistory.operation":
-		if e.complexity.NotificationTemplateHistory.Operation == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Operation(childComplexity), true
 
 	case "NotificationTemplateHistory.ownerID":
-		if e.complexity.NotificationTemplateHistory.OwnerID == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.OwnerID(childComplexity), true
 
 	case "NotificationTemplateHistory.ref":
-		if e.complexity.NotificationTemplateHistory.Ref == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Ref(childComplexity), true
 
 	case "NotificationTemplateHistory.subjectTemplate":
-		if e.complexity.NotificationTemplateHistory.SubjectTemplate == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.SubjectTemplate == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.SubjectTemplate(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.SubjectTemplate(childComplexity), true
 
 	case "NotificationTemplateHistory.systemInternalID":
-		if e.complexity.NotificationTemplateHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.SystemInternalID(childComplexity), true
 
 	case "NotificationTemplateHistory.systemOwned":
-		if e.complexity.NotificationTemplateHistory.SystemOwned == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.SystemOwned(childComplexity), true
 
 	case "NotificationTemplateHistory.titleTemplate":
-		if e.complexity.NotificationTemplateHistory.TitleTemplate == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.TitleTemplate == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.TitleTemplate(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.TitleTemplate(childComplexity), true
 
 	case "NotificationTemplateHistory.topicPattern":
-		if e.complexity.NotificationTemplateHistory.TopicPattern == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.TopicPattern == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.TopicPattern(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.TopicPattern(childComplexity), true
 
 	case "NotificationTemplateHistory.uischema":
-		if e.complexity.NotificationTemplateHistory.Uischema == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Uischema == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Uischema(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Uischema(childComplexity), true
 
 	case "NotificationTemplateHistory.updatedAt":
-		if e.complexity.NotificationTemplateHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.UpdatedAt(childComplexity), true
 
 	case "NotificationTemplateHistory.updatedBy":
-		if e.complexity.NotificationTemplateHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.UpdatedBy(childComplexity), true
 
 	case "NotificationTemplateHistory.version":
-		if e.complexity.NotificationTemplateHistory.Version == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.Version == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.Version(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.Version(childComplexity), true
 
 	case "NotificationTemplateHistory.workflowDefinitionID":
-		if e.complexity.NotificationTemplateHistory.WorkflowDefinitionID == nil {
+		if e.ComplexityRoot.NotificationTemplateHistory.WorkflowDefinitionID == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistory.WorkflowDefinitionID(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistory.WorkflowDefinitionID(childComplexity), true
 
 	case "NotificationTemplateHistoryConnection.edges":
-		if e.complexity.NotificationTemplateHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.NotificationTemplateHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistoryConnection.Edges(childComplexity), true
 
 	case "NotificationTemplateHistoryConnection.pageInfo":
-		if e.complexity.NotificationTemplateHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.NotificationTemplateHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistoryConnection.PageInfo(childComplexity), true
 
 	case "NotificationTemplateHistoryConnection.totalCount":
-		if e.complexity.NotificationTemplateHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.NotificationTemplateHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistoryConnection.TotalCount(childComplexity), true
 
 	case "NotificationTemplateHistoryEdge.cursor":
-		if e.complexity.NotificationTemplateHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.NotificationTemplateHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistoryEdge.Cursor(childComplexity), true
 
 	case "NotificationTemplateHistoryEdge.node":
-		if e.complexity.NotificationTemplateHistoryEdge.Node == nil {
+		if e.ComplexityRoot.NotificationTemplateHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.NotificationTemplateHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.NotificationTemplateHistoryEdge.Node(childComplexity), true
 
 	case "OrgMembershipHistory.createdAt":
-		if e.complexity.OrgMembershipHistory.CreatedAt == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.CreatedAt(childComplexity), true
 
 	case "OrgMembershipHistory.createdBy":
-		if e.complexity.OrgMembershipHistory.CreatedBy == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.CreatedBy(childComplexity), true
 
 	case "OrgMembershipHistory.historyTime":
-		if e.complexity.OrgMembershipHistory.HistoryTime == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.HistoryTime(childComplexity), true
 
 	case "OrgMembershipHistory.id":
-		if e.complexity.OrgMembershipHistory.ID == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.ID(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.ID(childComplexity), true
 
 	case "OrgMembershipHistory.operation":
-		if e.complexity.OrgMembershipHistory.Operation == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.Operation(childComplexity), true
 
 	case "OrgMembershipHistory.organizationID":
-		if e.complexity.OrgMembershipHistory.OrganizationID == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.OrganizationID == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.OrganizationID(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.OrganizationID(childComplexity), true
 
 	case "OrgMembershipHistory.ref":
-		if e.complexity.OrgMembershipHistory.Ref == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.Ref(childComplexity), true
 
 	case "OrgMembershipHistory.role":
-		if e.complexity.OrgMembershipHistory.Role == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.Role == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.Role(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.Role(childComplexity), true
 
 	case "OrgMembershipHistory.updatedAt":
-		if e.complexity.OrgMembershipHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.UpdatedAt(childComplexity), true
 
 	case "OrgMembershipHistory.updatedBy":
-		if e.complexity.OrgMembershipHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.UpdatedBy(childComplexity), true
 
 	case "OrgMembershipHistory.userID":
-		if e.complexity.OrgMembershipHistory.UserID == nil {
+		if e.ComplexityRoot.OrgMembershipHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistory.UserID(childComplexity), true
 
 	case "OrgMembershipHistoryConnection.edges":
-		if e.complexity.OrgMembershipHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.OrgMembershipHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistoryConnection.Edges(childComplexity), true
 
 	case "OrgMembershipHistoryConnection.pageInfo":
-		if e.complexity.OrgMembershipHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.OrgMembershipHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistoryConnection.PageInfo(childComplexity), true
 
 	case "OrgMembershipHistoryConnection.totalCount":
-		if e.complexity.OrgMembershipHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.OrgMembershipHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistoryConnection.TotalCount(childComplexity), true
 
 	case "OrgMembershipHistoryEdge.cursor":
-		if e.complexity.OrgMembershipHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.OrgMembershipHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistoryEdge.Cursor(childComplexity), true
 
 	case "OrgMembershipHistoryEdge.node":
-		if e.complexity.OrgMembershipHistoryEdge.Node == nil {
+		if e.ComplexityRoot.OrgMembershipHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.OrgMembershipHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.OrgMembershipHistoryEdge.Node(childComplexity), true
 
 	case "OrgSubscriptionHistory.active":
-		if e.complexity.OrgSubscriptionHistory.Active == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.Active == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.Active(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.Active(childComplexity), true
 
 	case "OrgSubscriptionHistory.createdAt":
-		if e.complexity.OrgSubscriptionHistory.CreatedAt == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.CreatedAt(childComplexity), true
 
 	case "OrgSubscriptionHistory.createdBy":
-		if e.complexity.OrgSubscriptionHistory.CreatedBy == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.CreatedBy(childComplexity), true
 
 	case "OrgSubscriptionHistory.daysUntilDue":
-		if e.complexity.OrgSubscriptionHistory.DaysUntilDue == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.DaysUntilDue == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.DaysUntilDue(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.DaysUntilDue(childComplexity), true
 
 	case "OrgSubscriptionHistory.expiresAt":
-		if e.complexity.OrgSubscriptionHistory.ExpiresAt == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.ExpiresAt == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.ExpiresAt(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.ExpiresAt(childComplexity), true
 
 	case "OrgSubscriptionHistory.historyTime":
-		if e.complexity.OrgSubscriptionHistory.HistoryTime == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.HistoryTime(childComplexity), true
 
 	case "OrgSubscriptionHistory.id":
-		if e.complexity.OrgSubscriptionHistory.ID == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.ID(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.ID(childComplexity), true
 
 	case "OrgSubscriptionHistory.operation":
-		if e.complexity.OrgSubscriptionHistory.Operation == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.Operation(childComplexity), true
 
 	case "OrgSubscriptionHistory.ownerID":
-		if e.complexity.OrgSubscriptionHistory.OwnerID == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.OwnerID(childComplexity), true
 
 	case "OrgSubscriptionHistory.ref":
-		if e.complexity.OrgSubscriptionHistory.Ref == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.Ref(childComplexity), true
 
 	case "OrgSubscriptionHistory.stripeSubscriptionID":
-		if e.complexity.OrgSubscriptionHistory.StripeSubscriptionID == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.StripeSubscriptionID == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.StripeSubscriptionID(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.StripeSubscriptionID(childComplexity), true
 
 	case "OrgSubscriptionHistory.stripeSubscriptionStatus":
-		if e.complexity.OrgSubscriptionHistory.StripeSubscriptionStatus == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.StripeSubscriptionStatus == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.StripeSubscriptionStatus(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.StripeSubscriptionStatus(childComplexity), true
 
 	case "OrgSubscriptionHistory.tags":
-		if e.complexity.OrgSubscriptionHistory.Tags == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.Tags(childComplexity), true
 
 	case "OrgSubscriptionHistory.trialExpiresAt":
-		if e.complexity.OrgSubscriptionHistory.TrialExpiresAt == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.TrialExpiresAt == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.TrialExpiresAt(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.TrialExpiresAt(childComplexity), true
 
 	case "OrgSubscriptionHistory.updatedAt":
-		if e.complexity.OrgSubscriptionHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.UpdatedAt(childComplexity), true
 
 	case "OrgSubscriptionHistory.updatedBy":
-		if e.complexity.OrgSubscriptionHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistory.UpdatedBy(childComplexity), true
 
 	case "OrgSubscriptionHistoryConnection.edges":
-		if e.complexity.OrgSubscriptionHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistoryConnection.Edges(childComplexity), true
 
 	case "OrgSubscriptionHistoryConnection.pageInfo":
-		if e.complexity.OrgSubscriptionHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistoryConnection.PageInfo(childComplexity), true
 
 	case "OrgSubscriptionHistoryConnection.totalCount":
-		if e.complexity.OrgSubscriptionHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistoryConnection.TotalCount(childComplexity), true
 
 	case "OrgSubscriptionHistoryEdge.cursor":
-		if e.complexity.OrgSubscriptionHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistoryEdge.Cursor(childComplexity), true
 
 	case "OrgSubscriptionHistoryEdge.node":
-		if e.complexity.OrgSubscriptionHistoryEdge.Node == nil {
+		if e.ComplexityRoot.OrgSubscriptionHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.OrgSubscriptionHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.OrgSubscriptionHistoryEdge.Node(childComplexity), true
 
 	case "OrganizationHistory.avatarLocalFileID":
-		if e.complexity.OrganizationHistory.AvatarLocalFileID == nil {
+		if e.ComplexityRoot.OrganizationHistory.AvatarLocalFileID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.AvatarLocalFileID(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.AvatarLocalFileID(childComplexity), true
 
 	case "OrganizationHistory.avatarRemoteURL":
-		if e.complexity.OrganizationHistory.AvatarRemoteURL == nil {
+		if e.ComplexityRoot.OrganizationHistory.AvatarRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.AvatarRemoteURL(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.AvatarRemoteURL(childComplexity), true
 
 	case "OrganizationHistory.avatarUpdatedAt":
-		if e.complexity.OrganizationHistory.AvatarUpdatedAt == nil {
+		if e.ComplexityRoot.OrganizationHistory.AvatarUpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.AvatarUpdatedAt(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.AvatarUpdatedAt(childComplexity), true
 
 	case "OrganizationHistory.createdAt":
-		if e.complexity.OrganizationHistory.CreatedAt == nil {
+		if e.ComplexityRoot.OrganizationHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.CreatedAt(childComplexity), true
 
 	case "OrganizationHistory.createdBy":
-		if e.complexity.OrganizationHistory.CreatedBy == nil {
+		if e.ComplexityRoot.OrganizationHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.CreatedBy(childComplexity), true
 
 	case "OrganizationHistory.dedicatedDb":
-		if e.complexity.OrganizationHistory.DedicatedDb == nil {
+		if e.ComplexityRoot.OrganizationHistory.DedicatedDb == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.DedicatedDb(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.DedicatedDb(childComplexity), true
 
 	case "OrganizationHistory.description":
-		if e.complexity.OrganizationHistory.Description == nil {
+		if e.ComplexityRoot.OrganizationHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.Description(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.Description(childComplexity), true
 
 	case "OrganizationHistory.displayName":
-		if e.complexity.OrganizationHistory.DisplayName == nil {
+		if e.ComplexityRoot.OrganizationHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.DisplayName(childComplexity), true
 
 	case "OrganizationHistory.historyTime":
-		if e.complexity.OrganizationHistory.HistoryTime == nil {
+		if e.ComplexityRoot.OrganizationHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.HistoryTime(childComplexity), true
 
 	case "OrganizationHistory.id":
-		if e.complexity.OrganizationHistory.ID == nil {
+		if e.ComplexityRoot.OrganizationHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.ID(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.ID(childComplexity), true
 
 	case "OrganizationHistory.name":
-		if e.complexity.OrganizationHistory.Name == nil {
+		if e.ComplexityRoot.OrganizationHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.Name(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.Name(childComplexity), true
 
 	case "OrganizationHistory.operation":
-		if e.complexity.OrganizationHistory.Operation == nil {
+		if e.ComplexityRoot.OrganizationHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.Operation(childComplexity), true
 
 	case "OrganizationHistory.personalOrg":
-		if e.complexity.OrganizationHistory.PersonalOrg == nil {
+		if e.ComplexityRoot.OrganizationHistory.PersonalOrg == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.PersonalOrg(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.PersonalOrg(childComplexity), true
 
 	case "OrganizationHistory.ref":
-		if e.complexity.OrganizationHistory.Ref == nil {
+		if e.ComplexityRoot.OrganizationHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.Ref(childComplexity), true
 
 	case "OrganizationHistory.stripeCustomerID":
-		if e.complexity.OrganizationHistory.StripeCustomerID == nil {
+		if e.ComplexityRoot.OrganizationHistory.StripeCustomerID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.StripeCustomerID(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.StripeCustomerID(childComplexity), true
 
 	case "OrganizationHistory.tags":
-		if e.complexity.OrganizationHistory.Tags == nil {
+		if e.ComplexityRoot.OrganizationHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.Tags(childComplexity), true
 
 	case "OrganizationHistory.updatedAt":
-		if e.complexity.OrganizationHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.OrganizationHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.UpdatedAt(childComplexity), true
 
 	case "OrganizationHistory.updatedBy":
-		if e.complexity.OrganizationHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.OrganizationHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistory.UpdatedBy(childComplexity), true
 
 	case "OrganizationHistoryConnection.edges":
-		if e.complexity.OrganizationHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.OrganizationHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistoryConnection.Edges(childComplexity), true
 
 	case "OrganizationHistoryConnection.pageInfo":
-		if e.complexity.OrganizationHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.OrganizationHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistoryConnection.PageInfo(childComplexity), true
 
 	case "OrganizationHistoryConnection.totalCount":
-		if e.complexity.OrganizationHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.OrganizationHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistoryConnection.TotalCount(childComplexity), true
 
 	case "OrganizationHistoryEdge.cursor":
-		if e.complexity.OrganizationHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.OrganizationHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistoryEdge.Cursor(childComplexity), true
 
 	case "OrganizationHistoryEdge.node":
-		if e.complexity.OrganizationHistoryEdge.Node == nil {
+		if e.ComplexityRoot.OrganizationHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.OrganizationHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.OrganizationHistoryEdge.Node(childComplexity), true
 
 	case "OrganizationSettingHistory.allowMatchingDomainsAutojoin":
-		if e.complexity.OrganizationSettingHistory.AllowMatchingDomainsAutojoin == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.AllowMatchingDomainsAutojoin == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.AllowMatchingDomainsAutojoin(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.AllowMatchingDomainsAutojoin(childComplexity), true
 
 	case "OrganizationSettingHistory.allowedEmailDomains":
-		if e.complexity.OrganizationSettingHistory.AllowedEmailDomains == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.AllowedEmailDomains == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.AllowedEmailDomains(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.AllowedEmailDomains(childComplexity), true
 
 	case "OrganizationSettingHistory.billingAddress":
-		if e.complexity.OrganizationSettingHistory.BillingAddress == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.BillingAddress == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.BillingAddress(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.BillingAddress(childComplexity), true
 
 	case "OrganizationSettingHistory.billingContact":
-		if e.complexity.OrganizationSettingHistory.BillingContact == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.BillingContact == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.BillingContact(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.BillingContact(childComplexity), true
 
 	case "OrganizationSettingHistory.billingEmail":
-		if e.complexity.OrganizationSettingHistory.BillingEmail == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.BillingEmail == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.BillingEmail(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.BillingEmail(childComplexity), true
 
 	case "OrganizationSettingHistory.billingNotificationsEnabled":
-		if e.complexity.OrganizationSettingHistory.BillingNotificationsEnabled == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.BillingNotificationsEnabled == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.BillingNotificationsEnabled(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.BillingNotificationsEnabled(childComplexity), true
 
 	case "OrganizationSettingHistory.billingPhone":
-		if e.complexity.OrganizationSettingHistory.BillingPhone == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.BillingPhone == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.BillingPhone(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.BillingPhone(childComplexity), true
 
 	case "OrganizationSettingHistory.complianceWebhookToken":
-		if e.complexity.OrganizationSettingHistory.ComplianceWebhookToken == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.ComplianceWebhookToken == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.ComplianceWebhookToken(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.ComplianceWebhookToken(childComplexity), true
 
 	case "OrganizationSettingHistory.createdAt":
-		if e.complexity.OrganizationSettingHistory.CreatedAt == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.CreatedAt(childComplexity), true
 
 	case "OrganizationSettingHistory.createdBy":
-		if e.complexity.OrganizationSettingHistory.CreatedBy == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.CreatedBy(childComplexity), true
 
 	case "OrganizationSettingHistory.domains":
-		if e.complexity.OrganizationSettingHistory.Domains == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.Domains == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.Domains(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.Domains(childComplexity), true
 
 	case "OrganizationSettingHistory.geoLocation":
-		if e.complexity.OrganizationSettingHistory.GeoLocation == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.GeoLocation == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.GeoLocation(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.GeoLocation(childComplexity), true
 
 	case "OrganizationSettingHistory.historyTime":
-		if e.complexity.OrganizationSettingHistory.HistoryTime == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.HistoryTime(childComplexity), true
 
 	case "OrganizationSettingHistory.id":
-		if e.complexity.OrganizationSettingHistory.ID == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.ID(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.ID(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProvider":
-		if e.complexity.OrganizationSettingHistory.IdentityProvider == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProvider == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProvider(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProvider(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderAuthTested":
-		if e.complexity.OrganizationSettingHistory.IdentityProviderAuthTested == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderAuthTested == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProviderAuthTested(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderAuthTested(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderClientID":
-		if e.complexity.OrganizationSettingHistory.IdentityProviderClientID == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProviderClientID(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientID(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderClientSecret":
-		if e.complexity.OrganizationSettingHistory.IdentityProviderClientSecret == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientSecret == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProviderClientSecret(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientSecret(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderEntityID":
-		if e.complexity.OrganizationSettingHistory.IdentityProviderEntityID == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProviderEntityID(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderLoginEnforced":
-		if e.complexity.OrganizationSettingHistory.IdentityProviderLoginEnforced == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderLoginEnforced == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProviderLoginEnforced(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderLoginEnforced(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderMetadataEndpoint":
-		if e.complexity.OrganizationSettingHistory.IdentityProviderMetadataEndpoint == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderMetadataEndpoint == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
 
 	case "OrganizationSettingHistory.multifactorAuthEnforced":
-		if e.complexity.OrganizationSettingHistory.MultifactorAuthEnforced == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.MultifactorAuthEnforced == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.MultifactorAuthEnforced(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.MultifactorAuthEnforced(childComplexity), true
 
 	case "OrganizationSettingHistory.oidcDiscoveryEndpoint":
-		if e.complexity.OrganizationSettingHistory.OidcDiscoveryEndpoint == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.OidcDiscoveryEndpoint == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.OidcDiscoveryEndpoint(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.OidcDiscoveryEndpoint(childComplexity), true
 
 	case "OrganizationSettingHistory.operation":
-		if e.complexity.OrganizationSettingHistory.Operation == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.Operation(childComplexity), true
 
 	case "OrganizationSettingHistory.organizationID":
-		if e.complexity.OrganizationSettingHistory.OrganizationID == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.OrganizationID == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.OrganizationID(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.OrganizationID(childComplexity), true
 
 	case "OrganizationSettingHistory.paymentMethodAdded":
-		if e.complexity.OrganizationSettingHistory.PaymentMethodAdded == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.PaymentMethodAdded == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.PaymentMethodAdded(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.PaymentMethodAdded(childComplexity), true
 
 	case "OrganizationSettingHistory.ref":
-		if e.complexity.OrganizationSettingHistory.Ref == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.Ref(childComplexity), true
 
 	case "OrganizationSettingHistory.samlCert":
-		if e.complexity.OrganizationSettingHistory.SamlCert == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.SamlCert == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.SamlCert(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.SamlCert(childComplexity), true
 
 	case "OrganizationSettingHistory.samlIssuer":
-		if e.complexity.OrganizationSettingHistory.SamlIssuer == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.SamlIssuer == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.SamlIssuer(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.SamlIssuer(childComplexity), true
 
 	case "OrganizationSettingHistory.samlSigninURL":
-		if e.complexity.OrganizationSettingHistory.SamlSigninURL == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.SamlSigninURL == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.SamlSigninURL(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.SamlSigninURL(childComplexity), true
 
 	case "OrganizationSettingHistory.tags":
-		if e.complexity.OrganizationSettingHistory.Tags == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.Tags(childComplexity), true
 
 	case "OrganizationSettingHistory.taxIdentifier":
-		if e.complexity.OrganizationSettingHistory.TaxIdentifier == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.TaxIdentifier == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.TaxIdentifier(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.TaxIdentifier(childComplexity), true
 
 	case "OrganizationSettingHistory.updatedAt":
-		if e.complexity.OrganizationSettingHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.UpdatedAt(childComplexity), true
 
 	case "OrganizationSettingHistory.updatedBy":
-		if e.complexity.OrganizationSettingHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.OrganizationSettingHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistory.UpdatedBy(childComplexity), true
 
 	case "OrganizationSettingHistoryConnection.edges":
-		if e.complexity.OrganizationSettingHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.OrganizationSettingHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistoryConnection.Edges(childComplexity), true
 
 	case "OrganizationSettingHistoryConnection.pageInfo":
-		if e.complexity.OrganizationSettingHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.OrganizationSettingHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistoryConnection.PageInfo(childComplexity), true
 
 	case "OrganizationSettingHistoryConnection.totalCount":
-		if e.complexity.OrganizationSettingHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.OrganizationSettingHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistoryConnection.TotalCount(childComplexity), true
 
 	case "OrganizationSettingHistoryEdge.cursor":
-		if e.complexity.OrganizationSettingHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.OrganizationSettingHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistoryEdge.Cursor(childComplexity), true
 
 	case "OrganizationSettingHistoryEdge.node":
-		if e.complexity.OrganizationSettingHistoryEdge.Node == nil {
+		if e.ComplexityRoot.OrganizationSettingHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.OrganizationSettingHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.OrganizationSettingHistoryEdge.Node(childComplexity), true
 
 	case "PageInfo.endCursor":
-		if e.complexity.PageInfo.EndCursor == nil {
+		if e.ComplexityRoot.PageInfo.EndCursor == nil {
 			break
 		}
 
-		return e.complexity.PageInfo.EndCursor(childComplexity), true
+		return e.ComplexityRoot.PageInfo.EndCursor(childComplexity), true
 
 	case "PageInfo.hasNextPage":
-		if e.complexity.PageInfo.HasNextPage == nil {
+		if e.ComplexityRoot.PageInfo.HasNextPage == nil {
 			break
 		}
 
-		return e.complexity.PageInfo.HasNextPage(childComplexity), true
+		return e.ComplexityRoot.PageInfo.HasNextPage(childComplexity), true
 
 	case "PageInfo.hasPreviousPage":
-		if e.complexity.PageInfo.HasPreviousPage == nil {
+		if e.ComplexityRoot.PageInfo.HasPreviousPage == nil {
 			break
 		}
 
-		return e.complexity.PageInfo.HasPreviousPage(childComplexity), true
+		return e.ComplexityRoot.PageInfo.HasPreviousPage(childComplexity), true
 
 	case "PageInfo.startCursor":
-		if e.complexity.PageInfo.StartCursor == nil {
+		if e.ComplexityRoot.PageInfo.StartCursor == nil {
 			break
 		}
 
-		return e.complexity.PageInfo.StartCursor(childComplexity), true
+		return e.ComplexityRoot.PageInfo.StartCursor(childComplexity), true
 
 	case "PlatformHistory.accessModelID":
-		if e.complexity.PlatformHistory.AccessModelID == nil {
+		if e.ComplexityRoot.PlatformHistory.AccessModelID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.AccessModelID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.AccessModelID(childComplexity), true
 
 	case "PlatformHistory.accessModelName":
-		if e.complexity.PlatformHistory.AccessModelName == nil {
+		if e.ComplexityRoot.PlatformHistory.AccessModelName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.AccessModelName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.AccessModelName(childComplexity), true
 
 	case "PlatformHistory.businessOwner":
-		if e.complexity.PlatformHistory.BusinessOwner == nil {
+		if e.ComplexityRoot.PlatformHistory.BusinessOwner == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.BusinessOwner(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.BusinessOwner(childComplexity), true
 
 	case "PlatformHistory.businessOwnerGroupID":
-		if e.complexity.PlatformHistory.BusinessOwnerGroupID == nil {
+		if e.ComplexityRoot.PlatformHistory.BusinessOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.BusinessOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.BusinessOwnerGroupID(childComplexity), true
 
 	case "PlatformHistory.businessOwnerUserID":
-		if e.complexity.PlatformHistory.BusinessOwnerUserID == nil {
+		if e.ComplexityRoot.PlatformHistory.BusinessOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.BusinessOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.BusinessOwnerUserID(childComplexity), true
 
 	case "PlatformHistory.businessPurpose":
-		if e.complexity.PlatformHistory.BusinessPurpose == nil {
+		if e.ComplexityRoot.PlatformHistory.BusinessPurpose == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.BusinessPurpose(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.BusinessPurpose(childComplexity), true
 
 	case "PlatformHistory.containsPii":
-		if e.complexity.PlatformHistory.ContainsPii == nil {
+		if e.ComplexityRoot.PlatformHistory.ContainsPii == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.ContainsPii(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.ContainsPii(childComplexity), true
 
 	case "PlatformHistory.costCenter":
-		if e.complexity.PlatformHistory.CostCenter == nil {
+		if e.ComplexityRoot.PlatformHistory.CostCenter == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.CostCenter(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.CostCenter(childComplexity), true
 
 	case "PlatformHistory.createdAt":
-		if e.complexity.PlatformHistory.CreatedAt == nil {
+		if e.ComplexityRoot.PlatformHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.CreatedAt(childComplexity), true
 
 	case "PlatformHistory.createdBy":
-		if e.complexity.PlatformHistory.CreatedBy == nil {
+		if e.ComplexityRoot.PlatformHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.CreatedBy(childComplexity), true
 
 	case "PlatformHistory.criticalityID":
-		if e.complexity.PlatformHistory.CriticalityID == nil {
+		if e.ComplexityRoot.PlatformHistory.CriticalityID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.CriticalityID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.CriticalityID(childComplexity), true
 
 	case "PlatformHistory.criticalityName":
-		if e.complexity.PlatformHistory.CriticalityName == nil {
+		if e.ComplexityRoot.PlatformHistory.CriticalityName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.CriticalityName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.CriticalityName(childComplexity), true
 
 	case "PlatformHistory.dataFlowSummary":
-		if e.complexity.PlatformHistory.DataFlowSummary == nil {
+		if e.ComplexityRoot.PlatformHistory.DataFlowSummary == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.DataFlowSummary(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.DataFlowSummary(childComplexity), true
 
 	case "PlatformHistory.description":
-		if e.complexity.PlatformHistory.Description == nil {
+		if e.ComplexityRoot.PlatformHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Description(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Description(childComplexity), true
 
 	case "PlatformHistory.displayID":
-		if e.complexity.PlatformHistory.DisplayID == nil {
+		if e.ComplexityRoot.PlatformHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.DisplayID(childComplexity), true
 
 	case "PlatformHistory.encryptionStatusID":
-		if e.complexity.PlatformHistory.EncryptionStatusID == nil {
+		if e.ComplexityRoot.PlatformHistory.EncryptionStatusID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.EncryptionStatusID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.EncryptionStatusID(childComplexity), true
 
 	case "PlatformHistory.encryptionStatusName":
-		if e.complexity.PlatformHistory.EncryptionStatusName == nil {
+		if e.ComplexityRoot.PlatformHistory.EncryptionStatusName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.EncryptionStatusName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.EncryptionStatusName(childComplexity), true
 
 	case "PlatformHistory.environmentID":
-		if e.complexity.PlatformHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.PlatformHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.EnvironmentID(childComplexity), true
 
 	case "PlatformHistory.environmentName":
-		if e.complexity.PlatformHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.PlatformHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.EnvironmentName(childComplexity), true
 
 	case "PlatformHistory.estimatedMonthlyCost":
-		if e.complexity.PlatformHistory.EstimatedMonthlyCost == nil {
+		if e.ComplexityRoot.PlatformHistory.EstimatedMonthlyCost == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.EstimatedMonthlyCost(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.EstimatedMonthlyCost(childComplexity), true
 
 	case "PlatformHistory.externalReferenceID":
-		if e.complexity.PlatformHistory.ExternalReferenceID == nil {
+		if e.ComplexityRoot.PlatformHistory.ExternalReferenceID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.ExternalReferenceID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.ExternalReferenceID(childComplexity), true
 
 	case "PlatformHistory.historyTime":
-		if e.complexity.PlatformHistory.HistoryTime == nil {
+		if e.ComplexityRoot.PlatformHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.HistoryTime(childComplexity), true
 
 	case "PlatformHistory.id":
-		if e.complexity.PlatformHistory.ID == nil {
+		if e.ComplexityRoot.PlatformHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.ID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.ID(childComplexity), true
 
 	case "PlatformHistory.internalOwner":
-		if e.complexity.PlatformHistory.InternalOwner == nil {
+		if e.ComplexityRoot.PlatformHistory.InternalOwner == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.InternalOwner(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.InternalOwner(childComplexity), true
 
 	case "PlatformHistory.internalOwnerGroupID":
-		if e.complexity.PlatformHistory.InternalOwnerGroupID == nil {
+		if e.ComplexityRoot.PlatformHistory.InternalOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.InternalOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.InternalOwnerGroupID(childComplexity), true
 
 	case "PlatformHistory.internalOwnerUserID":
-		if e.complexity.PlatformHistory.InternalOwnerUserID == nil {
+		if e.ComplexityRoot.PlatformHistory.InternalOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.InternalOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.InternalOwnerUserID(childComplexity), true
 
 	case "PlatformHistory.metadata":
-		if e.complexity.PlatformHistory.Metadata == nil {
+		if e.ComplexityRoot.PlatformHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Metadata(childComplexity), true
 
 	case "PlatformHistory.name":
-		if e.complexity.PlatformHistory.Name == nil {
+		if e.ComplexityRoot.PlatformHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Name(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Name(childComplexity), true
 
 	case "PlatformHistory.operation":
-		if e.complexity.PlatformHistory.Operation == nil {
+		if e.ComplexityRoot.PlatformHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Operation(childComplexity), true
 
 	case "PlatformHistory.ownerID":
-		if e.complexity.PlatformHistory.OwnerID == nil {
+		if e.ComplexityRoot.PlatformHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.OwnerID(childComplexity), true
 
 	case "PlatformHistory.physicalLocation":
-		if e.complexity.PlatformHistory.PhysicalLocation == nil {
+		if e.ComplexityRoot.PlatformHistory.PhysicalLocation == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PhysicalLocation(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PhysicalLocation(childComplexity), true
 
 	case "PlatformHistory.platformDataClassificationID":
-		if e.complexity.PlatformHistory.PlatformDataClassificationID == nil {
+		if e.ComplexityRoot.PlatformHistory.PlatformDataClassificationID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PlatformDataClassificationID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PlatformDataClassificationID(childComplexity), true
 
 	case "PlatformHistory.platformDataClassificationName":
-		if e.complexity.PlatformHistory.PlatformDataClassificationName == nil {
+		if e.ComplexityRoot.PlatformHistory.PlatformDataClassificationName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PlatformDataClassificationName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PlatformDataClassificationName(childComplexity), true
 
 	case "PlatformHistory.platformKindID":
-		if e.complexity.PlatformHistory.PlatformKindID == nil {
+		if e.ComplexityRoot.PlatformHistory.PlatformKindID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PlatformKindID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PlatformKindID(childComplexity), true
 
 	case "PlatformHistory.platformKindName":
-		if e.complexity.PlatformHistory.PlatformKindName == nil {
+		if e.ComplexityRoot.PlatformHistory.PlatformKindName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PlatformKindName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PlatformKindName(childComplexity), true
 
 	case "PlatformHistory.platformOwnerID":
-		if e.complexity.PlatformHistory.PlatformOwnerID == nil {
+		if e.ComplexityRoot.PlatformHistory.PlatformOwnerID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PlatformOwnerID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PlatformOwnerID(childComplexity), true
 
 	case "PlatformHistory.purchaseDate":
-		if e.complexity.PlatformHistory.PurchaseDate == nil {
+		if e.ComplexityRoot.PlatformHistory.PurchaseDate == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.PurchaseDate(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.PurchaseDate(childComplexity), true
 
 	case "PlatformHistory.ref":
-		if e.complexity.PlatformHistory.Ref == nil {
+		if e.ComplexityRoot.PlatformHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Ref(childComplexity), true
 
 	case "PlatformHistory.region":
-		if e.complexity.PlatformHistory.Region == nil {
+		if e.ComplexityRoot.PlatformHistory.Region == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Region(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Region(childComplexity), true
 
 	case "PlatformHistory.scopeID":
-		if e.complexity.PlatformHistory.ScopeID == nil {
+		if e.ComplexityRoot.PlatformHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.ScopeID(childComplexity), true
 
 	case "PlatformHistory.scopeName":
-		if e.complexity.PlatformHistory.ScopeName == nil {
+		if e.ComplexityRoot.PlatformHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.ScopeName(childComplexity), true
 
 	case "PlatformHistory.scopeStatement":
-		if e.complexity.PlatformHistory.ScopeStatement == nil {
+		if e.ComplexityRoot.PlatformHistory.ScopeStatement == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.ScopeStatement(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.ScopeStatement(childComplexity), true
 
 	case "PlatformHistory.securityOwner":
-		if e.complexity.PlatformHistory.SecurityOwner == nil {
+		if e.ComplexityRoot.PlatformHistory.SecurityOwner == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SecurityOwner(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SecurityOwner(childComplexity), true
 
 	case "PlatformHistory.securityOwnerGroupID":
-		if e.complexity.PlatformHistory.SecurityOwnerGroupID == nil {
+		if e.ComplexityRoot.PlatformHistory.SecurityOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SecurityOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SecurityOwnerGroupID(childComplexity), true
 
 	case "PlatformHistory.securityOwnerUserID":
-		if e.complexity.PlatformHistory.SecurityOwnerUserID == nil {
+		if e.ComplexityRoot.PlatformHistory.SecurityOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SecurityOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SecurityOwnerUserID(childComplexity), true
 
 	case "PlatformHistory.securityTierID":
-		if e.complexity.PlatformHistory.SecurityTierID == nil {
+		if e.ComplexityRoot.PlatformHistory.SecurityTierID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SecurityTierID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SecurityTierID(childComplexity), true
 
 	case "PlatformHistory.securityTierName":
-		if e.complexity.PlatformHistory.SecurityTierName == nil {
+		if e.ComplexityRoot.PlatformHistory.SecurityTierName == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SecurityTierName(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SecurityTierName(childComplexity), true
 
 	case "PlatformHistory.sourceIdentifier":
-		if e.complexity.PlatformHistory.SourceIdentifier == nil {
+		if e.ComplexityRoot.PlatformHistory.SourceIdentifier == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SourceIdentifier(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SourceIdentifier(childComplexity), true
 
 	case "PlatformHistory.sourceType":
-		if e.complexity.PlatformHistory.SourceType == nil {
+		if e.ComplexityRoot.PlatformHistory.SourceType == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.SourceType(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.SourceType(childComplexity), true
 
 	case "PlatformHistory.status":
-		if e.complexity.PlatformHistory.Status == nil {
+		if e.ComplexityRoot.PlatformHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Status(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Status(childComplexity), true
 
 	case "PlatformHistory.tags":
-		if e.complexity.PlatformHistory.Tags == nil {
+		if e.ComplexityRoot.PlatformHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.Tags(childComplexity), true
 
 	case "PlatformHistory.technicalOwner":
-		if e.complexity.PlatformHistory.TechnicalOwner == nil {
+		if e.ComplexityRoot.PlatformHistory.TechnicalOwner == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.TechnicalOwner(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.TechnicalOwner(childComplexity), true
 
 	case "PlatformHistory.technicalOwnerGroupID":
-		if e.complexity.PlatformHistory.TechnicalOwnerGroupID == nil {
+		if e.ComplexityRoot.PlatformHistory.TechnicalOwnerGroupID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.TechnicalOwnerGroupID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.TechnicalOwnerGroupID(childComplexity), true
 
 	case "PlatformHistory.technicalOwnerUserID":
-		if e.complexity.PlatformHistory.TechnicalOwnerUserID == nil {
+		if e.ComplexityRoot.PlatformHistory.TechnicalOwnerUserID == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.TechnicalOwnerUserID(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.TechnicalOwnerUserID(childComplexity), true
 
 	case "PlatformHistory.trustBoundaryDescription":
-		if e.complexity.PlatformHistory.TrustBoundaryDescription == nil {
+		if e.ComplexityRoot.PlatformHistory.TrustBoundaryDescription == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.TrustBoundaryDescription(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.TrustBoundaryDescription(childComplexity), true
 
 	case "PlatformHistory.updatedAt":
-		if e.complexity.PlatformHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.PlatformHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.UpdatedAt(childComplexity), true
 
 	case "PlatformHistory.updatedBy":
-		if e.complexity.PlatformHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.PlatformHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.UpdatedBy(childComplexity), true
 
 	case "PlatformHistory.workflowEligibleMarker":
-		if e.complexity.PlatformHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.PlatformHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.PlatformHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "PlatformHistoryConnection.edges":
-		if e.complexity.PlatformHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.PlatformHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.PlatformHistoryConnection.Edges(childComplexity), true
 
 	case "PlatformHistoryConnection.pageInfo":
-		if e.complexity.PlatformHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.PlatformHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.PlatformHistoryConnection.PageInfo(childComplexity), true
 
 	case "PlatformHistoryConnection.totalCount":
-		if e.complexity.PlatformHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.PlatformHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.PlatformHistoryConnection.TotalCount(childComplexity), true
 
 	case "PlatformHistoryEdge.cursor":
-		if e.complexity.PlatformHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.PlatformHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.PlatformHistoryEdge.Cursor(childComplexity), true
 
 	case "PlatformHistoryEdge.node":
-		if e.complexity.PlatformHistoryEdge.Node == nil {
+		if e.ComplexityRoot.PlatformHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.PlatformHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.PlatformHistoryEdge.Node(childComplexity), true
 
 	case "ProcedureHistory.approvalRequired":
-		if e.complexity.ProcedureHistory.ApprovalRequired == nil {
+		if e.ComplexityRoot.ProcedureHistory.ApprovalRequired == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ApprovalRequired(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ApprovalRequired(childComplexity), true
 
 	case "ProcedureHistory.approverID":
-		if e.complexity.ProcedureHistory.ApproverID == nil {
+		if e.ComplexityRoot.ProcedureHistory.ApproverID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ApproverID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ApproverID(childComplexity), true
 
 	case "ProcedureHistory.controlSuggestions":
-		if e.complexity.ProcedureHistory.ControlSuggestions == nil {
+		if e.ComplexityRoot.ProcedureHistory.ControlSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ControlSuggestions(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ControlSuggestions(childComplexity), true
 
 	case "ProcedureHistory.createdAt":
-		if e.complexity.ProcedureHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ProcedureHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.CreatedAt(childComplexity), true
 
 	case "ProcedureHistory.createdBy":
-		if e.complexity.ProcedureHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ProcedureHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.CreatedBy(childComplexity), true
 
 	case "ProcedureHistory.delegateID":
-		if e.complexity.ProcedureHistory.DelegateID == nil {
+		if e.ComplexityRoot.ProcedureHistory.DelegateID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.DelegateID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.DelegateID(childComplexity), true
 
 	case "ProcedureHistory.details":
-		if e.complexity.ProcedureHistory.Details == nil {
+		if e.ComplexityRoot.ProcedureHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Details(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Details(childComplexity), true
 
 	case "ProcedureHistory.detailsJSON":
-		if e.complexity.ProcedureHistory.DetailsJSON == nil {
+		if e.ComplexityRoot.ProcedureHistory.DetailsJSON == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.DetailsJSON(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.DetailsJSON(childComplexity), true
 
 	case "ProcedureHistory.dismissedControlSuggestions":
-		if e.complexity.ProcedureHistory.DismissedControlSuggestions == nil {
+		if e.ComplexityRoot.ProcedureHistory.DismissedControlSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.DismissedControlSuggestions(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.DismissedControlSuggestions(childComplexity), true
 
 	case "ProcedureHistory.dismissedImprovementSuggestions":
-		if e.complexity.ProcedureHistory.DismissedImprovementSuggestions == nil {
+		if e.ComplexityRoot.ProcedureHistory.DismissedImprovementSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.DismissedImprovementSuggestions(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.DismissedImprovementSuggestions(childComplexity), true
 
 	case "ProcedureHistory.dismissedTagSuggestions":
-		if e.complexity.ProcedureHistory.DismissedTagSuggestions == nil {
+		if e.ComplexityRoot.ProcedureHistory.DismissedTagSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.DismissedTagSuggestions(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.DismissedTagSuggestions(childComplexity), true
 
 	case "ProcedureHistory.displayID":
-		if e.complexity.ProcedureHistory.DisplayID == nil {
+		if e.ComplexityRoot.ProcedureHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.DisplayID(childComplexity), true
 
 	case "ProcedureHistory.environmentID":
-		if e.complexity.ProcedureHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.ProcedureHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.EnvironmentID(childComplexity), true
 
 	case "ProcedureHistory.environmentName":
-		if e.complexity.ProcedureHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.ProcedureHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.EnvironmentName(childComplexity), true
 
 	case "ProcedureHistory.fileID":
-		if e.complexity.ProcedureHistory.FileID == nil {
+		if e.ComplexityRoot.ProcedureHistory.FileID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.FileID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.FileID(childComplexity), true
 
 	case "ProcedureHistory.historyTime":
-		if e.complexity.ProcedureHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ProcedureHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.HistoryTime(childComplexity), true
 
 	case "ProcedureHistory.id":
-		if e.complexity.ProcedureHistory.ID == nil {
+		if e.ComplexityRoot.ProcedureHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ID(childComplexity), true
 
 	case "ProcedureHistory.improvementSuggestions":
-		if e.complexity.ProcedureHistory.ImprovementSuggestions == nil {
+		if e.ComplexityRoot.ProcedureHistory.ImprovementSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ImprovementSuggestions(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ImprovementSuggestions(childComplexity), true
 
 	case "ProcedureHistory.internalNotes":
-		if e.complexity.ProcedureHistory.InternalNotes == nil {
+		if e.ComplexityRoot.ProcedureHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.InternalNotes(childComplexity), true
 
 	case "ProcedureHistory.name":
-		if e.complexity.ProcedureHistory.Name == nil {
+		if e.ComplexityRoot.ProcedureHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Name(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Name(childComplexity), true
 
 	case "ProcedureHistory.operation":
-		if e.complexity.ProcedureHistory.Operation == nil {
+		if e.ComplexityRoot.ProcedureHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Operation(childComplexity), true
 
 	case "ProcedureHistory.ownerID":
-		if e.complexity.ProcedureHistory.OwnerID == nil {
+		if e.ComplexityRoot.ProcedureHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.OwnerID(childComplexity), true
 
 	case "ProcedureHistory.procedureKindID":
-		if e.complexity.ProcedureHistory.ProcedureKindID == nil {
+		if e.ComplexityRoot.ProcedureHistory.ProcedureKindID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ProcedureKindID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ProcedureKindID(childComplexity), true
 
 	case "ProcedureHistory.procedureKindName":
-		if e.complexity.ProcedureHistory.ProcedureKindName == nil {
+		if e.ComplexityRoot.ProcedureHistory.ProcedureKindName == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ProcedureKindName(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ProcedureKindName(childComplexity), true
 
 	case "ProcedureHistory.ref":
-		if e.complexity.ProcedureHistory.Ref == nil {
+		if e.ComplexityRoot.ProcedureHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Ref(childComplexity), true
 
 	case "ProcedureHistory.reviewDue":
-		if e.complexity.ProcedureHistory.ReviewDue == nil {
+		if e.ComplexityRoot.ProcedureHistory.ReviewDue == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ReviewDue(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ReviewDue(childComplexity), true
 
 	case "ProcedureHistory.reviewFrequency":
-		if e.complexity.ProcedureHistory.ReviewFrequency == nil {
+		if e.ComplexityRoot.ProcedureHistory.ReviewFrequency == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ReviewFrequency(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ReviewFrequency(childComplexity), true
 
 	case "ProcedureHistory.revision":
-		if e.complexity.ProcedureHistory.Revision == nil {
+		if e.ComplexityRoot.ProcedureHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Revision(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Revision(childComplexity), true
 
 	case "ProcedureHistory.scopeID":
-		if e.complexity.ProcedureHistory.ScopeID == nil {
+		if e.ComplexityRoot.ProcedureHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ScopeID(childComplexity), true
 
 	case "ProcedureHistory.scopeName":
-		if e.complexity.ProcedureHistory.ScopeName == nil {
+		if e.ComplexityRoot.ProcedureHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.ScopeName(childComplexity), true
 
 	case "ProcedureHistory.status":
-		if e.complexity.ProcedureHistory.Status == nil {
+		if e.ComplexityRoot.ProcedureHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Status(childComplexity), true
 
 	case "ProcedureHistory.summary":
-		if e.complexity.ProcedureHistory.Summary == nil {
+		if e.ComplexityRoot.ProcedureHistory.Summary == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Summary(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Summary(childComplexity), true
 
 	case "ProcedureHistory.systemInternalID":
-		if e.complexity.ProcedureHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.ProcedureHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.SystemInternalID(childComplexity), true
 
 	case "ProcedureHistory.systemOwned":
-		if e.complexity.ProcedureHistory.SystemOwned == nil {
+		if e.ComplexityRoot.ProcedureHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.SystemOwned(childComplexity), true
 
 	case "ProcedureHistory.tagSuggestions":
-		if e.complexity.ProcedureHistory.TagSuggestions == nil {
+		if e.ComplexityRoot.ProcedureHistory.TagSuggestions == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.TagSuggestions(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.TagSuggestions(childComplexity), true
 
 	case "ProcedureHistory.tags":
-		if e.complexity.ProcedureHistory.Tags == nil {
+		if e.ComplexityRoot.ProcedureHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.Tags(childComplexity), true
 
 	case "ProcedureHistory.url":
-		if e.complexity.ProcedureHistory.URL == nil {
+		if e.ComplexityRoot.ProcedureHistory.URL == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.URL(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.URL(childComplexity), true
 
 	case "ProcedureHistory.updatedAt":
-		if e.complexity.ProcedureHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ProcedureHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.UpdatedAt(childComplexity), true
 
 	case "ProcedureHistory.updatedBy":
-		if e.complexity.ProcedureHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ProcedureHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.UpdatedBy(childComplexity), true
 
 	case "ProcedureHistory.workflowEligibleMarker":
-		if e.complexity.ProcedureHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.ProcedureHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "ProcedureHistoryConnection.edges":
-		if e.complexity.ProcedureHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ProcedureHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistoryConnection.Edges(childComplexity), true
 
 	case "ProcedureHistoryConnection.pageInfo":
-		if e.complexity.ProcedureHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ProcedureHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistoryConnection.PageInfo(childComplexity), true
 
 	case "ProcedureHistoryConnection.totalCount":
-		if e.complexity.ProcedureHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ProcedureHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistoryConnection.TotalCount(childComplexity), true
 
 	case "ProcedureHistoryEdge.cursor":
-		if e.complexity.ProcedureHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ProcedureHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistoryEdge.Cursor(childComplexity), true
 
 	case "ProcedureHistoryEdge.node":
-		if e.complexity.ProcedureHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ProcedureHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ProcedureHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ProcedureHistoryEdge.Node(childComplexity), true
 
 	case "ProgramHistory.auditFirm":
-		if e.complexity.ProgramHistory.AuditFirm == nil {
+		if e.ComplexityRoot.ProgramHistory.AuditFirm == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.AuditFirm(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.AuditFirm(childComplexity), true
 
 	case "ProgramHistory.auditor":
-		if e.complexity.ProgramHistory.Auditor == nil {
+		if e.ComplexityRoot.ProgramHistory.Auditor == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Auditor(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Auditor(childComplexity), true
 
 	case "ProgramHistory.auditorEmail":
-		if e.complexity.ProgramHistory.AuditorEmail == nil {
+		if e.ComplexityRoot.ProgramHistory.AuditorEmail == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.AuditorEmail(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.AuditorEmail(childComplexity), true
 
 	case "ProgramHistory.auditorReadComments":
-		if e.complexity.ProgramHistory.AuditorReadComments == nil {
+		if e.ComplexityRoot.ProgramHistory.AuditorReadComments == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.AuditorReadComments(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.AuditorReadComments(childComplexity), true
 
 	case "ProgramHistory.auditorReady":
-		if e.complexity.ProgramHistory.AuditorReady == nil {
+		if e.ComplexityRoot.ProgramHistory.AuditorReady == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.AuditorReady(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.AuditorReady(childComplexity), true
 
 	case "ProgramHistory.auditorWriteComments":
-		if e.complexity.ProgramHistory.AuditorWriteComments == nil {
+		if e.ComplexityRoot.ProgramHistory.AuditorWriteComments == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.AuditorWriteComments(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.AuditorWriteComments(childComplexity), true
 
 	case "ProgramHistory.createdAt":
-		if e.complexity.ProgramHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ProgramHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.CreatedAt(childComplexity), true
 
 	case "ProgramHistory.createdBy":
-		if e.complexity.ProgramHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ProgramHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.CreatedBy(childComplexity), true
 
 	case "ProgramHistory.description":
-		if e.complexity.ProgramHistory.Description == nil {
+		if e.ComplexityRoot.ProgramHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Description(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Description(childComplexity), true
 
 	case "ProgramHistory.displayID":
-		if e.complexity.ProgramHistory.DisplayID == nil {
+		if e.ComplexityRoot.ProgramHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.DisplayID(childComplexity), true
 
 	case "ProgramHistory.endDate":
-		if e.complexity.ProgramHistory.EndDate == nil {
+		if e.ComplexityRoot.ProgramHistory.EndDate == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.EndDate(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.EndDate(childComplexity), true
 
 	case "ProgramHistory.frameworkName":
-		if e.complexity.ProgramHistory.FrameworkName == nil {
+		if e.ComplexityRoot.ProgramHistory.FrameworkName == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.FrameworkName(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.FrameworkName(childComplexity), true
 
 	case "ProgramHistory.historyTime":
-		if e.complexity.ProgramHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ProgramHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.HistoryTime(childComplexity), true
 
 	case "ProgramHistory.id":
-		if e.complexity.ProgramHistory.ID == nil {
+		if e.ComplexityRoot.ProgramHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.ID(childComplexity), true
 
 	case "ProgramHistory.name":
-		if e.complexity.ProgramHistory.Name == nil {
+		if e.ComplexityRoot.ProgramHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Name(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Name(childComplexity), true
 
 	case "ProgramHistory.operation":
-		if e.complexity.ProgramHistory.Operation == nil {
+		if e.ComplexityRoot.ProgramHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Operation(childComplexity), true
 
 	case "ProgramHistory.ownerID":
-		if e.complexity.ProgramHistory.OwnerID == nil {
+		if e.ComplexityRoot.ProgramHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.OwnerID(childComplexity), true
 
 	case "ProgramHistory.programKindID":
-		if e.complexity.ProgramHistory.ProgramKindID == nil {
+		if e.ComplexityRoot.ProgramHistory.ProgramKindID == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.ProgramKindID(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.ProgramKindID(childComplexity), true
 
 	case "ProgramHistory.programKindName":
-		if e.complexity.ProgramHistory.ProgramKindName == nil {
+		if e.ComplexityRoot.ProgramHistory.ProgramKindName == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.ProgramKindName(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.ProgramKindName(childComplexity), true
 
 	case "ProgramHistory.programOwnerID":
-		if e.complexity.ProgramHistory.ProgramOwnerID == nil {
+		if e.ComplexityRoot.ProgramHistory.ProgramOwnerID == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.ProgramOwnerID(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.ProgramOwnerID(childComplexity), true
 
 	case "ProgramHistory.ref":
-		if e.complexity.ProgramHistory.Ref == nil {
+		if e.ComplexityRoot.ProgramHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Ref(childComplexity), true
 
 	case "ProgramHistory.startDate":
-		if e.complexity.ProgramHistory.StartDate == nil {
+		if e.ComplexityRoot.ProgramHistory.StartDate == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.StartDate(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.StartDate(childComplexity), true
 
 	case "ProgramHistory.status":
-		if e.complexity.ProgramHistory.Status == nil {
+		if e.ComplexityRoot.ProgramHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Status(childComplexity), true
 
 	case "ProgramHistory.tags":
-		if e.complexity.ProgramHistory.Tags == nil {
+		if e.ComplexityRoot.ProgramHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.Tags(childComplexity), true
 
 	case "ProgramHistory.updatedAt":
-		if e.complexity.ProgramHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ProgramHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.UpdatedAt(childComplexity), true
 
 	case "ProgramHistory.updatedBy":
-		if e.complexity.ProgramHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ProgramHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ProgramHistory.UpdatedBy(childComplexity), true
 
 	case "ProgramHistoryConnection.edges":
-		if e.complexity.ProgramHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ProgramHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ProgramHistoryConnection.Edges(childComplexity), true
 
 	case "ProgramHistoryConnection.pageInfo":
-		if e.complexity.ProgramHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ProgramHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ProgramHistoryConnection.PageInfo(childComplexity), true
 
 	case "ProgramHistoryConnection.totalCount":
-		if e.complexity.ProgramHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ProgramHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ProgramHistoryConnection.TotalCount(childComplexity), true
 
 	case "ProgramHistoryEdge.cursor":
-		if e.complexity.ProgramHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ProgramHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ProgramHistoryEdge.Cursor(childComplexity), true
 
 	case "ProgramHistoryEdge.node":
-		if e.complexity.ProgramHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ProgramHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ProgramHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ProgramHistoryEdge.Node(childComplexity), true
 
 	case "ProgramMembershipHistory.createdAt":
-		if e.complexity.ProgramMembershipHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.CreatedAt(childComplexity), true
 
 	case "ProgramMembershipHistory.createdBy":
-		if e.complexity.ProgramMembershipHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.CreatedBy(childComplexity), true
 
 	case "ProgramMembershipHistory.historyTime":
-		if e.complexity.ProgramMembershipHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.HistoryTime(childComplexity), true
 
 	case "ProgramMembershipHistory.id":
-		if e.complexity.ProgramMembershipHistory.ID == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.ID(childComplexity), true
 
 	case "ProgramMembershipHistory.operation":
-		if e.complexity.ProgramMembershipHistory.Operation == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.Operation(childComplexity), true
 
 	case "ProgramMembershipHistory.programID":
-		if e.complexity.ProgramMembershipHistory.ProgramID == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.ProgramID == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.ProgramID(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.ProgramID(childComplexity), true
 
 	case "ProgramMembershipHistory.ref":
-		if e.complexity.ProgramMembershipHistory.Ref == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.Ref(childComplexity), true
 
 	case "ProgramMembershipHistory.role":
-		if e.complexity.ProgramMembershipHistory.Role == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.Role == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.Role(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.Role(childComplexity), true
 
 	case "ProgramMembershipHistory.updatedAt":
-		if e.complexity.ProgramMembershipHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.UpdatedAt(childComplexity), true
 
 	case "ProgramMembershipHistory.updatedBy":
-		if e.complexity.ProgramMembershipHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.UpdatedBy(childComplexity), true
 
 	case "ProgramMembershipHistory.userID":
-		if e.complexity.ProgramMembershipHistory.UserID == nil {
+		if e.ComplexityRoot.ProgramMembershipHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistory.UserID(childComplexity), true
 
 	case "ProgramMembershipHistoryConnection.edges":
-		if e.complexity.ProgramMembershipHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ProgramMembershipHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistoryConnection.Edges(childComplexity), true
 
 	case "ProgramMembershipHistoryConnection.pageInfo":
-		if e.complexity.ProgramMembershipHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ProgramMembershipHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistoryConnection.PageInfo(childComplexity), true
 
 	case "ProgramMembershipHistoryConnection.totalCount":
-		if e.complexity.ProgramMembershipHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ProgramMembershipHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistoryConnection.TotalCount(childComplexity), true
 
 	case "ProgramMembershipHistoryEdge.cursor":
-		if e.complexity.ProgramMembershipHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ProgramMembershipHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistoryEdge.Cursor(childComplexity), true
 
 	case "ProgramMembershipHistoryEdge.node":
-		if e.complexity.ProgramMembershipHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ProgramMembershipHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ProgramMembershipHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ProgramMembershipHistoryEdge.Node(childComplexity), true
 
 	case "Query.actionPlanHistories":
-		if e.complexity.Query.ActionPlanHistories == nil {
+		if e.ComplexityRoot.Query.ActionPlanHistories == nil {
 			break
 		}
 
@@ -13592,10 +13575,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ActionPlanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ActionPlanHistoryOrder), args["where"].(*historygenerated.ActionPlanHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ActionPlanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ActionPlanHistoryOrder), args["where"].(*historygenerated.ActionPlanHistoryWhereInput)), true
 
 	case "Query.assessmentHistories":
-		if e.complexity.Query.AssessmentHistories == nil {
+		if e.ComplexityRoot.Query.AssessmentHistories == nil {
 			break
 		}
 
@@ -13604,10 +13587,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.AssessmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentHistoryOrder), args["where"].(*historygenerated.AssessmentHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.AssessmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentHistoryOrder), args["where"].(*historygenerated.AssessmentHistoryWhereInput)), true
 
 	case "Query.assessmentResponseHistories":
-		if e.complexity.Query.AssessmentResponseHistories == nil {
+		if e.ComplexityRoot.Query.AssessmentResponseHistories == nil {
 			break
 		}
 
@@ -13616,10 +13599,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.AssessmentResponseHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentResponseHistoryOrder), args["where"].(*historygenerated.AssessmentResponseHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.AssessmentResponseHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssessmentResponseHistoryOrder), args["where"].(*historygenerated.AssessmentResponseHistoryWhereInput)), true
 
 	case "Query.assetHistories":
-		if e.complexity.Query.AssetHistories == nil {
+		if e.ComplexityRoot.Query.AssetHistories == nil {
 			break
 		}
 
@@ -13628,10 +13611,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.AssetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssetHistoryOrder), args["where"].(*historygenerated.AssetHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.AssetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssetHistoryOrder), args["where"].(*historygenerated.AssetHistoryWhereInput)), true
 
 	case "Query.campaignHistories":
-		if e.complexity.Query.CampaignHistories == nil {
+		if e.ComplexityRoot.Query.CampaignHistories == nil {
 			break
 		}
 
@@ -13640,10 +13623,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.CampaignHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignHistoryOrder), args["where"].(*historygenerated.CampaignHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.CampaignHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignHistoryOrder), args["where"].(*historygenerated.CampaignHistoryWhereInput)), true
 
 	case "Query.campaignTargetHistories":
-		if e.complexity.Query.CampaignTargetHistories == nil {
+		if e.ComplexityRoot.Query.CampaignTargetHistories == nil {
 			break
 		}
 
@@ -13652,10 +13635,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.CampaignTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignTargetHistoryOrder), args["where"].(*historygenerated.CampaignTargetHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.CampaignTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignTargetHistoryOrder), args["where"].(*historygenerated.CampaignTargetHistoryWhereInput)), true
 
 	case "Query.contactHistories":
-		if e.complexity.Query.ContactHistories == nil {
+		if e.ComplexityRoot.Query.ContactHistories == nil {
 			break
 		}
 
@@ -13664,10 +13647,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ContactHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ContactHistoryOrder), args["where"].(*historygenerated.ContactHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ContactHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ContactHistoryOrder), args["where"].(*historygenerated.ContactHistoryWhereInput)), true
 
 	case "Query.controlHistories":
-		if e.complexity.Query.ControlHistories == nil {
+		if e.ComplexityRoot.Query.ControlHistories == nil {
 			break
 		}
 
@@ -13676,10 +13659,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ControlHistoryOrder), args["where"].(*historygenerated.ControlHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ControlHistoryOrder), args["where"].(*historygenerated.ControlHistoryWhereInput)), true
 
 	case "Query.controlImplementationHistories":
-		if e.complexity.Query.ControlImplementationHistories == nil {
+		if e.ComplexityRoot.Query.ControlImplementationHistories == nil {
 			break
 		}
 
@@ -13688,10 +13671,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlImplementationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ControlImplementationHistoryOrder), args["where"].(*historygenerated.ControlImplementationHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ControlImplementationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ControlImplementationHistoryOrder), args["where"].(*historygenerated.ControlImplementationHistoryWhereInput)), true
 
 	case "Query.controlObjectiveHistories":
-		if e.complexity.Query.ControlObjectiveHistories == nil {
+		if e.ComplexityRoot.Query.ControlObjectiveHistories == nil {
 			break
 		}
 
@@ -13700,10 +13683,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlObjectiveHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ControlObjectiveHistoryOrder), args["where"].(*historygenerated.ControlObjectiveHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ControlObjectiveHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ControlObjectiveHistoryOrder), args["where"].(*historygenerated.ControlObjectiveHistoryWhereInput)), true
 
 	case "Query.customDomainHistories":
-		if e.complexity.Query.CustomDomainHistories == nil {
+		if e.ComplexityRoot.Query.CustomDomainHistories == nil {
 			break
 		}
 
@@ -13712,10 +13695,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.CustomDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CustomDomainHistoryOrder), args["where"].(*historygenerated.CustomDomainHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.CustomDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CustomDomainHistoryOrder), args["where"].(*historygenerated.CustomDomainHistoryWhereInput)), true
 
 	case "Query.dnsVerificationHistories":
-		if e.complexity.Query.DNSVerificationHistories == nil {
+		if e.ComplexityRoot.Query.DNSVerificationHistories == nil {
 			break
 		}
 
@@ -13724,10 +13707,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.DNSVerificationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DNSVerificationHistoryOrder), args["where"].(*historygenerated.DNSVerificationHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.DNSVerificationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DNSVerificationHistoryOrder), args["where"].(*historygenerated.DNSVerificationHistoryWhereInput)), true
 
 	case "Query.directoryAccountHistories":
-		if e.complexity.Query.DirectoryAccountHistories == nil {
+		if e.ComplexityRoot.Query.DirectoryAccountHistories == nil {
 			break
 		}
 
@@ -13736,10 +13719,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.DirectoryAccountHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DirectoryAccountHistoryOrder), args["where"].(*historygenerated.DirectoryAccountHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.DirectoryAccountHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DirectoryAccountHistoryOrder), args["where"].(*historygenerated.DirectoryAccountHistoryWhereInput)), true
 
 	case "Query.directoryGroupHistories":
-		if e.complexity.Query.DirectoryGroupHistories == nil {
+		if e.ComplexityRoot.Query.DirectoryGroupHistories == nil {
 			break
 		}
 
@@ -13748,10 +13731,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.DirectoryGroupHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DirectoryGroupHistoryOrder), args["where"].(*historygenerated.DirectoryGroupHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.DirectoryGroupHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DirectoryGroupHistoryOrder), args["where"].(*historygenerated.DirectoryGroupHistoryWhereInput)), true
 
 	case "Query.directoryMembershipHistories":
-		if e.complexity.Query.DirectoryMembershipHistories == nil {
+		if e.ComplexityRoot.Query.DirectoryMembershipHistories == nil {
 			break
 		}
 
@@ -13760,10 +13743,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.DirectoryMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DirectoryMembershipHistoryOrder), args["where"].(*historygenerated.DirectoryMembershipHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.DirectoryMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DirectoryMembershipHistoryOrder), args["where"].(*historygenerated.DirectoryMembershipHistoryWhereInput)), true
 
 	case "Query.discussionHistories":
-		if e.complexity.Query.DiscussionHistories == nil {
+		if e.ComplexityRoot.Query.DiscussionHistories == nil {
 			break
 		}
 
@@ -13772,10 +13755,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.DiscussionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DiscussionHistoryOrder), args["where"].(*historygenerated.DiscussionHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.DiscussionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DiscussionHistoryOrder), args["where"].(*historygenerated.DiscussionHistoryWhereInput)), true
 
 	case "Query.documentDataHistories":
-		if e.complexity.Query.DocumentDataHistories == nil {
+		if e.ComplexityRoot.Query.DocumentDataHistories == nil {
 			break
 		}
 
@@ -13784,10 +13767,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.DocumentDataHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DocumentDataHistoryOrder), args["where"].(*historygenerated.DocumentDataHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.DocumentDataHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DocumentDataHistoryOrder), args["where"].(*historygenerated.DocumentDataHistoryWhereInput)), true
 
 	case "Query.emailBrandingHistories":
-		if e.complexity.Query.EmailBrandingHistories == nil {
+		if e.ComplexityRoot.Query.EmailBrandingHistories == nil {
 			break
 		}
 
@@ -13796,10 +13779,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.EmailBrandingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailBrandingHistoryOrder), args["where"].(*historygenerated.EmailBrandingHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.EmailBrandingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailBrandingHistoryOrder), args["where"].(*historygenerated.EmailBrandingHistoryWhereInput)), true
 
 	case "Query.emailTemplateHistories":
-		if e.complexity.Query.EmailTemplateHistories == nil {
+		if e.ComplexityRoot.Query.EmailTemplateHistories == nil {
 			break
 		}
 
@@ -13808,10 +13791,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.EmailTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailTemplateHistoryOrder), args["where"].(*historygenerated.EmailTemplateHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.EmailTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailTemplateHistoryOrder), args["where"].(*historygenerated.EmailTemplateHistoryWhereInput)), true
 
 	case "Query.entityHistories":
-		if e.complexity.Query.EntityHistories == nil {
+		if e.ComplexityRoot.Query.EntityHistories == nil {
 			break
 		}
 
@@ -13820,10 +13803,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.EntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EntityHistoryOrder), args["where"].(*historygenerated.EntityHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.EntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EntityHistoryOrder), args["where"].(*historygenerated.EntityHistoryWhereInput)), true
 
 	case "Query.entityTypeHistories":
-		if e.complexity.Query.EntityTypeHistories == nil {
+		if e.ComplexityRoot.Query.EntityTypeHistories == nil {
 			break
 		}
 
@@ -13832,10 +13815,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.EntityTypeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EntityTypeHistoryOrder), args["where"].(*historygenerated.EntityTypeHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.EntityTypeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EntityTypeHistoryOrder), args["where"].(*historygenerated.EntityTypeHistoryWhereInput)), true
 
 	case "Query.evidenceHistories":
-		if e.complexity.Query.EvidenceHistories == nil {
+		if e.ComplexityRoot.Query.EvidenceHistories == nil {
 			break
 		}
 
@@ -13844,10 +13827,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.EvidenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EvidenceHistoryOrder), args["where"].(*historygenerated.EvidenceHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.EvidenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EvidenceHistoryOrder), args["where"].(*historygenerated.EvidenceHistoryWhereInput)), true
 
 	case "Query.fileHistories":
-		if e.complexity.Query.FileHistories == nil {
+		if e.ComplexityRoot.Query.FileHistories == nil {
 			break
 		}
 
@@ -13856,10 +13839,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.FileHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.FileHistoryOrder), args["where"].(*historygenerated.FileHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.FileHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.FileHistoryOrder), args["where"].(*historygenerated.FileHistoryWhereInput)), true
 
 	case "Query.findingControlHistories":
-		if e.complexity.Query.FindingControlHistories == nil {
+		if e.ComplexityRoot.Query.FindingControlHistories == nil {
 			break
 		}
 
@@ -13868,10 +13851,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.FindingControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.FindingControlHistoryOrder), args["where"].(*historygenerated.FindingControlHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.FindingControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.FindingControlHistoryOrder), args["where"].(*historygenerated.FindingControlHistoryWhereInput)), true
 
 	case "Query.findingHistories":
-		if e.complexity.Query.FindingHistories == nil {
+		if e.ComplexityRoot.Query.FindingHistories == nil {
 			break
 		}
 
@@ -13880,10 +13863,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.FindingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.FindingHistoryOrder), args["where"].(*historygenerated.FindingHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.FindingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.FindingHistoryOrder), args["where"].(*historygenerated.FindingHistoryWhereInput)), true
 
 	case "Query.groupHistories":
-		if e.complexity.Query.GroupHistories == nil {
+		if e.ComplexityRoot.Query.GroupHistories == nil {
 			break
 		}
 
@@ -13892,10 +13875,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.GroupHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.GroupHistoryOrder), args["where"].(*historygenerated.GroupHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.GroupHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.GroupHistoryOrder), args["where"].(*historygenerated.GroupHistoryWhereInput)), true
 
 	case "Query.groupMembershipHistories":
-		if e.complexity.Query.GroupMembershipHistories == nil {
+		if e.ComplexityRoot.Query.GroupMembershipHistories == nil {
 			break
 		}
 
@@ -13904,10 +13887,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.GroupMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.GroupMembershipHistoryOrder), args["where"].(*historygenerated.GroupMembershipHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.GroupMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.GroupMembershipHistoryOrder), args["where"].(*historygenerated.GroupMembershipHistoryWhereInput)), true
 
 	case "Query.groupSettingHistories":
-		if e.complexity.Query.GroupSettingHistories == nil {
+		if e.ComplexityRoot.Query.GroupSettingHistories == nil {
 			break
 		}
 
@@ -13916,10 +13899,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.GroupSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.GroupSettingHistoryOrder), args["where"].(*historygenerated.GroupSettingHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.GroupSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.GroupSettingHistoryOrder), args["where"].(*historygenerated.GroupSettingHistoryWhereInput)), true
 
 	case "Query.hushHistories":
-		if e.complexity.Query.HushHistories == nil {
+		if e.ComplexityRoot.Query.HushHistories == nil {
 			break
 		}
 
@@ -13928,10 +13911,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.HushHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.HushHistoryOrder), args["where"].(*historygenerated.HushHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.HushHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.HushHistoryOrder), args["where"].(*historygenerated.HushHistoryWhereInput)), true
 
 	case "Query.identityHolderHistories":
-		if e.complexity.Query.IdentityHolderHistories == nil {
+		if e.ComplexityRoot.Query.IdentityHolderHistories == nil {
 			break
 		}
 
@@ -13940,10 +13923,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.IdentityHolderHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.IdentityHolderHistoryOrder), args["where"].(*historygenerated.IdentityHolderHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.IdentityHolderHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.IdentityHolderHistoryOrder), args["where"].(*historygenerated.IdentityHolderHistoryWhereInput)), true
 
 	case "Query.integrationHistories":
-		if e.complexity.Query.IntegrationHistories == nil {
+		if e.ComplexityRoot.Query.IntegrationHistories == nil {
 			break
 		}
 
@@ -13952,10 +13935,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.IntegrationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.IntegrationHistoryOrder), args["where"].(*historygenerated.IntegrationHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.IntegrationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.IntegrationHistoryOrder), args["where"].(*historygenerated.IntegrationHistoryWhereInput)), true
 
 	case "Query.internalPolicyHistories":
-		if e.complexity.Query.InternalPolicyHistories == nil {
+		if e.ComplexityRoot.Query.InternalPolicyHistories == nil {
 			break
 		}
 
@@ -13964,10 +13947,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.InternalPolicyHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.InternalPolicyHistoryOrder), args["where"].(*historygenerated.InternalPolicyHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.InternalPolicyHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.InternalPolicyHistoryOrder), args["where"].(*historygenerated.InternalPolicyHistoryWhereInput)), true
 
 	case "Query.jobTemplateHistories":
-		if e.complexity.Query.JobTemplateHistories == nil {
+		if e.ComplexityRoot.Query.JobTemplateHistories == nil {
 			break
 		}
 
@@ -13976,10 +13959,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.JobTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.JobTemplateHistoryOrder), args["where"].(*historygenerated.JobTemplateHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.JobTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.JobTemplateHistoryOrder), args["where"].(*historygenerated.JobTemplateHistoryWhereInput)), true
 
 	case "Query.mappableDomainHistories":
-		if e.complexity.Query.MappableDomainHistories == nil {
+		if e.ComplexityRoot.Query.MappableDomainHistories == nil {
 			break
 		}
 
@@ -13988,10 +13971,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.MappableDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.MappableDomainHistoryOrder), args["where"].(*historygenerated.MappableDomainHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.MappableDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.MappableDomainHistoryOrder), args["where"].(*historygenerated.MappableDomainHistoryWhereInput)), true
 
 	case "Query.mappedControlHistories":
-		if e.complexity.Query.MappedControlHistories == nil {
+		if e.ComplexityRoot.Query.MappedControlHistories == nil {
 			break
 		}
 
@@ -14000,10 +13983,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.MappedControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.MappedControlHistoryOrder), args["where"].(*historygenerated.MappedControlHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.MappedControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.MappedControlHistoryOrder), args["where"].(*historygenerated.MappedControlHistoryWhereInput)), true
 
 	case "Query.narrativeHistories":
-		if e.complexity.Query.NarrativeHistories == nil {
+		if e.ComplexityRoot.Query.NarrativeHistories == nil {
 			break
 		}
 
@@ -14012,10 +13995,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.NarrativeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NarrativeHistoryOrder), args["where"].(*historygenerated.NarrativeHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.NarrativeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NarrativeHistoryOrder), args["where"].(*historygenerated.NarrativeHistoryWhereInput)), true
 
 	case "Query.node":
-		if e.complexity.Query.Node == nil {
+		if e.ComplexityRoot.Query.Node == nil {
 			break
 		}
 
@@ -14024,10 +14007,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.Node(childComplexity, args["id"].(string)), true
+		return e.ComplexityRoot.Query.Node(childComplexity, args["id"].(string)), true
 
 	case "Query.nodes":
-		if e.complexity.Query.Nodes == nil {
+		if e.ComplexityRoot.Query.Nodes == nil {
 			break
 		}
 
@@ -14036,10 +14019,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]string)), true
+		return e.ComplexityRoot.Query.Nodes(childComplexity, args["ids"].([]string)), true
 
 	case "Query.noteHistories":
-		if e.complexity.Query.NoteHistories == nil {
+		if e.ComplexityRoot.Query.NoteHistories == nil {
 			break
 		}
 
@@ -14048,10 +14031,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.NoteHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NoteHistoryOrder), args["where"].(*historygenerated.NoteHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.NoteHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NoteHistoryOrder), args["where"].(*historygenerated.NoteHistoryWhereInput)), true
 
 	case "Query.notificationPreferenceHistories":
-		if e.complexity.Query.NotificationPreferenceHistories == nil {
+		if e.ComplexityRoot.Query.NotificationPreferenceHistories == nil {
 			break
 		}
 
@@ -14060,10 +14043,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.NotificationPreferenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NotificationPreferenceHistoryOrder), args["where"].(*historygenerated.NotificationPreferenceHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.NotificationPreferenceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NotificationPreferenceHistoryOrder), args["where"].(*historygenerated.NotificationPreferenceHistoryWhereInput)), true
 
 	case "Query.notificationTemplateHistories":
-		if e.complexity.Query.NotificationTemplateHistories == nil {
+		if e.ComplexityRoot.Query.NotificationTemplateHistories == nil {
 			break
 		}
 
@@ -14072,10 +14055,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.NotificationTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NotificationTemplateHistoryOrder), args["where"].(*historygenerated.NotificationTemplateHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.NotificationTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.NotificationTemplateHistoryOrder), args["where"].(*historygenerated.NotificationTemplateHistoryWhereInput)), true
 
 	case "Query.orgMembershipHistories":
-		if e.complexity.Query.OrgMembershipHistories == nil {
+		if e.ComplexityRoot.Query.OrgMembershipHistories == nil {
 			break
 		}
 
@@ -14084,10 +14067,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.OrgMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrgMembershipHistoryOrder), args["where"].(*historygenerated.OrgMembershipHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.OrgMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrgMembershipHistoryOrder), args["where"].(*historygenerated.OrgMembershipHistoryWhereInput)), true
 
 	case "Query.orgSubscriptionHistories":
-		if e.complexity.Query.OrgSubscriptionHistories == nil {
+		if e.ComplexityRoot.Query.OrgSubscriptionHistories == nil {
 			break
 		}
 
@@ -14096,10 +14079,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.OrgSubscriptionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrgSubscriptionHistoryOrder), args["where"].(*historygenerated.OrgSubscriptionHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.OrgSubscriptionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrgSubscriptionHistoryOrder), args["where"].(*historygenerated.OrgSubscriptionHistoryWhereInput)), true
 
 	case "Query.organizationHistories":
-		if e.complexity.Query.OrganizationHistories == nil {
+		if e.ComplexityRoot.Query.OrganizationHistories == nil {
 			break
 		}
 
@@ -14108,10 +14091,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.OrganizationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrganizationHistoryOrder), args["where"].(*historygenerated.OrganizationHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.OrganizationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrganizationHistoryOrder), args["where"].(*historygenerated.OrganizationHistoryWhereInput)), true
 
 	case "Query.organizationSettingHistories":
-		if e.complexity.Query.OrganizationSettingHistories == nil {
+		if e.ComplexityRoot.Query.OrganizationSettingHistories == nil {
 			break
 		}
 
@@ -14120,10 +14103,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.OrganizationSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrganizationSettingHistoryOrder), args["where"].(*historygenerated.OrganizationSettingHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.OrganizationSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.OrganizationSettingHistoryOrder), args["where"].(*historygenerated.OrganizationSettingHistoryWhereInput)), true
 
 	case "Query.platformHistories":
-		if e.complexity.Query.PlatformHistories == nil {
+		if e.ComplexityRoot.Query.PlatformHistories == nil {
 			break
 		}
 
@@ -14132,10 +14115,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.PlatformHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.PlatformHistoryOrder), args["where"].(*historygenerated.PlatformHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.PlatformHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.PlatformHistoryOrder), args["where"].(*historygenerated.PlatformHistoryWhereInput)), true
 
 	case "Query.procedureHistories":
-		if e.complexity.Query.ProcedureHistories == nil {
+		if e.ComplexityRoot.Query.ProcedureHistories == nil {
 			break
 		}
 
@@ -14144,10 +14127,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ProcedureHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ProcedureHistoryOrder), args["where"].(*historygenerated.ProcedureHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ProcedureHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ProcedureHistoryOrder), args["where"].(*historygenerated.ProcedureHistoryWhereInput)), true
 
 	case "Query.programHistories":
-		if e.complexity.Query.ProgramHistories == nil {
+		if e.ComplexityRoot.Query.ProgramHistories == nil {
 			break
 		}
 
@@ -14156,10 +14139,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ProgramHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ProgramHistoryOrder), args["where"].(*historygenerated.ProgramHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ProgramHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ProgramHistoryOrder), args["where"].(*historygenerated.ProgramHistoryWhereInput)), true
 
 	case "Query.programMembershipHistories":
-		if e.complexity.Query.ProgramMembershipHistories == nil {
+		if e.ComplexityRoot.Query.ProgramMembershipHistories == nil {
 			break
 		}
 
@@ -14168,10 +14151,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ProgramMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ProgramMembershipHistoryOrder), args["where"].(*historygenerated.ProgramMembershipHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ProgramMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ProgramMembershipHistoryOrder), args["where"].(*historygenerated.ProgramMembershipHistoryWhereInput)), true
 
 	case "Query.remediationHistories":
-		if e.complexity.Query.RemediationHistories == nil {
+		if e.ComplexityRoot.Query.RemediationHistories == nil {
 			break
 		}
 
@@ -14180,10 +14163,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.RemediationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.RemediationHistoryOrder), args["where"].(*historygenerated.RemediationHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.RemediationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.RemediationHistoryOrder), args["where"].(*historygenerated.RemediationHistoryWhereInput)), true
 
 	case "Query.reviewHistories":
-		if e.complexity.Query.ReviewHistories == nil {
+		if e.ComplexityRoot.Query.ReviewHistories == nil {
 			break
 		}
 
@@ -14192,10 +14175,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ReviewHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ReviewHistoryOrder), args["where"].(*historygenerated.ReviewHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ReviewHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ReviewHistoryOrder), args["where"].(*historygenerated.ReviewHistoryWhereInput)), true
 
 	case "Query.riskHistories":
-		if e.complexity.Query.RiskHistories == nil {
+		if e.ComplexityRoot.Query.RiskHistories == nil {
 			break
 		}
 
@@ -14204,10 +14187,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.RiskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.RiskHistoryOrder), args["where"].(*historygenerated.RiskHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.RiskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.RiskHistoryOrder), args["where"].(*historygenerated.RiskHistoryWhereInput)), true
 
 	case "Query.scanHistories":
-		if e.complexity.Query.ScanHistories == nil {
+		if e.ComplexityRoot.Query.ScanHistories == nil {
 			break
 		}
 
@@ -14216,10 +14199,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ScanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ScanHistoryOrder), args["where"].(*historygenerated.ScanHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ScanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ScanHistoryOrder), args["where"].(*historygenerated.ScanHistoryWhereInput)), true
 
 	case "Query.scheduledJobHistories":
-		if e.complexity.Query.ScheduledJobHistories == nil {
+		if e.ComplexityRoot.Query.ScheduledJobHistories == nil {
 			break
 		}
 
@@ -14228,10 +14211,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ScheduledJobHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ScheduledJobHistoryOrder), args["where"].(*historygenerated.ScheduledJobHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.ScheduledJobHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.ScheduledJobHistoryOrder), args["where"].(*historygenerated.ScheduledJobHistoryWhereInput)), true
 
 	case "Query.standardHistories":
-		if e.complexity.Query.StandardHistories == nil {
+		if e.ComplexityRoot.Query.StandardHistories == nil {
 			break
 		}
 
@@ -14240,10 +14223,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.StandardHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.StandardHistoryOrder), args["where"].(*historygenerated.StandardHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.StandardHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.StandardHistoryOrder), args["where"].(*historygenerated.StandardHistoryWhereInput)), true
 
 	case "Query.subcontrolHistories":
-		if e.complexity.Query.SubcontrolHistories == nil {
+		if e.ComplexityRoot.Query.SubcontrolHistories == nil {
 			break
 		}
 
@@ -14252,10 +14235,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.SubcontrolHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SubcontrolHistoryOrder), args["where"].(*historygenerated.SubcontrolHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.SubcontrolHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SubcontrolHistoryOrder), args["where"].(*historygenerated.SubcontrolHistoryWhereInput)), true
 
 	case "Query.subprocessorHistories":
-		if e.complexity.Query.SubprocessorHistories == nil {
+		if e.ComplexityRoot.Query.SubprocessorHistories == nil {
 			break
 		}
 
@@ -14264,10 +14247,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.SubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SubprocessorHistoryOrder), args["where"].(*historygenerated.SubprocessorHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.SubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SubprocessorHistoryOrder), args["where"].(*historygenerated.SubprocessorHistoryWhereInput)), true
 
 	case "Query.taskHistories":
-		if e.complexity.Query.TaskHistories == nil {
+		if e.ComplexityRoot.Query.TaskHistories == nil {
 			break
 		}
 
@@ -14276,10 +14259,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TaskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TaskHistoryOrder), args["where"].(*historygenerated.TaskHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TaskHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TaskHistoryOrder), args["where"].(*historygenerated.TaskHistoryWhereInput)), true
 
 	case "Query.templateHistories":
-		if e.complexity.Query.TemplateHistories == nil {
+		if e.ComplexityRoot.Query.TemplateHistories == nil {
 			break
 		}
 
@@ -14288,10 +14271,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TemplateHistoryOrder), args["where"].(*historygenerated.TemplateHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TemplateHistoryOrder), args["where"].(*historygenerated.TemplateHistoryWhereInput)), true
 
 	case "Query.trustCenterComplianceHistories":
-		if e.complexity.Query.TrustCenterComplianceHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterComplianceHistories == nil {
 			break
 		}
 
@@ -14300,10 +14283,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterComplianceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterComplianceHistoryOrder), args["where"].(*historygenerated.TrustCenterComplianceHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterComplianceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterComplianceHistoryOrder), args["where"].(*historygenerated.TrustCenterComplianceHistoryWhereInput)), true
 
 	case "Query.trustCenterDocHistories":
-		if e.complexity.Query.TrustCenterDocHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterDocHistories == nil {
 			break
 		}
 
@@ -14312,10 +14295,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterDocHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterDocHistoryOrder), args["where"].(*historygenerated.TrustCenterDocHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterDocHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterDocHistoryOrder), args["where"].(*historygenerated.TrustCenterDocHistoryWhereInput)), true
 
 	case "Query.trustCenterEntityHistories":
-		if e.complexity.Query.TrustCenterEntityHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterEntityHistories == nil {
 			break
 		}
 
@@ -14324,10 +14307,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterEntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterEntityHistoryOrder), args["where"].(*historygenerated.TrustCenterEntityHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterEntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterEntityHistoryOrder), args["where"].(*historygenerated.TrustCenterEntityHistoryWhereInput)), true
 
 	case "Query.trustCenterFaqHistories":
-		if e.complexity.Query.TrustCenterFaqHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterFaqHistories == nil {
 			break
 		}
 
@@ -14336,10 +14319,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterFaqHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterFAQHistoryOrder), args["where"].(*historygenerated.TrustCenterFAQHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterFaqHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterFAQHistoryOrder), args["where"].(*historygenerated.TrustCenterFAQHistoryWhereInput)), true
 
 	case "Query.trustCenterHistories":
-		if e.complexity.Query.TrustCenterHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterHistories == nil {
 			break
 		}
 
@@ -14348,10 +14331,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterHistoryOrder), args["where"].(*historygenerated.TrustCenterHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterHistoryOrder), args["where"].(*historygenerated.TrustCenterHistoryWhereInput)), true
 
 	case "Query.trustCenterNdaRequestHistories":
-		if e.complexity.Query.TrustCenterNdaRequestHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterNdaRequestHistories == nil {
 			break
 		}
 
@@ -14360,10 +14343,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterNdaRequestHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterNDARequestHistoryOrder), args["where"].(*historygenerated.TrustCenterNDARequestHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterNdaRequestHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterNDARequestHistoryOrder), args["where"].(*historygenerated.TrustCenterNDARequestHistoryWhereInput)), true
 
 	case "Query.trustCenterSettingHistories":
-		if e.complexity.Query.TrustCenterSettingHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterSettingHistories == nil {
 			break
 		}
 
@@ -14372,10 +14355,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterSettingHistoryOrder), args["where"].(*historygenerated.TrustCenterSettingHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterSettingHistoryOrder), args["where"].(*historygenerated.TrustCenterSettingHistoryWhereInput)), true
 
 	case "Query.trustCenterSubprocessorHistories":
-		if e.complexity.Query.TrustCenterSubprocessorHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterSubprocessorHistories == nil {
 			break
 		}
 
@@ -14384,10 +14367,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterSubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterSubprocessorHistoryOrder), args["where"].(*historygenerated.TrustCenterSubprocessorHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterSubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterSubprocessorHistoryOrder), args["where"].(*historygenerated.TrustCenterSubprocessorHistoryWhereInput)), true
 
 	case "Query.trustCenterWatermarkConfigHistories":
-		if e.complexity.Query.TrustCenterWatermarkConfigHistories == nil {
+		if e.ComplexityRoot.Query.TrustCenterWatermarkConfigHistories == nil {
 			break
 		}
 
@@ -14396,10 +14379,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.TrustCenterWatermarkConfigHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterWatermarkConfigHistoryOrder), args["where"].(*historygenerated.TrustCenterWatermarkConfigHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.TrustCenterWatermarkConfigHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterWatermarkConfigHistoryOrder), args["where"].(*historygenerated.TrustCenterWatermarkConfigHistoryWhereInput)), true
 
 	case "Query.userHistories":
-		if e.complexity.Query.UserHistories == nil {
+		if e.ComplexityRoot.Query.UserHistories == nil {
 			break
 		}
 
@@ -14408,10 +14391,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.UserHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.UserHistoryOrder), args["where"].(*historygenerated.UserHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.UserHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.UserHistoryOrder), args["where"].(*historygenerated.UserHistoryWhereInput)), true
 
 	case "Query.userSettingHistories":
-		if e.complexity.Query.UserSettingHistories == nil {
+		if e.ComplexityRoot.Query.UserSettingHistories == nil {
 			break
 		}
 
@@ -14420,10 +14403,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.UserSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.UserSettingHistoryOrder), args["where"].(*historygenerated.UserSettingHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.UserSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.UserSettingHistoryOrder), args["where"].(*historygenerated.UserSettingHistoryWhereInput)), true
 
 	case "Query.vulnerabilityHistories":
-		if e.complexity.Query.VulnerabilityHistories == nil {
+		if e.ComplexityRoot.Query.VulnerabilityHistories == nil {
 			break
 		}
 
@@ -14432,10 +14415,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.VulnerabilityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.VulnerabilityHistoryOrder), args["where"].(*historygenerated.VulnerabilityHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.VulnerabilityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.VulnerabilityHistoryOrder), args["where"].(*historygenerated.VulnerabilityHistoryWhereInput)), true
 
 	case "Query.workflowAssignmentHistories":
-		if e.complexity.Query.WorkflowAssignmentHistories == nil {
+		if e.ComplexityRoot.Query.WorkflowAssignmentHistories == nil {
 			break
 		}
 
@@ -14444,10 +14427,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.WorkflowAssignmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowAssignmentHistoryOrder), args["where"].(*historygenerated.WorkflowAssignmentHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.WorkflowAssignmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowAssignmentHistoryOrder), args["where"].(*historygenerated.WorkflowAssignmentHistoryWhereInput)), true
 
 	case "Query.workflowAssignmentTargetHistories":
-		if e.complexity.Query.WorkflowAssignmentTargetHistories == nil {
+		if e.ComplexityRoot.Query.WorkflowAssignmentTargetHistories == nil {
 			break
 		}
 
@@ -14456,10 +14439,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.WorkflowAssignmentTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowAssignmentTargetHistoryOrder), args["where"].(*historygenerated.WorkflowAssignmentTargetHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.WorkflowAssignmentTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowAssignmentTargetHistoryOrder), args["where"].(*historygenerated.WorkflowAssignmentTargetHistoryWhereInput)), true
 
 	case "Query.workflowDefinitionHistories":
-		if e.complexity.Query.WorkflowDefinitionHistories == nil {
+		if e.ComplexityRoot.Query.WorkflowDefinitionHistories == nil {
 			break
 		}
 
@@ -14468,10 +14451,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.WorkflowDefinitionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowDefinitionHistoryOrder), args["where"].(*historygenerated.WorkflowDefinitionHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.WorkflowDefinitionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowDefinitionHistoryOrder), args["where"].(*historygenerated.WorkflowDefinitionHistoryWhereInput)), true
 
 	case "Query.workflowEventHistories":
-		if e.complexity.Query.WorkflowEventHistories == nil {
+		if e.ComplexityRoot.Query.WorkflowEventHistories == nil {
 			break
 		}
 
@@ -14480,10 +14463,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.WorkflowEventHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowEventHistoryOrder), args["where"].(*historygenerated.WorkflowEventHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.WorkflowEventHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowEventHistoryOrder), args["where"].(*historygenerated.WorkflowEventHistoryWhereInput)), true
 
 	case "Query.workflowInstanceHistories":
-		if e.complexity.Query.WorkflowInstanceHistories == nil {
+		if e.ComplexityRoot.Query.WorkflowInstanceHistories == nil {
 			break
 		}
 
@@ -14492,10 +14475,10 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.WorkflowInstanceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowInstanceHistoryOrder), args["where"].(*historygenerated.WorkflowInstanceHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.WorkflowInstanceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowInstanceHistoryOrder), args["where"].(*historygenerated.WorkflowInstanceHistoryWhereInput)), true
 
 	case "Query.workflowObjectRefHistories":
-		if e.complexity.Query.WorkflowObjectRefHistories == nil {
+		if e.ComplexityRoot.Query.WorkflowObjectRefHistories == nil {
 			break
 		}
 
@@ -14504,5761 +14487,5761 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.WorkflowObjectRefHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowObjectRefHistoryOrder), args["where"].(*historygenerated.WorkflowObjectRefHistoryWhereInput)), true
+		return e.ComplexityRoot.Query.WorkflowObjectRefHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.WorkflowObjectRefHistoryOrder), args["where"].(*historygenerated.WorkflowObjectRefHistoryWhereInput)), true
 
 	case "RemediationHistory.completedAt":
-		if e.complexity.RemediationHistory.CompletedAt == nil {
+		if e.ComplexityRoot.RemediationHistory.CompletedAt == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.CompletedAt(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.CompletedAt(childComplexity), true
 
 	case "RemediationHistory.createdAt":
-		if e.complexity.RemediationHistory.CreatedAt == nil {
+		if e.ComplexityRoot.RemediationHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.CreatedAt(childComplexity), true
 
 	case "RemediationHistory.createdBy":
-		if e.complexity.RemediationHistory.CreatedBy == nil {
+		if e.ComplexityRoot.RemediationHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.CreatedBy(childComplexity), true
 
 	case "RemediationHistory.displayID":
-		if e.complexity.RemediationHistory.DisplayID == nil {
+		if e.ComplexityRoot.RemediationHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.DisplayID(childComplexity), true
 
 	case "RemediationHistory.dueAt":
-		if e.complexity.RemediationHistory.DueAt == nil {
+		if e.ComplexityRoot.RemediationHistory.DueAt == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.DueAt(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.DueAt(childComplexity), true
 
 	case "RemediationHistory.environmentID":
-		if e.complexity.RemediationHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.RemediationHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.EnvironmentID(childComplexity), true
 
 	case "RemediationHistory.environmentName":
-		if e.complexity.RemediationHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.RemediationHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.EnvironmentName(childComplexity), true
 
 	case "RemediationHistory.error":
-		if e.complexity.RemediationHistory.Error == nil {
+		if e.ComplexityRoot.RemediationHistory.Error == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Error(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Error(childComplexity), true
 
 	case "RemediationHistory.explanation":
-		if e.complexity.RemediationHistory.Explanation == nil {
+		if e.ComplexityRoot.RemediationHistory.Explanation == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Explanation(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Explanation(childComplexity), true
 
 	case "RemediationHistory.externalID":
-		if e.complexity.RemediationHistory.ExternalID == nil {
+		if e.ComplexityRoot.RemediationHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.ExternalID(childComplexity), true
 
 	case "RemediationHistory.externalOwnerID":
-		if e.complexity.RemediationHistory.ExternalOwnerID == nil {
+		if e.ComplexityRoot.RemediationHistory.ExternalOwnerID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.ExternalOwnerID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.ExternalOwnerID(childComplexity), true
 
 	case "RemediationHistory.externalURI":
-		if e.complexity.RemediationHistory.ExternalURI == nil {
+		if e.ComplexityRoot.RemediationHistory.ExternalURI == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.ExternalURI(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.ExternalURI(childComplexity), true
 
 	case "RemediationHistory.historyTime":
-		if e.complexity.RemediationHistory.HistoryTime == nil {
+		if e.ComplexityRoot.RemediationHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.HistoryTime(childComplexity), true
 
 	case "RemediationHistory.id":
-		if e.complexity.RemediationHistory.ID == nil {
+		if e.ComplexityRoot.RemediationHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.ID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.ID(childComplexity), true
 
 	case "RemediationHistory.instructions":
-		if e.complexity.RemediationHistory.Instructions == nil {
+		if e.ComplexityRoot.RemediationHistory.Instructions == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Instructions(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Instructions(childComplexity), true
 
 	case "RemediationHistory.intent":
-		if e.complexity.RemediationHistory.Intent == nil {
+		if e.ComplexityRoot.RemediationHistory.Intent == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Intent(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Intent(childComplexity), true
 
 	case "RemediationHistory.internalNotes":
-		if e.complexity.RemediationHistory.InternalNotes == nil {
+		if e.ComplexityRoot.RemediationHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.InternalNotes(childComplexity), true
 
 	case "RemediationHistory.metadata":
-		if e.complexity.RemediationHistory.Metadata == nil {
+		if e.ComplexityRoot.RemediationHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Metadata(childComplexity), true
 
 	case "RemediationHistory.operation":
-		if e.complexity.RemediationHistory.Operation == nil {
+		if e.ComplexityRoot.RemediationHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Operation(childComplexity), true
 
 	case "RemediationHistory.ownerID":
-		if e.complexity.RemediationHistory.OwnerID == nil {
+		if e.ComplexityRoot.RemediationHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.OwnerID(childComplexity), true
 
 	case "RemediationHistory.ownerReference":
-		if e.complexity.RemediationHistory.OwnerReference == nil {
+		if e.ComplexityRoot.RemediationHistory.OwnerReference == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.OwnerReference(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.OwnerReference(childComplexity), true
 
 	case "RemediationHistory.prGeneratedAt":
-		if e.complexity.RemediationHistory.PrGeneratedAt == nil {
+		if e.ComplexityRoot.RemediationHistory.PrGeneratedAt == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.PrGeneratedAt(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.PrGeneratedAt(childComplexity), true
 
 	case "RemediationHistory.pullRequestURI":
-		if e.complexity.RemediationHistory.PullRequestURI == nil {
+		if e.ComplexityRoot.RemediationHistory.PullRequestURI == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.PullRequestURI(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.PullRequestURI(childComplexity), true
 
 	case "RemediationHistory.ref":
-		if e.complexity.RemediationHistory.Ref == nil {
+		if e.ComplexityRoot.RemediationHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Ref(childComplexity), true
 
 	case "RemediationHistory.repositoryURI":
-		if e.complexity.RemediationHistory.RepositoryURI == nil {
+		if e.ComplexityRoot.RemediationHistory.RepositoryURI == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.RepositoryURI(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.RepositoryURI(childComplexity), true
 
 	case "RemediationHistory.scopeID":
-		if e.complexity.RemediationHistory.ScopeID == nil {
+		if e.ComplexityRoot.RemediationHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.ScopeID(childComplexity), true
 
 	case "RemediationHistory.scopeName":
-		if e.complexity.RemediationHistory.ScopeName == nil {
+		if e.ComplexityRoot.RemediationHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.ScopeName(childComplexity), true
 
 	case "RemediationHistory.source":
-		if e.complexity.RemediationHistory.Source == nil {
+		if e.ComplexityRoot.RemediationHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Source(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Source(childComplexity), true
 
 	case "RemediationHistory.state":
-		if e.complexity.RemediationHistory.State == nil {
+		if e.ComplexityRoot.RemediationHistory.State == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.State(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.State(childComplexity), true
 
 	case "RemediationHistory.summary":
-		if e.complexity.RemediationHistory.Summary == nil {
+		if e.ComplexityRoot.RemediationHistory.Summary == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Summary(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Summary(childComplexity), true
 
 	case "RemediationHistory.systemInternalID":
-		if e.complexity.RemediationHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.RemediationHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.SystemInternalID(childComplexity), true
 
 	case "RemediationHistory.systemOwned":
-		if e.complexity.RemediationHistory.SystemOwned == nil {
+		if e.ComplexityRoot.RemediationHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.SystemOwned(childComplexity), true
 
 	case "RemediationHistory.tags":
-		if e.complexity.RemediationHistory.Tags == nil {
+		if e.ComplexityRoot.RemediationHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Tags(childComplexity), true
 
 	case "RemediationHistory.ticketReference":
-		if e.complexity.RemediationHistory.TicketReference == nil {
+		if e.ComplexityRoot.RemediationHistory.TicketReference == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.TicketReference(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.TicketReference(childComplexity), true
 
 	case "RemediationHistory.title":
-		if e.complexity.RemediationHistory.Title == nil {
+		if e.ComplexityRoot.RemediationHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.Title(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.Title(childComplexity), true
 
 	case "RemediationHistory.updatedAt":
-		if e.complexity.RemediationHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.RemediationHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.UpdatedAt(childComplexity), true
 
 	case "RemediationHistory.updatedBy":
-		if e.complexity.RemediationHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.RemediationHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.RemediationHistory.UpdatedBy(childComplexity), true
 
 	case "RemediationHistoryConnection.edges":
-		if e.complexity.RemediationHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.RemediationHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.RemediationHistoryConnection.Edges(childComplexity), true
 
 	case "RemediationHistoryConnection.pageInfo":
-		if e.complexity.RemediationHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.RemediationHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.RemediationHistoryConnection.PageInfo(childComplexity), true
 
 	case "RemediationHistoryConnection.totalCount":
-		if e.complexity.RemediationHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.RemediationHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.RemediationHistoryConnection.TotalCount(childComplexity), true
 
 	case "RemediationHistoryEdge.cursor":
-		if e.complexity.RemediationHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.RemediationHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.RemediationHistoryEdge.Cursor(childComplexity), true
 
 	case "RemediationHistoryEdge.node":
-		if e.complexity.RemediationHistoryEdge.Node == nil {
+		if e.ComplexityRoot.RemediationHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.RemediationHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.RemediationHistoryEdge.Node(childComplexity), true
 
 	case "ReviewHistory.approved":
-		if e.complexity.ReviewHistory.Approved == nil {
+		if e.ComplexityRoot.ReviewHistory.Approved == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Approved(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Approved(childComplexity), true
 
 	case "ReviewHistory.approvedAt":
-		if e.complexity.ReviewHistory.ApprovedAt == nil {
+		if e.ComplexityRoot.ReviewHistory.ApprovedAt == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ApprovedAt(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ApprovedAt(childComplexity), true
 
 	case "ReviewHistory.category":
-		if e.complexity.ReviewHistory.Category == nil {
+		if e.ComplexityRoot.ReviewHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Category(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Category(childComplexity), true
 
 	case "ReviewHistory.classification":
-		if e.complexity.ReviewHistory.Classification == nil {
+		if e.ComplexityRoot.ReviewHistory.Classification == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Classification(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Classification(childComplexity), true
 
 	case "ReviewHistory.createdAt":
-		if e.complexity.ReviewHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ReviewHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.CreatedAt(childComplexity), true
 
 	case "ReviewHistory.createdBy":
-		if e.complexity.ReviewHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ReviewHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.CreatedBy(childComplexity), true
 
 	case "ReviewHistory.details":
-		if e.complexity.ReviewHistory.Details == nil {
+		if e.ComplexityRoot.ReviewHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Details(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Details(childComplexity), true
 
 	case "ReviewHistory.environmentID":
-		if e.complexity.ReviewHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.ReviewHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.EnvironmentID(childComplexity), true
 
 	case "ReviewHistory.environmentName":
-		if e.complexity.ReviewHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.ReviewHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.EnvironmentName(childComplexity), true
 
 	case "ReviewHistory.externalID":
-		if e.complexity.ReviewHistory.ExternalID == nil {
+		if e.ComplexityRoot.ReviewHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ExternalID(childComplexity), true
 
 	case "ReviewHistory.externalOwnerID":
-		if e.complexity.ReviewHistory.ExternalOwnerID == nil {
+		if e.ComplexityRoot.ReviewHistory.ExternalOwnerID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ExternalOwnerID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ExternalOwnerID(childComplexity), true
 
 	case "ReviewHistory.externalURI":
-		if e.complexity.ReviewHistory.ExternalURI == nil {
+		if e.ComplexityRoot.ReviewHistory.ExternalURI == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ExternalURI(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ExternalURI(childComplexity), true
 
 	case "ReviewHistory.historyTime":
-		if e.complexity.ReviewHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ReviewHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.HistoryTime(childComplexity), true
 
 	case "ReviewHistory.id":
-		if e.complexity.ReviewHistory.ID == nil {
+		if e.ComplexityRoot.ReviewHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ID(childComplexity), true
 
 	case "ReviewHistory.internalNotes":
-		if e.complexity.ReviewHistory.InternalNotes == nil {
+		if e.ComplexityRoot.ReviewHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.InternalNotes(childComplexity), true
 
 	case "ReviewHistory.metadata":
-		if e.complexity.ReviewHistory.Metadata == nil {
+		if e.ComplexityRoot.ReviewHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Metadata(childComplexity), true
 
 	case "ReviewHistory.operation":
-		if e.complexity.ReviewHistory.Operation == nil {
+		if e.ComplexityRoot.ReviewHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Operation(childComplexity), true
 
 	case "ReviewHistory.ownerID":
-		if e.complexity.ReviewHistory.OwnerID == nil {
+		if e.ComplexityRoot.ReviewHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.OwnerID(childComplexity), true
 
 	case "ReviewHistory.rawPayload":
-		if e.complexity.ReviewHistory.RawPayload == nil {
+		if e.ComplexityRoot.ReviewHistory.RawPayload == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.RawPayload(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.RawPayload(childComplexity), true
 
 	case "ReviewHistory.ref":
-		if e.complexity.ReviewHistory.Ref == nil {
+		if e.ComplexityRoot.ReviewHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Ref(childComplexity), true
 
 	case "ReviewHistory.reportedAt":
-		if e.complexity.ReviewHistory.ReportedAt == nil {
+		if e.ComplexityRoot.ReviewHistory.ReportedAt == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ReportedAt(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ReportedAt(childComplexity), true
 
 	case "ReviewHistory.reporter":
-		if e.complexity.ReviewHistory.Reporter == nil {
+		if e.ComplexityRoot.ReviewHistory.Reporter == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Reporter(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Reporter(childComplexity), true
 
 	case "ReviewHistory.reviewedAt":
-		if e.complexity.ReviewHistory.ReviewedAt == nil {
+		if e.ComplexityRoot.ReviewHistory.ReviewedAt == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ReviewedAt(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ReviewedAt(childComplexity), true
 
 	case "ReviewHistory.reviewerID":
-		if e.complexity.ReviewHistory.ReviewerID == nil {
+		if e.ComplexityRoot.ReviewHistory.ReviewerID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ReviewerID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ReviewerID(childComplexity), true
 
 	case "ReviewHistory.scopeID":
-		if e.complexity.ReviewHistory.ScopeID == nil {
+		if e.ComplexityRoot.ReviewHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ScopeID(childComplexity), true
 
 	case "ReviewHistory.scopeName":
-		if e.complexity.ReviewHistory.ScopeName == nil {
+		if e.ComplexityRoot.ReviewHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.ScopeName(childComplexity), true
 
 	case "ReviewHistory.source":
-		if e.complexity.ReviewHistory.Source == nil {
+		if e.ComplexityRoot.ReviewHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Source(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Source(childComplexity), true
 
 	case "ReviewHistory.state":
-		if e.complexity.ReviewHistory.State == nil {
+		if e.ComplexityRoot.ReviewHistory.State == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.State(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.State(childComplexity), true
 
 	case "ReviewHistory.summary":
-		if e.complexity.ReviewHistory.Summary == nil {
+		if e.ComplexityRoot.ReviewHistory.Summary == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Summary(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Summary(childComplexity), true
 
 	case "ReviewHistory.systemInternalID":
-		if e.complexity.ReviewHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.ReviewHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.SystemInternalID(childComplexity), true
 
 	case "ReviewHistory.systemOwned":
-		if e.complexity.ReviewHistory.SystemOwned == nil {
+		if e.ComplexityRoot.ReviewHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.SystemOwned(childComplexity), true
 
 	case "ReviewHistory.tags":
-		if e.complexity.ReviewHistory.Tags == nil {
+		if e.ComplexityRoot.ReviewHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Tags(childComplexity), true
 
 	case "ReviewHistory.title":
-		if e.complexity.ReviewHistory.Title == nil {
+		if e.ComplexityRoot.ReviewHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.Title(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.Title(childComplexity), true
 
 	case "ReviewHistory.updatedAt":
-		if e.complexity.ReviewHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ReviewHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.UpdatedAt(childComplexity), true
 
 	case "ReviewHistory.updatedBy":
-		if e.complexity.ReviewHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ReviewHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ReviewHistory.UpdatedBy(childComplexity), true
 
 	case "ReviewHistoryConnection.edges":
-		if e.complexity.ReviewHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ReviewHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ReviewHistoryConnection.Edges(childComplexity), true
 
 	case "ReviewHistoryConnection.pageInfo":
-		if e.complexity.ReviewHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ReviewHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ReviewHistoryConnection.PageInfo(childComplexity), true
 
 	case "ReviewHistoryConnection.totalCount":
-		if e.complexity.ReviewHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ReviewHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ReviewHistoryConnection.TotalCount(childComplexity), true
 
 	case "ReviewHistoryEdge.cursor":
-		if e.complexity.ReviewHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ReviewHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ReviewHistoryEdge.Cursor(childComplexity), true
 
 	case "ReviewHistoryEdge.node":
-		if e.complexity.ReviewHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ReviewHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ReviewHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ReviewHistoryEdge.Node(childComplexity), true
 
 	case "RiskHistory.businessCosts":
-		if e.complexity.RiskHistory.BusinessCosts == nil {
+		if e.ComplexityRoot.RiskHistory.BusinessCosts == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.BusinessCosts(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.BusinessCosts(childComplexity), true
 
 	case "RiskHistory.businessCostsJSON":
-		if e.complexity.RiskHistory.BusinessCostsJSON == nil {
+		if e.ComplexityRoot.RiskHistory.BusinessCostsJSON == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.BusinessCostsJSON(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.BusinessCostsJSON(childComplexity), true
 
 	case "RiskHistory.createdAt":
-		if e.complexity.RiskHistory.CreatedAt == nil {
+		if e.ComplexityRoot.RiskHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.CreatedAt(childComplexity), true
 
 	case "RiskHistory.createdBy":
-		if e.complexity.RiskHistory.CreatedBy == nil {
+		if e.ComplexityRoot.RiskHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.CreatedBy(childComplexity), true
 
 	case "RiskHistory.delegateID":
-		if e.complexity.RiskHistory.DelegateID == nil {
+		if e.ComplexityRoot.RiskHistory.DelegateID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.DelegateID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.DelegateID(childComplexity), true
 
 	case "RiskHistory.details":
-		if e.complexity.RiskHistory.Details == nil {
+		if e.ComplexityRoot.RiskHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Details(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Details(childComplexity), true
 
 	case "RiskHistory.detailsJSON":
-		if e.complexity.RiskHistory.DetailsJSON == nil {
+		if e.ComplexityRoot.RiskHistory.DetailsJSON == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.DetailsJSON(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.DetailsJSON(childComplexity), true
 
 	case "RiskHistory.displayID":
-		if e.complexity.RiskHistory.DisplayID == nil {
+		if e.ComplexityRoot.RiskHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.DisplayID(childComplexity), true
 
 	case "RiskHistory.environmentID":
-		if e.complexity.RiskHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.RiskHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.EnvironmentID(childComplexity), true
 
 	case "RiskHistory.environmentName":
-		if e.complexity.RiskHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.RiskHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.EnvironmentName(childComplexity), true
 
 	case "RiskHistory.historyTime":
-		if e.complexity.RiskHistory.HistoryTime == nil {
+		if e.ComplexityRoot.RiskHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.HistoryTime(childComplexity), true
 
 	case "RiskHistory.id":
-		if e.complexity.RiskHistory.ID == nil {
+		if e.ComplexityRoot.RiskHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.ID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.ID(childComplexity), true
 
 	case "RiskHistory.impact":
-		if e.complexity.RiskHistory.Impact == nil {
+		if e.ComplexityRoot.RiskHistory.Impact == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Impact(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Impact(childComplexity), true
 
 	case "RiskHistory.likelihood":
-		if e.complexity.RiskHistory.Likelihood == nil {
+		if e.ComplexityRoot.RiskHistory.Likelihood == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Likelihood(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Likelihood(childComplexity), true
 
 	case "RiskHistory.mitigation":
-		if e.complexity.RiskHistory.Mitigation == nil {
+		if e.ComplexityRoot.RiskHistory.Mitigation == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Mitigation(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Mitigation(childComplexity), true
 
 	case "RiskHistory.mitigationJSON":
-		if e.complexity.RiskHistory.MitigationJSON == nil {
+		if e.ComplexityRoot.RiskHistory.MitigationJSON == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.MitigationJSON(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.MitigationJSON(childComplexity), true
 
 	case "RiskHistory.name":
-		if e.complexity.RiskHistory.Name == nil {
+		if e.ComplexityRoot.RiskHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Name(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Name(childComplexity), true
 
 	case "RiskHistory.operation":
-		if e.complexity.RiskHistory.Operation == nil {
+		if e.ComplexityRoot.RiskHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Operation(childComplexity), true
 
 	case "RiskHistory.ownerID":
-		if e.complexity.RiskHistory.OwnerID == nil {
+		if e.ComplexityRoot.RiskHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.OwnerID(childComplexity), true
 
 	case "RiskHistory.ref":
-		if e.complexity.RiskHistory.Ref == nil {
+		if e.ComplexityRoot.RiskHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Ref(childComplexity), true
 
 	case "RiskHistory.riskCategoryID":
-		if e.complexity.RiskHistory.RiskCategoryID == nil {
+		if e.ComplexityRoot.RiskHistory.RiskCategoryID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.RiskCategoryID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.RiskCategoryID(childComplexity), true
 
 	case "RiskHistory.riskCategoryName":
-		if e.complexity.RiskHistory.RiskCategoryName == nil {
+		if e.ComplexityRoot.RiskHistory.RiskCategoryName == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.RiskCategoryName(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.RiskCategoryName(childComplexity), true
 
 	case "RiskHistory.riskKindID":
-		if e.complexity.RiskHistory.RiskKindID == nil {
+		if e.ComplexityRoot.RiskHistory.RiskKindID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.RiskKindID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.RiskKindID(childComplexity), true
 
 	case "RiskHistory.riskKindName":
-		if e.complexity.RiskHistory.RiskKindName == nil {
+		if e.ComplexityRoot.RiskHistory.RiskKindName == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.RiskKindName(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.RiskKindName(childComplexity), true
 
 	case "RiskHistory.scopeID":
-		if e.complexity.RiskHistory.ScopeID == nil {
+		if e.ComplexityRoot.RiskHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.ScopeID(childComplexity), true
 
 	case "RiskHistory.scopeName":
-		if e.complexity.RiskHistory.ScopeName == nil {
+		if e.ComplexityRoot.RiskHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.ScopeName(childComplexity), true
 
 	case "RiskHistory.score":
-		if e.complexity.RiskHistory.Score == nil {
+		if e.ComplexityRoot.RiskHistory.Score == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Score(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Score(childComplexity), true
 
 	case "RiskHistory.stakeholderID":
-		if e.complexity.RiskHistory.StakeholderID == nil {
+		if e.ComplexityRoot.RiskHistory.StakeholderID == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.StakeholderID(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.StakeholderID(childComplexity), true
 
 	case "RiskHistory.status":
-		if e.complexity.RiskHistory.Status == nil {
+		if e.ComplexityRoot.RiskHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Status(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Status(childComplexity), true
 
 	case "RiskHistory.tags":
-		if e.complexity.RiskHistory.Tags == nil {
+		if e.ComplexityRoot.RiskHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.Tags(childComplexity), true
 
 	case "RiskHistory.updatedAt":
-		if e.complexity.RiskHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.RiskHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.UpdatedAt(childComplexity), true
 
 	case "RiskHistory.updatedBy":
-		if e.complexity.RiskHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.RiskHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.RiskHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.RiskHistory.UpdatedBy(childComplexity), true
 
 	case "RiskHistoryConnection.edges":
-		if e.complexity.RiskHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.RiskHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.RiskHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.RiskHistoryConnection.Edges(childComplexity), true
 
 	case "RiskHistoryConnection.pageInfo":
-		if e.complexity.RiskHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.RiskHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.RiskHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.RiskHistoryConnection.PageInfo(childComplexity), true
 
 	case "RiskHistoryConnection.totalCount":
-		if e.complexity.RiskHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.RiskHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.RiskHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.RiskHistoryConnection.TotalCount(childComplexity), true
 
 	case "RiskHistoryEdge.cursor":
-		if e.complexity.RiskHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.RiskHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.RiskHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.RiskHistoryEdge.Cursor(childComplexity), true
 
 	case "RiskHistoryEdge.node":
-		if e.complexity.RiskHistoryEdge.Node == nil {
+		if e.ComplexityRoot.RiskHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.RiskHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.RiskHistoryEdge.Node(childComplexity), true
 
 	case "ScanHistory.assignedTo":
-		if e.complexity.ScanHistory.AssignedTo == nil {
+		if e.ComplexityRoot.ScanHistory.AssignedTo == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.AssignedTo(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.AssignedTo(childComplexity), true
 
 	case "ScanHistory.assignedToGroupID":
-		if e.complexity.ScanHistory.AssignedToGroupID == nil {
+		if e.ComplexityRoot.ScanHistory.AssignedToGroupID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.AssignedToGroupID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.AssignedToGroupID(childComplexity), true
 
 	case "ScanHistory.assignedToUserID":
-		if e.complexity.ScanHistory.AssignedToUserID == nil {
+		if e.ComplexityRoot.ScanHistory.AssignedToUserID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.AssignedToUserID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.AssignedToUserID(childComplexity), true
 
 	case "ScanHistory.createdAt":
-		if e.complexity.ScanHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ScanHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.CreatedAt(childComplexity), true
 
 	case "ScanHistory.createdBy":
-		if e.complexity.ScanHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ScanHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.CreatedBy(childComplexity), true
 
 	case "ScanHistory.environmentID":
-		if e.complexity.ScanHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.ScanHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.EnvironmentID(childComplexity), true
 
 	case "ScanHistory.environmentName":
-		if e.complexity.ScanHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.ScanHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.EnvironmentName(childComplexity), true
 
 	case "ScanHistory.generatedByPlatformID":
-		if e.complexity.ScanHistory.GeneratedByPlatformID == nil {
+		if e.ComplexityRoot.ScanHistory.GeneratedByPlatformID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.GeneratedByPlatformID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.GeneratedByPlatformID(childComplexity), true
 
 	case "ScanHistory.historyTime":
-		if e.complexity.ScanHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ScanHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.HistoryTime(childComplexity), true
 
 	case "ScanHistory.id":
-		if e.complexity.ScanHistory.ID == nil {
+		if e.ComplexityRoot.ScanHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ID(childComplexity), true
 
 	case "ScanHistory.metadata":
-		if e.complexity.ScanHistory.Metadata == nil {
+		if e.ComplexityRoot.ScanHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.Metadata(childComplexity), true
 
 	case "ScanHistory.nextScanRunAt":
-		if e.complexity.ScanHistory.NextScanRunAt == nil {
+		if e.ComplexityRoot.ScanHistory.NextScanRunAt == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.NextScanRunAt(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.NextScanRunAt(childComplexity), true
 
 	case "ScanHistory.operation":
-		if e.complexity.ScanHistory.Operation == nil {
+		if e.ComplexityRoot.ScanHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.Operation(childComplexity), true
 
 	case "ScanHistory.ownerID":
-		if e.complexity.ScanHistory.OwnerID == nil {
+		if e.ComplexityRoot.ScanHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.OwnerID(childComplexity), true
 
 	case "ScanHistory.performedBy":
-		if e.complexity.ScanHistory.PerformedBy == nil {
+		if e.ComplexityRoot.ScanHistory.PerformedBy == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.PerformedBy(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.PerformedBy(childComplexity), true
 
 	case "ScanHistory.performedByGroupID":
-		if e.complexity.ScanHistory.PerformedByGroupID == nil {
+		if e.ComplexityRoot.ScanHistory.PerformedByGroupID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.PerformedByGroupID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.PerformedByGroupID(childComplexity), true
 
 	case "ScanHistory.performedByUserID":
-		if e.complexity.ScanHistory.PerformedByUserID == nil {
+		if e.ComplexityRoot.ScanHistory.PerformedByUserID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.PerformedByUserID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.PerformedByUserID(childComplexity), true
 
 	case "ScanHistory.ref":
-		if e.complexity.ScanHistory.Ref == nil {
+		if e.ComplexityRoot.ScanHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.Ref(childComplexity), true
 
 	case "ScanHistory.reviewedBy":
-		if e.complexity.ScanHistory.ReviewedBy == nil {
+		if e.ComplexityRoot.ScanHistory.ReviewedBy == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ReviewedBy(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ReviewedBy(childComplexity), true
 
 	case "ScanHistory.reviewedByGroupID":
-		if e.complexity.ScanHistory.ReviewedByGroupID == nil {
+		if e.ComplexityRoot.ScanHistory.ReviewedByGroupID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ReviewedByGroupID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ReviewedByGroupID(childComplexity), true
 
 	case "ScanHistory.reviewedByUserID":
-		if e.complexity.ScanHistory.ReviewedByUserID == nil {
+		if e.ComplexityRoot.ScanHistory.ReviewedByUserID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ReviewedByUserID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ReviewedByUserID(childComplexity), true
 
 	case "ScanHistory.scanDate":
-		if e.complexity.ScanHistory.ScanDate == nil {
+		if e.ComplexityRoot.ScanHistory.ScanDate == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ScanDate(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ScanDate(childComplexity), true
 
 	case "ScanHistory.scanSchedule":
-		if e.complexity.ScanHistory.ScanSchedule == nil {
+		if e.ComplexityRoot.ScanHistory.ScanSchedule == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ScanSchedule(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ScanSchedule(childComplexity), true
 
 	case "ScanHistory.scanType":
-		if e.complexity.ScanHistory.ScanType == nil {
+		if e.ComplexityRoot.ScanHistory.ScanType == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ScanType(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ScanType(childComplexity), true
 
 	case "ScanHistory.scopeID":
-		if e.complexity.ScanHistory.ScopeID == nil {
+		if e.ComplexityRoot.ScanHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ScopeID(childComplexity), true
 
 	case "ScanHistory.scopeName":
-		if e.complexity.ScanHistory.ScopeName == nil {
+		if e.ComplexityRoot.ScanHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.ScopeName(childComplexity), true
 
 	case "ScanHistory.status":
-		if e.complexity.ScanHistory.Status == nil {
+		if e.ComplexityRoot.ScanHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.Status(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.Status(childComplexity), true
 
 	case "ScanHistory.tags":
-		if e.complexity.ScanHistory.Tags == nil {
+		if e.ComplexityRoot.ScanHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.Tags(childComplexity), true
 
 	case "ScanHistory.target":
-		if e.complexity.ScanHistory.Target == nil {
+		if e.ComplexityRoot.ScanHistory.Target == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.Target(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.Target(childComplexity), true
 
 	case "ScanHistory.updatedAt":
-		if e.complexity.ScanHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ScanHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.UpdatedAt(childComplexity), true
 
 	case "ScanHistory.updatedBy":
-		if e.complexity.ScanHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ScanHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.UpdatedBy(childComplexity), true
 
 	case "ScanHistory.vulnerabilityIds":
-		if e.complexity.ScanHistory.VulnerabilityIds == nil {
+		if e.ComplexityRoot.ScanHistory.VulnerabilityIds == nil {
 			break
 		}
 
-		return e.complexity.ScanHistory.VulnerabilityIds(childComplexity), true
+		return e.ComplexityRoot.ScanHistory.VulnerabilityIds(childComplexity), true
 
 	case "ScanHistoryConnection.edges":
-		if e.complexity.ScanHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ScanHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ScanHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ScanHistoryConnection.Edges(childComplexity), true
 
 	case "ScanHistoryConnection.pageInfo":
-		if e.complexity.ScanHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ScanHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ScanHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ScanHistoryConnection.PageInfo(childComplexity), true
 
 	case "ScanHistoryConnection.totalCount":
-		if e.complexity.ScanHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ScanHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ScanHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ScanHistoryConnection.TotalCount(childComplexity), true
 
 	case "ScanHistoryEdge.cursor":
-		if e.complexity.ScanHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ScanHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ScanHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ScanHistoryEdge.Cursor(childComplexity), true
 
 	case "ScanHistoryEdge.node":
-		if e.complexity.ScanHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ScanHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ScanHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ScanHistoryEdge.Node(childComplexity), true
 
 	case "ScheduledJobHistory.active":
-		if e.complexity.ScheduledJobHistory.Active == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.Active == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.Active(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.Active(childComplexity), true
 
 	case "ScheduledJobHistory.configuration":
-		if e.complexity.ScheduledJobHistory.Configuration == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.Configuration == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.Configuration(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.Configuration(childComplexity), true
 
 	case "ScheduledJobHistory.createdAt":
-		if e.complexity.ScheduledJobHistory.CreatedAt == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.CreatedAt(childComplexity), true
 
 	case "ScheduledJobHistory.createdBy":
-		if e.complexity.ScheduledJobHistory.CreatedBy == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.CreatedBy(childComplexity), true
 
 	case "ScheduledJobHistory.cron":
-		if e.complexity.ScheduledJobHistory.Cron == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.Cron == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.Cron(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.Cron(childComplexity), true
 
 	case "ScheduledJobHistory.displayID":
-		if e.complexity.ScheduledJobHistory.DisplayID == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.DisplayID(childComplexity), true
 
 	case "ScheduledJobHistory.historyTime":
-		if e.complexity.ScheduledJobHistory.HistoryTime == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.HistoryTime(childComplexity), true
 
 	case "ScheduledJobHistory.id":
-		if e.complexity.ScheduledJobHistory.ID == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.ID(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.ID(childComplexity), true
 
 	case "ScheduledJobHistory.jobID":
-		if e.complexity.ScheduledJobHistory.JobID == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.JobID == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.JobID(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.JobID(childComplexity), true
 
 	case "ScheduledJobHistory.jobRunnerID":
-		if e.complexity.ScheduledJobHistory.JobRunnerID == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.JobRunnerID == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.JobRunnerID(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.JobRunnerID(childComplexity), true
 
 	case "ScheduledJobHistory.operation":
-		if e.complexity.ScheduledJobHistory.Operation == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.Operation(childComplexity), true
 
 	case "ScheduledJobHistory.ownerID":
-		if e.complexity.ScheduledJobHistory.OwnerID == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.OwnerID(childComplexity), true
 
 	case "ScheduledJobHistory.ref":
-		if e.complexity.ScheduledJobHistory.Ref == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.Ref(childComplexity), true
 
 	case "ScheduledJobHistory.updatedAt":
-		if e.complexity.ScheduledJobHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.UpdatedAt(childComplexity), true
 
 	case "ScheduledJobHistory.updatedBy":
-		if e.complexity.ScheduledJobHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.ScheduledJobHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistory.UpdatedBy(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.edges":
-		if e.complexity.ScheduledJobHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.ScheduledJobHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistoryConnection.Edges(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.pageInfo":
-		if e.complexity.ScheduledJobHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.ScheduledJobHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistoryConnection.PageInfo(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.totalCount":
-		if e.complexity.ScheduledJobHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.ScheduledJobHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistoryConnection.TotalCount(childComplexity), true
 
 	case "ScheduledJobHistoryEdge.cursor":
-		if e.complexity.ScheduledJobHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.ScheduledJobHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistoryEdge.Cursor(childComplexity), true
 
 	case "ScheduledJobHistoryEdge.node":
-		if e.complexity.ScheduledJobHistoryEdge.Node == nil {
+		if e.ComplexityRoot.ScheduledJobHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.ScheduledJobHistoryEdge.Node(childComplexity), true
 
 	case "StandardHistory.createdAt":
-		if e.complexity.StandardHistory.CreatedAt == nil {
+		if e.ComplexityRoot.StandardHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.CreatedAt(childComplexity), true
 
 	case "StandardHistory.createdBy":
-		if e.complexity.StandardHistory.CreatedBy == nil {
+		if e.ComplexityRoot.StandardHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.CreatedBy(childComplexity), true
 
 	case "StandardHistory.description":
-		if e.complexity.StandardHistory.Description == nil {
+		if e.ComplexityRoot.StandardHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Description(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Description(childComplexity), true
 
 	case "StandardHistory.domains":
-		if e.complexity.StandardHistory.Domains == nil {
+		if e.ComplexityRoot.StandardHistory.Domains == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Domains(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Domains(childComplexity), true
 
 	case "StandardHistory.framework":
-		if e.complexity.StandardHistory.Framework == nil {
+		if e.ComplexityRoot.StandardHistory.Framework == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Framework(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Framework(childComplexity), true
 
 	case "StandardHistory.freeToUse":
-		if e.complexity.StandardHistory.FreeToUse == nil {
+		if e.ComplexityRoot.StandardHistory.FreeToUse == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.FreeToUse(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.FreeToUse(childComplexity), true
 
 	case "StandardHistory.governingBody":
-		if e.complexity.StandardHistory.GoverningBody == nil {
+		if e.ComplexityRoot.StandardHistory.GoverningBody == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.GoverningBody(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.GoverningBody(childComplexity), true
 
 	case "StandardHistory.governingBodyLogoURL":
-		if e.complexity.StandardHistory.GoverningBodyLogoURL == nil {
+		if e.ComplexityRoot.StandardHistory.GoverningBodyLogoURL == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.GoverningBodyLogoURL(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.GoverningBodyLogoURL(childComplexity), true
 
 	case "StandardHistory.historyTime":
-		if e.complexity.StandardHistory.HistoryTime == nil {
+		if e.ComplexityRoot.StandardHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.HistoryTime(childComplexity), true
 
 	case "StandardHistory.id":
-		if e.complexity.StandardHistory.ID == nil {
+		if e.ComplexityRoot.StandardHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.ID(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.ID(childComplexity), true
 
 	case "StandardHistory.internalNotes":
-		if e.complexity.StandardHistory.InternalNotes == nil {
+		if e.ComplexityRoot.StandardHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.InternalNotes(childComplexity), true
 
 	case "StandardHistory.isPublic":
-		if e.complexity.StandardHistory.IsPublic == nil {
+		if e.ComplexityRoot.StandardHistory.IsPublic == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.IsPublic(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.IsPublic(childComplexity), true
 
 	case "StandardHistory.link":
-		if e.complexity.StandardHistory.Link == nil {
+		if e.ComplexityRoot.StandardHistory.Link == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Link(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Link(childComplexity), true
 
 	case "StandardHistory.logoFileID":
-		if e.complexity.StandardHistory.LogoFileID == nil {
+		if e.ComplexityRoot.StandardHistory.LogoFileID == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.LogoFileID(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.LogoFileID(childComplexity), true
 
 	case "StandardHistory.name":
-		if e.complexity.StandardHistory.Name == nil {
+		if e.ComplexityRoot.StandardHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Name(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Name(childComplexity), true
 
 	case "StandardHistory.operation":
-		if e.complexity.StandardHistory.Operation == nil {
+		if e.ComplexityRoot.StandardHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Operation(childComplexity), true
 
 	case "StandardHistory.ownerID":
-		if e.complexity.StandardHistory.OwnerID == nil {
+		if e.ComplexityRoot.StandardHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.OwnerID(childComplexity), true
 
 	case "StandardHistory.ref":
-		if e.complexity.StandardHistory.Ref == nil {
+		if e.ComplexityRoot.StandardHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Ref(childComplexity), true
 
 	case "StandardHistory.revision":
-		if e.complexity.StandardHistory.Revision == nil {
+		if e.ComplexityRoot.StandardHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Revision(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Revision(childComplexity), true
 
 	case "StandardHistory.shortName":
-		if e.complexity.StandardHistory.ShortName == nil {
+		if e.ComplexityRoot.StandardHistory.ShortName == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.ShortName(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.ShortName(childComplexity), true
 
 	case "StandardHistory.standardType":
-		if e.complexity.StandardHistory.StandardType == nil {
+		if e.ComplexityRoot.StandardHistory.StandardType == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.StandardType(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.StandardType(childComplexity), true
 
 	case "StandardHistory.status":
-		if e.complexity.StandardHistory.Status == nil {
+		if e.ComplexityRoot.StandardHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Status(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Status(childComplexity), true
 
 	case "StandardHistory.systemInternalID":
-		if e.complexity.StandardHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.StandardHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.SystemInternalID(childComplexity), true
 
 	case "StandardHistory.systemOwned":
-		if e.complexity.StandardHistory.SystemOwned == nil {
+		if e.ComplexityRoot.StandardHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.SystemOwned(childComplexity), true
 
 	case "StandardHistory.tags":
-		if e.complexity.StandardHistory.Tags == nil {
+		if e.ComplexityRoot.StandardHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Tags(childComplexity), true
 
 	case "StandardHistory.updatedAt":
-		if e.complexity.StandardHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.StandardHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.UpdatedAt(childComplexity), true
 
 	case "StandardHistory.updatedBy":
-		if e.complexity.StandardHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.StandardHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.UpdatedBy(childComplexity), true
 
 	case "StandardHistory.version":
-		if e.complexity.StandardHistory.Version == nil {
+		if e.ComplexityRoot.StandardHistory.Version == nil {
 			break
 		}
 
-		return e.complexity.StandardHistory.Version(childComplexity), true
+		return e.ComplexityRoot.StandardHistory.Version(childComplexity), true
 
 	case "StandardHistoryConnection.edges":
-		if e.complexity.StandardHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.StandardHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.StandardHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.StandardHistoryConnection.Edges(childComplexity), true
 
 	case "StandardHistoryConnection.pageInfo":
-		if e.complexity.StandardHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.StandardHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.StandardHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.StandardHistoryConnection.PageInfo(childComplexity), true
 
 	case "StandardHistoryConnection.totalCount":
-		if e.complexity.StandardHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.StandardHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.StandardHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.StandardHistoryConnection.TotalCount(childComplexity), true
 
 	case "StandardHistoryEdge.cursor":
-		if e.complexity.StandardHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.StandardHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.StandardHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.StandardHistoryEdge.Cursor(childComplexity), true
 
 	case "StandardHistoryEdge.node":
-		if e.complexity.StandardHistoryEdge.Node == nil {
+		if e.ComplexityRoot.StandardHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.StandardHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.StandardHistoryEdge.Node(childComplexity), true
 
 	case "SubcontrolHistory.aliases":
-		if e.complexity.SubcontrolHistory.Aliases == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Aliases == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Aliases(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Aliases(childComplexity), true
 
 	case "SubcontrolHistory.assessmentMethods":
-		if e.complexity.SubcontrolHistory.AssessmentMethods == nil {
+		if e.ComplexityRoot.SubcontrolHistory.AssessmentMethods == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.AssessmentMethods(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.AssessmentMethods(childComplexity), true
 
 	case "SubcontrolHistory.assessmentObjectives":
-		if e.complexity.SubcontrolHistory.AssessmentObjectives == nil {
+		if e.ComplexityRoot.SubcontrolHistory.AssessmentObjectives == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.AssessmentObjectives(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.AssessmentObjectives(childComplexity), true
 
 	case "SubcontrolHistory.auditorReferenceID":
-		if e.complexity.SubcontrolHistory.AuditorReferenceID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.AuditorReferenceID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.AuditorReferenceID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.AuditorReferenceID(childComplexity), true
 
 	case "SubcontrolHistory.category":
-		if e.complexity.SubcontrolHistory.Category == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Category(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Category(childComplexity), true
 
 	case "SubcontrolHistory.categoryID":
-		if e.complexity.SubcontrolHistory.CategoryID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.CategoryID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.CategoryID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.CategoryID(childComplexity), true
 
 	case "SubcontrolHistory.controlID":
-		if e.complexity.SubcontrolHistory.ControlID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ControlID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ControlID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ControlID(childComplexity), true
 
 	case "SubcontrolHistory.controlOwnerID":
-		if e.complexity.SubcontrolHistory.ControlOwnerID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ControlOwnerID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ControlOwnerID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ControlOwnerID(childComplexity), true
 
 	case "SubcontrolHistory.controlQuestions":
-		if e.complexity.SubcontrolHistory.ControlQuestions == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ControlQuestions == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ControlQuestions(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ControlQuestions(childComplexity), true
 
 	case "SubcontrolHistory.createdAt":
-		if e.complexity.SubcontrolHistory.CreatedAt == nil {
+		if e.ComplexityRoot.SubcontrolHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.CreatedAt(childComplexity), true
 
 	case "SubcontrolHistory.createdBy":
-		if e.complexity.SubcontrolHistory.CreatedBy == nil {
+		if e.ComplexityRoot.SubcontrolHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.CreatedBy(childComplexity), true
 
 	case "SubcontrolHistory.delegateID":
-		if e.complexity.SubcontrolHistory.DelegateID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.DelegateID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.DelegateID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.DelegateID(childComplexity), true
 
 	case "SubcontrolHistory.description":
-		if e.complexity.SubcontrolHistory.Description == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Description(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Description(childComplexity), true
 
 	case "SubcontrolHistory.descriptionJSON":
-		if e.complexity.SubcontrolHistory.DescriptionJSON == nil {
+		if e.ComplexityRoot.SubcontrolHistory.DescriptionJSON == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.DescriptionJSON(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.DescriptionJSON(childComplexity), true
 
 	case "SubcontrolHistory.displayID":
-		if e.complexity.SubcontrolHistory.DisplayID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.DisplayID(childComplexity), true
 
 	case "SubcontrolHistory.evidenceRequests":
-		if e.complexity.SubcontrolHistory.EvidenceRequests == nil {
+		if e.ComplexityRoot.SubcontrolHistory.EvidenceRequests == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.EvidenceRequests(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.EvidenceRequests(childComplexity), true
 
 	case "SubcontrolHistory.exampleEvidence":
-		if e.complexity.SubcontrolHistory.ExampleEvidence == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ExampleEvidence == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ExampleEvidence(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ExampleEvidence(childComplexity), true
 
 	case "SubcontrolHistory.historyTime":
-		if e.complexity.SubcontrolHistory.HistoryTime == nil {
+		if e.ComplexityRoot.SubcontrolHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.HistoryTime(childComplexity), true
 
 	case "SubcontrolHistory.id":
-		if e.complexity.SubcontrolHistory.ID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ID(childComplexity), true
 
 	case "SubcontrolHistory.implementationGuidance":
-		if e.complexity.SubcontrolHistory.ImplementationGuidance == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ImplementationGuidance == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ImplementationGuidance(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ImplementationGuidance(childComplexity), true
 
 	case "SubcontrolHistory.internalNotes":
-		if e.complexity.SubcontrolHistory.InternalNotes == nil {
+		if e.ComplexityRoot.SubcontrolHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.InternalNotes(childComplexity), true
 
 	case "SubcontrolHistory.mappedCategories":
-		if e.complexity.SubcontrolHistory.MappedCategories == nil {
+		if e.ComplexityRoot.SubcontrolHistory.MappedCategories == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.MappedCategories(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.MappedCategories(childComplexity), true
 
 	case "SubcontrolHistory.operation":
-		if e.complexity.SubcontrolHistory.Operation == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Operation(childComplexity), true
 
 	case "SubcontrolHistory.ownerID":
-		if e.complexity.SubcontrolHistory.OwnerID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.OwnerID(childComplexity), true
 
 	case "SubcontrolHistory.ref":
-		if e.complexity.SubcontrolHistory.Ref == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Ref(childComplexity), true
 
 	case "SubcontrolHistory.refCode":
-		if e.complexity.SubcontrolHistory.RefCode == nil {
+		if e.ComplexityRoot.SubcontrolHistory.RefCode == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.RefCode(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.RefCode(childComplexity), true
 
 	case "SubcontrolHistory.referenceFramework":
-		if e.complexity.SubcontrolHistory.ReferenceFramework == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ReferenceFramework == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ReferenceFramework(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ReferenceFramework(childComplexity), true
 
 	case "SubcontrolHistory.referenceFrameworkRevision":
-		if e.complexity.SubcontrolHistory.ReferenceFrameworkRevision == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ReferenceFrameworkRevision == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ReferenceFrameworkRevision(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ReferenceFrameworkRevision(childComplexity), true
 
 	case "SubcontrolHistory.referenceID":
-		if e.complexity.SubcontrolHistory.ReferenceID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ReferenceID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ReferenceID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ReferenceID(childComplexity), true
 
 	case "SubcontrolHistory.references":
-		if e.complexity.SubcontrolHistory.References == nil {
+		if e.ComplexityRoot.SubcontrolHistory.References == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.References(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.References(childComplexity), true
 
 	case "SubcontrolHistory.responsiblePartyID":
-		if e.complexity.SubcontrolHistory.ResponsiblePartyID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.ResponsiblePartyID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.ResponsiblePartyID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.ResponsiblePartyID(childComplexity), true
 
 	case "SubcontrolHistory.source":
-		if e.complexity.SubcontrolHistory.Source == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Source(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Source(childComplexity), true
 
 	case "SubcontrolHistory.status":
-		if e.complexity.SubcontrolHistory.Status == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Status(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Status(childComplexity), true
 
 	case "SubcontrolHistory.subcategory":
-		if e.complexity.SubcontrolHistory.Subcategory == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Subcategory == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Subcategory(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Subcategory(childComplexity), true
 
 	case "SubcontrolHistory.subcontrolKindID":
-		if e.complexity.SubcontrolHistory.SubcontrolKindID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.SubcontrolKindID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.SubcontrolKindID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.SubcontrolKindID(childComplexity), true
 
 	case "SubcontrolHistory.subcontrolKindName":
-		if e.complexity.SubcontrolHistory.SubcontrolKindName == nil {
+		if e.ComplexityRoot.SubcontrolHistory.SubcontrolKindName == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.SubcontrolKindName(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.SubcontrolKindName(childComplexity), true
 
 	case "SubcontrolHistory.systemInternalID":
-		if e.complexity.SubcontrolHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.SubcontrolHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.SystemInternalID(childComplexity), true
 
 	case "SubcontrolHistory.systemOwned":
-		if e.complexity.SubcontrolHistory.SystemOwned == nil {
+		if e.ComplexityRoot.SubcontrolHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.SystemOwned(childComplexity), true
 
 	case "SubcontrolHistory.tags":
-		if e.complexity.SubcontrolHistory.Tags == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Tags(childComplexity), true
 
 	case "SubcontrolHistory.testingProcedures":
-		if e.complexity.SubcontrolHistory.TestingProcedures == nil {
+		if e.ComplexityRoot.SubcontrolHistory.TestingProcedures == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.TestingProcedures(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.TestingProcedures(childComplexity), true
 
 	case "SubcontrolHistory.title":
-		if e.complexity.SubcontrolHistory.Title == nil {
+		if e.ComplexityRoot.SubcontrolHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.Title(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.Title(childComplexity), true
 
 	case "SubcontrolHistory.updatedAt":
-		if e.complexity.SubcontrolHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.SubcontrolHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.UpdatedAt(childComplexity), true
 
 	case "SubcontrolHistory.updatedBy":
-		if e.complexity.SubcontrolHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.SubcontrolHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.UpdatedBy(childComplexity), true
 
 	case "SubcontrolHistory.workflowEligibleMarker":
-		if e.complexity.SubcontrolHistory.WorkflowEligibleMarker == nil {
+		if e.ComplexityRoot.SubcontrolHistory.WorkflowEligibleMarker == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistory.WorkflowEligibleMarker(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "SubcontrolHistoryConnection.edges":
-		if e.complexity.SubcontrolHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.SubcontrolHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistoryConnection.Edges(childComplexity), true
 
 	case "SubcontrolHistoryConnection.pageInfo":
-		if e.complexity.SubcontrolHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.SubcontrolHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistoryConnection.PageInfo(childComplexity), true
 
 	case "SubcontrolHistoryConnection.totalCount":
-		if e.complexity.SubcontrolHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.SubcontrolHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistoryConnection.TotalCount(childComplexity), true
 
 	case "SubcontrolHistoryEdge.cursor":
-		if e.complexity.SubcontrolHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.SubcontrolHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistoryEdge.Cursor(childComplexity), true
 
 	case "SubcontrolHistoryEdge.node":
-		if e.complexity.SubcontrolHistoryEdge.Node == nil {
+		if e.ComplexityRoot.SubcontrolHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.SubcontrolHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.SubcontrolHistoryEdge.Node(childComplexity), true
 
 	case "SubprocessorHistory.createdAt":
-		if e.complexity.SubprocessorHistory.CreatedAt == nil {
+		if e.ComplexityRoot.SubprocessorHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.CreatedAt(childComplexity), true
 
 	case "SubprocessorHistory.createdBy":
-		if e.complexity.SubprocessorHistory.CreatedBy == nil {
+		if e.ComplexityRoot.SubprocessorHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.CreatedBy(childComplexity), true
 
 	case "SubprocessorHistory.description":
-		if e.complexity.SubprocessorHistory.Description == nil {
+		if e.ComplexityRoot.SubprocessorHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.Description(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.Description(childComplexity), true
 
 	case "SubprocessorHistory.historyTime":
-		if e.complexity.SubprocessorHistory.HistoryTime == nil {
+		if e.ComplexityRoot.SubprocessorHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.HistoryTime(childComplexity), true
 
 	case "SubprocessorHistory.id":
-		if e.complexity.SubprocessorHistory.ID == nil {
+		if e.ComplexityRoot.SubprocessorHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.ID(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.ID(childComplexity), true
 
 	case "SubprocessorHistory.internalNotes":
-		if e.complexity.SubprocessorHistory.InternalNotes == nil {
+		if e.ComplexityRoot.SubprocessorHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.InternalNotes(childComplexity), true
 
 	case "SubprocessorHistory.logoFileID":
-		if e.complexity.SubprocessorHistory.LogoFileID == nil {
+		if e.ComplexityRoot.SubprocessorHistory.LogoFileID == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.LogoFileID(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.LogoFileID(childComplexity), true
 
 	case "SubprocessorHistory.logoRemoteURL":
-		if e.complexity.SubprocessorHistory.LogoRemoteURL == nil {
+		if e.ComplexityRoot.SubprocessorHistory.LogoRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.LogoRemoteURL(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.LogoRemoteURL(childComplexity), true
 
 	case "SubprocessorHistory.name":
-		if e.complexity.SubprocessorHistory.Name == nil {
+		if e.ComplexityRoot.SubprocessorHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.Name(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.Name(childComplexity), true
 
 	case "SubprocessorHistory.operation":
-		if e.complexity.SubprocessorHistory.Operation == nil {
+		if e.ComplexityRoot.SubprocessorHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.Operation(childComplexity), true
 
 	case "SubprocessorHistory.ownerID":
-		if e.complexity.SubprocessorHistory.OwnerID == nil {
+		if e.ComplexityRoot.SubprocessorHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.OwnerID(childComplexity), true
 
 	case "SubprocessorHistory.ref":
-		if e.complexity.SubprocessorHistory.Ref == nil {
+		if e.ComplexityRoot.SubprocessorHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.Ref(childComplexity), true
 
 	case "SubprocessorHistory.systemInternalID":
-		if e.complexity.SubprocessorHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.SubprocessorHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.SystemInternalID(childComplexity), true
 
 	case "SubprocessorHistory.systemOwned":
-		if e.complexity.SubprocessorHistory.SystemOwned == nil {
+		if e.ComplexityRoot.SubprocessorHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.SystemOwned(childComplexity), true
 
 	case "SubprocessorHistory.tags":
-		if e.complexity.SubprocessorHistory.Tags == nil {
+		if e.ComplexityRoot.SubprocessorHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.Tags(childComplexity), true
 
 	case "SubprocessorHistory.updatedAt":
-		if e.complexity.SubprocessorHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.SubprocessorHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.UpdatedAt(childComplexity), true
 
 	case "SubprocessorHistory.updatedBy":
-		if e.complexity.SubprocessorHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.SubprocessorHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistory.UpdatedBy(childComplexity), true
 
 	case "SubprocessorHistoryConnection.edges":
-		if e.complexity.SubprocessorHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.SubprocessorHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistoryConnection.Edges(childComplexity), true
 
 	case "SubprocessorHistoryConnection.pageInfo":
-		if e.complexity.SubprocessorHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.SubprocessorHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistoryConnection.PageInfo(childComplexity), true
 
 	case "SubprocessorHistoryConnection.totalCount":
-		if e.complexity.SubprocessorHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.SubprocessorHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistoryConnection.TotalCount(childComplexity), true
 
 	case "SubprocessorHistoryEdge.cursor":
-		if e.complexity.SubprocessorHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.SubprocessorHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistoryEdge.Cursor(childComplexity), true
 
 	case "SubprocessorHistoryEdge.node":
-		if e.complexity.SubprocessorHistoryEdge.Node == nil {
+		if e.ComplexityRoot.SubprocessorHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.SubprocessorHistoryEdge.Node(childComplexity), true
 
 	case "TaskHistory.assigneeID":
-		if e.complexity.TaskHistory.AssigneeID == nil {
+		if e.ComplexityRoot.TaskHistory.AssigneeID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.AssigneeID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.AssigneeID(childComplexity), true
 
 	case "TaskHistory.assignerID":
-		if e.complexity.TaskHistory.AssignerID == nil {
+		if e.ComplexityRoot.TaskHistory.AssignerID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.AssignerID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.AssignerID(childComplexity), true
 
 	case "TaskHistory.completed":
-		if e.complexity.TaskHistory.Completed == nil {
+		if e.ComplexityRoot.TaskHistory.Completed == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Completed(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Completed(childComplexity), true
 
 	case "TaskHistory.createdAt":
-		if e.complexity.TaskHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TaskHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.CreatedAt(childComplexity), true
 
 	case "TaskHistory.createdBy":
-		if e.complexity.TaskHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TaskHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.CreatedBy(childComplexity), true
 
 	case "TaskHistory.details":
-		if e.complexity.TaskHistory.Details == nil {
+		if e.ComplexityRoot.TaskHistory.Details == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Details(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Details(childComplexity), true
 
 	case "TaskHistory.detailsJSON":
-		if e.complexity.TaskHistory.DetailsJSON == nil {
+		if e.ComplexityRoot.TaskHistory.DetailsJSON == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.DetailsJSON(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.DetailsJSON(childComplexity), true
 
 	case "TaskHistory.displayID":
-		if e.complexity.TaskHistory.DisplayID == nil {
+		if e.ComplexityRoot.TaskHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.DisplayID(childComplexity), true
 
 	case "TaskHistory.due":
-		if e.complexity.TaskHistory.Due == nil {
+		if e.ComplexityRoot.TaskHistory.Due == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Due(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Due(childComplexity), true
 
 	case "TaskHistory.environmentID":
-		if e.complexity.TaskHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.TaskHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.EnvironmentID(childComplexity), true
 
 	case "TaskHistory.environmentName":
-		if e.complexity.TaskHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.TaskHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.EnvironmentName(childComplexity), true
 
 	case "TaskHistory.externalReferenceURL":
-		if e.complexity.TaskHistory.ExternalReferenceURL == nil {
+		if e.ComplexityRoot.TaskHistory.ExternalReferenceURL == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.ExternalReferenceURL(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.ExternalReferenceURL(childComplexity), true
 
 	case "TaskHistory.historyTime":
-		if e.complexity.TaskHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TaskHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.HistoryTime(childComplexity), true
 
 	case "TaskHistory.id":
-		if e.complexity.TaskHistory.ID == nil {
+		if e.ComplexityRoot.TaskHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.ID(childComplexity), true
 
 	case "TaskHistory.idempotencyKey":
-		if e.complexity.TaskHistory.IdempotencyKey == nil {
+		if e.ComplexityRoot.TaskHistory.IdempotencyKey == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.IdempotencyKey(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.IdempotencyKey(childComplexity), true
 
 	case "TaskHistory.operation":
-		if e.complexity.TaskHistory.Operation == nil {
+		if e.ComplexityRoot.TaskHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Operation(childComplexity), true
 
 	case "TaskHistory.ownerID":
-		if e.complexity.TaskHistory.OwnerID == nil {
+		if e.ComplexityRoot.TaskHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.OwnerID(childComplexity), true
 
 	case "TaskHistory.parentTaskID":
-		if e.complexity.TaskHistory.ParentTaskID == nil {
+		if e.ComplexityRoot.TaskHistory.ParentTaskID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.ParentTaskID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.ParentTaskID(childComplexity), true
 
 	case "TaskHistory.ref":
-		if e.complexity.TaskHistory.Ref == nil {
+		if e.ComplexityRoot.TaskHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Ref(childComplexity), true
 
 	case "TaskHistory.scopeID":
-		if e.complexity.TaskHistory.ScopeID == nil {
+		if e.ComplexityRoot.TaskHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.ScopeID(childComplexity), true
 
 	case "TaskHistory.scopeName":
-		if e.complexity.TaskHistory.ScopeName == nil {
+		if e.ComplexityRoot.TaskHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.ScopeName(childComplexity), true
 
 	case "TaskHistory.status":
-		if e.complexity.TaskHistory.Status == nil {
+		if e.ComplexityRoot.TaskHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Status(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Status(childComplexity), true
 
 	case "TaskHistory.systemGenerated":
-		if e.complexity.TaskHistory.SystemGenerated == nil {
+		if e.ComplexityRoot.TaskHistory.SystemGenerated == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.SystemGenerated(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.SystemGenerated(childComplexity), true
 
 	case "TaskHistory.tags":
-		if e.complexity.TaskHistory.Tags == nil {
+		if e.ComplexityRoot.TaskHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Tags(childComplexity), true
 
 	case "TaskHistory.taskKindID":
-		if e.complexity.TaskHistory.TaskKindID == nil {
+		if e.ComplexityRoot.TaskHistory.TaskKindID == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.TaskKindID(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.TaskKindID(childComplexity), true
 
 	case "TaskHistory.taskKindName":
-		if e.complexity.TaskHistory.TaskKindName == nil {
+		if e.ComplexityRoot.TaskHistory.TaskKindName == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.TaskKindName(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.TaskKindName(childComplexity), true
 
 	case "TaskHistory.title":
-		if e.complexity.TaskHistory.Title == nil {
+		if e.ComplexityRoot.TaskHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.Title(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.Title(childComplexity), true
 
 	case "TaskHistory.updatedAt":
-		if e.complexity.TaskHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TaskHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.UpdatedAt(childComplexity), true
 
 	case "TaskHistory.updatedBy":
-		if e.complexity.TaskHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TaskHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TaskHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TaskHistory.UpdatedBy(childComplexity), true
 
 	case "TaskHistoryConnection.edges":
-		if e.complexity.TaskHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TaskHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TaskHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TaskHistoryConnection.Edges(childComplexity), true
 
 	case "TaskHistoryConnection.pageInfo":
-		if e.complexity.TaskHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TaskHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TaskHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TaskHistoryConnection.PageInfo(childComplexity), true
 
 	case "TaskHistoryConnection.totalCount":
-		if e.complexity.TaskHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TaskHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TaskHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TaskHistoryConnection.TotalCount(childComplexity), true
 
 	case "TaskHistoryEdge.cursor":
-		if e.complexity.TaskHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TaskHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TaskHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TaskHistoryEdge.Cursor(childComplexity), true
 
 	case "TaskHistoryEdge.node":
-		if e.complexity.TaskHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TaskHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TaskHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TaskHistoryEdge.Node(childComplexity), true
 
 	case "TemplateHistory.createdAt":
-		if e.complexity.TemplateHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TemplateHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.CreatedAt(childComplexity), true
 
 	case "TemplateHistory.createdBy":
-		if e.complexity.TemplateHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TemplateHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.CreatedBy(childComplexity), true
 
 	case "TemplateHistory.description":
-		if e.complexity.TemplateHistory.Description == nil {
+		if e.ComplexityRoot.TemplateHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Description(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Description(childComplexity), true
 
 	case "TemplateHistory.environmentID":
-		if e.complexity.TemplateHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.TemplateHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.EnvironmentID(childComplexity), true
 
 	case "TemplateHistory.environmentName":
-		if e.complexity.TemplateHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.TemplateHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.EnvironmentName(childComplexity), true
 
 	case "TemplateHistory.historyTime":
-		if e.complexity.TemplateHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TemplateHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.HistoryTime(childComplexity), true
 
 	case "TemplateHistory.id":
-		if e.complexity.TemplateHistory.ID == nil {
+		if e.ComplexityRoot.TemplateHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.ID(childComplexity), true
 
 	case "TemplateHistory.internalNotes":
-		if e.complexity.TemplateHistory.InternalNotes == nil {
+		if e.ComplexityRoot.TemplateHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.InternalNotes(childComplexity), true
 
 	case "TemplateHistory.jsonconfig":
-		if e.complexity.TemplateHistory.Jsonconfig == nil {
+		if e.ComplexityRoot.TemplateHistory.Jsonconfig == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Jsonconfig(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Jsonconfig(childComplexity), true
 
 	case "TemplateHistory.kind":
-		if e.complexity.TemplateHistory.Kind == nil {
+		if e.ComplexityRoot.TemplateHistory.Kind == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Kind(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Kind(childComplexity), true
 
 	case "TemplateHistory.name":
-		if e.complexity.TemplateHistory.Name == nil {
+		if e.ComplexityRoot.TemplateHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Name(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Name(childComplexity), true
 
 	case "TemplateHistory.operation":
-		if e.complexity.TemplateHistory.Operation == nil {
+		if e.ComplexityRoot.TemplateHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Operation(childComplexity), true
 
 	case "TemplateHistory.ownerID":
-		if e.complexity.TemplateHistory.OwnerID == nil {
+		if e.ComplexityRoot.TemplateHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.OwnerID(childComplexity), true
 
 	case "TemplateHistory.ref":
-		if e.complexity.TemplateHistory.Ref == nil {
+		if e.ComplexityRoot.TemplateHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Ref(childComplexity), true
 
 	case "TemplateHistory.scopeID":
-		if e.complexity.TemplateHistory.ScopeID == nil {
+		if e.ComplexityRoot.TemplateHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.ScopeID(childComplexity), true
 
 	case "TemplateHistory.scopeName":
-		if e.complexity.TemplateHistory.ScopeName == nil {
+		if e.ComplexityRoot.TemplateHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.ScopeName(childComplexity), true
 
 	case "TemplateHistory.systemInternalID":
-		if e.complexity.TemplateHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.TemplateHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.SystemInternalID(childComplexity), true
 
 	case "TemplateHistory.systemOwned":
-		if e.complexity.TemplateHistory.SystemOwned == nil {
+		if e.ComplexityRoot.TemplateHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.SystemOwned(childComplexity), true
 
 	case "TemplateHistory.tags":
-		if e.complexity.TemplateHistory.Tags == nil {
+		if e.ComplexityRoot.TemplateHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Tags(childComplexity), true
 
 	case "TemplateHistory.templateType":
-		if e.complexity.TemplateHistory.TemplateType == nil {
+		if e.ComplexityRoot.TemplateHistory.TemplateType == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.TemplateType(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.TemplateType(childComplexity), true
 
 	case "TemplateHistory.trustCenterID":
-		if e.complexity.TemplateHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TemplateHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.TrustCenterID(childComplexity), true
 
 	case "TemplateHistory.uischema":
-		if e.complexity.TemplateHistory.Uischema == nil {
+		if e.ComplexityRoot.TemplateHistory.Uischema == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.Uischema(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.Uischema(childComplexity), true
 
 	case "TemplateHistory.updatedAt":
-		if e.complexity.TemplateHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TemplateHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.UpdatedAt(childComplexity), true
 
 	case "TemplateHistory.updatedBy":
-		if e.complexity.TemplateHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TemplateHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TemplateHistory.UpdatedBy(childComplexity), true
 
 	case "TemplateHistoryConnection.edges":
-		if e.complexity.TemplateHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TemplateHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TemplateHistoryConnection.Edges(childComplexity), true
 
 	case "TemplateHistoryConnection.pageInfo":
-		if e.complexity.TemplateHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TemplateHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TemplateHistoryConnection.PageInfo(childComplexity), true
 
 	case "TemplateHistoryConnection.totalCount":
-		if e.complexity.TemplateHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TemplateHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TemplateHistoryConnection.TotalCount(childComplexity), true
 
 	case "TemplateHistoryEdge.cursor":
-		if e.complexity.TemplateHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TemplateHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TemplateHistoryEdge.Cursor(childComplexity), true
 
 	case "TemplateHistoryEdge.node":
-		if e.complexity.TemplateHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TemplateHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TemplateHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TemplateHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterComplianceHistory.createdAt":
-		if e.complexity.TrustCenterComplianceHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterComplianceHistory.createdBy":
-		if e.complexity.TrustCenterComplianceHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterComplianceHistory.historyTime":
-		if e.complexity.TrustCenterComplianceHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterComplianceHistory.id":
-		if e.complexity.TrustCenterComplianceHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.ID(childComplexity), true
 
 	case "TrustCenterComplianceHistory.operation":
-		if e.complexity.TrustCenterComplianceHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.Operation(childComplexity), true
 
 	case "TrustCenterComplianceHistory.ref":
-		if e.complexity.TrustCenterComplianceHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.Ref(childComplexity), true
 
 	case "TrustCenterComplianceHistory.standardID":
-		if e.complexity.TrustCenterComplianceHistory.StandardID == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.StandardID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.StandardID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.StandardID(childComplexity), true
 
 	case "TrustCenterComplianceHistory.tags":
-		if e.complexity.TrustCenterComplianceHistory.Tags == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.Tags(childComplexity), true
 
 	case "TrustCenterComplianceHistory.trustCenterID":
-		if e.complexity.TrustCenterComplianceHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterComplianceHistory.updatedAt":
-		if e.complexity.TrustCenterComplianceHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterComplianceHistory.updatedBy":
-		if e.complexity.TrustCenterComplianceHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterComplianceHistoryConnection.edges":
-		if e.complexity.TrustCenterComplianceHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterComplianceHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterComplianceHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterComplianceHistoryConnection.totalCount":
-		if e.complexity.TrustCenterComplianceHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterComplianceHistoryEdge.cursor":
-		if e.complexity.TrustCenterComplianceHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterComplianceHistoryEdge.node":
-		if e.complexity.TrustCenterComplianceHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterComplianceHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterComplianceHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterComplianceHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterDocHistory.createdAt":
-		if e.complexity.TrustCenterDocHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterDocHistory.createdBy":
-		if e.complexity.TrustCenterDocHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterDocHistory.fileID":
-		if e.complexity.TrustCenterDocHistory.FileID == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.FileID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.FileID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.FileID(childComplexity), true
 
 	case "TrustCenterDocHistory.historyTime":
-		if e.complexity.TrustCenterDocHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterDocHistory.id":
-		if e.complexity.TrustCenterDocHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.ID(childComplexity), true
 
 	case "TrustCenterDocHistory.operation":
-		if e.complexity.TrustCenterDocHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.Operation(childComplexity), true
 
 	case "TrustCenterDocHistory.originalFileID":
-		if e.complexity.TrustCenterDocHistory.OriginalFileID == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.OriginalFileID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.OriginalFileID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.OriginalFileID(childComplexity), true
 
 	case "TrustCenterDocHistory.ref":
-		if e.complexity.TrustCenterDocHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.Ref(childComplexity), true
 
 	case "TrustCenterDocHistory.standardID":
-		if e.complexity.TrustCenterDocHistory.StandardID == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.StandardID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.StandardID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.StandardID(childComplexity), true
 
 	case "TrustCenterDocHistory.tags":
-		if e.complexity.TrustCenterDocHistory.Tags == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.Tags(childComplexity), true
 
 	case "TrustCenterDocHistory.title":
-		if e.complexity.TrustCenterDocHistory.Title == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.Title(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.Title(childComplexity), true
 
 	case "TrustCenterDocHistory.trustCenterDocKindID":
-		if e.complexity.TrustCenterDocHistory.TrustCenterDocKindID == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.TrustCenterDocKindID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.TrustCenterDocKindID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.TrustCenterDocKindID(childComplexity), true
 
 	case "TrustCenterDocHistory.trustCenterDocKindName":
-		if e.complexity.TrustCenterDocHistory.TrustCenterDocKindName == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.TrustCenterDocKindName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.TrustCenterDocKindName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.TrustCenterDocKindName(childComplexity), true
 
 	case "TrustCenterDocHistory.trustCenterID":
-		if e.complexity.TrustCenterDocHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterDocHistory.updatedAt":
-		if e.complexity.TrustCenterDocHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterDocHistory.updatedBy":
-		if e.complexity.TrustCenterDocHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterDocHistory.visibility":
-		if e.complexity.TrustCenterDocHistory.Visibility == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.Visibility == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.Visibility(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.Visibility(childComplexity), true
 
 	case "TrustCenterDocHistory.watermarkStatus":
-		if e.complexity.TrustCenterDocHistory.WatermarkStatus == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.WatermarkStatus == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.WatermarkStatus(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.WatermarkStatus(childComplexity), true
 
 	case "TrustCenterDocHistory.watermarkingEnabled":
-		if e.complexity.TrustCenterDocHistory.WatermarkingEnabled == nil {
+		if e.ComplexityRoot.TrustCenterDocHistory.WatermarkingEnabled == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.WatermarkingEnabled(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistory.WatermarkingEnabled(childComplexity), true
 
 	case "TrustCenterDocHistoryConnection.edges":
-		if e.complexity.TrustCenterDocHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterDocHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterDocHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterDocHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterDocHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterDocHistoryConnection.totalCount":
-		if e.complexity.TrustCenterDocHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterDocHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterDocHistoryEdge.cursor":
-		if e.complexity.TrustCenterDocHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterDocHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterDocHistoryEdge.node":
-		if e.complexity.TrustCenterDocHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterDocHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterDocHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterEntityHistory.createdAt":
-		if e.complexity.TrustCenterEntityHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterEntityHistory.createdBy":
-		if e.complexity.TrustCenterEntityHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterEntityHistory.entityTypeID":
-		if e.complexity.TrustCenterEntityHistory.EntityTypeID == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.EntityTypeID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.EntityTypeID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.EntityTypeID(childComplexity), true
 
 	case "TrustCenterEntityHistory.historyTime":
-		if e.complexity.TrustCenterEntityHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterEntityHistory.id":
-		if e.complexity.TrustCenterEntityHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.ID(childComplexity), true
 
 	case "TrustCenterEntityHistory.logoFileID":
-		if e.complexity.TrustCenterEntityHistory.LogoFileID == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.LogoFileID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.LogoFileID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.LogoFileID(childComplexity), true
 
 	case "TrustCenterEntityHistory.name":
-		if e.complexity.TrustCenterEntityHistory.Name == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.Name(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.Name(childComplexity), true
 
 	case "TrustCenterEntityHistory.operation":
-		if e.complexity.TrustCenterEntityHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.Operation(childComplexity), true
 
 	case "TrustCenterEntityHistory.ref":
-		if e.complexity.TrustCenterEntityHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.Ref(childComplexity), true
 
 	case "TrustCenterEntityHistory.trustCenterID":
-		if e.complexity.TrustCenterEntityHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterEntityHistory.url":
-		if e.complexity.TrustCenterEntityHistory.URL == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.URL == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.URL(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.URL(childComplexity), true
 
 	case "TrustCenterEntityHistory.updatedAt":
-		if e.complexity.TrustCenterEntityHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterEntityHistory.updatedBy":
-		if e.complexity.TrustCenterEntityHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterEntityHistoryConnection.edges":
-		if e.complexity.TrustCenterEntityHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterEntityHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterEntityHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterEntityHistoryConnection.totalCount":
-		if e.complexity.TrustCenterEntityHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterEntityHistoryEdge.cursor":
-		if e.complexity.TrustCenterEntityHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterEntityHistoryEdge.node":
-		if e.complexity.TrustCenterEntityHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterEntityHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterEntityHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterEntityHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterFAQHistory.createdAt":
-		if e.complexity.TrustCenterFAQHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterFAQHistory.createdBy":
-		if e.complexity.TrustCenterFAQHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterFAQHistory.displayOrder":
-		if e.complexity.TrustCenterFAQHistory.DisplayOrder == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.DisplayOrder == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.DisplayOrder(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.DisplayOrder(childComplexity), true
 
 	case "TrustCenterFAQHistory.historyTime":
-		if e.complexity.TrustCenterFAQHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterFAQHistory.id":
-		if e.complexity.TrustCenterFAQHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.ID(childComplexity), true
 
 	case "TrustCenterFAQHistory.noteID":
-		if e.complexity.TrustCenterFAQHistory.NoteID == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.NoteID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.NoteID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.NoteID(childComplexity), true
 
 	case "TrustCenterFAQHistory.operation":
-		if e.complexity.TrustCenterFAQHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.Operation(childComplexity), true
 
 	case "TrustCenterFAQHistory.ref":
-		if e.complexity.TrustCenterFAQHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.Ref(childComplexity), true
 
 	case "TrustCenterFAQHistory.referenceLink":
-		if e.complexity.TrustCenterFAQHistory.ReferenceLink == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.ReferenceLink == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.ReferenceLink(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.ReferenceLink(childComplexity), true
 
 	case "TrustCenterFAQHistory.trustCenterFaqKindID":
-		if e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindID == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.TrustCenterFaqKindID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.TrustCenterFaqKindID(childComplexity), true
 
 	case "TrustCenterFAQHistory.trustCenterFaqKindName":
-		if e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindName == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.TrustCenterFaqKindName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.TrustCenterFaqKindName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.TrustCenterFaqKindName(childComplexity), true
 
 	case "TrustCenterFAQHistory.trustCenterID":
-		if e.complexity.TrustCenterFAQHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterFAQHistory.updatedAt":
-		if e.complexity.TrustCenterFAQHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterFAQHistory.updatedBy":
-		if e.complexity.TrustCenterFAQHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterFAQHistoryConnection.edges":
-		if e.complexity.TrustCenterFAQHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterFAQHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterFAQHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterFAQHistoryConnection.totalCount":
-		if e.complexity.TrustCenterFAQHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterFAQHistoryEdge.cursor":
-		if e.complexity.TrustCenterFAQHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterFAQHistoryEdge.node":
-		if e.complexity.TrustCenterFAQHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterFAQHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterFAQHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterFAQHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterHistory.createdAt":
-		if e.complexity.TrustCenterHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterHistory.createdBy":
-		if e.complexity.TrustCenterHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterHistory.customDomainID":
-		if e.complexity.TrustCenterHistory.CustomDomainID == nil {
+		if e.ComplexityRoot.TrustCenterHistory.CustomDomainID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.CustomDomainID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.CustomDomainID(childComplexity), true
 
 	case "TrustCenterHistory.historyTime":
-		if e.complexity.TrustCenterHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterHistory.id":
-		if e.complexity.TrustCenterHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.ID(childComplexity), true
 
 	case "TrustCenterHistory.operation":
-		if e.complexity.TrustCenterHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.Operation(childComplexity), true
 
 	case "TrustCenterHistory.ownerID":
-		if e.complexity.TrustCenterHistory.OwnerID == nil {
+		if e.ComplexityRoot.TrustCenterHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.OwnerID(childComplexity), true
 
 	case "TrustCenterHistory.pirschAccessLink":
-		if e.complexity.TrustCenterHistory.PirschAccessLink == nil {
+		if e.ComplexityRoot.TrustCenterHistory.PirschAccessLink == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.PirschAccessLink(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.PirschAccessLink(childComplexity), true
 
 	case "TrustCenterHistory.pirschDomainID":
-		if e.complexity.TrustCenterHistory.PirschDomainID == nil {
+		if e.ComplexityRoot.TrustCenterHistory.PirschDomainID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.PirschDomainID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.PirschDomainID(childComplexity), true
 
 	case "TrustCenterHistory.pirschIdentificationCode":
-		if e.complexity.TrustCenterHistory.PirschIdentificationCode == nil {
+		if e.ComplexityRoot.TrustCenterHistory.PirschIdentificationCode == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.PirschIdentificationCode(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.PirschIdentificationCode(childComplexity), true
 
 	case "TrustCenterHistory.previewDomainID":
-		if e.complexity.TrustCenterHistory.PreviewDomainID == nil {
+		if e.ComplexityRoot.TrustCenterHistory.PreviewDomainID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.PreviewDomainID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.PreviewDomainID(childComplexity), true
 
 	case "TrustCenterHistory.previewStatus":
-		if e.complexity.TrustCenterHistory.PreviewStatus == nil {
+		if e.ComplexityRoot.TrustCenterHistory.PreviewStatus == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.PreviewStatus(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.PreviewStatus(childComplexity), true
 
 	case "TrustCenterHistory.ref":
-		if e.complexity.TrustCenterHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.Ref(childComplexity), true
 
 	case "TrustCenterHistory.slug":
-		if e.complexity.TrustCenterHistory.Slug == nil {
+		if e.ComplexityRoot.TrustCenterHistory.Slug == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.Slug(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.Slug(childComplexity), true
 
 	case "TrustCenterHistory.subprocessorURL":
-		if e.complexity.TrustCenterHistory.SubprocessorURL == nil {
+		if e.ComplexityRoot.TrustCenterHistory.SubprocessorURL == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.SubprocessorURL(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.SubprocessorURL(childComplexity), true
 
 	case "TrustCenterHistory.tags":
-		if e.complexity.TrustCenterHistory.Tags == nil {
+		if e.ComplexityRoot.TrustCenterHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.Tags(childComplexity), true
 
 	case "TrustCenterHistory.updatedAt":
-		if e.complexity.TrustCenterHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterHistory.updatedBy":
-		if e.complexity.TrustCenterHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterHistoryConnection.edges":
-		if e.complexity.TrustCenterHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterHistoryConnection.totalCount":
-		if e.complexity.TrustCenterHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterHistoryEdge.cursor":
-		if e.complexity.TrustCenterHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterHistoryEdge.node":
-		if e.complexity.TrustCenterHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.accessLevel":
-		if e.complexity.TrustCenterNDARequestHistory.AccessLevel == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.AccessLevel == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.AccessLevel(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.AccessLevel(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.approvedAt":
-		if e.complexity.TrustCenterNDARequestHistory.ApprovedAt == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.ApprovedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedAt(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.approvedByUserID":
-		if e.complexity.TrustCenterNDARequestHistory.ApprovedByUserID == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedByUserID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.ApprovedByUserID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.ApprovedByUserID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.companyName":
-		if e.complexity.TrustCenterNDARequestHistory.CompanyName == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.CompanyName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.CompanyName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.CompanyName(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.createdAt":
-		if e.complexity.TrustCenterNDARequestHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.createdBy":
-		if e.complexity.TrustCenterNDARequestHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.documentDataID":
-		if e.complexity.TrustCenterNDARequestHistory.DocumentDataID == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.DocumentDataID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.DocumentDataID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.DocumentDataID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.email":
-		if e.complexity.TrustCenterNDARequestHistory.Email == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.Email(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.Email(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.fileID":
-		if e.complexity.TrustCenterNDARequestHistory.FileID == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.FileID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.FileID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.FileID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.firstName":
-		if e.complexity.TrustCenterNDARequestHistory.FirstName == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.FirstName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.FirstName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.FirstName(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.historyTime":
-		if e.complexity.TrustCenterNDARequestHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.id":
-		if e.complexity.TrustCenterNDARequestHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.ID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.lastName":
-		if e.complexity.TrustCenterNDARequestHistory.LastName == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.LastName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.LastName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.LastName(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.operation":
-		if e.complexity.TrustCenterNDARequestHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.Operation(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.reason":
-		if e.complexity.TrustCenterNDARequestHistory.Reason == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.Reason == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.Reason(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.Reason(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.ref":
-		if e.complexity.TrustCenterNDARequestHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.Ref(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.signedAt":
-		if e.complexity.TrustCenterNDARequestHistory.SignedAt == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.SignedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.SignedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.SignedAt(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.status":
-		if e.complexity.TrustCenterNDARequestHistory.Status == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.Status(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.Status(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.tags":
-		if e.complexity.TrustCenterNDARequestHistory.Tags == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.Tags(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.trustCenterID":
-		if e.complexity.TrustCenterNDARequestHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.updatedAt":
-		if e.complexity.TrustCenterNDARequestHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterNDARequestHistory.updatedBy":
-		if e.complexity.TrustCenterNDARequestHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterNDARequestHistoryConnection.edges":
-		if e.complexity.TrustCenterNDARequestHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterNDARequestHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterNDARequestHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterNDARequestHistoryConnection.totalCount":
-		if e.complexity.TrustCenterNDARequestHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterNDARequestHistoryEdge.cursor":
-		if e.complexity.TrustCenterNDARequestHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterNDARequestHistoryEdge.node":
-		if e.complexity.TrustCenterNDARequestHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterNDARequestHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterNDARequestHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterNDARequestHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterSettingHistory.accentColor":
-		if e.complexity.TrustCenterSettingHistory.AccentColor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.AccentColor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.AccentColor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.AccentColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.backgroundColor":
-		if e.complexity.TrustCenterSettingHistory.BackgroundColor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.BackgroundColor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.BackgroundColor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.BackgroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.companyDescription":
-		if e.complexity.TrustCenterSettingHistory.CompanyDescription == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.CompanyDescription == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.CompanyDescription(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.CompanyDescription(childComplexity), true
 
 	case "TrustCenterSettingHistory.companyDomain":
-		if e.complexity.TrustCenterSettingHistory.CompanyDomain == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.CompanyDomain == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.CompanyDomain(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.CompanyDomain(childComplexity), true
 
 	case "TrustCenterSettingHistory.companyName":
-		if e.complexity.TrustCenterSettingHistory.CompanyName == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.CompanyName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.CompanyName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.CompanyName(childComplexity), true
 
 	case "TrustCenterSettingHistory.createdAt":
-		if e.complexity.TrustCenterSettingHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterSettingHistory.createdBy":
-		if e.complexity.TrustCenterSettingHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterSettingHistory.environment":
-		if e.complexity.TrustCenterSettingHistory.Environment == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.Environment == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.Environment(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.Environment(childComplexity), true
 
 	case "TrustCenterSettingHistory.faviconLocalFileID":
-		if e.complexity.TrustCenterSettingHistory.FaviconLocalFileID == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.FaviconLocalFileID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.FaviconLocalFileID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.FaviconLocalFileID(childComplexity), true
 
 	case "TrustCenterSettingHistory.faviconRemoteURL":
-		if e.complexity.TrustCenterSettingHistory.FaviconRemoteURL == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.FaviconRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.FaviconRemoteURL(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.FaviconRemoteURL(childComplexity), true
 
 	case "TrustCenterSettingHistory.font":
-		if e.complexity.TrustCenterSettingHistory.Font == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.Font == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.Font(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.Font(childComplexity), true
 
 	case "TrustCenterSettingHistory.foregroundColor":
-		if e.complexity.TrustCenterSettingHistory.ForegroundColor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.ForegroundColor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.ForegroundColor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.ForegroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.historyTime":
-		if e.complexity.TrustCenterSettingHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterSettingHistory.id":
-		if e.complexity.TrustCenterSettingHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.ID(childComplexity), true
 
 	case "TrustCenterSettingHistory.logoLocalFileID":
-		if e.complexity.TrustCenterSettingHistory.LogoLocalFileID == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.LogoLocalFileID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.LogoLocalFileID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.LogoLocalFileID(childComplexity), true
 
 	case "TrustCenterSettingHistory.logoRemoteURL":
-		if e.complexity.TrustCenterSettingHistory.LogoRemoteURL == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.LogoRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.LogoRemoteURL(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.LogoRemoteURL(childComplexity), true
 
 	case "TrustCenterSettingHistory.ndaApprovalRequired":
-		if e.complexity.TrustCenterSettingHistory.NdaApprovalRequired == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.NdaApprovalRequired == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.NdaApprovalRequired(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApprovalRequired(childComplexity), true
 
 	case "TrustCenterSettingHistory.operation":
-		if e.complexity.TrustCenterSettingHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.Operation(childComplexity), true
 
 	case "TrustCenterSettingHistory.overview":
-		if e.complexity.TrustCenterSettingHistory.Overview == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.Overview == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.Overview(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.Overview(childComplexity), true
 
 	case "TrustCenterSettingHistory.primaryColor":
-		if e.complexity.TrustCenterSettingHistory.PrimaryColor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.PrimaryColor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.PrimaryColor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.PrimaryColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.ref":
-		if e.complexity.TrustCenterSettingHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.Ref(childComplexity), true
 
 	case "TrustCenterSettingHistory.removeBranding":
-		if e.complexity.TrustCenterSettingHistory.RemoveBranding == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.RemoveBranding == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.RemoveBranding(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.RemoveBranding(childComplexity), true
 
 	case "TrustCenterSettingHistory.secondaryBackgroundColor":
-		if e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.SecondaryBackgroundColor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.SecondaryBackgroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.secondaryForegroundColor":
-		if e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.SecondaryForegroundColor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.SecondaryForegroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.securityContact":
-		if e.complexity.TrustCenterSettingHistory.SecurityContact == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.SecurityContact == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.SecurityContact(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.SecurityContact(childComplexity), true
 
 	case "TrustCenterSettingHistory.statusPageURL":
-		if e.complexity.TrustCenterSettingHistory.StatusPageURL == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.StatusPageURL == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.StatusPageURL(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.StatusPageURL(childComplexity), true
 
 	case "TrustCenterSettingHistory.themeMode":
-		if e.complexity.TrustCenterSettingHistory.ThemeMode == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.ThemeMode == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.ThemeMode(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.ThemeMode(childComplexity), true
 
 	case "TrustCenterSettingHistory.title":
-		if e.complexity.TrustCenterSettingHistory.Title == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.Title == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.Title(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.Title(childComplexity), true
 
 	case "TrustCenterSettingHistory.trustCenterID":
-		if e.complexity.TrustCenterSettingHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterSettingHistory.updatedAt":
-		if e.complexity.TrustCenterSettingHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterSettingHistory.updatedBy":
-		if e.complexity.TrustCenterSettingHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterSettingHistoryConnection.edges":
-		if e.complexity.TrustCenterSettingHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterSettingHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterSettingHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterSettingHistoryConnection.totalCount":
-		if e.complexity.TrustCenterSettingHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterSettingHistoryEdge.cursor":
-		if e.complexity.TrustCenterSettingHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterSettingHistoryEdge.node":
-		if e.complexity.TrustCenterSettingHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterSettingHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSettingHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSettingHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.countries":
-		if e.complexity.TrustCenterSubprocessorHistory.Countries == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.Countries == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.Countries(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.Countries(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.createdAt":
-		if e.complexity.TrustCenterSubprocessorHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.createdBy":
-		if e.complexity.TrustCenterSubprocessorHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.historyTime":
-		if e.complexity.TrustCenterSubprocessorHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.id":
-		if e.complexity.TrustCenterSubprocessorHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.ID(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.operation":
-		if e.complexity.TrustCenterSubprocessorHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.Operation(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.ref":
-		if e.complexity.TrustCenterSubprocessorHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.Ref(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.subprocessorID":
-		if e.complexity.TrustCenterSubprocessorHistory.SubprocessorID == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.SubprocessorID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.SubprocessorID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.SubprocessorID(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.trustCenterID":
-		if e.complexity.TrustCenterSubprocessorHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.trustCenterSubprocessorKindID":
-		if e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindID == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindID(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.trustCenterSubprocessorKindName":
-		if e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindName == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindName(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.TrustCenterSubprocessorKindName(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.updatedAt":
-		if e.complexity.TrustCenterSubprocessorHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterSubprocessorHistory.updatedBy":
-		if e.complexity.TrustCenterSubprocessorHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterSubprocessorHistoryConnection.edges":
-		if e.complexity.TrustCenterSubprocessorHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterSubprocessorHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterSubprocessorHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterSubprocessorHistoryConnection.totalCount":
-		if e.complexity.TrustCenterSubprocessorHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterSubprocessorHistoryEdge.cursor":
-		if e.complexity.TrustCenterSubprocessorHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterSubprocessorHistoryEdge.node":
-		if e.complexity.TrustCenterSubprocessorHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterSubprocessorHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterSubprocessorHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterSubprocessorHistoryEdge.Node(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.color":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Color == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Color == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Color(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Color(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.createdAt":
-		if e.complexity.TrustCenterWatermarkConfigHistory.CreatedAt == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.CreatedAt(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.createdBy":
-		if e.complexity.TrustCenterWatermarkConfigHistory.CreatedBy == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.CreatedBy(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.font":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Font == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Font == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Font(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Font(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.fontSize":
-		if e.complexity.TrustCenterWatermarkConfigHistory.FontSize == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.FontSize == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.FontSize(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.FontSize(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.historyTime":
-		if e.complexity.TrustCenterWatermarkConfigHistory.HistoryTime == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.HistoryTime(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.id":
-		if e.complexity.TrustCenterWatermarkConfigHistory.ID == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.ID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.ID(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.isEnabled":
-		if e.complexity.TrustCenterWatermarkConfigHistory.IsEnabled == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.IsEnabled == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.IsEnabled(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.IsEnabled(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.logoID":
-		if e.complexity.TrustCenterWatermarkConfigHistory.LogoID == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.LogoID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.LogoID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.LogoID(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.opacity":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Opacity == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Opacity == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Opacity(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Opacity(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.operation":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Operation == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Operation(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.ownerID":
-		if e.complexity.TrustCenterWatermarkConfigHistory.OwnerID == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.OwnerID(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.ref":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Ref == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Ref(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.rotation":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Rotation == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Rotation == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Rotation(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Rotation(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.text":
-		if e.complexity.TrustCenterWatermarkConfigHistory.Text == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Text == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.Text(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.Text(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.trustCenterID":
-		if e.complexity.TrustCenterWatermarkConfigHistory.TrustCenterID == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.TrustCenterID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.TrustCenterID(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.TrustCenterID(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.updatedAt":
-		if e.complexity.TrustCenterWatermarkConfigHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedAt(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.updatedBy":
-		if e.complexity.TrustCenterWatermarkConfigHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistory.UpdatedBy(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistoryConnection.edges":
-		if e.complexity.TrustCenterWatermarkConfigHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.Edges(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistoryConnection.pageInfo":
-		if e.complexity.TrustCenterWatermarkConfigHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.PageInfo(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistoryConnection.totalCount":
-		if e.complexity.TrustCenterWatermarkConfigHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistoryConnection.TotalCount(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistoryEdge.cursor":
-		if e.complexity.TrustCenterWatermarkConfigHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistoryEdge.Cursor(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistoryEdge.node":
-		if e.complexity.TrustCenterWatermarkConfigHistoryEdge.Node == nil {
+		if e.ComplexityRoot.TrustCenterWatermarkConfigHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterWatermarkConfigHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.TrustCenterWatermarkConfigHistoryEdge.Node(childComplexity), true
 
 	case "UserHistory.authProvider":
-		if e.complexity.UserHistory.AuthProvider == nil {
+		if e.ComplexityRoot.UserHistory.AuthProvider == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.AuthProvider(childComplexity), true
+		return e.ComplexityRoot.UserHistory.AuthProvider(childComplexity), true
 
 	case "UserHistory.avatarLocalFileID":
-		if e.complexity.UserHistory.AvatarLocalFileID == nil {
+		if e.ComplexityRoot.UserHistory.AvatarLocalFileID == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.AvatarLocalFileID(childComplexity), true
+		return e.ComplexityRoot.UserHistory.AvatarLocalFileID(childComplexity), true
 
 	case "UserHistory.avatarRemoteURL":
-		if e.complexity.UserHistory.AvatarRemoteURL == nil {
+		if e.ComplexityRoot.UserHistory.AvatarRemoteURL == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.AvatarRemoteURL(childComplexity), true
+		return e.ComplexityRoot.UserHistory.AvatarRemoteURL(childComplexity), true
 
 	case "UserHistory.avatarUpdatedAt":
-		if e.complexity.UserHistory.AvatarUpdatedAt == nil {
+		if e.ComplexityRoot.UserHistory.AvatarUpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.AvatarUpdatedAt(childComplexity), true
+		return e.ComplexityRoot.UserHistory.AvatarUpdatedAt(childComplexity), true
 
 	case "UserHistory.createdAt":
-		if e.complexity.UserHistory.CreatedAt == nil {
+		if e.ComplexityRoot.UserHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.UserHistory.CreatedAt(childComplexity), true
 
 	case "UserHistory.createdBy":
-		if e.complexity.UserHistory.CreatedBy == nil {
+		if e.ComplexityRoot.UserHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.UserHistory.CreatedBy(childComplexity), true
 
 	case "UserHistory.displayID":
-		if e.complexity.UserHistory.DisplayID == nil {
+		if e.ComplexityRoot.UserHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.UserHistory.DisplayID(childComplexity), true
 
 	case "UserHistory.displayName":
-		if e.complexity.UserHistory.DisplayName == nil {
+		if e.ComplexityRoot.UserHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.UserHistory.DisplayName(childComplexity), true
 
 	case "UserHistory.email":
-		if e.complexity.UserHistory.Email == nil {
+		if e.ComplexityRoot.UserHistory.Email == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.Email(childComplexity), true
+		return e.ComplexityRoot.UserHistory.Email(childComplexity), true
 
 	case "UserHistory.firstName":
-		if e.complexity.UserHistory.FirstName == nil {
+		if e.ComplexityRoot.UserHistory.FirstName == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.FirstName(childComplexity), true
+		return e.ComplexityRoot.UserHistory.FirstName(childComplexity), true
 
 	case "UserHistory.historyTime":
-		if e.complexity.UserHistory.HistoryTime == nil {
+		if e.ComplexityRoot.UserHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.UserHistory.HistoryTime(childComplexity), true
 
 	case "UserHistory.id":
-		if e.complexity.UserHistory.ID == nil {
+		if e.ComplexityRoot.UserHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.ID(childComplexity), true
+		return e.ComplexityRoot.UserHistory.ID(childComplexity), true
 
 	case "UserHistory.lastLoginProvider":
-		if e.complexity.UserHistory.LastLoginProvider == nil {
+		if e.ComplexityRoot.UserHistory.LastLoginProvider == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.LastLoginProvider(childComplexity), true
+		return e.ComplexityRoot.UserHistory.LastLoginProvider(childComplexity), true
 
 	case "UserHistory.lastName":
-		if e.complexity.UserHistory.LastName == nil {
+		if e.ComplexityRoot.UserHistory.LastName == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.LastName(childComplexity), true
+		return e.ComplexityRoot.UserHistory.LastName(childComplexity), true
 
 	case "UserHistory.lastSeen":
-		if e.complexity.UserHistory.LastSeen == nil {
+		if e.ComplexityRoot.UserHistory.LastSeen == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.LastSeen(childComplexity), true
+		return e.ComplexityRoot.UserHistory.LastSeen(childComplexity), true
 
 	case "UserHistory.operation":
-		if e.complexity.UserHistory.Operation == nil {
+		if e.ComplexityRoot.UserHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.UserHistory.Operation(childComplexity), true
 
 	case "UserHistory.ref":
-		if e.complexity.UserHistory.Ref == nil {
+		if e.ComplexityRoot.UserHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.UserHistory.Ref(childComplexity), true
 
 	case "UserHistory.role":
-		if e.complexity.UserHistory.Role == nil {
+		if e.ComplexityRoot.UserHistory.Role == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.Role(childComplexity), true
+		return e.ComplexityRoot.UserHistory.Role(childComplexity), true
 
 	case "UserHistory.scimActive":
-		if e.complexity.UserHistory.ScimActive == nil {
+		if e.ComplexityRoot.UserHistory.ScimActive == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.ScimActive(childComplexity), true
+		return e.ComplexityRoot.UserHistory.ScimActive(childComplexity), true
 
 	case "UserHistory.scimExternalID":
-		if e.complexity.UserHistory.ScimExternalID == nil {
+		if e.ComplexityRoot.UserHistory.ScimExternalID == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.ScimExternalID(childComplexity), true
+		return e.ComplexityRoot.UserHistory.ScimExternalID(childComplexity), true
 
 	case "UserHistory.scimLocale":
-		if e.complexity.UserHistory.ScimLocale == nil {
+		if e.ComplexityRoot.UserHistory.ScimLocale == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.ScimLocale(childComplexity), true
+		return e.ComplexityRoot.UserHistory.ScimLocale(childComplexity), true
 
 	case "UserHistory.scimPreferredLanguage":
-		if e.complexity.UserHistory.ScimPreferredLanguage == nil {
+		if e.ComplexityRoot.UserHistory.ScimPreferredLanguage == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.ScimPreferredLanguage(childComplexity), true
+		return e.ComplexityRoot.UserHistory.ScimPreferredLanguage(childComplexity), true
 
 	case "UserHistory.scimUsername":
-		if e.complexity.UserHistory.ScimUsername == nil {
+		if e.ComplexityRoot.UserHistory.ScimUsername == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.ScimUsername(childComplexity), true
+		return e.ComplexityRoot.UserHistory.ScimUsername(childComplexity), true
 
 	case "UserHistory.sub":
-		if e.complexity.UserHistory.Sub == nil {
+		if e.ComplexityRoot.UserHistory.Sub == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.Sub(childComplexity), true
+		return e.ComplexityRoot.UserHistory.Sub(childComplexity), true
 
 	case "UserHistory.tags":
-		if e.complexity.UserHistory.Tags == nil {
+		if e.ComplexityRoot.UserHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.UserHistory.Tags(childComplexity), true
 
 	case "UserHistory.updatedAt":
-		if e.complexity.UserHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.UserHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.UserHistory.UpdatedAt(childComplexity), true
 
 	case "UserHistory.updatedBy":
-		if e.complexity.UserHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.UserHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.UserHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.UserHistory.UpdatedBy(childComplexity), true
 
 	case "UserHistoryConnection.edges":
-		if e.complexity.UserHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.UserHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.UserHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.UserHistoryConnection.Edges(childComplexity), true
 
 	case "UserHistoryConnection.pageInfo":
-		if e.complexity.UserHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.UserHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.UserHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.UserHistoryConnection.PageInfo(childComplexity), true
 
 	case "UserHistoryConnection.totalCount":
-		if e.complexity.UserHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.UserHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.UserHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.UserHistoryConnection.TotalCount(childComplexity), true
 
 	case "UserHistoryEdge.cursor":
-		if e.complexity.UserHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.UserHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.UserHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.UserHistoryEdge.Cursor(childComplexity), true
 
 	case "UserHistoryEdge.node":
-		if e.complexity.UserHistoryEdge.Node == nil {
+		if e.ComplexityRoot.UserHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.UserHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.UserHistoryEdge.Node(childComplexity), true
 
 	case "UserSettingHistory.createdAt":
-		if e.complexity.UserSettingHistory.CreatedAt == nil {
+		if e.ComplexityRoot.UserSettingHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.CreatedAt(childComplexity), true
 
 	case "UserSettingHistory.createdBy":
-		if e.complexity.UserSettingHistory.CreatedBy == nil {
+		if e.ComplexityRoot.UserSettingHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.CreatedBy(childComplexity), true
 
 	case "UserSettingHistory.delegateEndAt":
-		if e.complexity.UserSettingHistory.DelegateEndAt == nil {
+		if e.ComplexityRoot.UserSettingHistory.DelegateEndAt == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.DelegateEndAt(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.DelegateEndAt(childComplexity), true
 
 	case "UserSettingHistory.delegateStartAt":
-		if e.complexity.UserSettingHistory.DelegateStartAt == nil {
+		if e.ComplexityRoot.UserSettingHistory.DelegateStartAt == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.DelegateStartAt(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.DelegateStartAt(childComplexity), true
 
 	case "UserSettingHistory.delegateUserID":
-		if e.complexity.UserSettingHistory.DelegateUserID == nil {
+		if e.ComplexityRoot.UserSettingHistory.DelegateUserID == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.DelegateUserID(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.DelegateUserID(childComplexity), true
 
 	case "UserSettingHistory.emailConfirmed":
-		if e.complexity.UserSettingHistory.EmailConfirmed == nil {
+		if e.ComplexityRoot.UserSettingHistory.EmailConfirmed == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.EmailConfirmed(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.EmailConfirmed(childComplexity), true
 
 	case "UserSettingHistory.historyTime":
-		if e.complexity.UserSettingHistory.HistoryTime == nil {
+		if e.ComplexityRoot.UserSettingHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.HistoryTime(childComplexity), true
 
 	case "UserSettingHistory.id":
-		if e.complexity.UserSettingHistory.ID == nil {
+		if e.ComplexityRoot.UserSettingHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.ID(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.ID(childComplexity), true
 
 	case "UserSettingHistory.isTfaEnabled":
-		if e.complexity.UserSettingHistory.IsTfaEnabled == nil {
+		if e.ComplexityRoot.UserSettingHistory.IsTfaEnabled == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.IsTfaEnabled(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.IsTfaEnabled(childComplexity), true
 
 	case "UserSettingHistory.isWebauthnAllowed":
-		if e.complexity.UserSettingHistory.IsWebauthnAllowed == nil {
+		if e.ComplexityRoot.UserSettingHistory.IsWebauthnAllowed == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.IsWebauthnAllowed(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.IsWebauthnAllowed(childComplexity), true
 
 	case "UserSettingHistory.locked":
-		if e.complexity.UserSettingHistory.Locked == nil {
+		if e.ComplexityRoot.UserSettingHistory.Locked == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.Locked(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.Locked(childComplexity), true
 
 	case "UserSettingHistory.operation":
-		if e.complexity.UserSettingHistory.Operation == nil {
+		if e.ComplexityRoot.UserSettingHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.Operation(childComplexity), true
 
 	case "UserSettingHistory.ref":
-		if e.complexity.UserSettingHistory.Ref == nil {
+		if e.ComplexityRoot.UserSettingHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.Ref(childComplexity), true
 
 	case "UserSettingHistory.silencedAt":
-		if e.complexity.UserSettingHistory.SilencedAt == nil {
+		if e.ComplexityRoot.UserSettingHistory.SilencedAt == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.SilencedAt(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.SilencedAt(childComplexity), true
 
 	case "UserSettingHistory.status":
-		if e.complexity.UserSettingHistory.Status == nil {
+		if e.ComplexityRoot.UserSettingHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.Status(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.Status(childComplexity), true
 
 	case "UserSettingHistory.suspendedAt":
-		if e.complexity.UserSettingHistory.SuspendedAt == nil {
+		if e.ComplexityRoot.UserSettingHistory.SuspendedAt == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.SuspendedAt(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.SuspendedAt(childComplexity), true
 
 	case "UserSettingHistory.tags":
-		if e.complexity.UserSettingHistory.Tags == nil {
+		if e.ComplexityRoot.UserSettingHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.Tags(childComplexity), true
 
 	case "UserSettingHistory.updatedAt":
-		if e.complexity.UserSettingHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.UserSettingHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.UpdatedAt(childComplexity), true
 
 	case "UserSettingHistory.updatedBy":
-		if e.complexity.UserSettingHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.UserSettingHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.UpdatedBy(childComplexity), true
 
 	case "UserSettingHistory.userID":
-		if e.complexity.UserSettingHistory.UserID == nil {
+		if e.ComplexityRoot.UserSettingHistory.UserID == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistory.UserID(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistory.UserID(childComplexity), true
 
 	case "UserSettingHistoryConnection.edges":
-		if e.complexity.UserSettingHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.UserSettingHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistoryConnection.Edges(childComplexity), true
 
 	case "UserSettingHistoryConnection.pageInfo":
-		if e.complexity.UserSettingHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.UserSettingHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistoryConnection.PageInfo(childComplexity), true
 
 	case "UserSettingHistoryConnection.totalCount":
-		if e.complexity.UserSettingHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.UserSettingHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistoryConnection.TotalCount(childComplexity), true
 
 	case "UserSettingHistoryEdge.cursor":
-		if e.complexity.UserSettingHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.UserSettingHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistoryEdge.Cursor(childComplexity), true
 
 	case "UserSettingHistoryEdge.node":
-		if e.complexity.UserSettingHistoryEdge.Node == nil {
+		if e.ComplexityRoot.UserSettingHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.UserSettingHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.UserSettingHistoryEdge.Node(childComplexity), true
 
 	case "VulnerabilityHistory.blocking":
-		if e.complexity.VulnerabilityHistory.Blocking == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Blocking == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Blocking(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Blocking(childComplexity), true
 
 	case "VulnerabilityHistory.category":
-		if e.complexity.VulnerabilityHistory.Category == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Category == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Category(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Category(childComplexity), true
 
 	case "VulnerabilityHistory.createdAt":
-		if e.complexity.VulnerabilityHistory.CreatedAt == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.CreatedAt(childComplexity), true
 
 	case "VulnerabilityHistory.createdBy":
-		if e.complexity.VulnerabilityHistory.CreatedBy == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.CreatedBy(childComplexity), true
 
 	case "VulnerabilityHistory.cveID":
-		if e.complexity.VulnerabilityHistory.CveID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.CveID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.CveID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.CveID(childComplexity), true
 
 	case "VulnerabilityHistory.description":
-		if e.complexity.VulnerabilityHistory.Description == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Description(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Description(childComplexity), true
 
 	case "VulnerabilityHistory.discoveredAt":
-		if e.complexity.VulnerabilityHistory.DiscoveredAt == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.DiscoveredAt == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.DiscoveredAt(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.DiscoveredAt(childComplexity), true
 
 	case "VulnerabilityHistory.displayID":
-		if e.complexity.VulnerabilityHistory.DisplayID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.DisplayID(childComplexity), true
 
 	case "VulnerabilityHistory.displayName":
-		if e.complexity.VulnerabilityHistory.DisplayName == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.DisplayName == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.DisplayName(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.DisplayName(childComplexity), true
 
 	case "VulnerabilityHistory.environmentID":
-		if e.complexity.VulnerabilityHistory.EnvironmentID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.EnvironmentID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.EnvironmentID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.EnvironmentID(childComplexity), true
 
 	case "VulnerabilityHistory.environmentName":
-		if e.complexity.VulnerabilityHistory.EnvironmentName == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.EnvironmentName == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.EnvironmentName(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.EnvironmentName(childComplexity), true
 
 	case "VulnerabilityHistory.exploitability":
-		if e.complexity.VulnerabilityHistory.Exploitability == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Exploitability == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Exploitability(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Exploitability(childComplexity), true
 
 	case "VulnerabilityHistory.externalID":
-		if e.complexity.VulnerabilityHistory.ExternalID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.ExternalID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.ExternalID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.ExternalID(childComplexity), true
 
 	case "VulnerabilityHistory.externalOwnerID":
-		if e.complexity.VulnerabilityHistory.ExternalOwnerID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.ExternalOwnerID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.ExternalOwnerID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.ExternalOwnerID(childComplexity), true
 
 	case "VulnerabilityHistory.externalURI":
-		if e.complexity.VulnerabilityHistory.ExternalURI == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.ExternalURI == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.ExternalURI(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.ExternalURI(childComplexity), true
 
 	case "VulnerabilityHistory.historyTime":
-		if e.complexity.VulnerabilityHistory.HistoryTime == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.HistoryTime(childComplexity), true
 
 	case "VulnerabilityHistory.id":
-		if e.complexity.VulnerabilityHistory.ID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.ID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.ID(childComplexity), true
 
 	case "VulnerabilityHistory.impact":
-		if e.complexity.VulnerabilityHistory.Impact == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Impact == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Impact(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Impact(childComplexity), true
 
 	case "VulnerabilityHistory.impacts":
-		if e.complexity.VulnerabilityHistory.Impacts == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Impacts == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Impacts(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Impacts(childComplexity), true
 
 	case "VulnerabilityHistory.internalNotes":
-		if e.complexity.VulnerabilityHistory.InternalNotes == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.InternalNotes(childComplexity), true
 
 	case "VulnerabilityHistory.metadata":
-		if e.complexity.VulnerabilityHistory.Metadata == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Metadata(childComplexity), true
 
 	case "VulnerabilityHistory.open":
-		if e.complexity.VulnerabilityHistory.Open == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Open == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Open(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Open(childComplexity), true
 
 	case "VulnerabilityHistory.operation":
-		if e.complexity.VulnerabilityHistory.Operation == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Operation(childComplexity), true
 
 	case "VulnerabilityHistory.ownerID":
-		if e.complexity.VulnerabilityHistory.OwnerID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.OwnerID(childComplexity), true
 
 	case "VulnerabilityHistory.priority":
-		if e.complexity.VulnerabilityHistory.Priority == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Priority == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Priority(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Priority(childComplexity), true
 
 	case "VulnerabilityHistory.production":
-		if e.complexity.VulnerabilityHistory.Production == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Production == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Production(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Production(childComplexity), true
 
 	case "VulnerabilityHistory.public":
-		if e.complexity.VulnerabilityHistory.Public == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Public == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Public(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Public(childComplexity), true
 
 	case "VulnerabilityHistory.publishedAt":
-		if e.complexity.VulnerabilityHistory.PublishedAt == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.PublishedAt == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.PublishedAt(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.PublishedAt(childComplexity), true
 
 	case "VulnerabilityHistory.rawPayload":
-		if e.complexity.VulnerabilityHistory.RawPayload == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.RawPayload == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.RawPayload(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.RawPayload(childComplexity), true
 
 	case "VulnerabilityHistory.ref":
-		if e.complexity.VulnerabilityHistory.Ref == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Ref(childComplexity), true
 
 	case "VulnerabilityHistory.references":
-		if e.complexity.VulnerabilityHistory.References == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.References == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.References(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.References(childComplexity), true
 
 	case "VulnerabilityHistory.remediationSLA":
-		if e.complexity.VulnerabilityHistory.RemediationSLA == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.RemediationSLA == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.RemediationSLA(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.RemediationSLA(childComplexity), true
 
 	case "VulnerabilityHistory.scopeID":
-		if e.complexity.VulnerabilityHistory.ScopeID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.ScopeID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.ScopeID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.ScopeID(childComplexity), true
 
 	case "VulnerabilityHistory.scopeName":
-		if e.complexity.VulnerabilityHistory.ScopeName == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.ScopeName == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.ScopeName(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.ScopeName(childComplexity), true
 
 	case "VulnerabilityHistory.score":
-		if e.complexity.VulnerabilityHistory.Score == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Score == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Score(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Score(childComplexity), true
 
 	case "VulnerabilityHistory.severity":
-		if e.complexity.VulnerabilityHistory.Severity == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Severity == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Severity(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Severity(childComplexity), true
 
 	case "VulnerabilityHistory.source":
-		if e.complexity.VulnerabilityHistory.Source == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Source == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Source(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Source(childComplexity), true
 
 	case "VulnerabilityHistory.sourceUpdatedAt":
-		if e.complexity.VulnerabilityHistory.SourceUpdatedAt == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.SourceUpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.SourceUpdatedAt(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.SourceUpdatedAt(childComplexity), true
 
 	case "VulnerabilityHistory.status":
-		if e.complexity.VulnerabilityHistory.Status == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Status(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Status(childComplexity), true
 
 	case "VulnerabilityHistory.summary":
-		if e.complexity.VulnerabilityHistory.Summary == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Summary == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Summary(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Summary(childComplexity), true
 
 	case "VulnerabilityHistory.systemInternalID":
-		if e.complexity.VulnerabilityHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.SystemInternalID(childComplexity), true
 
 	case "VulnerabilityHistory.systemOwned":
-		if e.complexity.VulnerabilityHistory.SystemOwned == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.SystemOwned(childComplexity), true
 
 	case "VulnerabilityHistory.tags":
-		if e.complexity.VulnerabilityHistory.Tags == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Tags(childComplexity), true
 
 	case "VulnerabilityHistory.updatedAt":
-		if e.complexity.VulnerabilityHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.UpdatedAt(childComplexity), true
 
 	case "VulnerabilityHistory.updatedBy":
-		if e.complexity.VulnerabilityHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.UpdatedBy(childComplexity), true
 
 	case "VulnerabilityHistory.validated":
-		if e.complexity.VulnerabilityHistory.Validated == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Validated == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Validated(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Validated(childComplexity), true
 
 	case "VulnerabilityHistory.vector":
-		if e.complexity.VulnerabilityHistory.Vector == nil {
+		if e.ComplexityRoot.VulnerabilityHistory.Vector == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistory.Vector(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistory.Vector(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.edges":
-		if e.complexity.VulnerabilityHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.VulnerabilityHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistoryConnection.Edges(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.pageInfo":
-		if e.complexity.VulnerabilityHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.VulnerabilityHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistoryConnection.PageInfo(childComplexity), true
 
 	case "VulnerabilityHistoryConnection.totalCount":
-		if e.complexity.VulnerabilityHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.VulnerabilityHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistoryConnection.TotalCount(childComplexity), true
 
 	case "VulnerabilityHistoryEdge.cursor":
-		if e.complexity.VulnerabilityHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.VulnerabilityHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistoryEdge.Cursor(childComplexity), true
 
 	case "VulnerabilityHistoryEdge.node":
-		if e.complexity.VulnerabilityHistoryEdge.Node == nil {
+		if e.ComplexityRoot.VulnerabilityHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.VulnerabilityHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.VulnerabilityHistoryEdge.Node(childComplexity), true
 
 	case "WorkflowAssignmentHistory.actorGroupID":
-		if e.complexity.WorkflowAssignmentHistory.ActorGroupID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.ActorGroupID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.ActorGroupID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.ActorGroupID(childComplexity), true
 
 	case "WorkflowAssignmentHistory.actorUserID":
-		if e.complexity.WorkflowAssignmentHistory.ActorUserID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.ActorUserID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.ActorUserID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.ActorUserID(childComplexity), true
 
 	case "WorkflowAssignmentHistory.approvalMetadata":
-		if e.complexity.WorkflowAssignmentHistory.ApprovalMetadata == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.ApprovalMetadata == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.ApprovalMetadata(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.ApprovalMetadata(childComplexity), true
 
 	case "WorkflowAssignmentHistory.assignmentKey":
-		if e.complexity.WorkflowAssignmentHistory.AssignmentKey == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.AssignmentKey == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.AssignmentKey(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.AssignmentKey(childComplexity), true
 
 	case "WorkflowAssignmentHistory.createdAt":
-		if e.complexity.WorkflowAssignmentHistory.CreatedAt == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.CreatedAt(childComplexity), true
 
 	case "WorkflowAssignmentHistory.createdBy":
-		if e.complexity.WorkflowAssignmentHistory.CreatedBy == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.CreatedBy(childComplexity), true
 
 	case "WorkflowAssignmentHistory.decidedAt":
-		if e.complexity.WorkflowAssignmentHistory.DecidedAt == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.DecidedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.DecidedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.DecidedAt(childComplexity), true
 
 	case "WorkflowAssignmentHistory.displayID":
-		if e.complexity.WorkflowAssignmentHistory.DisplayID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.DisplayID(childComplexity), true
 
 	case "WorkflowAssignmentHistory.dueAt":
-		if e.complexity.WorkflowAssignmentHistory.DueAt == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.DueAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.DueAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.DueAt(childComplexity), true
 
 	case "WorkflowAssignmentHistory.historyTime":
-		if e.complexity.WorkflowAssignmentHistory.HistoryTime == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.HistoryTime(childComplexity), true
 
 	case "WorkflowAssignmentHistory.id":
-		if e.complexity.WorkflowAssignmentHistory.ID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.ID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.ID(childComplexity), true
 
 	case "WorkflowAssignmentHistory.invalidationMetadata":
-		if e.complexity.WorkflowAssignmentHistory.InvalidationMetadata == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.InvalidationMetadata == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.InvalidationMetadata(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.InvalidationMetadata(childComplexity), true
 
 	case "WorkflowAssignmentHistory.label":
-		if e.complexity.WorkflowAssignmentHistory.Label == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Label == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Label(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Label(childComplexity), true
 
 	case "WorkflowAssignmentHistory.metadata":
-		if e.complexity.WorkflowAssignmentHistory.Metadata == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Metadata == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Metadata(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Metadata(childComplexity), true
 
 	case "WorkflowAssignmentHistory.notes":
-		if e.complexity.WorkflowAssignmentHistory.Notes == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Notes == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Notes(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Notes(childComplexity), true
 
 	case "WorkflowAssignmentHistory.operation":
-		if e.complexity.WorkflowAssignmentHistory.Operation == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Operation(childComplexity), true
 
 	case "WorkflowAssignmentHistory.ownerID":
-		if e.complexity.WorkflowAssignmentHistory.OwnerID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.OwnerID(childComplexity), true
 
 	case "WorkflowAssignmentHistory.ref":
-		if e.complexity.WorkflowAssignmentHistory.Ref == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Ref(childComplexity), true
 
 	case "WorkflowAssignmentHistory.rejectionMetadata":
-		if e.complexity.WorkflowAssignmentHistory.RejectionMetadata == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.RejectionMetadata == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.RejectionMetadata(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.RejectionMetadata(childComplexity), true
 
 	case "WorkflowAssignmentHistory.required":
-		if e.complexity.WorkflowAssignmentHistory.Required == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Required == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Required(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Required(childComplexity), true
 
 	case "WorkflowAssignmentHistory.role":
-		if e.complexity.WorkflowAssignmentHistory.Role == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Role == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Role(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Role(childComplexity), true
 
 	case "WorkflowAssignmentHistory.status":
-		if e.complexity.WorkflowAssignmentHistory.Status == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Status == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Status(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Status(childComplexity), true
 
 	case "WorkflowAssignmentHistory.tags":
-		if e.complexity.WorkflowAssignmentHistory.Tags == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.Tags(childComplexity), true
 
 	case "WorkflowAssignmentHistory.updatedAt":
-		if e.complexity.WorkflowAssignmentHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedAt(childComplexity), true
 
 	case "WorkflowAssignmentHistory.updatedBy":
-		if e.complexity.WorkflowAssignmentHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.UpdatedBy(childComplexity), true
 
 	case "WorkflowAssignmentHistory.workflowInstanceID":
-		if e.complexity.WorkflowAssignmentHistory.WorkflowInstanceID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistory.WorkflowInstanceID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistory.WorkflowInstanceID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistory.WorkflowInstanceID(childComplexity), true
 
 	case "WorkflowAssignmentHistoryConnection.edges":
-		if e.complexity.WorkflowAssignmentHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistoryConnection.Edges(childComplexity), true
 
 	case "WorkflowAssignmentHistoryConnection.pageInfo":
-		if e.complexity.WorkflowAssignmentHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistoryConnection.PageInfo(childComplexity), true
 
 	case "WorkflowAssignmentHistoryConnection.totalCount":
-		if e.complexity.WorkflowAssignmentHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistoryConnection.TotalCount(childComplexity), true
 
 	case "WorkflowAssignmentHistoryEdge.cursor":
-		if e.complexity.WorkflowAssignmentHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistoryEdge.Cursor(childComplexity), true
 
 	case "WorkflowAssignmentHistoryEdge.node":
-		if e.complexity.WorkflowAssignmentHistoryEdge.Node == nil {
+		if e.ComplexityRoot.WorkflowAssignmentHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentHistoryEdge.Node(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.createdAt":
-		if e.complexity.WorkflowAssignmentTargetHistory.CreatedAt == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.CreatedAt(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.createdBy":
-		if e.complexity.WorkflowAssignmentTargetHistory.CreatedBy == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.CreatedBy(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.displayID":
-		if e.complexity.WorkflowAssignmentTargetHistory.DisplayID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.DisplayID(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.historyTime":
-		if e.complexity.WorkflowAssignmentTargetHistory.HistoryTime == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.HistoryTime(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.id":
-		if e.complexity.WorkflowAssignmentTargetHistory.ID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.ID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.ID(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.operation":
-		if e.complexity.WorkflowAssignmentTargetHistory.Operation == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.Operation(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.ownerID":
-		if e.complexity.WorkflowAssignmentTargetHistory.OwnerID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.OwnerID(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.ref":
-		if e.complexity.WorkflowAssignmentTargetHistory.Ref == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.Ref(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.resolverKey":
-		if e.complexity.WorkflowAssignmentTargetHistory.ResolverKey == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.ResolverKey == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.ResolverKey(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.ResolverKey(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.tags":
-		if e.complexity.WorkflowAssignmentTargetHistory.Tags == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.Tags(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.targetGroupID":
-		if e.complexity.WorkflowAssignmentTargetHistory.TargetGroupID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.TargetGroupID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.TargetGroupID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.TargetGroupID(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.targetType":
-		if e.complexity.WorkflowAssignmentTargetHistory.TargetType == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.TargetType == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.TargetType(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.TargetType(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.targetUserID":
-		if e.complexity.WorkflowAssignmentTargetHistory.TargetUserID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.TargetUserID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.TargetUserID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.TargetUserID(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.updatedAt":
-		if e.complexity.WorkflowAssignmentTargetHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedAt(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.updatedBy":
-		if e.complexity.WorkflowAssignmentTargetHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.UpdatedBy(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistory.workflowAssignmentID":
-		if e.complexity.WorkflowAssignmentTargetHistory.WorkflowAssignmentID == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistory.WorkflowAssignmentID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistory.WorkflowAssignmentID(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistory.WorkflowAssignmentID(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistoryConnection.edges":
-		if e.complexity.WorkflowAssignmentTargetHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistoryConnection.Edges(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistoryConnection.pageInfo":
-		if e.complexity.WorkflowAssignmentTargetHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistoryConnection.PageInfo(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistoryConnection.totalCount":
-		if e.complexity.WorkflowAssignmentTargetHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistoryConnection.TotalCount(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistoryEdge.cursor":
-		if e.complexity.WorkflowAssignmentTargetHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistoryEdge.Cursor(childComplexity), true
 
 	case "WorkflowAssignmentTargetHistoryEdge.node":
-		if e.complexity.WorkflowAssignmentTargetHistoryEdge.Node == nil {
+		if e.ComplexityRoot.WorkflowAssignmentTargetHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.WorkflowAssignmentTargetHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.WorkflowAssignmentTargetHistoryEdge.Node(childComplexity), true
 
 	case "WorkflowDefinitionHistory.active":
-		if e.complexity.WorkflowDefinitionHistory.Active == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Active == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Active(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Active(childComplexity), true
 
 	case "WorkflowDefinitionHistory.cooldownSeconds":
-		if e.complexity.WorkflowDefinitionHistory.CooldownSeconds == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.CooldownSeconds == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.CooldownSeconds(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.CooldownSeconds(childComplexity), true
 
 	case "WorkflowDefinitionHistory.createdAt":
-		if e.complexity.WorkflowDefinitionHistory.CreatedAt == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.CreatedAt(childComplexity), true
 
 	case "WorkflowDefinitionHistory.createdBy":
-		if e.complexity.WorkflowDefinitionHistory.CreatedBy == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.CreatedBy(childComplexity), true
 
 	case "WorkflowDefinitionHistory.definitionJSON":
-		if e.complexity.WorkflowDefinitionHistory.DefinitionJSON == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.DefinitionJSON == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.DefinitionJSON(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.DefinitionJSON(childComplexity), true
 
 	case "WorkflowDefinitionHistory.description":
-		if e.complexity.WorkflowDefinitionHistory.Description == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Description == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Description(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Description(childComplexity), true
 
 	case "WorkflowDefinitionHistory.displayID":
-		if e.complexity.WorkflowDefinitionHistory.DisplayID == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.DisplayID(childComplexity), true
 
 	case "WorkflowDefinitionHistory.draft":
-		if e.complexity.WorkflowDefinitionHistory.Draft == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Draft == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Draft(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Draft(childComplexity), true
 
 	case "WorkflowDefinitionHistory.historyTime":
-		if e.complexity.WorkflowDefinitionHistory.HistoryTime == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.HistoryTime(childComplexity), true
 
 	case "WorkflowDefinitionHistory.id":
-		if e.complexity.WorkflowDefinitionHistory.ID == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.ID(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.ID(childComplexity), true
 
 	case "WorkflowDefinitionHistory.internalNotes":
-		if e.complexity.WorkflowDefinitionHistory.InternalNotes == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.InternalNotes == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.InternalNotes(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.InternalNotes(childComplexity), true
 
 	case "WorkflowDefinitionHistory.isDefault":
-		if e.complexity.WorkflowDefinitionHistory.IsDefault == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.IsDefault == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.IsDefault(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.IsDefault(childComplexity), true
 
 	case "WorkflowDefinitionHistory.name":
-		if e.complexity.WorkflowDefinitionHistory.Name == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Name == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Name(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Name(childComplexity), true
 
 	case "WorkflowDefinitionHistory.operation":
-		if e.complexity.WorkflowDefinitionHistory.Operation == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Operation(childComplexity), true
 
 	case "WorkflowDefinitionHistory.ownerID":
-		if e.complexity.WorkflowDefinitionHistory.OwnerID == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.OwnerID(childComplexity), true
 
 	case "WorkflowDefinitionHistory.publishedAt":
-		if e.complexity.WorkflowDefinitionHistory.PublishedAt == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.PublishedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.PublishedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.PublishedAt(childComplexity), true
 
 	case "WorkflowDefinitionHistory.ref":
-		if e.complexity.WorkflowDefinitionHistory.Ref == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Ref(childComplexity), true
 
 	case "WorkflowDefinitionHistory.revision":
-		if e.complexity.WorkflowDefinitionHistory.Revision == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Revision == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Revision(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Revision(childComplexity), true
 
 	case "WorkflowDefinitionHistory.schemaType":
-		if e.complexity.WorkflowDefinitionHistory.SchemaType == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.SchemaType == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.SchemaType(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.SchemaType(childComplexity), true
 
 	case "WorkflowDefinitionHistory.systemInternalID":
-		if e.complexity.WorkflowDefinitionHistory.SystemInternalID == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.SystemInternalID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.SystemInternalID(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.SystemInternalID(childComplexity), true
 
 	case "WorkflowDefinitionHistory.systemOwned":
-		if e.complexity.WorkflowDefinitionHistory.SystemOwned == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.SystemOwned == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.SystemOwned(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.SystemOwned(childComplexity), true
 
 	case "WorkflowDefinitionHistory.tags":
-		if e.complexity.WorkflowDefinitionHistory.Tags == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.Tags(childComplexity), true
 
 	case "WorkflowDefinitionHistory.trackedFields":
-		if e.complexity.WorkflowDefinitionHistory.TrackedFields == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.TrackedFields == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.TrackedFields(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.TrackedFields(childComplexity), true
 
 	case "WorkflowDefinitionHistory.updatedAt":
-		if e.complexity.WorkflowDefinitionHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedAt(childComplexity), true
 
 	case "WorkflowDefinitionHistory.updatedBy":
-		if e.complexity.WorkflowDefinitionHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.UpdatedBy(childComplexity), true
 
 	case "WorkflowDefinitionHistory.workflowKind":
-		if e.complexity.WorkflowDefinitionHistory.WorkflowKind == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistory.WorkflowKind == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistory.WorkflowKind(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistory.WorkflowKind(childComplexity), true
 
 	case "WorkflowDefinitionHistoryConnection.edges":
-		if e.complexity.WorkflowDefinitionHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistoryConnection.Edges(childComplexity), true
 
 	case "WorkflowDefinitionHistoryConnection.pageInfo":
-		if e.complexity.WorkflowDefinitionHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistoryConnection.PageInfo(childComplexity), true
 
 	case "WorkflowDefinitionHistoryConnection.totalCount":
-		if e.complexity.WorkflowDefinitionHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistoryConnection.TotalCount(childComplexity), true
 
 	case "WorkflowDefinitionHistoryEdge.cursor":
-		if e.complexity.WorkflowDefinitionHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistoryEdge.Cursor(childComplexity), true
 
 	case "WorkflowDefinitionHistoryEdge.node":
-		if e.complexity.WorkflowDefinitionHistoryEdge.Node == nil {
+		if e.ComplexityRoot.WorkflowDefinitionHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.WorkflowDefinitionHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.WorkflowDefinitionHistoryEdge.Node(childComplexity), true
 
 	case "WorkflowEventHistory.createdAt":
-		if e.complexity.WorkflowEventHistory.CreatedAt == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.CreatedAt(childComplexity), true
 
 	case "WorkflowEventHistory.createdBy":
-		if e.complexity.WorkflowEventHistory.CreatedBy == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.CreatedBy(childComplexity), true
 
 	case "WorkflowEventHistory.displayID":
-		if e.complexity.WorkflowEventHistory.DisplayID == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.DisplayID(childComplexity), true
 
 	case "WorkflowEventHistory.eventType":
-		if e.complexity.WorkflowEventHistory.EventType == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.EventType == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.EventType(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.EventType(childComplexity), true
 
 	case "WorkflowEventHistory.historyTime":
-		if e.complexity.WorkflowEventHistory.HistoryTime == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.HistoryTime(childComplexity), true
 
 	case "WorkflowEventHistory.id":
-		if e.complexity.WorkflowEventHistory.ID == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.ID(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.ID(childComplexity), true
 
 	case "WorkflowEventHistory.operation":
-		if e.complexity.WorkflowEventHistory.Operation == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.Operation(childComplexity), true
 
 	case "WorkflowEventHistory.ownerID":
-		if e.complexity.WorkflowEventHistory.OwnerID == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.OwnerID(childComplexity), true
 
 	case "WorkflowEventHistory.payload":
-		if e.complexity.WorkflowEventHistory.Payload == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.Payload == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.Payload(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.Payload(childComplexity), true
 
 	case "WorkflowEventHistory.ref":
-		if e.complexity.WorkflowEventHistory.Ref == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.Ref(childComplexity), true
 
 	case "WorkflowEventHistory.tags":
-		if e.complexity.WorkflowEventHistory.Tags == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.Tags(childComplexity), true
 
 	case "WorkflowEventHistory.updatedAt":
-		if e.complexity.WorkflowEventHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.UpdatedAt(childComplexity), true
 
 	case "WorkflowEventHistory.updatedBy":
-		if e.complexity.WorkflowEventHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.UpdatedBy(childComplexity), true
 
 	case "WorkflowEventHistory.workflowInstanceID":
-		if e.complexity.WorkflowEventHistory.WorkflowInstanceID == nil {
+		if e.ComplexityRoot.WorkflowEventHistory.WorkflowInstanceID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistory.WorkflowInstanceID(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistory.WorkflowInstanceID(childComplexity), true
 
 	case "WorkflowEventHistoryConnection.edges":
-		if e.complexity.WorkflowEventHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.WorkflowEventHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistoryConnection.Edges(childComplexity), true
 
 	case "WorkflowEventHistoryConnection.pageInfo":
-		if e.complexity.WorkflowEventHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.WorkflowEventHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistoryConnection.PageInfo(childComplexity), true
 
 	case "WorkflowEventHistoryConnection.totalCount":
-		if e.complexity.WorkflowEventHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.WorkflowEventHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistoryConnection.TotalCount(childComplexity), true
 
 	case "WorkflowEventHistoryEdge.cursor":
-		if e.complexity.WorkflowEventHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.WorkflowEventHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistoryEdge.Cursor(childComplexity), true
 
 	case "WorkflowEventHistoryEdge.node":
-		if e.complexity.WorkflowEventHistoryEdge.Node == nil {
+		if e.ComplexityRoot.WorkflowEventHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.WorkflowEventHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.WorkflowEventHistoryEdge.Node(childComplexity), true
 
 	case "WorkflowInstanceHistory.actionPlanID":
-		if e.complexity.WorkflowInstanceHistory.ActionPlanID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.ActionPlanID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.ActionPlanID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.ActionPlanID(childComplexity), true
 
 	case "WorkflowInstanceHistory.campaignID":
-		if e.complexity.WorkflowInstanceHistory.CampaignID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.CampaignID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.CampaignID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.CampaignID(childComplexity), true
 
 	case "WorkflowInstanceHistory.campaignTargetID":
-		if e.complexity.WorkflowInstanceHistory.CampaignTargetID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.CampaignTargetID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.CampaignTargetID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.CampaignTargetID(childComplexity), true
 
 	case "WorkflowInstanceHistory.context":
-		if e.complexity.WorkflowInstanceHistory.Context == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.Context == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.Context(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.Context(childComplexity), true
 
 	case "WorkflowInstanceHistory.controlID":
-		if e.complexity.WorkflowInstanceHistory.ControlID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.ControlID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.ControlID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.ControlID(childComplexity), true
 
 	case "WorkflowInstanceHistory.createdAt":
-		if e.complexity.WorkflowInstanceHistory.CreatedAt == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.CreatedAt(childComplexity), true
 
 	case "WorkflowInstanceHistory.createdBy":
-		if e.complexity.WorkflowInstanceHistory.CreatedBy == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.CreatedBy(childComplexity), true
 
 	case "WorkflowInstanceHistory.currentActionIndex":
-		if e.complexity.WorkflowInstanceHistory.CurrentActionIndex == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.CurrentActionIndex == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.CurrentActionIndex(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.CurrentActionIndex(childComplexity), true
 
 	case "WorkflowInstanceHistory.definitionSnapshot":
-		if e.complexity.WorkflowInstanceHistory.DefinitionSnapshot == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.DefinitionSnapshot == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.DefinitionSnapshot(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.DefinitionSnapshot(childComplexity), true
 
 	case "WorkflowInstanceHistory.displayID":
-		if e.complexity.WorkflowInstanceHistory.DisplayID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.DisplayID(childComplexity), true
 
 	case "WorkflowInstanceHistory.evidenceID":
-		if e.complexity.WorkflowInstanceHistory.EvidenceID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.EvidenceID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.EvidenceID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.EvidenceID(childComplexity), true
 
 	case "WorkflowInstanceHistory.historyTime":
-		if e.complexity.WorkflowInstanceHistory.HistoryTime == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.HistoryTime(childComplexity), true
 
 	case "WorkflowInstanceHistory.id":
-		if e.complexity.WorkflowInstanceHistory.ID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.ID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.ID(childComplexity), true
 
 	case "WorkflowInstanceHistory.identityHolderID":
-		if e.complexity.WorkflowInstanceHistory.IdentityHolderID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.IdentityHolderID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.IdentityHolderID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.IdentityHolderID(childComplexity), true
 
 	case "WorkflowInstanceHistory.internalPolicyID":
-		if e.complexity.WorkflowInstanceHistory.InternalPolicyID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.InternalPolicyID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.InternalPolicyID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.InternalPolicyID(childComplexity), true
 
 	case "WorkflowInstanceHistory.lastEvaluatedAt":
-		if e.complexity.WorkflowInstanceHistory.LastEvaluatedAt == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.LastEvaluatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.LastEvaluatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.LastEvaluatedAt(childComplexity), true
 
 	case "WorkflowInstanceHistory.operation":
-		if e.complexity.WorkflowInstanceHistory.Operation == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.Operation(childComplexity), true
 
 	case "WorkflowInstanceHistory.ownerID":
-		if e.complexity.WorkflowInstanceHistory.OwnerID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.OwnerID(childComplexity), true
 
 	case "WorkflowInstanceHistory.platformID":
-		if e.complexity.WorkflowInstanceHistory.PlatformID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.PlatformID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.PlatformID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.PlatformID(childComplexity), true
 
 	case "WorkflowInstanceHistory.procedureID":
-		if e.complexity.WorkflowInstanceHistory.ProcedureID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.ProcedureID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.ProcedureID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.ProcedureID(childComplexity), true
 
 	case "WorkflowInstanceHistory.ref":
-		if e.complexity.WorkflowInstanceHistory.Ref == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.Ref(childComplexity), true
 
 	case "WorkflowInstanceHistory.state":
-		if e.complexity.WorkflowInstanceHistory.State == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.State == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.State(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.State(childComplexity), true
 
 	case "WorkflowInstanceHistory.subcontrolID":
-		if e.complexity.WorkflowInstanceHistory.SubcontrolID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.SubcontrolID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.SubcontrolID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.SubcontrolID(childComplexity), true
 
 	case "WorkflowInstanceHistory.tags":
-		if e.complexity.WorkflowInstanceHistory.Tags == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.Tags == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.Tags(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.Tags(childComplexity), true
 
 	case "WorkflowInstanceHistory.updatedAt":
-		if e.complexity.WorkflowInstanceHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.UpdatedAt(childComplexity), true
 
 	case "WorkflowInstanceHistory.updatedBy":
-		if e.complexity.WorkflowInstanceHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.UpdatedBy(childComplexity), true
 
 	case "WorkflowInstanceHistory.workflowDefinitionID":
-		if e.complexity.WorkflowInstanceHistory.WorkflowDefinitionID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.WorkflowDefinitionID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.WorkflowDefinitionID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.WorkflowDefinitionID(childComplexity), true
 
 	case "WorkflowInstanceHistory.workflowProposalID":
-		if e.complexity.WorkflowInstanceHistory.WorkflowProposalID == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistory.WorkflowProposalID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistory.WorkflowProposalID(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistory.WorkflowProposalID(childComplexity), true
 
 	case "WorkflowInstanceHistoryConnection.edges":
-		if e.complexity.WorkflowInstanceHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistoryConnection.Edges(childComplexity), true
 
 	case "WorkflowInstanceHistoryConnection.pageInfo":
-		if e.complexity.WorkflowInstanceHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistoryConnection.PageInfo(childComplexity), true
 
 	case "WorkflowInstanceHistoryConnection.totalCount":
-		if e.complexity.WorkflowInstanceHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistoryConnection.TotalCount(childComplexity), true
 
 	case "WorkflowInstanceHistoryEdge.cursor":
-		if e.complexity.WorkflowInstanceHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistoryEdge.Cursor(childComplexity), true
 
 	case "WorkflowInstanceHistoryEdge.node":
-		if e.complexity.WorkflowInstanceHistoryEdge.Node == nil {
+		if e.ComplexityRoot.WorkflowInstanceHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.WorkflowInstanceHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.WorkflowInstanceHistoryEdge.Node(childComplexity), true
 
 	case "WorkflowObjectRefHistory.actionPlanID":
-		if e.complexity.WorkflowObjectRefHistory.ActionPlanID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.ActionPlanID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.ActionPlanID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.ActionPlanID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.campaignID":
-		if e.complexity.WorkflowObjectRefHistory.CampaignID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.CampaignID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.CampaignID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.CampaignID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.campaignTargetID":
-		if e.complexity.WorkflowObjectRefHistory.CampaignTargetID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.CampaignTargetID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.CampaignTargetID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.CampaignTargetID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.controlID":
-		if e.complexity.WorkflowObjectRefHistory.ControlID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.ControlID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.ControlID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.ControlID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.createdAt":
-		if e.complexity.WorkflowObjectRefHistory.CreatedAt == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.CreatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.CreatedAt(childComplexity), true
 
 	case "WorkflowObjectRefHistory.createdBy":
-		if e.complexity.WorkflowObjectRefHistory.CreatedBy == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.CreatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.CreatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.CreatedBy(childComplexity), true
 
 	case "WorkflowObjectRefHistory.directoryAccountID":
-		if e.complexity.WorkflowObjectRefHistory.DirectoryAccountID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.DirectoryAccountID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.DirectoryAccountID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.DirectoryAccountID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.directoryGroupID":
-		if e.complexity.WorkflowObjectRefHistory.DirectoryGroupID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.DirectoryGroupID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.DirectoryGroupID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.DirectoryGroupID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.directoryMembershipID":
-		if e.complexity.WorkflowObjectRefHistory.DirectoryMembershipID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.DirectoryMembershipID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.DirectoryMembershipID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.DirectoryMembershipID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.displayID":
-		if e.complexity.WorkflowObjectRefHistory.DisplayID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.DisplayID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.DisplayID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.DisplayID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.evidenceID":
-		if e.complexity.WorkflowObjectRefHistory.EvidenceID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.EvidenceID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.EvidenceID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.EvidenceID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.findingID":
-		if e.complexity.WorkflowObjectRefHistory.FindingID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.FindingID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.FindingID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.FindingID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.historyTime":
-		if e.complexity.WorkflowObjectRefHistory.HistoryTime == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.HistoryTime == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.HistoryTime(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.HistoryTime(childComplexity), true
 
 	case "WorkflowObjectRefHistory.id":
-		if e.complexity.WorkflowObjectRefHistory.ID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.ID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.ID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.ID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.identityHolderID":
-		if e.complexity.WorkflowObjectRefHistory.IdentityHolderID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.IdentityHolderID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.IdentityHolderID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.IdentityHolderID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.internalPolicyID":
-		if e.complexity.WorkflowObjectRefHistory.InternalPolicyID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.InternalPolicyID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.InternalPolicyID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.InternalPolicyID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.operation":
-		if e.complexity.WorkflowObjectRefHistory.Operation == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.Operation == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.Operation(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.Operation(childComplexity), true
 
 	case "WorkflowObjectRefHistory.ownerID":
-		if e.complexity.WorkflowObjectRefHistory.OwnerID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.OwnerID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.OwnerID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.OwnerID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.platformID":
-		if e.complexity.WorkflowObjectRefHistory.PlatformID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.PlatformID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.PlatformID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.PlatformID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.procedureID":
-		if e.complexity.WorkflowObjectRefHistory.ProcedureID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.ProcedureID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.ProcedureID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.ProcedureID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.ref":
-		if e.complexity.WorkflowObjectRefHistory.Ref == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.Ref == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.Ref(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.Ref(childComplexity), true
 
 	case "WorkflowObjectRefHistory.subcontrolID":
-		if e.complexity.WorkflowObjectRefHistory.SubcontrolID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.SubcontrolID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.SubcontrolID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.SubcontrolID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.taskID":
-		if e.complexity.WorkflowObjectRefHistory.TaskID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.TaskID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.TaskID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.TaskID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.updatedAt":
-		if e.complexity.WorkflowObjectRefHistory.UpdatedAt == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.UpdatedAt(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedAt(childComplexity), true
 
 	case "WorkflowObjectRefHistory.updatedBy":
-		if e.complexity.WorkflowObjectRefHistory.UpdatedBy == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedBy == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.UpdatedBy(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.UpdatedBy(childComplexity), true
 
 	case "WorkflowObjectRefHistory.workflowInstanceID":
-		if e.complexity.WorkflowObjectRefHistory.WorkflowInstanceID == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistory.WorkflowInstanceID == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistory.WorkflowInstanceID(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistory.WorkflowInstanceID(childComplexity), true
 
 	case "WorkflowObjectRefHistoryConnection.edges":
-		if e.complexity.WorkflowObjectRefHistoryConnection.Edges == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistoryConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistoryConnection.Edges(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistoryConnection.Edges(childComplexity), true
 
 	case "WorkflowObjectRefHistoryConnection.pageInfo":
-		if e.complexity.WorkflowObjectRefHistoryConnection.PageInfo == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistoryConnection.PageInfo == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistoryConnection.PageInfo(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistoryConnection.PageInfo(childComplexity), true
 
 	case "WorkflowObjectRefHistoryConnection.totalCount":
-		if e.complexity.WorkflowObjectRefHistoryConnection.TotalCount == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistoryConnection.TotalCount == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistoryConnection.TotalCount(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistoryConnection.TotalCount(childComplexity), true
 
 	case "WorkflowObjectRefHistoryEdge.cursor":
-		if e.complexity.WorkflowObjectRefHistoryEdge.Cursor == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistoryEdge.Cursor == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistoryEdge.Cursor(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistoryEdge.Cursor(childComplexity), true
 
 	case "WorkflowObjectRefHistoryEdge.node":
-		if e.complexity.WorkflowObjectRefHistoryEdge.Node == nil {
+		if e.ComplexityRoot.WorkflowObjectRefHistoryEdge.Node == nil {
 			break
 		}
 
-		return e.complexity.WorkflowObjectRefHistoryEdge.Node(childComplexity), true
+		return e.ComplexityRoot.WorkflowObjectRefHistoryEdge.Node(childComplexity), true
 
 	}
 	return 0, false
@@ -20266,7 +20249,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
-	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
+	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputActionPlanHistoryOrder,
 		ec.unmarshalInputActionPlanHistoryWhereInput,
@@ -20431,9 +20414,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 				ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
 				data = ec._Query(ctx, opCtx.Operation.SelectionSet)
 			} else {
-				if atomic.LoadInt32(&ec.pendingDeferred) > 0 {
-					result := <-ec.deferredResults
-					atomic.AddInt32(&ec.pendingDeferred, -1)
+				if atomic.LoadInt32(&ec.PendingDeferred) > 0 {
+					result := <-ec.DeferredResults
+					atomic.AddInt32(&ec.PendingDeferred, -1)
 					data = result.Result
 					response.Path = result.Path
 					response.Label = result.Label
@@ -20445,8 +20428,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			var buf bytes.Buffer
 			data.MarshalGQL(&buf)
 			response.Data = buf.Bytes()
-			if atomic.LoadInt32(&ec.deferred) > 0 {
-				hasNext := atomic.LoadInt32(&ec.pendingDeferred) > 0
+			if atomic.LoadInt32(&ec.Deferred) > 0 {
+				hasNext := atomic.LoadInt32(&ec.PendingDeferred) > 0
 				response.HasNext = &hasNext
 			}
 
@@ -20459,44 +20442,22 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 }
 
 type executionContext struct {
-	*graphql.OperationContext
-	*executableSchema
-	deferred        int32
-	pendingDeferred int32
-	deferredResults chan graphql.DeferredResult
+	*graphql.ExecutionContextState[ResolverRoot, DirectiveRoot, ComplexityRoot]
 }
 
-func (ec *executionContext) processDeferredGroup(dg graphql.DeferredGroup) {
-	atomic.AddInt32(&ec.pendingDeferred, 1)
-	go func() {
-		ctx := graphql.WithFreshResponseContext(dg.Context)
-		dg.FieldSet.Dispatch(ctx)
-		ds := graphql.DeferredResult{
-			Path:   dg.Path,
-			Label:  dg.Label,
-			Result: dg.FieldSet,
-			Errors: graphql.GetErrors(ctx),
-		}
-		// null fields should bubble up
-		if dg.FieldSet.Invalids > 0 {
-			ds.Result = graphql.Null
-		}
-		ec.deferredResults <- ds
-	}()
-}
-
-func (ec *executionContext) introspectSchema() (*introspection.Schema, error) {
-	if ec.DisableIntrospection {
-		return nil, errors.New("introspection disabled")
+func newExecutionContext(
+	opCtx *graphql.OperationContext,
+	execSchema *executableSchema,
+	deferredResults chan graphql.DeferredResult,
+) executionContext {
+	return executionContext{
+		ExecutionContextState: graphql.NewExecutionContextState[ResolverRoot, DirectiveRoot, ComplexityRoot](
+			opCtx,
+			(*graphql.ExecutableSchemaState[ResolverRoot, DirectiveRoot, ComplexityRoot])(execSchema),
+			parsedSchema,
+			deferredResults,
+		),
 	}
-	return introspection.WrapSchema(ec.Schema()), nil
-}
-
-func (ec *executionContext) introspectType(name string) (*introspection.Type, error) {
-	if ec.DisableIntrospection {
-		return nil, errors.New("introspection disabled")
-	}
-	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
 var sources = []*ast.Source{
@@ -20631,6 +20592,10 @@ scalar WorkflowAssignmentRejection
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
+"""
+ExportMetadata contains metadata for an export record
+"""
+scalar ExportMetadata
 """
 Any is a generic fallback type
 """

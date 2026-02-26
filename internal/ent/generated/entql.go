@@ -1130,20 +1130,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Export",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			export.FieldCreatedAt:    {Type: field.TypeTime, Column: export.FieldCreatedAt},
-			export.FieldUpdatedAt:    {Type: field.TypeTime, Column: export.FieldUpdatedAt},
-			export.FieldCreatedBy:    {Type: field.TypeString, Column: export.FieldCreatedBy},
-			export.FieldUpdatedBy:    {Type: field.TypeString, Column: export.FieldUpdatedBy},
-			export.FieldDeletedAt:    {Type: field.TypeTime, Column: export.FieldDeletedAt},
-			export.FieldDeletedBy:    {Type: field.TypeString, Column: export.FieldDeletedBy},
-			export.FieldRequestorID:  {Type: field.TypeString, Column: export.FieldRequestorID},
-			export.FieldOwnerID:      {Type: field.TypeString, Column: export.FieldOwnerID},
-			export.FieldExportType:   {Type: field.TypeEnum, Column: export.FieldExportType},
-			export.FieldFormat:       {Type: field.TypeEnum, Column: export.FieldFormat},
-			export.FieldStatus:       {Type: field.TypeEnum, Column: export.FieldStatus},
-			export.FieldFields:       {Type: field.TypeJSON, Column: export.FieldFields},
-			export.FieldFilters:      {Type: field.TypeString, Column: export.FieldFilters},
-			export.FieldErrorMessage: {Type: field.TypeString, Column: export.FieldErrorMessage},
+			export.FieldCreatedAt:      {Type: field.TypeTime, Column: export.FieldCreatedAt},
+			export.FieldUpdatedAt:      {Type: field.TypeTime, Column: export.FieldUpdatedAt},
+			export.FieldCreatedBy:      {Type: field.TypeString, Column: export.FieldCreatedBy},
+			export.FieldUpdatedBy:      {Type: field.TypeString, Column: export.FieldUpdatedBy},
+			export.FieldDeletedAt:      {Type: field.TypeTime, Column: export.FieldDeletedAt},
+			export.FieldDeletedBy:      {Type: field.TypeString, Column: export.FieldDeletedBy},
+			export.FieldRequestorID:    {Type: field.TypeString, Column: export.FieldRequestorID},
+			export.FieldOwnerID:        {Type: field.TypeString, Column: export.FieldOwnerID},
+			export.FieldExportType:     {Type: field.TypeEnum, Column: export.FieldExportType},
+			export.FieldFormat:         {Type: field.TypeEnum, Column: export.FieldFormat},
+			export.FieldStatus:         {Type: field.TypeEnum, Column: export.FieldStatus},
+			export.FieldFields:         {Type: field.TypeJSON, Column: export.FieldFields},
+			export.FieldFilters:        {Type: field.TypeString, Column: export.FieldFilters},
+			export.FieldErrorMessage:   {Type: field.TypeString, Column: export.FieldErrorMessage},
+			export.FieldMode:           {Type: field.TypeEnum, Column: export.FieldMode},
+			export.FieldExportMetadata: {Type: field.TypeJSON, Column: export.FieldExportMetadata},
 		},
 	}
 	graph.Nodes[28] = &sqlgraph.Node{
@@ -24790,6 +24792,16 @@ func (f *ExportFilter) WhereFilters(p entql.StringP) {
 // WhereErrorMessage applies the entql string predicate on the error_message field.
 func (f *ExportFilter) WhereErrorMessage(p entql.StringP) {
 	f.Where(p.Field(export.FieldErrorMessage))
+}
+
+// WhereMode applies the entql string predicate on the mode field.
+func (f *ExportFilter) WhereMode(p entql.StringP) {
+	f.Where(p.Field(export.FieldMode))
+}
+
+// WhereExportMetadata applies the entql json.RawMessage predicate on the export_metadata field.
+func (f *ExportFilter) WhereExportMetadata(p entql.BytesP) {
+	f.Where(p.Field(export.FieldExportMetadata))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

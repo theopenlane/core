@@ -78,6 +78,10 @@ func (ec *executionContext) fieldContext_ExportBulkCreatePayload_exports(_ conte
 				return ec.fieldContext_Export_filters(ctx, field)
 			case "errorMessage":
 				return ec.fieldContext_Export_errorMessage(ctx, field)
+			case "mode":
+				return ec.fieldContext_Export_mode(ctx, field)
+			case "exportMetadata":
+				return ec.fieldContext_Export_exportMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -170,6 +174,10 @@ func (ec *executionContext) fieldContext_ExportCreatePayload_export(_ context.Co
 				return ec.fieldContext_Export_filters(ctx, field)
 			case "errorMessage":
 				return ec.fieldContext_Export_errorMessage(ctx, field)
+			case "mode":
+				return ec.fieldContext_Export_mode(ctx, field)
+			case "exportMetadata":
+				return ec.fieldContext_Export_exportMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -262,6 +270,10 @@ func (ec *executionContext) fieldContext_ExportUpdatePayload_export(_ context.Co
 				return ec.fieldContext_Export_filters(ctx, field)
 			case "errorMessage":
 				return ec.fieldContext_Export_errorMessage(ctx, field)
+			case "mode":
+				return ec.fieldContext_Export_mode(ctx, field)
+			case "exportMetadata":
+				return ec.fieldContext_Export_exportMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -309,10 +321,10 @@ func (ec *executionContext) _ExportBulkCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -348,10 +360,10 @@ func (ec *executionContext) _ExportBulkDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -387,10 +399,10 @@ func (ec *executionContext) _ExportCreatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -426,10 +438,10 @@ func (ec *executionContext) _ExportDeletePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -465,10 +477,10 @@ func (ec *executionContext) _ExportUpdatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

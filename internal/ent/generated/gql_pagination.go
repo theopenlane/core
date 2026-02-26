@@ -12648,6 +12648,20 @@ var (
 			}
 		},
 	}
+	// ExportOrderFieldMode orders Export by mode.
+	ExportOrderFieldMode = &ExportOrderField{
+		Value: func(_m *Export) (ent.Value, error) {
+			return _m.Mode, nil
+		},
+		column: export.FieldMode,
+		toTerm: export.ByMode,
+		toCursor: func(_m *Export) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Mode,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12664,6 +12678,8 @@ func (f ExportOrderField) String() string {
 		str = "format"
 	case ExportOrderFieldStatus.column:
 		str = "status"
+	case ExportOrderFieldMode.column:
+		str = "mode"
 	}
 	return str
 }
@@ -12690,6 +12706,8 @@ func (f *ExportOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ExportOrderFieldFormat
 	case "status":
 		*f = *ExportOrderFieldStatus
+	case "mode":
+		*f = *ExportOrderFieldMode
 	default:
 		return fmt.Errorf("%s is not a valid ExportOrderField", str)
 	}
