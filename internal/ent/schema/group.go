@@ -98,6 +98,17 @@ func (Group) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
 			),
+		field.String("oscal_role").
+			Comment("OSCAL role identifier used for role-based responsibility mapping").
+			Optional().
+			Nillable(),
+		field.String("oscal_party_uuid").
+			Comment("OSCAL party UUID linked to this group for responsibility mapping").
+			Optional().
+			Nillable(),
+		field.Strings("oscal_contact_uuids").
+			Comment("OSCAL contact UUID references associated with this group").
+			Optional(),
 		field.String("scim_external_id").
 			Comment("the SCIM external ID for the group").
 			Optional().

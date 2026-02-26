@@ -47,6 +47,11 @@ func (Platform) PluralName() string {
 // Fields of the Platform
 func (Platform) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique(),
 		field.String("name").
 			Comment("the name of the platform").
 			NotEmpty().
@@ -261,6 +266,10 @@ func (s Platform) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(User{}.Name()),
 			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: SystemMetadata{},
 		}),
 	}
 }

@@ -199,6 +199,11 @@ func (ControlMixin) Annotations() []schema.Annotation {
 
 // controlFields are fields use by both Control and Subcontrol schemas
 var controlFields = []ent.Field{
+	field.String("external_uuid").
+		Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+		Optional().
+		Nillable().
+		Unique(),
 	field.String("title").
 		Optional().
 		Annotations(
@@ -252,6 +257,14 @@ var controlFields = []ent.Field{
 			entx.FieldWorkflowEligible(),
 		).
 		Comment("status of the control"),
+	field.Enum("implementation_status").
+		Comment("OSCAL-aligned implementation status of the control").
+		GoType(enums.ControlImplementationStatus("")).
+		Optional().
+		Default(enums.ControlImplementationStatusPlanned.String()),
+	field.Text("implementation_description").
+		Comment("narrative describing current implementation state for OSCAL export").
+		Optional(),
 	field.Enum("source").
 		GoType(enums.ControlSource("")).
 		Optional().

@@ -52,6 +52,11 @@ func (Program) PluralName() string {
 // Fields of the Program
 func (Program) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique(),
 		field.String("name").
 			Comment("the name of the program").
 			NotEmpty().
@@ -168,6 +173,10 @@ func (p Program) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Narrative{}),
 		// programs can have 1:many associated action plans
 		defaultEdgeToWithPagination(p, ActionPlan{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: SystemMetadata{},
+		}),
 		edge.From("users", User.Type).
 			Ref("programs").
 			// Skip the mutation input for the users edge

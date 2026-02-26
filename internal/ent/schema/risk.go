@@ -48,6 +48,11 @@ func (Risk) PluralName() string {
 // Fields returns risk fields.
 func (Risk) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique(),
 		field.String("name").
 			NotEmpty().
 			Annotations(

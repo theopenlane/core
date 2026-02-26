@@ -48,6 +48,11 @@ func (Evidence) PluralName() string {
 // Fields of the Evidence
 func (Evidence) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique(),
 		field.String("name").
 			Comment("the name of the evidence").
 			Annotations(
