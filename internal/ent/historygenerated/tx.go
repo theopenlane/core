@@ -124,6 +124,8 @@ type Tx struct {
 	SubcontrolHistory *SubcontrolHistoryClient
 	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
 	SubprocessorHistory *SubprocessorHistoryClient
+	// SystemDetailHistory is the client for interacting with the SystemDetailHistory builders.
+	SystemDetailHistory *SystemDetailHistoryClient
 	// TaskHistory is the client for interacting with the TaskHistory builders.
 	TaskHistory *TaskHistoryClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
@@ -350,6 +352,7 @@ func (tx *Tx) init() {
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
 	tx.SubprocessorHistory = NewSubprocessorHistoryClient(tx.config)
+	tx.SystemDetailHistory = NewSystemDetailHistoryClient(tx.config)
 	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
 	tx.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(tx.config)

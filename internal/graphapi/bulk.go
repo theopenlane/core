@@ -2871,7 +2871,7 @@ func (r *mutationResolver) bulkUpdateGroup(ctx context.Context, ids []string, in
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendOscalContactUuids(input.AppendOscalContactUuids).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("group_id", id).Msg("failed to update group in bulk operation")
 			continue
@@ -2912,7 +2912,7 @@ func (r *mutationResolver) bulkUpdateCSVGroup(ctx context.Context, inputs []*csv
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendOscalContactUuids(input.Input.AppendOscalContactUuids).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("group_id", input.ID).Msg("failed to update group in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
@@ -6389,6 +6389,160 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 	// return response
 	return &model.SubscriberBulkCreatePayload{
 		Subscribers: res,
+	}, nil
+}
+
+// bulkCreateSystemDetail uses the CreateBulk function to create multiple SystemDetail entities
+func (r *mutationResolver) bulkCreateSystemDetail(ctx context.Context, input []*generated.CreateSystemDetailInput) (*model.SystemDetailBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.SystemDetailCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.SystemDetail.Create().SetInput(*data)
+	}
+
+	res, err := c.SystemDetail.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "systemdetail"})
+	}
+
+	// return response
+	return &model.SystemDetailBulkCreatePayload{
+		SystemDetails: res,
+	}, nil
+}
+
+// bulkUpdateSystemDetail updates multiple SystemDetail entities
+func (r *mutationResolver) bulkUpdateSystemDetail(ctx context.Context, ids []string, input generated.UpdateSystemDetailInput) (*model.SystemDetailBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.SystemDetail, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each systemdetail individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for systemdetail")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.SystemDetail.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("systemdetail_id", id).Msg("failed to get systemdetail in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendRevisionHistory(input.AppendRevisionHistory).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("systemdetail_id", id).Msg("failed to update systemdetail in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.SystemDetailBulkUpdatePayload{
+		SystemDetails: results,
+		UpdatedIDs:    updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVSystemDetail updates multiple SystemDetail entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVSystemDetail(ctx context.Context, inputs []*csvgenerated.SystemDetailCSVUpdateInput) (*model.SystemDetailBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.SystemDetail, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each systemdetail individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for systemdetail")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.SystemDetail.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("systemdetail_id", input.ID).Msg("failed to get systemdetail in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendRevisionHistory(input.Input.AppendRevisionHistory).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("systemdetail_id", input.ID).Msg("failed to update systemdetail in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "systemdetail"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.SystemDetailBulkUpdatePayload{
+		SystemDetails: results,
+		UpdatedIDs:    updatedIDs,
+	}, nil
+}
+
+// bulkDeleteSystemDetail deletes multiple SystemDetail entities by their IDs
+func (r *mutationResolver) bulkDeleteSystemDetail(ctx context.Context, ids []string) (*model.SystemDetailBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each systemdetail individually to ensure proper cleanup
+			if err := r.db.SystemDetail.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("systemdetail_id", id).Msg("failed to delete systemdetail in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.SystemDetailEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("systemdetail_id", id).Msg("failed to cleanup systemdetail edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some systemdetail deletions failed")
+	}
+
+	return &model.SystemDetailBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 

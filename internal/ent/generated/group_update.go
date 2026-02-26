@@ -254,6 +254,64 @@ func (_u *GroupUpdate) SetNillableDisplayName(v *string) *GroupUpdate {
 	return _u
 }
 
+// SetOscalRole sets the "oscal_role" field.
+func (_u *GroupUpdate) SetOscalRole(v string) *GroupUpdate {
+	_u.mutation.SetOscalRole(v)
+	return _u
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableOscalRole(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetOscalRole(*v)
+	}
+	return _u
+}
+
+// ClearOscalRole clears the value of the "oscal_role" field.
+func (_u *GroupUpdate) ClearOscalRole() *GroupUpdate {
+	_u.mutation.ClearOscalRole()
+	return _u
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_u *GroupUpdate) SetOscalPartyUUID(v string) *GroupUpdate {
+	_u.mutation.SetOscalPartyUUID(v)
+	return _u
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableOscalPartyUUID(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetOscalPartyUUID(*v)
+	}
+	return _u
+}
+
+// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
+func (_u *GroupUpdate) ClearOscalPartyUUID() *GroupUpdate {
+	_u.mutation.ClearOscalPartyUUID()
+	return _u
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_u *GroupUpdate) SetOscalContactUuids(v []string) *GroupUpdate {
+	_u.mutation.SetOscalContactUuids(v)
+	return _u
+}
+
+// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
+func (_u *GroupUpdate) AppendOscalContactUuids(v []string) *GroupUpdate {
+	_u.mutation.AppendOscalContactUuids(v)
+	return _u
+}
+
+// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
+func (_u *GroupUpdate) ClearOscalContactUuids() *GroupUpdate {
+	_u.mutation.ClearOscalContactUuids()
+	return _u
+}
+
 // SetScimExternalID sets the "scim_external_id" field.
 func (_u *GroupUpdate) SetScimExternalID(v string) *GroupUpdate {
 	_u.mutation.SetScimExternalID(v)
@@ -2224,6 +2282,29 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OscalRole(); ok {
+		_spec.SetField(group.FieldOscalRole, field.TypeString, value)
+	}
+	if _u.mutation.OscalRoleCleared() {
+		_spec.ClearField(group.FieldOscalRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(group.FieldOscalPartyUUID, field.TypeString, value)
+	}
+	if _u.mutation.OscalPartyUUIDCleared() {
+		_spec.ClearField(group.FieldOscalPartyUUID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalContactUuids(); ok {
+		_spec.SetField(group.FieldOscalContactUuids, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, group.FieldOscalContactUuids, value)
+		})
+	}
+	if _u.mutation.OscalContactUuidsCleared() {
+		_spec.ClearField(group.FieldOscalContactUuids, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ScimExternalID(); ok {
 		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)
@@ -4810,6 +4891,64 @@ func (_u *GroupUpdateOne) SetNillableDisplayName(v *string) *GroupUpdateOne {
 	return _u
 }
 
+// SetOscalRole sets the "oscal_role" field.
+func (_u *GroupUpdateOne) SetOscalRole(v string) *GroupUpdateOne {
+	_u.mutation.SetOscalRole(v)
+	return _u
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableOscalRole(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetOscalRole(*v)
+	}
+	return _u
+}
+
+// ClearOscalRole clears the value of the "oscal_role" field.
+func (_u *GroupUpdateOne) ClearOscalRole() *GroupUpdateOne {
+	_u.mutation.ClearOscalRole()
+	return _u
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_u *GroupUpdateOne) SetOscalPartyUUID(v string) *GroupUpdateOne {
+	_u.mutation.SetOscalPartyUUID(v)
+	return _u
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableOscalPartyUUID(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetOscalPartyUUID(*v)
+	}
+	return _u
+}
+
+// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
+func (_u *GroupUpdateOne) ClearOscalPartyUUID() *GroupUpdateOne {
+	_u.mutation.ClearOscalPartyUUID()
+	return _u
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_u *GroupUpdateOne) SetOscalContactUuids(v []string) *GroupUpdateOne {
+	_u.mutation.SetOscalContactUuids(v)
+	return _u
+}
+
+// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
+func (_u *GroupUpdateOne) AppendOscalContactUuids(v []string) *GroupUpdateOne {
+	_u.mutation.AppendOscalContactUuids(v)
+	return _u
+}
+
+// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
+func (_u *GroupUpdateOne) ClearOscalContactUuids() *GroupUpdateOne {
+	_u.mutation.ClearOscalContactUuids()
+	return _u
+}
+
 // SetScimExternalID sets the "scim_external_id" field.
 func (_u *GroupUpdateOne) SetScimExternalID(v string) *GroupUpdateOne {
 	_u.mutation.SetScimExternalID(v)
@@ -6810,6 +6949,29 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.OscalRole(); ok {
+		_spec.SetField(group.FieldOscalRole, field.TypeString, value)
+	}
+	if _u.mutation.OscalRoleCleared() {
+		_spec.ClearField(group.FieldOscalRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(group.FieldOscalPartyUUID, field.TypeString, value)
+	}
+	if _u.mutation.OscalPartyUUIDCleared() {
+		_spec.ClearField(group.FieldOscalPartyUUID, field.TypeString)
+	}
+	if value, ok := _u.mutation.OscalContactUuids(); ok {
+		_spec.SetField(group.FieldOscalContactUuids, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, group.FieldOscalContactUuids, value)
+		})
+	}
+	if _u.mutation.OscalContactUuidsCleared() {
+		_spec.ClearField(group.FieldOscalContactUuids, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ScimExternalID(); ok {
 		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)

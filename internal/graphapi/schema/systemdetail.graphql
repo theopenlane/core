@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up systemDetail by ID
+    """
+     systemDetail(
+        """
+        ID of the systemDetail
+        """
+        id: ID!
+    ):  SystemDetail!
+}
+
+extend type Mutation{
+    """
+    Create a new systemDetail
+    """
+    createSystemDetail(
+        """
+        values of the systemDetail
+        """
+        input: CreateSystemDetailInput!
+    ): SystemDetailCreatePayload!
+    """
+    Create multiple new systemDetails
+    """
+    createBulkSystemDetail(
+        """
+        values of the systemDetail
+        """
+        input: [CreateSystemDetailInput!]
+    ): SystemDetailBulkCreatePayload!
+    """
+    Create multiple new systemDetails via file upload
+    """
+    createBulkCSVSystemDetail(
+        """
+        csv file containing values of the systemDetail
+        """
+        input: Upload!
+    ): SystemDetailBulkCreatePayload!
+    """
+    Update multiple existing systemDetails
+    """
+    updateBulkSystemDetail(
+        """
+        IDs of the systemDetails to update
+        """
+        ids: [ID!]!
+        """
+        values to update the systemDetails with
+        """
+        input: UpdateSystemDetailInput!
+    ): SystemDetailBulkUpdatePayload!
+    """
+    Update multiple existing systemDetails via file upload
+    """
+    updateBulkCSVSystemDetail(
+        """
+        csv file containing values of the systemDetail, must include ID column
+        """
+        input: Upload!
+    ): SystemDetailBulkUpdatePayload!
+    """
+    Update an existing systemDetail
+    """
+    updateSystemDetail(
+        """
+        ID of the systemDetail
+        """
+        id: ID!
+        """
+        New values for the systemDetail
+        """
+        input: UpdateSystemDetailInput!
+    ): SystemDetailUpdatePayload!
+    """
+    Delete an existing systemDetail
+    """
+    deleteSystemDetail(
+        """
+        ID of the systemDetail
+        """
+        id: ID!
+    ): SystemDetailDeletePayload!
+    """
+    Delete multiple systemDetails
+    """
+    deleteBulkSystemDetail(
+        """
+        IDs of the systemDetails to delete
+        """
+        ids: [ID!]!
+    ): SystemDetailBulkDeletePayload!
+}
+
+"""
+Return response for createSystemDetail mutation
+"""
+type SystemDetailCreatePayload {
+    """
+    Created systemDetail
+    """
+    systemDetail: SystemDetail!
+}
+
+"""
+Return response for updateSystemDetail mutation
+"""
+type SystemDetailUpdatePayload {
+    """
+    Updated systemDetail
+    """
+    systemDetail: SystemDetail!
+}
+
+"""
+Return response for deleteSystemDetail mutation
+"""
+type SystemDetailDeletePayload {
+    """
+    Deleted systemDetail ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSystemDetail mutation
+"""
+type SystemDetailBulkCreatePayload {
+    """
+    Created systemDetails
+    """
+    systemDetails: [SystemDetail!]
+}
+
+"""
+Return response for updateBulkSystemDetail mutation
+"""
+type SystemDetailBulkUpdatePayload {
+    """
+    Updated systemDetails
+    """
+    systemDetails: [SystemDetail!]
+    """
+    IDs of the updated systemDetails
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkSystemDetail mutation
+"""
+type SystemDetailBulkDeletePayload {
+    """
+    Deleted systemDetail IDs
+    """
+    deletedIDs: [ID!]!
+}

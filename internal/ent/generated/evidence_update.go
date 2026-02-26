@@ -235,6 +235,26 @@ func (_u *EvidenceUpdate) ClearWorkflowEligibleMarker() *EvidenceUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *EvidenceUpdate) SetExternalUUID(v string) *EvidenceUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableExternalUUID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *EvidenceUpdate) ClearExternalUUID() *EvidenceUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *EvidenceUpdate) SetName(v string) *EvidenceUpdate {
 	_u.mutation.SetName(v)
@@ -964,6 +984,12 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(evidence.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(evidence.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(evidence.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
@@ -1817,6 +1843,26 @@ func (_u *EvidenceUpdateOne) ClearWorkflowEligibleMarker() *EvidenceUpdateOne {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *EvidenceUpdateOne) SetExternalUUID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableExternalUUID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *EvidenceUpdateOne) ClearExternalUUID() *EvidenceUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *EvidenceUpdateOne) SetName(v string) *EvidenceUpdateOne {
 	_u.mutation.SetName(v)
@@ -2576,6 +2622,12 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(evidence.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(evidence.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(evidence.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)

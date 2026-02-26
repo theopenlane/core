@@ -671,6 +671,18 @@ func (f SubprocessorHistoryFunc) Mutate(ctx context.Context, m historygenerated.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.SubprocessorHistoryMutation", m)
 }
 
+// The SystemDetailHistoryFunc type is an adapter to allow the use of ordinary
+// function as SystemDetailHistory mutator.
+type SystemDetailHistoryFunc func(context.Context, *historygenerated.SystemDetailHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SystemDetailHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.SystemDetailHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.SystemDetailHistoryMutation", m)
+}
+
 // The TaskHistoryFunc type is an adapter to allow the use of ordinary
 // function as TaskHistory mutator.
 type TaskHistoryFunc func(context.Context, *historygenerated.TaskHistoryMutation) (historygenerated.Value, error)

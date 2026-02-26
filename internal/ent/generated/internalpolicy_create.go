@@ -489,6 +489,20 @@ func (_c *InternalPolicyCreate) SetNillableWorkflowEligibleMarker(v *bool) *Inte
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *InternalPolicyCreate) SetExternalUUID(v string) *InternalPolicyCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableExternalUUID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyCreate) SetID(v string) *InternalPolicyCreate {
 	_c.mutation.SetID(v)
@@ -1057,6 +1071,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -1266,6 +1266,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		Rules: []CSVReferenceRule{
 		},
 	},
+	"SystemDetail": {
+		SchemaName: "SystemDetail",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"TFASetting": {
 		SchemaName: "TFASetting",
 		Rules: []CSVReferenceRule{
@@ -2704,6 +2709,24 @@ type SubscriberCSVUpdateInput struct {
 
 // CSVInputWrapper marks SubscriberCSVUpdateInput for CSV header preprocessing.
 func (SubscriberCSVUpdateInput) CSVInputWrapper() {}
+
+// SystemDetailCSVInput wraps CreateSystemDetailInput with CSV reference columns.
+type SystemDetailCSVInput struct {
+	Input generated.CreateSystemDetailInput
+}
+
+// CSVInputWrapper marks SystemDetailCSVInput for CSV header preprocessing.
+func (SystemDetailCSVInput) CSVInputWrapper() {}
+
+// SystemDetailCSVUpdateInput wraps UpdateSystemDetailInput with CSV reference columns for bulk updates.
+type SystemDetailCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateSystemDetailInput
+}
+
+// CSVInputWrapper marks SystemDetailCSVUpdateInput for CSV header preprocessing.
+func (SystemDetailCSVUpdateInput) CSVInputWrapper() {}
 
 // TFASettingCSVInput wraps CreateTFASettingInput with CSV reference columns.
 type TFASettingCSVInput struct {

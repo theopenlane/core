@@ -155,6 +155,20 @@ func (_c *ControlHistoryCreate) SetTags(v []string) *ControlHistoryCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *ControlHistoryCreate) SetExternalUUID(v string) *ControlHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableExternalUUID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ControlHistoryCreate) SetTitle(v string) *ControlHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -247,6 +261,34 @@ func (_c *ControlHistoryCreate) SetStatus(v enums.ControlStatus) *ControlHistory
 func (_c *ControlHistoryCreate) SetNillableStatus(v *enums.ControlStatus) *ControlHistoryCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_c *ControlHistoryCreate) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlHistoryCreate {
+	_c.mutation.SetImplementationStatus(v)
+	return _c
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetImplementationStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_c *ControlHistoryCreate) SetImplementationDescription(v string) *ControlHistoryCreate {
+	_c.mutation.SetImplementationDescription(v)
+	return _c
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableImplementationDescription(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetImplementationDescription(*v)
 	}
 	return _c
 }
@@ -699,6 +741,10 @@ func (_c *ControlHistoryCreate) defaults() error {
 		v := controlhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ImplementationStatus(); !ok {
+		v := controlhistory.DefaultImplementationStatus
+		_c.mutation.SetImplementationStatus(v)
+	}
 	if _, ok := _c.mutation.Source(); !ok {
 		v := controlhistory.DefaultSource
 		_c.mutation.SetSource(v)
@@ -748,6 +794,11 @@ func (_c *ControlHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := controlhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ImplementationStatus(); ok {
+		if err := controlhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.implementation_status": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.Source(); ok {
@@ -843,6 +894,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(controlhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -874,6 +929,14 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ImplementationStatus(); ok {
+		_spec.SetField(controlhistory.FieldImplementationStatus, field.TypeEnum, value)
+		_node.ImplementationStatus = value
+	}
+	if value, ok := _c.mutation.ImplementationDescription(); ok {
+		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
+		_node.ImplementationDescription = value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)

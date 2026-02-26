@@ -1433,6 +1433,30 @@ func (f SubprocessorHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.SubprocessorHistoryMutation", m)
 }
 
+// The SystemDetailHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type SystemDetailHistoryQueryRuleFunc func(context.Context, *historygenerated.SystemDetailHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f SystemDetailHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.SystemDetailHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.SystemDetailHistoryQuery", q)
+}
+
+// The SystemDetailHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type SystemDetailHistoryMutationRuleFunc func(context.Context, *historygenerated.SystemDetailHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f SystemDetailHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.SystemDetailHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.SystemDetailHistoryMutation", m)
+}
+
 // The TaskHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TaskHistoryQueryRuleFunc func(context.Context, *historygenerated.TaskHistoryQuery) error
@@ -2058,6 +2082,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.SubprocessorHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.SystemDetailHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.TaskHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.TemplateHistoryQuery:
@@ -2214,6 +2240,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.SubcontrolHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.SubprocessorHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.SystemDetailHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.TaskHistoryMutation:
 		return m.Filter(), nil

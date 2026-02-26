@@ -34,6 +34,8 @@ var (
 	ExportTypeSubprocessor ExportType = "SUBPROCESSOR"
 	// ExportTypeSubscriber indicates the subscriber.
 	ExportTypeSubscriber ExportType = "SUBSCRIBER"
+	// ExportTypeSystemDetail indicates the systemdetail.
+	ExportTypeSystemDetail ExportType = "SYSTEM_DETAIL"
 	// ExportTypeTask indicates the task.
 	ExportTypeTask ExportType = "TASK"
 	// ExportTypeTrustCenterFaq indicates the trustcenterfaq.
@@ -61,6 +63,7 @@ var exportTypeValues = []ExportType{
 	ExportTypeRisk,
 	ExportTypeSubprocessor,
 	ExportTypeSubscriber,
+	ExportTypeSystemDetail,
 	ExportTypeTask,
 	ExportTypeTrustCenterFaq,
 	ExportTypeTrustCenterSubprocessor,

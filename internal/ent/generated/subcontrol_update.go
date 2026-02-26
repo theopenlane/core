@@ -142,6 +142,26 @@ func (_u *SubcontrolUpdate) ClearTags() *SubcontrolUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *SubcontrolUpdate) SetExternalUUID(v string) *SubcontrolUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableExternalUUID(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *SubcontrolUpdate) ClearExternalUUID() *SubcontrolUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *SubcontrolUpdate) SetTitle(v string) *SubcontrolUpdate {
 	_u.mutation.SetTitle(v)
@@ -295,6 +315,46 @@ func (_u *SubcontrolUpdate) SetNillableStatus(v *enums.ControlStatus) *Subcontro
 // ClearStatus clears the value of the "status" field.
 func (_u *SubcontrolUpdate) ClearStatus() *SubcontrolUpdate {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_u *SubcontrolUpdate) SetImplementationStatus(v enums.ControlImplementationStatus) *SubcontrolUpdate {
+	_u.mutation.SetImplementationStatus(v)
+	return _u
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetImplementationStatus(*v)
+	}
+	return _u
+}
+
+// ClearImplementationStatus clears the value of the "implementation_status" field.
+func (_u *SubcontrolUpdate) ClearImplementationStatus() *SubcontrolUpdate {
+	_u.mutation.ClearImplementationStatus()
+	return _u
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_u *SubcontrolUpdate) SetImplementationDescription(v string) *SubcontrolUpdate {
+	_u.mutation.SetImplementationDescription(v)
+	return _u
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_u *SubcontrolUpdate) SetNillableImplementationDescription(v *string) *SubcontrolUpdate {
+	if v != nil {
+		_u.SetImplementationDescription(*v)
+	}
+	return _u
+}
+
+// ClearImplementationDescription clears the value of the "implementation_description" field.
+func (_u *SubcontrolUpdate) ClearImplementationDescription() *SubcontrolUpdate {
+	_u.mutation.ClearImplementationDescription()
 	return _u
 }
 
@@ -1397,6 +1457,11 @@ func (_u *SubcontrolUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImplementationStatus(); ok {
+		if err := subcontrol.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Source(); ok {
 		if err := subcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
@@ -1482,6 +1547,12 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrol.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(subcontrol.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(subcontrol.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(subcontrol.FieldTitle, field.TypeString, value)
 	}
@@ -1533,6 +1604,18 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(subcontrol.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationStatus(); ok {
+		_spec.SetField(subcontrol.FieldImplementationStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.ImplementationStatusCleared() {
+		_spec.ClearField(subcontrol.FieldImplementationStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationDescription(); ok {
+		_spec.SetField(subcontrol.FieldImplementationDescription, field.TypeString, value)
+	}
+	if _u.mutation.ImplementationDescriptionCleared() {
+		_spec.ClearField(subcontrol.FieldImplementationDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
@@ -2688,6 +2771,26 @@ func (_u *SubcontrolUpdateOne) ClearTags() *SubcontrolUpdateOne {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *SubcontrolUpdateOne) SetExternalUUID(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableExternalUUID(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *SubcontrolUpdateOne) ClearExternalUUID() *SubcontrolUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *SubcontrolUpdateOne) SetTitle(v string) *SubcontrolUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -2841,6 +2944,46 @@ func (_u *SubcontrolUpdateOne) SetNillableStatus(v *enums.ControlStatus) *Subcon
 // ClearStatus clears the value of the "status" field.
 func (_u *SubcontrolUpdateOne) ClearStatus() *SubcontrolUpdateOne {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_u *SubcontrolUpdateOne) SetImplementationStatus(v enums.ControlImplementationStatus) *SubcontrolUpdateOne {
+	_u.mutation.SetImplementationStatus(v)
+	return _u
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetImplementationStatus(*v)
+	}
+	return _u
+}
+
+// ClearImplementationStatus clears the value of the "implementation_status" field.
+func (_u *SubcontrolUpdateOne) ClearImplementationStatus() *SubcontrolUpdateOne {
+	_u.mutation.ClearImplementationStatus()
+	return _u
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_u *SubcontrolUpdateOne) SetImplementationDescription(v string) *SubcontrolUpdateOne {
+	_u.mutation.SetImplementationDescription(v)
+	return _u
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_u *SubcontrolUpdateOne) SetNillableImplementationDescription(v *string) *SubcontrolUpdateOne {
+	if v != nil {
+		_u.SetImplementationDescription(*v)
+	}
+	return _u
+}
+
+// ClearImplementationDescription clears the value of the "implementation_description" field.
+func (_u *SubcontrolUpdateOne) ClearImplementationDescription() *SubcontrolUpdateOne {
+	_u.mutation.ClearImplementationDescription()
 	return _u
 }
 
@@ -3956,6 +4099,11 @@ func (_u *SubcontrolUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImplementationStatus(); ok {
+		if err := subcontrol.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Source(); ok {
 		if err := subcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
@@ -4058,6 +4206,12 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrol.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(subcontrol.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(subcontrol.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(subcontrol.FieldTitle, field.TypeString, value)
 	}
@@ -4109,6 +4263,18 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(subcontrol.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationStatus(); ok {
+		_spec.SetField(subcontrol.FieldImplementationStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.ImplementationStatusCleared() {
+		_spec.ClearField(subcontrol.FieldImplementationStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationDescription(); ok {
+		_spec.SetField(subcontrol.FieldImplementationDescription, field.TypeString, value)
+	}
+	if _u.mutation.ImplementationDescriptionCleared() {
+		_spec.ClearField(subcontrol.FieldImplementationDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)

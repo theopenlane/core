@@ -40,6 +40,8 @@ const (
 	FieldProgramKindName = "program_kind_name"
 	// FieldProgramKindID holds the string denoting the program_kind_id field in the database.
 	FieldProgramKindID = "program_kind_id"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -100,6 +102,8 @@ const (
 	EdgeNarratives = "narratives"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
+	// EdgeSystemDetail holds the string denoting the system_detail edge name in mutations.
+	EdgeSystemDetail = "system_detail"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
@@ -201,6 +205,13 @@ const (
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
+	// SystemDetailTable is the table that holds the system_detail relation/edge.
+	SystemDetailTable = "system_details"
+	// SystemDetailInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailInverseTable = "system_details"
+	// SystemDetailColumn is the table column denoting the system_detail relation/edge.
+	SystemDetailColumn = "program_id"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "program_memberships"
 	// UsersInverseTable is the table name for the User entity.
@@ -236,6 +247,7 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldProgramKindName,
 	FieldProgramKindID,
+	FieldExternalUUID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -424,6 +436,11 @@ func ByProgramKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByProgramKindID orders the results by the program_kind_id field.
 func ByProgramKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProgramKindID, opts...).ToFunc()
+}
+
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -715,6 +732,13 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySystemDetailField orders the results by system_detail field.
+func BySystemDetailField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByUsersCount orders the results by users count.
 func ByUsersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -866,6 +890,13 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionPlansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+	)
+}
+func newSystemDetailStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
 	)
 }
 func newUsersStep() *sqlgraph.Step {

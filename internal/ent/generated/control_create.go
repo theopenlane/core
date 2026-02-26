@@ -144,6 +144,20 @@ func (_c *ControlCreate) SetTags(v []string) *ControlCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *ControlCreate) SetExternalUUID(v string) *ControlCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableExternalUUID(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ControlCreate) SetTitle(v string) *ControlCreate {
 	_c.mutation.SetTitle(v)
@@ -236,6 +250,34 @@ func (_c *ControlCreate) SetStatus(v enums.ControlStatus) *ControlCreate {
 func (_c *ControlCreate) SetNillableStatus(v *enums.ControlStatus) *ControlCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_c *ControlCreate) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlCreate {
+	_c.mutation.SetImplementationStatus(v)
+	return _c
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlCreate {
+	if v != nil {
+		_c.SetImplementationStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_c *ControlCreate) SetImplementationDescription(v string) *ControlCreate {
+	_c.mutation.SetImplementationDescription(v)
+	return _c
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableImplementationDescription(v *string) *ControlCreate {
+	if v != nil {
+		_c.SetImplementationDescription(*v)
 	}
 	return _c
 }
@@ -1081,6 +1123,10 @@ func (_c *ControlCreate) defaults() error {
 		v := control.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ImplementationStatus(); !ok {
+		v := control.DefaultImplementationStatus
+		_c.mutation.SetImplementationStatus(v)
+	}
 	if _, ok := _c.mutation.Source(); !ok {
 		v := control.DefaultSource
 		_c.mutation.SetSource(v)
@@ -1124,6 +1170,11 @@ func (_c *ControlCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := control.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Control.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ImplementationStatus(); ok {
+		if err := control.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`generated: validator failed for field "Control.implementation_status": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.Source(); ok {
@@ -1222,6 +1273,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(control.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(control.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -1249,6 +1304,14 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(control.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ImplementationStatus(); ok {
+		_spec.SetField(control.FieldImplementationStatus, field.TypeEnum, value)
+		_node.ImplementationStatus = value
+	}
+	if value, ok := _c.mutation.ImplementationDescription(); ok {
+		_spec.SetField(control.FieldImplementationDescription, field.TypeString, value)
+		_node.ImplementationDescription = value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeEnum, value)

@@ -173,6 +173,9 @@ type SubcontrolHistory func(*sql.Selector)
 // SubprocessorHistory is the predicate function for subprocessorhistory builders.
 type SubprocessorHistory func(*sql.Selector)
 
+// SystemDetailHistory is the predicate function for systemdetailhistory builders.
+type SystemDetailHistory func(*sql.Selector)
+
 // TaskHistory is the predicate function for taskhistory builders.
 type TaskHistory func(*sql.Selector)
 

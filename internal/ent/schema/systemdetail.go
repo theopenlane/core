@@ -4,12 +4,15 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // SystemDetail defines OSCAL-centric system metadata anchors
@@ -114,7 +117,7 @@ func (s SystemDetail) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[SystemDetail](s,
 				withParents(Program{}, Platform{}),
 				withOrganizationOwner(true),
-				//				withListObjectsFilter(),
+				withListObjectsFilter(),
 			),
 		},
 	}.getMixins(s)
@@ -144,25 +147,25 @@ func (SystemDetail) Modules() []models.OrgModule {
 }
 
 // Annotations of the SystemDetail
-//func (SystemDetail) Annotations() []schema.Annotation {
-//	return []schema.Annotation{
-//		entfga.SelfAccessChecks(),
-//		entx.NewExportable(
-//			entx.WithOrgOwned(),
-//		),
-//	}
-//}
-//
-//// Policy of the SystemDetail
-//func (s SystemDetail) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CanCreateObjectsUnderParents([]string{
-//				Program{}.PluralName(),
-//				Platform{}.PluralName(),
-//			}),
-//			policy.CheckCreateAccess(),
-//			policy.CheckOrgWriteAccess(),
-//		),
-//	)
-//}
+func (SystemDetail) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
+	}
+}
+
+// Policy of the SystemDetail
+func (s SystemDetail) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				Program{}.PluralName(),
+				Platform{}.PluralName(),
+			}),
+			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
+		),
+	)
+}

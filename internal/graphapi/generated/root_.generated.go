@@ -722,11 +722,14 @@ type ComplexityRoot struct {
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		ExternalUUID               func(childComplexity int) int
 		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasPendingWorkflow         func(childComplexity int) int
 		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
+		ImplementationStatus       func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsTrustCenterControl       func(childComplexity int) int
@@ -1928,6 +1931,7 @@ type ComplexityRoot struct {
 		Environment             func(childComplexity int) int
 		EnvironmentID           func(childComplexity int) int
 		EnvironmentName         func(childComplexity int) int
+		ExternalUUID            func(childComplexity int) int
 		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		HasPendingWorkflow      func(childComplexity int) int
 		HasWorkflowHistory      func(childComplexity int) int
@@ -2308,6 +2312,9 @@ type ComplexityRoot struct {
 		NarrativeBlockedGroups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		NarrativeEditors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		NarrativeViewers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		OscalContactUuids                  func(childComplexity int) int
+		OscalPartyUUID                     func(childComplexity int) int
+		OscalRole                          func(childComplexity int) int
 		Owner                              func(childComplexity int) int
 		OwnerID                            func(childComplexity int) int
 		Permissions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -2736,6 +2743,7 @@ type ComplexityRoot struct {
 		Environment                     func(childComplexity int) int
 		EnvironmentID                   func(childComplexity int) int
 		EnvironmentName                 func(childComplexity int) int
+		ExternalUUID                    func(childComplexity int) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HasPendingWorkflow              func(childComplexity int) int
@@ -3269,6 +3277,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSystemDetail            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTagDefinition           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
@@ -3331,6 +3340,7 @@ type ComplexityRoot struct {
 		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
 		CreateBulkSubprocessor               func(childComplexity int, input []*generated.CreateSubprocessorInput) int
 		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
+		CreateBulkSystemDetail               func(childComplexity int, input []*generated.CreateSystemDetailInput) int
 		CreateBulkTagDefinition              func(childComplexity int, input []*generated.CreateTagDefinitionInput) int
 		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
 		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
@@ -3412,6 +3422,7 @@ type ComplexityRoot struct {
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
+		CreateSystemDetail                   func(childComplexity int, input generated.CreateSystemDetailInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTagDefinition                  func(childComplexity int, input generated.CreateTagDefinitionInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
@@ -3480,6 +3491,7 @@ type ComplexityRoot struct {
 		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
 		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
 		DeleteBulkSubprocessor               func(childComplexity int, ids []string) int
+		DeleteBulkSystemDetail               func(childComplexity int, ids []string) int
 		DeleteBulkTask                       func(childComplexity int, ids []string) int
 		DeleteBulkTemplate                   func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterCompliance      func(childComplexity int, ids []string) int
@@ -3550,6 +3562,7 @@ type ComplexityRoot struct {
 		DeleteSubcontrol                     func(childComplexity int, id string) int
 		DeleteSubprocessor                   func(childComplexity int, id string) int
 		DeleteSubscriber                     func(childComplexity int, email string, ownerID *string) int
+		DeleteSystemDetail                   func(childComplexity int, id string) int
 		DeleteTagDefinition                  func(childComplexity int, id string) int
 		DeleteTask                           func(childComplexity int, id string) int
 		DeleteTemplate                       func(childComplexity int, id string) int
@@ -3627,6 +3640,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSystemDetail            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
@@ -3670,6 +3684,7 @@ type ComplexityRoot struct {
 		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
 		UpdateBulkSubcontrol                 func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
 		UpdateBulkSubprocessor               func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
+		UpdateBulkSystemDetail               func(childComplexity int, ids []string, input generated.UpdateSystemDetailInput) int
 		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateBulkTemplate                   func(childComplexity int, ids []string, input generated.UpdateTemplateInput) int
 		UpdateBulkTrustCenterCompliance      func(childComplexity int, ids []string, input generated.UpdateTrustCenterComplianceInput) int
@@ -3741,6 +3756,7 @@ type ComplexityRoot struct {
 		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
+		UpdateSystemDetail                   func(childComplexity int, id string, input generated.UpdateSystemDetailInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTagDefinition                  func(childComplexity int, id string, input generated.UpdateTagDefinitionInput) int
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
@@ -4242,6 +4258,7 @@ type ComplexityRoot struct {
 		SubprocessorCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Subprocessors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		SystemDetails                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
 		TagDefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
 		Tags                            func(childComplexity int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -4466,6 +4483,7 @@ type ComplexityRoot struct {
 		EstimatedMonthlyCost           func(childComplexity int) int
 		Evidence                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExternalReferenceID            func(childComplexity int) int
+		ExternalUUID                   func(childComplexity int) int
 		Files                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GeneratedScans                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		HasPendingWorkflow             func(childComplexity int) int
@@ -4514,6 +4532,7 @@ type ComplexityRoot struct {
 		SourceIdentifier               func(childComplexity int) int
 		SourceType                     func(childComplexity int) int
 		Status                         func(childComplexity int) int
+		SystemDetail                   func(childComplexity int) int
 		Tags                           func(childComplexity int) int
 		Tasks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		TechnicalOwner                 func(childComplexity int) int
@@ -4674,6 +4693,7 @@ type ComplexityRoot struct {
 		Editors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EndDate              func(childComplexity int) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		ExternalUUID         func(childComplexity int) int
 		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		FrameworkName        func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -4694,6 +4714,7 @@ type ComplexityRoot struct {
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
 		Subcontrols          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemDetail         func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
@@ -4971,6 +4992,9 @@ type ComplexityRoot struct {
 		Subscriber                      func(childComplexity int, email string) int
 		SubscriberSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subscribers                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		SystemDetail                    func(childComplexity int, id string) int
+		SystemDetailSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		SystemDetails                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) int
 		TagDefinition                   func(childComplexity int, id string) int
 		TagDefinitionSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		TagDefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
@@ -5217,6 +5241,7 @@ type ComplexityRoot struct {
 		Environment       func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
+		ExternalUUID      func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
 		InternalPolicies  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -5520,6 +5545,7 @@ type ComplexityRoot struct {
 		Subcontrols           func(childComplexity int) int
 		Subprocessors         func(childComplexity int) int
 		Subscribers           func(childComplexity int) int
+		SystemDetails         func(childComplexity int) int
 		TagDefinitions        func(childComplexity int) int
 		Tasks                 func(childComplexity int) int
 		Templates             func(childComplexity int) int
@@ -5622,10 +5648,13 @@ type ComplexityRoot struct {
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		ExternalUUID               func(childComplexity int) int
 		HasPendingWorkflow         func(childComplexity int) int
 		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
+		ImplementationStatus       func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		MappedCategories           func(childComplexity int) int
@@ -5808,6 +5837,66 @@ type ComplexityRoot struct {
 		NotificationCreated func(childComplexity int) int
 	}
 
+	SystemDetail struct {
+		AuthorizationBoundary func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		LastReviewed          func(childComplexity int) int
+		OscalMetadataJSON     func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Platform              func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
+		Program               func(childComplexity int) int
+		ProgramID             func(childComplexity int) int
+		RevisionHistory       func(childComplexity int) int
+		SensitivityLevel      func(childComplexity int) int
+		SystemName            func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		Version               func(childComplexity int) int
+	}
+
+	SystemDetailBulkCreatePayload struct {
+		SystemDetails func(childComplexity int) int
+	}
+
+	SystemDetailBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	SystemDetailBulkUpdatePayload struct {
+		SystemDetails func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
+	}
+
+	SystemDetailConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SystemDetailCreatePayload struct {
+		SystemDetail func(childComplexity int) int
+	}
+
+	SystemDetailDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	SystemDetailEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SystemDetailUpdatePayload struct {
+		SystemDetail func(childComplexity int) int
+	}
+
 	TFASetting struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
@@ -5910,6 +5999,7 @@ type ComplexityRoot struct {
 		EnvironmentName        func(childComplexity int) int
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExternalReferenceURL   func(childComplexity int) int
+		ExternalUUID           func(childComplexity int) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                     func(childComplexity int) int
 		IdempotencyKey         func(childComplexity int) int
@@ -10599,6 +10689,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.ExampleEvidence(childComplexity), true
 
+	case "Control.externalUUID":
+		if e.ComplexityRoot.Control.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ExternalUUID(childComplexity), true
+
 	case "Control.findings":
 		if e.ComplexityRoot.Control.Findings == nil {
 			break
@@ -10632,12 +10729,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.ID(childComplexity), true
 
+	case "Control.implementationDescription":
+		if e.ComplexityRoot.Control.ImplementationDescription == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ImplementationDescription(childComplexity), true
+
 	case "Control.implementationGuidance":
 		if e.ComplexityRoot.Control.ImplementationGuidance == nil {
 			break
 		}
 
 		return e.ComplexityRoot.Control.ImplementationGuidance(childComplexity), true
+
+	case "Control.implementationStatus":
+		if e.ComplexityRoot.Control.ImplementationStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Control.ImplementationStatus(childComplexity), true
 
 	case "Control.internalNotes":
 		if e.ComplexityRoot.Control.InternalNotes == nil {
@@ -16370,6 +16481,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Evidence.EnvironmentName(childComplexity), true
 
+	case "Evidence.externalUUID":
+		if e.ComplexityRoot.Evidence.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.ExternalUUID(childComplexity), true
+
 	case "Evidence.files":
 		if e.ComplexityRoot.Evidence.Files == nil {
 			break
@@ -18630,6 +18748,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Group.NarrativeViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NarrativeOrder), args["where"].(*generated.NarrativeWhereInput)), true
 
+	case "Group.oscalContactUuids":
+		if e.ComplexityRoot.Group.OscalContactUuids == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.OscalContactUuids(childComplexity), true
+
+	case "Group.oscalPartyUUID":
+		if e.ComplexityRoot.Group.OscalPartyUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.OscalPartyUUID(childComplexity), true
+
+	case "Group.oscalRole":
+		if e.ComplexityRoot.Group.OscalRole == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.OscalRole(childComplexity), true
+
 	case "Group.owner":
 		if e.ComplexityRoot.Group.Owner == nil {
 			break
@@ -20833,6 +20972,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.EnvironmentName(childComplexity), true
+
+	case "InternalPolicy.externalUUID":
+		if e.ComplexityRoot.InternalPolicy.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicy.ExternalUUID(childComplexity), true
 
 	case "InternalPolicy.file":
 		if e.ComplexityRoot.InternalPolicy.File == nil {
@@ -23556,6 +23702,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVSubscriber(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVSystemDetail":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVSystemDetail(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVTagDefinition":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVTagDefinition == nil {
 			break
@@ -24299,6 +24457,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkSubscriber(childComplexity, args["input"].([]*generated.CreateSubscriberInput)), true
+
+	case "Mutation.createBulkSystemDetail":
+		if e.ComplexityRoot.Mutation.CreateBulkSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkSystemDetail(childComplexity, args["input"].([]*generated.CreateSystemDetailInput)), true
 
 	case "Mutation.createBulkTagDefinition":
 		if e.ComplexityRoot.Mutation.CreateBulkTagDefinition == nil {
@@ -25272,6 +25442,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateSubscriber(childComplexity, args["input"].(generated.CreateSubscriberInput)), true
 
+	case "Mutation.createSystemDetail":
+		if e.ComplexityRoot.Mutation.CreateSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateSystemDetail(childComplexity, args["input"].(generated.CreateSystemDetailInput)), true
+
 	case "Mutation.createTFASetting":
 		if e.ComplexityRoot.Mutation.CreateTFASetting == nil {
 			break
@@ -26087,6 +26269,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkSubprocessor(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkSystemDetail":
+		if e.ComplexityRoot.Mutation.DeleteBulkSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkSystemDetail(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteBulkTask":
 		if e.ComplexityRoot.Mutation.DeleteBulkTask == nil {
@@ -26927,6 +27121,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteSubscriber(childComplexity, args["email"].(string), args["ownerID"].(*string)), true
+
+	case "Mutation.deleteSystemDetail":
+		if e.ComplexityRoot.Mutation.DeleteSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteSystemDetail(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteTagDefinition":
 		if e.ComplexityRoot.Mutation.DeleteTagDefinition == nil {
@@ -27847,6 +28053,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVSystemDetail":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVSystemDetail(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVTask":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVTask == nil {
 			break
@@ -28362,6 +28580,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSubprocessorInput)), true
+
+	case "Mutation.updateBulkSystemDetail":
+		if e.ComplexityRoot.Mutation.UpdateBulkSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkSystemDetail(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSystemDetailInput)), true
 
 	case "Mutation.updateBulkTask":
 		if e.ComplexityRoot.Mutation.UpdateBulkTask == nil {
@@ -29214,6 +29444,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateSubscriber(childComplexity, args["email"].(string), args["input"].(generated.UpdateSubscriberInput)), true
+
+	case "Mutation.updateSystemDetail":
+		if e.ComplexityRoot.Mutation.UpdateSystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSystemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateSystemDetail(childComplexity, args["id"].(string), args["input"].(generated.UpdateSystemDetailInput)), true
 
 	case "Mutation.updateTFASetting":
 		if e.ComplexityRoot.Mutation.UpdateTFASetting == nil {
@@ -32252,6 +32494,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Organization.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 
+	case "Organization.systemDetails":
+		if e.ComplexityRoot.Organization.SystemDetails == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_systemDetails_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.SystemDetails(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SystemDetailOrder), args["where"].(*generated.SystemDetailWhereInput)), true
+
 	case "Organization.tagDefinitions":
 		if e.ComplexityRoot.Organization.TagDefinitions == nil {
 			break
@@ -33455,6 +33709,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Platform.ExternalReferenceID(childComplexity), true
 
+	case "Platform.externalUUID":
+		if e.ComplexityRoot.Platform.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.ExternalUUID(childComplexity), true
+
 	case "Platform.files":
 		if e.ComplexityRoot.Platform.Files == nil {
 			break
@@ -33840,6 +34101,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.Status(childComplexity), true
+
+	case "Platform.systemDetail":
+		if e.ComplexityRoot.Platform.SystemDetail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Platform.SystemDetail(childComplexity), true
 
 	case "Platform.tags":
 		if e.ComplexityRoot.Platform.Tags == nil {
@@ -34740,6 +35008,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Program.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
+	case "Program.externalUUID":
+		if e.ComplexityRoot.Program.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.ExternalUUID(childComplexity), true
+
 	case "Program.files":
 		if e.ComplexityRoot.Program.Files == nil {
 			break
@@ -34919,6 +35194,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Program.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Program.systemDetail":
+		if e.ComplexityRoot.Program.SystemDetail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Program.SystemDetail(childComplexity), true
 
 	case "Program.tags":
 		if e.ComplexityRoot.Program.Tags == nil {
@@ -37396,6 +37678,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.Subscribers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubscriberOrder), args["where"].(*generated.SubscriberWhereInput)), true
 
+	case "Query.systemDetail":
+		if e.ComplexityRoot.Query.SystemDetail == nil {
+			break
+		}
+
+		args, err := ec.field_Query_systemDetail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SystemDetail(childComplexity, args["id"].(string)), true
+
+	case "Query.systemDetailSearch":
+		if e.ComplexityRoot.Query.SystemDetailSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_systemDetailSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SystemDetailSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.systemDetails":
+		if e.ComplexityRoot.Query.SystemDetails == nil {
+			break
+		}
+
+		args, err := ec.field_Query_systemDetails_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SystemDetails(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SystemDetailOrder), args["where"].(*generated.SystemDetailWhereInput)), true
+
 	case "Query.tagDefinition":
 		if e.ComplexityRoot.Query.TagDefinition == nil {
 			break
@@ -39288,6 +39606,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Risk.EnvironmentName(childComplexity), true
 
+	case "Risk.externalUUID":
+		if e.ComplexityRoot.Risk.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.ExternalUUID(childComplexity), true
+
 	case "Risk.id":
 		if e.ComplexityRoot.Risk.ID == nil {
 			break
@@ -40810,6 +41135,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SearchResults.Subscribers(childComplexity), true
 
+	case "SearchResults.systemDetails":
+		if e.ComplexityRoot.SearchResults.SystemDetails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResults.SystemDetails(childComplexity), true
+
 	case "SearchResults.tagDefinitions":
 		if e.ComplexityRoot.SearchResults.TagDefinitions == nil {
 			break
@@ -41385,6 +41717,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.ExampleEvidence(childComplexity), true
 
+	case "Subcontrol.externalUUID":
+		if e.ComplexityRoot.Subcontrol.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ExternalUUID(childComplexity), true
+
 	case "Subcontrol.hasPendingWorkflow":
 		if e.ComplexityRoot.Subcontrol.HasPendingWorkflow == nil {
 			break
@@ -41406,12 +41745,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subcontrol.ID(childComplexity), true
 
+	case "Subcontrol.implementationDescription":
+		if e.ComplexityRoot.Subcontrol.ImplementationDescription == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ImplementationDescription(childComplexity), true
+
 	case "Subcontrol.implementationGuidance":
 		if e.ComplexityRoot.Subcontrol.ImplementationGuidance == nil {
 			break
 		}
 
 		return e.ComplexityRoot.Subcontrol.ImplementationGuidance(childComplexity), true
+
+	case "Subcontrol.implementationStatus":
+		if e.ComplexityRoot.Subcontrol.ImplementationStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Subcontrol.ImplementationStatus(childComplexity), true
 
 	case "Subcontrol.internalNotes":
 		if e.ComplexityRoot.Subcontrol.InternalNotes == nil {
@@ -42182,6 +42535,237 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Subscription.NotificationCreated(childComplexity), true
 
+	case "SystemDetail.authorizationBoundary":
+		if e.ComplexityRoot.SystemDetail.AuthorizationBoundary == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.AuthorizationBoundary(childComplexity), true
+
+	case "SystemDetail.createdAt":
+		if e.ComplexityRoot.SystemDetail.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.CreatedAt(childComplexity), true
+
+	case "SystemDetail.createdBy":
+		if e.ComplexityRoot.SystemDetail.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.CreatedBy(childComplexity), true
+
+	case "SystemDetail.description":
+		if e.ComplexityRoot.SystemDetail.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.Description(childComplexity), true
+
+	case "SystemDetail.displayID":
+		if e.ComplexityRoot.SystemDetail.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.DisplayID(childComplexity), true
+
+	case "SystemDetail.id":
+		if e.ComplexityRoot.SystemDetail.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.ID(childComplexity), true
+
+	case "SystemDetail.lastReviewed":
+		if e.ComplexityRoot.SystemDetail.LastReviewed == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.LastReviewed(childComplexity), true
+
+	case "SystemDetail.oscalMetadataJSON":
+		if e.ComplexityRoot.SystemDetail.OscalMetadataJSON == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.OscalMetadataJSON(childComplexity), true
+
+	case "SystemDetail.owner":
+		if e.ComplexityRoot.SystemDetail.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.Owner(childComplexity), true
+
+	case "SystemDetail.ownerID":
+		if e.ComplexityRoot.SystemDetail.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.OwnerID(childComplexity), true
+
+	case "SystemDetail.platform":
+		if e.ComplexityRoot.SystemDetail.Platform == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.Platform(childComplexity), true
+
+	case "SystemDetail.platformID":
+		if e.ComplexityRoot.SystemDetail.PlatformID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.PlatformID(childComplexity), true
+
+	case "SystemDetail.program":
+		if e.ComplexityRoot.SystemDetail.Program == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.Program(childComplexity), true
+
+	case "SystemDetail.programID":
+		if e.ComplexityRoot.SystemDetail.ProgramID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.ProgramID(childComplexity), true
+
+	case "SystemDetail.revisionHistory":
+		if e.ComplexityRoot.SystemDetail.RevisionHistory == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.RevisionHistory(childComplexity), true
+
+	case "SystemDetail.sensitivityLevel":
+		if e.ComplexityRoot.SystemDetail.SensitivityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.SensitivityLevel(childComplexity), true
+
+	case "SystemDetail.systemName":
+		if e.ComplexityRoot.SystemDetail.SystemName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.SystemName(childComplexity), true
+
+	case "SystemDetail.tags":
+		if e.ComplexityRoot.SystemDetail.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.Tags(childComplexity), true
+
+	case "SystemDetail.updatedAt":
+		if e.ComplexityRoot.SystemDetail.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.UpdatedAt(childComplexity), true
+
+	case "SystemDetail.updatedBy":
+		if e.ComplexityRoot.SystemDetail.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.UpdatedBy(childComplexity), true
+
+	case "SystemDetail.version":
+		if e.ComplexityRoot.SystemDetail.Version == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetail.Version(childComplexity), true
+
+	case "SystemDetailBulkCreatePayload.systemDetails":
+		if e.ComplexityRoot.SystemDetailBulkCreatePayload.SystemDetails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailBulkCreatePayload.SystemDetails(childComplexity), true
+
+	case "SystemDetailBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.SystemDetailBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "SystemDetailBulkUpdatePayload.systemDetails":
+		if e.ComplexityRoot.SystemDetailBulkUpdatePayload.SystemDetails == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailBulkUpdatePayload.SystemDetails(childComplexity), true
+
+	case "SystemDetailBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.SystemDetailBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "SystemDetailConnection.edges":
+		if e.ComplexityRoot.SystemDetailConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailConnection.Edges(childComplexity), true
+
+	case "SystemDetailConnection.pageInfo":
+		if e.ComplexityRoot.SystemDetailConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailConnection.PageInfo(childComplexity), true
+
+	case "SystemDetailConnection.totalCount":
+		if e.ComplexityRoot.SystemDetailConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailConnection.TotalCount(childComplexity), true
+
+	case "SystemDetailCreatePayload.systemDetail":
+		if e.ComplexityRoot.SystemDetailCreatePayload.SystemDetail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailCreatePayload.SystemDetail(childComplexity), true
+
+	case "SystemDetailDeletePayload.deletedID":
+		if e.ComplexityRoot.SystemDetailDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailDeletePayload.DeletedID(childComplexity), true
+
+	case "SystemDetailEdge.cursor":
+		if e.ComplexityRoot.SystemDetailEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailEdge.Cursor(childComplexity), true
+
+	case "SystemDetailEdge.node":
+		if e.ComplexityRoot.SystemDetailEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailEdge.Node(childComplexity), true
+
+	case "SystemDetailUpdatePayload.systemDetail":
+		if e.ComplexityRoot.SystemDetailUpdatePayload.SystemDetail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailUpdatePayload.SystemDetail(childComplexity), true
+
 	case "TFASetting.createdAt":
 		if e.ComplexityRoot.TFASetting.CreatedAt == nil {
 			break
@@ -42666,6 +43250,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Task.ExternalReferenceURL(childComplexity), true
+
+	case "Task.externalUUID":
+		if e.ComplexityRoot.Task.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Task.ExternalUUID(childComplexity), true
 
 	case "Task.groups":
 		if e.ComplexityRoot.Task.Groups == nil {
@@ -48843,6 +49434,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateSubcontrolInput,
 		ec.unmarshalInputCreateSubprocessorInput,
 		ec.unmarshalInputCreateSubscriberInput,
+		ec.unmarshalInputCreateSystemDetailInput,
 		ec.unmarshalInputCreateTFASettingInput,
 		ec.unmarshalInputCreateTagDefinitionInput,
 		ec.unmarshalInputCreateTaskInput,
@@ -48989,6 +49581,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSubprocessorWhereInput,
 		ec.unmarshalInputSubscriberOrder,
 		ec.unmarshalInputSubscriberWhereInput,
+		ec.unmarshalInputSystemDetailOrder,
+		ec.unmarshalInputSystemDetailWhereInput,
 		ec.unmarshalInputTFASettingOrder,
 		ec.unmarshalInputTFASettingWhereInput,
 		ec.unmarshalInputTagDefinitionOrder,
@@ -49082,6 +49676,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateSubcontrolInput,
 		ec.unmarshalInputUpdateSubprocessorInput,
 		ec.unmarshalInputUpdateSubscriberInput,
+		ec.unmarshalInputUpdateSystemDetailInput,
 		ec.unmarshalInputUpdateTFASettingInput,
 		ec.unmarshalInputUpdateTagDefinitionInput,
 		ec.unmarshalInputUpdateTaskInput,
@@ -59050,6 +59645,10 @@ type Control implements Node {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalSource(source: FRAMEWORK)
@@ -59081,6 +59680,14 @@ type Control implements Node {
   status of the control
   """
   status: ControlControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -59925,6 +60532,16 @@ type ControlConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlControlImplementationStatus is enum for the field implementation_status
+"""
+enum ControlControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+  PLANNED
+  IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  INHERITED
+  NOT_APPLICABLE
 }
 """
 ControlControlSource is enum for the field source
@@ -61511,6 +62128,24 @@ input ControlWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -61609,6 +62244,33 @@ input ControlWhereInput {
   statusNotIn: [ControlControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  implementation_status field predicates
+  """
+  implementationStatus: ControlControlImplementationStatus
+  implementationStatusNEQ: ControlControlImplementationStatus
+  implementationStatusIn: [ControlControlImplementationStatus!]
+  implementationStatusNotIn: [ControlControlImplementationStatus!]
+  implementationStatusIsNil: Boolean
+  implementationStatusNotNil: Boolean
+  """
+  implementation_description field predicates
+  """
+  implementationDescription: String
+  implementationDescriptionNEQ: String
+  implementationDescriptionIn: [String!]
+  implementationDescriptionNotIn: [String!]
+  implementationDescriptionGT: String
+  implementationDescriptionGTE: String
+  implementationDescriptionLT: String
+  implementationDescriptionLTE: String
+  implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
+  implementationDescriptionHasSuffix: String
+  implementationDescriptionIsNil: Boolean
+  implementationDescriptionNotNil: Boolean
+  implementationDescriptionEqualFold: String
+  implementationDescriptionContainsFold: String
   """
   source field predicates
   """
@@ -62811,6 +63473,10 @@ input CreateControlInput {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -62838,6 +63504,14 @@ input CreateControlInput {
   status of the control
   """
   status: ControlControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -63904,6 +64578,10 @@ input CreateEvidenceInput {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the evidence
   """
   name: String!
@@ -64351,6 +65029,18 @@ input CreateGroupInput {
   """
   displayName: String
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -64706,6 +65396,10 @@ input CreateInternalPolicyInput {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -65385,6 +66079,7 @@ input CreateOrganizationInput {
   noteIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  systemDetailIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
   riskIDs: [ID!]
@@ -65624,6 +66319,10 @@ input CreatePlatformInput {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the platform
   """
   name: String!
@@ -65733,6 +66432,7 @@ input CreatePlatformInput {
   applicableFrameworkIDs: [ID!]
   generatedScanIDs: [ID!]
   platformOwnerID: ID
+  systemDetailID: ID
 }
 """
 CreateProcedureInput is used for create Procedure object.
@@ -65861,6 +66561,10 @@ input CreateProgramInput {
   """
   programKindName: String
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the program
   """
   name: String!
@@ -65925,6 +66629,7 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
+  systemDetailID: ID
   programOwnerID: ID
 }
 """
@@ -66199,6 +66904,10 @@ input CreateRiskInput {
   the scope of the risk
   """
   scopeName: String
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the name of the risk
   """
@@ -66488,6 +67197,10 @@ input CreateSubcontrolInput {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -66515,6 +67228,14 @@ input CreateSubcontrolInput {
   status of the control
   """
   status: SubcontrolControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -66670,6 +67391,51 @@ input CreateSubscriberInput {
   eventIDs: [ID!]
 }
 """
+CreateSystemDetailInput is used for create SystemDetail object.
+Input was generated by ent.
+"""
+input CreateSystemDetailInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String!
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+  ownerID: ID
+  programID: ID
+  platformID: ID
+}
+"""
 CreateTFASettingInput is used for create TFASetting object.
 Input was generated by ent.
 """
@@ -66731,6 +67497,10 @@ input CreateTaskInput {
   the scope of the task
   """
   scopeName: String
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the title of the task
   """
@@ -76533,6 +77303,10 @@ type Evidence implements Node {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the evidence
   """
   name: String!
@@ -77175,6 +77949,24 @@ input EvidenceWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -80741,6 +81533,18 @@ type Group implements Node {
   """
   displayName: String!
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -82815,6 +83619,42 @@ input GroupWhereInput {
   displayNameEqualFold: String
   displayNameContainsFold: String
   """
+  oscal_role field predicates
+  """
+  oscalRole: String
+  oscalRoleNEQ: String
+  oscalRoleIn: [String!]
+  oscalRoleNotIn: [String!]
+  oscalRoleGT: String
+  oscalRoleGTE: String
+  oscalRoleLT: String
+  oscalRoleLTE: String
+  oscalRoleContains: String
+  oscalRoleHasPrefix: String
+  oscalRoleHasSuffix: String
+  oscalRoleIsNil: Boolean
+  oscalRoleNotNil: Boolean
+  oscalRoleEqualFold: String
+  oscalRoleContainsFold: String
+  """
+  oscal_party_uuid field predicates
+  """
+  oscalPartyUUID: String
+  oscalPartyUUIDNEQ: String
+  oscalPartyUUIDIn: [String!]
+  oscalPartyUUIDNotIn: [String!]
+  oscalPartyUUIDGT: String
+  oscalPartyUUIDGTE: String
+  oscalPartyUUIDLT: String
+  oscalPartyUUIDLTE: String
+  oscalPartyUUIDContains: String
+  oscalPartyUUIDHasPrefix: String
+  oscalPartyUUIDHasSuffix: String
+  oscalPartyUUIDIsNil: Boolean
+  oscalPartyUUIDNotNil: Boolean
+  oscalPartyUUIDEqualFold: String
+  oscalPartyUUIDContainsFold: String
+  """
   scim_external_id field predicates
   """
   scimExternalID: String
@@ -83119,6 +83959,10 @@ input GroupWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for oscalContactUuidsHas to contain a specific value
+  """
+  oscalContactUuidsHas: String
 }
 type Hush implements Node {
   id: ID!
@@ -86019,6 +86863,10 @@ type InternalPolicy implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   owner: Organization
   blockedGroups(
     """
@@ -86978,6 +87826,24 @@ input InternalPolicyWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   owner edge predicates
   """
@@ -94319,6 +95185,37 @@ type Organization implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
   procedures(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -96887,6 +97784,11 @@ input OrganizationWhereInput {
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
   """
+  system_details edge predicates
+  """
+  hasSystemDetails: Boolean
+  hasSystemDetailsWith: [SystemDetailWhereInput!]
+  """
   procedures edge predicates
   """
   hasProcedures: Boolean
@@ -97650,6 +98552,10 @@ type Platform implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the name of the platform
   """
@@ -98515,6 +99421,7 @@ type Platform implements Node {
     where: ScanWhereInput
   ): ScanConnection!
   platformOwner: User
+  systemDetail: SystemDetail
 }
 """
 A connection to a list of items.
@@ -99228,6 +100135,24 @@ input PlatformWhereInput {
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -99649,6 +100574,11 @@ input PlatformWhereInput {
   """
   hasPlatformOwner: Boolean
   hasPlatformOwnerWith: [UserWhereInput!]
+  """
+  system_detail edge predicates
+  """
+  hasSystemDetail: Boolean
+  hasSystemDetailWith: [SystemDetailWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -100833,6 +101763,10 @@ type Program implements Node {
   """
   programKindID: ID
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the program
   """
   name: String!
@@ -101351,6 +102285,7 @@ type Program implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  systemDetail: SystemDetail
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -101796,6 +102731,24 @@ input ProgramWhereInput {
   programKindIDEqualFold: ID
   programKindIDContainsFold: ID
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -102052,6 +103005,11 @@ input ProgramWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  system_detail edge predicates
+  """
+  hasSystemDetail: Boolean
+  hasSystemDetailWith: [SystemDetailWhereInput!]
   """
   users edge predicates
   """
@@ -104199,6 +105157,37 @@ type Query {
     """
     where: SubscriberWhereInput
   ): SubscriberConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
   tfaSettings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -107642,6 +108631,10 @@ type Risk implements Node {
   """
   scopeID: ID
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the risk
   """
   name: String!
@@ -108551,6 +109544,24 @@ input RiskWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -111241,6 +112252,10 @@ type Subcontrol implements Node {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalSource(source: FRAMEWORK)
@@ -111272,6 +112287,14 @@ type Subcontrol implements Node {
   status of the control
   """
   status: SubcontrolControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -111813,6 +112836,16 @@ type SubcontrolConnection {
   totalCount: Int!
 }
 """
+SubcontrolControlImplementationStatus is enum for the field implementation_status
+"""
+enum SubcontrolControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+  PLANNED
+  IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  INHERITED
+  NOT_APPLICABLE
+}
+"""
 SubcontrolControlSource is enum for the field source
 """
 enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
@@ -111976,6 +113009,24 @@ input SubcontrolWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -112074,6 +113125,33 @@ input SubcontrolWhereInput {
   statusNotIn: [SubcontrolControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  implementation_status field predicates
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  implementationStatusNEQ: SubcontrolControlImplementationStatus
+  implementationStatusIn: [SubcontrolControlImplementationStatus!]
+  implementationStatusNotIn: [SubcontrolControlImplementationStatus!]
+  implementationStatusIsNil: Boolean
+  implementationStatusNotNil: Boolean
+  """
+  implementation_description field predicates
+  """
+  implementationDescription: String
+  implementationDescriptionNEQ: String
+  implementationDescriptionIn: [String!]
+  implementationDescriptionNotIn: [String!]
+  implementationDescriptionGT: String
+  implementationDescriptionGTE: String
+  implementationDescriptionLT: String
+  implementationDescriptionLTE: String
+  implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
+  implementationDescriptionHasSuffix: String
+  implementationDescriptionIsNil: Boolean
+  implementationDescriptionNotNil: Boolean
+  implementationDescriptionEqualFold: String
+  implementationDescriptionContainsFold: String
   """
   source field predicates
   """
@@ -113164,6 +114242,399 @@ input SubscriberWhereInput {
   """
   tagsHas: String
 }
+type SystemDetail implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  optional program anchor for this system detail
+  """
+  programID: ID
+  """
+  optional platform anchor for this system detail
+  """
+  platformID: ID
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String!
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+  owner: Organization
+  """
+  optional program this detail belongs to
+  """
+  program: Program
+  """
+  optional platform this detail belongs to
+  """
+  platform: Platform
+}
+"""
+A connection to a list of items.
+"""
+type SystemDetailConnection {
+  """
+  A list of edges.
+  """
+  edges: [SystemDetailEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SystemDetailEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SystemDetail
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for SystemDetail connections
+"""
+input SystemDetailOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SystemDetails.
+  """
+  field: SystemDetailOrderField!
+}
+"""
+Properties by which SystemDetail connections can be ordered.
+"""
+enum SystemDetailOrderField {
+  created_at
+  updated_at
+  system_name
+}
+"""
+SystemDetailSystemSensitivityLevel is enum for the field sensitivity_level
+"""
+enum SystemDetailSystemSensitivityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SystemSensitivityLevel") {
+  LOW
+  MODERATE
+  HIGH
+  UNKNOWN
+}
+"""
+SystemDetailWhereInput is used for filtering SystemDetail objects.
+Input was generated by ent.
+"""
+input SystemDetailWhereInput {
+  not: SystemDetailWhereInput
+  and: [SystemDetailWhereInput!]
+  or: [SystemDetailWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  program_id field predicates
+  """
+  programID: ID
+  programIDNEQ: ID
+  programIDIn: [ID!]
+  programIDNotIn: [ID!]
+  programIDGT: ID
+  programIDGTE: ID
+  programIDLT: ID
+  programIDLTE: ID
+  programIDContains: ID
+  programIDHasPrefix: ID
+  programIDHasSuffix: ID
+  programIDIsNil: Boolean
+  programIDNotNil: Boolean
+  programIDEqualFold: ID
+  programIDContainsFold: ID
+  """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
+  system_name field predicates
+  """
+  systemName: String
+  systemNameNEQ: String
+  systemNameIn: [String!]
+  systemNameNotIn: [String!]
+  systemNameGT: String
+  systemNameGTE: String
+  systemNameLT: String
+  systemNameLTE: String
+  systemNameContains: String
+  systemNameHasPrefix: String
+  systemNameHasSuffix: String
+  systemNameEqualFold: String
+  systemNameContainsFold: String
+  """
+  version field predicates
+  """
+  version: String
+  versionNEQ: String
+  versionIn: [String!]
+  versionNotIn: [String!]
+  versionGT: String
+  versionGTE: String
+  versionLT: String
+  versionLTE: String
+  versionContains: String
+  versionHasPrefix: String
+  versionHasSuffix: String
+  versionIsNil: Boolean
+  versionNotNil: Boolean
+  versionEqualFold: String
+  versionContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  authorization_boundary field predicates
+  """
+  authorizationBoundary: String
+  authorizationBoundaryNEQ: String
+  authorizationBoundaryIn: [String!]
+  authorizationBoundaryNotIn: [String!]
+  authorizationBoundaryGT: String
+  authorizationBoundaryGTE: String
+  authorizationBoundaryLT: String
+  authorizationBoundaryLTE: String
+  authorizationBoundaryContains: String
+  authorizationBoundaryHasPrefix: String
+  authorizationBoundaryHasSuffix: String
+  authorizationBoundaryIsNil: Boolean
+  authorizationBoundaryNotNil: Boolean
+  authorizationBoundaryEqualFold: String
+  authorizationBoundaryContainsFold: String
+  """
+  sensitivity_level field predicates
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  sensitivityLevelNEQ: SystemDetailSystemSensitivityLevel
+  sensitivityLevelIn: [SystemDetailSystemSensitivityLevel!]
+  sensitivityLevelNotIn: [SystemDetailSystemSensitivityLevel!]
+  sensitivityLevelIsNil: Boolean
+  sensitivityLevelNotNil: Boolean
+  """
+  last_reviewed field predicates
+  """
+  lastReviewed: DateTime
+  lastReviewedNEQ: DateTime
+  lastReviewedIn: [DateTime!]
+  lastReviewedNotIn: [DateTime!]
+  lastReviewedGT: DateTime
+  lastReviewedGTE: DateTime
+  lastReviewedLT: DateTime
+  lastReviewedLTE: DateTime
+  lastReviewedIsNil: Boolean
+  lastReviewedNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  program edge predicates
+  """
+  hasProgram: Boolean
+  hasProgramWith: [ProgramWhereInput!]
+  """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
 type TFASetting implements Node {
   id: ID!
   createdAt: Time
@@ -113693,6 +115164,10 @@ type Task implements Node {
   the scope of the task
   """
   scopeID: ID
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the title of the task
   """
@@ -114535,6 +116010,24 @@ input TaskWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   title field predicates
   """
@@ -120500,6 +121993,11 @@ input UpdateControlInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -120536,6 +122034,16 @@ input UpdateControlInput {
   """
   status: ControlControlStatus
   clearStatus: Boolean
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlControlImplementationStatus
+  clearImplementationStatus: Boolean
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
+  clearImplementationDescription: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -121966,6 +123474,11 @@ input UpdateEvidenceInput {
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   the name of the evidence
   """
   name: String
@@ -122591,6 +124104,22 @@ input UpdateGroupInput {
   """
   displayName: String
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  clearOscalRole: Boolean
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  clearOscalPartyUUID: Boolean
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  appendOscalContactUuids: [String!]
+  clearOscalContactUuids: Boolean
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -123132,6 +124661,11 @@ input UpdateInternalPolicyInput {
   """
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -123996,6 +125530,9 @@ input UpdateOrganizationInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addSystemDetailIDs: [ID!]
+  removeSystemDetailIDs: [ID!]
+  clearSystemDetails: Boolean
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedures: Boolean
@@ -124381,6 +125918,11 @@ input UpdatePlatformInput {
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   the name of the platform
   """
   name: String
@@ -124568,6 +126110,8 @@ input UpdatePlatformInput {
   clearGeneratedScans: Boolean
   platformOwnerID: ID
   clearPlatformOwner: Boolean
+  systemDetailID: ID
+  clearSystemDetail: Boolean
 }
 """
 UpdateProcedureInput is used for update Procedure object.
@@ -124759,6 +126303,11 @@ input UpdateProgramInput {
   programKindName: String
   clearProgramKindName: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   the name of the program
   """
   name: String
@@ -124862,6 +126411,8 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  systemDetailID: ID
+  clearSystemDetail: Boolean
   programOwnerID: ID
   clearProgramOwner: Boolean
 }
@@ -125261,6 +126812,11 @@ input UpdateRiskInput {
   """
   scopeName: String
   clearScopeName: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
   """
   the name of the risk
   """
@@ -125678,6 +127234,11 @@ input UpdateSubcontrolInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -125714,6 +127275,16 @@ input UpdateSubcontrolInput {
   """
   status: SubcontrolControlStatus
   clearStatus: Boolean
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  clearImplementationStatus: Boolean
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
+  clearImplementationDescription: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -125941,6 +127512,62 @@ input UpdateSubscriberInput {
   clearEvents: Boolean
 }
 """
+UpdateSystemDetailInput is used for update SystemDetail object.
+Input was generated by ent.
+"""
+input UpdateSystemDetailInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  clearVersion: Boolean
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  clearAuthorizationBoundary: Boolean
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  clearSensitivityLevel: Boolean
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  clearLastReviewed: Boolean
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  appendRevisionHistory: [Any!]
+  clearRevisionHistory: Boolean
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+  clearOscalMetadataJSON: Boolean
+  programID: ID
+  clearProgram: Boolean
+  platformID: ID
+  clearPlatform: Boolean
+}
+"""
 UpdateTFASettingInput is used for update TFASetting object.
 Input was generated by ent.
 """
@@ -126015,6 +127642,11 @@ input UpdateTaskInput {
   """
   scopeName: String
   clearScopeName: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
   """
   the title of the task
   """
@@ -140614,6 +142246,31 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): SubscriberConnection
     """
+    Search across SystemDetail objects
+    """
+    systemDetailSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): SystemDetailConnection
+    """
     Search across TagDefinition objects
     """
     tagDefinitionSearch(
@@ -140784,6 +142441,7 @@ type SearchResults{
   subcontrols: SubcontrolConnection
   subprocessors: SubprocessorConnection
   subscribers: SubscriberConnection
+  systemDetails: SystemDetailConnection
   tagDefinitions: TagDefinitionConnection
   tasks: TaskConnection
   templates: TemplateConnection
@@ -141418,6 +143076,165 @@ type SubscriberBulkCreatePayload {
   Subscribe to notification creation events for the authenticated user
   """
   notificationCreated: Notification!
+}
+`, BuiltIn: false},
+	{Name: "../schema/systemdetail.graphql", Input: `extend type Query {
+    """
+    Look up systemDetail by ID
+    """
+     systemDetail(
+        """
+        ID of the systemDetail
+        """
+        id: ID!
+    ):  SystemDetail!
+}
+
+extend type Mutation{
+    """
+    Create a new systemDetail
+    """
+    createSystemDetail(
+        """
+        values of the systemDetail
+        """
+        input: CreateSystemDetailInput!
+    ): SystemDetailCreatePayload!
+    """
+    Create multiple new systemDetails
+    """
+    createBulkSystemDetail(
+        """
+        values of the systemDetail
+        """
+        input: [CreateSystemDetailInput!]
+    ): SystemDetailBulkCreatePayload!
+    """
+    Create multiple new systemDetails via file upload
+    """
+    createBulkCSVSystemDetail(
+        """
+        csv file containing values of the systemDetail
+        """
+        input: Upload!
+    ): SystemDetailBulkCreatePayload!
+    """
+    Update multiple existing systemDetails
+    """
+    updateBulkSystemDetail(
+        """
+        IDs of the systemDetails to update
+        """
+        ids: [ID!]!
+        """
+        values to update the systemDetails with
+        """
+        input: UpdateSystemDetailInput!
+    ): SystemDetailBulkUpdatePayload!
+    """
+    Update multiple existing systemDetails via file upload
+    """
+    updateBulkCSVSystemDetail(
+        """
+        csv file containing values of the systemDetail, must include ID column
+        """
+        input: Upload!
+    ): SystemDetailBulkUpdatePayload!
+    """
+    Update an existing systemDetail
+    """
+    updateSystemDetail(
+        """
+        ID of the systemDetail
+        """
+        id: ID!
+        """
+        New values for the systemDetail
+        """
+        input: UpdateSystemDetailInput!
+    ): SystemDetailUpdatePayload!
+    """
+    Delete an existing systemDetail
+    """
+    deleteSystemDetail(
+        """
+        ID of the systemDetail
+        """
+        id: ID!
+    ): SystemDetailDeletePayload!
+    """
+    Delete multiple systemDetails
+    """
+    deleteBulkSystemDetail(
+        """
+        IDs of the systemDetails to delete
+        """
+        ids: [ID!]!
+    ): SystemDetailBulkDeletePayload!
+}
+
+"""
+Return response for createSystemDetail mutation
+"""
+type SystemDetailCreatePayload {
+    """
+    Created systemDetail
+    """
+    systemDetail: SystemDetail!
+}
+
+"""
+Return response for updateSystemDetail mutation
+"""
+type SystemDetailUpdatePayload {
+    """
+    Updated systemDetail
+    """
+    systemDetail: SystemDetail!
+}
+
+"""
+Return response for deleteSystemDetail mutation
+"""
+type SystemDetailDeletePayload {
+    """
+    Deleted systemDetail ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSystemDetail mutation
+"""
+type SystemDetailBulkCreatePayload {
+    """
+    Created systemDetails
+    """
+    systemDetails: [SystemDetail!]
+}
+
+"""
+Return response for updateBulkSystemDetail mutation
+"""
+type SystemDetailBulkUpdatePayload {
+    """
+    Updated systemDetails
+    """
+    systemDetails: [SystemDetail!]
+    """
+    IDs of the updated systemDetails
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkSystemDetail mutation
+"""
+type SystemDetailBulkDeletePayload {
+    """
+    Deleted systemDetail IDs
+    """
+    deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/tagdefinition.graphql", Input: `extend type Query {

@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Subcontrol_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
@@ -82,6 +84,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
 			case "referenceFramework":
@@ -254,6 +260,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Subcontrol_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
@@ -270,6 +278,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkUpdatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
 			case "referenceFramework":
@@ -442,6 +454,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Subcontrol_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
@@ -458,6 +472,10 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
 			case "referenceFramework":
@@ -630,6 +648,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subcontrol_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Subcontrol_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
@@ -646,6 +666,10 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Subcontrol_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Subcontrol_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Subcontrol_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Subcontrol_source(ctx, field)
 			case "referenceFramework":

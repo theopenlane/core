@@ -510,6 +510,20 @@ func (_c *InternalPolicyHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *InternalPolicyHistoryCreate) SetExternalUUID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableExternalUUID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyHistoryCreate) SetID(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetID(v)
@@ -876,6 +890,10 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(internalpolicyhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	return _node, _spec
 }

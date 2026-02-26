@@ -137,6 +137,20 @@ func (_c *SubcontrolCreate) SetTags(v []string) *SubcontrolCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *SubcontrolCreate) SetExternalUUID(v string) *SubcontrolCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableExternalUUID(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *SubcontrolCreate) SetTitle(v string) *SubcontrolCreate {
 	_c.mutation.SetTitle(v)
@@ -229,6 +243,34 @@ func (_c *SubcontrolCreate) SetStatus(v enums.ControlStatus) *SubcontrolCreate {
 func (_c *SubcontrolCreate) SetNillableStatus(v *enums.ControlStatus) *SubcontrolCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_c *SubcontrolCreate) SetImplementationStatus(v enums.ControlImplementationStatus) *SubcontrolCreate {
+	_c.mutation.SetImplementationStatus(v)
+	return _c
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *SubcontrolCreate {
+	if v != nil {
+		_c.SetImplementationStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_c *SubcontrolCreate) SetImplementationDescription(v string) *SubcontrolCreate {
+	_c.mutation.SetImplementationDescription(v)
+	return _c
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableImplementationDescription(v *string) *SubcontrolCreate {
+	if v != nil {
+		_c.SetImplementationDescription(*v)
 	}
 	return _c
 }
@@ -837,6 +879,10 @@ func (_c *SubcontrolCreate) defaults() error {
 		v := subcontrol.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ImplementationStatus(); !ok {
+		v := subcontrol.DefaultImplementationStatus
+		_c.mutation.SetImplementationStatus(v)
+	}
 	if _, ok := _c.mutation.Source(); !ok {
 		v := subcontrol.DefaultSource
 		_c.mutation.SetSource(v)
@@ -872,6 +918,11 @@ func (_c *SubcontrolCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := subcontrol.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ImplementationStatus(); ok {
+		if err := subcontrol.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.implementation_status": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.Source(); ok {
@@ -976,6 +1027,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(subcontrol.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(subcontrol.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -1003,6 +1058,14 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(subcontrol.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ImplementationStatus(); ok {
+		_spec.SetField(subcontrol.FieldImplementationStatus, field.TypeEnum, value)
+		_node.ImplementationStatus = value
+	}
+	if value, ok := _c.mutation.ImplementationDescription(); ok {
+		_spec.SetField(subcontrol.FieldImplementationDescription, field.TypeString, value)
+		_node.ImplementationDescription = value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeEnum, value)
