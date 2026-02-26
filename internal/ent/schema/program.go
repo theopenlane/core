@@ -175,7 +175,7 @@ func (p Program) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, ActionPlan{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: p,
-			edgeSchema: SystemMetadata{},
+			edgeSchema: SystemDetail{},
 		}),
 		edge.From("users", User.Type).
 			Ref("programs").

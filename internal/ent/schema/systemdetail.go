@@ -6,47 +6,46 @@ import (
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 )
 
-// SystemMetadata defines OSCAL-centric system metadata scoped to a program
-type SystemMetadata struct {
+// SystemDetail defines OSCAL-centric system metadata anchors
+type SystemDetail struct {
 	SchemaFuncs
 
 	ent.Schema
 }
 
-// SchemaSystemMetadata is the canonical schema name
-const SchemaSystemMetadata = "system_metadata"
+// SchemaSystemDetail is the canonical schema name
+const SchemaSystemDetail = "system_detail"
 
 // Name returns the schema name
-func (SystemMetadata) Name() string {
-	return SchemaSystemMetadata
+func (SystemDetail) Name() string {
+	return SchemaSystemDetail
 }
 
 // GetType returns the ent type
-func (SystemMetadata) GetType() any {
-	return SystemMetadata.Type
+func (SystemDetail) GetType() any {
+	return SystemDetail.Type
 }
 
 // PluralName returns the plural schema name
-func (SystemMetadata) PluralName() string {
-	return pluralize.NewClient().Plural(SchemaSystemMetadata)
+func (SystemDetail) PluralName() string {
+	return "system_details"
 }
 
-// Fields of the SystemMetadata.
-func (SystemMetadata) Fields() []ent.Field {
+// Fields of the SystemDetail
+func (SystemDetail) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("program_id").
-			Comment("optional program anchor for this metadata").
+			Comment("optional program anchor for this system detail").
 			Optional().
 			Nillable(),
 		field.String("platform_id").
-			Comment("optional platform anchor for this metadata").
+			Comment("optional platform anchor for this system detail").
 			Optional().
 			Nillable(),
 		field.String("system_name").
@@ -87,32 +86,32 @@ func (SystemMetadata) Fields() []ent.Field {
 	}
 }
 
-// Edges of the SystemMetadata
-func (s SystemMetadata) Edges() []ent.Edge {
+// Edges of the SystemDetail
+func (s SystemDetail) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: Program{},
 			field:      "program_id",
-			ref:        "system_metadata",
-			comment:    "optional program this metadata belongs to",
+			ref:        "system_detail",
+			comment:    "optional program this detail belongs to",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: Platform{},
 			field:      "platform_id",
-			ref:        "system_metadata",
-			comment:    "optional platform this metadata belongs to",
+			ref:        "system_detail",
+			comment:    "optional platform this detail belongs to",
 		}),
 	}
 }
 
-// Mixin of the SystemMetadata
-func (s SystemMetadata) Mixin() []ent.Mixin {
+// Mixin of the SystemDetail
+func (s SystemDetail) Mixin() []ent.Mixin {
 	return mixinConfig{
-		prefix: "SMD",
+		prefix: "SDT",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[SystemMetadata](s,
+			newObjectOwnedMixin[SystemDetail](s,
 				withParents(Program{}, Platform{}),
 				withOrganizationOwner(true),
 				//				withListObjectsFilter(),
@@ -121,8 +120,8 @@ func (s SystemMetadata) Mixin() []ent.Mixin {
 	}.getMixins(s)
 }
 
-// Indexes of the SystemMetadata
-func (SystemMetadata) Indexes() []ent.Index {
+// Indexes of the SystemDetail
+func (SystemDetail) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("program_id").
 			Unique().
@@ -138,14 +137,14 @@ func (SystemMetadata) Indexes() []ent.Index {
 }
 
 // Modules returns modules required for this schema
-func (SystemMetadata) Modules() []models.OrgModule {
+func (SystemDetail) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
 	}
 }
 
-// Annotations of the SystemMetadata
-//func (SystemMetadata) Annotations() []schema.Annotation {
+// Annotations of the SystemDetail
+//func (SystemDetail) Annotations() []schema.Annotation {
 //	return []schema.Annotation{
 //		entfga.SelfAccessChecks(),
 //		entx.NewExportable(
@@ -154,8 +153,8 @@ func (SystemMetadata) Modules() []models.OrgModule {
 //	}
 //}
 //
-//// Policy of the SystemMetadata
-//func (s SystemMetadata) Policy() ent.Policy {
+//// Policy of the SystemDetail
+//func (s SystemDetail) Policy() ent.Policy {
 //	return policy.NewPolicy(
 //		policy.WithMutationRules(
 //			policy.CanCreateObjectsUnderParents([]string{

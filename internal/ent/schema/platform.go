@@ -269,7 +269,7 @@ func (s Platform) Edges() []ent.Edge {
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: s,
-			edgeSchema: SystemMetadata{},
+			edgeSchema: SystemDetail{},
 		}),
 	}
 }
