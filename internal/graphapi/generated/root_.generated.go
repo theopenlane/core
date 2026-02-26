@@ -11055,10 +11055,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlCategoryEdge.Node(childComplexity), true
-<<<<<<< HEAD
-||||||| fde9703e5
-		return e.complexity.ControlCategoryEdge.Node(childComplexity), true
-=======
 
 	case "ControlChange.diffs":
 		if e.ComplexityRoot.ControlChange.Diffs == nil {
@@ -11080,7 +11076,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlChange.Title(childComplexity), true
->>>>>>> origin/main
 
 	case "ControlConnection.edges":
 		if e.ComplexityRoot.ControlConnection.Edges == nil {
@@ -11116,10 +11111,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlDeletePayload.DeletedID(childComplexity), true
-<<<<<<< HEAD
-||||||| fde9703e5
-		return e.complexity.ControlDeletePayload.DeletedID(childComplexity), true
-=======
 
 	case "ControlDiffPayload.changes":
 		if e.ComplexityRoot.ControlDiffPayload.Changes == nil {
@@ -11148,7 +11139,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlDiffPayload.StandardID(childComplexity), true
->>>>>>> origin/main
 
 	case "ControlEdge.cursor":
 		if e.ComplexityRoot.ControlEdge.Cursor == nil {
@@ -11163,10 +11153,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlEdge.Node(childComplexity), true
-<<<<<<< HEAD
-||||||| fde9703e5
-		return e.complexity.ControlEdge.Node(childComplexity), true
-=======
 
 	case "ControlFieldDiff.diff":
 		if e.ComplexityRoot.ControlFieldDiff.Diff == nil {
@@ -11195,7 +11181,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlFieldDiff.OldValue(childComplexity), true
->>>>>>> origin/main
 
 	case "ControlGroup.category":
 		if e.ComplexityRoot.ControlGroup.Category == nil {
@@ -16723,7 +16708,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Export.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
-<<<<<<< HEAD
 
 	case "Export.exportMetadata":
 		if e.ComplexityRoot.Export.ExportMetadata == nil {
@@ -16731,10 +16715,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Export.ExportMetadata(childComplexity), true
-||||||| fde9703e5
-		return e.complexity.Export.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
-=======
->>>>>>> origin/main
 
 	case "Export.exportType":
 		if e.ComplexityRoot.Export.ExportType == nil {
@@ -16782,7 +16762,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Export.ID(childComplexity), true
-<<<<<<< HEAD
 
 	case "Export.mode":
 		if e.ComplexityRoot.Export.Mode == nil {
@@ -16790,10 +16769,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Export.Mode(childComplexity), true
-||||||| fde9703e5
-		return e.complexity.Export.ID(childComplexity), true
-=======
->>>>>>> origin/main
 
 	case "Export.owner":
 		if e.ComplexityRoot.Export.Owner == nil {
@@ -35546,10 +35521,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.ControlCategoriesByFramework(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
-<<<<<<< HEAD
-||||||| fde9703e5
-		return e.complexity.Query.ControlCategoriesByFramework(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
-=======
 
 	case "Query.controlDiff":
 		if e.ComplexityRoot.Query.ControlDiff == nil {
@@ -35562,7 +35533,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.ControlDiff(childComplexity, args["input"].(model.ControlDiffInput)), true
->>>>>>> origin/main
 
 	case "Query.controlImplementation":
 		if e.ComplexityRoot.Query.ControlImplementation == nil {

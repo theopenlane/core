@@ -950,10 +950,6 @@ func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Conte
 			it.Field = data
 		}
 	}
-<<<<<<< HEAD
-||||||| fde9703e5
-
-=======
 	return it, nil
 }
 
@@ -994,7 +990,6 @@ func (ec *executionContext) unmarshalInputControlDiffInput(ctx context.Context, 
 			it.NewRevision = data
 		}
 	}
->>>>>>> origin/main
 	return it, nil
 }
 
@@ -1122,10 +1117,6 @@ func (ec *executionContext) _ControlCategoryEdge(ctx context.Context, sel ast.Se
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
-<<<<<<< HEAD
-||||||| fde9703e5
-		ec.processDeferredGroup(graphql.DeferredGroup{
-=======
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -1274,7 +1265,6 @@ func (ec *executionContext) _ControlFieldDiff(ctx context.Context, sel ast.Selec
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
->>>>>>> origin/main
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
