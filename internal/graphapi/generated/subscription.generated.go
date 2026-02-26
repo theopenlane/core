@@ -37,7 +37,7 @@ func (ec *executionContext) _Subscription_notificationCreated(ctx context.Contex
 		field,
 		ec.fieldContext_Subscription_notificationCreated,
 		func(ctx context.Context) (any, error) {
-			return ec.resolvers.Subscription().NotificationCreated(ctx)
+			return ec.Resolvers.Subscription().NotificationCreated(ctx)
 		},
 		nil,
 		ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification,

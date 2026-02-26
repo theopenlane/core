@@ -207,7 +207,7 @@ func TestRegisterGalaListeners(t *testing.T) {
 
 	ids, err := RegisterGalaListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, 6)
+	require.Len(t, ids, 7)
 
 	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeTask), "create"))
 	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
@@ -215,6 +215,7 @@ func TestRegisterGalaListeners(t *testing.T) {
 	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProcedure), "update_one"))
 	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeNote), "create"))
 	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeExport), "update"))
+	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeStandard), "update"))
 }
 
 func TestErrorConstants(t *testing.T) {
