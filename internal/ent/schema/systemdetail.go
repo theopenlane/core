@@ -129,7 +129,6 @@ func (s SystemDetail) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.SystemDetail](s,
 				withParents(Program{}, Platform{}),
 				withOrganizationOwner(true),
-				withListObjectsFilter(),
 			),
 		},
 	}.getMixins(s)
