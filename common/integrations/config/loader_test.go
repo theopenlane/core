@@ -5,6 +5,8 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
@@ -86,7 +88,7 @@ func TestFSLoader_LoadIncludesInactiveSpecs(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected inactive provider spec to be loaded")
 	}
-	if spec.Active {
+	if spec.Active != nil && *spec.Active {
 		t.Fatalf("expected inactive provider, got active=true")
 	}
 }
@@ -98,7 +100,7 @@ func TestToProviderConfigs(t *testing.T) {
 			Name:        "github",
 			DisplayName: "GitHub",
 			AuthType:    types.AuthKindOAuth2,
-			Active:      true,
+			Active:      lo.ToPtr(true),
 		},
 	}
 

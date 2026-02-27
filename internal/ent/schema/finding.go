@@ -62,7 +62,7 @@ func (Finding) Fields() []ent.Field {
 				entgql.OrderField("external_owner_id"),
 			),
 		field.String("source").
-			Comment("system that produced the finding, e.g. gcp_scc").
+			Comment("system that produced the finding, e.g. gcpscc").
 			Optional(),
 		field.String("resource_name").
 			Comment("resource identifier provided by the source system").

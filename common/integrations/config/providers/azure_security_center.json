@@ -1,12 +1,12 @@
 {
-  "name": "azure_security_center",
+  "name": "azuresecuritycenter",
   "displayName": "Microsoft Defender for Cloud",
   "category": "compliance",
   "authType": "oauth2",
   "active": false,
   "visible": true,
   "logoUrl": "https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azuresecuritycenter/overview",
   "labels": {
     "vendor": "microsoft",
     "product": "defender-for-cloud"

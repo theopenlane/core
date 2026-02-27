@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
 
+	integrationconfig "github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/workflows"
@@ -83,6 +84,8 @@ type Config struct {
 	Slack Slack `json:"slack" koanf:"slack"`
 	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
 	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationoauthprovider" koanf:"integrationoauthprovider"`
+	// IntegrationProviders contains provider spec overrides keyed by provider name.
+	IntegrationProviders map[string]integrationconfig.ProviderSpec `json:"integrationproviders" koanf:"integrationproviders"`
 	// IntegrationGitHubApp contains configuration for GitHub App integrations
 	IntegrationGitHubApp handlers.IntegrationGitHubAppConfig `json:"integrationgithubapp" koanf:"integrationgithubapp"`
 	// Workflows contains the configuration for the workflows engine

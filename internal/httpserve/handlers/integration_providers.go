@@ -90,8 +90,8 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 		AuthType:               keystore.AuthType(meta.Auth),
 		AuthStartPath:          spec.AuthStartPath,
 		AuthCallbackPath:       spec.AuthCallbackPath,
-		Active:                 spec.Active,
-		Visible:                spec.Visible,
+		Active:                 lo.FromPtr(spec.Active),
+		Visible:                lo.FromPtr(spec.Visible),
 		Tags:                   providerTags(spec),
 		LogoURL:                meta.LogoURL,
 		DocsURL:                meta.DocsURL,
@@ -110,6 +110,7 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 
 	if spec.OAuth != nil && (spec.AuthType == types.AuthKindOAuth2 || spec.AuthType == types.AuthKindOIDC) {
 		entry.OAuth = &openapi.IntegrationOAuthMetadata{
+			ClientID:    spec.OAuth.ClientID,
 			AuthURL:     spec.OAuth.AuthURL,
 			TokenURL:    spec.OAuth.TokenURL,
 			RedirectURI: spec.OAuth.RedirectURI,

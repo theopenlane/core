@@ -8,6 +8,7 @@ import (
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 )
 
 type celMapEntry struct {
@@ -114,7 +115,7 @@ func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName strin
 	}
 
 	switch provider {
-	case integrationtypes.ProviderType("github"), integrationtypes.ProviderType("github_app"):
+	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
 		return githubMappingSpec(variant)
 	default:
 		return openapi.IntegrationMappingOverride{}, false
@@ -128,7 +129,7 @@ func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName s
 	}
 
 	switch provider {
-	case integrationtypes.ProviderType("github"), integrationtypes.ProviderType("github_app"):
+	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
 		return true
 	default:
 		return false

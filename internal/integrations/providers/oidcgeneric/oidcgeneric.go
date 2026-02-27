@@ -10,7 +10,7 @@ import (
 )
 
 // TypeOIDCGeneric identifies the generic OIDC provider
-const TypeOIDCGeneric = types.ProviderType("oidc_generic")
+const TypeOIDCGeneric = types.ProviderType("oidcgeneric")
 
 // Builder returns the generic OIDC provider builder
 func Builder() providers.Builder {

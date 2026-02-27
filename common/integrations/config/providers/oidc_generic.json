@@ -1,5 +1,5 @@
 {
-  "name": "oidc_generic",
+  "name": "oidcgeneric",
   "displayName": "Generic OIDC",
   "category": "sso",
   "authType": "oidc",
@@ -8,10 +8,10 @@
   "active": true,
   "visible": false,
   "logoUrl": "https://static-00.iconduck.com/assets.00/openid-icon-512x512-5t0u9s21.png",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/oidc_generic/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/oidcgeneric/overview",
   "oauth": {
-    "clientId": "${OIDC_CLIENT_ID}",
-    "clientSecret": "${OIDC_CLIENT_SECRET}",
+    "clientId": "",
+    "clientSecret": "",
     "scopes": [
       "openid",
       "profile",

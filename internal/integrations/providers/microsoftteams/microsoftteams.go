@@ -7,7 +7,7 @@ import (
 )
 
 // TypeMicrosoftTeams identifies the Microsoft Teams provider
-const TypeMicrosoftTeams = types.ProviderType("microsoft_teams")
+const TypeMicrosoftTeams = types.ProviderType("microsoftteams")
 
 // Builder returns the Microsoft Teams provider builder
 func Builder() providers.Builder {

@@ -24,9 +24,9 @@ import (
 
 // GitHub App cookie names used during install callbacks.
 const (
-	githubAppStateCookieName  = "github_app_state"
-	githubAppOrgIDCookieName  = "github_app_org_id"
-	githubAppUserIDCookieName = "github_app_user_id"
+	githubAppStateCookieName  = "githubapp_state"
+	githubAppOrgIDCookieName  = "githubapp_org_id"
+	githubAppUserIDCookieName = "githubapp_user_id"
 )
 
 // IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
@@ -127,14 +127,14 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	orgCookie, err := sessions.GetCookie(req, githubAppOrgIDCookieName)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get github_app_org_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get githubapp_org_id cookie")
 
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
 	}
 
 	userCookie, err := sessions.GetCookie(req, githubAppUserIDCookieName)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get github_app_user_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get githubapp_user_id cookie")
 
 		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}

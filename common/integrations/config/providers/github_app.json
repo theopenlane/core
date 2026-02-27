@@ -1,14 +1,14 @@
 {
-  "name": "github_app",
+  "name": "githubapp",
   "displayName": "GitHub App",
   "category": "code",
-  "authType": "github_app",
+  "authType": "githubapp",
   "authStartPath": "/v1/integrations/github/app/install",
   "authCallbackPath": "/v1/integrations/github/app/callback",
   "active": true,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/github_app/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/githubapp/overview",
   "githubApp": {
     "baseUrl": "https://api.github.com"
   },

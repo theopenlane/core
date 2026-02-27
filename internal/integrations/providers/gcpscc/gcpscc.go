@@ -24,7 +24,7 @@ import (
 )
 
 // TypeGCPSCC identifies the GCP Security Command Center provider.
-const TypeGCPSCC = types.ProviderType("gcp_scc")
+const TypeGCPSCC = types.ProviderType("gcpscc")
 
 const (
 	workloadGrantType        = "urn:ietf:params:oauth:grant-type:token-exchange"

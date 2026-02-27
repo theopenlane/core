@@ -1,12 +1,12 @@
 {
-  "name": "gcp_scc",
+  "name": "gcpscc",
   "displayName": "Google Cloud SCC",
   "category": "cloud",
   "authType": "workload_identity",
   "active": true,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/gcp_scc/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/gcpscc/overview",
   "googleWorkloadIdentity": {
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform"

@@ -113,7 +113,7 @@ func WithIntegrationActivation() ServerOption {
 			log.Panic().Err(err).Msg("failed to initialize keymaker service")
 		}
 
-		activationSvc, err := activation.NewService(svc, store, s.Config.Handler.IntegrationOperations)
+		activationSvc, err := activation.NewService(svc, store, s.Config.Handler.IntegrationOperations, reg)
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to initialize integration activation service")
 		}

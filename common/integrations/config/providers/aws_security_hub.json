@@ -1,5 +1,5 @@
 {
-  "name": "aws_security_hub",
+  "name": "awssecurityhub",
   "displayName": "AWS Security Hub",
   "category": "cloud",
   "authType": "aws_sts",

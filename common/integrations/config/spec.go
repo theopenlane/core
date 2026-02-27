@@ -1,11 +1,15 @@
 package config
 
 import (
+	"context"
+	"reflect"
 	"time"
 
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ProviderSpec mirrors the declarative provider definition files rendered in the UI
@@ -25,9 +29,9 @@ type ProviderSpec struct {
 	// AuthCallbackPath is the integration API callback path used to complete provider authentication
 	AuthCallbackPath string `json:"authCallbackPath,omitempty"`
 	// Active toggles provider availability
-	Active bool `json:"active"`
+	Active *bool `json:"active,omitempty"`
 	// Visible toggles provider visibility in the UI
-	Visible bool `json:"visible"`
+	Visible *bool `json:"visible,omitempty"`
 	// Tags define UI labels/pills rendered for the provider card
 	Tags []string `json:"tags,omitempty"`
 	// LogoURL references the logo asset
@@ -89,6 +93,91 @@ func ToProviderConfigs(specs map[types.ProviderType]ProviderSpec) map[types.Prov
 	return lo.MapEntries(specs, func(provider types.ProviderType, spec ProviderSpec) (types.ProviderType, types.ProviderConfig) {
 		return provider, spec.ToProviderConfig()
 	})
+}
+
+// MergeProviderSpecs overlays provider-specific overrides onto base specs using provider keys
+func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]ProviderSpec, overrides map[string]ProviderSpec) map[types.ProviderType]ProviderSpec {
+	merged := lo.Assign(map[types.ProviderType]ProviderSpec{}, base)
+
+	for key, override := range overrides {
+		provider := types.ProviderTypeFromString(key)
+		current, ok := merged[provider]
+		if !ok {
+			continue
+		}
+
+		currentMap, err := jsonx.ToMap(current)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize base provider spec for merge")
+			continue
+		}
+
+		overrideMap, err := jsonx.ToMap(override)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize override provider spec for merge")
+			continue
+		}
+
+		nextMap := mergeValueMaps(currentMap, pruneZeroValueMap(overrideMap))
+		var next ProviderSpec
+		if err := jsonx.RoundTrip(nextMap, &next); err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to apply provider spec override")
+			continue
+		}
+
+		merged[provider] = next
+	}
+
+	return merged
+}
+
+// pruneZeroValueMap removes zero-value leaves so overrides only apply explicitly provided fields
+func pruneZeroValueMap(values map[string]any) map[string]any {
+	withPrunedChildren := lo.MapEntries(values, func(key string, value any) (string, any) {
+		nested, ok := value.(map[string]any)
+		if !ok {
+			return key, value
+		}
+
+		return key, pruneZeroValueMap(nested)
+	})
+
+	return lo.PickBy(withPrunedChildren, func(_ string, value any) bool {
+		nested, ok := value.(map[string]any)
+		if ok {
+			return len(nested) > 0
+		}
+
+		if value == nil {
+			return false
+		}
+
+		// booleans are always kept: with *bool+omitempty on the source fields,
+		// a bool appearing in the map means it was explicitly provided (nil was omitted)
+		if _, isBool := value.(bool); isBool {
+			return true
+		}
+
+		return !reflect.ValueOf(value).IsZero()
+	})
+}
+
+// mergeValueMaps deep-merges an override map onto a base map
+func mergeValueMaps(base map[string]any, override map[string]any) map[string]any {
+	merged := lo.Assign(map[string]any{}, base)
+
+	for key, overrideValue := range override {
+		baseNested, baseIsMap := merged[key].(map[string]any)
+		overrideNested, overrideIsMap := overrideValue.(map[string]any)
+		if baseIsMap && overrideIsMap {
+			merged[key] = mergeValueMaps(baseNested, overrideNested)
+			continue
+		}
+
+		merged[key] = overrideValue
+	}
+
+	return merged
 }
 
 // PersistenceSpec controls how secrets are stored

@@ -2795,12 +2795,12 @@ func (r IntegrationConfigRequest) ToMap() map[string]any {
 // IntegrationConfigParams captures path parameters for the integration config endpoint.
 type IntegrationConfigParams struct {
 	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration provider identifier" example:"gcp_scc"`
+	Provider string `param:"provider" description:"Integration provider identifier" example:"gcpscc"`
 }
 
 // ExampleIntegrationConfigParams is an example of the path parameters for integration configuration.
 var ExampleIntegrationConfigParams = IntegrationConfigParams{
-	Provider: "gcp_scc",
+	Provider: "gcpscc",
 }
 
 // IntegrationConfigPayload wraps path parameters with the request payload.
@@ -2814,7 +2814,7 @@ type IntegrationConfigPayload struct {
 // IntegrationOperationParams captures path parameters for operation requests.
 type IntegrationOperationParams struct {
 	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration provider identifier" example:"gcp_scc"`
+	Provider string `param:"provider" description:"Integration provider identifier" example:"gcpscc"`
 }
 
 // IntegrationOperationRequest describes a provider operation to run.
@@ -2837,7 +2837,7 @@ type IntegrationOperationPayload struct {
 
 // ExampleIntegrationOperationPayload demonstrates a sample operation request.
 var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
-	IntegrationOperationParams: IntegrationOperationParams{Provider: "gcp_scc"},
+	IntegrationOperationParams: IntegrationOperationParams{Provider: "gcpscc"},
 	Body: IntegrationOperationRequest{
 		Operation: "findings.collect",
 		Config: map[string]any{
@@ -2962,7 +2962,7 @@ type IntegrationSlackState = state.SlackState
 
 // ExampleIntegrationConfigPayload demonstrates a full integration configuration request.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	IntegrationConfigParams: IntegrationConfigParams{Provider: "gcp_scc"},
+	IntegrationConfigParams: IntegrationConfigParams{Provider: "gcpscc"},
 	Body: IntegrationConfigRequest{
 		ServiceAccountEmail:      "scc-runner@example.iam.gserviceaccount.com",
 		Audience:                 "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
@@ -2977,6 +2977,8 @@ var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 
 // IntegrationOAuthMetadata captures OAuth-specific metadata for integrations.
 type IntegrationOAuthMetadata struct {
+	// ClientID is the OAuth application client identifier.
+	ClientID string `json:"clientId,omitempty"`
 	// AuthURL is the authUrl value.
 	AuthURL string `json:"authUrl,omitempty"`
 	// TokenURL is the tokenUrl value.
@@ -3031,7 +3033,7 @@ type IntegrationOperationResponse struct {
 func (r *IntegrationConfigResponse) ExampleResponse() any {
 	return IntegrationConfigResponse{
 		Reply:    rout.Reply{Success: true},
-		Provider: "gcp_scc",
+		Provider: "gcpscc",
 	}
 }
 
@@ -3039,7 +3041,7 @@ func (r *IntegrationConfigResponse) ExampleResponse() any {
 func (r *IntegrationOperationResponse) ExampleResponse() any {
 	return IntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
-		Provider:  "gcp_scc",
+		Provider:  "gcpscc",
 		Operation: "findings.collect",
 		Status:    "ok",
 		Summary:   "Collected 5 findings from organizations/123/sources/456",

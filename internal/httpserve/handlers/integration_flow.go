@@ -85,7 +85,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if !spec.Active {
+	if !lo.FromPtr(spec.Active) {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
@@ -95,16 +95,6 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	if h.IntegrationActivation == nil {
 		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
-	}
-
-	integration, err := h.IntegrationStore.EnsureIntegration(userCtx, user.OrganizationID, providerType)
-	if err != nil {
-		logx.FromContext(userCtx).Error().Err(err).Str("org_id", user.OrganizationID).Str("provider", string(providerType)).Msg("failed to ensure integration record")
-
-		return h.InternalServerError(ctx, err, openapiCtx)
-	}
-	if err := h.updateIntegrationProviderMetadata(userCtx, integration.ID, providerType); err != nil {
-		logx.FromContext(userCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
 	}
 
 	state, err := h.generateOAuthState(user.OrganizationID, string(providerType))
@@ -117,11 +107,10 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	scopes := mergeScopes(spec, in.Scopes)
 
 	begin, err := h.IntegrationActivation.BeginOAuth(userCtx, activation.BeginOAuthRequest{
-		OrgID:         user.OrganizationID,
-		IntegrationID: integration.ID,
-		Provider:      providerType,
-		Scopes:        scopes,
-		State:         state,
+		OrgID:    user.OrganizationID,
+		Provider: providerType,
+		Scopes:   scopes,
+		State:    state,
 	})
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to begin OAuth flow")
@@ -215,6 +204,17 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to complete oauth callback")
 			return h.InternalServerError(ctx, err, openapiCtx)
 		}
+	}
+
+	integration, err := h.IntegrationStore.EnsureIntegration(systemCtx, result.OrgID, result.Provider)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("org_id", result.OrgID).Str("provider", string(result.Provider)).Msg("failed to ensure integration record")
+
+		return h.InternalServerError(ctx, err, openapiCtx)
+	}
+
+	if err := h.updateIntegrationProviderMetadata(systemCtx, integration.ID, result.Provider); err != nil {
+		logx.FromContext(reqCtx).Warn().Err(err).Str("provider", string(result.Provider)).Msg("failed to update integration provider metadata")
 	}
 
 	cfg := h.getOauthCookieConfig()
