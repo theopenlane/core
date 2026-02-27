@@ -202,4 +202,16 @@ func TestOnlyCommentsAdded(t *testing.T) {
 		)
 		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
 	})
+
+	t.Run("multiple children, extra key added", func(t *testing.T) {
+		oldText := makeSlate(
+			map[string]any{"text": "a"},
+			map[string]any{"text": "b"},
+		)
+		newText := makeSlate(
+			map[string]any{"text": "a", "comment": "c1", "extra": "not allowed"},
+			map[string]any{"text": "b", "comment": "c2"},
+		)
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
 }

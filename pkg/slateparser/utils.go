@@ -71,6 +71,18 @@ func OnlyCommentsAdded(oldText []any, newText []any) bool {
 			continue
 		}
 
+		allowedKeys := map[string]bool{
+			"text":    true,
+			"comment": true,
+		}
+
+		// if there are other keys besides text and comment, return false
+		for key := range newChildMap {
+			if !allowedKeys[key] {
+				return false
+			}
+		}
+
 		// if they are not equal, check the text is the same
 		oldText, oldOK := oldChildMap["text"]
 		newText, newOK := newChildMap["text"]
