@@ -7,7 +7,7 @@ import (
 )
 
 // TypeAzureEntraID identifies the Azure Entra ID provider
-const TypeAzureEntraID = types.ProviderType("azure_entra_id")
+const TypeAzureEntraID = types.ProviderType("azureentraid")
 
 // Builder returns the Azure Entra ID provider builder
 func Builder() providers.Builder {

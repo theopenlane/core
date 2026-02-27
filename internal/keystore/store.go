@@ -18,6 +18,7 @@ import (
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
+	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -257,7 +258,7 @@ func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.
 	)
 
 	switch provider {
-	case types.ProviderType("github"), types.ProviderType("github_app"):
+	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
 		appID, _ := data["appId"].(string)
 		installationID, _ := data["installationId"].(string)
 		if appID == "" && installationID == "" {

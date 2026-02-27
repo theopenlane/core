@@ -16,6 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
+	teamsprovider "github.com/theopenlane/core/internal/integrations/providers/microsoftteams"
+	slackprovider "github.com/theopenlane/core/internal/integrations/providers/slack"
 	"github.com/theopenlane/core/internal/workflows"
 )
 
@@ -305,9 +307,9 @@ func (e *WorkflowEngine) resolveNotificationIntegration(ctx context.Context, own
 
 	switch channel {
 	case enums.ChannelSlack:
-		return nil, types.ProviderType("slack"), nil
+		return nil, slackprovider.TypeSlack, nil
 	case enums.ChannelTeams:
-		return nil, types.ProviderType("microsoft_teams"), nil
+		return nil, teamsprovider.TypeMicrosoftTeams, nil
 	default:
 		return nil, types.ProviderUnknown, ErrNotificationChannelUnsupported
 	}

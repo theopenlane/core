@@ -10,7 +10,7 @@ import (
 // TestParseStatePayload validates state parsing for a well-formed payload.
 func TestParseStatePayload(t *testing.T) {
 	orgID := "org_123"
-	provider := "github_app"
+	provider := "githubapp"
 	randomBytes := []byte("randombytes")
 
 	stateData := buildStatePayload(orgID, provider, randomBytes)

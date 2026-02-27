@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -24,7 +25,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
 	specs := map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	}
 	restore := suite.withIntegrationRegistry(t, specs)
 	defer restore()
@@ -49,7 +50,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 		require.True(t, ok, "expected provider %s", name)
 		assert.Equal(t, spec.DisplayName, provider.DisplayName)
 		assert.Equal(t, spec.Description, provider.Description)
-		assert.Equal(t, spec.Visible, provider.Visible)
+		assert.Equal(t, lo.FromPtr(spec.Visible), provider.Visible)
 		assert.ElementsMatch(t, spec.Tags, provider.Tags)
 		assert.NotNil(t, provider.CredentialsSchema, "expected schema for %s", provider.Name)
 	}
@@ -63,7 +64,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
 	specs := map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 		types.ProviderType("github"): {
 			Name:             "github",
 			DisplayName:      "GitHub",
@@ -72,8 +73,8 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 			AuthType:         types.AuthKindOAuth2,
 			AuthStartPath:    "/v1/integrations/oauth/start",
 			AuthCallbackPath: "/v1/integrations/oauth/callback",
-			Active:           true,
-			Visible:          true,
+			Active:           lo.ToPtr(true),
+			Visible:          lo.ToPtr(true),
 			Tags:             []string{"code", "github"},
 			OAuth: &config.OAuthSpec{
 				ClientID:     "test-client",
@@ -104,7 +105,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 		providerNames[provider.Name] = true
 		providersByName[provider.Name] = provider
 	}
-	assert.True(t, providerNames["gcp_scc"])
+	assert.True(t, providerNames["gcpscc"])
 	assert.True(t, providerNames["github"])
 	assert.Equal(t, "/v1/integrations/oauth/start", providersByName["github"].AuthStartPath)
 	assert.Equal(t, "/v1/integrations/oauth/callback", providersByName["github"].AuthCallbackPath)
@@ -120,7 +121,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersSingleProvider() {
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
 	specs := map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"): gcpSCCSpec(),
+		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	}
 	restore := suite.withIntegrationRegistry(t, specs)
 	defer restore()
@@ -138,12 +139,12 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersSingleProvider() {
 
 	found := false
 	for _, provider := range resp.Providers {
-		if provider.Name == "gcp_scc" {
+		if provider.Name == "gcpscc" {
 			found = true
 			break
 		}
 	}
-	require.True(t, found, "expected gcp_scc provider")
+	require.True(t, found, "expected gcpscc provider")
 }
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus() {
@@ -154,16 +155,16 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
 	activeSpec := gcpSCCSpec()
-	activeSpec.Active = true
+	activeSpec.Active = lo.ToPtr(true)
 
 	inactiveSpec := gcpSCCSpec()
 	inactiveSpec.Name = "inactive_provider"
 	inactiveSpec.DisplayName = "Inactive Provider"
-	inactiveSpec.Active = false
-	inactiveSpec.Visible = true
+	inactiveSpec.Active = lo.ToPtr(false)
+	inactiveSpec.Visible = lo.ToPtr(true)
 
 	specs := map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("gcp_scc"):           activeSpec,
+		types.ProviderType("gcpscc"):            activeSpec,
 		types.ProviderType("inactive_provider"): inactiveSpec,
 	}
 	restore := suite.withIntegrationRegistry(t, specs)
@@ -185,11 +186,11 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 		providersByName[provider.Name] = provider
 	}
 
-	require.Contains(t, providersByName, "gcp_scc")
+	require.Contains(t, providersByName, "gcpscc")
 	require.Contains(t, providersByName, "inactive_provider")
 
-	assert.True(t, providersByName["gcp_scc"].Active)
-	assert.True(t, providersByName["gcp_scc"].Visible)
+	assert.True(t, providersByName["gcpscc"].Active)
+	assert.True(t, providersByName["gcpscc"].Visible)
 	assert.False(t, providersByName["inactive_provider"].Active)
 	assert.True(t, providersByName["inactive_provider"].Visible)
 }
@@ -202,16 +203,16 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInst
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
 	specs := map[types.ProviderType]config.ProviderSpec{
-		types.ProviderType("github_app"): {
-			Name:             "github_app",
+		types.ProviderType("githubapp"): {
+			Name:             "githubapp",
 			DisplayName:      "GitHub App",
 			Category:         "code",
 			Description:      "GitHub App integration",
 			AuthType:         types.AuthKindGitHubApp,
 			AuthStartPath:    "/v1/integrations/github/app/install",
 			AuthCallbackPath: "/v1/integrations/github/app/callback",
-			Active:           true,
-			Visible:          true,
+			Active:           lo.ToPtr(true),
+			Visible:          lo.ToPtr(true),
 			GitHubApp: &config.GitHubAppSpec{
 				BaseURL: "https://api.github.com",
 				AppSlug: "openlane-test-app",
@@ -234,12 +235,12 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInst
 
 	var githubAppProvider *models.IntegrationProviderMetadata
 	for i := range resp.Providers {
-		if resp.Providers[i].Name == "github_app" {
+		if resp.Providers[i].Name == "githubapp" {
 			githubAppProvider = &resp.Providers[i]
 			break
 		}
 	}
-	require.NotNil(t, githubAppProvider, "expected github_app provider in response")
+	require.NotNil(t, githubAppProvider, "expected githubapp provider in response")
 	require.NotNil(t, githubAppProvider.GitHubApp, "expected githubApp metadata")
 	assert.Equal(t, "openlane-test-app", githubAppProvider.GitHubApp.AppSlug)
 	assert.Equal(t, "/v1/integrations/github/app/install", githubAppProvider.AuthStartPath)

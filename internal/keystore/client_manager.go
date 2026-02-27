@@ -2,7 +2,6 @@ package keystore
 
 import (
 	"context"
-	"strings"
 	"sync"
 
 	"github.com/samber/lo"
@@ -110,7 +109,7 @@ func descriptorKey(descriptor types.ClientDescriptor) (clientDescriptorKey, erro
 	if descriptor.Provider == types.ProviderUnknown {
 		return clientDescriptorKey{}, ErrProviderRequired
 	}
-	if strings.TrimSpace(string(descriptor.Name)) == "" {
+	if descriptor.Name == "" {
 		return clientDescriptorKey{}, ErrClientDescriptorInvalid
 	}
 	if descriptor.Build == nil {
@@ -146,6 +145,19 @@ type clientDescriptorKey struct {
 	Provider types.ProviderType
 	// Name identifies the specific client type within the provider
 	Name types.ClientName
+}
+
+// BuildFromPayload constructs a client directly from the provided payload without using the credential store or pool
+func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types.ProviderType, client types.ClientName, payload types.CredentialPayload, config map[string]any) (any, error) {
+	m.mu.RLock()
+	descriptor, ok := m.descriptors[clientDescriptorKey{Provider: provider, Name: client}]
+	m.mu.RUnlock()
+
+	if !ok {
+		return nil, ErrClientNotRegistered
+	}
+
+	return descriptor.Build(ctx, payload, helpers.DeepCloneMap(config))
 }
 
 // FlattenDescriptors converts a map of provider descriptors into a single slice for manager construction

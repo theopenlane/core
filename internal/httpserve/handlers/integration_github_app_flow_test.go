@@ -63,7 +63,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	sessions := keymaker.NewMemorySessionStore()
 	svc, err := keymaker.NewService(suite.h.IntegrationRegistry, store, sessions, keymaker.ServiceOptions{})
 	require.NoError(t, err)
-	activationSvc, err := activation.NewService(svc, store, &mockOperationRunner{})
+	activationSvc, err := activation.NewService(svc, store, &mockOperationRunner{}, &mockPayloadMinter{})
 	require.NoError(t, err)
 	suite.h.IntegrationActivation = activationSvc
 	defer func() {
@@ -83,16 +83,16 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	query.Set("state", state)
 	callbackReq.URL.RawQuery = query.Encode()
 
-	callbackReq.AddCookie(&http.Cookie{Name: "github_app_state", Value: state})
-	callbackReq.AddCookie(&http.Cookie{Name: "github_app_org_id", Value: user.OrganizationID})
-	callbackReq.AddCookie(&http.Cookie{Name: "github_app_user_id", Value: user.ID})
+	callbackReq.AddCookie(&http.Cookie{Name: "githubapp_state", Value: state})
+	callbackReq.AddCookie(&http.Cookie{Name: "githubapp_org_id", Value: user.OrganizationID})
+	callbackReq.AddCookie(&http.Cookie{Name: "githubapp_user_id", Value: user.ID})
 
 	callbackRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
 
 	assert.Equal(t, http.StatusFound, callbackRec.Code)
 	location := callbackRec.Header().Get("Location")
-	assert.Contains(t, location, "provider=github_app")
+	assert.Contains(t, location, "provider=githubapp")
 	assert.Contains(t, location, "status=success")
 }
 

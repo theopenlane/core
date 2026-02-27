@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Registry exposes loaded provider configs and runtime providers to callers
@@ -21,28 +22,34 @@ type Registry struct {
 	operations map[types.ProviderType][]types.OperationDescriptor
 }
 
-// NewRegistry loads embedded provider specs and builds the registry using the catalog builders.
-func NewRegistry(ctx context.Context) (*Registry, error) {
+// NewRegistry loads embedded provider specs and builds the registry using the catalog builders
+func NewRegistry(ctx context.Context, overrides map[string]config.ProviderSpec) (*Registry, error) {
 	loader := config.NewFSLoader(config.ProvidersFS, "providers")
 	specs, err := loader.Load()
 	if err != nil {
 		return nil, err
 	}
 
+	if len(overrides) > 0 {
+		specs = config.MergeProviderSpecs(ctx, specs, overrides)
+	}
+
 	builders := catalog.Builders()
 
 	instance := &Registry{
-		configs:    specs,
+		configs:    make(map[types.ProviderType]config.ProviderSpec, len(specs)),
 		providers:  map[types.ProviderType]providers.Provider{},
 		clients:    map[types.ProviderType][]types.ClientDescriptor{},
 		operations: map[types.ProviderType][]types.OperationDescriptor{},
 	}
 
+	maps.Copy(instance.configs, specs)
+
 	builderIndex := lo.SliceToMap(builders, func(b providers.Builder) (types.ProviderType, providers.Builder) {
 		return b.Type(), b
 	})
 
-	for providerType, spec := range specs {
+	for providerType, spec := range instance.configs {
 		builder, ok := builderIndex[providerType]
 		if !ok {
 			continue
@@ -50,11 +57,19 @@ func NewRegistry(ctx context.Context) (*Registry, error) {
 
 		provider, err := builder.Build(ctx, spec)
 		if err != nil {
-			return nil, ErrProviderBuildFailed
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", string(providerType)).Msg("provider build failed, marking inactive")
+			spec.Active = lo.ToPtr(false)
+			instance.configs[providerType] = spec
+
+			continue
 		}
 
 		if provider == nil {
-			return nil, ErrProviderNil
+			logx.FromContext(ctx).Warn().Str("provider", string(providerType)).Msg("provider build returned nil, marking inactive")
+			spec.Active = lo.ToPtr(false)
+			instance.configs[providerType] = spec
+
+			continue
 		}
 
 		instance.providers[providerType] = provider
@@ -156,6 +171,16 @@ func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.O
 		copy(copied, descriptors)
 		return provider, copied
 	})
+}
+
+// MintPayload calls the registered provider's Mint method with the supplied subject without accessing the credential store
+func (r *Registry) MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+	provider, ok := r.providers[subject.Provider]
+	if !ok {
+		return types.CredentialPayload{}, ErrProviderNotFound
+	}
+
+	return provider.Mint(ctx, subject)
 }
 
 // UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).

@@ -7,7 +7,7 @@ import (
 )
 
 // TypeGoogleWorkspace identifies the Google Workspace provider
-const TypeGoogleWorkspace = types.ProviderType("google_workspace")
+const TypeGoogleWorkspace = types.ProviderType("googleworkspace")
 
 // Builder returns the Google Workspace provider builder
 func Builder() providers.Builder {

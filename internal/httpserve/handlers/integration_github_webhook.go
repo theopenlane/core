@@ -44,7 +44,7 @@ const (
 var (
 	githubAppWebhookReceivedCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "openlane_github_app_webhook_received_total",
+			Name: "openlane_githubapp_webhook_received_total",
 			Help: "Total number of GitHub App webhooks received by event type",
 		},
 		[]string{"event_type"},
@@ -52,7 +52,7 @@ var (
 
 	githubAppWebhookResponseCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "openlane_github_app_webhook_responses_total",
+			Name: "openlane_githubapp_webhook_responses_total",
 			Help: "Total number of GitHub App webhook responses by event, status code, and result",
 		},
 		[]string{"event_type", "status_code", "result"},
@@ -60,7 +60,7 @@ var (
 
 	githubAppWebhookProcessingLatency = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "openlane_github_app_webhook_processing_latency_seconds",
+			Name:    "openlane_githubapp_webhook_processing_latency_seconds",
 			Help:    "Latency of GitHub App webhook processing in seconds",
 			Buckets: prometheus.DefBuckets,
 		},
@@ -69,7 +69,7 @@ var (
 
 	githubAppWebhookAlertsQueuedCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "openlane_github_app_webhook_alerts_queued_total",
+			Name: "openlane_githubapp_webhook_alerts_queued_total",
 			Help: "Total number of GitHub App vulnerability alerts queued for ingest by event and alert type",
 		},
 		[]string{"event_type", "alert_type"},
@@ -77,7 +77,7 @@ var (
 
 	githubAppWebhookEmitErrorsCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "openlane_github_app_webhook_emit_errors_total",
+			Name: "openlane_githubapp_webhook_emit_errors_total",
 			Help: "Total number of GitHub App webhook ingest emit errors by event type",
 		},
 		[]string{"event_type"},
