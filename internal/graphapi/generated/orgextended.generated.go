@@ -188,6 +188,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Organization_programs(ctx, field)
+			case "systemDetails":
+				return ec.fieldContext_Organization_systemDetails(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Organization_procedures(ctx, field)
 			case "internalPolicies":

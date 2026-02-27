@@ -175,6 +175,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*SubprocessorMutation]() {
 		c.Subprocessor.Use(hook)
 	}
+	for _, hook := range history.Hooks[*SystemDetailMutation]() {
+		c.SystemDetail.Use(hook)
+	}
 	for _, hook := range history.Hooks[*TaskMutation]() {
 		c.Task.Use(hook)
 	}

@@ -285,6 +285,26 @@ func (_u *RiskHistoryUpdate) ClearScopeID() *RiskHistoryUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *RiskHistoryUpdate) SetExternalUUID(v string) *RiskHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableExternalUUID(v *string) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *RiskHistoryUpdate) ClearExternalUUID() *RiskHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *RiskHistoryUpdate) SetName(v string) *RiskHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -720,6 +740,12 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(riskhistory.FieldScopeID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(riskhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(riskhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)
 	}
@@ -1084,6 +1110,26 @@ func (_u *RiskHistoryUpdateOne) SetNillableScopeID(v *string) *RiskHistoryUpdate
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RiskHistoryUpdateOne) ClearScopeID() *RiskHistoryUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *RiskHistoryUpdateOne) SetExternalUUID(v string) *RiskHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableExternalUUID(v *string) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *RiskHistoryUpdateOne) ClearExternalUUID() *RiskHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -1551,6 +1597,12 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(riskhistory.FieldScopeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(riskhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(riskhistory.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)

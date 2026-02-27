@@ -170,6 +170,8 @@ type Tx struct {
 	Subprocessor *SubprocessorClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
+	// SystemDetail is the client for interacting with the SystemDetail builders.
+	SystemDetail *SystemDetailClient
 	// TFASetting is the client for interacting with the TFASetting builders.
 	TFASetting *TFASettingClient
 	// TagDefinition is the client for interacting with the TagDefinition builders.
@@ -428,6 +430,7 @@ func (tx *Tx) init() {
 	tx.Subcontrol = NewSubcontrolClient(tx.config)
 	tx.Subprocessor = NewSubprocessorClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
+	tx.SystemDetail = NewSystemDetailClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
 	tx.TagDefinition = NewTagDefinitionClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)

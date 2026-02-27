@@ -64,6 +64,7 @@ type SchemaConfig struct {
 	StandardHistory                   string // StandardHistory table.
 	SubcontrolHistory                 string // SubcontrolHistory table.
 	SubprocessorHistory               string // SubprocessorHistory table.
+	SystemDetailHistory               string // SystemDetailHistory table.
 	TaskHistory                       string // TaskHistory table.
 	TemplateHistory                   string // TemplateHistory table.
 	TrustCenterComplianceHistory      string // TrustCenterComplianceHistory table.

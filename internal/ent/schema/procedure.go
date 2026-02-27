@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Procedure defines the procedure schema.
@@ -206,6 +207,7 @@ func (p Procedure) Policy() ent.Policy {
 				Program{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.ProcedureMutation](),
 		),
 	)

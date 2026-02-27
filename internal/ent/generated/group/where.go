@@ -137,6 +137,16 @@ func DisplayName(v string) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldDisplayName, v))
 }
 
+// OscalRole applies equality check predicate on the "oscal_role" field. It's identical to OscalRoleEQ.
+func OscalRole(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldOscalRole, v))
+}
+
+// OscalPartyUUID applies equality check predicate on the "oscal_party_uuid" field. It's identical to OscalPartyUUIDEQ.
+func OscalPartyUUID(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldOscalPartyUUID, v))
+}
+
 // ScimExternalID applies equality check predicate on the "scim_external_id" field. It's identical to ScimExternalIDEQ.
 func ScimExternalID(v string) predicate.Group {
 	return predicate.Group(sql.FieldEQ(FieldScimExternalID, v))
@@ -1055,6 +1065,166 @@ func DisplayNameEqualFold(v string) predicate.Group {
 // DisplayNameContainsFold applies the ContainsFold predicate on the "display_name" field.
 func DisplayNameContainsFold(v string) predicate.Group {
 	return predicate.Group(sql.FieldContainsFold(FieldDisplayName, v))
+}
+
+// OscalRoleEQ applies the EQ predicate on the "oscal_role" field.
+func OscalRoleEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldOscalRole, v))
+}
+
+// OscalRoleNEQ applies the NEQ predicate on the "oscal_role" field.
+func OscalRoleNEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldOscalRole, v))
+}
+
+// OscalRoleIn applies the In predicate on the "oscal_role" field.
+func OscalRoleIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldIn(FieldOscalRole, vs...))
+}
+
+// OscalRoleNotIn applies the NotIn predicate on the "oscal_role" field.
+func OscalRoleNotIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldNotIn(FieldOscalRole, vs...))
+}
+
+// OscalRoleGT applies the GT predicate on the "oscal_role" field.
+func OscalRoleGT(v string) predicate.Group {
+	return predicate.Group(sql.FieldGT(FieldOscalRole, v))
+}
+
+// OscalRoleGTE applies the GTE predicate on the "oscal_role" field.
+func OscalRoleGTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldGTE(FieldOscalRole, v))
+}
+
+// OscalRoleLT applies the LT predicate on the "oscal_role" field.
+func OscalRoleLT(v string) predicate.Group {
+	return predicate.Group(sql.FieldLT(FieldOscalRole, v))
+}
+
+// OscalRoleLTE applies the LTE predicate on the "oscal_role" field.
+func OscalRoleLTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldLTE(FieldOscalRole, v))
+}
+
+// OscalRoleContains applies the Contains predicate on the "oscal_role" field.
+func OscalRoleContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldOscalRole, v))
+}
+
+// OscalRoleHasPrefix applies the HasPrefix predicate on the "oscal_role" field.
+func OscalRoleHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldOscalRole, v))
+}
+
+// OscalRoleHasSuffix applies the HasSuffix predicate on the "oscal_role" field.
+func OscalRoleHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldOscalRole, v))
+}
+
+// OscalRoleIsNil applies the IsNil predicate on the "oscal_role" field.
+func OscalRoleIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldOscalRole))
+}
+
+// OscalRoleNotNil applies the NotNil predicate on the "oscal_role" field.
+func OscalRoleNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldOscalRole))
+}
+
+// OscalRoleEqualFold applies the EqualFold predicate on the "oscal_role" field.
+func OscalRoleEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldOscalRole, v))
+}
+
+// OscalRoleContainsFold applies the ContainsFold predicate on the "oscal_role" field.
+func OscalRoleContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldOscalRole, v))
+}
+
+// OscalPartyUUIDEQ applies the EQ predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldEQ(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDNEQ applies the NEQ predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDNEQ(v string) predicate.Group {
+	return predicate.Group(sql.FieldNEQ(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDIn applies the In predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldIn(FieldOscalPartyUUID, vs...))
+}
+
+// OscalPartyUUIDNotIn applies the NotIn predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDNotIn(vs ...string) predicate.Group {
+	return predicate.Group(sql.FieldNotIn(FieldOscalPartyUUID, vs...))
+}
+
+// OscalPartyUUIDGT applies the GT predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDGT(v string) predicate.Group {
+	return predicate.Group(sql.FieldGT(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDGTE applies the GTE predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDGTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldGTE(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDLT applies the LT predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDLT(v string) predicate.Group {
+	return predicate.Group(sql.FieldLT(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDLTE applies the LTE predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDLTE(v string) predicate.Group {
+	return predicate.Group(sql.FieldLTE(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDContains applies the Contains predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDContains(v string) predicate.Group {
+	return predicate.Group(sql.FieldContains(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDHasPrefix applies the HasPrefix predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDHasPrefix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasPrefix(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDHasSuffix applies the HasSuffix predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDHasSuffix(v string) predicate.Group {
+	return predicate.Group(sql.FieldHasSuffix(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDIsNil applies the IsNil predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldOscalPartyUUID))
+}
+
+// OscalPartyUUIDNotNil applies the NotNil predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldOscalPartyUUID))
+}
+
+// OscalPartyUUIDEqualFold applies the EqualFold predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDEqualFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldEqualFold(FieldOscalPartyUUID, v))
+}
+
+// OscalPartyUUIDContainsFold applies the ContainsFold predicate on the "oscal_party_uuid" field.
+func OscalPartyUUIDContainsFold(v string) predicate.Group {
+	return predicate.Group(sql.FieldContainsFold(FieldOscalPartyUUID, v))
+}
+
+// OscalContactUuidsIsNil applies the IsNil predicate on the "oscal_contact_uuids" field.
+func OscalContactUuidsIsNil() predicate.Group {
+	return predicate.Group(sql.FieldIsNull(FieldOscalContactUuids))
+}
+
+// OscalContactUuidsNotNil applies the NotNil predicate on the "oscal_contact_uuids" field.
+func OscalContactUuidsNotNil() predicate.Group {
+	return predicate.Group(sql.FieldNotNull(FieldOscalContactUuids))
 }
 
 // ScimExternalIDEQ applies the EQ predicate on the "scim_external_id" field.

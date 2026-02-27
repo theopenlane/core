@@ -45,6 +45,8 @@ type ControlHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// human readable title of the control for quick identification
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
@@ -61,6 +63,10 @@ type ControlHistory struct {
 	ResponsiblePartyID string `json:"responsible_party_id,omitempty"`
 	// status of the control
 	Status enums.ControlStatus `json:"status,omitempty"`
+	// OSCAL-aligned implementation status of the control
+	ImplementationStatus enums.ControlImplementationStatus `json:"implementation_status,omitempty"`
+	// narrative describing current implementation state for OSCAL export
+	ImplementationDescription string `json:"implementation_description,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
 	Source enums.ControlSource `json:"source,omitempty"`
 	// the reference framework for the control if it came from a standard, empty if not associated with a standard
@@ -139,7 +145,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker, controlhistory.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -232,6 +238,13 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case controlhistory.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
+			}
 		case controlhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -283,6 +296,18 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.ControlStatus(value.String)
+			}
+		case controlhistory.FieldImplementationStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_status", values[i])
+			} else if value.Valid {
+				_m.ImplementationStatus = enums.ControlImplementationStatus(value.String)
+			}
+		case controlhistory.FieldImplementationDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field implementation_description", values[i])
+			} else if value.Valid {
+				_m.ImplementationDescription = value.String
 			}
 		case controlhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -568,6 +593,11 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
@@ -591,6 +621,12 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("implementation_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ImplementationStatus))
+	builder.WriteString(", ")
+	builder.WriteString("implementation_description=")
+	builder.WriteString(_m.ImplementationDescription)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Source))

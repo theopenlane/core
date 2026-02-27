@@ -245,6 +245,7 @@ type SchemaConfig struct {
 	Subprocessor                       string // Subprocessor table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
+	SystemDetail                       string // SystemDetail table.
 	TFASetting                         string // TFASetting table.
 	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.

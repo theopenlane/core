@@ -185,6 +185,26 @@ func (_u *ProgramHistoryUpdate) ClearProgramKindID() *ProgramHistoryUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ProgramHistoryUpdate) SetExternalUUID(v string) *ProgramHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ProgramHistoryUpdate) SetNillableExternalUUID(v *string) *ProgramHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ProgramHistoryUpdate) ClearExternalUUID() *ProgramHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *ProgramHistoryUpdate) SetName(v string) *ProgramHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -552,6 +572,12 @@ func (_u *ProgramHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ProgramKindIDCleared() {
 		_spec.ClearField(programhistory.FieldProgramKindID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(programhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(programhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)
 	}
@@ -786,6 +812,26 @@ func (_u *ProgramHistoryUpdateOne) SetNillableProgramKindID(v *string) *ProgramH
 // ClearProgramKindID clears the value of the "program_kind_id" field.
 func (_u *ProgramHistoryUpdateOne) ClearProgramKindID() *ProgramHistoryUpdateOne {
 	_u.mutation.ClearProgramKindID()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ProgramHistoryUpdateOne) SetExternalUUID(v string) *ProgramHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ProgramHistoryUpdateOne) SetNillableExternalUUID(v *string) *ProgramHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ProgramHistoryUpdateOne) ClearExternalUUID() *ProgramHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -1185,6 +1231,12 @@ func (_u *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramH
 	}
 	if _u.mutation.ProgramKindIDCleared() {
 		_spec.ClearField(programhistory.FieldProgramKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(programhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(programhistory.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)

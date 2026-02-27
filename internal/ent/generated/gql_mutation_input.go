@@ -2780,6 +2780,7 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 // CreateControlInput represents a mutation input for creating controls.
 type CreateControlInput struct {
 	Tags                       []string
+	ExternalUUID               *string
 	Title                      *string
 	Description                *string
 	DescriptionJSON            []interface{}
@@ -2787,6 +2788,8 @@ type CreateControlInput struct {
 	ReferenceID                *string
 	AuditorReferenceID         *string
 	Status                     *enums.ControlStatus
+	ImplementationStatus       *enums.ControlImplementationStatus
+	ImplementationDescription  *string
 	Source                     *enums.ControlSource
 	ReferenceFramework         *string
 	ReferenceFrameworkRevision *string
@@ -2846,6 +2849,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
+	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
 	}
@@ -2866,6 +2872,12 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ImplementationStatus; v != nil {
+		m.SetImplementationStatus(*v)
+	}
+	if v := i.ImplementationDescription; v != nil {
+		m.SetImplementationDescription(*v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -3034,6 +3046,8 @@ type UpdateControlInput struct {
 	ClearTags                       bool
 	Tags                            []string
 	AppendTags                      []string
+	ClearExternalUUID               bool
+	ExternalUUID                    *string
 	ClearTitle                      bool
 	Title                           *string
 	ClearDescription                bool
@@ -3050,6 +3064,10 @@ type UpdateControlInput struct {
 	AuditorReferenceID              *string
 	ClearStatus                     bool
 	Status                          *enums.ControlStatus
+	ClearImplementationStatus       bool
+	ImplementationStatus            *enums.ControlImplementationStatus
+	ClearImplementationDescription  bool
+	ImplementationDescription       *string
 	ClearSource                     bool
 	Source                          *enums.ControlSource
 	ClearReferenceFrameworkRevision bool
@@ -3192,6 +3210,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
+	}
 	if i.ClearTitle {
 		m.ClearTitle()
 	}
@@ -3239,6 +3263,18 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearImplementationStatus {
+		m.ClearImplementationStatus()
+	}
+	if v := i.ImplementationStatus; v != nil {
+		m.SetImplementationStatus(*v)
+	}
+	if i.ClearImplementationDescription {
+		m.ClearImplementationDescription()
+	}
+	if v := i.ImplementationDescription; v != nil {
+		m.SetImplementationDescription(*v)
 	}
 	if i.ClearSource {
 		m.ClearSource()
@@ -8091,6 +8127,7 @@ type CreateEvidenceInput struct {
 	EnvironmentName          *string
 	ScopeName                *string
 	WorkflowEligibleMarker   *bool
+	ExternalUUID             *string
 	Name                     string
 	Description              *string
 	CollectionProcedure      *string
@@ -8129,6 +8166,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
@@ -8216,6 +8256,8 @@ type UpdateEvidenceInput struct {
 	ScopeName                      *string
 	ClearWorkflowEligibleMarker    bool
 	WorkflowEligibleMarker         *bool
+	ClearExternalUUID              bool
+	ExternalUUID                   *string
 	Name                           *string
 	ClearDescription               bool
 	Description                    *string
@@ -8299,6 +8341,12 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -10216,6 +10264,9 @@ type CreateGroupInput struct {
 	Description                          *string
 	LogoURL                              *string
 	DisplayName                          *string
+	OscalRole                            *string
+	OscalPartyUUID                       *string
+	OscalContactUuids                    []string
 	ScimExternalID                       *string
 	ScimDisplayName                      *string
 	ScimActive                           *bool
@@ -10282,6 +10333,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
+	}
+	if v := i.OscalRole; v != nil {
+		m.SetOscalRole(*v)
+	}
+	if v := i.OscalPartyUUID; v != nil {
+		m.SetOscalPartyUUID(*v)
+	}
+	if v := i.OscalContactUuids; v != nil {
+		m.SetOscalContactUuids(v)
 	}
 	if v := i.ScimExternalID; v != nil {
 		m.SetScimExternalID(*v)
@@ -10452,6 +10512,13 @@ type UpdateGroupInput struct {
 	ClearLogoURL                               bool
 	LogoURL                                    *string
 	DisplayName                                *string
+	ClearOscalRole                             bool
+	OscalRole                                  *string
+	ClearOscalPartyUUID                        bool
+	OscalPartyUUID                             *string
+	ClearOscalContactUuids                     bool
+	OscalContactUuids                          []string
+	AppendOscalContactUuids                    []string
 	ClearScimExternalID                        bool
 	ScimExternalID                             *string
 	ClearScimDisplayName                       bool
@@ -10626,6 +10693,27 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
+	}
+	if i.ClearOscalRole {
+		m.ClearOscalRole()
+	}
+	if v := i.OscalRole; v != nil {
+		m.SetOscalRole(*v)
+	}
+	if i.ClearOscalPartyUUID {
+		m.ClearOscalPartyUUID()
+	}
+	if v := i.OscalPartyUUID; v != nil {
+		m.SetOscalPartyUUID(*v)
+	}
+	if i.ClearOscalContactUuids {
+		m.ClearOscalContactUuids()
+	}
+	if v := i.OscalContactUuids; v != nil {
+		m.SetOscalContactUuids(v)
+	}
+	if i.AppendOscalContactUuids != nil {
+		m.AppendOscalContactUuids(i.OscalContactUuids)
 	}
 	if i.ClearScimExternalID {
 		m.ClearScimExternalID()
@@ -12043,6 +12131,7 @@ type CreateInternalPolicyInput struct {
 	EnvironmentName                 *string
 	ScopeName                       *string
 	WorkflowEligibleMarker          *bool
+	ExternalUUID                    *string
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -12131,6 +12220,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -12256,6 +12348,8 @@ type UpdateInternalPolicyInput struct {
 	ScopeName                             *string
 	ClearWorkflowEligibleMarker           bool
 	WorkflowEligibleMarker                *bool
+	ClearExternalUUID                     bool
+	ExternalUUID                          *string
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -12468,6 +12562,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -14938,6 +15038,7 @@ type CreateOrganizationInput struct {
 	NoteIDs                           []string
 	TaskIDs                           []string
 	ProgramIDs                        []string
+	SystemDetailIDs                   []string
 	ProcedureIDs                      []string
 	InternalPolicyIDs                 []string
 	RiskIDs                           []string
@@ -15162,6 +15263,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
+	}
+	if v := i.SystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
 	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
@@ -15470,6 +15574,9 @@ type UpdateOrganizationInput struct {
 	ClearPrograms                           bool
 	AddProgramIDs                           []string
 	RemoveProgramIDs                        []string
+	ClearSystemDetails                      bool
+	AddSystemDetailIDs                      []string
+	RemoveSystemDetailIDs                   []string
 	ClearProcedures                         bool
 	AddProcedureIDs                         []string
 	RemoveProcedureIDs                      []string
@@ -16088,6 +16195,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearSystemDetails {
+		m.ClearSystemDetails()
+	}
+	if v := i.AddSystemDetailIDs; len(v) > 0 {
+		m.AddSystemDetailIDs(v...)
+	}
+	if v := i.RemoveSystemDetailIDs; len(v) > 0 {
+		m.RemoveSystemDetailIDs(v...)
 	}
 	if i.ClearProcedures {
 		m.ClearProcedures()
@@ -17027,6 +17143,7 @@ type CreatePlatformInput struct {
 	SecurityTierName               *string
 	CriticalityName                *string
 	WorkflowEligibleMarker         *bool
+	ExternalUUID                   *string
 	Name                           string
 	Description                    *string
 	BusinessPurpose                *string
@@ -17086,6 +17203,7 @@ type CreatePlatformInput struct {
 	ApplicableFrameworkIDs         []string
 	GeneratedScanIDs               []string
 	PlatformOwnerID                *string
+	SystemDetailID                 *string
 }
 
 // Mutate applies the CreatePlatformInput on the PlatformMutation builder.
@@ -17131,6 +17249,9 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
@@ -17307,6 +17428,9 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.PlatformOwnerID; v != nil {
 		m.SetPlatformOwnerID(*v)
 	}
+	if v := i.SystemDetailID; v != nil {
+		m.SetSystemDetailID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreatePlatformInput on the PlatformCreate builder.
@@ -17346,6 +17470,8 @@ type UpdatePlatformInput struct {
 	CriticalityName                     *string
 	ClearWorkflowEligibleMarker         bool
 	WorkflowEligibleMarker              *bool
+	ClearExternalUUID                   bool
+	ExternalUUID                        *string
 	Name                                *string
 	ClearDescription                    bool
 	Description                         *string
@@ -17483,6 +17609,8 @@ type UpdatePlatformInput struct {
 	RemoveGeneratedScanIDs              []string
 	ClearPlatformOwner                  bool
 	PlatformOwnerID                     *string
+	ClearSystemDetail                   bool
+	SystemDetailID                      *string
 }
 
 // Mutate applies the UpdatePlatformInput on the PlatformMutation builder.
@@ -17573,6 +17701,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -17984,6 +18118,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.PlatformOwnerID; v != nil {
 		m.SetPlatformOwnerID(*v)
+	}
+	if i.ClearSystemDetail {
+		m.ClearSystemDetail()
+	}
+	if v := i.SystemDetailID; v != nil {
+		m.SetSystemDetailID(*v)
 	}
 }
 
@@ -18603,6 +18743,7 @@ func (c *ProcedureUpdateOne) SetInput(i UpdateProcedureInput) *ProcedureUpdateOn
 type CreateProgramInput struct {
 	Tags                 []string
 	ProgramKindName      *string
+	ExternalUUID         *string
 	Name                 string
 	Description          *string
 	Status               *enums.ProgramStatus
@@ -18632,6 +18773,7 @@ type CreateProgramInput struct {
 	EvidenceIDs          []string
 	NarrativeIDs         []string
 	ActionPlanIDs        []string
+	SystemDetailID       *string
 	ProgramOwnerID       *string
 }
 
@@ -18642,6 +18784,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.ProgramKindName; v != nil {
 		m.SetProgramKindName(*v)
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
@@ -18728,6 +18873,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
+	if v := i.SystemDetailID; v != nil {
+		m.SetSystemDetailID(*v)
+	}
 	if v := i.ProgramOwnerID; v != nil {
 		m.SetProgramOwnerID(*v)
 	}
@@ -18746,6 +18894,8 @@ type UpdateProgramInput struct {
 	AppendTags                []string
 	ClearProgramKindName      bool
 	ProgramKindName           *string
+	ClearExternalUUID         bool
+	ExternalUUID              *string
 	Name                      *string
 	ClearDescription          bool
 	Description               *string
@@ -18814,6 +18964,8 @@ type UpdateProgramInput struct {
 	ClearActionPlans          bool
 	AddActionPlanIDs          []string
 	RemoveActionPlanIDs       []string
+	ClearSystemDetail         bool
+	SystemDetailID            *string
 	ClearProgramOwner         bool
 	ProgramOwnerID            *string
 }
@@ -18834,6 +18986,12 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.ProgramKindName; v != nil {
 		m.SetProgramKindName(*v)
+	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -19038,6 +19196,12 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
+	}
+	if i.ClearSystemDetail {
+		m.ClearSystemDetail()
+	}
+	if v := i.SystemDetailID; v != nil {
+		m.SetSystemDetailID(*v)
 	}
 	if i.ClearProgramOwner {
 		m.ClearProgramOwner()
@@ -20362,6 +20526,7 @@ type CreateRiskInput struct {
 	RiskCategoryName  *string
 	EnvironmentName   *string
 	ScopeName         *string
+	ExternalUUID      *string
 	Name              string
 	Status            *enums.RiskStatus
 	Impact            *enums.RiskImpact
@@ -20414,6 +20579,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -20536,6 +20704,8 @@ type UpdateRiskInput struct {
 	EnvironmentName         *string
 	ClearScopeName          bool
 	ScopeName               *string
+	ClearExternalUUID       bool
+	ExternalUUID            *string
 	Name                    *string
 	ClearStatus             bool
 	Status                  *enums.RiskStatus
@@ -20656,6 +20826,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -21972,6 +22148,7 @@ func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
 // CreateSubcontrolInput represents a mutation input for creating subcontrols.
 type CreateSubcontrolInput struct {
 	Tags                       []string
+	ExternalUUID               *string
 	Title                      *string
 	Description                *string
 	DescriptionJSON            []interface{}
@@ -21979,6 +22156,8 @@ type CreateSubcontrolInput struct {
 	ReferenceID                *string
 	AuditorReferenceID         *string
 	Status                     *enums.ControlStatus
+	ImplementationStatus       *enums.ControlImplementationStatus
+	ImplementationDescription  *string
 	Source                     *enums.ControlSource
 	ReferenceFramework         *string
 	ReferenceFrameworkRevision *string
@@ -22025,6 +22204,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
+	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
 	}
@@ -22045,6 +22227,12 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ImplementationStatus; v != nil {
+		m.SetImplementationStatus(*v)
+	}
+	if v := i.ImplementationDescription; v != nil {
+		m.SetImplementationDescription(*v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -22172,6 +22360,8 @@ type UpdateSubcontrolInput struct {
 	ClearTags                       bool
 	Tags                            []string
 	AppendTags                      []string
+	ClearExternalUUID               bool
+	ExternalUUID                    *string
 	ClearTitle                      bool
 	Title                           *string
 	ClearDescription                bool
@@ -22188,6 +22378,10 @@ type UpdateSubcontrolInput struct {
 	AuditorReferenceID              *string
 	ClearStatus                     bool
 	Status                          *enums.ControlStatus
+	ClearImplementationStatus       bool
+	ImplementationStatus            *enums.ControlImplementationStatus
+	ClearImplementationDescription  bool
+	ImplementationDescription       *string
 	ClearSource                     bool
 	Source                          *enums.ControlSource
 	ClearReferenceFrameworkRevision bool
@@ -22295,6 +22489,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
+	}
 	if i.ClearTitle {
 		m.ClearTitle()
 	}
@@ -22342,6 +22542,18 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearImplementationStatus {
+		m.ClearImplementationStatus()
+	}
+	if v := i.ImplementationStatus; v != nil {
+		m.SetImplementationStatus(*v)
+	}
+	if i.ClearImplementationDescription {
+		m.ClearImplementationDescription()
+	}
+	if v := i.ImplementationDescription; v != nil {
+		m.SetImplementationDescription(*v)
 	}
 	if i.ClearSource {
 		m.ClearSource()
@@ -22891,6 +23103,178 @@ func (c *SubscriberUpdateOne) SetInput(i UpdateSubscriberInput) *SubscriberUpdat
 	return c
 }
 
+// CreateSystemDetailInput represents a mutation input for creating systemdetails.
+type CreateSystemDetailInput struct {
+	Tags                  []string
+	SystemName            string
+	Version               *string
+	Description           *string
+	AuthorizationBoundary *string
+	SensitivityLevel      *enums.SystemSensitivityLevel
+	LastReviewed          *models.DateTime
+	RevisionHistory       []interface{}
+	OscalMetadataJSON     map[string]interface{}
+	OwnerID               *string
+	ProgramID             *string
+	PlatformID            *string
+}
+
+// Mutate applies the CreateSystemDetailInput on the SystemDetailMutation builder.
+func (i *CreateSystemDetailInput) Mutate(m *SystemDetailMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetSystemName(i.SystemName)
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.AuthorizationBoundary; v != nil {
+		m.SetAuthorizationBoundary(*v)
+	}
+	if v := i.SensitivityLevel; v != nil {
+		m.SetSensitivityLevel(*v)
+	}
+	if v := i.LastReviewed; v != nil {
+		m.SetLastReviewed(*v)
+	}
+	if v := i.RevisionHistory; v != nil {
+		m.SetRevisionHistory(v)
+	}
+	if v := i.OscalMetadataJSON; v != nil {
+		m.SetOscalMetadataJSON(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.ProgramID; v != nil {
+		m.SetProgramID(*v)
+	}
+	if v := i.PlatformID; v != nil {
+		m.SetPlatformID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateSystemDetailInput on the SystemDetailCreate builder.
+func (c *SystemDetailCreate) SetInput(i CreateSystemDetailInput) *SystemDetailCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateSystemDetailInput represents a mutation input for updating systemdetails.
+type UpdateSystemDetailInput struct {
+	ClearTags                  bool
+	Tags                       []string
+	AppendTags                 []string
+	SystemName                 *string
+	ClearVersion               bool
+	Version                    *string
+	ClearDescription           bool
+	Description                *string
+	ClearAuthorizationBoundary bool
+	AuthorizationBoundary      *string
+	ClearSensitivityLevel      bool
+	SensitivityLevel           *enums.SystemSensitivityLevel
+	ClearLastReviewed          bool
+	LastReviewed               *models.DateTime
+	ClearRevisionHistory       bool
+	RevisionHistory            []interface{}
+	AppendRevisionHistory      []interface{}
+	ClearOscalMetadataJSON     bool
+	OscalMetadataJSON          map[string]interface{}
+	ClearProgram               bool
+	ProgramID                  *string
+	ClearPlatform              bool
+	PlatformID                 *string
+}
+
+// Mutate applies the UpdateSystemDetailInput on the SystemDetailMutation builder.
+func (i *UpdateSystemDetailInput) Mutate(m *SystemDetailMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.SystemName; v != nil {
+		m.SetSystemName(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearAuthorizationBoundary {
+		m.ClearAuthorizationBoundary()
+	}
+	if v := i.AuthorizationBoundary; v != nil {
+		m.SetAuthorizationBoundary(*v)
+	}
+	if i.ClearSensitivityLevel {
+		m.ClearSensitivityLevel()
+	}
+	if v := i.SensitivityLevel; v != nil {
+		m.SetSensitivityLevel(*v)
+	}
+	if i.ClearLastReviewed {
+		m.ClearLastReviewed()
+	}
+	if v := i.LastReviewed; v != nil {
+		m.SetLastReviewed(*v)
+	}
+	if i.ClearRevisionHistory {
+		m.ClearRevisionHistory()
+	}
+	if v := i.RevisionHistory; v != nil {
+		m.SetRevisionHistory(v)
+	}
+	if i.AppendRevisionHistory != nil {
+		m.AppendRevisionHistory(i.RevisionHistory)
+	}
+	if i.ClearOscalMetadataJSON {
+		m.ClearOscalMetadataJSON()
+	}
+	if v := i.OscalMetadataJSON; v != nil {
+		m.SetOscalMetadataJSON(v)
+	}
+	if i.ClearProgram {
+		m.ClearProgram()
+	}
+	if v := i.ProgramID; v != nil {
+		m.SetProgramID(*v)
+	}
+	if i.ClearPlatform {
+		m.ClearPlatform()
+	}
+	if v := i.PlatformID; v != nil {
+		m.SetPlatformID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateSystemDetailInput on the SystemDetailUpdate builder.
+func (c *SystemDetailUpdate) SetInput(i UpdateSystemDetailInput) *SystemDetailUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateSystemDetailInput on the SystemDetailUpdateOne builder.
+func (c *SystemDetailUpdateOne) SetInput(i UpdateSystemDetailInput) *SystemDetailUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateTFASettingInput represents a mutation input for creating tfasettings.
 type CreateTFASettingInput struct {
 	TotpAllowed *bool
@@ -23059,6 +23443,7 @@ type CreateTaskInput struct {
 	TaskKindName             *string
 	EnvironmentName          *string
 	ScopeName                *string
+	ExternalUUID             *string
 	Title                    string
 	Details                  *string
 	DetailsJSON              []interface{}
@@ -23106,6 +23491,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	m.SetTitle(i.Title)
 	if v := i.Details; v != nil {
@@ -23220,6 +23608,8 @@ type UpdateTaskInput struct {
 	EnvironmentName                *string
 	ClearScopeName                 bool
 	ScopeName                      *string
+	ClearExternalUUID              bool
+	ExternalUUID                   *string
 	Title                          *string
 	ClearDetails                   bool
 	Details                        *string
@@ -23328,6 +23718,12 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearExternalUUID {
+		m.ClearExternalUUID()
+	}
+	if v := i.ExternalUUID; v != nil {
+		m.SetExternalUUID(*v)
 	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)

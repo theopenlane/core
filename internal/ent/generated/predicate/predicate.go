@@ -243,6 +243,9 @@ type Subprocessor func(*sql.Selector)
 // Subscriber is the predicate function for subscriber builders.
 type Subscriber func(*sql.Selector)
 
+// SystemDetail is the predicate function for systemdetail builders.
+type SystemDetail func(*sql.Selector)
+
 // TFASetting is the predicate function for tfasetting builders.
 type TFASetting func(*sql.Selector)
 

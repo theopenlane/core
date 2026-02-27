@@ -91,6 +91,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -254,6 +255,7 @@ func checkColumn(t, c string) error {
 			subcontrol.Table:                 subcontrol.ValidColumn,
 			subprocessor.Table:               subprocessor.ValidColumn,
 			subscriber.Table:                 subscriber.ValidColumn,
+			systemdetail.Table:               systemdetail.ValidColumn,
 			tfasetting.Table:                 tfasetting.ValidColumn,
 			tagdefinition.Table:              tagdefinition.ValidColumn,
 			task.Table:                       task.ValidColumn,

@@ -157,6 +157,19 @@ type EntityTypeBuilder struct {
 	Name string
 }
 
+type IdentityHolderBuilder struct {
+	client *client
+
+	// Fields
+	FullName   string
+	Email      string
+	Phone      string
+	Title      string
+	Department string
+	Team       string
+	Location   string
+}
+
 type ContactBuilder struct {
 	client *client
 
@@ -931,6 +944,52 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		SetDisplayName(e.DisplayName).
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return entity
+}
+
+// MustNew identity holder builder is used to create, without authz checks, identity holders in the database
+func (i *IdentityHolderBuilder) MustNew(ctx context.Context, t *testing.T) *ent.IdentityHolder {
+	ctx = setContext(ctx, i.client.db)
+
+	if i.FullName == "" {
+		i.FullName = gofakeit.Name()
+	}
+
+	if i.Email == "" {
+		i.Email = gofakeit.Email()
+	}
+
+	if i.Phone == "" {
+		i.Phone = gofakeit.Phone()
+	}
+
+	if i.Title == "" {
+		i.Title = gofakeit.JobTitle()
+	}
+
+	if i.Department == "" {
+		i.Department = gofakeit.JobDescriptor()
+	}
+
+	if i.Team == "" {
+		i.Team = gofakeit.AppName()
+	}
+
+	if i.Location == "" {
+		i.Location = gofakeit.City()
+	}
+
+	entity, err := i.client.db.IdentityHolder.Create().
+		SetFullName(i.FullName).
+		SetEmail(i.Email).
+		SetPhoneNumber(i.Phone).
+		SetTitle(i.Title).
+		SetDepartment(i.Department).
+		SetTeam(i.Team).
+		SetLocation(i.Location).
 		Save(ctx)
 	requireNoError(t, err)
 

@@ -85,6 +85,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -1036,7 +1037,7 @@ func init() {
 	// control.DefaultTags holds the default value on creation for the tags field.
 	control.DefaultTags = controlDescTags.Default.([]string)
 	// controlDescReferenceFrameworkRevision is the schema descriptor for reference_framework_revision field.
-	controlDescReferenceFrameworkRevision := controlMixinFields5[10].Descriptor()
+	controlDescReferenceFrameworkRevision := controlMixinFields5[13].Descriptor()
 	// control.ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	control.ReferenceFrameworkRevisionValidator = controlDescReferenceFrameworkRevision.Validators[0].(func(string) error)
 	// controlDescOwnerID is the schema descriptor for owner_id field.
@@ -2715,23 +2716,23 @@ func init() {
 	// evidence.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	evidence.DefaultWorkflowEligibleMarker = evidenceDescWorkflowEligibleMarker.Default.(bool)
 	// evidenceDescName is the schema descriptor for name field.
-	evidenceDescName := evidenceFields[0].Descriptor()
+	evidenceDescName := evidenceFields[1].Descriptor()
 	// evidence.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	evidence.NameValidator = evidenceDescName.Validators[0].(func(string) error)
 	// evidenceDescCreationDate is the schema descriptor for creation_date field.
-	evidenceDescCreationDate := evidenceFields[3].Descriptor()
+	evidenceDescCreationDate := evidenceFields[4].Descriptor()
 	// evidence.DefaultCreationDate holds the default value on creation for the creation_date field.
 	evidence.DefaultCreationDate = evidenceDescCreationDate.Default.(func() time.Time)
 	// evidenceDescRenewalDate is the schema descriptor for renewal_date field.
-	evidenceDescRenewalDate := evidenceFields[4].Descriptor()
+	evidenceDescRenewalDate := evidenceFields[5].Descriptor()
 	// evidence.DefaultRenewalDate holds the default value on creation for the renewal_date field.
 	evidence.DefaultRenewalDate = evidenceDescRenewalDate.Default.(time.Time)
 	// evidenceDescIsAutomated is the schema descriptor for is_automated field.
-	evidenceDescIsAutomated := evidenceFields[6].Descriptor()
+	evidenceDescIsAutomated := evidenceFields[7].Descriptor()
 	// evidence.DefaultIsAutomated holds the default value on creation for the is_automated field.
 	evidence.DefaultIsAutomated = evidenceDescIsAutomated.Default.(bool)
 	// evidenceDescURL is the schema descriptor for url field.
-	evidenceDescURL := evidenceFields[7].Descriptor()
+	evidenceDescURL := evidenceFields[8].Descriptor()
 	// evidence.URLValidator is a validator for the "url" field. It is called by the builders before save.
 	evidence.URLValidator = evidenceDescURL.Validators[0].(func(string) error)
 	// evidenceDescID is the schema descriptor for id field.
@@ -3176,7 +3177,7 @@ func init() {
 	// group.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	group.DisplayNameValidator = groupDescDisplayName.Validators[0].(func(string) error)
 	// groupDescScimActive is the schema descriptor for scim_active field.
-	groupDescScimActive := groupFields[8].Descriptor()
+	groupDescScimActive := groupFields[11].Descriptor()
 	// group.DefaultScimActive holds the default value on creation for the scim_active field.
 	group.DefaultScimActive = groupDescScimActive.Default.(bool)
 	// groupDescID is the schema descriptor for id field.
@@ -5641,11 +5642,11 @@ func init() {
 	// platform.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	platform.DefaultWorkflowEligibleMarker = platformDescWorkflowEligibleMarker.Default.(bool)
 	// platformDescName is the schema descriptor for name field.
-	platformDescName := platformFields[0].Descriptor()
+	platformDescName := platformFields[1].Descriptor()
 	// platform.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	platform.NameValidator = platformDescName.Validators[0].(func(string) error)
 	// platformDescContainsPii is the schema descriptor for contains_pii field.
-	platformDescContainsPii := platformFields[9].Descriptor()
+	platformDescContainsPii := platformFields[10].Descriptor()
 	// platform.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	platform.DefaultContainsPii = platformDescContainsPii.Default.(bool)
 	// platformDescID is the schema descriptor for id field.
@@ -5889,23 +5890,23 @@ func init() {
 	// program.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	program.OwnerIDValidator = programDescOwnerID.Validators[0].(func(string) error)
 	// programDescName is the schema descriptor for name field.
-	programDescName := programFields[0].Descriptor()
+	programDescName := programFields[1].Descriptor()
 	// program.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	program.NameValidator = programDescName.Validators[0].(func(string) error)
 	// programDescAuditorReady is the schema descriptor for auditor_ready field.
-	programDescAuditorReady := programFields[6].Descriptor()
+	programDescAuditorReady := programFields[7].Descriptor()
 	// program.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	program.DefaultAuditorReady = programDescAuditorReady.Default.(bool)
 	// programDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programDescAuditorWriteComments := programFields[7].Descriptor()
+	programDescAuditorWriteComments := programFields[8].Descriptor()
 	// program.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	program.DefaultAuditorWriteComments = programDescAuditorWriteComments.Default.(bool)
 	// programDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programDescAuditorReadComments := programFields[8].Descriptor()
+	programDescAuditorReadComments := programFields[9].Descriptor()
 	// program.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	program.DefaultAuditorReadComments = programDescAuditorReadComments.Default.(bool)
 	// programDescAuditorEmail is the schema descriptor for auditor_email field.
-	programDescAuditorEmail := programFields[11].Descriptor()
+	programDescAuditorEmail := programFields[12].Descriptor()
 	// program.AuditorEmailValidator is a validator for the "auditor_email" field. It is called by the builders before save.
 	program.AuditorEmailValidator = programDescAuditorEmail.Validators[0].(func(string) error)
 	// programDescID is the schema descriptor for id field.
@@ -6224,7 +6225,7 @@ func init() {
 	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescName is the schema descriptor for name field.
-	riskDescName := riskFields[0].Descriptor()
+	riskDescName := riskFields[1].Descriptor()
 	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	risk.NameValidator = riskDescName.Validators[0].(func(string) error)
 	// riskDescID is the schema descriptor for id field.
@@ -6660,7 +6661,7 @@ func init() {
 	// subcontrol.DefaultTags holds the default value on creation for the tags field.
 	subcontrol.DefaultTags = subcontrolDescTags.Default.([]string)
 	// subcontrolDescReferenceFrameworkRevision is the schema descriptor for reference_framework_revision field.
-	subcontrolDescReferenceFrameworkRevision := subcontrolMixinFields5[10].Descriptor()
+	subcontrolDescReferenceFrameworkRevision := subcontrolMixinFields5[13].Descriptor()
 	// subcontrol.ReferenceFrameworkRevisionValidator is a validator for the "reference_framework_revision" field. It is called by the builders before save.
 	subcontrol.ReferenceFrameworkRevisionValidator = subcontrolDescReferenceFrameworkRevision.Validators[0].(func(string) error)
 	// subcontrolDescOwnerID is the schema descriptor for owner_id field.
@@ -6881,6 +6882,78 @@ func init() {
 	subscriberDescID := subscriberMixinFields2[0].Descriptor()
 	// subscriber.DefaultID holds the default value on creation for the id field.
 	subscriber.DefaultID = subscriberDescID.Default.(func() string)
+	systemdetailMixin := schema.SystemDetail{}.Mixin()
+	systemdetail.Policy = privacy.NewPolicies(schema.SystemDetail{})
+	systemdetail.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := systemdetail.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	systemdetailMixinHooks0 := systemdetailMixin[0].Hooks()
+	systemdetailMixinHooks1 := systemdetailMixin[1].Hooks()
+	systemdetailMixinHooks2 := systemdetailMixin[2].Hooks()
+	systemdetailMixinHooks3 := systemdetailMixin[3].Hooks()
+	systemdetailMixinHooks5 := systemdetailMixin[5].Hooks()
+
+	systemdetail.Hooks[1] = systemdetailMixinHooks0[0]
+
+	systemdetail.Hooks[2] = systemdetailMixinHooks1[0]
+
+	systemdetail.Hooks[3] = systemdetailMixinHooks2[0]
+
+	systemdetail.Hooks[4] = systemdetailMixinHooks3[0]
+
+	systemdetail.Hooks[5] = systemdetailMixinHooks5[0]
+
+	systemdetail.Hooks[6] = systemdetailMixinHooks5[1]
+	systemdetailMixinInters1 := systemdetailMixin[1].Interceptors()
+	systemdetailMixinInters5 := systemdetailMixin[5].Interceptors()
+	systemdetail.Interceptors[0] = systemdetailMixinInters1[0]
+	systemdetail.Interceptors[1] = systemdetailMixinInters5[0]
+	systemdetail.Interceptors[2] = systemdetailMixinInters5[1]
+	systemdetailMixinFields0 := systemdetailMixin[0].Fields()
+	_ = systemdetailMixinFields0
+	systemdetailMixinFields2 := systemdetailMixin[2].Fields()
+	_ = systemdetailMixinFields2
+	systemdetailMixinFields3 := systemdetailMixin[3].Fields()
+	_ = systemdetailMixinFields3
+	systemdetailMixinFields5 := systemdetailMixin[5].Fields()
+	_ = systemdetailMixinFields5
+	systemdetailFields := schema.SystemDetail{}.Fields()
+	_ = systemdetailFields
+	// systemdetailDescCreatedAt is the schema descriptor for created_at field.
+	systemdetailDescCreatedAt := systemdetailMixinFields0[0].Descriptor()
+	// systemdetail.DefaultCreatedAt holds the default value on creation for the created_at field.
+	systemdetail.DefaultCreatedAt = systemdetailDescCreatedAt.Default.(func() time.Time)
+	// systemdetailDescUpdatedAt is the schema descriptor for updated_at field.
+	systemdetailDescUpdatedAt := systemdetailMixinFields0[1].Descriptor()
+	// systemdetail.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	systemdetail.DefaultUpdatedAt = systemdetailDescUpdatedAt.Default.(func() time.Time)
+	// systemdetail.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	systemdetail.UpdateDefaultUpdatedAt = systemdetailDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// systemdetailDescDisplayID is the schema descriptor for display_id field.
+	systemdetailDescDisplayID := systemdetailMixinFields2[1].Descriptor()
+	// systemdetail.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	systemdetail.DisplayIDValidator = systemdetailDescDisplayID.Validators[0].(func(string) error)
+	// systemdetailDescTags is the schema descriptor for tags field.
+	systemdetailDescTags := systemdetailMixinFields3[0].Descriptor()
+	// systemdetail.DefaultTags holds the default value on creation for the tags field.
+	systemdetail.DefaultTags = systemdetailDescTags.Default.([]string)
+	// systemdetailDescOwnerID is the schema descriptor for owner_id field.
+	systemdetailDescOwnerID := systemdetailMixinFields5[0].Descriptor()
+	// systemdetail.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	systemdetail.OwnerIDValidator = systemdetailDescOwnerID.Validators[0].(func(string) error)
+	// systemdetailDescSystemName is the schema descriptor for system_name field.
+	systemdetailDescSystemName := systemdetailFields[2].Descriptor()
+	// systemdetail.SystemNameValidator is a validator for the "system_name" field. It is called by the builders before save.
+	systemdetail.SystemNameValidator = systemdetailDescSystemName.Validators[0].(func(string) error)
+	// systemdetailDescID is the schema descriptor for id field.
+	systemdetailDescID := systemdetailMixinFields2[0].Descriptor()
+	// systemdetail.DefaultID holds the default value on creation for the id field.
+	systemdetail.DefaultID = systemdetailDescID.Default.(func() string)
 	tfasettingMixin := schema.TFASetting{}.Mixin()
 	tfasetting.Policy = privacy.NewPolicies(schema.TFASetting{})
 	tfasetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -7095,15 +7168,15 @@ func init() {
 	// task.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	task.OwnerIDValidator = taskDescOwnerID.Validators[0].(func(string) error)
 	// taskDescTitle is the schema descriptor for title field.
-	taskDescTitle := taskFields[0].Descriptor()
+	taskDescTitle := taskFields[1].Descriptor()
 	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	task.TitleValidator = taskDescTitle.Validators[0].(func(string) error)
 	// taskDescSystemGenerated is the schema descriptor for system_generated field.
-	taskDescSystemGenerated := taskFields[8].Descriptor()
+	taskDescSystemGenerated := taskFields[9].Descriptor()
 	// task.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	task.DefaultSystemGenerated = taskDescSystemGenerated.Default.(bool)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[10].Descriptor()
+	taskDescExternalReferenceURL := taskFields[11].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.

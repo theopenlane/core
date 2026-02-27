@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -172,6 +173,20 @@ func (_c *ProgramCreate) SetProgramKindID(v string) *ProgramCreate {
 func (_c *ProgramCreate) SetNillableProgramKindID(v *string) *ProgramCreate {
 	if v != nil {
 		_c.SetProgramKindID(*v)
+	}
+	return _c
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *ProgramCreate) SetExternalUUID(v string) *ProgramCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *ProgramCreate) SetNillableExternalUUID(v *string) *ProgramCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
 	}
 	return _c
 }
@@ -599,6 +614,25 @@ func (_c *ProgramCreate) AddActionPlans(v ...*ActionPlan) *ProgramCreate {
 	return _c.AddActionPlanIDs(ids...)
 }
 
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_c *ProgramCreate) SetSystemDetailID(id string) *ProgramCreate {
+	_c.mutation.SetSystemDetailID(id)
+	return _c
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_c *ProgramCreate) SetNillableSystemDetailID(id *string) *ProgramCreate {
+	if id != nil {
+		_c = _c.SetSystemDetailID(*id)
+	}
+	return _c
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_c *ProgramCreate) SetSystemDetail(v *SystemDetail) *ProgramCreate {
+	return _c.SetSystemDetailID(v.ID)
+}
+
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (_c *ProgramCreate) AddUserIDs(ids ...string) *ProgramCreate {
 	_c.mutation.AddUserIDs(ids...)
@@ -831,6 +865,10 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ProgramKindName(); ok {
 		_spec.SetField(program.FieldProgramKindName, field.TypeString, value)
 		_node.ProgramKindName = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(program.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(program.FieldName, field.TypeString, value)
@@ -1166,6 +1204,23 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   program.SystemDetailTable,
+			Columns: []string{program.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

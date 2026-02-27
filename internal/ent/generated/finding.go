@@ -57,7 +57,7 @@ type Finding struct {
 	ExternalID string `json:"external_id,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
-	// system that produced the finding, e.g. gcp_scc
+	// system that produced the finding, e.g. gcpscc
 	Source string `json:"source,omitempty"`
 	// resource identifier provided by the source system
 	ResourceName string `json:"resource_name,omitempty"`

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -60,6 +61,11 @@ func (Control) Fields() []ent.Field {
 				entx.FieldWebhookPayloadField(),
 				entgql.OrderField("ref_code"),
 				directives.ExternalSourceDirectiveAnnotation,
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleControlID,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
 			).
 			Comment("the unique reference code for the control"),
 		field.String("standard_id").
@@ -111,6 +117,12 @@ func (c Control) Edges() []ent.Edge {
 			fromSchema: c,
 			edgeSchema: ControlImplementation{},
 			comment:    "the implementation(s) of the control",
+			annotations: []schema.Annotation{
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleImplementedByComponent,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			},
 		}),
 		// controls have control objectives and subcontrols
 		edgeToWithPagination(&edgeDefinition{
@@ -233,6 +245,7 @@ func (c Control) Policy() ent.Policy {
 				Program{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
 		),
 	)
@@ -252,6 +265,10 @@ func (c Control) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 			entx.WithSystemOwned(),
+		),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("implemented-requirement"),
 		),
 	}
 }

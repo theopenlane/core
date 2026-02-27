@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Task_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Task_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -240,6 +242,8 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Task_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Task_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -400,6 +404,8 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Task_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Task_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -560,6 +566,8 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Task_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Task_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":

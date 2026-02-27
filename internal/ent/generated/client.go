@@ -98,6 +98,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -306,6 +307,8 @@ type Client struct {
 	Subprocessor *SubprocessorClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
+	// SystemDetail is the client for interacting with the SystemDetail builders.
+	SystemDetail *SystemDetailClient
 	// TFASetting is the client for interacting with the TFASetting builders.
 	TFASetting *TFASettingClient
 	// TagDefinition is the client for interacting with the TagDefinition builders.
@@ -453,6 +456,7 @@ func (c *Client) init() {
 	c.Subcontrol = NewSubcontrolClient(c.config)
 	c.Subprocessor = NewSubprocessorClient(c.config)
 	c.Subscriber = NewSubscriberClient(c.config)
+	c.SystemDetail = NewSystemDetailClient(c.config)
 	c.TFASetting = NewTFASettingClient(c.config)
 	c.TagDefinition = NewTagDefinitionClient(c.config)
 	c.Task = NewTaskClient(c.config)
@@ -768,6 +772,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Subcontrol:                 NewSubcontrolClient(cfg),
 		Subprocessor:               NewSubprocessorClient(cfg),
 		Subscriber:                 NewSubscriberClient(cfg),
+		SystemDetail:               NewSystemDetailClient(cfg),
 		TFASetting:                 NewTFASettingClient(cfg),
 		TagDefinition:              NewTagDefinitionClient(cfg),
 		Task:                       NewTaskClient(cfg),
@@ -890,6 +895,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Subcontrol:                 NewSubcontrolClient(cfg),
 		Subprocessor:               NewSubprocessorClient(cfg),
 		Subscriber:                 NewSubscriberClient(cfg),
+		SystemDetail:               NewSystemDetailClient(cfg),
 		TFASetting:                 NewTFASettingClient(cfg),
 		TagDefinition:              NewTagDefinitionClient(cfg),
 		Task:                       NewTaskClient(cfg),
@@ -960,12 +966,12 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
-		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
-		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.Vulnerability,
-		c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail,
+		c.TFASetting, c.TagDefinition, c.Task, c.Template, c.TrustCenter,
+		c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
+		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
+		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
+		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
 		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
 		c.WorkflowProposal,
 	} {
@@ -994,12 +1000,12 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
-		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.TFASetting,
-		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.Vulnerability,
-		c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail,
+		c.TFASetting, c.TagDefinition, c.Task, c.Template, c.TrustCenter,
+		c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
+		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
+		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
+		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
 		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
 		c.WorkflowProposal,
 	} {
@@ -1240,6 +1246,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Subprocessor.mutate(ctx, m)
 	case *SubscriberMutation:
 		return c.Subscriber.mutate(ctx, m)
+	case *SystemDetailMutation:
+		return c.SystemDetail.mutate(ctx, m)
 	case *TFASettingMutation:
 		return c.TFASetting.mutate(ctx, m)
 	case *TagDefinitionMutation:
@@ -20939,6 +20947,25 @@ func (c *OrganizationClient) QueryPrograms(_m *Organization) *ProgramQuery {
 	return query
 }
 
+// QuerySystemDetails queries the system_details edge of a Organization.
+func (c *OrganizationClient) QuerySystemDetails(_m *Organization) *SystemDetailQuery {
+	query := (&SystemDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SystemDetailsTable, organization.SystemDetailsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProcedures queries the procedures edge of a Organization.
 func (c *OrganizationClient) QueryProcedures(_m *Organization) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
@@ -23360,6 +23387,25 @@ func (c *PlatformClient) QueryPlatformOwner(_m *Platform) *UserQuery {
 	return query
 }
 
+// QuerySystemDetail queries the system_detail edge of a Platform.
+func (c *PlatformClient) QuerySystemDetail(_m *Platform) *SystemDetailQuery {
+	query := (&SystemDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, platform.SystemDetailTable, platform.SystemDetailColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *PlatformClient) Hooks() []Hook {
 	hooks := c.hooks.Platform
@@ -24308,6 +24354,25 @@ func (c *ProgramClient) QueryActionPlans(_m *Program) *ActionPlanQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySystemDetail queries the system_detail edge of a Program.
+func (c *ProgramClient) QuerySystemDetail(_m *Program) *SystemDetailQuery {
+	query := (&SystemDetailClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, program.SystemDetailTable, program.SystemDetailColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -28388,6 +28453,198 @@ func (c *SubscriberClient) mutate(ctx context.Context, m *SubscriberMutation) (V
 		return (&SubscriberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Subscriber mutation op: %q", m.Op())
+	}
+}
+
+// SystemDetailClient is a client for the SystemDetail schema.
+type SystemDetailClient struct {
+	config
+}
+
+// NewSystemDetailClient returns a client for the SystemDetail from the given config.
+func NewSystemDetailClient(c config) *SystemDetailClient {
+	return &SystemDetailClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `systemdetail.Hooks(f(g(h())))`.
+func (c *SystemDetailClient) Use(hooks ...Hook) {
+	c.hooks.SystemDetail = append(c.hooks.SystemDetail, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `systemdetail.Intercept(f(g(h())))`.
+func (c *SystemDetailClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SystemDetail = append(c.inters.SystemDetail, interceptors...)
+}
+
+// Create returns a builder for creating a SystemDetail entity.
+func (c *SystemDetailClient) Create() *SystemDetailCreate {
+	mutation := newSystemDetailMutation(c.config, OpCreate)
+	return &SystemDetailCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SystemDetail entities.
+func (c *SystemDetailClient) CreateBulk(builders ...*SystemDetailCreate) *SystemDetailCreateBulk {
+	return &SystemDetailCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SystemDetailClient) MapCreateBulk(slice any, setFunc func(*SystemDetailCreate, int)) *SystemDetailCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SystemDetailCreateBulk{err: fmt.Errorf("calling to SystemDetailClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SystemDetailCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SystemDetailCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SystemDetail.
+func (c *SystemDetailClient) Update() *SystemDetailUpdate {
+	mutation := newSystemDetailMutation(c.config, OpUpdate)
+	return &SystemDetailUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SystemDetailClient) UpdateOne(_m *SystemDetail) *SystemDetailUpdateOne {
+	mutation := newSystemDetailMutation(c.config, OpUpdateOne, withSystemDetail(_m))
+	return &SystemDetailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SystemDetailClient) UpdateOneID(id string) *SystemDetailUpdateOne {
+	mutation := newSystemDetailMutation(c.config, OpUpdateOne, withSystemDetailID(id))
+	return &SystemDetailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SystemDetail.
+func (c *SystemDetailClient) Delete() *SystemDetailDelete {
+	mutation := newSystemDetailMutation(c.config, OpDelete)
+	return &SystemDetailDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SystemDetailClient) DeleteOne(_m *SystemDetail) *SystemDetailDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SystemDetailClient) DeleteOneID(id string) *SystemDetailDeleteOne {
+	builder := c.Delete().Where(systemdetail.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SystemDetailDeleteOne{builder}
+}
+
+// Query returns a query builder for SystemDetail.
+func (c *SystemDetailClient) Query() *SystemDetailQuery {
+	return &SystemDetailQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSystemDetail},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SystemDetail entity by its id.
+func (c *SystemDetailClient) Get(ctx context.Context, id string) (*SystemDetail, error) {
+	return c.Query().Where(systemdetail.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SystemDetailClient) GetX(ctx context.Context, id string) *SystemDetail {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a SystemDetail.
+func (c *SystemDetailClient) QueryOwner(_m *SystemDetail) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, systemdetail.OwnerTable, systemdetail.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgram queries the program edge of a SystemDetail.
+func (c *SystemDetailClient) QueryProgram(_m *SystemDetail) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, systemdetail.ProgramTable, systemdetail.ProgramColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlatform queries the platform edge of a SystemDetail.
+func (c *SystemDetailClient) QueryPlatform(_m *SystemDetail) *PlatformQuery {
+	query := (&PlatformClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(systemdetail.Table, systemdetail.FieldID, id),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, systemdetail.PlatformTable, systemdetail.PlatformColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SystemDetailClient) Hooks() []Hook {
+	hooks := c.hooks.SystemDetail
+	return append(hooks[:len(hooks):len(hooks)], systemdetail.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SystemDetailClient) Interceptors() []Interceptor {
+	inters := c.inters.SystemDetail
+	return append(inters[:len(inters):len(inters)], systemdetail.Interceptors[:]...)
+}
+
+func (c *SystemDetailClient) mutate(ctx context.Context, m *SystemDetailMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SystemDetailCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SystemDetailUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SystemDetailUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SystemDetailDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown SystemDetail mutation op: %q", m.Op())
 	}
 }
 
@@ -35430,12 +35687,12 @@ type (
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
 		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
-		TFASetting, TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
-		TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest,
-		TrustCenterSetting, TrustCenterSubprocessor, TrustCenterWatermarkConfig, User,
-		UserSetting, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Hook
+		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
+		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
+		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
+		TrustCenterWatermarkConfig, User, UserSetting, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -35453,12 +35710,13 @@ type (
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
 		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
-		TFASetting, TagDefinition, Task, Template, TrustCenter, TrustCenterCompliance,
-		TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest,
-		TrustCenterSetting, TrustCenterSubprocessor, TrustCenterWatermarkConfig, User,
-		UserSetting, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
+		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
+		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
+		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
+		TrustCenterWatermarkConfig, User, UserSetting, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Interceptor
 	}
 )
 

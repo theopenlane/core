@@ -165,6 +165,8 @@ const (
 	EdgeTasks = "tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
 	EdgeProcedures = "procedures"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
@@ -659,6 +661,13 @@ const (
 	ProgramsInverseTable = "programs"
 	// ProgramsColumn is the table column denoting the programs relation/edge.
 	ProgramsColumn = "owner_id"
+	// SystemDetailsTable is the table that holds the system_details relation/edge.
+	SystemDetailsTable = "system_details"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailsInverseTable = "system_details"
+	// SystemDetailsColumn is the table column denoting the system_details relation/edge.
+	SystemDetailsColumn = "owner_id"
 	// ProceduresTable is the table that holds the procedures relation/edge.
 	ProceduresTable = "procedures"
 	// ProceduresInverseTable is the table name for the Procedure entity.
@@ -1974,6 +1983,20 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProceduresCount orders the results by procedures count.
 func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3077,6 +3100,13 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
+	)
+}
+func newSystemDetailsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SystemDetailsTable, SystemDetailsColumn),
 	)
 }
 func newProceduresStep() *sqlgraph.Step {

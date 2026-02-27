@@ -188,6 +188,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Organization_programs(ctx, field)
+			case "systemDetails":
+				return ec.fieldContext_Organization_systemDetails(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Organization_procedures(ctx, field)
 			case "internalPolicies":
@@ -449,6 +451,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Organization_programs(ctx, field)
+			case "systemDetails":
+				return ec.fieldContext_Organization_systemDetails(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Organization_procedures(ctx, field)
 			case "internalPolicies":
@@ -739,6 +743,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_tasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_Organization_programs(ctx, field)
+			case "systemDetails":
+				return ec.fieldContext_Organization_systemDetails(ctx, field)
 			case "procedures":
 				return ec.fieldContext_Organization_procedures(ctx, field)
 			case "internalPolicies":

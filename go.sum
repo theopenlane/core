@@ -99,8 +99,8 @@ github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.18 h1:/A/xDuZAVD2Bp
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.18/go.mod h1:hWe9b4f+djUQGmyiGEeOnZv69dtMSgpDRIvNMvuvzvY=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.96.2 h1:M1A9AjcFwlxTLuf0Faj88L8Iqw0n/AJHjpZTQzMMsSc=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.96.2/go.mod h1:KsdTV6Q9WKUZm2mNJnUFmIoXfZux91M3sr/a4REX8e0=
-github.com/aws/aws-sdk-go-v2/service/securityhub v1.67.5 h1:azGi/ugcS5ucS6YI1ETh3n32ps9zJpdLQQmvuzXEx/k=
-github.com/aws/aws-sdk-go-v2/service/securityhub v1.67.5/go.mod h1:2lCBuCX+mx0aVBXqhQiTWO+m+kzv5ke+FWKP2TuDn34=
+github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.0 h1:3RWHYox000aCsZT85jVVWaEujLq01MumFRGPAA3S0d0=
+github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.0/go.mod h1:2lCBuCX+mx0aVBXqhQiTWO+m+kzv5ke+FWKP2TuDn34=
 github.com/aws/aws-sdk-go-v2/service/signin v1.0.6 h1:MzORe+J94I+hYu2a6XmV5yC9huoTv8NRcCrUNedDypQ=
 github.com/aws/aws-sdk-go-v2/service/signin v1.0.6/go.mod h1:hXzcHLARD7GeWnifd8j9RWqtfIgxj4/cAtIVIK7hg8g=
 github.com/aws/aws-sdk-go-v2/service/sso v1.30.11 h1:7oGD8KPfBOJGXiCoRKrrrQkbvCp8N++u36hrLMPey6o=
@@ -159,8 +159,8 @@ github.com/clipperhouse/stringish v0.1.1 h1:+NSqMOr3GR6k1FdRhhnXrLfztGzuG+VuFDfa
 github.com/clipperhouse/stringish v0.1.1/go.mod h1:v/WhFtE1q0ovMta2+m+UbpZ+2/HEXNWYXQgCt4hdOzA=
 github.com/clipperhouse/uax29/v2 v2.4.0 h1:RXqE/l5EiAbA4u97giimKNlmpvkmz+GrBVTelsoXy9g=
 github.com/clipperhouse/uax29/v2 v2.4.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
-github.com/cloudflare/cloudflare-go/v6 v6.7.0 h1:MP6Xy5WmsyrxgTxoLeq/vraqR0nbTtXoHhW4vAYc4SY=
-github.com/cloudflare/cloudflare-go/v6 v6.7.0/go.mod h1:Lj3MUqjvKctXRpdRhLQxZYRrNZHuRs0XYuH8JtQGyoI=
+github.com/cloudflare/cloudflare-go/v6 v6.8.0 h1:t1UV6Yc2T/MzEmiJgPRfIZZvpeBINNCMYHksn4nWsmk=
+github.com/cloudflare/cloudflare-go/v6 v6.8.0/go.mod h1:Lj3MUqjvKctXRpdRhLQxZYRrNZHuRs0XYuH8JtQGyoI=
 github.com/cncf/xds/go v0.0.0-20251210132809-ee656c7534f5 h1:6xNmx7iTtyBRev0+D/Tv1FZd4SCg8axKApyNyRsAt/w=
 github.com/cncf/xds/go v0.0.0-20251210132809-ee656c7534f5/go.mod h1:KdCmV+x/BuvyMxRnYBlmVaq4OLiKW6iRQfvC62cvdkI=
 github.com/containerd/continuity v0.4.5 h1:ZRoN1sXq9u7V6QoHMcVWGhOwDFqZ4B9i5H6un1Wh0x4=
@@ -669,8 +669,8 @@ github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4l
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
 github.com/theopenlane/emailtemplates v0.3.6 h1:ZBoaOD5wAmqfLywjlEK7H/nvshnE0J1WBT93Uiz84EI=
 github.com/theopenlane/emailtemplates v0.3.6/go.mod h1:VmTIBAJ9XQ+QOi7ZcaOjoEv0NxsuPKcR7Pz0N3EQeJE=
-github.com/theopenlane/entx v0.22.5 h1:wVRnC8xAVrofucPgj8fgsbv2wkq0HbNS2HIxtPkyekE=
-github.com/theopenlane/entx v0.22.5/go.mod h1:YEXLGD7rn5zeoL4091PrnR83fEaJDWprd47ULKxE7nE=
+github.com/theopenlane/entx v0.22.6 h1:dby7ZGgBxTKkMdzmQrSqbT7J3UWs8ieXTAJt6J0DkAA=
+github.com/theopenlane/entx v0.22.6/go.mod h1:5TnuRIVA0KShJ+LQZ6dAEoueDQ5nPNa7JPCLytkvYUw=
 github.com/theopenlane/go-client v0.8.5 h1:U14+tvR7BqrmGoUyf1uXEoJR+ixcW1XoGTYJqtN6pgc=
 github.com/theopenlane/go-client v0.8.5/go.mod h1:jx0AuE1ePg/PPraMRHCnUwMGU8NFmD0hv6xLht5D7A4=
 github.com/theopenlane/gqlgen-plugins v0.14.4 h1:mTdRnfE4IKhbDqXYmPU03D0euTADoiYnb9Vc1sdSvMU=
@@ -681,6 +681,8 @@ github.com/theopenlane/iam v0.25.0 h1:wcjyR+whLWO6nQWP3jTJ2XR/lH+wY13q8Jl16YJowr
 github.com/theopenlane/iam v0.25.0/go.mod h1:eXxlQGjTxRySRxlezxZq0kr84rEFHbyFIYOon8FYI8Y=
 github.com/theopenlane/newman v0.2.2 h1:TADWEoD9vOJonRqPKTUePMudpoRq7w6K7Vdy5RdapWw=
 github.com/theopenlane/newman v0.2.2/go.mod h1:nUyyNIxUIfKpPLf4oO/v1bFp5Ca8P42FG0ObxyEp/pA=
+github.com/theopenlane/oscalot v0.1.0 h1:ExYiMU4Q1ezbGq77sxkgahmfmc46L+2NqB39fg0HXjU=
+github.com/theopenlane/oscalot v0.1.0/go.mod h1:L7XzkqdBATqF2Du0uMTxoRr+eSfOHAwB6/ogwdwM0XE=
 github.com/theopenlane/riverboat v0.8.8 h1:MnArmNTqcM8cM21chiFkwVp9F74vdHevNoTeEIJtmpE=
 github.com/theopenlane/riverboat v0.8.8/go.mod h1:RNYPAn0PLNlAFXAEi0UADhrhmqhjLHqd2ZUX5IDVXFE=
 github.com/theopenlane/utils v0.7.0 h1:tSN9PBC8Ywn2As3TDW/1TAfWsVsodrccec40oAhiZgo=

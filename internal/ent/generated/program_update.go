@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -197,6 +198,26 @@ func (_u *ProgramUpdate) SetNillableProgramKindID(v *string) *ProgramUpdate {
 // ClearProgramKindID clears the value of the "program_kind_id" field.
 func (_u *ProgramUpdate) ClearProgramKindID() *ProgramUpdate {
 	_u.mutation.ClearProgramKindID()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ProgramUpdate) SetExternalUUID(v string) *ProgramUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableExternalUUID(v *string) *ProgramUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ProgramUpdate) ClearExternalUUID() *ProgramUpdate {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -665,6 +686,25 @@ func (_u *ProgramUpdate) AddActionPlans(v ...*ActionPlan) *ProgramUpdate {
 	return _u.AddActionPlanIDs(ids...)
 }
 
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_u *ProgramUpdate) SetSystemDetailID(id string) *ProgramUpdate {
+	_u.mutation.SetSystemDetailID(id)
+	return _u
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableSystemDetailID(id *string) *ProgramUpdate {
+	if id != nil {
+		_u = _u.SetSystemDetailID(*id)
+	}
+	return _u
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_u *ProgramUpdate) SetSystemDetail(v *SystemDetail) *ProgramUpdate {
+	return _u.SetSystemDetailID(v.ID)
+}
+
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (_u *ProgramUpdate) AddUserIDs(ids ...string) *ProgramUpdate {
 	_u.mutation.AddUserIDs(ids...)
@@ -1032,6 +1072,12 @@ func (_u *ProgramUpdate) RemoveActionPlans(v ...*ActionPlan) *ProgramUpdate {
 	return _u.RemoveActionPlanIDs(ids...)
 }
 
+// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
+func (_u *ProgramUpdate) ClearSystemDetail() *ProgramUpdate {
+	_u.mutation.ClearSystemDetail()
+	return _u
+}
+
 // ClearUsers clears all "users" edges to the User entity.
 func (_u *ProgramUpdate) ClearUsers() *ProgramUpdate {
 	_u.mutation.ClearUsers()
@@ -1211,6 +1257,12 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ProgramKindNameCleared() {
 		_spec.ClearField(program.FieldProgramKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(program.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(program.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(program.FieldName, field.TypeString, value)
@@ -2051,6 +2103,37 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SystemDetailCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   program.SystemDetailTable,
+			Columns: []string{program.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   program.SystemDetailTable,
+			Columns: []string{program.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.UsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2370,6 +2453,26 @@ func (_u *ProgramUpdateOne) SetNillableProgramKindID(v *string) *ProgramUpdateOn
 // ClearProgramKindID clears the value of the "program_kind_id" field.
 func (_u *ProgramUpdateOne) ClearProgramKindID() *ProgramUpdateOne {
 	_u.mutation.ClearProgramKindID()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ProgramUpdateOne) SetExternalUUID(v string) *ProgramUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableExternalUUID(v *string) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ProgramUpdateOne) ClearExternalUUID() *ProgramUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -2838,6 +2941,25 @@ func (_u *ProgramUpdateOne) AddActionPlans(v ...*ActionPlan) *ProgramUpdateOne {
 	return _u.AddActionPlanIDs(ids...)
 }
 
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_u *ProgramUpdateOne) SetSystemDetailID(id string) *ProgramUpdateOne {
+	_u.mutation.SetSystemDetailID(id)
+	return _u
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableSystemDetailID(id *string) *ProgramUpdateOne {
+	if id != nil {
+		_u = _u.SetSystemDetailID(*id)
+	}
+	return _u
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_u *ProgramUpdateOne) SetSystemDetail(v *SystemDetail) *ProgramUpdateOne {
+	return _u.SetSystemDetailID(v.ID)
+}
+
 // AddUserIDs adds the "users" edge to the User entity by IDs.
 func (_u *ProgramUpdateOne) AddUserIDs(ids ...string) *ProgramUpdateOne {
 	_u.mutation.AddUserIDs(ids...)
@@ -3205,6 +3327,12 @@ func (_u *ProgramUpdateOne) RemoveActionPlans(v ...*ActionPlan) *ProgramUpdateOn
 	return _u.RemoveActionPlanIDs(ids...)
 }
 
+// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
+func (_u *ProgramUpdateOne) ClearSystemDetail() *ProgramUpdateOne {
+	_u.mutation.ClearSystemDetail()
+	return _u
+}
+
 // ClearUsers clears all "users" edges to the User entity.
 func (_u *ProgramUpdateOne) ClearUsers() *ProgramUpdateOne {
 	_u.mutation.ClearUsers()
@@ -3414,6 +3542,12 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 	}
 	if _u.mutation.ProgramKindNameCleared() {
 		_spec.ClearField(program.FieldProgramKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(program.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(program.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(program.FieldName, field.TypeString, value)
@@ -4249,6 +4383,37 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   program.SystemDetailTable,
+			Columns: []string{program.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   program.SystemDetailTable,
+			Columns: []string{program.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

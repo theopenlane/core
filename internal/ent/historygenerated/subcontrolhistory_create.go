@@ -155,6 +155,20 @@ func (_c *SubcontrolHistoryCreate) SetTags(v []string) *SubcontrolHistoryCreate 
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *SubcontrolHistoryCreate) SetExternalUUID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableExternalUUID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *SubcontrolHistoryCreate) SetTitle(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -247,6 +261,34 @@ func (_c *SubcontrolHistoryCreate) SetStatus(v enums.ControlStatus) *SubcontrolH
 func (_c *SubcontrolHistoryCreate) SetNillableStatus(v *enums.ControlStatus) *SubcontrolHistoryCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_c *SubcontrolHistoryCreate) SetImplementationStatus(v enums.ControlImplementationStatus) *SubcontrolHistoryCreate {
+	_c.mutation.SetImplementationStatus(v)
+	return _c
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetImplementationStatus(*v)
+	}
+	return _c
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_c *SubcontrolHistoryCreate) SetImplementationDescription(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetImplementationDescription(v)
+	return _c
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableImplementationDescription(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetImplementationDescription(*v)
 	}
 	return _c
 }
@@ -607,6 +649,10 @@ func (_c *SubcontrolHistoryCreate) defaults() error {
 		v := subcontrolhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ImplementationStatus(); !ok {
+		v := subcontrolhistory.DefaultImplementationStatus
+		_c.mutation.SetImplementationStatus(v)
+	}
 	if _, ok := _c.mutation.Source(); !ok {
 		v := subcontrolhistory.DefaultSource
 		_c.mutation.SetSource(v)
@@ -648,6 +694,11 @@ func (_c *SubcontrolHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := subcontrolhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ImplementationStatus(); ok {
+		if err := subcontrolhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.implementation_status": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.Source(); ok {
@@ -741,6 +792,10 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(subcontrolhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(subcontrolhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -772,6 +827,14 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(subcontrolhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ImplementationStatus(); ok {
+		_spec.SetField(subcontrolhistory.FieldImplementationStatus, field.TypeEnum, value)
+		_node.ImplementationStatus = value
+	}
+	if value, ok := _c.mutation.ImplementationDescription(); ok {
+		_spec.SetField(subcontrolhistory.FieldImplementationDescription, field.TypeString, value)
+		_node.ImplementationDescription = value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeEnum, value)

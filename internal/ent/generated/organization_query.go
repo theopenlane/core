@@ -84,6 +84,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -168,6 +169,7 @@ type OrganizationQuery struct {
 	withNotes                                *NoteQuery
 	withTasks                                *TaskQuery
 	withPrograms                             *ProgramQuery
+	withSystemDetails                        *SystemDetailQuery
 	withProcedures                           *ProcedureQuery
 	withInternalPolicies                     *InternalPolicyQuery
 	withRisks                                *RiskQuery
@@ -275,6 +277,7 @@ type OrganizationQuery struct {
 	withNamedNotes                           map[string]*NoteQuery
 	withNamedTasks                           map[string]*TaskQuery
 	withNamedPrograms                        map[string]*ProgramQuery
+	withNamedSystemDetails                   map[string]*SystemDetailQuery
 	withNamedProcedures                      map[string]*ProcedureQuery
 	withNamedInternalPolicies                map[string]*InternalPolicyQuery
 	withNamedRisks                           map[string]*RiskQuery
@@ -1811,6 +1814,31 @@ func (_q *OrganizationQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QuerySystemDetails chains the current query on the "system_details" edge.
+func (_q *OrganizationQuery) QuerySystemDetails() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SystemDetailsTable, organization.SystemDetailsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryProcedures chains the current query on the "procedures" edge.
 func (_q *OrganizationQuery) QueryProcedures() *ProcedureQuery {
 	query := (&ProcedureClient{config: _q.config}).Query()
@@ -3311,6 +3339,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withNotes:                           _q.withNotes.Clone(),
 		withTasks:                           _q.withTasks.Clone(),
 		withPrograms:                        _q.withPrograms.Clone(),
+		withSystemDetails:                   _q.withSystemDetails.Clone(),
 		withProcedures:                      _q.withProcedures.Clone(),
 		withInternalPolicies:                _q.withInternalPolicies.Clone(),
 		withRisks:                           _q.withRisks.Clone(),
@@ -4006,6 +4035,17 @@ func (_q *OrganizationQuery) WithPrograms(opts ...func(*ProgramQuery)) *Organiza
 	return _q
 }
 
+// WithSystemDetails tells the query-builder to eager-load the nodes that are connected to
+// the "system_details" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithSystemDetails(opts ...func(*SystemDetailQuery)) *OrganizationQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetails = query
+	return _q
+}
+
 // WithProcedures tells the query-builder to eager-load the nodes that are connected to
 // the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithProcedures(opts ...func(*ProcedureQuery)) *OrganizationQuery {
@@ -4640,7 +4680,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [108]bool{
+		loadedTypes = [109]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4699,6 +4739,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withNotes != nil,
 			_q.withTasks != nil,
 			_q.withPrograms != nil,
+			_q.withSystemDetails != nil,
 			_q.withProcedures != nil,
 			_q.withInternalPolicies != nil,
 			_q.withRisks != nil,
@@ -5204,6 +5245,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Programs = []*Program{} },
 			func(n *Organization, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetails; query != nil {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Organization) { n.Edges.SystemDetails = []*SystemDetail{} },
+			func(n *Organization, e *SystemDetail) { n.Edges.SystemDetails = append(n.Edges.SystemDetails, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5975,6 +6023,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedPrograms(name) },
 			func(n *Organization, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSystemDetails {
+		if err := _q.loadSystemDetails(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSystemDetails(name) },
+			func(n *Organization, e *SystemDetail) { n.appendNamedSystemDetails(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8222,6 +8277,36 @@ func (_q *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 	}
 	query.Where(predicate.Program(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.ProgramsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadSystemDetails(ctx context.Context, query *SystemDetailQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *SystemDetail)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(systemdetail.FieldOwnerID)
+	}
+	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SystemDetailsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -10632,6 +10717,20 @@ func (_q *OrganizationQuery) WithNamedPrograms(name string, opts ...func(*Progra
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedSystemDetails tells the query-builder to eager-load the nodes that are connected to the "system_details"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedSystemDetails(name string, opts ...func(*SystemDetailQuery)) *OrganizationQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSystemDetails == nil {
+		_q.withNamedSystemDetails = make(map[string]*SystemDetailQuery)
+	}
+	_q.withNamedSystemDetails[name] = query
 	return _q
 }
 

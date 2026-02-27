@@ -8,6 +8,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -44,16 +45,30 @@ func (Narrative) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			).
 			Comment("the name of the narrative"),
 		field.Text("description").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			).
 			Comment("the description of the narrative"),
 		field.Text("details").
 			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleImplementationDetails,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			).
 			Comment("text data for the narrative document"),
 	}
 }
@@ -66,6 +81,12 @@ func (n Narrative) Edges() []ent.Edge {
 			name:       "satisfies",
 			t:          Control.Type,
 			comment:    "which controls are satisfied by the narrative",
+			annotations: []schema.Annotation{
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleSatisfiesControl,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			},
 		}),
 		defaultEdgeFromWithPagination(n, Program{}),
 		defaultEdgeFromWithPagination(n, InternalPolicy{}),
@@ -103,6 +124,10 @@ func (Narrative) Modules() []models.OrgModule {
 func (n Narrative) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("statement"),
+		),
 	}
 }
 

@@ -2040,32 +2040,32 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "task": {
 	ObjectType:      "task",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "control": {
 	ObjectType:      "control",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "subcontrol": {
 	ObjectType:      "subcontrol",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "procedure": {
 	ObjectType:      "procedure",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "risk": {
 	ObjectType:      "risk",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "internal_policy": {
 	ObjectType:      "internal_policy",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "evidence": {
 	ObjectType:      "evidence",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
@@ -2450,6 +2450,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "programs": {
 	ObjectType:      "program",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "system_details": {
+	ObjectType:      "system_detail",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "procedures": {
@@ -2852,6 +2856,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "user",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "system_detail": {
+	ObjectType:      "system_detail",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "procedure": {"owner": {
 	ObjectType:      "owner",
@@ -2996,6 +3004,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "action_plans": {
 	ObjectType:      "action_plan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "system_detail": {
+	ObjectType:      "system_detail",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "users": {
@@ -3547,6 +3559,19 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "events": {
 	ObjectType:      "event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "system_detail": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "program": {
+	ObjectType:      "program",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platform": {
+	ObjectType:      "platform",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },

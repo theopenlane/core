@@ -118,6 +118,11 @@ func ProgramKindID(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldProgramKindID, v))
 }
 
+// ExternalUUID applies equality check predicate on the "external_uuid" field. It's identical to ExternalUUIDEQ.
+func ExternalUUID(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldExternalUUID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldName, v))
@@ -851,6 +856,81 @@ func ProgramKindIDEqualFold(v string) predicate.Program {
 // ProgramKindIDContainsFold applies the ContainsFold predicate on the "program_kind_id" field.
 func ProgramKindIDContainsFold(v string) predicate.Program {
 	return predicate.Program(sql.FieldContainsFold(FieldProgramKindID, v))
+}
+
+// ExternalUUIDEQ applies the EQ predicate on the "external_uuid" field.
+func ExternalUUIDEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldExternalUUID, v))
+}
+
+// ExternalUUIDNEQ applies the NEQ predicate on the "external_uuid" field.
+func ExternalUUIDNEQ(v string) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldExternalUUID, v))
+}
+
+// ExternalUUIDIn applies the In predicate on the "external_uuid" field.
+func ExternalUUIDIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldExternalUUID, vs...))
+}
+
+// ExternalUUIDNotIn applies the NotIn predicate on the "external_uuid" field.
+func ExternalUUIDNotIn(vs ...string) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldExternalUUID, vs...))
+}
+
+// ExternalUUIDGT applies the GT predicate on the "external_uuid" field.
+func ExternalUUIDGT(v string) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldExternalUUID, v))
+}
+
+// ExternalUUIDGTE applies the GTE predicate on the "external_uuid" field.
+func ExternalUUIDGTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldExternalUUID, v))
+}
+
+// ExternalUUIDLT applies the LT predicate on the "external_uuid" field.
+func ExternalUUIDLT(v string) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldExternalUUID, v))
+}
+
+// ExternalUUIDLTE applies the LTE predicate on the "external_uuid" field.
+func ExternalUUIDLTE(v string) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldExternalUUID, v))
+}
+
+// ExternalUUIDContains applies the Contains predicate on the "external_uuid" field.
+func ExternalUUIDContains(v string) predicate.Program {
+	return predicate.Program(sql.FieldContains(FieldExternalUUID, v))
+}
+
+// ExternalUUIDHasPrefix applies the HasPrefix predicate on the "external_uuid" field.
+func ExternalUUIDHasPrefix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasPrefix(FieldExternalUUID, v))
+}
+
+// ExternalUUIDHasSuffix applies the HasSuffix predicate on the "external_uuid" field.
+func ExternalUUIDHasSuffix(v string) predicate.Program {
+	return predicate.Program(sql.FieldHasSuffix(FieldExternalUUID, v))
+}
+
+// ExternalUUIDIsNil applies the IsNil predicate on the "external_uuid" field.
+func ExternalUUIDIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldExternalUUID))
+}
+
+// ExternalUUIDNotNil applies the NotNil predicate on the "external_uuid" field.
+func ExternalUUIDNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldExternalUUID))
+}
+
+// ExternalUUIDEqualFold applies the EqualFold predicate on the "external_uuid" field.
+func ExternalUUIDEqualFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldEqualFold(FieldExternalUUID, v))
+}
+
+// ExternalUUIDContainsFold applies the ContainsFold predicate on the "external_uuid" field.
+func ExternalUUIDContainsFold(v string) predicate.Program {
+	return predicate.Program(sql.FieldContainsFold(FieldExternalUUID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -2013,6 +2093,35 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Program {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSystemDetail applies the HasEdge predicate on the "system_detail" edge.
+func HasSystemDetail() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSystemDetailWith applies the HasEdge predicate on the "system_detail" edge with a given conditions (other predicates).
+func HasSystemDetailWith(preds ...predicate.SystemDetail) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newSystemDetailStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

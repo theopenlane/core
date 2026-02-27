@@ -29,7 +29,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.2
 	github.com/brianvoe/gofakeit/v7 v7.14.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v6 v6.7.0
+	github.com/cloudflare/cloudflare-go/v6 v6.8.0
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20240320110924-172bf2aee9c8
 	github.com/fatih/camelcase v1.0.0
@@ -88,11 +88,11 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
-	github.com/theopenlane/core/common v1.0.10
+	github.com/theopenlane/core/common v1.0.11
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
-	github.com/theopenlane/entx v0.22.5
+	github.com/theopenlane/entx v0.22.6
 	github.com/theopenlane/go-client v0.8.5
 	github.com/theopenlane/gqlgen-plugins v0.14.4
 	github.com/theopenlane/httpsling v0.3.0
@@ -133,6 +133,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	github.com/theopenlane/oscalot v0.1.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/term v0.40.0 // indirect
@@ -250,7 +251,7 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.9
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.67.5
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.0
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect

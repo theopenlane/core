@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -555,6 +556,20 @@ func (_c *PlatformCreate) SetWorkflowEligibleMarker(v bool) *PlatformCreate {
 func (_c *PlatformCreate) SetNillableWorkflowEligibleMarker(v *bool) *PlatformCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *PlatformCreate) SetExternalUUID(v string) *PlatformCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableExternalUUID(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
 	}
 	return _c
 }
@@ -1274,6 +1289,25 @@ func (_c *PlatformCreate) SetPlatformOwner(v *User) *PlatformCreate {
 	return _c.SetPlatformOwnerID(v.ID)
 }
 
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_c *PlatformCreate) SetSystemDetailID(id string) *PlatformCreate {
+	_c.mutation.SetSystemDetailID(id)
+	return _c
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_c *PlatformCreate) SetNillableSystemDetailID(id *string) *PlatformCreate {
+	if id != nil {
+		_c = _c.SetSystemDetailID(*id)
+	}
+	return _c
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_c *PlatformCreate) SetSystemDetail(v *SystemDetail) *PlatformCreate {
+	return _c.SetSystemDetailID(v.ID)
+}
+
 // Mutation returns the PlatformMutation object of the builder.
 func (_c *PlatformCreate) Mutation() *PlatformMutation {
 	return _c.mutation
@@ -1513,6 +1547,10 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(platform.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(platform.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(platform.FieldName, field.TypeString, value)
@@ -2329,6 +2367,23 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.PlatformOwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

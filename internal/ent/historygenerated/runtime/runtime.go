@@ -63,6 +63,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -478,15 +479,15 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[38].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[41].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[47].Descriptor()
+	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[50].Descriptor()
 	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// controlhistoryDescIsTrustCenterControl is the schema descriptor for is_trust_center_control field.
-	controlhistoryDescIsTrustCenterControl := controlhistoryFields[51].Descriptor()
+	controlhistoryDescIsTrustCenterControl := controlhistoryFields[54].Descriptor()
 	// controlhistory.DefaultIsTrustCenterControl holds the default value on creation for the is_trust_center_control field.
 	controlhistory.DefaultIsTrustCenterControl = controlhistoryDescIsTrustCenterControl.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -1090,15 +1091,15 @@ func init() {
 	// evidencehistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	evidencehistory.DefaultWorkflowEligibleMarker = evidencehistoryDescWorkflowEligibleMarker.Default.(bool)
 	// evidencehistoryDescCreationDate is the schema descriptor for creation_date field.
-	evidencehistoryDescCreationDate := evidencehistoryFields[21].Descriptor()
+	evidencehistoryDescCreationDate := evidencehistoryFields[22].Descriptor()
 	// evidencehistory.DefaultCreationDate holds the default value on creation for the creation_date field.
 	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() time.Time)
 	// evidencehistoryDescRenewalDate is the schema descriptor for renewal_date field.
-	evidencehistoryDescRenewalDate := evidencehistoryFields[22].Descriptor()
+	evidencehistoryDescRenewalDate := evidencehistoryFields[23].Descriptor()
 	// evidencehistory.DefaultRenewalDate holds the default value on creation for the renewal_date field.
 	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(time.Time)
 	// evidencehistoryDescIsAutomated is the schema descriptor for is_automated field.
-	evidencehistoryDescIsAutomated := evidencehistoryFields[24].Descriptor()
+	evidencehistoryDescIsAutomated := evidencehistoryFields[25].Descriptor()
 	// evidencehistory.DefaultIsAutomated holds the default value on creation for the is_automated field.
 	evidencehistory.DefaultIsAutomated = evidencehistoryDescIsAutomated.Default.(bool)
 	// evidencehistoryDescID is the schema descriptor for id field.
@@ -1274,7 +1275,7 @@ func init() {
 	// grouphistory.DefaultDisplayName holds the default value on creation for the display_name field.
 	grouphistory.DefaultDisplayName = grouphistoryDescDisplayName.Default.(string)
 	// grouphistoryDescScimActive is the schema descriptor for scim_active field.
-	grouphistoryDescScimActive := grouphistoryFields[21].Descriptor()
+	grouphistoryDescScimActive := grouphistoryFields[24].Descriptor()
 	// grouphistory.DefaultScimActive holds the default value on creation for the scim_active field.
 	grouphistory.DefaultScimActive = grouphistoryDescScimActive.Default.(bool)
 	// grouphistoryDescID is the schema descriptor for id field.
@@ -2035,7 +2036,7 @@ func init() {
 	// platformhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	platformhistory.DefaultWorkflowEligibleMarker = platformhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// platformhistoryDescContainsPii is the schema descriptor for contains_pii field.
-	platformhistoryDescContainsPii := platformhistoryFields[51].Descriptor()
+	platformhistoryDescContainsPii := platformhistoryFields[52].Descriptor()
 	// platformhistory.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	platformhistory.DefaultContainsPii = platformhistoryDescContainsPii.Default.(bool)
 	// platformhistoryDescID is the schema descriptor for id field.
@@ -2153,15 +2154,15 @@ func init() {
 	// programhistory.DefaultTags holds the default value on creation for the tags field.
 	programhistory.DefaultTags = programhistoryDescTags.Default.([]string)
 	// programhistoryDescAuditorReady is the schema descriptor for auditor_ready field.
-	programhistoryDescAuditorReady := programhistoryFields[21].Descriptor()
+	programhistoryDescAuditorReady := programhistoryFields[22].Descriptor()
 	// programhistory.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	programhistory.DefaultAuditorReady = programhistoryDescAuditorReady.Default.(bool)
 	// programhistoryDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programhistoryDescAuditorWriteComments := programhistoryFields[22].Descriptor()
+	programhistoryDescAuditorWriteComments := programhistoryFields[23].Descriptor()
 	// programhistory.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	programhistory.DefaultAuditorWriteComments = programhistoryDescAuditorWriteComments.Default.(bool)
 	// programhistoryDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programhistoryDescAuditorReadComments := programhistoryFields[23].Descriptor()
+	programhistoryDescAuditorReadComments := programhistoryFields[24].Descriptor()
 	// programhistory.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	programhistory.DefaultAuditorReadComments = programhistoryDescAuditorReadComments.Default.(bool)
 	// programhistoryDescID is the schema descriptor for id field.
@@ -2473,11 +2474,11 @@ func init() {
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[38].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[41].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[43].Descriptor()
+	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[46].Descriptor()
 	// subcontrolhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	subcontrolhistory.DefaultWorkflowEligibleMarker = subcontrolhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.
@@ -2523,6 +2524,41 @@ func init() {
 	subprocessorhistoryDescID := subprocessorhistoryFields[9].Descriptor()
 	// subprocessorhistory.DefaultID holds the default value on creation for the id field.
 	subprocessorhistory.DefaultID = subprocessorhistoryDescID.Default.(func() string)
+	systemdetailhistory.Policy = privacy.NewPolicies(historyschema.SystemDetailHistory{})
+	systemdetailhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := systemdetailhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	systemdetailhistoryInters := historyschema.SystemDetailHistory{}.Interceptors()
+	systemdetailhistory.Interceptors[0] = systemdetailhistoryInters[0]
+	systemdetailhistoryFields := historyschema.SystemDetailHistory{}.Fields()
+	_ = systemdetailhistoryFields
+	// systemdetailhistoryDescHistoryTime is the schema descriptor for history_time field.
+	systemdetailhistoryDescHistoryTime := systemdetailhistoryFields[0].Descriptor()
+	// systemdetailhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	systemdetailhistory.DefaultHistoryTime = systemdetailhistoryDescHistoryTime.Default.(func() time.Time)
+	// systemdetailhistoryDescCreatedAt is the schema descriptor for created_at field.
+	systemdetailhistoryDescCreatedAt := systemdetailhistoryFields[3].Descriptor()
+	// systemdetailhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	systemdetailhistory.DefaultCreatedAt = systemdetailhistoryDescCreatedAt.Default.(func() time.Time)
+	// systemdetailhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	systemdetailhistoryDescUpdatedAt := systemdetailhistoryFields[4].Descriptor()
+	// systemdetailhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	systemdetailhistory.DefaultUpdatedAt = systemdetailhistoryDescUpdatedAt.Default.(func() time.Time)
+	// systemdetailhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	systemdetailhistory.UpdateDefaultUpdatedAt = systemdetailhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// systemdetailhistoryDescTags is the schema descriptor for tags field.
+	systemdetailhistoryDescTags := systemdetailhistoryFields[11].Descriptor()
+	// systemdetailhistory.DefaultTags holds the default value on creation for the tags field.
+	systemdetailhistory.DefaultTags = systemdetailhistoryDescTags.Default.([]string)
+	// systemdetailhistoryDescID is the schema descriptor for id field.
+	systemdetailhistoryDescID := systemdetailhistoryFields[9].Descriptor()
+	// systemdetailhistory.DefaultID holds the default value on creation for the id field.
+	systemdetailhistory.DefaultID = systemdetailhistoryDescID.Default.(func() string)
 	taskhistory.Policy = privacy.NewPolicies(historyschema.TaskHistory{})
 	taskhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -2555,7 +2591,7 @@ func init() {
 	// taskhistory.DefaultTags holds the default value on creation for the tags field.
 	taskhistory.DefaultTags = taskhistoryDescTags.Default.([]string)
 	// taskhistoryDescSystemGenerated is the schema descriptor for system_generated field.
-	taskhistoryDescSystemGenerated := taskhistoryFields[27].Descriptor()
+	taskhistoryDescSystemGenerated := taskhistoryFields[28].Descriptor()
 	// taskhistory.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	taskhistory.DefaultSystemGenerated = taskhistoryDescSystemGenerated.Default.(bool)
 	// taskhistoryDescID is the schema descriptor for id field.

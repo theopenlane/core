@@ -208,6 +208,11 @@ func WorkflowEligibleMarker(v bool) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
+// ExternalUUID applies equality check predicate on the "external_uuid" field. It's identical to ExternalUUIDEQ.
+func ExternalUUID(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalUUID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldCreatedAt, v))
@@ -2181,6 +2186,81 @@ func WorkflowEligibleMarkerIsNil() predicate.InternalPolicy {
 // WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
 func WorkflowEligibleMarkerNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldWorkflowEligibleMarker))
+}
+
+// ExternalUUIDEQ applies the EQ predicate on the "external_uuid" field.
+func ExternalUUIDEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldExternalUUID, v))
+}
+
+// ExternalUUIDNEQ applies the NEQ predicate on the "external_uuid" field.
+func ExternalUUIDNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldExternalUUID, v))
+}
+
+// ExternalUUIDIn applies the In predicate on the "external_uuid" field.
+func ExternalUUIDIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldExternalUUID, vs...))
+}
+
+// ExternalUUIDNotIn applies the NotIn predicate on the "external_uuid" field.
+func ExternalUUIDNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldExternalUUID, vs...))
+}
+
+// ExternalUUIDGT applies the GT predicate on the "external_uuid" field.
+func ExternalUUIDGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldExternalUUID, v))
+}
+
+// ExternalUUIDGTE applies the GTE predicate on the "external_uuid" field.
+func ExternalUUIDGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldExternalUUID, v))
+}
+
+// ExternalUUIDLT applies the LT predicate on the "external_uuid" field.
+func ExternalUUIDLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldExternalUUID, v))
+}
+
+// ExternalUUIDLTE applies the LTE predicate on the "external_uuid" field.
+func ExternalUUIDLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldExternalUUID, v))
+}
+
+// ExternalUUIDContains applies the Contains predicate on the "external_uuid" field.
+func ExternalUUIDContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldExternalUUID, v))
+}
+
+// ExternalUUIDHasPrefix applies the HasPrefix predicate on the "external_uuid" field.
+func ExternalUUIDHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldExternalUUID, v))
+}
+
+// ExternalUUIDHasSuffix applies the HasSuffix predicate on the "external_uuid" field.
+func ExternalUUIDHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldExternalUUID, v))
+}
+
+// ExternalUUIDIsNil applies the IsNil predicate on the "external_uuid" field.
+func ExternalUUIDIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldExternalUUID))
+}
+
+// ExternalUUIDNotNil applies the NotNil predicate on the "external_uuid" field.
+func ExternalUUIDNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldExternalUUID))
+}
+
+// ExternalUUIDEqualFold applies the EqualFold predicate on the "external_uuid" field.
+func ExternalUUIDEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldExternalUUID, v))
+}
+
+// ExternalUUIDContainsFold applies the ContainsFold predicate on the "external_uuid" field.
+func ExternalUUIDContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldExternalUUID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

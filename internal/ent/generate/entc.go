@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/entx/workflowgen"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
@@ -73,6 +74,7 @@ const (
 	entGeneratedAuthzPath    = "internal/ent/authzgenerated"
 	entGeneratedWorkflowPath = "internal/ent/workflowgenerated"
 	csvGeneratedPath         = "internal/ent/csvgenerated"
+	oscalGeneratedPath       = "internal/ent/oscalgenerated"
 	integrationGeneratedPath = "internal/ent/integrationgenerated"
 
 	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
@@ -133,7 +135,12 @@ func main() {
 	var capturedGraph *gen.Graph
 
 	if hasChanges {
-		capturedGraph = schemaGenerate(getEntfgaExtension(hasChanges), getEntGqlExtension(), getHistoryExtension(hasChanges))
+		capturedGraph = schemaGenerate(
+			getEntfgaExtension(hasChanges),
+			getEntGqlExtension(),
+			getHistoryExtension(hasChanges),
+			getOSCALExtension(),
+		)
 	} else {
 		log.Info().Msg("no schema changes detected, skipping main schema codegen")
 	}
@@ -287,6 +294,15 @@ func getHistoryExtension(hasChanges bool) *history.Extension {
 	}
 
 	return historyExt
+}
+
+func getOSCALExtension() *oscalgen.Extension {
+	return oscalgen.New(
+		oscalgen.WithSchemaPath(schemaPath),
+		oscalgen.WithGeneratedDir(oscalGeneratedPath),
+		oscalgen.WithPackageName("oscalgenerated"),
+		oscalgen.WithBuildFlags(buildFlags),
+	)
 }
 
 func exportableSchema() {

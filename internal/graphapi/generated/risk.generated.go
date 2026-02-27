@@ -84,6 +84,8 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -248,6 +250,8 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -412,6 +416,8 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -576,6 +582,8 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":

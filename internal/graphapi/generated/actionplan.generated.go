@@ -464,6 +464,14 @@ type MutationResolver interface {
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error)
 	UpdateSubscriber(ctx context.Context, email string, input generated.UpdateSubscriberInput) (*model.SubscriberUpdatePayload, error)
 	DeleteSubscriber(ctx context.Context, email string, ownerID *string) (*model.SubscriberDeletePayload, error)
+	CreateSystemDetail(ctx context.Context, input generated.CreateSystemDetailInput) (*model.SystemDetailCreatePayload, error)
+	CreateBulkSystemDetail(ctx context.Context, input []*generated.CreateSystemDetailInput) (*model.SystemDetailBulkCreatePayload, error)
+	CreateBulkCSVSystemDetail(ctx context.Context, input graphql.Upload) (*model.SystemDetailBulkCreatePayload, error)
+	UpdateBulkSystemDetail(ctx context.Context, ids []string, input generated.UpdateSystemDetailInput) (*model.SystemDetailBulkUpdatePayload, error)
+	UpdateBulkCSVSystemDetail(ctx context.Context, input graphql.Upload) (*model.SystemDetailBulkUpdatePayload, error)
+	UpdateSystemDetail(ctx context.Context, id string, input generated.UpdateSystemDetailInput) (*model.SystemDetailUpdatePayload, error)
+	DeleteSystemDetail(ctx context.Context, id string) (*model.SystemDetailDeletePayload, error)
+	DeleteBulkSystemDetail(ctx context.Context, ids []string) (*model.SystemDetailBulkDeletePayload, error)
 	CreateTagDefinition(ctx context.Context, input generated.CreateTagDefinitionInput) (*model.TagDefinitionCreatePayload, error)
 	CreateBulkTagDefinition(ctx context.Context, input []*generated.CreateTagDefinitionInput) (*model.TagDefinitionBulkCreatePayload, error)
 	CreateBulkCSVTagDefinition(ctx context.Context, input graphql.Upload) (*model.TagDefinitionBulkCreatePayload, error)
@@ -1357,6 +1365,17 @@ func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_args(ctx cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createBulkCSVSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createBulkCSVTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2037,6 +2056,17 @@ func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubscriberInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createBulkSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSystemDetailInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSystemDetailInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -3000,6 +3030,17 @@ func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Con
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSystemDetailInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSystemDetailInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -3808,6 +3849,17 @@ func (ec *executionContext) field_Mutation_deleteBulkSubprocessor_args(ctx conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteBulkSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -4580,6 +4632,17 @@ func (ec *executionContext) field_Mutation_deleteSubscriber_args(ctx context.Con
 		return nil, err
 	}
 	args["ownerID"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -5484,6 +5547,17 @@ func (ec *executionContext) field_Mutation_updateBulkCSVSubprocessor_args(ctx co
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateBulkCSVSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateBulkCSVTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -6130,6 +6204,22 @@ func (ec *executionContext) field_Mutation_updateBulkSubprocessor_args(ctx conte
 	}
 	args["ids"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubprocessorInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBulkSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSystemDetailInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSystemDetailInput)
 	if err != nil {
 		return nil, err
 	}
@@ -7341,6 +7431,22 @@ func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Con
 	}
 	args["email"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubscriberInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSystemDetail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSystemDetailInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSystemDetailInput)
 	if err != nil {
 		return nil, err
 	}
@@ -28784,6 +28890,370 @@ func (ec *executionContext) fieldContext_Mutation_deleteSubscriber(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_createSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CreateSystemDetail(ctx, fc.Args["input"].(generated.CreateSystemDetailInput))
+		},
+		nil,
+		ec.marshalNSystemDetailCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "systemDetail":
+				return ec.fieldContext_SystemDetailCreatePayload_systemDetail(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBulkSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBulkSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CreateBulkSystemDetail(ctx, fc.Args["input"].([]*generated.CreateSystemDetailInput))
+		},
+		nil,
+		ec.marshalNSystemDetailBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBulkSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "systemDetails":
+				return ec.fieldContext_SystemDetailBulkCreatePayload_systemDetails(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBulkSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBulkCSVSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_createBulkCSVSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CreateBulkCSVSystemDetail(ctx, fc.Args["input"].(graphql.Upload))
+		},
+		nil,
+		ec.marshalNSystemDetailBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkCreatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBulkCSVSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "systemDetails":
+				return ec.fieldContext_SystemDetailBulkCreatePayload_systemDetails(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBulkCSVSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBulkSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBulkSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateBulkSystemDetail(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateSystemDetailInput))
+		},
+		nil,
+		ec.marshalNSystemDetailBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBulkSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "systemDetails":
+				return ec.fieldContext_SystemDetailBulkUpdatePayload_systemDetails(ctx, field)
+			case "updatedIDs":
+				return ec.fieldContext_SystemDetailBulkUpdatePayload_updatedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBulkSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBulkCSVSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBulkCSVSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateBulkCSVSystemDetail(ctx, fc.Args["input"].(graphql.Upload))
+		},
+		nil,
+		ec.marshalNSystemDetailBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBulkCSVSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "systemDetails":
+				return ec.fieldContext_SystemDetailBulkUpdatePayload_systemDetails(ctx, field)
+			case "updatedIDs":
+				return ec.fieldContext_SystemDetailBulkUpdatePayload_updatedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBulkCSVSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateSystemDetail(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSystemDetailInput))
+		},
+		nil,
+		ec.marshalNSystemDetailUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "systemDetail":
+				return ec.fieldContext_SystemDetailUpdatePayload_systemDetail(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteSystemDetail(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNSystemDetailDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedID":
+				return ec.fieldContext_SystemDetailDeletePayload_deletedID(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkSystemDetail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkSystemDetail,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteBulkSystemDetail(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNSystemDetailBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkSystemDetail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_SystemDetailBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkSystemDetail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createTagDefinition(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -37600,6 +38070,62 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteSubscriber":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteSubscriber(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBulkSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBulkSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBulkCSVSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBulkCSVSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBulkSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBulkSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBulkCSVSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBulkCSVSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteSystemDetail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkSystemDetail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkSystemDetail(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

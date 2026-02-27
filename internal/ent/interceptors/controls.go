@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // InterceptorTrustCenterControl is middleware that filters control queries based on user context:
@@ -20,6 +21,12 @@ import (
 // - authenticated users with only the trust center module (not compliance) only see trust center controls
 func InterceptorTrustCenterControl() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		// skip if modules are not enabled
+		client := generated.FromContext(ctx)
+		if !utils.ModulesEnabled(client) {
+			return nil
+		}
+
 		// anonymous trust center users can only see controls that are:
 		// 1. marked as trust center controls (cloned from the trust center standard)
 		// 2. have public visibility

@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -91,6 +92,7 @@ type PlatformQuery struct {
 	withApplicableFrameworks       *StandardQuery
 	withGeneratedScans             *ScanQuery
 	withPlatformOwner              *UserQuery
+	withSystemDetail               *SystemDetailQuery
 	withFKs                        bool
 	loadTotal                      []func(context.Context, []*Platform) error
 	modifiers                      []func(*sql.Selector)
@@ -1230,6 +1232,31 @@ func (_q *PlatformQuery) QueryPlatformOwner() *UserQuery {
 	return query
 }
 
+// QuerySystemDetail chains the current query on the "system_detail" edge.
+func (_q *PlatformQuery) QuerySystemDetail() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, platform.SystemDetailTable, platform.SystemDetailColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Platform entity from the query.
 // Returns a *NotFoundError when no Platform was found.
 func (_q *PlatformQuery) First(ctx context.Context) (*Platform, error) {
@@ -1465,6 +1492,7 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withApplicableFrameworks:       _q.withApplicableFrameworks.Clone(),
 		withGeneratedScans:             _q.withGeneratedScans.Clone(),
 		withPlatformOwner:              _q.withPlatformOwner.Clone(),
+		withSystemDetail:               _q.withSystemDetail.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1945,6 +1973,17 @@ func (_q *PlatformQuery) WithPlatformOwner(opts ...func(*UserQuery)) *PlatformQu
 	return _q
 }
 
+// WithSystemDetail tells the query-builder to eager-load the nodes that are connected to
+// the "system_detail" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithSystemDetail(opts ...func(*SystemDetailQuery)) *PlatformQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetail = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -2030,7 +2069,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		nodes       = []*Platform{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [43]bool{
+		loadedTypes = [44]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -2074,6 +2113,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withApplicableFrameworks != nil,
 			_q.withGeneratedScans != nil,
 			_q.withPlatformOwner != nil,
+			_q.withSystemDetail != nil,
 		}
 	)
 	if withFKs {
@@ -2390,6 +2430,12 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 	if query := _q.withPlatformOwner; query != nil {
 		if err := _q.loadPlatformOwner(ctx, query, nodes, nil,
 			func(n *Platform, e *User) { n.Edges.PlatformOwner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetail; query != nil {
+		if err := _q.loadSystemDetail(ctx, query, nodes, nil,
+			func(n *Platform, e *SystemDetail) { n.Edges.SystemDetail = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -4393,6 +4439,36 @@ func (_q *PlatformQuery) loadPlatformOwner(ctx context.Context, query *UserQuery
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadSystemDetail(ctx context.Context, query *SystemDetailQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *SystemDetail)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Platform)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(systemdetail.FieldPlatformID)
+	}
+	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(platform.SystemDetailColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.PlatformID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "platform_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

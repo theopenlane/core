@@ -900,6 +900,31 @@ extend type Query{
         last: Int
     ): SubscriberConnection
     """
+    Search across SystemDetail objects
+    """
+    systemDetailSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): SystemDetailConnection
+    """
     Search across TagDefinition objects
     """
     tagDefinitionSearch(
@@ -1070,6 +1095,7 @@ type SearchResults{
   subcontrols: SubcontrolConnection
   subprocessors: SubprocessorConnection
   subscribers: SubscriberConnection
+  systemDetails: SystemDetailConnection
   tagDefinitions: TagDefinitionConnection
   tasks: TaskConnection
   templates: TemplateConnection

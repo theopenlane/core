@@ -64,6 +64,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -1800,6 +1801,11 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldTags)
 				fieldSeen[controlhistory.FieldTags] = struct{}{}
 			}
+		case "externalUUID":
+			if _, ok := fieldSeen[controlhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldExternalUUID)
+				fieldSeen[controlhistory.FieldExternalUUID] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[controlhistory.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldTitle)
@@ -1839,6 +1845,16 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldStatus)
 				fieldSeen[controlhistory.FieldStatus] = struct{}{}
+			}
+		case "implementationStatus":
+			if _, ok := fieldSeen[controlhistory.FieldImplementationStatus]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldImplementationStatus)
+				fieldSeen[controlhistory.FieldImplementationStatus] = struct{}{}
+			}
+		case "implementationDescription":
+			if _, ok := fieldSeen[controlhistory.FieldImplementationDescription]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldImplementationDescription)
+				fieldSeen[controlhistory.FieldImplementationDescription] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[controlhistory.FieldSource]; !ok {
@@ -4841,6 +4857,11 @@ func (_q *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, evidencehistory.FieldWorkflowEligibleMarker)
 				fieldSeen[evidencehistory.FieldWorkflowEligibleMarker] = struct{}{}
 			}
+		case "externalUUID":
+			if _, ok := fieldSeen[evidencehistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldExternalUUID)
+				fieldSeen[evidencehistory.FieldExternalUUID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[evidencehistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, evidencehistory.FieldName)
@@ -5811,6 +5832,21 @@ func (_q *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[grouphistory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldDisplayName)
 				fieldSeen[grouphistory.FieldDisplayName] = struct{}{}
+			}
+		case "oscalRole":
+			if _, ok := fieldSeen[grouphistory.FieldOscalRole]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldOscalRole)
+				fieldSeen[grouphistory.FieldOscalRole] = struct{}{}
+			}
+		case "oscalPartyUUID":
+			if _, ok := fieldSeen[grouphistory.FieldOscalPartyUUID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldOscalPartyUUID)
+				fieldSeen[grouphistory.FieldOscalPartyUUID] = struct{}{}
+			}
+		case "oscalContactUuids":
+			if _, ok := fieldSeen[grouphistory.FieldOscalContactUuids]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldOscalContactUuids)
+				fieldSeen[grouphistory.FieldOscalContactUuids] = struct{}{}
 			}
 		case "scimExternalID":
 			if _, ok := fieldSeen[grouphistory.FieldScimExternalID]; !ok {
@@ -7030,6 +7066,11 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldWorkflowEligibleMarker]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldWorkflowEligibleMarker)
 				fieldSeen[internalpolicyhistory.FieldWorkflowEligibleMarker] = struct{}{}
+			}
+		case "externalUUID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldExternalUUID)
+				fieldSeen[internalpolicyhistory.FieldExternalUUID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -9289,6 +9330,11 @@ func (_q *PlatformHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, platformhistory.FieldWorkflowEligibleMarker)
 				fieldSeen[platformhistory.FieldWorkflowEligibleMarker] = struct{}{}
 			}
+		case "externalUUID":
+			if _, ok := fieldSeen[platformhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, platformhistory.FieldExternalUUID)
+				fieldSeen[platformhistory.FieldExternalUUID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[platformhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, platformhistory.FieldName)
@@ -9801,6 +9847,11 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldProgramKindID]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldProgramKindID)
 				fieldSeen[programhistory.FieldProgramKindID] = struct{}{}
+			}
+		case "externalUUID":
+			if _, ok := fieldSeen[programhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldExternalUUID)
+				fieldSeen[programhistory.FieldExternalUUID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[programhistory.FieldName]; !ok {
@@ -10693,6 +10744,11 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldScopeID)
 				fieldSeen[riskhistory.FieldScopeID] = struct{}{}
 			}
+		case "externalUUID":
+			if _, ok := fieldSeen[riskhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldExternalUUID)
+				fieldSeen[riskhistory.FieldExternalUUID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[riskhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldName)
@@ -11499,6 +11555,11 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldTags)
 				fieldSeen[subcontrolhistory.FieldTags] = struct{}{}
 			}
+		case "externalUUID":
+			if _, ok := fieldSeen[subcontrolhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldExternalUUID)
+				fieldSeen[subcontrolhistory.FieldExternalUUID] = struct{}{}
+			}
 		case "title":
 			if _, ok := fieldSeen[subcontrolhistory.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldTitle)
@@ -11538,6 +11599,16 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldStatus)
 				fieldSeen[subcontrolhistory.FieldStatus] = struct{}{}
+			}
+		case "implementationStatus":
+			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationStatus]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationStatus)
+				fieldSeen[subcontrolhistory.FieldImplementationStatus] = struct{}{}
+			}
+		case "implementationDescription":
+			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationDescription]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationDescription)
+				fieldSeen[subcontrolhistory.FieldImplementationDescription] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[subcontrolhistory.FieldSource]; !ok {
@@ -11897,6 +11968,190 @@ func newSubprocessorHistoryPaginateArgs(rv map[string]any) *subprocessorhistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *SystemDetailHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SystemDetailHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *SystemDetailHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(systemdetailhistory.Columns))
+		selectedFields = []string{systemdetailhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[systemdetailhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldHistoryTime)
+				fieldSeen[systemdetailhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[systemdetailhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldRef)
+				fieldSeen[systemdetailhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[systemdetailhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldOperation)
+				fieldSeen[systemdetailhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[systemdetailhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldCreatedAt)
+				fieldSeen[systemdetailhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[systemdetailhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldUpdatedAt)
+				fieldSeen[systemdetailhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[systemdetailhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldCreatedBy)
+				fieldSeen[systemdetailhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[systemdetailhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldUpdatedBy)
+				fieldSeen[systemdetailhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldDisplayID)
+				fieldSeen[systemdetailhistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[systemdetailhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldTags)
+				fieldSeen[systemdetailhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldOwnerID)
+				fieldSeen[systemdetailhistory.FieldOwnerID] = struct{}{}
+			}
+		case "programID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldProgramID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldProgramID)
+				fieldSeen[systemdetailhistory.FieldProgramID] = struct{}{}
+			}
+		case "platformID":
+			if _, ok := fieldSeen[systemdetailhistory.FieldPlatformID]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldPlatformID)
+				fieldSeen[systemdetailhistory.FieldPlatformID] = struct{}{}
+			}
+		case "systemName":
+			if _, ok := fieldSeen[systemdetailhistory.FieldSystemName]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldSystemName)
+				fieldSeen[systemdetailhistory.FieldSystemName] = struct{}{}
+			}
+		case "version":
+			if _, ok := fieldSeen[systemdetailhistory.FieldVersion]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldVersion)
+				fieldSeen[systemdetailhistory.FieldVersion] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[systemdetailhistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldDescription)
+				fieldSeen[systemdetailhistory.FieldDescription] = struct{}{}
+			}
+		case "authorizationBoundary":
+			if _, ok := fieldSeen[systemdetailhistory.FieldAuthorizationBoundary]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldAuthorizationBoundary)
+				fieldSeen[systemdetailhistory.FieldAuthorizationBoundary] = struct{}{}
+			}
+		case "sensitivityLevel":
+			if _, ok := fieldSeen[systemdetailhistory.FieldSensitivityLevel]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldSensitivityLevel)
+				fieldSeen[systemdetailhistory.FieldSensitivityLevel] = struct{}{}
+			}
+		case "lastReviewed":
+			if _, ok := fieldSeen[systemdetailhistory.FieldLastReviewed]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldLastReviewed)
+				fieldSeen[systemdetailhistory.FieldLastReviewed] = struct{}{}
+			}
+		case "revisionHistory":
+			if _, ok := fieldSeen[systemdetailhistory.FieldRevisionHistory]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldRevisionHistory)
+				fieldSeen[systemdetailhistory.FieldRevisionHistory] = struct{}{}
+			}
+		case "oscalMetadataJSON":
+			if _, ok := fieldSeen[systemdetailhistory.FieldOscalMetadataJSON]; !ok {
+				selectedFields = append(selectedFields, systemdetailhistory.FieldOscalMetadataJSON)
+				fieldSeen[systemdetailhistory.FieldOscalMetadataJSON] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type systemdetailhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []SystemDetailHistoryPaginateOption
+}
+
+func newSystemDetailHistoryPaginateArgs(rv map[string]any) *systemdetailhistoryPaginateArgs {
+	args := &systemdetailhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &SystemDetailHistoryOrder{Field: &SystemDetailHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithSystemDetailHistoryOrder(order))
+			}
+		case *SystemDetailHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithSystemDetailHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*SystemDetailHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithSystemDetailHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (_q *TaskHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -11996,6 +12251,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldScopeID)
 				fieldSeen[taskhistory.FieldScopeID] = struct{}{}
+			}
+		case "externalUUID":
+			if _, ok := fieldSeen[taskhistory.FieldExternalUUID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldExternalUUID)
+				fieldSeen[taskhistory.FieldExternalUUID] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[taskhistory.FieldTitle]; !ok {

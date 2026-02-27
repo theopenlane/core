@@ -143,6 +143,11 @@ func WorkflowEligibleMarker(v bool) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
+// ExternalUUID applies equality check predicate on the "external_uuid" field. It's identical to ExternalUUIDEQ.
+func ExternalUUID(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldEQ(FieldExternalUUID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldName, v))
@@ -1161,6 +1166,81 @@ func WorkflowEligibleMarkerIsNil() predicate.EvidenceHistory {
 // WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
 func WorkflowEligibleMarkerNotNil() predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
+}
+
+// ExternalUUIDEQ applies the EQ predicate on the "external_uuid" field.
+func ExternalUUIDEQ(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldEQ(FieldExternalUUID, v))
+}
+
+// ExternalUUIDNEQ applies the NEQ predicate on the "external_uuid" field.
+func ExternalUUIDNEQ(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNEQ(FieldExternalUUID, v))
+}
+
+// ExternalUUIDIn applies the In predicate on the "external_uuid" field.
+func ExternalUUIDIn(vs ...string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldIn(FieldExternalUUID, vs...))
+}
+
+// ExternalUUIDNotIn applies the NotIn predicate on the "external_uuid" field.
+func ExternalUUIDNotIn(vs ...string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNotIn(FieldExternalUUID, vs...))
+}
+
+// ExternalUUIDGT applies the GT predicate on the "external_uuid" field.
+func ExternalUUIDGT(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldGT(FieldExternalUUID, v))
+}
+
+// ExternalUUIDGTE applies the GTE predicate on the "external_uuid" field.
+func ExternalUUIDGTE(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldGTE(FieldExternalUUID, v))
+}
+
+// ExternalUUIDLT applies the LT predicate on the "external_uuid" field.
+func ExternalUUIDLT(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldLT(FieldExternalUUID, v))
+}
+
+// ExternalUUIDLTE applies the LTE predicate on the "external_uuid" field.
+func ExternalUUIDLTE(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldLTE(FieldExternalUUID, v))
+}
+
+// ExternalUUIDContains applies the Contains predicate on the "external_uuid" field.
+func ExternalUUIDContains(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldContains(FieldExternalUUID, v))
+}
+
+// ExternalUUIDHasPrefix applies the HasPrefix predicate on the "external_uuid" field.
+func ExternalUUIDHasPrefix(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldHasPrefix(FieldExternalUUID, v))
+}
+
+// ExternalUUIDHasSuffix applies the HasSuffix predicate on the "external_uuid" field.
+func ExternalUUIDHasSuffix(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldHasSuffix(FieldExternalUUID, v))
+}
+
+// ExternalUUIDIsNil applies the IsNil predicate on the "external_uuid" field.
+func ExternalUUIDIsNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldIsNull(FieldExternalUUID))
+}
+
+// ExternalUUIDNotNil applies the NotNil predicate on the "external_uuid" field.
+func ExternalUUIDNotNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNotNull(FieldExternalUUID))
+}
+
+// ExternalUUIDEqualFold applies the EqualFold predicate on the "external_uuid" field.
+func ExternalUUIDEqualFold(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldEqualFold(FieldExternalUUID, v))
+}
+
+// ExternalUUIDContainsFold applies the ContainsFold predicate on the "external_uuid" field.
+func ExternalUUIDContainsFold(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldContainsFold(FieldExternalUUID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

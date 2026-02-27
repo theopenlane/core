@@ -259,6 +259,20 @@ func (_c *RiskCreate) SetNillableScopeID(v *string) *RiskCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *RiskCreate) SetExternalUUID(v string) *RiskCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableExternalUUID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *RiskCreate) SetName(v string) *RiskCreate {
 	_c.mutation.SetName(v)
@@ -896,6 +910,10 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeName(); ok {
 		_spec.SetField(risk.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(risk.FieldName, field.TypeString, value)

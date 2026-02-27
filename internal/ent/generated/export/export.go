@@ -138,7 +138,7 @@ var (
 // ExportTypeValidator is a validator for the "export_type" field enum values. It is called by the builders before save.
 func ExportTypeValidator(et enums.ExportType) error {
 	switch et.String() {
-	case "ASSET", "CONTROL", "DIRECTORY_MEMBERSHIP", "ENTITY", "EVIDENCE", "FINDING", "IDENTITY_HOLDER", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_FAQ", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY":
+	case "ASSET", "CONTROL", "DIRECTORY_MEMBERSHIP", "ENTITY", "EVIDENCE", "FINDING", "IDENTITY_HOLDER", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "SYSTEM_DETAIL", "TASK", "TRUST_CENTER_FAQ", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for export_type field: %q", et)

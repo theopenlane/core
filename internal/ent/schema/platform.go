@@ -11,6 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -47,16 +48,38 @@ func (Platform) PluralName() string {
 // Fields of the Platform
 func (Platform) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("name").
 			Comment("the name of the platform").
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			),
 		field.String("description").
 			Comment("the description of the platform boundary").
-			Optional(),
+			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			),
 		field.String("business_purpose").
 			Comment("the business purpose of the platform").
 			Optional().
@@ -262,6 +285,10 @@ func (s Platform) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(User{}.Name()),
 			},
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: SystemDetail{},
+		}),
 	}
 }
 
@@ -286,6 +313,10 @@ func (Platform) Modules() []models.OrgModule {
 func (Platform) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("system-implementation"),
+		),
 	}
 }
 

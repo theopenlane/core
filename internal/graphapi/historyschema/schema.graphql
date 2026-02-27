@@ -4272,6 +4272,10 @@ type ControlHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
+	"""
 	human readable title of the control for quick identification
 	"""
 	title: String @externalSource(source: FRAMEWORK)
@@ -4303,6 +4307,14 @@ type ControlHistory implements Node {
 	status of the control
 	"""
 	status: ControlHistoryControlStatus
+	"""
+	OSCAL-aligned implementation status of the control
+	"""
+	implementationStatus: ControlHistoryControlImplementationStatus
+	"""
+	narrative describing current implementation state for OSCAL export
+	"""
+	implementationDescription: String
 	"""
 	source of the control, e.g. framework, template, custom, etc.
 	"""
@@ -4448,6 +4460,16 @@ type ControlHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+ControlHistoryControlImplementationStatus is enum for the field implementation_status
+"""
+enum ControlHistoryControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+	PLANNED
+	IMPLEMENTED
+	PARTIALLY_IMPLEMENTED
+	INHERITED
+	NOT_APPLICABLE
 }
 """
 ControlHistoryControlSource is enum for the field source
@@ -4662,6 +4684,24 @@ input ControlHistoryWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
+	"""
 	title field predicates
 	"""
 	title: String
@@ -4760,6 +4800,33 @@ input ControlHistoryWhereInput {
 	statusNotIn: [ControlHistoryControlStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	implementation_status field predicates
+	"""
+	implementationStatus: ControlHistoryControlImplementationStatus
+	implementationStatusNEQ: ControlHistoryControlImplementationStatus
+	implementationStatusIn: [ControlHistoryControlImplementationStatus!]
+	implementationStatusNotIn: [ControlHistoryControlImplementationStatus!]
+	implementationStatusIsNil: Boolean
+	implementationStatusNotNil: Boolean
+	"""
+	implementation_description field predicates
+	"""
+	implementationDescription: String
+	implementationDescriptionNEQ: String
+	implementationDescriptionIn: [String!]
+	implementationDescriptionNotIn: [String!]
+	implementationDescriptionGT: String
+	implementationDescriptionGTE: String
+	implementationDescriptionLT: String
+	implementationDescriptionLTE: String
+	implementationDescriptionContains: String
+	implementationDescriptionHasPrefix: String
+	implementationDescriptionHasSuffix: String
+	implementationDescriptionIsNil: Boolean
+	implementationDescriptionNotNil: Boolean
+	implementationDescriptionEqualFold: String
+	implementationDescriptionContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -6818,7 +6885,7 @@ type DirectoryAccountHistory implements Node {
 	"""
 	identityHolderID: String
 	"""
-	directory source label set by the integration (e.g. google_workspace, github, slack)
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
 	"""
@@ -11856,6 +11923,10 @@ type EvidenceHistory implements Node {
 	"""
 	workflowEligibleMarker: Boolean
 	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
+	"""
 	the name of the evidence
 	"""
 	name: String!
@@ -12199,6 +12270,24 @@ input EvidenceHistoryWhereInput {
 	workflowEligibleMarkerNEQ: Boolean
 	workflowEligibleMarkerIsNil: Boolean
 	workflowEligibleMarkerNotNil: Boolean
+	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -13424,7 +13513,7 @@ type FindingHistory implements Node {
 	"""
 	externalOwnerID: String
 	"""
-	system that produced the finding, e.g. gcp_scc
+	system that produced the finding, e.g. gcpscc
 	"""
 	source: String
 	"""
@@ -14387,6 +14476,18 @@ type GroupHistory implements Node {
 	"""
 	displayName: String!
 	"""
+	OSCAL role identifier used for role-based responsibility mapping
+	"""
+	oscalRole: String
+	"""
+	OSCAL party UUID linked to this group for responsibility mapping
+	"""
+	oscalPartyUUID: String
+	"""
+	OSCAL contact UUID references associated with this group
+	"""
+	oscalContactUuids: [String!]
+	"""
 	the SCIM external ID for the group
 	"""
 	scimExternalID: String
@@ -14656,6 +14757,42 @@ input GroupHistoryWhereInput {
 	displayNameHasSuffix: String
 	displayNameEqualFold: String
 	displayNameContainsFold: String
+	"""
+	oscal_role field predicates
+	"""
+	oscalRole: String
+	oscalRoleNEQ: String
+	oscalRoleIn: [String!]
+	oscalRoleNotIn: [String!]
+	oscalRoleGT: String
+	oscalRoleGTE: String
+	oscalRoleLT: String
+	oscalRoleLTE: String
+	oscalRoleContains: String
+	oscalRoleHasPrefix: String
+	oscalRoleHasSuffix: String
+	oscalRoleIsNil: Boolean
+	oscalRoleNotNil: Boolean
+	oscalRoleEqualFold: String
+	oscalRoleContainsFold: String
+	"""
+	oscal_party_uuid field predicates
+	"""
+	oscalPartyUUID: String
+	oscalPartyUUIDNEQ: String
+	oscalPartyUUIDIn: [String!]
+	oscalPartyUUIDNotIn: [String!]
+	oscalPartyUUIDGT: String
+	oscalPartyUUIDGTE: String
+	oscalPartyUUIDLT: String
+	oscalPartyUUIDLTE: String
+	oscalPartyUUIDContains: String
+	oscalPartyUUIDHasPrefix: String
+	oscalPartyUUIDHasSuffix: String
+	oscalPartyUUIDIsNil: Boolean
+	oscalPartyUUIDNotNil: Boolean
+	oscalPartyUUIDEqualFold: String
+	oscalPartyUUIDContainsFold: String
 	"""
 	scim_external_id field predicates
 	"""
@@ -16971,6 +17108,10 @@ type InternalPolicyHistory implements Node {
 	internal marker field for workflow eligibility, not exposed in API
 	"""
 	workflowEligibleMarker: Boolean
+	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
 }
 """
 A connection to a list of items.
@@ -17528,6 +17669,24 @@ input InternalPolicyHistoryWhereInput {
 	workflowEligibleMarkerNEQ: Boolean
 	workflowEligibleMarkerIsNil: Boolean
 	workflowEligibleMarkerNotNil: Boolean
+	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
 }
 """
 JobCadence is when a job should be scheduled to run
@@ -22030,6 +22189,10 @@ type PlatformHistory implements Node {
 	"""
 	workflowEligibleMarker: Boolean
 	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
+	"""
 	the name of the platform
 	"""
 	name: String!
@@ -22858,6 +23021,24 @@ input PlatformHistoryWhereInput {
 	workflowEligibleMarkerNEQ: Boolean
 	workflowEligibleMarkerIsNil: Boolean
 	workflowEligibleMarkerNotNil: Boolean
+	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -23792,6 +23973,10 @@ type ProgramHistory implements Node {
 	"""
 	programKindID: String
 	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
+	"""
 	the name of the program
 	"""
 	name: String!
@@ -24108,6 +24293,24 @@ input ProgramHistoryWhereInput {
 	programKindIDNotNil: Boolean
 	programKindIDEqualFold: String
 	programKindIDContainsFold: String
+	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -26244,6 +26447,37 @@ type Query {
 		"""
 		where: SubprocessorHistoryWhereInput
 	): SubprocessorHistoryConnection!
+	systemDetailHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetailHistories returned from the connection.
+		"""
+		orderBy: SystemDetailHistoryOrder
+
+		"""
+		Filtering options for SystemDetailHistories returned from the connection.
+		"""
+		where: SystemDetailHistoryWhereInput
+	): SystemDetailHistoryConnection!
 	taskHistories(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -28384,6 +28618,10 @@ type RiskHistory implements Node {
 	"""
 	scopeID: String
 	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
+	"""
 	the name of the risk
 	"""
 	name: String!
@@ -28829,6 +29067,24 @@ input RiskHistoryWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: String
 	scopeIDContainsFold: String
+	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -30486,6 +30742,10 @@ type SubcontrolHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
+	"""
 	human readable title of the control for quick identification
 	"""
 	title: String @externalSource(source: FRAMEWORK)
@@ -30517,6 +30777,14 @@ type SubcontrolHistory implements Node {
 	status of the control
 	"""
 	status: SubcontrolHistoryControlStatus
+	"""
+	OSCAL-aligned implementation status of the control
+	"""
+	implementationStatus: SubcontrolHistoryControlImplementationStatus
+	"""
+	narrative describing current implementation state for OSCAL export
+	"""
+	implementationDescription: String
 	"""
 	source of the control, e.g. framework, template, custom, etc.
 	"""
@@ -30638,6 +30906,16 @@ type SubcontrolHistoryConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+SubcontrolHistoryControlImplementationStatus is enum for the field implementation_status
+"""
+enum SubcontrolHistoryControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+	PLANNED
+	IMPLEMENTED
+	PARTIALLY_IMPLEMENTED
+	INHERITED
+	NOT_APPLICABLE
 }
 """
 SubcontrolHistoryControlSource is enum for the field source
@@ -30845,6 +31123,24 @@ input SubcontrolHistoryWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
+	"""
 	title field predicates
 	"""
 	title: String
@@ -30943,6 +31239,33 @@ input SubcontrolHistoryWhereInput {
 	statusNotIn: [SubcontrolHistoryControlStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	implementation_status field predicates
+	"""
+	implementationStatus: SubcontrolHistoryControlImplementationStatus
+	implementationStatusNEQ: SubcontrolHistoryControlImplementationStatus
+	implementationStatusIn: [SubcontrolHistoryControlImplementationStatus!]
+	implementationStatusNotIn: [SubcontrolHistoryControlImplementationStatus!]
+	implementationStatusIsNil: Boolean
+	implementationStatusNotNil: Boolean
+	"""
+	implementation_description field predicates
+	"""
+	implementationDescription: String
+	implementationDescriptionNEQ: String
+	implementationDescriptionIn: [String!]
+	implementationDescriptionNotIn: [String!]
+	implementationDescriptionGT: String
+	implementationDescriptionGTE: String
+	implementationDescriptionLT: String
+	implementationDescriptionLTE: String
+	implementationDescriptionContains: String
+	implementationDescriptionHasPrefix: String
+	implementationDescriptionHasSuffix: String
+	implementationDescriptionIsNil: Boolean
+	implementationDescriptionNotNil: Boolean
+	implementationDescriptionEqualFold: String
+	implementationDescriptionContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -31572,6 +31895,419 @@ input SubprocessorHistoryWhereInput {
 	logoFileIDEqualFold: String
 	logoFileIDContainsFold: String
 }
+type SystemDetailHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: SystemDetailHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	a shortened prefixed id field to use as a human readable identifier
+	"""
+	displayID: String!
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String
+	"""
+	optional program anchor for this system detail
+	"""
+	programID: String
+	"""
+	optional platform anchor for this system detail
+	"""
+	platformID: String
+	"""
+	system name used in OSCAL metadata
+	"""
+	systemName: String!
+	"""
+	system version used in OSCAL metadata
+	"""
+	version: String
+	"""
+	system description used in OSCAL metadata
+	"""
+	description: String
+	"""
+	authorization boundary narrative for OSCAL export
+	"""
+	authorizationBoundary: String
+	"""
+	security sensitivity level of the system
+	"""
+	sensitivityLevel: SystemDetailHistorySystemSensitivityLevel
+	"""
+	timestamp when metadata was last reviewed
+	"""
+	lastReviewed: DateTime
+	"""
+	structured revision history for OSCAL metadata
+	"""
+	revisionHistory: [Any!]
+	"""
+	optional escape hatch for additional OSCAL metadata fields
+	"""
+	oscalMetadataJSON: Map
+}
+"""
+A connection to a list of items.
+"""
+type SystemDetailHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [SystemDetailHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SystemDetailHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: SystemDetailHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+SystemDetailHistoryOpType is enum for the field operation
+"""
+enum SystemDetailHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for SystemDetailHistory connections
+"""
+input SystemDetailHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order SystemDetailHistories.
+	"""
+	field: SystemDetailHistoryOrderField!
+}
+"""
+Properties by which SystemDetailHistory connections can be ordered.
+"""
+enum SystemDetailHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+	system_name
+}
+"""
+SystemDetailHistorySystemSensitivityLevel is enum for the field sensitivity_level
+"""
+enum SystemDetailHistorySystemSensitivityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SystemSensitivityLevel") {
+	LOW
+	MODERATE
+	HIGH
+	UNKNOWN
+}
+"""
+SystemDetailHistoryWhereInput is used for filtering SystemDetailHistory objects.
+Input was generated by ent.
+"""
+input SystemDetailHistoryWhereInput {
+	not: SystemDetailHistoryWhereInput
+	and: [SystemDetailHistoryWhereInput!]
+	or: [SystemDetailHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: SystemDetailHistoryOpType
+	operationNEQ: SystemDetailHistoryOpType
+	operationIn: [SystemDetailHistoryOpType!]
+	operationNotIn: [SystemDetailHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	program_id field predicates
+	"""
+	programID: String
+	programIDNEQ: String
+	programIDIn: [String!]
+	programIDNotIn: [String!]
+	programIDGT: String
+	programIDGTE: String
+	programIDLT: String
+	programIDLTE: String
+	programIDContains: String
+	programIDHasPrefix: String
+	programIDHasSuffix: String
+	programIDIsNil: Boolean
+	programIDNotNil: Boolean
+	programIDEqualFold: String
+	programIDContainsFold: String
+	"""
+	platform_id field predicates
+	"""
+	platformID: String
+	platformIDNEQ: String
+	platformIDIn: [String!]
+	platformIDNotIn: [String!]
+	platformIDGT: String
+	platformIDGTE: String
+	platformIDLT: String
+	platformIDLTE: String
+	platformIDContains: String
+	platformIDHasPrefix: String
+	platformIDHasSuffix: String
+	platformIDIsNil: Boolean
+	platformIDNotNil: Boolean
+	platformIDEqualFold: String
+	platformIDContainsFold: String
+	"""
+	system_name field predicates
+	"""
+	systemName: String
+	systemNameNEQ: String
+	systemNameIn: [String!]
+	systemNameNotIn: [String!]
+	systemNameGT: String
+	systemNameGTE: String
+	systemNameLT: String
+	systemNameLTE: String
+	systemNameContains: String
+	systemNameHasPrefix: String
+	systemNameHasSuffix: String
+	systemNameEqualFold: String
+	systemNameContainsFold: String
+	"""
+	version field predicates
+	"""
+	version: String
+	versionNEQ: String
+	versionIn: [String!]
+	versionNotIn: [String!]
+	versionGT: String
+	versionGTE: String
+	versionLT: String
+	versionLTE: String
+	versionContains: String
+	versionHasPrefix: String
+	versionHasSuffix: String
+	versionIsNil: Boolean
+	versionNotNil: Boolean
+	versionEqualFold: String
+	versionContainsFold: String
+	"""
+	description field predicates
+	"""
+	description: String
+	descriptionNEQ: String
+	descriptionIn: [String!]
+	descriptionNotIn: [String!]
+	descriptionGT: String
+	descriptionGTE: String
+	descriptionLT: String
+	descriptionLTE: String
+	descriptionContains: String
+	descriptionHasPrefix: String
+	descriptionHasSuffix: String
+	descriptionIsNil: Boolean
+	descriptionNotNil: Boolean
+	descriptionEqualFold: String
+	descriptionContainsFold: String
+	"""
+	authorization_boundary field predicates
+	"""
+	authorizationBoundary: String
+	authorizationBoundaryNEQ: String
+	authorizationBoundaryIn: [String!]
+	authorizationBoundaryNotIn: [String!]
+	authorizationBoundaryGT: String
+	authorizationBoundaryGTE: String
+	authorizationBoundaryLT: String
+	authorizationBoundaryLTE: String
+	authorizationBoundaryContains: String
+	authorizationBoundaryHasPrefix: String
+	authorizationBoundaryHasSuffix: String
+	authorizationBoundaryIsNil: Boolean
+	authorizationBoundaryNotNil: Boolean
+	authorizationBoundaryEqualFold: String
+	authorizationBoundaryContainsFold: String
+	"""
+	sensitivity_level field predicates
+	"""
+	sensitivityLevel: SystemDetailHistorySystemSensitivityLevel
+	sensitivityLevelNEQ: SystemDetailHistorySystemSensitivityLevel
+	sensitivityLevelIn: [SystemDetailHistorySystemSensitivityLevel!]
+	sensitivityLevelNotIn: [SystemDetailHistorySystemSensitivityLevel!]
+	sensitivityLevelIsNil: Boolean
+	sensitivityLevelNotNil: Boolean
+	"""
+	last_reviewed field predicates
+	"""
+	lastReviewed: DateTime
+	lastReviewedNEQ: DateTime
+	lastReviewedIn: [DateTime!]
+	lastReviewedNotIn: [DateTime!]
+	lastReviewedGT: DateTime
+	lastReviewedGTE: DateTime
+	lastReviewedLT: DateTime
+	lastReviewedLTE: DateTime
+	lastReviewedIsNil: Boolean
+	lastReviewedNotNil: Boolean
+}
 type TaskHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -31617,6 +32353,10 @@ type TaskHistory implements Node {
 	the scope of the task
 	"""
 	scopeID: String
+	"""
+	stable external UUID for deterministic OSCAL export and round-tripping
+	"""
+	externalUUID: String
 	"""
 	the title of the task
 	"""
@@ -32000,6 +32740,24 @@ input TaskHistoryWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: String
 	scopeIDContainsFold: String
+	"""
+	external_uuid field predicates
+	"""
+	externalUUID: String
+	externalUUIDNEQ: String
+	externalUUIDIn: [String!]
+	externalUUIDNotIn: [String!]
+	externalUUIDGT: String
+	externalUUIDGTE: String
+	externalUUIDLT: String
+	externalUUIDLTE: String
+	externalUUIDContains: String
+	externalUUIDHasPrefix: String
+	externalUUIDHasSuffix: String
+	externalUUIDIsNil: Boolean
+	externalUUIDNotNil: Boolean
+	externalUUIDEqualFold: String
+	externalUUIDContainsFold: String
 	"""
 	title field predicates
 	"""
