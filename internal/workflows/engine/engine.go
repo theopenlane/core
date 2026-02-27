@@ -183,12 +183,10 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 
 // guardTrigger enforces active-instance checks for a trigger attempt
 func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, domain *workflows.DomainChanges) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return auth.ErrNoAuthUser
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
 	}
-
-	orgID := caller.OrganizationID
 
 	// For PRE_COMMIT approval workflows, guard per (object, domain) to allow multiple concurrent instances
 	// for different approval domains on the same object. POST_COMMIT approvals behave like reviews.
@@ -237,12 +235,10 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 
 // guardTriggerPerDomain checks for active instances per (object, approval domain)
 func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generated.WorkflowDefinition, obj *workflows.Object, approvalFields []string) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return auth.ErrNoAuthUser
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
 	}
-
-	orgID := caller.OrganizationID
 
 	// Derive domain key from approval fields
 	domainKey := workflows.DeriveDomainKey(obj.Type, approvalFields)
@@ -319,12 +315,10 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 
 // ProcessAction executes a workflow action
 func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.WorkflowInstance, action models.WorkflowAction) error {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return auth.ErrNoAuthUser
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
 	}
-
-	orgID := caller.OrganizationID
 
 	// Use allow context for internal workflow operations
 	allowCtx := workflows.AllowContext(ctx)
@@ -414,9 +408,9 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)
 	}
 
-	completeCaller, completeOk := auth.CallerFromContext(ctx)
-	if !completeOk || completeCaller == nil || completeCaller.SubjectID == "" {
-		return scope.Fail(fmt.Errorf("failed to get subject ID from context: %w", auth.ErrNoAuthUser), nil)
+	userID, userErr := auth.GetSubjectIDFromContext(ctx)
+	if userErr != nil {
+		return scope.Fail(fmt.Errorf("failed to get subject ID from context: %w", userErr), nil)
 	}
 
 	payload := gala.WorkflowAssignmentCompletedPayload{
