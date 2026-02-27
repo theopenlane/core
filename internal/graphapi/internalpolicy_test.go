@@ -475,6 +475,15 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 }
 
 func TestMutationUpdateInternalPolicy(t *testing.T) {
+	makeSlate := func(children ...any) []any {
+		return []any{
+			map[string]any{
+				"type":     "paragraph",
+				"children": children,
+			},
+		}
+	}
+
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	internalPolicyAdminUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
@@ -557,6 +566,30 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
+		},
+		{
+			name:     "member allowed to add comment",
+			policyID: internalPolicy.ID,
+			request: testclient.UpdateInternalPolicyInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is a comment from a member user",
+				},
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+		},
+		{
+			name:     "member not allowed to update details",
+			policyID: internalPolicy.ID,
+			request: testclient.UpdateInternalPolicyInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is a comment from a member user",
+				},
+				DetailsJSON: makeSlate(map[string]any{"text": "hello"}), // should not be allowed to update the details, only add a comment
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:     "update not allowed, not enough permissions",

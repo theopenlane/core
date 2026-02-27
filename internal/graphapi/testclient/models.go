@@ -6101,7 +6101,7 @@ type CreateDirectoryAccountInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_account
 	ScopeName *string `json:"scopeName,omitempty"`
-	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directoryName,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"externalID"`
@@ -6706,7 +6706,7 @@ type CreateFindingInput struct {
 	ExternalID *string `json:"externalID,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
-	// system that produced the finding, e.g. gcp_scc
+	// system that produced the finding, e.g. gcpscc
 	Source *string `json:"source,omitempty"`
 	// resource identifier provided by the source system
 	ResourceName *string `json:"resourceName,omitempty"`
@@ -9950,7 +9950,7 @@ type DirectoryAccount struct {
 	PlatformID *string `json:"platformID,omitempty"`
 	// deduplicated identity holder linked to this directory account
 	IdentityHolderID *string `json:"identityHolderID,omitempty"`
-	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directoryName,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"externalID"`
@@ -15956,7 +15956,7 @@ type Finding struct {
 	ExternalID *string `json:"externalID,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
-	// system that produced the finding, e.g. gcp_scc
+	// system that produced the finding, e.g. gcpscc
 	Source *string `json:"source,omitempty"`
 	// resource identifier provided by the source system
 	ResourceName *string `json:"resourceName,omitempty"`
@@ -38072,7 +38072,7 @@ type UpdateDirectoryAccountInput struct {
 	// the scope of the directory_account
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
-	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName      *string `json:"directoryName,omitempty"`
 	ClearDirectoryName *bool   `json:"clearDirectoryName,omitempty"`
 	// optional secondary identifier such as Azure immutable ID
@@ -39021,7 +39021,7 @@ type UpdateFindingInput struct {
 	// the owner of the finding
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
-	// system that produced the finding, e.g. gcp_scc
+	// system that produced the finding, e.g. gcpscc
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
 	// resource identifier provided by the source system
