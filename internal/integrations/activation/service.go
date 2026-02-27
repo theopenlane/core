@@ -2,9 +2,8 @@ package activation
 
 import (
 	"context"
+	"maps"
 	"strings"
-
-	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
@@ -103,8 +102,8 @@ func (s *Service) BeginOAuth(ctx context.Context, req BeginOAuthRequest) (BeginO
 		Provider:       req.Provider,
 		RedirectURI:    req.RedirectURI,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       lo.Assign(map[string]any{}, req.Metadata),
-		LabelOverrides: lo.Assign(map[string]string{}, req.LabelOverrides),
+		Metadata:       maps.Clone(req.Metadata),
+		LabelOverrides: maps.Clone(req.LabelOverrides),
 		State:          strings.TrimSpace(req.State),
 	})
 	if err != nil {
@@ -189,7 +188,7 @@ func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (Configur
 		With(
 			types.WithCredentialKind(types.CredentialKindMetadata),
 			types.WithCredentialSet(models.CredentialSet{
-				ProviderData: lo.Assign(map[string]any{}, req.ProviderData),
+				ProviderData: maps.Clone(req.ProviderData),
 			}),
 		).
 		Build()

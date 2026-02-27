@@ -109,7 +109,8 @@ func (e *WorkflowEngine) buildNotificationTemplateVars(ctx context.Context, inst
 	}
 
 	_, baseData := workflows.BuildWorkflowActionContext(instance, obj, actionKey)
-	vars = lo.Assign(map[string]any{}, vars, baseData)
+	vars = maps.Clone(vars)
+	maps.Copy(vars, baseData)
 
 	data := map[string]any{}
 	if paramsData != nil {
@@ -123,8 +124,9 @@ func (e *WorkflowEngine) buildNotificationTemplateVars(ctx context.Context, inst
 		}
 	}
 
-	data = lo.Assign(data, baseData)
-	vars = lo.Assign(vars, map[string]any{"data": data}, data)
+	maps.Copy(data, baseData)
+	vars["data"] = data
+	maps.Copy(vars, data)
 
 	return vars, data, nil
 }

@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"context"
+	"maps"
 	"strings"
 	"time"
 
@@ -314,7 +315,7 @@ func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.
 func payloadToCredentialSet(payload types.CredentialPayload, now func() time.Time) models.CredentialSet {
 	cloned := payload.Data
 	// Copy map to avoid mutating caller
-	cloned.ProviderData = lo.Assign(map[string]any{}, payload.Data.ProviderData)
+	cloned.ProviderData = maps.Clone(payload.Data.ProviderData)
 
 	if payload.Token != nil {
 		cloned.OAuthAccessToken = payload.Token.AccessToken

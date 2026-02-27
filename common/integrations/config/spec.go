@@ -2,7 +2,6 @@ package config
 
 import (
 	"context"
-	"reflect"
 	"time"
 
 	"github.com/samber/lo"
@@ -10,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // ProviderSpec mirrors the declarative provider definition files rendered in the UI
@@ -118,7 +118,7 @@ func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]Provide
 			continue
 		}
 
-		nextMap := mergeValueMaps(currentMap, pruneZeroValueMap(overrideMap))
+		nextMap := mapx.DeepMergeMapAny(currentMap, mapx.PruneMapZeroAny(overrideMap))
 		var next ProviderSpec
 		if err := jsonx.RoundTrip(nextMap, &next); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to apply provider spec override")
@@ -126,55 +126,6 @@ func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]Provide
 		}
 
 		merged[provider] = next
-	}
-
-	return merged
-}
-
-// pruneZeroValueMap removes zero-value leaves so overrides only apply explicitly provided fields
-func pruneZeroValueMap(values map[string]any) map[string]any {
-	withPrunedChildren := lo.MapEntries(values, func(key string, value any) (string, any) {
-		nested, ok := value.(map[string]any)
-		if !ok {
-			return key, value
-		}
-
-		return key, pruneZeroValueMap(nested)
-	})
-
-	return lo.PickBy(withPrunedChildren, func(_ string, value any) bool {
-		nested, ok := value.(map[string]any)
-		if ok {
-			return len(nested) > 0
-		}
-
-		if value == nil {
-			return false
-		}
-
-		// booleans are always kept: with *bool+omitempty on the source fields,
-		// a bool appearing in the map means it was explicitly provided (nil was omitted)
-		if _, isBool := value.(bool); isBool {
-			return true
-		}
-
-		return !reflect.ValueOf(value).IsZero()
-	})
-}
-
-// mergeValueMaps deep-merges an override map onto a base map
-func mergeValueMaps(base map[string]any, override map[string]any) map[string]any {
-	merged := lo.Assign(map[string]any{}, base)
-
-	for key, overrideValue := range override {
-		baseNested, baseIsMap := merged[key].(map[string]any)
-		overrideNested, overrideIsMap := overrideValue.(map[string]any)
-		if baseIsMap && overrideIsMap {
-			merged[key] = mergeValueMaps(baseNested, overrideNested)
-			continue
-		}
-
-		merged[key] = overrideValue
 	}
 
 	return merged

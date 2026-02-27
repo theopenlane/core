@@ -3,10 +3,9 @@ package keymaker
 import (
 	"context"
 	"fmt"
+	"maps"
 	"strings"
 	"time"
-
-	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations"
@@ -152,8 +151,8 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		RedirectURI:    req.RedirectURI,
 		State:          req.State,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       lo.Assign(map[string]any{}, req.Metadata),
-		LabelOverrides: lo.Assign(map[string]string{}, req.LabelOverrides),
+		Metadata:       maps.Clone(req.Metadata),
+		LabelOverrides: maps.Clone(req.LabelOverrides),
 	}
 
 	session, err := provider.BeginAuth(ctx, authCtx)
@@ -172,8 +171,8 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		OrgID:          req.OrgID,
 		IntegrationID:  req.IntegrationID,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       lo.Assign(map[string]any{}, req.Metadata),
-		LabelOverrides: lo.Assign(map[string]string{}, req.LabelOverrides),
+		Metadata:       maps.Clone(req.Metadata),
+		LabelOverrides: maps.Clone(req.LabelOverrides),
 		AuthSession:    session,
 		CreatedAt:      s.now(),
 	}

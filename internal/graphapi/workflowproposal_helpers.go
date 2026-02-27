@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/mutations"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // requireWorkflowObjectEditAccess checks that the user in the context has edit access to the given workflow object
@@ -88,9 +88,7 @@ func validateWorkflowProposalChanges(domainKey string, objectType enums.Workflow
 		return nil
 	}
 
-	allowed := lo.SliceToMap(fields, func(field string) (string, struct{}) {
-		return field, struct{}{}
-	})
+	allowed := mapx.MapSetFromSlice(fields)
 
 	for field := range changes {
 		if _, ok := allowed[field]; !ok {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/iam/fgax"
 )
 
@@ -62,19 +63,13 @@ func SyncTuples(ctx context.Context, client *fgax.Client, subjectID, subjectType
 		return nil
 	}
 
-	addMap := make(map[string]struct{}, len(newItems))
-	for _, item := range newItems {
-		addMap[item] = struct{}{}
-	}
+	addMap := mapx.MapSetFromSlice(newItems)
 
 	for _, item := range oldItems {
 		delete(addMap, item)
 	}
 
-	delMap := make(map[string]struct{}, len(oldItems))
-	for _, item := range oldItems {
-		delMap[item] = struct{}{}
-	}
+	delMap := mapx.MapSetFromSlice(oldItems)
 
 	for _, item := range newItems {
 		delete(delMap, item)

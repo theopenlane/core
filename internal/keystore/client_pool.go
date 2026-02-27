@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 const (
@@ -331,8 +332,8 @@ func cloneCredentialPayload(payload types.CredentialPayload) types.CredentialPay
 // cloneCredentialSet creates a deep copy of a credential set
 func cloneCredentialSet(set models.CredentialSet) models.CredentialSet {
 	clone := set
-	clone.ProviderData = helpers.DeepCloneMap(set.ProviderData)
-	clone.Claims = helpers.DeepCloneMap(set.Claims)
+	clone.ProviderData = mapx.DeepCloneMapAny(set.ProviderData)
+	clone.Claims = mapx.DeepCloneMapAny(set.Claims)
 	if set.OAuthExpiry != nil {
 		expiry := *set.OAuthExpiry
 		clone.OAuthExpiry = &expiry

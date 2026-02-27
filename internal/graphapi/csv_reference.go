@@ -86,7 +86,7 @@ func newCSVRuleLookupCache() *csvRuleLookupCache {
 // get retrieves cached resolved values for a lookup key.
 func (c *csvRuleLookupCache) get(key csvLookupCacheKey) map[string]string {
 	if cached, ok := c.cache[key]; ok {
-		return lo.Assign(map[string]string{}, cached)
+		return maps.Clone(cached)
 	}
 	return map[string]string{}
 }
