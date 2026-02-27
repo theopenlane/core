@@ -100,7 +100,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		}
 	}
 
-	_, err = m.Job.Insert(ctx, args, nil)
+	err = enqueueJob(ctx, m.Job, args, nil)
 
 	return v, err
 }
