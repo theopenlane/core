@@ -8,7 +8,7 @@
   "active": false,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azureentraid/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
   "oauth": {
     "clientId": "",
     "clientSecret": "",

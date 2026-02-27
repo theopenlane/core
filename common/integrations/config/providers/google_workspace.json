@@ -8,7 +8,7 @@
   "active": true,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/googleworkspace/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
   "oauth": {
     "clientId": "",
     "clientSecret": "",

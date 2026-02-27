@@ -6,7 +6,7 @@
   "active": false,
   "visible": true,
   "logoUrl": "https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azuresecuritycenter/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center/overview",
   "labels": {
     "vendor": "microsoft",
     "product": "defender-for-cloud"

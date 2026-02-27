@@ -8,7 +8,7 @@
   "active": false,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/microsoftteams/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/overview",
   "oauth": {
     "clientId": "",
     "clientSecret": "",

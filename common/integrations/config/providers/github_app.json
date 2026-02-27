@@ -8,7 +8,7 @@
   "active": true,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/githubapp/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/github_app/overview",
   "githubApp": {
     "baseUrl": "https://api.github.com"
   },

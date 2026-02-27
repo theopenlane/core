@@ -6,7 +6,7 @@
   "active": true,
   "visible": true,
   "logoUrl": "",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/gcpscc/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/gcp_scc/overview",
   "googleWorkloadIdentity": {
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform"

@@ -8,7 +8,7 @@
   "active": true,
   "visible": false,
   "logoUrl": "https://static-00.iconduck.com/assets.00/openid-icon-512x512-5t0u9s21.png",
-  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/oidcgeneric/overview",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/oidc_generic/overview",
   "oauth": {
     "clientId": "",
     "clientSecret": "",
