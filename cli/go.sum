@@ -7,6 +7,7 @@ github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw
 github.com/agnivade/levenshtein v1.2.1 h1:EHBY3UOn1gwdy/VbFwgo4cxecRznFk7fKWN1KOX7eoM=
 github.com/agnivade/levenshtein v1.2.1/go.mod h1:QVVI16kDrtSuwcpd0p1+xMC6Z/VfhtCyDIjcwga4/DU=
 github.com/alicebob/miniredis/v2 v2.37.0 h1:RheObYW32G1aiJIj81XVt78ZHJpHonHLHW7OLIshq68=
+github.com/alicebob/miniredis/v2 v2.37.0/go.mod h1:TcL7YfarKPGDAthEtl5NBeHZfeUQj6OXMm/+iu5cLMM=
 github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883 h1:bvNMNQO63//z+xNgfBlViaCIJKLlCJ6/fmUseuG0wVQ=
 github.com/andreyvit/diff v0.0.0-20170406064948-c7f18ee00883/go.mod h1:rCTlJbsFo29Kk6CurOXKm700vrz8f0KW0JNfpkRJY/8=
 github.com/bahlo/generic-list-go v0.2.0 h1:5sz/EEAK+ls5wF+NeqDpk5+iNdMDXrh3z3nPnH1Wvgk=
@@ -201,8 +202,8 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.11.1 h1:wsdL+CwNBcKKqdUWaqEU/EI8pgJTo96ZeOZb2c57lg8=
-github.com/theopenlane/core v1.11.1/go.mod h1:8OUtGBf6Ka45bVbjRkh6MyBnjhytRcsrXQG0HIQeVTo=
+github.com/theopenlane/core v1.11.4 h1:WZaZb8S1shr/Y3EGPBVbE0Kimu/I31I9pGRvoElJgV0=
+github.com/theopenlane/core v1.11.4/go.mod h1:jlZOnHBiOIq1zIC1/48vhk3tTdl5xNi+TW0gQ4du5TM=
 github.com/theopenlane/core/common v1.0.10 h1:csSffptvCS10d1mxWAQX/9cNwIQoj55CLJ+Gb1vMxw4=
 github.com/theopenlane/core/common v1.0.10/go.mod h1:hERcNHtt/WoHF7aWWogs9CDcM6Uc/ubLMyH1tSp3xw8=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
