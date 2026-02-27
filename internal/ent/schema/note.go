@@ -95,36 +95,57 @@ func (n Note) Edges() []ent.Edge {
 			fromSchema: n,
 			edgeSchema: Task{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Task{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Control{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Control{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Subcontrol{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Procedure{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Procedure{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Risk{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: InternalPolicy{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: Evidence{},
 			ref:        "comments",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Evidence{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -255,6 +256,7 @@ func (Evidence) Policy() ent.Policy {
 			}),
 			policy.CheckCreateAccess(), // generic create access on the organization level
 			// users without org level can_create_evidence should be able
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.EvidenceMutation](),
 		),
 	)

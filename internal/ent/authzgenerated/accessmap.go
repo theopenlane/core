@@ -2040,32 +2040,32 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "task": {
 	ObjectType:      "task",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "control": {
 	ObjectType:      "control",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "subcontrol": {
 	ObjectType:      "subcontrol",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "procedure": {
 	ObjectType:      "procedure",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "risk": {
 	ObjectType:      "risk",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "internal_policy": {
 	ObjectType:      "internal_policy",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "evidence": {
 	ObjectType:      "evidence",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,

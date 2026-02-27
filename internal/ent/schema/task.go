@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/graphapi/directives"
 )
@@ -347,6 +348,7 @@ func (Task) Policy() ent.Policy {
 		policy.WithMutationRules(
 			// all users should be allowed to create a task
 			policy.AllowCreate(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)

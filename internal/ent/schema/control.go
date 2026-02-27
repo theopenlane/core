@@ -245,6 +245,7 @@ func (c Control) Policy() ent.Policy {
 				Program{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
 		),
 	)
