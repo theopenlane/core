@@ -175,12 +175,12 @@ func (SystemDetail) Annotations() []schema.Annotation {
 func (s SystemDetail) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				Program{}.PluralName(),
 				Platform{}.PluralName(),
 			}),
-			policy.CheckCreateAccess(),
-			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
