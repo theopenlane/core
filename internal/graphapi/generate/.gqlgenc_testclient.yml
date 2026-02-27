@@ -70,6 +70,9 @@ models:
   WorkflowEventPayload:
     model:
       - github.com/theopenlane/core/common/models.WorkflowEventPayload
+  ExportMetadata:
+    model:
+      - github.com/theopenlane/core/common/models.ExportMetadata
   Map:
     model:
       - github.com/99designs/gqlgen/graphql.Map

@@ -6,9 +6,10 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx/history"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -69,6 +70,17 @@ func (Export) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			).
 			Comment("if we try to export and it fails, the error message will be stored here"),
+		field.Enum("mode").
+			Comment("the mode of export, e.g., flat or folder").
+			Default(enums.ExportModeFlat.String()).
+			Immutable().
+			Annotations(
+				entgql.OrderField("mode"),
+			).
+			GoType(enums.ExportMode("")),
+		field.JSON("export_metadata", models.ExportMetadata{}).
+			Comment("metadata for the export record").
+			Optional(),
 	}
 }
 

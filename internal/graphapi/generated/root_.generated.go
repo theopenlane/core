@@ -1993,22 +1993,24 @@ type ComplexityRoot struct {
 	}
 
 	Export struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		ErrorMessage func(childComplexity int) int
-		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ExportType   func(childComplexity int) int
-		Fields       func(childComplexity int) int
-		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Filters      func(childComplexity int) int
-		Format       func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		RequestorID  func(childComplexity int) int
-		Status       func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		ErrorMessage   func(childComplexity int) int
+		Events         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExportMetadata func(childComplexity int) int
+		ExportType     func(childComplexity int) int
+		Fields         func(childComplexity int) int
+		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Filters        func(childComplexity int) int
+		Format         func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Mode           func(childComplexity int) int
+		Owner          func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		RequestorID    func(childComplexity int) int
+		Status         func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
 	}
 
 	ExportBulkCreatePayload struct {
@@ -16707,6 +16709,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Export.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
 
+	case "Export.exportMetadata":
+		if e.ComplexityRoot.Export.ExportMetadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Export.ExportMetadata(childComplexity), true
+
 	case "Export.exportType":
 		if e.ComplexityRoot.Export.ExportType == nil {
 			break
@@ -16753,6 +16762,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Export.ID(childComplexity), true
+
+	case "Export.mode":
+		if e.ComplexityRoot.Export.Mode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Export.Mode(childComplexity), true
 
 	case "Export.owner":
 		if e.ComplexityRoot.Export.Owner == nil {
@@ -49329,6 +49345,10 @@ Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
 """
+ExportMetadata contains metadata for an export record
+"""
+scalar ExportMetadata
+"""
 Any is a generic fallback type
 """
 scalar Any`, BuiltIn: false},
@@ -63955,6 +63975,14 @@ input CreateExportInput {
   the specific filters to run against the exported data. This should be a well formatted graphql query
   """
   filters: String
+  """
+  the mode of export, e.g., flat or folder
+  """
+  mode: ExportExportMode
+  """
+  metadata for the export record
+  """
+  exportMetadata: ExportMetadata
   ownerID: ID
   eventIDs: [ID!]
   fileIDs: [ID!]
@@ -77388,6 +77416,14 @@ type Export implements Node {
   if we try to export and it fails, the error message will be stored here
   """
   errorMessage: String
+  """
+  the mode of export, e.g., flat or folder
+  """
+  mode: ExportExportMode!
+  """
+  metadata for the export record
+  """
+  exportMetadata: ExportMetadata
   owner: Organization
   events(
     """
@@ -77492,6 +77528,13 @@ enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enum
   PDF
 }
 """
+ExportExportMode is enum for the field mode
+"""
+enum ExportExportMode @goModel(model: "github.com/theopenlane/core/common/enums.ExportMode") {
+  FLAT
+  FOLDER
+}
+"""
 ExportExportStatus is enum for the field status
 """
 enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ExportStatus") {
@@ -77545,6 +77588,7 @@ enum ExportOrderField {
   export_type
   format
   status
+  mode
 }
 """
 ExportWhereInput is used for filtering Export objects.
@@ -77722,6 +77766,13 @@ input ExportWhereInput {
   errorMessageNotNil: Boolean
   errorMessageEqualFold: String
   errorMessageContainsFold: String
+  """
+  mode field predicates
+  """
+  mode: ExportExportMode
+  modeNEQ: ExportExportMode
+  modeIn: [ExportExportMode!]
+  modeNotIn: [ExportExportMode!]
   """
   owner edge predicates
   """
@@ -122012,6 +122063,11 @@ input UpdateExportInput {
   """
   errorMessage: String
   clearErrorMessage: Boolean
+  """
+  metadata for the export record
+  """
+  exportMetadata: ExportMetadata
+  clearExportMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]

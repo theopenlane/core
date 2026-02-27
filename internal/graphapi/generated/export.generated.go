@@ -78,6 +78,10 @@ func (ec *executionContext) fieldContext_ExportBulkCreatePayload_exports(_ conte
 				return ec.fieldContext_Export_filters(ctx, field)
 			case "errorMessage":
 				return ec.fieldContext_Export_errorMessage(ctx, field)
+			case "mode":
+				return ec.fieldContext_Export_mode(ctx, field)
+			case "exportMetadata":
+				return ec.fieldContext_Export_exportMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -170,6 +174,10 @@ func (ec *executionContext) fieldContext_ExportCreatePayload_export(_ context.Co
 				return ec.fieldContext_Export_filters(ctx, field)
 			case "errorMessage":
 				return ec.fieldContext_Export_errorMessage(ctx, field)
+			case "mode":
+				return ec.fieldContext_Export_mode(ctx, field)
+			case "exportMetadata":
+				return ec.fieldContext_Export_exportMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -262,6 +270,10 @@ func (ec *executionContext) fieldContext_ExportUpdatePayload_export(_ context.Co
 				return ec.fieldContext_Export_filters(ctx, field)
 			case "errorMessage":
 				return ec.fieldContext_Export_errorMessage(ctx, field)
+			case "mode":
+				return ec.fieldContext_Export_mode(ctx, field)
+			case "exportMetadata":
+				return ec.fieldContext_Export_exportMetadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":

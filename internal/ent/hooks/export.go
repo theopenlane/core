@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -84,11 +85,22 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return v, err
 	}
 
-	_, err = m.Job.Insert(ctx, jobspec.ExportContentArgs{
+	args := jobspec.ExportContentArgs{
 		ExportID:       id,
 		UserID:         au.SubjectID,
 		OrganizationID: orgID,
-	}, nil)
+	}
+
+	if exportType == enums.ExportTypeEvidence {
+		mode, _ := m.Mode()
+		args.Mode = mode
+
+		if metadata, ok := m.ExportMetadata(); ok {
+			args.ExportMetadata = &metadata
+		}
+	}
+
+	err = enqueueJob(ctx, m.Job, args, nil)
 
 	return v, err
 }

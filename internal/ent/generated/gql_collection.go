@@ -22304,6 +22304,16 @@ func (_q *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, export.FieldErrorMessage)
 				fieldSeen[export.FieldErrorMessage] = struct{}{}
 			}
+		case "mode":
+			if _, ok := fieldSeen[export.FieldMode]; !ok {
+				selectedFields = append(selectedFields, export.FieldMode)
+				fieldSeen[export.FieldMode] = struct{}{}
+			}
+		case "exportMetadata":
+			if _, ok := fieldSeen[export.FieldExportMetadata]; !ok {
+				selectedFields = append(selectedFields, export.FieldExportMetadata)
+				fieldSeen[export.FieldExportMetadata] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
