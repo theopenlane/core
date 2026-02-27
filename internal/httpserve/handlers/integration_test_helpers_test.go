@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/integrations/config"
@@ -22,7 +23,7 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 	originalActivation := suite.h.IntegrationActivation
 
 	ctx := context.Background()
-	reg, err := registry.NewRegistry(ctx)
+	reg, err := registry.NewRegistry(ctx, nil)
 	require.NoError(t, err)
 
 	for provider, spec := range specs {
@@ -44,7 +45,8 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 	require.NoError(t, err)
 
 	mockOps := &mockOperationRunner{}
-	activationSvc, err := activation.NewService(svc, store, mockOps)
+	mockMinter := &mockPayloadMinter{}
+	activationSvc, err := activation.NewService(svc, store, mockOps, mockMinter)
 	require.NoError(t, err)
 	suite.h.IntegrationActivation = activationSvc
 
@@ -65,6 +67,21 @@ func (m *mockOperationRunner) Run(_ context.Context, _ types.OperationRequest) (
 	}, nil
 }
 
+func (m *mockOperationRunner) RunWithPayload(_ context.Context, _ types.OperationRequest, _ types.CredentialPayload) (types.OperationResult, error) {
+	return types.OperationResult{
+		Status:  types.OperationStatusOK,
+		Summary: "mock health check passed",
+		Details: map[string]any{"mock": true},
+	}, nil
+}
+
+// mockPayloadMinter implements activation.PayloadMinter for tests
+type mockPayloadMinter struct{}
+
+func (m *mockPayloadMinter) MintPayload(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+	return subject.Credential, nil
+}
+
 type testProvider struct {
 	providerType types.ProviderType
 }
@@ -83,13 +100,13 @@ func (p *testProvider) Mint(context.Context, types.CredentialSubject) (types.Cre
 
 func gcpSCCSpec() config.ProviderSpec {
 	return config.ProviderSpec{
-		Name:        "gcp_scc",
+		Name:        "gcpscc",
 		DisplayName: "Google Cloud SCC",
 		Category:    "cloud",
 		Description: "Google Cloud Security Command Center integration",
 		AuthType:    types.AuthKindWorkloadIdentity,
-		Active:      true,
-		Visible:     true,
+		Active:      lo.ToPtr(true),
+		Visible:     lo.ToPtr(true),
 		Tags:        []string{"cloud", "google"},
 		CredentialsSchema: map[string]any{
 			"type": "object",

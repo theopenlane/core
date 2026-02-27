@@ -3,8 +3,6 @@ package registry
 import "errors"
 
 var (
-	// ErrNoProviderSpecs indicates no provider specifications were supplied during registry creation
-	ErrNoProviderSpecs = errors.New("integrations/registry: no provider specs supplied")
 	// ErrRegistryNil indicates the registry is nil
 	ErrRegistryNil = errors.New("integrations/registry: registry is nil")
 	// ErrProviderTypeRequired indicates the provider type is missing
@@ -15,4 +13,6 @@ var (
 	ErrProviderBuildFailed = errors.New("integrations/registry: build provider failed")
 	// ErrProviderNil indicates a provider build returned a nil instance
 	ErrProviderNil = errors.New("integrations/registry: provider is nil")
+	// ErrProviderNotFound indicates the requested provider is not registered
+	ErrProviderNotFound = errors.New("integrations/registry: provider not found")
 )

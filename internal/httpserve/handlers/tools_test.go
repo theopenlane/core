@@ -13,6 +13,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -400,7 +401,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		DisplayName: "GitHub",
 		Category:    "code",
 		AuthType:    types.AuthKindOAuth2,
-		Active:      true,
+		Active:      lo.ToPtr(true),
 		OAuth: &config.OAuthSpec{
 			ClientID:     "test-client",
 			ClientSecret: "test-secret",
@@ -418,7 +419,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		},
 	}
 
-	reg, err := registry.NewRegistry(ctx)
+	reg, err := registry.NewRegistry(ctx, nil)
 	require.NoError(suite.T(), err)
 	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
 
@@ -434,7 +435,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
 	assert.NoError(suite.T(), err)
 
-	activationSvc, err := activation.NewService(svc, store, suite.h.IntegrationOperations)
+	activationSvc, err := activation.NewService(svc, store, suite.h.IntegrationOperations, reg)
 	assert.NoError(suite.T(), err)
 	suite.h.IntegrationActivation = activationSvc
 }

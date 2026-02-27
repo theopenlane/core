@@ -99,6 +99,42 @@
       "type": "object",
       "description": "Config is the config values for the cache-control middleware"
     },
+    "config.APIKeySpec": {
+      "properties": {
+        "KeyLabel": {
+          "type": "string"
+        },
+        "HeaderName": {
+          "type": "string"
+        },
+        "QueryParam": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "config.AWSFederationSpec": {
+      "properties": {
+        "RoleARN": {
+          "type": "string"
+        },
+        "SessionName": {
+          "type": "string"
+        },
+        "Duration": {
+          "type": "integer"
+        },
+        "Region": {
+          "type": "string"
+        },
+        "ExternalID": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "config.Auth": {
       "properties": {
         "enabled": {
@@ -125,6 +161,42 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
+    "config.GitHubAppSpec": {
+      "properties": {
+        "BaseURL": {
+          "type": "string"
+        },
+        "TokenTTL": {
+          "type": "integer"
+        },
+        "AppSlug": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "config.GoogleWorkloadIdentitySpec": {
+      "properties": {
+        "Audience": {
+          "type": "string"
+        },
+        "TargetServiceAccount": {
+          "type": "string"
+        },
+        "Scopes": {
+          "$ref": "#/$defs/[]string"
+        },
+        "TokenLifetime": {
+          "type": "integer"
+        },
+        "SubjectTokenType": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "config.KeyWatcher": {
       "properties": {
         "enabled": {
@@ -140,6 +212,54 @@
       "type": "object",
       "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
     },
+    "config.OAuthSpec": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "AuthURL": {
+          "type": "string"
+        },
+        "TokenURL": {
+          "type": "string"
+        },
+        "Scopes": {
+          "$ref": "#/$defs/[]string"
+        },
+        "OIDCDiscovery": {
+          "type": "string"
+        },
+        "RedirectURI": {
+          "type": "string"
+        },
+        "UsePKCE": {
+          "type": "boolean"
+        },
+        "AuthParams": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "TokenParams": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "AdditionalHosts": {
+          "$ref": "#/$defs/[]string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "config.PersistenceSpec": {
+      "properties": {
+        "StoreRefreshToken": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "config.PoolConfig": {
       "properties": {
         "maxworkers": {
@@ -150,6 +270,84 @@
       "additionalProperties": false,
       "type": "object",
       "description": "PoolConfig contains the settings for the goroutine pool"
+    },
+    "config.ProviderSpec": {
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "DisplayName": {
+          "type": "string"
+        },
+        "Category": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "AuthType": {
+          "type": "string"
+        },
+        "AuthStartPath": {
+          "type": "string"
+        },
+        "AuthCallbackPath": {
+          "type": "string"
+        },
+        "Active": {
+          "type": "boolean"
+        },
+        "Visible": {
+          "type": "boolean"
+        },
+        "Tags": {
+          "$ref": "#/$defs/[]string"
+        },
+        "LogoURL": {
+          "type": "string"
+        },
+        "DocsURL": {
+          "type": "string"
+        },
+        "SchemaVersion": {
+          "type": "string"
+        },
+        "oauth": {
+          "$ref": "#/$defs/config.OAuthSpec"
+        },
+        "APIKey": {
+          "$ref": "#/$defs/config.APIKeySpec"
+        },
+        "UserInfo": {
+          "$ref": "#/$defs/config.UserInfoSpec"
+        },
+        "GoogleWorkloadIdentity": {
+          "$ref": "#/$defs/config.GoogleWorkloadIdentitySpec"
+        },
+        "GitHubApp": {
+          "$ref": "#/$defs/config.GitHubAppSpec"
+        },
+        "AWSSTS": {
+          "$ref": "#/$defs/config.AWSFederationSpec"
+        },
+        "CredentialsSchema": {
+          "$ref": "#/$defs/map[string]interface {}"
+        },
+        "Persistence": {
+          "$ref": "#/$defs/config.PersistenceSpec"
+        },
+        "Labels": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "Metadata": {
+          "$ref": "#/$defs/map[string]interface {}"
+        },
+        "Defaults": {
+          "$ref": "#/$defs/map[string]interface {}"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "config.Server": {
       "properties": {
@@ -294,6 +492,36 @@
       "additionalProperties": false,
       "type": "object",
       "description": "TLS settings for the server for secure connections"
+    },
+    "config.UserInfoSpec": {
+      "properties": {
+        "URL": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "AuthStyle": {
+          "type": "string"
+        },
+        "AuthHeader": {
+          "type": "string"
+        },
+        "IDPath": {
+          "type": "string"
+        },
+        "EmailPath": {
+          "type": "string"
+        },
+        "LoginPath": {
+          "type": "string"
+        },
+        "SecondaryEmailURL": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "cors.Config": {
       "properties": {
@@ -861,6 +1089,15 @@
       "additionalProperties": {
         "$ref": "#/$defs/[]string"
       },
+      "type": "object"
+    },
+    "map[string]config.ProviderSpec": {
+      "additionalProperties": {
+        "$ref": "#/$defs/config.ProviderSpec"
+      },
+      "type": "object"
+    },
+    "map[string]interface {}": {
       "type": "object"
     },
     "map[string]river.QueueConfig": {
@@ -1825,6 +2062,10 @@
     "integrationoauthprovider": {
       "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
       "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
+    },
+    "integrationproviders": {
+      "$ref": "#/$defs/map[string]config.ProviderSpec",
+      "description": "IntegrationProviders contains provider spec overrides keyed by provider name."
     },
     "integrationgithubapp": {
       "$ref": "#/$defs/handlers.IntegrationGitHubAppConfig",

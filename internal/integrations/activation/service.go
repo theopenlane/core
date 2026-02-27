@@ -21,29 +21,47 @@ type CredentialWriter interface {
 
 // OperationRunner executes provider operations for health checks
 type OperationRunner interface {
+	// Run executes an operation loading credentials from the store
 	Run(ctx context.Context, req types.OperationRequest) (types.OperationResult, error)
+	// RunWithPayload executes an operation using the provided credential payload without loading from the store
+	RunWithPayload(ctx context.Context, req types.OperationRequest, payload types.CredentialPayload) (types.OperationResult, error)
+}
+
+// PayloadMinter mints credentials from an in-memory payload without accessing the credential store
+type PayloadMinter interface {
+	// MintPayload exchanges or refreshes the supplied in-memory credential payload via the provider
+	MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error)
 }
 
 // Service coordinates activation flows for OAuth and non-OAuth providers
 type Service struct {
-	keymaker   *keymaker.Service
-	store      CredentialWriter
+	// keymaker manages OAuth/OIDC session state
+	keymaker *keymaker.Service
+	// store persists credential payloads after successful activation
+	store CredentialWriter
+	// operations executes provider operations for health checks
 	operations OperationRunner
+	// minter mints credentials from an in-memory payload for pre-persist validation
+	minter PayloadMinter
 }
 
 // NewService constructs an activation service from the supplied dependencies
-func NewService(keymakerSvc *keymaker.Service, store CredentialWriter, operations OperationRunner) (*Service, error) {
+func NewService(keymakerSvc *keymaker.Service, store CredentialWriter, operations OperationRunner, minter PayloadMinter) (*Service, error) {
 	if store == nil {
 		return nil, ErrStoreRequired
 	}
 	if keymakerSvc == nil {
 		return nil, ErrKeymakerRequired
 	}
+	if minter == nil {
+		return nil, ErrMinterRequired
+	}
 
 	return &Service{
 		keymaker:   keymakerSvc,
 		store:      store,
 		operations: operations,
+		minter:     minter,
 	}, nil
 }
 
@@ -158,7 +176,7 @@ type ConfigureResult struct {
 	HealthResult *types.OperationResult
 }
 
-// Configure persists non-OAuth credentials and optionally runs a health check
+// Configure validates connectivity with the provider and persists credentials only on success
 func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (ConfigureResult, error) {
 	if req.OrgID == "" {
 		return ConfigureResult{}, keystore.ErrOrgIDRequired
@@ -179,34 +197,45 @@ func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (Configur
 		return ConfigureResult{}, err
 	}
 
-	saved, err := s.store.SaveCredential(ctx, req.OrgID, payload)
-	if err != nil {
-		return ConfigureResult{}, err
-	}
-
-	result := ConfigureResult{Credential: saved}
 	if !req.Validate {
-		return result, nil
+		saved, err := s.store.SaveCredential(ctx, req.OrgID, payload)
+		if err != nil {
+			return ConfigureResult{}, err
+		}
+
+		return ConfigureResult{Credential: saved}, nil
 	}
 
 	if s.operations == nil {
 		return ConfigureResult{}, ErrOperationsRequired
 	}
 
-	health, err := s.operations.Run(ctx, types.OperationRequest{
-		OrgID:    req.OrgID,
-		Provider: req.Provider,
-		Name:     defaultHealthOperation,
-		Force:    true,
+	minted, err := s.minter.MintPayload(ctx, types.CredentialSubject{
+		Provider:   req.Provider,
+		OrgID:      req.OrgID,
+		Credential: payload,
 	})
 	if err != nil {
 		return ConfigureResult{}, err
 	}
 
-	result.HealthResult = &health
-	if health.Status != types.OperationStatusOK {
-		return result, ErrHealthCheckFailed
+	health, err := s.operations.RunWithPayload(ctx, types.OperationRequest{
+		OrgID:    req.OrgID,
+		Provider: req.Provider,
+		Name:     defaultHealthOperation,
+	}, minted)
+	if err != nil {
+		return ConfigureResult{}, err
 	}
 
-	return result, nil
+	if health.Status != types.OperationStatusOK {
+		return ConfigureResult{HealthResult: &health}, ErrHealthCheckFailed
+	}
+
+	saved, err := s.store.SaveCredential(ctx, req.OrgID, payload)
+	if err != nil {
+		return ConfigureResult{}, err
+	}
+
+	return ConfigureResult{Credential: saved, HealthResult: &health}, nil
 }

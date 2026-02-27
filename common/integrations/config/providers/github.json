@@ -10,7 +10,7 @@
   "logoUrl": "",
   "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/github/overview",
   "oauth": {
-    "clientId": "Ov23lipGzu6xlTkJKTVj",
+    "clientId": "",
     "clientSecret": "",
     "authUrl": "https://github.com/login/oauth/authorize",
     "tokenUrl": "https://github.com/login/oauth/access_token",

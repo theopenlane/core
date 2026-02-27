@@ -6,6 +6,8 @@ import (
 
 	"github.com/theopenlane/iam/sessions"
 
+	integrationconfig "github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
 	coreconfig "github.com/theopenlane/core/config"
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
@@ -87,5 +89,44 @@ func TestWithAuth_EnabledIntegrationRegistry_GitHubApp(t *testing.T) {
 
 	if so.Config.Handler.IntegrationRegistry == nil {
 		t.Fatalf("expected integration registry to be initialized when GitHub App integration enabled")
+	}
+}
+
+func TestWithAuth_IntegrationProviderOverridesApplied(t *testing.T) {
+	t.Parallel()
+
+	so := &ServerOptions{
+		Config: serverconfig.Config{
+			Settings: coreconfig.Config{
+				IntegrationOauthProvider: handlers.IntegrationOauthProviderConfig{
+					Enabled: true,
+				},
+				IntegrationProviders: map[string]integrationconfig.ProviderSpec{
+					"github": {
+						OAuth: &integrationconfig.OAuthSpec{
+							ClientID: "override-client-id",
+						},
+					},
+				},
+			},
+			SessionConfig: &sessions.SessionConfig{},
+		},
+	}
+
+	WithAuth().apply(so)
+
+	if so.Config.Handler.IntegrationRegistry == nil {
+		t.Fatalf("expected integration registry to be initialized when enabled")
+	}
+
+	spec, ok := so.Config.Handler.IntegrationRegistry.Config(types.ProviderType("github"))
+	if !ok {
+		t.Fatalf("expected github provider spec to exist")
+	}
+	if spec.OAuth == nil {
+		t.Fatalf("expected github oauth config to exist")
+	}
+	if spec.OAuth.ClientID != "override-client-id" {
+		t.Fatalf("expected github oauth client id override to be applied, got %q", spec.OAuth.ClientID)
 	}
 }

@@ -3,7 +3,6 @@ package keystore
 import (
 	"context"
 	"maps"
-	"strings"
 	"sync"
 
 	"github.com/samber/lo"
@@ -77,13 +76,13 @@ func (m *OperationManager) RegisterDescriptor(descriptor types.OperationDescript
 
 // Run executes the requested provider operation using stored credentials and optional clients
 func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) (types.OperationResult, error) {
-	if strings.TrimSpace(req.OrgID) == "" {
+	if req.OrgID == "" {
 		return types.OperationResult{}, ErrOrgIDRequired
 	}
 	if req.Provider == types.ProviderUnknown {
 		return types.OperationResult{}, ErrProviderRequired
 	}
-	if strings.TrimSpace(string(req.Name)) == "" {
+	if req.Name == "" {
 		return types.OperationResult{}, ErrOperationNameRequired
 	}
 
@@ -128,6 +127,69 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 	}
 
 	return result, nil
+}
+
+// RunWithPayload executes the requested operation using the provided credential payload instead of loading from the store
+func (m *OperationManager) RunWithPayload(ctx context.Context, req types.OperationRequest, payload types.CredentialPayload) (types.OperationResult, error) {
+	if req.OrgID == "" {
+		return types.OperationResult{}, ErrOrgIDRequired
+	}
+	if req.Provider == types.ProviderUnknown {
+		return types.OperationResult{}, ErrProviderRequired
+	}
+	if req.Name == "" {
+		return types.OperationResult{}, ErrOperationNameRequired
+	}
+
+	key := operationKey{
+		provider: req.Provider,
+		name:     req.Name,
+	}
+
+	m.mu.RLock()
+	descriptor, ok := m.descriptors[key]
+	m.mu.RUnlock()
+
+	if !ok {
+		return types.OperationResult{}, ErrOperationNotRegistered
+	}
+
+	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+
+	input := types.OperationInput{
+		OrgID:      req.OrgID,
+		Provider:   req.Provider,
+		Credential: payload,
+		Client:     client,
+		Config:     helpers.DeepCloneMap(req.Config),
+	}
+
+	result, runErr := descriptor.Run(ctx, input)
+	if result.Status == "" {
+		result.Status = types.OperationStatusUnknown
+	}
+
+	if runErr != nil {
+		return result, runErr
+	}
+
+	return result, nil
+}
+
+// resolveClientFromPayload builds a client from the provided payload when the operation requires one
+func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload) (any, error) {
+	if descriptor.Client == "" {
+		return nil, nil
+	}
+
+	if m.clients == nil {
+		return nil, ErrOperationClientManagerRequired
+	}
+
+	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, payload, maps.Clone(req.Config))
 }
 
 // resolveCredential retrieves or refreshes the credential based on the request flags
@@ -192,7 +254,7 @@ func operationDescriptorKey(descriptor types.OperationDescriptor) (operationKey,
 	if descriptor.Provider == types.ProviderUnknown {
 		return operationKey{}, ErrProviderRequired
 	}
-	if strings.TrimSpace(string(descriptor.Name)) == "" {
+	if descriptor.Name == "" {
 		return operationKey{}, ErrOperationDescriptorInvalid
 	}
 	if descriptor.Run == nil {

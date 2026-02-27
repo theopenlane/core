@@ -1,5 +1,5 @@
 {
-  "name": "azure_entra_id",
+  "name": "azureentraid",
   "displayName": "Azure Entra ID",
   "category": "identity",
   "authType": "oauth2",
@@ -10,8 +10,8 @@
   "logoUrl": "",
   "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
   "oauth": {
-    "clientId": "${AZURE_ENTRA_CLIENT_ID}",
-    "clientSecret": "${AZURE_ENTRA_CLIENT_SECRET}",
+    "clientId": "",
+    "clientSecret": "",
     "authUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
     "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
     "scopes": [

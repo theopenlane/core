@@ -152,6 +152,40 @@ func TestBeginAuthorizationRequiresProviderState(t *testing.T) {
 	}
 }
 
+func TestBeginAuthorizationAllowsEmptyIntegrationID(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	providerType := types.ProviderType("acme")
+	provider := &fakeProvider{
+		providerType: providerType,
+		state:        "state-no-integration",
+		authURL:      "https://example.com/auth",
+	}
+
+	service, err := NewService(
+		fakeResolver{provider: provider},
+		&fakeKeystore{},
+		NewMemorySessionStore(),
+		ServiceOptions{},
+	)
+	if err != nil {
+		t.Fatalf("NewService error: %v", err)
+	}
+
+	begin, err := service.BeginAuthorization(ctx, BeginRequest{
+		OrgID:    "org-1",
+		Provider: providerType,
+	})
+	if err != nil {
+		t.Fatalf("expected no error with empty IntegrationID, got: %v", err)
+	}
+
+	if begin.AuthURL != provider.authURL {
+		t.Fatalf("expected auth URL %q, got %q", provider.authURL, begin.AuthURL)
+	}
+}
+
 func TestCompleteAuthorizationValidatesInputs(t *testing.T) {
 	t.Parallel()
 
@@ -255,7 +289,6 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 

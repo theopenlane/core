@@ -1,5 +1,5 @@
 {
-  "name": "aws_audit_manager",
+  "name": "awsauditmanager",
   "displayName": "AWS Audit & Compliance",
   "category": "compliance",
   "authType": "aws_sts",

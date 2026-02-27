@@ -1,5 +1,5 @@
 {
-  "name": "google_workspace",
+  "name": "googleworkspace",
   "displayName": "Google Workspace",
   "category": "identity",
   "authType": "oauth2",
@@ -10,8 +10,8 @@
   "logoUrl": "",
   "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
   "oauth": {
-    "clientId": "${GOOGLE_WORKSPACE_CLIENT_ID}",
-    "clientSecret": "${GOOGLE_WORKSPACE_CLIENT_SECRET}",
+    "clientId": "",
+    "clientSecret": "",
     "authUrl": "https://accounts.google.com/o/oauth2/v2/auth",
     "tokenUrl": "https://oauth2.googleapis.com/token",
     "scopes": [
