@@ -957,6 +957,18 @@ func (f SubscriberFunc) Mutate(ctx context.Context, m generated.Mutation) (gener
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.SubscriberMutation", m)
 }
 
+// The SystemDetailFunc type is an adapter to allow the use of ordinary
+// function as SystemDetail mutator.
+type SystemDetailFunc func(context.Context, *generated.SystemDetailMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SystemDetailFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.SystemDetailMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.SystemDetailMutation", m)
+}
+
 // The TFASettingFunc type is an adapter to allow the use of ordinary
 // function as TFASetting mutator.
 type TFASettingFunc func(context.Context, *generated.TFASettingMutation) (generated.Value, error)

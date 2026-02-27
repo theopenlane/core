@@ -575,6 +575,20 @@ func (_c *PlatformHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *Pla
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *PlatformHistoryCreate) SetExternalUUID(v string) *PlatformHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *PlatformHistoryCreate) SetNillableExternalUUID(v *string) *PlatformHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *PlatformHistoryCreate) SetName(v string) *PlatformHistoryCreate {
 	_c.mutation.SetName(v)
@@ -1147,6 +1161,10 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(platformhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(platformhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(platformhistory.FieldName, field.TypeString, value)

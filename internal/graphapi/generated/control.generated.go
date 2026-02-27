@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -82,6 +84,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
 			case "referenceFramework":
@@ -288,6 +294,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -304,6 +312,10 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
 			case "referenceFramework":
@@ -510,6 +522,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -526,6 +540,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
 			case "referenceFramework":
@@ -732,6 +750,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_displayID(ctx, field)
 			case "tags":
 				return ec.fieldContext_Control_tags(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Control_externalUUID(ctx, field)
 			case "title":
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
@@ -748,6 +768,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
 			case "status":
 				return ec.fieldContext_Control_status(ctx, field)
+			case "implementationStatus":
+				return ec.fieldContext_Control_implementationStatus(ctx, field)
+			case "implementationDescription":
+				return ec.fieldContext_Control_implementationDescription(ctx, field)
 			case "source":
 				return ec.fieldContext_Control_source(ctx, field)
 			case "referenceFramework":

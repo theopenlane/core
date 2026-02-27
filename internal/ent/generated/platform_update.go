@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -721,6 +722,26 @@ func (_u *PlatformUpdate) SetNillableWorkflowEligibleMarker(v *bool) *PlatformUp
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *PlatformUpdate) ClearWorkflowEligibleMarker() *PlatformUpdate {
 	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *PlatformUpdate) SetExternalUUID(v string) *PlatformUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableExternalUUID(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *PlatformUpdate) ClearExternalUUID() *PlatformUpdate {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -1525,6 +1546,25 @@ func (_u *PlatformUpdate) SetPlatformOwner(v *User) *PlatformUpdate {
 	return _u.SetPlatformOwnerID(v.ID)
 }
 
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_u *PlatformUpdate) SetSystemDetailID(id string) *PlatformUpdate {
+	_u.mutation.SetSystemDetailID(id)
+	return _u
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableSystemDetailID(id *string) *PlatformUpdate {
+	if id != nil {
+		_u = _u.SetSystemDetailID(*id)
+	}
+	return _u
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdate) SetSystemDetail(v *SystemDetail) *PlatformUpdate {
+	return _u.SetSystemDetailID(v.ID)
+}
+
 // Mutation returns the PlatformMutation object of the builder.
 func (_u *PlatformUpdate) Mutation() *PlatformMutation {
 	return _u.mutation
@@ -2157,6 +2197,12 @@ func (_u *PlatformUpdate) ClearPlatformOwner() *PlatformUpdate {
 	return _u
 }
 
+// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdate) ClearSystemDetail() *PlatformUpdate {
+	_u.mutation.ClearSystemDetail()
+	return _u
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *PlatformUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -2355,6 +2401,12 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(platform.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(platform.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(platform.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(platform.FieldName, field.TypeString, value)
@@ -4179,6 +4231,37 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SystemDetailCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Platform
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -4870,6 +4953,26 @@ func (_u *PlatformUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *Platfor
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *PlatformUpdateOne) ClearWorkflowEligibleMarker() *PlatformUpdateOne {
 	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *PlatformUpdateOne) SetExternalUUID(v string) *PlatformUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableExternalUUID(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *PlatformUpdateOne) ClearExternalUUID() *PlatformUpdateOne {
+	_u.mutation.ClearExternalUUID()
 	return _u
 }
 
@@ -5674,6 +5777,25 @@ func (_u *PlatformUpdateOne) SetPlatformOwner(v *User) *PlatformUpdateOne {
 	return _u.SetPlatformOwnerID(v.ID)
 }
 
+// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
+func (_u *PlatformUpdateOne) SetSystemDetailID(id string) *PlatformUpdateOne {
+	_u.mutation.SetSystemDetailID(id)
+	return _u
+}
+
+// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableSystemDetailID(id *string) *PlatformUpdateOne {
+	if id != nil {
+		_u = _u.SetSystemDetailID(*id)
+	}
+	return _u
+}
+
+// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdateOne) SetSystemDetail(v *SystemDetail) *PlatformUpdateOne {
+	return _u.SetSystemDetailID(v.ID)
+}
+
 // Mutation returns the PlatformMutation object of the builder.
 func (_u *PlatformUpdateOne) Mutation() *PlatformMutation {
 	return _u.mutation
@@ -6306,6 +6428,12 @@ func (_u *PlatformUpdateOne) ClearPlatformOwner() *PlatformUpdateOne {
 	return _u
 }
 
+// ClearSystemDetail clears the "system_detail" edge to the SystemDetail entity.
+func (_u *PlatformUpdateOne) ClearSystemDetail() *PlatformUpdateOne {
+	_u.mutation.ClearSystemDetail()
+	return _u
+}
+
 // Where appends a list predicates to the PlatformUpdate builder.
 func (_u *PlatformUpdateOne) Where(ps ...predicate.Platform) *PlatformUpdateOne {
 	_u.mutation.Where(ps...)
@@ -6534,6 +6662,12 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(platform.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(platform.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(platform.FieldExternalUUID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(platform.FieldName, field.TypeString, value)
@@ -8353,6 +8487,37 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.Platform
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

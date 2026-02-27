@@ -49,6 +49,8 @@ type Evidence struct {
 	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the name of the evidence
 	Name string `json:"name,omitempty"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -263,7 +265,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
@@ -373,6 +375,13 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
+			}
+		case evidence.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
 			}
 		case evidence.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -575,6 +584,11 @@ func (_m *Evidence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

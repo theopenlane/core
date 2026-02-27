@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -116,7 +117,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 103)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 104)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -464,6 +465,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldDeletedBy:                  {Type: field.TypeString, Column: control.FieldDeletedBy},
 			control.FieldDisplayID:                  {Type: field.TypeString, Column: control.FieldDisplayID},
 			control.FieldTags:                       {Type: field.TypeJSON, Column: control.FieldTags},
+			control.FieldExternalUUID:               {Type: field.TypeString, Column: control.FieldExternalUUID},
 			control.FieldTitle:                      {Type: field.TypeString, Column: control.FieldTitle},
 			control.FieldDescription:                {Type: field.TypeString, Column: control.FieldDescription},
 			control.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: control.FieldDescriptionJSON},
@@ -472,6 +474,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldAuditorReferenceID:         {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
 			control.FieldResponsiblePartyID:         {Type: field.TypeString, Column: control.FieldResponsiblePartyID},
 			control.FieldStatus:                     {Type: field.TypeEnum, Column: control.FieldStatus},
+			control.FieldImplementationStatus:       {Type: field.TypeEnum, Column: control.FieldImplementationStatus},
+			control.FieldImplementationDescription:  {Type: field.TypeString, Column: control.FieldImplementationDescription},
 			control.FieldSource:                     {Type: field.TypeEnum, Column: control.FieldSource},
 			control.FieldReferenceFramework:         {Type: field.TypeString, Column: control.FieldReferenceFramework},
 			control.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: control.FieldReferenceFrameworkRevision},
@@ -1108,6 +1112,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldScopeName:              {Type: field.TypeString, Column: evidence.FieldScopeName},
 			evidence.FieldScopeID:                {Type: field.TypeString, Column: evidence.FieldScopeID},
 			evidence.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: evidence.FieldWorkflowEligibleMarker},
+			evidence.FieldExternalUUID:           {Type: field.TypeString, Column: evidence.FieldExternalUUID},
 			evidence.FieldName:                   {Type: field.TypeString, Column: evidence.FieldName},
 			evidence.FieldDescription:            {Type: field.TypeString, Column: evidence.FieldDescription},
 			evidence.FieldCollectionProcedure:    {Type: field.TypeString, Column: evidence.FieldCollectionProcedure},
@@ -1322,25 +1327,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Group",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			group.FieldCreatedAt:        {Type: field.TypeTime, Column: group.FieldCreatedAt},
-			group.FieldUpdatedAt:        {Type: field.TypeTime, Column: group.FieldUpdatedAt},
-			group.FieldCreatedBy:        {Type: field.TypeString, Column: group.FieldCreatedBy},
-			group.FieldUpdatedBy:        {Type: field.TypeString, Column: group.FieldUpdatedBy},
-			group.FieldDeletedAt:        {Type: field.TypeTime, Column: group.FieldDeletedAt},
-			group.FieldDeletedBy:        {Type: field.TypeString, Column: group.FieldDeletedBy},
-			group.FieldDisplayID:        {Type: field.TypeString, Column: group.FieldDisplayID},
-			group.FieldTags:             {Type: field.TypeJSON, Column: group.FieldTags},
-			group.FieldOwnerID:          {Type: field.TypeString, Column: group.FieldOwnerID},
-			group.FieldName:             {Type: field.TypeString, Column: group.FieldName},
-			group.FieldDescription:      {Type: field.TypeString, Column: group.FieldDescription},
-			group.FieldIsManaged:        {Type: field.TypeBool, Column: group.FieldIsManaged},
-			group.FieldGravatarLogoURL:  {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
-			group.FieldLogoURL:          {Type: field.TypeString, Column: group.FieldLogoURL},
-			group.FieldDisplayName:      {Type: field.TypeString, Column: group.FieldDisplayName},
-			group.FieldScimExternalID:   {Type: field.TypeString, Column: group.FieldScimExternalID},
-			group.FieldScimDisplayName:  {Type: field.TypeString, Column: group.FieldScimDisplayName},
-			group.FieldScimActive:       {Type: field.TypeBool, Column: group.FieldScimActive},
-			group.FieldScimGroupMailing: {Type: field.TypeString, Column: group.FieldScimGroupMailing},
+			group.FieldCreatedAt:         {Type: field.TypeTime, Column: group.FieldCreatedAt},
+			group.FieldUpdatedAt:         {Type: field.TypeTime, Column: group.FieldUpdatedAt},
+			group.FieldCreatedBy:         {Type: field.TypeString, Column: group.FieldCreatedBy},
+			group.FieldUpdatedBy:         {Type: field.TypeString, Column: group.FieldUpdatedBy},
+			group.FieldDeletedAt:         {Type: field.TypeTime, Column: group.FieldDeletedAt},
+			group.FieldDeletedBy:         {Type: field.TypeString, Column: group.FieldDeletedBy},
+			group.FieldDisplayID:         {Type: field.TypeString, Column: group.FieldDisplayID},
+			group.FieldTags:              {Type: field.TypeJSON, Column: group.FieldTags},
+			group.FieldOwnerID:           {Type: field.TypeString, Column: group.FieldOwnerID},
+			group.FieldName:              {Type: field.TypeString, Column: group.FieldName},
+			group.FieldDescription:       {Type: field.TypeString, Column: group.FieldDescription},
+			group.FieldIsManaged:         {Type: field.TypeBool, Column: group.FieldIsManaged},
+			group.FieldGravatarLogoURL:   {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
+			group.FieldLogoURL:           {Type: field.TypeString, Column: group.FieldLogoURL},
+			group.FieldDisplayName:       {Type: field.TypeString, Column: group.FieldDisplayName},
+			group.FieldOscalRole:         {Type: field.TypeString, Column: group.FieldOscalRole},
+			group.FieldOscalPartyUUID:    {Type: field.TypeString, Column: group.FieldOscalPartyUUID},
+			group.FieldOscalContactUuids: {Type: field.TypeJSON, Column: group.FieldOscalContactUuids},
+			group.FieldScimExternalID:    {Type: field.TypeString, Column: group.FieldScimExternalID},
+			group.FieldScimDisplayName:   {Type: field.TypeString, Column: group.FieldScimDisplayName},
+			group.FieldScimActive:        {Type: field.TypeBool, Column: group.FieldScimActive},
+			group.FieldScimGroupMailing:  {Type: field.TypeString, Column: group.FieldScimGroupMailing},
 		},
 	}
 	graph.Nodes[33] = &sqlgraph.Node{
@@ -1652,6 +1660,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldScopeName:                       {Type: field.TypeString, Column: internalpolicy.FieldScopeName},
 			internalpolicy.FieldScopeID:                         {Type: field.TypeString, Column: internalpolicy.FieldScopeID},
 			internalpolicy.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: internalpolicy.FieldWorkflowEligibleMarker},
+			internalpolicy.FieldExternalUUID:                    {Type: field.TypeString, Column: internalpolicy.FieldExternalUUID},
 		},
 	}
 	graph.Nodes[42] = &sqlgraph.Node{
@@ -2376,6 +2385,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			platform.FieldCriticalityName:                {Type: field.TypeString, Column: platform.FieldCriticalityName},
 			platform.FieldCriticalityID:                  {Type: field.TypeString, Column: platform.FieldCriticalityID},
 			platform.FieldWorkflowEligibleMarker:         {Type: field.TypeBool, Column: platform.FieldWorkflowEligibleMarker},
+			platform.FieldExternalUUID:                   {Type: field.TypeString, Column: platform.FieldExternalUUID},
 			platform.FieldName:                           {Type: field.TypeString, Column: platform.FieldName},
 			platform.FieldDescription:                    {Type: field.TypeString, Column: platform.FieldDescription},
 			platform.FieldBusinessPurpose:                {Type: field.TypeString, Column: platform.FieldBusinessPurpose},
@@ -2469,6 +2479,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldOwnerID:              {Type: field.TypeString, Column: program.FieldOwnerID},
 			program.FieldProgramKindName:      {Type: field.TypeString, Column: program.FieldProgramKindName},
 			program.FieldProgramKindID:        {Type: field.TypeString, Column: program.FieldProgramKindID},
+			program.FieldExternalUUID:         {Type: field.TypeString, Column: program.FieldExternalUUID},
 			program.FieldName:                 {Type: field.TypeString, Column: program.FieldName},
 			program.FieldDescription:          {Type: field.TypeString, Column: program.FieldDescription},
 			program.FieldStatus:               {Type: field.TypeEnum, Column: program.FieldStatus},
@@ -2626,6 +2637,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldEnvironmentID:     {Type: field.TypeString, Column: risk.FieldEnvironmentID},
 			risk.FieldScopeName:         {Type: field.TypeString, Column: risk.FieldScopeName},
 			risk.FieldScopeID:           {Type: field.TypeString, Column: risk.FieldScopeID},
+			risk.FieldExternalUUID:      {Type: field.TypeString, Column: risk.FieldExternalUUID},
 			risk.FieldName:              {Type: field.TypeString, Column: risk.FieldName},
 			risk.FieldStatus:            {Type: field.TypeEnum, Column: risk.FieldStatus},
 			risk.FieldImpact:            {Type: field.TypeEnum, Column: risk.FieldImpact},
@@ -2793,6 +2805,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldDeletedBy:                  {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
 			subcontrol.FieldDisplayID:                  {Type: field.TypeString, Column: subcontrol.FieldDisplayID},
 			subcontrol.FieldTags:                       {Type: field.TypeJSON, Column: subcontrol.FieldTags},
+			subcontrol.FieldExternalUUID:               {Type: field.TypeString, Column: subcontrol.FieldExternalUUID},
 			subcontrol.FieldTitle:                      {Type: field.TypeString, Column: subcontrol.FieldTitle},
 			subcontrol.FieldDescription:                {Type: field.TypeString, Column: subcontrol.FieldDescription},
 			subcontrol.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: subcontrol.FieldDescriptionJSON},
@@ -2801,6 +2814,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldAuditorReferenceID:         {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
 			subcontrol.FieldResponsiblePartyID:         {Type: field.TypeString, Column: subcontrol.FieldResponsiblePartyID},
 			subcontrol.FieldStatus:                     {Type: field.TypeEnum, Column: subcontrol.FieldStatus},
+			subcontrol.FieldImplementationStatus:       {Type: field.TypeEnum, Column: subcontrol.FieldImplementationStatus},
+			subcontrol.FieldImplementationDescription:  {Type: field.TypeString, Column: subcontrol.FieldImplementationDescription},
 			subcontrol.FieldSource:                     {Type: field.TypeEnum, Column: subcontrol.FieldSource},
 			subcontrol.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrol.FieldReferenceFramework},
 			subcontrol.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrol.FieldReferenceFrameworkRevision},
@@ -2890,6 +2905,38 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[79] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   systemdetail.Table,
+			Columns: systemdetail.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: systemdetail.FieldID,
+			},
+		},
+		Type: "SystemDetail",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			systemdetail.FieldCreatedAt:             {Type: field.TypeTime, Column: systemdetail.FieldCreatedAt},
+			systemdetail.FieldUpdatedAt:             {Type: field.TypeTime, Column: systemdetail.FieldUpdatedAt},
+			systemdetail.FieldCreatedBy:             {Type: field.TypeString, Column: systemdetail.FieldCreatedBy},
+			systemdetail.FieldUpdatedBy:             {Type: field.TypeString, Column: systemdetail.FieldUpdatedBy},
+			systemdetail.FieldDeletedAt:             {Type: field.TypeTime, Column: systemdetail.FieldDeletedAt},
+			systemdetail.FieldDeletedBy:             {Type: field.TypeString, Column: systemdetail.FieldDeletedBy},
+			systemdetail.FieldDisplayID:             {Type: field.TypeString, Column: systemdetail.FieldDisplayID},
+			systemdetail.FieldTags:                  {Type: field.TypeJSON, Column: systemdetail.FieldTags},
+			systemdetail.FieldOwnerID:               {Type: field.TypeString, Column: systemdetail.FieldOwnerID},
+			systemdetail.FieldProgramID:             {Type: field.TypeString, Column: systemdetail.FieldProgramID},
+			systemdetail.FieldPlatformID:            {Type: field.TypeString, Column: systemdetail.FieldPlatformID},
+			systemdetail.FieldSystemName:            {Type: field.TypeString, Column: systemdetail.FieldSystemName},
+			systemdetail.FieldVersion:               {Type: field.TypeString, Column: systemdetail.FieldVersion},
+			systemdetail.FieldDescription:           {Type: field.TypeString, Column: systemdetail.FieldDescription},
+			systemdetail.FieldAuthorizationBoundary: {Type: field.TypeString, Column: systemdetail.FieldAuthorizationBoundary},
+			systemdetail.FieldSensitivityLevel:      {Type: field.TypeEnum, Column: systemdetail.FieldSensitivityLevel},
+			systemdetail.FieldLastReviewed:          {Type: field.TypeTime, Column: systemdetail.FieldLastReviewed},
+			systemdetail.FieldRevisionHistory:       {Type: field.TypeJSON, Column: systemdetail.FieldRevisionHistory},
+			systemdetail.FieldOscalMetadataJSON:     {Type: field.TypeJSON, Column: systemdetail.FieldOscalMetadataJSON},
+		},
+	}
+	graph.Nodes[80] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -2914,7 +2961,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:     {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[80] = &sqlgraph.Node{
+	graph.Nodes[81] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tagdefinition.Table,
 			Columns: tagdefinition.Columns,
@@ -2942,7 +2989,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagdefinition.FieldColor:            {Type: field.TypeString, Column: tagdefinition.FieldColor},
 		},
 	}
-	graph.Nodes[81] = &sqlgraph.Node{
+	graph.Nodes[82] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -2968,6 +3015,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldEnvironmentID:        {Type: field.TypeString, Column: task.FieldEnvironmentID},
 			task.FieldScopeName:            {Type: field.TypeString, Column: task.FieldScopeName},
 			task.FieldScopeID:              {Type: field.TypeString, Column: task.FieldScopeID},
+			task.FieldExternalUUID:         {Type: field.TypeString, Column: task.FieldExternalUUID},
 			task.FieldTitle:                {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDetails:              {Type: field.TypeString, Column: task.FieldDetails},
 			task.FieldDetailsJSON:          {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
@@ -2982,7 +3030,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldParentTaskID:         {Type: field.TypeString, Column: task.FieldParentTaskID},
 		},
 	}
-	graph.Nodes[82] = &sqlgraph.Node{
+	graph.Nodes[83] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -3017,7 +3065,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldTrustCenterID:    {Type: field.TypeString, Column: template.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[83] = &sqlgraph.Node{
+	graph.Nodes[84] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenter.Table,
 			Columns: trustcenter.Columns,
@@ -3046,7 +3094,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenter.FieldSubprocessorURL},
 		},
 	}
-	graph.Nodes[84] = &sqlgraph.Node{
+	graph.Nodes[85] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentercompliance.Table,
 			Columns: trustcentercompliance.Columns,
@@ -3068,7 +3116,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentercompliance.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercompliance.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[85] = &sqlgraph.Node{
+	graph.Nodes[86] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdoc.Table,
 			Columns: trustcenterdoc.Columns,
@@ -3098,7 +3146,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdoc.FieldStandardID:             {Type: field.TypeString, Column: trustcenterdoc.FieldStandardID},
 		},
 	}
-	graph.Nodes[86] = &sqlgraph.Node{
+	graph.Nodes[87] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterentity.Table,
 			Columns: trustcenterentity.Columns,
@@ -3122,7 +3170,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterentity.FieldEntityTypeID:  {Type: field.TypeString, Column: trustcenterentity.FieldEntityTypeID},
 		},
 	}
-	graph.Nodes[87] = &sqlgraph.Node{
+	graph.Nodes[88] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterfaq.Table,
 			Columns: trustcenterfaq.Columns,
@@ -3147,7 +3195,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterfaq.FieldDisplayOrder:           {Type: field.TypeInt, Column: trustcenterfaq.FieldDisplayOrder},
 		},
 	}
-	graph.Nodes[88] = &sqlgraph.Node{
+	graph.Nodes[89] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterndarequest.Table,
 			Columns: trustcenterndarequest.Columns,
@@ -3180,7 +3228,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequest.FieldFileID:           {Type: field.TypeString, Column: trustcenterndarequest.FieldFileID},
 		},
 	}
-	graph.Nodes[89] = &sqlgraph.Node{
+	graph.Nodes[90] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
@@ -3222,7 +3270,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[91] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessor.Table,
 			Columns: trustcentersubprocessor.Columns,
@@ -3246,7 +3294,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessor.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldCountries},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfig.Table,
 			Columns: trustcenterwatermarkconfig.Columns,
@@ -3275,7 +3323,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3314,7 +3362,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldScimLocale:            {Type: field.TypeString, Column: user.FieldScimLocale},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3346,7 +3394,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[94] = &sqlgraph.Node{
+	graph.Nodes[95] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vulnerability.Table,
 			Columns: vulnerability.Columns,
@@ -3404,7 +3452,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldRawPayload:       {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
 		},
 	}
-	graph.Nodes[95] = &sqlgraph.Node{
+	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -3433,7 +3481,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldUserVerified:    {Type: field.TypeBool, Column: webauthn.FieldUserVerified},
 		},
 	}
-	graph.Nodes[96] = &sqlgraph.Node{
+	graph.Nodes[97] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignment.Table,
 			Columns: workflowassignment.Columns,
@@ -3470,7 +3518,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignment.FieldDueAt:                {Type: field.TypeTime, Column: workflowassignment.FieldDueAt},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[98] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenttarget.Table,
 			Columns: workflowassignmenttarget.Columns,
@@ -3497,7 +3545,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenttarget.FieldResolverKey:          {Type: field.TypeString, Column: workflowassignmenttarget.FieldResolverKey},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowdefinition.Table,
 			Columns: workflowdefinition.Columns,
@@ -3539,7 +3587,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowdefinition.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinition.FieldTrackedFields},
 		},
 	}
-	graph.Nodes[99] = &sqlgraph.Node{
+	graph.Nodes[100] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowevent.Table,
 			Columns: workflowevent.Columns,
@@ -3564,7 +3612,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowevent.FieldPayload:            {Type: field.TypeJSON, Column: workflowevent.FieldPayload},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[101] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowinstance.Table,
 			Columns: workflowinstance.Columns,
@@ -3603,7 +3651,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstance.FieldPlatformID:           {Type: field.TypeString, Column: workflowinstance.FieldPlatformID},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowobjectref.Table,
 			Columns: workflowobjectref.Columns,
@@ -3638,7 +3686,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectref.FieldPlatformID:            {Type: field.TypeString, Column: workflowobjectref.FieldPlatformID},
 		},
 	}
-	graph.Nodes[102] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowproposal.Table,
 			Columns: workflowproposal.Columns,
@@ -10807,6 +10855,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"system_details",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"SystemDetail",
+	)
+	graph.MustAddE(
 		"procedures",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -11995,6 +12055,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"system_detail",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   platform.SystemDetailTable,
+			Columns: []string{platform.SystemDetailColumn},
+			Bidi:    false,
+		},
+		"Platform",
+		"SystemDetail",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -12425,6 +12497,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Program",
 		"ActionPlan",
+	)
+	graph.MustAddE(
+		"system_detail",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   program.SystemDetailTable,
+			Columns: []string{program.SystemDetailColumn},
+			Bidi:    false,
+		},
+		"Program",
+		"SystemDetail",
 	)
 	graph.MustAddE(
 		"users",
@@ -14045,6 +14129,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subscriber",
 		"Event",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   systemdetail.OwnerTable,
+			Columns: []string{systemdetail.OwnerColumn},
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"Organization",
+	)
+	graph.MustAddE(
+		"program",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   systemdetail.ProgramTable,
+			Columns: []string{systemdetail.ProgramColumn},
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"Program",
+	)
+	graph.MustAddE(
+		"platform",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   systemdetail.PlatformTable,
+			Columns: []string{systemdetail.PlatformColumn},
+			Bidi:    false,
+		},
+		"SystemDetail",
+		"Platform",
 	)
 	graph.MustAddE(
 		"owner",
@@ -19181,6 +19301,11 @@ func (f *ControlFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(control.FieldTags))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *ControlFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(control.FieldExternalUUID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *ControlFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(control.FieldTitle))
@@ -19219,6 +19344,16 @@ func (f *ControlFilter) WhereResponsiblePartyID(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ControlFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(control.FieldStatus))
+}
+
+// WhereImplementationStatus applies the entql string predicate on the implementation_status field.
+func (f *ControlFilter) WhereImplementationStatus(p entql.StringP) {
+	f.Where(p.Field(control.FieldImplementationStatus))
+}
+
+// WhereImplementationDescription applies the entql string predicate on the implementation_description field.
+func (f *ControlFilter) WhereImplementationDescription(p entql.StringP) {
+	f.Where(p.Field(control.FieldImplementationDescription))
 }
 
 // WhereSource applies the entql string predicate on the source field.
@@ -24443,6 +24578,11 @@ func (f *EvidenceFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(evidence.FieldWorkflowEligibleMarker))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *EvidenceFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(evidence.FieldExternalUUID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *EvidenceFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldName))
@@ -26346,6 +26486,21 @@ func (f *GroupFilter) WhereLogoURL(p entql.StringP) {
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *GroupFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(group.FieldDisplayName))
+}
+
+// WhereOscalRole applies the entql string predicate on the oscal_role field.
+func (f *GroupFilter) WhereOscalRole(p entql.StringP) {
+	f.Where(p.Field(group.FieldOscalRole))
+}
+
+// WhereOscalPartyUUID applies the entql string predicate on the oscal_party_uuid field.
+func (f *GroupFilter) WhereOscalPartyUUID(p entql.StringP) {
+	f.Where(p.Field(group.FieldOscalPartyUUID))
+}
+
+// WhereOscalContactUuids applies the entql json.RawMessage predicate on the oscal_contact_uuids field.
+func (f *GroupFilter) WhereOscalContactUuids(p entql.BytesP) {
+	f.Where(p.Field(group.FieldOscalContactUuids))
 }
 
 // WhereScimExternalID applies the entql string predicate on the scim_external_id field.
@@ -29264,6 +29419,11 @@ func (f *InternalPolicyFilter) WhereScopeID(p entql.StringP) {
 // WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
 func (f *InternalPolicyFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(internalpolicy.FieldWorkflowEligibleMarker))
+}
+
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *InternalPolicyFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldExternalUUID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -33768,6 +33928,20 @@ func (f *OrganizationFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	})))
 }
 
+// WhereHasSystemDetails applies a predicate to check if query has an edge system_details.
+func (f *OrganizationFilter) WhereHasSystemDetails() {
+	f.Where(entql.HasEdge("system_details"))
+}
+
+// WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasProcedures applies a predicate to check if query has an edge procedures.
 func (f *OrganizationFilter) WhereHasProcedures() {
 	f.Where(entql.HasEdge("procedures"))
@@ -35212,6 +35386,11 @@ func (f *PlatformFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(platform.FieldWorkflowEligibleMarker))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *PlatformFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(platform.FieldExternalUUID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *PlatformFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(platform.FieldName))
@@ -35904,6 +36083,20 @@ func (f *PlatformFilter) WhereHasPlatformOwnerWith(preds ...predicate.User) {
 	})))
 }
 
+// WhereHasSystemDetail applies a predicate to check if query has an edge system_detail.
+func (f *PlatformFilter) WhereHasSystemDetail() {
+	f.Where(entql.HasEdge("system_detail"))
+}
+
+// WhereHasSystemDetailWith applies a predicate to check if query has an edge system_detail with a given conditions (other predicates).
+func (f *PlatformFilter) WhereHasSystemDetailWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_detail", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *ProcedureQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -36495,6 +36688,11 @@ func (f *ProgramFilter) WhereProgramKindID(p entql.StringP) {
 	f.Where(p.Field(program.FieldProgramKindID))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *ProgramFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(program.FieldExternalUUID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *ProgramFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(program.FieldName))
@@ -36792,6 +36990,20 @@ func (f *ProgramFilter) WhereHasActionPlans() {
 // WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
 func (f *ProgramFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
 	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSystemDetail applies a predicate to check if query has an edge system_detail.
+func (f *ProgramFilter) WhereHasSystemDetail() {
+	f.Where(entql.HasEdge("system_detail"))
+}
+
+// WhereHasSystemDetailWith applies a predicate to check if query has an edge system_detail with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasSystemDetailWith(preds ...predicate.SystemDetail) {
+	f.Where(entql.HasEdgeWith("system_detail", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -38088,6 +38300,11 @@ func (f *RiskFilter) WhereScopeName(p entql.StringP) {
 // WhereScopeID applies the entql string predicate on the scope_id field.
 func (f *RiskFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(risk.FieldScopeID))
+}
+
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *RiskFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldExternalUUID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -39640,6 +39857,11 @@ func (f *SubcontrolFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldTags))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *SubcontrolFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldExternalUUID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *SubcontrolFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldTitle))
@@ -39678,6 +39900,16 @@ func (f *SubcontrolFilter) WhereResponsiblePartyID(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *SubcontrolFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldStatus))
+}
+
+// WhereImplementationStatus applies the entql string predicate on the implementation_status field.
+func (f *SubcontrolFilter) WhereImplementationStatus(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldImplementationStatus))
+}
+
+// WhereImplementationDescription applies the entql string predicate on the implementation_description field.
+func (f *SubcontrolFilter) WhereImplementationDescription(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldImplementationDescription))
 }
 
 // WhereSource applies the entql string predicate on the source field.
@@ -40434,6 +40666,183 @@ func (f *SubscriberFilter) WhereHasEventsWith(preds ...predicate.Event) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *SystemDetailQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the SystemDetailQuery builder.
+func (_q *SystemDetailQuery) Filter() *SystemDetailFilter {
+	return &SystemDetailFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *SystemDetailMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the SystemDetailMutation builder.
+func (m *SystemDetailMutation) Filter() *SystemDetailFilter {
+	return &SystemDetailFilter{config: m.config, predicateAdder: m}
+}
+
+// SystemDetailFilter provides a generic filtering capability at runtime for SystemDetailQuery.
+type SystemDetailFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *SystemDetailFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *SystemDetailFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *SystemDetailFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(systemdetail.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *SystemDetailFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(systemdetail.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *SystemDetailFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SystemDetailFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *SystemDetailFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(systemdetail.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *SystemDetailFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldDeletedBy))
+}
+
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *SystemDetailFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldDisplayID))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *SystemDetailFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(systemdetail.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SystemDetailFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldOwnerID))
+}
+
+// WhereProgramID applies the entql string predicate on the program_id field.
+func (f *SystemDetailFilter) WhereProgramID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldProgramID))
+}
+
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *SystemDetailFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldPlatformID))
+}
+
+// WhereSystemName applies the entql string predicate on the system_name field.
+func (f *SystemDetailFilter) WhereSystemName(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldSystemName))
+}
+
+// WhereVersion applies the entql string predicate on the version field.
+func (f *SystemDetailFilter) WhereVersion(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldVersion))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *SystemDetailFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldDescription))
+}
+
+// WhereAuthorizationBoundary applies the entql string predicate on the authorization_boundary field.
+func (f *SystemDetailFilter) WhereAuthorizationBoundary(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldAuthorizationBoundary))
+}
+
+// WhereSensitivityLevel applies the entql string predicate on the sensitivity_level field.
+func (f *SystemDetailFilter) WhereSensitivityLevel(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldSensitivityLevel))
+}
+
+// WhereLastReviewed applies the entql time.Time predicate on the last_reviewed field.
+func (f *SystemDetailFilter) WhereLastReviewed(p entql.TimeP) {
+	f.Where(p.Field(systemdetail.FieldLastReviewed))
+}
+
+// WhereRevisionHistory applies the entql json.RawMessage predicate on the revision_history field.
+func (f *SystemDetailFilter) WhereRevisionHistory(p entql.BytesP) {
+	f.Where(p.Field(systemdetail.FieldRevisionHistory))
+}
+
+// WhereOscalMetadataJSON applies the entql json.RawMessage predicate on the oscal_metadata_json field.
+func (f *SystemDetailFilter) WhereOscalMetadataJSON(p entql.BytesP) {
+	f.Where(p.Field(systemdetail.FieldOscalMetadataJSON))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *SystemDetailFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProgram applies a predicate to check if query has an edge program.
+func (f *SystemDetailFilter) WhereHasProgram() {
+	f.Where(entql.HasEdge("program"))
+}
+
+// WhereHasProgramWith applies a predicate to check if query has an edge program with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasProgramWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("program", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPlatform applies a predicate to check if query has an edge platform.
+func (f *SystemDetailFilter) WhereHasPlatform() {
+	f.Where(entql.HasEdge("platform"))
+}
+
+// WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
+func (f *SystemDetailFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
+	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *TFASettingQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -40462,7 +40871,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -40581,7 +40990,7 @@ type TagDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -40710,7 +41119,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -40794,6 +41203,11 @@ func (f *TaskFilter) WhereScopeName(p entql.StringP) {
 // WhereScopeID applies the entql string predicate on the scope_id field.
 func (f *TaskFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(task.FieldScopeID))
+}
+
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *TaskFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(task.FieldExternalUUID))
 }
 
 // WhereTitle applies the entql string predicate on the title field.
@@ -41221,7 +41635,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -41497,7 +41911,7 @@ type TrustCenterFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -41841,7 +42255,7 @@ type TrustCenterComplianceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterComplianceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -41982,7 +42396,7 @@ type TrustCenterDocFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -42205,7 +42619,7 @@ type TrustCenterEntityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterEntityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -42370,7 +42784,7 @@ type TrustCenterFAQFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFAQFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -42540,7 +42954,7 @@ type TrustCenterNDARequestFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterNDARequestFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -42764,7 +43178,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -43005,7 +43419,7 @@ type TrustCenterSubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -43170,7 +43584,7 @@ type TrustCenterWatermarkConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -43360,7 +43774,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -43908,7 +44322,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -44071,7 +44485,7 @@ type VulnerabilityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VulnerabilityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -44630,7 +45044,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -44764,7 +45178,7 @@ type WorkflowAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -44994,7 +45408,7 @@ type WorkflowAssignmentTargetFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentTargetFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -45160,7 +45574,7 @@ type WorkflowDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -45429,7 +45843,7 @@ type WorkflowEventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowEventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -45557,7 +45971,7 @@ type WorkflowInstanceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowInstanceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -45965,7 +46379,7 @@ type WorkflowObjectRefFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowObjectRefFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -46367,7 +46781,7 @@ type WorkflowProposalFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowProposalFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

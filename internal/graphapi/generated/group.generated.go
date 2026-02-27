@@ -80,6 +80,12 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "oscalRole":
+				return ec.fieldContext_Group_oscalRole(ctx, field)
+			case "oscalPartyUUID":
+				return ec.fieldContext_Group_oscalPartyUUID(ctx, field)
+			case "oscalContactUuids":
+				return ec.fieldContext_Group_oscalContactUuids(ctx, field)
 			case "scimExternalID":
 				return ec.fieldContext_Group_scimExternalID(ctx, field)
 			case "scimDisplayName":
@@ -274,6 +280,12 @@ func (ec *executionContext) fieldContext_GroupBulkUpdatePayload_groups(_ context
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "oscalRole":
+				return ec.fieldContext_Group_oscalRole(ctx, field)
+			case "oscalPartyUUID":
+				return ec.fieldContext_Group_oscalPartyUUID(ctx, field)
+			case "oscalContactUuids":
+				return ec.fieldContext_Group_oscalContactUuids(ctx, field)
 			case "scimExternalID":
 				return ec.fieldContext_Group_scimExternalID(ctx, field)
 			case "scimDisplayName":
@@ -468,6 +480,12 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "oscalRole":
+				return ec.fieldContext_Group_oscalRole(ctx, field)
+			case "oscalPartyUUID":
+				return ec.fieldContext_Group_oscalPartyUUID(ctx, field)
+			case "oscalContactUuids":
+				return ec.fieldContext_Group_oscalContactUuids(ctx, field)
 			case "scimExternalID":
 				return ec.fieldContext_Group_scimExternalID(ctx, field)
 			case "scimDisplayName":
@@ -662,6 +680,12 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_logoURL(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
+			case "oscalRole":
+				return ec.fieldContext_Group_oscalRole(ctx, field)
+			case "oscalPartyUUID":
+				return ec.fieldContext_Group_oscalPartyUUID(ctx, field)
+			case "oscalContactUuids":
+				return ec.fieldContext_Group_oscalContactUuids(ctx, field)
 			case "scimExternalID":
 				return ec.fieldContext_Group_scimExternalID(ctx, field)
 			case "scimDisplayName":

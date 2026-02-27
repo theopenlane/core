@@ -69,6 +69,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -204,6 +205,7 @@ func checkColumn(t, c string) error {
 			standardhistory.Table:                   standardhistory.ValidColumn,
 			subcontrolhistory.Table:                 subcontrolhistory.ValidColumn,
 			subprocessorhistory.Table:               subprocessorhistory.ValidColumn,
+			systemdetailhistory.Table:               systemdetailhistory.ValidColumn,
 			taskhistory.Table:                       taskhistory.ValidColumn,
 			templatehistory.Table:                   templatehistory.ValidColumn,
 			trustcentercompliancehistory.Table:      trustcentercompliancehistory.ValidColumn,

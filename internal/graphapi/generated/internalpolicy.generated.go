@@ -126,6 +126,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -310,6 +312,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -494,6 +498,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -678,6 +684,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":

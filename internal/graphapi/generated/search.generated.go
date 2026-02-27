@@ -1428,6 +1428,43 @@ func (ec *executionContext) fieldContext_SearchResults_subscribers(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_systemDetails(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_SearchResults_systemDetails,
+		func(ctx context.Context) (any, error) {
+			return obj.SystemDetails, nil
+		},
+		nil,
+		ec.marshalOSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_systemDetails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_SystemDetailConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_SystemDetailConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_SystemDetailConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SystemDetailConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_tagDefinitions(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1757,6 +1794,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_subprocessors(ctx, field, obj)
 		case "subscribers":
 			out.Values[i] = ec._SearchResults_subscribers(ctx, field, obj)
+		case "systemDetails":
+			out.Values[i] = ec._SearchResults_systemDetails(ctx, field, obj)
 		case "tagDefinitions":
 			out.Values[i] = ec._SearchResults_tagDefinitions(ctx, field, obj)
 		case "tasks":

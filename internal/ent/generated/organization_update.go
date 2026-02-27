@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -1200,6 +1201,21 @@ func (_u *OrganizationUpdate) AddPrograms(v ...*Program) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramIDs(ids...)
+}
+
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_u *OrganizationUpdate) AddSystemDetailIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddSystemDetailIDs(ids...)
+	return _u
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_u *OrganizationUpdate) AddSystemDetails(v ...*SystemDetail) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSystemDetailIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
@@ -3122,6 +3138,27 @@ func (_u *OrganizationUpdate) RemovePrograms(v ...*Program) *OrganizationUpdate 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearSystemDetails clears all "system_details" edges to the SystemDetail entity.
+func (_u *OrganizationUpdate) ClearSystemDetails() *OrganizationUpdate {
+	_u.mutation.ClearSystemDetails()
+	return _u
+}
+
+// RemoveSystemDetailIDs removes the "system_details" edge to SystemDetail entities by IDs.
+func (_u *OrganizationUpdate) RemoveSystemDetailIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveSystemDetailIDs(ids...)
+	return _u
+}
+
+// RemoveSystemDetails removes "system_details" edges to SystemDetail entities.
+func (_u *OrganizationUpdate) RemoveSystemDetails(v ...*SystemDetail) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSystemDetailIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
@@ -7061,6 +7098,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -10572,6 +10657,21 @@ func (_u *OrganizationUpdateOne) AddPrograms(v ...*Program) *OrganizationUpdateO
 	return _u.AddProgramIDs(ids...)
 }
 
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_u *OrganizationUpdateOne) AddSystemDetailIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddSystemDetailIDs(ids...)
+	return _u
+}
+
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_u *OrganizationUpdateOne) AddSystemDetails(v ...*SystemDetail) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSystemDetailIDs(ids...)
+}
+
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
 func (_u *OrganizationUpdateOne) AddProcedureIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddProcedureIDs(ids...)
@@ -12492,6 +12592,27 @@ func (_u *OrganizationUpdateOne) RemovePrograms(v ...*Program) *OrganizationUpda
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramIDs(ids...)
+}
+
+// ClearSystemDetails clears all "system_details" edges to the SystemDetail entity.
+func (_u *OrganizationUpdateOne) ClearSystemDetails() *OrganizationUpdateOne {
+	_u.mutation.ClearSystemDetails()
+	return _u
+}
+
+// RemoveSystemDetailIDs removes the "system_details" edge to SystemDetail entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveSystemDetailIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveSystemDetailIDs(ids...)
+	return _u
+}
+
+// RemoveSystemDetails removes "system_details" edges to SystemDetail entities.
+func (_u *OrganizationUpdateOne) RemoveSystemDetails(v ...*SystemDetail) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSystemDetailIDs(ids...)
 }
 
 // ClearProcedures clears all "procedures" edges to the Procedure entity.
@@ -16456,6 +16577,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SystemDetailsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailsTable,
+			Columns: []string{organization.SystemDetailsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

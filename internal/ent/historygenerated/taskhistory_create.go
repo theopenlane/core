@@ -253,6 +253,20 @@ func (_c *TaskHistoryCreate) SetNillableScopeID(v *string) *TaskHistoryCreate {
 	return _c
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_c *TaskHistoryCreate) SetExternalUUID(v string) *TaskHistoryCreate {
+	_c.mutation.SetExternalUUID(v)
+	return _c
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableExternalUUID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetExternalUUID(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *TaskHistoryCreate) SetTitle(v string) *TaskHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -628,6 +642,10 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(taskhistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.ExternalUUID(); ok {
+		_spec.SetField(taskhistory.FieldExternalUUID, field.TypeString, value)
+		_node.ExternalUUID = &value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)

@@ -54,6 +54,8 @@ const (
 	FieldScopeID = "scope_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -96,6 +98,7 @@ var Columns = []string{
 	FieldScopeName,
 	FieldScopeID,
 	FieldWorkflowEligibleMarker,
+	FieldExternalUUID,
 	FieldName,
 	FieldDescription,
 	FieldCollectionProcedure,
@@ -254,6 +257,11 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
+}
+
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

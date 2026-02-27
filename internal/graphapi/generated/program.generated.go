@@ -72,6 +72,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -132,6 +134,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":
@@ -218,6 +222,8 @@ func (ec *executionContext) fieldContext_ProgramBulkUpdatePayload_programs(_ con
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -278,6 +284,8 @@ func (ec *executionContext) fieldContext_ProgramBulkUpdatePayload_programs(_ con
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":
@@ -364,6 +372,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -424,6 +434,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":
@@ -510,6 +522,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_programKindName(ctx, field)
 			case "programKindID":
 				return ec.fieldContext_Program_programKindID(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Program_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Program_name(ctx, field)
 			case "description":
@@ -570,6 +584,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_narratives(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Program_actionPlans(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Program_systemDetail(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
 			case "programOwner":

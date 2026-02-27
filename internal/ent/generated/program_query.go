@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -61,6 +62,7 @@ type ProgramQuery struct {
 	withEvidence               *EvidenceQuery
 	withNarratives             *NarrativeQuery
 	withActionPlans            *ActionPlanQuery
+	withSystemDetail           *SystemDetailQuery
 	withUsers                  *UserQuery
 	withProgramOwner           *UserQuery
 	withMembers                *ProgramMembershipQuery
@@ -545,6 +547,31 @@ func (_q *ProgramQuery) QueryActionPlans() *ActionPlanQuery {
 	return query
 }
 
+// QuerySystemDetail chains the current query on the "system_detail" edge.
+func (_q *ProgramQuery) QuerySystemDetail() *SystemDetailQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, selector),
+			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, program.SystemDetailTable, program.SystemDetailColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryUsers chains the current query on the "users" edge.
 func (_q *ProgramQuery) QueryUsers() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
@@ -829,6 +856,7 @@ func (_q *ProgramQuery) Clone() *ProgramQuery {
 		withEvidence:          _q.withEvidence.Clone(),
 		withNarratives:        _q.withNarratives.Clone(),
 		withActionPlans:       _q.withActionPlans.Clone(),
+		withSystemDetail:      _q.withSystemDetail.Clone(),
 		withUsers:             _q.withUsers.Clone(),
 		withProgramOwner:      _q.withProgramOwner.Clone(),
 		withMembers:           _q.withMembers.Clone(),
@@ -1026,6 +1054,17 @@ func (_q *ProgramQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *Program
 	return _q
 }
 
+// WithSystemDetail tells the query-builder to eager-load the nodes that are connected to
+// the "system_detail" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProgramQuery) WithSystemDetail(opts ...func(*SystemDetailQuery)) *ProgramQuery {
+	query := (&SystemDetailClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSystemDetail = query
+	return _q
+}
+
 // WithUsers tells the query-builder to eager-load the nodes that are connected to
 // the "users" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ProgramQuery) WithUsers(opts ...func(*UserQuery)) *ProgramQuery {
@@ -1144,7 +1183,7 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		nodes       = []*Program{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1162,6 +1201,7 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			_q.withEvidence != nil,
 			_q.withNarratives != nil,
 			_q.withActionPlans != nil,
+			_q.withSystemDetail != nil,
 			_q.withUsers != nil,
 			_q.withProgramOwner != nil,
 			_q.withMembers != nil,
@@ -1309,6 +1349,12 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		if err := _q.loadActionPlans(ctx, query, nodes,
 			func(n *Program) { n.Edges.ActionPlans = []*ActionPlan{} },
 			func(n *Program, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSystemDetail; query != nil {
+		if err := _q.loadSystemDetail(ctx, query, nodes, nil,
+			func(n *Program, e *SystemDetail) { n.Edges.SystemDetail = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2382,6 +2428,36 @@ func (_q *ProgramQuery) loadActionPlans(ctx context.Context, query *ActionPlanQu
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *ProgramQuery) loadSystemDetail(ctx context.Context, query *SystemDetailQuery, nodes []*Program, init func(*Program), assign func(*Program, *SystemDetail)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Program)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(systemdetail.FieldProgramID)
+	}
+	query.Where(predicate.SystemDetail(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(program.SystemDetailColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ProgramID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "program_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "program_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

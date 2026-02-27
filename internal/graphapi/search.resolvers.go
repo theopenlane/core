@@ -59,6 +59,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		subcontrolResults           *generated.SubcontrolConnection
 		subprocessorResults         *generated.SubprocessorConnection
 		subscriberResults           *generated.SubscriberConnection
+		systemdetailResults         *generated.SystemDetailConnection
 		tagdefinitionResults        *generated.TagDefinitionConnection
 		taskResults                 *generated.TaskConnection
 		templateResults             *generated.TemplateConnection
@@ -505,6 +506,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			systemdetailResults, err = searchSystemDetails(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, systemdetailResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			tagdefinitionResults, err = searchTagDefinitions(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -756,6 +769,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Subscribers = subscriberResults
 
 		res.TotalCount += subscriberResults.TotalCount
+	}
+	if systemdetailResults != nil && len(systemdetailResults.Edges) > 0 {
+		res.SystemDetails = systemdetailResults
+
+		res.TotalCount += systemdetailResults.TotalCount
 	}
 	if tagdefinitionResults != nil && len(tagdefinitionResults.Edges) > 0 {
 		res.TagDefinitions = tagdefinitionResults
@@ -1144,6 +1162,16 @@ func (r *queryResolver) SubscriberSearch(ctx context.Context, query string, afte
 
 	// return the results
 	return subscriberResults, nil
+}
+func (r *queryResolver) SystemDetailSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SystemDetailConnection, error) {
+	systemdetailResults, err := searchSystemDetails(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return systemdetailResults, nil
 }
 func (r *queryResolver) TagDefinitionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TagDefinitionConnection, error) {
 	tagdefinitionResults, err := searchTagDefinitions(ctx, query, after, first, before, last)

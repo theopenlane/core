@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -89,7 +90,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 75)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 76)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   actionplanhistory.Table,
@@ -429,6 +430,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: controlhistory.FieldDeletedBy},
 			controlhistory.FieldDisplayID:                  {Type: field.TypeString, Column: controlhistory.FieldDisplayID},
 			controlhistory.FieldTags:                       {Type: field.TypeJSON, Column: controlhistory.FieldTags},
+			controlhistory.FieldExternalUUID:               {Type: field.TypeString, Column: controlhistory.FieldExternalUUID},
 			controlhistory.FieldTitle:                      {Type: field.TypeString, Column: controlhistory.FieldTitle},
 			controlhistory.FieldDescription:                {Type: field.TypeString, Column: controlhistory.FieldDescription},
 			controlhistory.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: controlhistory.FieldDescriptionJSON},
@@ -437,6 +439,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldAuditorReferenceID:         {Type: field.TypeString, Column: controlhistory.FieldAuditorReferenceID},
 			controlhistory.FieldResponsiblePartyID:         {Type: field.TypeString, Column: controlhistory.FieldResponsiblePartyID},
 			controlhistory.FieldStatus:                     {Type: field.TypeEnum, Column: controlhistory.FieldStatus},
+			controlhistory.FieldImplementationStatus:       {Type: field.TypeEnum, Column: controlhistory.FieldImplementationStatus},
+			controlhistory.FieldImplementationDescription:  {Type: field.TypeString, Column: controlhistory.FieldImplementationDescription},
 			controlhistory.FieldSource:                     {Type: field.TypeEnum, Column: controlhistory.FieldSource},
 			controlhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: controlhistory.FieldReferenceFramework},
 			controlhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: controlhistory.FieldReferenceFrameworkRevision},
@@ -1006,6 +1010,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidencehistory.FieldScopeName:              {Type: field.TypeString, Column: evidencehistory.FieldScopeName},
 			evidencehistory.FieldScopeID:                {Type: field.TypeString, Column: evidencehistory.FieldScopeID},
 			evidencehistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: evidencehistory.FieldWorkflowEligibleMarker},
+			evidencehistory.FieldExternalUUID:           {Type: field.TypeString, Column: evidencehistory.FieldExternalUUID},
 			evidencehistory.FieldName:                   {Type: field.TypeString, Column: evidencehistory.FieldName},
 			evidencehistory.FieldDescription:            {Type: field.TypeString, Column: evidencehistory.FieldDescription},
 			evidencehistory.FieldCollectionProcedure:    {Type: field.TypeString, Column: evidencehistory.FieldCollectionProcedure},
@@ -1174,28 +1179,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "GroupHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			grouphistory.FieldHistoryTime:      {Type: field.TypeTime, Column: grouphistory.FieldHistoryTime},
-			grouphistory.FieldRef:              {Type: field.TypeString, Column: grouphistory.FieldRef},
-			grouphistory.FieldOperation:        {Type: field.TypeEnum, Column: grouphistory.FieldOperation},
-			grouphistory.FieldCreatedAt:        {Type: field.TypeTime, Column: grouphistory.FieldCreatedAt},
-			grouphistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: grouphistory.FieldUpdatedAt},
-			grouphistory.FieldCreatedBy:        {Type: field.TypeString, Column: grouphistory.FieldCreatedBy},
-			grouphistory.FieldUpdatedBy:        {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
-			grouphistory.FieldDeletedAt:        {Type: field.TypeTime, Column: grouphistory.FieldDeletedAt},
-			grouphistory.FieldDeletedBy:        {Type: field.TypeString, Column: grouphistory.FieldDeletedBy},
-			grouphistory.FieldDisplayID:        {Type: field.TypeString, Column: grouphistory.FieldDisplayID},
-			grouphistory.FieldTags:             {Type: field.TypeJSON, Column: grouphistory.FieldTags},
-			grouphistory.FieldOwnerID:          {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
-			grouphistory.FieldName:             {Type: field.TypeString, Column: grouphistory.FieldName},
-			grouphistory.FieldDescription:      {Type: field.TypeString, Column: grouphistory.FieldDescription},
-			grouphistory.FieldIsManaged:        {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
-			grouphistory.FieldGravatarLogoURL:  {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
-			grouphistory.FieldLogoURL:          {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
-			grouphistory.FieldDisplayName:      {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
-			grouphistory.FieldScimExternalID:   {Type: field.TypeString, Column: grouphistory.FieldScimExternalID},
-			grouphistory.FieldScimDisplayName:  {Type: field.TypeString, Column: grouphistory.FieldScimDisplayName},
-			grouphistory.FieldScimActive:       {Type: field.TypeBool, Column: grouphistory.FieldScimActive},
-			grouphistory.FieldScimGroupMailing: {Type: field.TypeString, Column: grouphistory.FieldScimGroupMailing},
+			grouphistory.FieldHistoryTime:       {Type: field.TypeTime, Column: grouphistory.FieldHistoryTime},
+			grouphistory.FieldRef:               {Type: field.TypeString, Column: grouphistory.FieldRef},
+			grouphistory.FieldOperation:         {Type: field.TypeEnum, Column: grouphistory.FieldOperation},
+			grouphistory.FieldCreatedAt:         {Type: field.TypeTime, Column: grouphistory.FieldCreatedAt},
+			grouphistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: grouphistory.FieldUpdatedAt},
+			grouphistory.FieldCreatedBy:         {Type: field.TypeString, Column: grouphistory.FieldCreatedBy},
+			grouphistory.FieldUpdatedBy:         {Type: field.TypeString, Column: grouphistory.FieldUpdatedBy},
+			grouphistory.FieldDeletedAt:         {Type: field.TypeTime, Column: grouphistory.FieldDeletedAt},
+			grouphistory.FieldDeletedBy:         {Type: field.TypeString, Column: grouphistory.FieldDeletedBy},
+			grouphistory.FieldDisplayID:         {Type: field.TypeString, Column: grouphistory.FieldDisplayID},
+			grouphistory.FieldTags:              {Type: field.TypeJSON, Column: grouphistory.FieldTags},
+			grouphistory.FieldOwnerID:           {Type: field.TypeString, Column: grouphistory.FieldOwnerID},
+			grouphistory.FieldName:              {Type: field.TypeString, Column: grouphistory.FieldName},
+			grouphistory.FieldDescription:       {Type: field.TypeString, Column: grouphistory.FieldDescription},
+			grouphistory.FieldIsManaged:         {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
+			grouphistory.FieldGravatarLogoURL:   {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
+			grouphistory.FieldLogoURL:           {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
+			grouphistory.FieldDisplayName:       {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
+			grouphistory.FieldOscalRole:         {Type: field.TypeString, Column: grouphistory.FieldOscalRole},
+			grouphistory.FieldOscalPartyUUID:    {Type: field.TypeString, Column: grouphistory.FieldOscalPartyUUID},
+			grouphistory.FieldOscalContactUuids: {Type: field.TypeJSON, Column: grouphistory.FieldOscalContactUuids},
+			grouphistory.FieldScimExternalID:    {Type: field.TypeString, Column: grouphistory.FieldScimExternalID},
+			grouphistory.FieldScimDisplayName:   {Type: field.TypeString, Column: grouphistory.FieldScimDisplayName},
+			grouphistory.FieldScimActive:        {Type: field.TypeBool, Column: grouphistory.FieldScimActive},
+			grouphistory.FieldScimGroupMailing:  {Type: field.TypeString, Column: grouphistory.FieldScimGroupMailing},
 		},
 	}
 	graph.Nodes[26] = &sqlgraph.Node{
@@ -1427,6 +1435,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldScopeName:                       {Type: field.TypeString, Column: internalpolicyhistory.FieldScopeName},
 			internalpolicyhistory.FieldScopeID:                         {Type: field.TypeString, Column: internalpolicyhistory.FieldScopeID},
 			internalpolicyhistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: internalpolicyhistory.FieldWorkflowEligibleMarker},
+			internalpolicyhistory.FieldExternalUUID:                    {Type: field.TypeString, Column: internalpolicyhistory.FieldExternalUUID},
 		},
 	}
 	graph.Nodes[32] = &sqlgraph.Node{
@@ -1857,6 +1866,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			platformhistory.FieldCriticalityName:                {Type: field.TypeString, Column: platformhistory.FieldCriticalityName},
 			platformhistory.FieldCriticalityID:                  {Type: field.TypeString, Column: platformhistory.FieldCriticalityID},
 			platformhistory.FieldWorkflowEligibleMarker:         {Type: field.TypeBool, Column: platformhistory.FieldWorkflowEligibleMarker},
+			platformhistory.FieldExternalUUID:                   {Type: field.TypeString, Column: platformhistory.FieldExternalUUID},
 			platformhistory.FieldName:                           {Type: field.TypeString, Column: platformhistory.FieldName},
 			platformhistory.FieldDescription:                    {Type: field.TypeString, Column: platformhistory.FieldDescription},
 			platformhistory.FieldBusinessPurpose:                {Type: field.TypeString, Column: platformhistory.FieldBusinessPurpose},
@@ -1956,6 +1966,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldOwnerID:              {Type: field.TypeString, Column: programhistory.FieldOwnerID},
 			programhistory.FieldProgramKindName:      {Type: field.TypeString, Column: programhistory.FieldProgramKindName},
 			programhistory.FieldProgramKindID:        {Type: field.TypeString, Column: programhistory.FieldProgramKindID},
+			programhistory.FieldExternalUUID:         {Type: field.TypeString, Column: programhistory.FieldExternalUUID},
 			programhistory.FieldName:                 {Type: field.TypeString, Column: programhistory.FieldName},
 			programhistory.FieldDescription:          {Type: field.TypeString, Column: programhistory.FieldDescription},
 			programhistory.FieldStatus:               {Type: field.TypeEnum, Column: programhistory.FieldStatus},
@@ -2125,6 +2136,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldEnvironmentID:     {Type: field.TypeString, Column: riskhistory.FieldEnvironmentID},
 			riskhistory.FieldScopeName:         {Type: field.TypeString, Column: riskhistory.FieldScopeName},
 			riskhistory.FieldScopeID:           {Type: field.TypeString, Column: riskhistory.FieldScopeID},
+			riskhistory.FieldExternalUUID:      {Type: field.TypeString, Column: riskhistory.FieldExternalUUID},
 			riskhistory.FieldName:              {Type: field.TypeString, Column: riskhistory.FieldName},
 			riskhistory.FieldStatus:            {Type: field.TypeEnum, Column: riskhistory.FieldStatus},
 			riskhistory.FieldImpact:            {Type: field.TypeEnum, Column: riskhistory.FieldImpact},
@@ -2279,6 +2291,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
 			subcontrolhistory.FieldDisplayID:                  {Type: field.TypeString, Column: subcontrolhistory.FieldDisplayID},
 			subcontrolhistory.FieldTags:                       {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
+			subcontrolhistory.FieldExternalUUID:               {Type: field.TypeString, Column: subcontrolhistory.FieldExternalUUID},
 			subcontrolhistory.FieldTitle:                      {Type: field.TypeString, Column: subcontrolhistory.FieldTitle},
 			subcontrolhistory.FieldDescription:                {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
 			subcontrolhistory.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: subcontrolhistory.FieldDescriptionJSON},
@@ -2287,6 +2300,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldAuditorReferenceID:         {Type: field.TypeString, Column: subcontrolhistory.FieldAuditorReferenceID},
 			subcontrolhistory.FieldResponsiblePartyID:         {Type: field.TypeString, Column: subcontrolhistory.FieldResponsiblePartyID},
 			subcontrolhistory.FieldStatus:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldStatus},
+			subcontrolhistory.FieldImplementationStatus:       {Type: field.TypeEnum, Column: subcontrolhistory.FieldImplementationStatus},
+			subcontrolhistory.FieldImplementationDescription:  {Type: field.TypeString, Column: subcontrolhistory.FieldImplementationDescription},
 			subcontrolhistory.FieldSource:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
 			subcontrolhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFramework},
 			subcontrolhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFrameworkRevision},
@@ -2348,6 +2363,41 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   systemdetailhistory.Table,
+			Columns: systemdetailhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: systemdetailhistory.FieldID,
+			},
+		},
+		Type: "SystemDetailHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			systemdetailhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: systemdetailhistory.FieldHistoryTime},
+			systemdetailhistory.FieldRef:                   {Type: field.TypeString, Column: systemdetailhistory.FieldRef},
+			systemdetailhistory.FieldOperation:             {Type: field.TypeEnum, Column: systemdetailhistory.FieldOperation},
+			systemdetailhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: systemdetailhistory.FieldCreatedAt},
+			systemdetailhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: systemdetailhistory.FieldUpdatedAt},
+			systemdetailhistory.FieldCreatedBy:             {Type: field.TypeString, Column: systemdetailhistory.FieldCreatedBy},
+			systemdetailhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: systemdetailhistory.FieldUpdatedBy},
+			systemdetailhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: systemdetailhistory.FieldDeletedAt},
+			systemdetailhistory.FieldDeletedBy:             {Type: field.TypeString, Column: systemdetailhistory.FieldDeletedBy},
+			systemdetailhistory.FieldDisplayID:             {Type: field.TypeString, Column: systemdetailhistory.FieldDisplayID},
+			systemdetailhistory.FieldTags:                  {Type: field.TypeJSON, Column: systemdetailhistory.FieldTags},
+			systemdetailhistory.FieldOwnerID:               {Type: field.TypeString, Column: systemdetailhistory.FieldOwnerID},
+			systemdetailhistory.FieldProgramID:             {Type: field.TypeString, Column: systemdetailhistory.FieldProgramID},
+			systemdetailhistory.FieldPlatformID:            {Type: field.TypeString, Column: systemdetailhistory.FieldPlatformID},
+			systemdetailhistory.FieldSystemName:            {Type: field.TypeString, Column: systemdetailhistory.FieldSystemName},
+			systemdetailhistory.FieldVersion:               {Type: field.TypeString, Column: systemdetailhistory.FieldVersion},
+			systemdetailhistory.FieldDescription:           {Type: field.TypeString, Column: systemdetailhistory.FieldDescription},
+			systemdetailhistory.FieldAuthorizationBoundary: {Type: field.TypeString, Column: systemdetailhistory.FieldAuthorizationBoundary},
+			systemdetailhistory.FieldSensitivityLevel:      {Type: field.TypeEnum, Column: systemdetailhistory.FieldSensitivityLevel},
+			systemdetailhistory.FieldLastReviewed:          {Type: field.TypeTime, Column: systemdetailhistory.FieldLastReviewed},
+			systemdetailhistory.FieldRevisionHistory:       {Type: field.TypeJSON, Column: systemdetailhistory.FieldRevisionHistory},
+			systemdetailhistory.FieldOscalMetadataJSON:     {Type: field.TypeJSON, Column: systemdetailhistory.FieldOscalMetadataJSON},
+		},
+	}
+	graph.Nodes[56] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   taskhistory.Table,
 			Columns: taskhistory.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -2375,6 +2425,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldEnvironmentID:        {Type: field.TypeString, Column: taskhistory.FieldEnvironmentID},
 			taskhistory.FieldScopeName:            {Type: field.TypeString, Column: taskhistory.FieldScopeName},
 			taskhistory.FieldScopeID:              {Type: field.TypeString, Column: taskhistory.FieldScopeID},
+			taskhistory.FieldExternalUUID:         {Type: field.TypeString, Column: taskhistory.FieldExternalUUID},
 			taskhistory.FieldTitle:                {Type: field.TypeString, Column: taskhistory.FieldTitle},
 			taskhistory.FieldDetails:              {Type: field.TypeString, Column: taskhistory.FieldDetails},
 			taskhistory.FieldDetailsJSON:          {Type: field.TypeJSON, Column: taskhistory.FieldDetailsJSON},
@@ -2389,7 +2440,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldParentTaskID:         {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -2427,7 +2478,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldTrustCenterID:    {Type: field.TypeString, Column: templatehistory.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[57] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentercompliancehistory.Table,
 			Columns: trustcentercompliancehistory.Columns,
@@ -2452,7 +2503,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentercompliancehistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercompliancehistory.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[58] = &sqlgraph.Node{
+	graph.Nodes[59] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdochistory.Table,
 			Columns: trustcenterdochistory.Columns,
@@ -2485,7 +2536,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdochistory.FieldStandardID:             {Type: field.TypeString, Column: trustcenterdochistory.FieldStandardID},
 		},
 	}
-	graph.Nodes[59] = &sqlgraph.Node{
+	graph.Nodes[60] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterentityhistory.Table,
 			Columns: trustcenterentityhistory.Columns,
@@ -2512,7 +2563,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterentityhistory.FieldEntityTypeID:  {Type: field.TypeString, Column: trustcenterentityhistory.FieldEntityTypeID},
 		},
 	}
-	graph.Nodes[60] = &sqlgraph.Node{
+	graph.Nodes[61] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterfaqhistory.Table,
 			Columns: trustcenterfaqhistory.Columns,
@@ -2540,7 +2591,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterfaqhistory.FieldDisplayOrder:           {Type: field.TypeInt, Column: trustcenterfaqhistory.FieldDisplayOrder},
 		},
 	}
-	graph.Nodes[61] = &sqlgraph.Node{
+	graph.Nodes[62] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterhistory.Table,
 			Columns: trustcenterhistory.Columns,
@@ -2572,7 +2623,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenterhistory.FieldSubprocessorURL},
 		},
 	}
-	graph.Nodes[62] = &sqlgraph.Node{
+	graph.Nodes[63] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterndarequesthistory.Table,
 			Columns: trustcenterndarequesthistory.Columns,
@@ -2608,7 +2659,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequesthistory.FieldFileID:           {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFileID},
 		},
 	}
-	graph.Nodes[63] = &sqlgraph.Node{
+	graph.Nodes[64] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersettinghistory.Table,
 			Columns: trustcentersettinghistory.Columns,
@@ -2653,7 +2704,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldStatusPageURL:            {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 		},
 	}
-	graph.Nodes[64] = &sqlgraph.Node{
+	graph.Nodes[65] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessorhistory.Table,
 			Columns: trustcentersubprocessorhistory.Columns,
@@ -2680,7 +2731,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessorhistory.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessorhistory.FieldCountries},
 		},
 	}
-	graph.Nodes[65] = &sqlgraph.Node{
+	graph.Nodes[66] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfighistory.Table,
 			Columns: trustcenterwatermarkconfighistory.Columns,
@@ -2712,7 +2763,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldFont},
 		},
 	}
-	graph.Nodes[66] = &sqlgraph.Node{
+	graph.Nodes[67] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -2754,7 +2805,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldScimLocale:            {Type: field.TypeString, Column: userhistory.FieldScimLocale},
 		},
 	}
-	graph.Nodes[67] = &sqlgraph.Node{
+	graph.Nodes[68] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -2789,7 +2840,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[68] = &sqlgraph.Node{
+	graph.Nodes[69] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vulnerabilityhistory.Table,
 			Columns: vulnerabilityhistory.Columns,
@@ -2850,7 +2901,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldRawPayload:       {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
 		},
 	}
-	graph.Nodes[69] = &sqlgraph.Node{
+	graph.Nodes[70] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenthistory.Table,
 			Columns: workflowassignmenthistory.Columns,
@@ -2890,7 +2941,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenthistory.FieldDueAt:                {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDueAt},
 		},
 	}
-	graph.Nodes[70] = &sqlgraph.Node{
+	graph.Nodes[71] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenttargethistory.Table,
 			Columns: workflowassignmenttargethistory.Columns,
@@ -2920,7 +2971,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenttargethistory.FieldResolverKey:          {Type: field.TypeString, Column: workflowassignmenttargethistory.FieldResolverKey},
 		},
 	}
-	graph.Nodes[71] = &sqlgraph.Node{
+	graph.Nodes[72] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowdefinitionhistory.Table,
 			Columns: workflowdefinitionhistory.Columns,
@@ -2965,7 +3016,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowdefinitionhistory.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTrackedFields},
 		},
 	}
-	graph.Nodes[72] = &sqlgraph.Node{
+	graph.Nodes[73] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workfloweventhistory.Table,
 			Columns: workfloweventhistory.Columns,
@@ -2993,7 +3044,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workfloweventhistory.FieldPayload:            {Type: field.TypeJSON, Column: workfloweventhistory.FieldPayload},
 		},
 	}
-	graph.Nodes[73] = &sqlgraph.Node{
+	graph.Nodes[74] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowinstancehistory.Table,
 			Columns: workflowinstancehistory.Columns,
@@ -3035,7 +3086,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstancehistory.FieldPlatformID:           {Type: field.TypeString, Column: workflowinstancehistory.FieldPlatformID},
 		},
 	}
-	graph.Nodes[74] = &sqlgraph.Node{
+	graph.Nodes[75] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowobjectrefhistory.Table,
 			Columns: workflowobjectrefhistory.Columns,
@@ -4587,6 +4638,11 @@ func (f *ControlHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(controlhistory.FieldTags))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *ControlHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldExternalUUID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *ControlHistoryFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldTitle))
@@ -4625,6 +4681,16 @@ func (f *ControlHistoryFilter) WhereResponsiblePartyID(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ControlHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldStatus))
+}
+
+// WhereImplementationStatus applies the entql string predicate on the implementation_status field.
+func (f *ControlHistoryFilter) WhereImplementationStatus(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldImplementationStatus))
+}
+
+// WhereImplementationDescription applies the entql string predicate on the implementation_description field.
+func (f *ControlHistoryFilter) WhereImplementationDescription(p entql.StringP) {
+	f.Where(p.Field(controlhistory.FieldImplementationDescription))
 }
 
 // WhereSource applies the entql string predicate on the source field.
@@ -7122,6 +7188,11 @@ func (f *EvidenceHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(evidencehistory.FieldWorkflowEligibleMarker))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *EvidenceHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(evidencehistory.FieldExternalUUID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *EvidenceHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(evidencehistory.FieldName))
@@ -7950,6 +8021,21 @@ func (f *GroupHistoryFilter) WhereLogoURL(p entql.StringP) {
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *GroupHistoryFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldDisplayName))
+}
+
+// WhereOscalRole applies the entql string predicate on the oscal_role field.
+func (f *GroupHistoryFilter) WhereOscalRole(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldOscalRole))
+}
+
+// WhereOscalPartyUUID applies the entql string predicate on the oscal_party_uuid field.
+func (f *GroupHistoryFilter) WhereOscalPartyUUID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldOscalPartyUUID))
+}
+
+// WhereOscalContactUuids applies the entql json.RawMessage predicate on the oscal_contact_uuids field.
+func (f *GroupHistoryFilter) WhereOscalContactUuids(p entql.BytesP) {
+	f.Where(p.Field(grouphistory.FieldOscalContactUuids))
 }
 
 // WhereScimExternalID applies the entql string predicate on the scim_external_id field.
@@ -8975,6 +9061,11 @@ func (f *InternalPolicyHistoryFilter) WhereScopeID(p entql.StringP) {
 // WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
 func (f *InternalPolicyHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(internalpolicyhistory.FieldWorkflowEligibleMarker))
+}
+
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *InternalPolicyHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldExternalUUID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -10827,6 +10918,11 @@ func (f *PlatformHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(platformhistory.FieldWorkflowEligibleMarker))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *PlatformHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(platformhistory.FieldExternalUUID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *PlatformHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(platformhistory.FieldName))
@@ -11270,6 +11366,11 @@ func (f *ProgramHistoryFilter) WhereProgramKindName(p entql.StringP) {
 // WhereProgramKindID applies the entql string predicate on the program_kind_id field.
 func (f *ProgramHistoryFilter) WhereProgramKindID(p entql.StringP) {
 	f.Where(p.Field(programhistory.FieldProgramKindID))
+}
+
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *ProgramHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldExternalUUID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -12017,6 +12118,11 @@ func (f *RiskHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldScopeID))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *RiskHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldExternalUUID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *RiskHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldName))
@@ -12687,6 +12793,11 @@ func (f *SubcontrolHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrolhistory.FieldTags))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *SubcontrolHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldExternalUUID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *SubcontrolHistoryFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldTitle))
@@ -12725,6 +12836,16 @@ func (f *SubcontrolHistoryFilter) WhereResponsiblePartyID(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *SubcontrolHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldStatus))
+}
+
+// WhereImplementationStatus applies the entql string predicate on the implementation_status field.
+func (f *SubcontrolHistoryFilter) WhereImplementationStatus(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldImplementationStatus))
+}
+
+// WhereImplementationDescription applies the entql string predicate on the implementation_description field.
+func (f *SubcontrolHistoryFilter) WhereImplementationDescription(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldImplementationDescription))
 }
 
 // WhereSource applies the entql string predicate on the source field.
@@ -12988,6 +13109,156 @@ func (f *SubprocessorHistoryFilter) WhereLogoFileID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *SystemDetailHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the SystemDetailHistoryQuery builder.
+func (_q *SystemDetailHistoryQuery) Filter() *SystemDetailHistoryFilter {
+	return &SystemDetailHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *SystemDetailHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the SystemDetailHistoryMutation builder.
+func (m *SystemDetailHistoryMutation) Filter() *SystemDetailHistoryFilter {
+	return &SystemDetailHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// SystemDetailHistoryFilter provides a generic filtering capability at runtime for SystemDetailHistoryQuery.
+type SystemDetailHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *SystemDetailHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *SystemDetailHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *SystemDetailHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(systemdetailhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *SystemDetailHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *SystemDetailHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *SystemDetailHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(systemdetailhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *SystemDetailHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(systemdetailhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *SystemDetailHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SystemDetailHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *SystemDetailHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(systemdetailhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *SystemDetailHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldDeletedBy))
+}
+
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *SystemDetailHistoryFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldDisplayID))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *SystemDetailHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(systemdetailhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SystemDetailHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldOwnerID))
+}
+
+// WhereProgramID applies the entql string predicate on the program_id field.
+func (f *SystemDetailHistoryFilter) WhereProgramID(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldProgramID))
+}
+
+// WherePlatformID applies the entql string predicate on the platform_id field.
+func (f *SystemDetailHistoryFilter) WherePlatformID(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldPlatformID))
+}
+
+// WhereSystemName applies the entql string predicate on the system_name field.
+func (f *SystemDetailHistoryFilter) WhereSystemName(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldSystemName))
+}
+
+// WhereVersion applies the entql string predicate on the version field.
+func (f *SystemDetailHistoryFilter) WhereVersion(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldVersion))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *SystemDetailHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldDescription))
+}
+
+// WhereAuthorizationBoundary applies the entql string predicate on the authorization_boundary field.
+func (f *SystemDetailHistoryFilter) WhereAuthorizationBoundary(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldAuthorizationBoundary))
+}
+
+// WhereSensitivityLevel applies the entql string predicate on the sensitivity_level field.
+func (f *SystemDetailHistoryFilter) WhereSensitivityLevel(p entql.StringP) {
+	f.Where(p.Field(systemdetailhistory.FieldSensitivityLevel))
+}
+
+// WhereLastReviewed applies the entql time.Time predicate on the last_reviewed field.
+func (f *SystemDetailHistoryFilter) WhereLastReviewed(p entql.TimeP) {
+	f.Where(p.Field(systemdetailhistory.FieldLastReviewed))
+}
+
+// WhereRevisionHistory applies the entql json.RawMessage predicate on the revision_history field.
+func (f *SystemDetailHistoryFilter) WhereRevisionHistory(p entql.BytesP) {
+	f.Where(p.Field(systemdetailhistory.FieldRevisionHistory))
+}
+
+// WhereOscalMetadataJSON applies the entql json.RawMessage predicate on the oscal_metadata_json field.
+func (f *SystemDetailHistoryFilter) WhereOscalMetadataJSON(p entql.BytesP) {
+	f.Where(p.Field(systemdetailhistory.FieldOscalMetadataJSON))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *TaskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -13016,7 +13287,7 @@ type TaskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13117,6 +13388,11 @@ func (f *TaskHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldScopeID))
 }
 
+// WhereExternalUUID applies the entql string predicate on the external_uuid field.
+func (f *TaskHistoryFilter) WhereExternalUUID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldExternalUUID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *TaskHistoryFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldTitle))
@@ -13206,7 +13482,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13371,7 +13647,7 @@ type TrustCenterComplianceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterComplianceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13471,7 +13747,7 @@ type TrustCenterDocHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13611,7 +13887,7 @@ type TrustCenterEntityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterEntityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13721,7 +13997,7 @@ type TrustCenterFAQHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFAQHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13836,7 +14112,7 @@ type TrustCenterHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13971,7 +14247,7 @@ type TrustCenterNDARequestHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterNDARequestHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14126,7 +14402,7 @@ type TrustCenterSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14326,7 +14602,7 @@ type TrustCenterSubprocessorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14436,7 +14712,7 @@ type TrustCenterWatermarkConfigHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14571,7 +14847,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14756,7 +15032,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14906,7 +15182,7 @@ type VulnerabilityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VulnerabilityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15186,7 +15462,7 @@ type WorkflowAssignmentHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15361,7 +15637,7 @@ type WorkflowAssignmentTargetHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentTargetHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15486,7 +15762,7 @@ type WorkflowDefinitionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowDefinitionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15686,7 +15962,7 @@ type WorkflowEventHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowEventHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15801,7 +16077,7 @@ type WorkflowInstanceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowInstanceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15986,7 +16262,7 @@ type WorkflowObjectRefHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowObjectRefHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

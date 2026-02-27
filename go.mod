@@ -92,7 +92,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
-	github.com/theopenlane/entx v0.22.5
+	github.com/theopenlane/entx v0.22.6
 	github.com/theopenlane/go-client v0.8.5
 	github.com/theopenlane/gqlgen-plugins v0.14.4
 	github.com/theopenlane/httpsling v0.3.0
@@ -133,6 +133,7 @@ require (
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	github.com/theopenlane/oscalot v0.1.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/term v0.40.0 // indirect

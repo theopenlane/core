@@ -1795,6 +1795,38 @@ func (r *queryResolver) SubprocessorHistories(ctx context.Context, after *entgql
 	return res, err
 }
 
+// SystemDetailHistories is the resolver for the systemDetailHistories field.
+func (r *queryResolver) SystemDetailHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SystemDetailHistoryOrder, where *historygenerated.SystemDetailHistoryWhereInput) (*historygenerated.SystemDetailHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.SystemDetailHistoryOrder{
+			Field:     historygenerated.SystemDetailHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SystemDetailHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "systemdetailhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithSystemDetailHistoryOrder(orderBy),
+		historygenerated.WithSystemDetailHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "systemdetailhistory"})
+	}
+
+	return res, err
+}
+
 // TaskHistories is the resolver for the taskHistories field.
 func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TaskHistoryOrder, where *historygenerated.TaskHistoryWhereInput) (*historygenerated.TaskHistoryConnection, error) {
 	// set page limit if nothing was set

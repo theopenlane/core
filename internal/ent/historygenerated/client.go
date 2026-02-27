@@ -75,6 +75,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -217,6 +218,8 @@ type Client struct {
 	SubcontrolHistory *SubcontrolHistoryClient
 	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
 	SubprocessorHistory *SubprocessorHistoryClient
+	// SystemDetailHistory is the client for interacting with the SystemDetailHistory builders.
+	SystemDetailHistory *SystemDetailHistoryClient
 	// TaskHistory is the client for interacting with the TaskHistory builders.
 	TaskHistory *TaskHistoryClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
@@ -329,6 +332,7 @@ func (c *Client) init() {
 	c.StandardHistory = NewStandardHistoryClient(c.config)
 	c.SubcontrolHistory = NewSubcontrolHistoryClient(c.config)
 	c.SubprocessorHistory = NewSubprocessorHistoryClient(c.config)
+	c.SystemDetailHistory = NewSystemDetailHistoryClient(c.config)
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
 	c.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(c.config)
@@ -520,6 +524,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		StandardHistory:                   NewStandardHistoryClient(cfg),
 		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
+		SystemDetailHistory:               NewSystemDetailHistoryClient(cfg),
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		TemplateHistory:                   NewTemplateHistoryClient(cfg),
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
@@ -614,6 +619,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		StandardHistory:                   NewStandardHistoryClient(cfg),
 		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
+		SystemDetailHistory:               NewSystemDetailHistoryClient(cfg),
 		TaskHistory:                       NewTaskHistoryClient(cfg),
 		TemplateHistory:                   NewTemplateHistoryClient(cfg),
 		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
@@ -680,15 +686,15 @@ func (c *Client) Use(hooks ...Hook) {
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
 		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
-		c.SubcontrolHistory, c.SubprocessorHistory, c.TaskHistory, c.TemplateHistory,
-		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
-		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
-		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
-		c.WorkflowDefinitionHistory, c.WorkflowEventHistory, c.WorkflowInstanceHistory,
-		c.WorkflowObjectRefHistory,
+		c.SubcontrolHistory, c.SubprocessorHistory, c.SystemDetailHistory,
+		c.TaskHistory, c.TemplateHistory, c.TrustCenterComplianceHistory,
+		c.TrustCenterDocHistory, c.TrustCenterEntityHistory, c.TrustCenterFAQHistory,
+		c.TrustCenterHistory, c.TrustCenterNDARequestHistory,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
+		c.VulnerabilityHistory, c.WorkflowAssignmentHistory,
+		c.WorkflowAssignmentTargetHistory, c.WorkflowDefinitionHistory,
+		c.WorkflowEventHistory, c.WorkflowInstanceHistory, c.WorkflowObjectRefHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -715,15 +721,15 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
 		c.RiskHistory, c.ScanHistory, c.ScheduledJobHistory, c.StandardHistory,
-		c.SubcontrolHistory, c.SubprocessorHistory, c.TaskHistory, c.TemplateHistory,
-		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
-		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
-		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VulnerabilityHistory,
-		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
-		c.WorkflowDefinitionHistory, c.WorkflowEventHistory, c.WorkflowInstanceHistory,
-		c.WorkflowObjectRefHistory,
+		c.SubcontrolHistory, c.SubprocessorHistory, c.SystemDetailHistory,
+		c.TaskHistory, c.TemplateHistory, c.TrustCenterComplianceHistory,
+		c.TrustCenterDocHistory, c.TrustCenterEntityHistory, c.TrustCenterFAQHistory,
+		c.TrustCenterHistory, c.TrustCenterNDARequestHistory,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
+		c.VulnerabilityHistory, c.WorkflowAssignmentHistory,
+		c.WorkflowAssignmentTargetHistory, c.WorkflowDefinitionHistory,
+		c.WorkflowEventHistory, c.WorkflowInstanceHistory, c.WorkflowObjectRefHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -894,6 +900,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.SubcontrolHistory.mutate(ctx, m)
 	case *SubprocessorHistoryMutation:
 		return c.SubprocessorHistory.mutate(ctx, m)
+	case *SystemDetailHistoryMutation:
+		return c.SystemDetailHistory.mutate(ctx, m)
 	case *TaskHistoryMutation:
 		return c.TaskHistory.mutate(ctx, m)
 	case *TemplateHistoryMutation:
@@ -8362,6 +8370,141 @@ func (c *SubprocessorHistoryClient) mutate(ctx context.Context, m *SubprocessorH
 	}
 }
 
+// SystemDetailHistoryClient is a client for the SystemDetailHistory schema.
+type SystemDetailHistoryClient struct {
+	config
+}
+
+// NewSystemDetailHistoryClient returns a client for the SystemDetailHistory from the given config.
+func NewSystemDetailHistoryClient(c config) *SystemDetailHistoryClient {
+	return &SystemDetailHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `systemdetailhistory.Hooks(f(g(h())))`.
+func (c *SystemDetailHistoryClient) Use(hooks ...Hook) {
+	c.hooks.SystemDetailHistory = append(c.hooks.SystemDetailHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `systemdetailhistory.Intercept(f(g(h())))`.
+func (c *SystemDetailHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SystemDetailHistory = append(c.inters.SystemDetailHistory, interceptors...)
+}
+
+// Create returns a builder for creating a SystemDetailHistory entity.
+func (c *SystemDetailHistoryClient) Create() *SystemDetailHistoryCreate {
+	mutation := newSystemDetailHistoryMutation(c.config, OpCreate)
+	return &SystemDetailHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SystemDetailHistory entities.
+func (c *SystemDetailHistoryClient) CreateBulk(builders ...*SystemDetailHistoryCreate) *SystemDetailHistoryCreateBulk {
+	return &SystemDetailHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SystemDetailHistoryClient) MapCreateBulk(slice any, setFunc func(*SystemDetailHistoryCreate, int)) *SystemDetailHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SystemDetailHistoryCreateBulk{err: fmt.Errorf("calling to SystemDetailHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SystemDetailHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SystemDetailHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SystemDetailHistory.
+func (c *SystemDetailHistoryClient) Update() *SystemDetailHistoryUpdate {
+	mutation := newSystemDetailHistoryMutation(c.config, OpUpdate)
+	return &SystemDetailHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SystemDetailHistoryClient) UpdateOne(_m *SystemDetailHistory) *SystemDetailHistoryUpdateOne {
+	mutation := newSystemDetailHistoryMutation(c.config, OpUpdateOne, withSystemDetailHistory(_m))
+	return &SystemDetailHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SystemDetailHistoryClient) UpdateOneID(id string) *SystemDetailHistoryUpdateOne {
+	mutation := newSystemDetailHistoryMutation(c.config, OpUpdateOne, withSystemDetailHistoryID(id))
+	return &SystemDetailHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SystemDetailHistory.
+func (c *SystemDetailHistoryClient) Delete() *SystemDetailHistoryDelete {
+	mutation := newSystemDetailHistoryMutation(c.config, OpDelete)
+	return &SystemDetailHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SystemDetailHistoryClient) DeleteOne(_m *SystemDetailHistory) *SystemDetailHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SystemDetailHistoryClient) DeleteOneID(id string) *SystemDetailHistoryDeleteOne {
+	builder := c.Delete().Where(systemdetailhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SystemDetailHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for SystemDetailHistory.
+func (c *SystemDetailHistoryClient) Query() *SystemDetailHistoryQuery {
+	return &SystemDetailHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSystemDetailHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SystemDetailHistory entity by its id.
+func (c *SystemDetailHistoryClient) Get(ctx context.Context, id string) (*SystemDetailHistory, error) {
+	return c.Query().Where(systemdetailhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SystemDetailHistoryClient) GetX(ctx context.Context, id string) *SystemDetailHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SystemDetailHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.SystemDetailHistory
+	return append(hooks[:len(hooks):len(hooks)], systemdetailhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SystemDetailHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.SystemDetailHistory
+	return append(inters[:len(inters):len(inters)], systemdetailhistory.Interceptors[:]...)
+}
+
+func (c *SystemDetailHistoryClient) mutate(ctx context.Context, m *SystemDetailHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SystemDetailHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SystemDetailHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SystemDetailHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SystemDetailHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown SystemDetailHistory mutation op: %q", m.Op())
+	}
+}
+
 // TaskHistoryClient is a client for the TaskHistory schema.
 type TaskHistoryClient struct {
 	config
@@ -11080,12 +11223,12 @@ type (
 		OrganizationHistory, OrganizationSettingHistory, PlatformHistory,
 		ProcedureHistory, ProgramHistory, ProgramMembershipHistory, RemediationHistory,
 		ReviewHistory, RiskHistory, ScanHistory, ScheduledJobHistory, StandardHistory,
-		SubcontrolHistory, SubprocessorHistory, TaskHistory, TemplateHistory,
-		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
-		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
-		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
-		VulnerabilityHistory, WorkflowAssignmentHistory,
+		SubcontrolHistory, SubprocessorHistory, SystemDetailHistory, TaskHistory,
+		TemplateHistory, TrustCenterComplianceHistory, TrustCenterDocHistory,
+		TrustCenterEntityHistory, TrustCenterFAQHistory, TrustCenterHistory,
+		TrustCenterNDARequestHistory, TrustCenterSettingHistory,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
+		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Hook
@@ -11106,12 +11249,12 @@ type (
 		OrganizationHistory, OrganizationSettingHistory, PlatformHistory,
 		ProcedureHistory, ProgramHistory, ProgramMembershipHistory, RemediationHistory,
 		ReviewHistory, RiskHistory, ScanHistory, ScheduledJobHistory, StandardHistory,
-		SubcontrolHistory, SubprocessorHistory, TaskHistory, TemplateHistory,
-		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
-		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
-		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
-		VulnerabilityHistory, WorkflowAssignmentHistory,
+		SubcontrolHistory, SubprocessorHistory, SystemDetailHistory, TaskHistory,
+		TemplateHistory, TrustCenterComplianceHistory, TrustCenterDocHistory,
+		TrustCenterEntityHistory, TrustCenterFAQHistory, TrustCenterHistory,
+		TrustCenterNDARequestHistory, TrustCenterSettingHistory,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
+		UserSettingHistory, VulnerabilityHistory, WorkflowAssignmentHistory,
 		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory,
 		WorkflowEventHistory, WorkflowInstanceHistory,
 		WorkflowObjectRefHistory []ent.Interceptor

@@ -126,6 +126,26 @@ func (_u *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ControlHistoryUpdate) SetExternalUUID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableExternalUUID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ControlHistoryUpdate) ClearExternalUUID() *ControlHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ControlHistoryUpdate) SetTitle(v string) *ControlHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -279,6 +299,46 @@ func (_u *ControlHistoryUpdate) SetNillableStatus(v *enums.ControlStatus) *Contr
 // ClearStatus clears the value of the "status" field.
 func (_u *ControlHistoryUpdate) ClearStatus() *ControlHistoryUpdate {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_u *ControlHistoryUpdate) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlHistoryUpdate {
+	_u.mutation.SetImplementationStatus(v)
+	return _u
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetImplementationStatus(*v)
+	}
+	return _u
+}
+
+// ClearImplementationStatus clears the value of the "implementation_status" field.
+func (_u *ControlHistoryUpdate) ClearImplementationStatus() *ControlHistoryUpdate {
+	_u.mutation.ClearImplementationStatus()
+	return _u
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_u *ControlHistoryUpdate) SetImplementationDescription(v string) *ControlHistoryUpdate {
+	_u.mutation.SetImplementationDescription(v)
+	return _u
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableImplementationDescription(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetImplementationDescription(*v)
+	}
+	return _u
+}
+
+// ClearImplementationDescription clears the value of the "implementation_description" field.
+func (_u *ControlHistoryUpdate) ClearImplementationDescription() *ControlHistoryUpdate {
+	_u.mutation.ClearImplementationDescription()
 	return _u
 }
 
@@ -892,6 +952,11 @@ func (_u *ControlHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImplementationStatus(); ok {
+		if err := controlhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
@@ -967,6 +1032,12 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(controlhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(controlhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
 	}
@@ -1024,6 +1095,18 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationStatus(); ok {
+		_spec.SetField(controlhistory.FieldImplementationStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.ImplementationStatusCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationDescription(); ok {
+		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
+	}
+	if _u.mutation.ImplementationDescriptionCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)
@@ -1364,6 +1447,26 @@ func (_u *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *ControlHistoryUpdateOne) SetExternalUUID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableExternalUUID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *ControlHistoryUpdateOne) ClearExternalUUID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ControlHistoryUpdateOne) SetTitle(v string) *ControlHistoryUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -1517,6 +1620,46 @@ func (_u *ControlHistoryUpdateOne) SetNillableStatus(v *enums.ControlStatus) *Co
 // ClearStatus clears the value of the "status" field.
 func (_u *ControlHistoryUpdateOne) ClearStatus() *ControlHistoryUpdateOne {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetImplementationStatus sets the "implementation_status" field.
+func (_u *ControlHistoryUpdateOne) SetImplementationStatus(v enums.ControlImplementationStatus) *ControlHistoryUpdateOne {
+	_u.mutation.SetImplementationStatus(v)
+	return _u
+}
+
+// SetNillableImplementationStatus sets the "implementation_status" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableImplementationStatus(v *enums.ControlImplementationStatus) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetImplementationStatus(*v)
+	}
+	return _u
+}
+
+// ClearImplementationStatus clears the value of the "implementation_status" field.
+func (_u *ControlHistoryUpdateOne) ClearImplementationStatus() *ControlHistoryUpdateOne {
+	_u.mutation.ClearImplementationStatus()
+	return _u
+}
+
+// SetImplementationDescription sets the "implementation_description" field.
+func (_u *ControlHistoryUpdateOne) SetImplementationDescription(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetImplementationDescription(v)
+	return _u
+}
+
+// SetNillableImplementationDescription sets the "implementation_description" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableImplementationDescription(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetImplementationDescription(*v)
+	}
+	return _u
+}
+
+// ClearImplementationDescription clears the value of the "implementation_description" field.
+func (_u *ControlHistoryUpdateOne) ClearImplementationDescription() *ControlHistoryUpdateOne {
+	_u.mutation.ClearImplementationDescription()
 	return _u
 }
 
@@ -2143,6 +2286,11 @@ func (_u *ControlHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ImplementationStatus(); ok {
+		if err := controlhistory.ImplementationStatusValidator(v); err != nil {
+			return &ValidationError{Name: "implementation_status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.implementation_status": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Source(); ok {
 		if err := controlhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
@@ -2235,6 +2383,12 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(controlhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(controlhistory.FieldExternalUUID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(controlhistory.FieldTitle, field.TypeString, value)
 	}
@@ -2292,6 +2446,18 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationStatus(); ok {
+		_spec.SetField(controlhistory.FieldImplementationStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.ImplementationStatusCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ImplementationDescription(); ok {
+		_spec.SetField(controlhistory.FieldImplementationDescription, field.TypeString, value)
+	}
+	if _u.mutation.ImplementationDescriptionCleared() {
+		_spec.ClearField(controlhistory.FieldImplementationDescription, field.TypeString)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeEnum, value)

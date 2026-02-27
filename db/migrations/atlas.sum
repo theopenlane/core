@@ -1,4 +1,4 @@
-h1:ZAV5xOOm4eR1ffOK2YtQuTXieocLaayP1H6BeGvJndc=
+h1:SbxwF6IP2p6QTVIqmpeYf5hILjnTidI6XbVakPKDpsQ=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -58,3 +58,5 @@ h1:ZAV5xOOm4eR1ffOK2YtQuTXieocLaayP1H6BeGvJndc=
 20260223191723_asset_display_name_history.sql h1:a4W/dZDWbJ4QKmI3j9uXUqrJ+lNPbVDYFkQgttB097Y=
 20260224215609_directoryaccountintegration.sql h1:hYl5OFEXdEPPgEkV9WKvJmkk2N5P8klWj4cPIilJk8s=
 20260224215613_directoryaccountintegration_history.sql h1:OH+pVn82fIAEHzgCEYm2lSPVTAoNvp8wsCinTUv9l1Y=
+20260227011414_oscalfields.sql h1:jG/FaRd/O5wgbJbjJEsqGz41JfZbw9oRJCcabtwPaOY=
+20260227011418_oscalfields_history.sql h1:n9RFi4ahKzlTookTU5fzfZJhc10Ja8HQmMqEE0NfE/s=

@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -55,6 +56,11 @@ func (Subcontrol) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("ref_code"),
 				directives.ExternalSourceDirectiveAnnotation,
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleStatementID,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
 			).
 			Comment("the unique reference code for the control"),
 		field.String("control_id").
@@ -77,6 +83,10 @@ func (s Subcontrol) Edges() []ent.Edge {
 			required:   true,
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToControlID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -85,6 +95,10 @@ func (s Subcontrol) Edges() []ent.Edge {
 			comment:    "the implementation(s) of the subcontrol",
 			annotations: []schema.Annotation{
 				entx.FieldWorkflowEligible(),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToStatementID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
@@ -180,6 +194,16 @@ func (s Subcontrol) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.SubcontrolMutation](),
 		),
 	)
+}
+
+// Annotations of the Subcontrol
+func (Subcontrol) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("implemented-requirement-statement"),
+		),
+	}
 }
 
 // Annotations of the Standard

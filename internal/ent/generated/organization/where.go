@@ -2799,6 +2799,35 @@ func HasProgramsWith(preds ...predicate.Program) predicate.Organization {
 	})
 }
 
+// HasSystemDetails applies the HasEdge predicate on the "system_details" edge.
+func HasSystemDetails() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SystemDetailsTable, SystemDetailsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSystemDetailsWith applies the HasEdge predicate on the "system_details" edge with a given conditions (other predicates).
+func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newSystemDetailsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.SystemDetail
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasProcedures applies the HasEdge predicate on the "procedures" edge.
 func HasProcedures() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

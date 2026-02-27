@@ -6169,6 +6169,10 @@ type Control implements Node {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalSource(source: FRAMEWORK)
@@ -6200,6 +6204,14 @@ type Control implements Node {
   status of the control
   """
   status: ControlControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -7044,6 +7056,16 @@ type ControlConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlControlImplementationStatus is enum for the field implementation_status
+"""
+enum ControlControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+  PLANNED
+  IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  INHERITED
+  NOT_APPLICABLE
 }
 """
 ControlControlSource is enum for the field source
@@ -8630,6 +8652,24 @@ input ControlWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -8728,6 +8768,33 @@ input ControlWhereInput {
   statusNotIn: [ControlControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  implementation_status field predicates
+  """
+  implementationStatus: ControlControlImplementationStatus
+  implementationStatusNEQ: ControlControlImplementationStatus
+  implementationStatusIn: [ControlControlImplementationStatus!]
+  implementationStatusNotIn: [ControlControlImplementationStatus!]
+  implementationStatusIsNil: Boolean
+  implementationStatusNotNil: Boolean
+  """
+  implementation_description field predicates
+  """
+  implementationDescription: String
+  implementationDescriptionNEQ: String
+  implementationDescriptionIn: [String!]
+  implementationDescriptionNotIn: [String!]
+  implementationDescriptionGT: String
+  implementationDescriptionGTE: String
+  implementationDescriptionLT: String
+  implementationDescriptionLTE: String
+  implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
+  implementationDescriptionHasSuffix: String
+  implementationDescriptionIsNil: Boolean
+  implementationDescriptionNotNil: Boolean
+  implementationDescriptionEqualFold: String
+  implementationDescriptionContainsFold: String
   """
   source field predicates
   """
@@ -9930,6 +9997,10 @@ input CreateControlInput {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -9957,6 +10028,14 @@ input CreateControlInput {
   status of the control
   """
   status: ControlControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -11023,6 +11102,10 @@ input CreateEvidenceInput {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the evidence
   """
   name: String!
@@ -11470,6 +11553,18 @@ input CreateGroupInput {
   """
   displayName: String
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -11825,6 +11920,10 @@ input CreateInternalPolicyInput {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -12504,6 +12603,7 @@ input CreateOrganizationInput {
   noteIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  systemDetailIDs: [ID!]
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
   riskIDs: [ID!]
@@ -12743,6 +12843,10 @@ input CreatePlatformInput {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the platform
   """
   name: String!
@@ -12852,6 +12956,7 @@ input CreatePlatformInput {
   applicableFrameworkIDs: [ID!]
   generatedScanIDs: [ID!]
   platformOwnerID: ID
+  systemDetailID: ID
 }
 """
 CreateProcedureInput is used for create Procedure object.
@@ -12980,6 +13085,10 @@ input CreateProgramInput {
   """
   programKindName: String
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the program
   """
   name: String!
@@ -13044,6 +13153,7 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
+  systemDetailID: ID
   programOwnerID: ID
 }
 """
@@ -13318,6 +13428,10 @@ input CreateRiskInput {
   the scope of the risk
   """
   scopeName: String
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the name of the risk
   """
@@ -13607,6 +13721,10 @@ input CreateSubcontrolInput {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -13634,6 +13752,14 @@ input CreateSubcontrolInput {
   status of the control
   """
   status: SubcontrolControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -13789,6 +13915,51 @@ input CreateSubscriberInput {
   eventIDs: [ID!]
 }
 """
+CreateSystemDetailInput is used for create SystemDetail object.
+Input was generated by ent.
+"""
+input CreateSystemDetailInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String!
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+  ownerID: ID
+  programID: ID
+  platformID: ID
+}
+"""
 CreateTFASettingInput is used for create TFASetting object.
 Input was generated by ent.
 """
@@ -13850,6 +14021,10 @@ input CreateTaskInput {
   the scope of the task
   """
   scopeName: String
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the title of the task
   """
@@ -23652,6 +23827,10 @@ type Evidence implements Node {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the evidence
   """
   name: String!
@@ -24295,6 +24474,24 @@ input EvidenceWhereInput {
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -24680,6 +24877,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
   RISK
   SUBPROCESSOR
   SUBSCRIBER
+  SYSTEM_DETAIL
   TASK
   TRUST_CENTER_FAQ
   TRUST_CENTER_SUBPROCESSOR
@@ -27863,6 +28061,18 @@ type Group implements Node {
   """
   displayName: String!
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -29937,6 +30147,42 @@ input GroupWhereInput {
   displayNameEqualFold: String
   displayNameContainsFold: String
   """
+  oscal_role field predicates
+  """
+  oscalRole: String
+  oscalRoleNEQ: String
+  oscalRoleIn: [String!]
+  oscalRoleNotIn: [String!]
+  oscalRoleGT: String
+  oscalRoleGTE: String
+  oscalRoleLT: String
+  oscalRoleLTE: String
+  oscalRoleContains: String
+  oscalRoleHasPrefix: String
+  oscalRoleHasSuffix: String
+  oscalRoleIsNil: Boolean
+  oscalRoleNotNil: Boolean
+  oscalRoleEqualFold: String
+  oscalRoleContainsFold: String
+  """
+  oscal_party_uuid field predicates
+  """
+  oscalPartyUUID: String
+  oscalPartyUUIDNEQ: String
+  oscalPartyUUIDIn: [String!]
+  oscalPartyUUIDNotIn: [String!]
+  oscalPartyUUIDGT: String
+  oscalPartyUUIDGTE: String
+  oscalPartyUUIDLT: String
+  oscalPartyUUIDLTE: String
+  oscalPartyUUIDContains: String
+  oscalPartyUUIDHasPrefix: String
+  oscalPartyUUIDHasSuffix: String
+  oscalPartyUUIDIsNil: Boolean
+  oscalPartyUUIDNotNil: Boolean
+  oscalPartyUUIDEqualFold: String
+  oscalPartyUUIDContainsFold: String
+  """
   scim_external_id field predicates
   """
   scimExternalID: String
@@ -30241,6 +30487,10 @@ input GroupWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for oscalContactUuidsHas to contain a specific value
+  """
+  oscalContactUuidsHas: String
 }
 type Hush implements Node {
   id: ID!
@@ -33141,6 +33391,10 @@ type InternalPolicy implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   owner: Organization
   blockedGroups(
     """
@@ -34100,6 +34354,24 @@ input InternalPolicyWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   owner edge predicates
   """
@@ -41441,6 +41713,37 @@ type Organization implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
   procedures(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -44009,6 +44312,11 @@ input OrganizationWhereInput {
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
   """
+  system_details edge predicates
+  """
+  hasSystemDetails: Boolean
+  hasSystemDetailsWith: [SystemDetailWhereInput!]
+  """
   procedures edge predicates
   """
   hasProcedures: Boolean
@@ -44772,6 +45080,10 @@ type Platform implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the name of the platform
   """
@@ -45637,6 +45949,7 @@ type Platform implements Node {
     where: ScanWhereInput
   ): ScanConnection!
   platformOwner: User
+  systemDetail: SystemDetail
 }
 """
 A connection to a list of items.
@@ -46350,6 +46663,24 @@ input PlatformWhereInput {
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -46771,6 +47102,11 @@ input PlatformWhereInput {
   """
   hasPlatformOwner: Boolean
   hasPlatformOwnerWith: [UserWhereInput!]
+  """
+  system_detail edge predicates
+  """
+  hasSystemDetail: Boolean
+  hasSystemDetailWith: [SystemDetailWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -47955,6 +48291,10 @@ type Program implements Node {
   """
   programKindID: ID
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the program
   """
   name: String!
@@ -48473,6 +48813,7 @@ type Program implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  systemDetail: SystemDetail
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -48918,6 +49259,24 @@ input ProgramWhereInput {
   programKindIDEqualFold: ID
   programKindIDContainsFold: ID
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -49174,6 +49533,11 @@ input ProgramWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  system_detail edge predicates
+  """
+  hasSystemDetail: Boolean
+  hasSystemDetailWith: [SystemDetailWhereInput!]
   """
   users edge predicates
   """
@@ -51321,6 +51685,37 @@ type Query {
     """
     where: SubscriberWhereInput
   ): SubscriberConnection!
+  systemDetails(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetails returned from the connection.
+    """
+    orderBy: [SystemDetailOrder!]
+
+    """
+    Filtering options for SystemDetails returned from the connection.
+    """
+    where: SystemDetailWhereInput
+  ): SystemDetailConnection!
   tfaSettings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -54764,6 +55159,10 @@ type Risk implements Node {
   """
   scopeID: ID
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the risk
   """
   name: String!
@@ -55673,6 +56072,24 @@ input RiskWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -58363,6 +58780,10 @@ type Subcontrol implements Node {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalSource(source: FRAMEWORK)
@@ -58394,6 +58815,14 @@ type Subcontrol implements Node {
   status of the control
   """
   status: SubcontrolControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -58935,6 +59364,16 @@ type SubcontrolConnection {
   totalCount: Int!
 }
 """
+SubcontrolControlImplementationStatus is enum for the field implementation_status
+"""
+enum SubcontrolControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+  PLANNED
+  IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  INHERITED
+  NOT_APPLICABLE
+}
+"""
 SubcontrolControlSource is enum for the field source
 """
 enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
@@ -59098,6 +59537,24 @@ input SubcontrolWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -59196,6 +59653,33 @@ input SubcontrolWhereInput {
   statusNotIn: [SubcontrolControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  implementation_status field predicates
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  implementationStatusNEQ: SubcontrolControlImplementationStatus
+  implementationStatusIn: [SubcontrolControlImplementationStatus!]
+  implementationStatusNotIn: [SubcontrolControlImplementationStatus!]
+  implementationStatusIsNil: Boolean
+  implementationStatusNotNil: Boolean
+  """
+  implementation_description field predicates
+  """
+  implementationDescription: String
+  implementationDescriptionNEQ: String
+  implementationDescriptionIn: [String!]
+  implementationDescriptionNotIn: [String!]
+  implementationDescriptionGT: String
+  implementationDescriptionGTE: String
+  implementationDescriptionLT: String
+  implementationDescriptionLTE: String
+  implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
+  implementationDescriptionHasSuffix: String
+  implementationDescriptionIsNil: Boolean
+  implementationDescriptionNotNil: Boolean
+  implementationDescriptionEqualFold: String
+  implementationDescriptionContainsFold: String
   """
   source field predicates
   """
@@ -60286,6 +60770,399 @@ input SubscriberWhereInput {
   """
   tagsHas: String
 }
+type SystemDetail implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  optional program anchor for this system detail
+  """
+  programID: ID
+  """
+  optional platform anchor for this system detail
+  """
+  platformID: ID
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String!
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+  owner: Organization
+  """
+  optional program this detail belongs to
+  """
+  program: Program
+  """
+  optional platform this detail belongs to
+  """
+  platform: Platform
+}
+"""
+A connection to a list of items.
+"""
+type SystemDetailConnection {
+  """
+  A list of edges.
+  """
+  edges: [SystemDetailEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SystemDetailEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SystemDetail
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for SystemDetail connections
+"""
+input SystemDetailOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SystemDetails.
+  """
+  field: SystemDetailOrderField!
+}
+"""
+Properties by which SystemDetail connections can be ordered.
+"""
+enum SystemDetailOrderField {
+  created_at
+  updated_at
+  system_name
+}
+"""
+SystemDetailSystemSensitivityLevel is enum for the field sensitivity_level
+"""
+enum SystemDetailSystemSensitivityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SystemSensitivityLevel") {
+  LOW
+  MODERATE
+  HIGH
+  UNKNOWN
+}
+"""
+SystemDetailWhereInput is used for filtering SystemDetail objects.
+Input was generated by ent.
+"""
+input SystemDetailWhereInput {
+  not: SystemDetailWhereInput
+  and: [SystemDetailWhereInput!]
+  or: [SystemDetailWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  program_id field predicates
+  """
+  programID: ID
+  programIDNEQ: ID
+  programIDIn: [ID!]
+  programIDNotIn: [ID!]
+  programIDGT: ID
+  programIDGTE: ID
+  programIDLT: ID
+  programIDLTE: ID
+  programIDContains: ID
+  programIDHasPrefix: ID
+  programIDHasSuffix: ID
+  programIDIsNil: Boolean
+  programIDNotNil: Boolean
+  programIDEqualFold: ID
+  programIDContainsFold: ID
+  """
+  platform_id field predicates
+  """
+  platformID: ID
+  platformIDNEQ: ID
+  platformIDIn: [ID!]
+  platformIDNotIn: [ID!]
+  platformIDGT: ID
+  platformIDGTE: ID
+  platformIDLT: ID
+  platformIDLTE: ID
+  platformIDContains: ID
+  platformIDHasPrefix: ID
+  platformIDHasSuffix: ID
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: ID
+  platformIDContainsFold: ID
+  """
+  system_name field predicates
+  """
+  systemName: String
+  systemNameNEQ: String
+  systemNameIn: [String!]
+  systemNameNotIn: [String!]
+  systemNameGT: String
+  systemNameGTE: String
+  systemNameLT: String
+  systemNameLTE: String
+  systemNameContains: String
+  systemNameHasPrefix: String
+  systemNameHasSuffix: String
+  systemNameEqualFold: String
+  systemNameContainsFold: String
+  """
+  version field predicates
+  """
+  version: String
+  versionNEQ: String
+  versionIn: [String!]
+  versionNotIn: [String!]
+  versionGT: String
+  versionGTE: String
+  versionLT: String
+  versionLTE: String
+  versionContains: String
+  versionHasPrefix: String
+  versionHasSuffix: String
+  versionIsNil: Boolean
+  versionNotNil: Boolean
+  versionEqualFold: String
+  versionContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  authorization_boundary field predicates
+  """
+  authorizationBoundary: String
+  authorizationBoundaryNEQ: String
+  authorizationBoundaryIn: [String!]
+  authorizationBoundaryNotIn: [String!]
+  authorizationBoundaryGT: String
+  authorizationBoundaryGTE: String
+  authorizationBoundaryLT: String
+  authorizationBoundaryLTE: String
+  authorizationBoundaryContains: String
+  authorizationBoundaryHasPrefix: String
+  authorizationBoundaryHasSuffix: String
+  authorizationBoundaryIsNil: Boolean
+  authorizationBoundaryNotNil: Boolean
+  authorizationBoundaryEqualFold: String
+  authorizationBoundaryContainsFold: String
+  """
+  sensitivity_level field predicates
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  sensitivityLevelNEQ: SystemDetailSystemSensitivityLevel
+  sensitivityLevelIn: [SystemDetailSystemSensitivityLevel!]
+  sensitivityLevelNotIn: [SystemDetailSystemSensitivityLevel!]
+  sensitivityLevelIsNil: Boolean
+  sensitivityLevelNotNil: Boolean
+  """
+  last_reviewed field predicates
+  """
+  lastReviewed: DateTime
+  lastReviewedNEQ: DateTime
+  lastReviewedIn: [DateTime!]
+  lastReviewedNotIn: [DateTime!]
+  lastReviewedGT: DateTime
+  lastReviewedGTE: DateTime
+  lastReviewedLT: DateTime
+  lastReviewedLTE: DateTime
+  lastReviewedIsNil: Boolean
+  lastReviewedNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  program edge predicates
+  """
+  hasProgram: Boolean
+  hasProgramWith: [ProgramWhereInput!]
+  """
+  platform edge predicates
+  """
+  hasPlatform: Boolean
+  hasPlatformWith: [PlatformWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
 type TFASetting implements Node {
   id: ID!
   createdAt: Time
@@ -60815,6 +61692,10 @@ type Task implements Node {
   the scope of the task
   """
   scopeID: ID
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the title of the task
   """
@@ -61657,6 +62538,24 @@ input TaskWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   title field predicates
   """
@@ -67622,6 +68521,11 @@ input UpdateControlInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -67658,6 +68562,16 @@ input UpdateControlInput {
   """
   status: ControlControlStatus
   clearStatus: Boolean
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlControlImplementationStatus
+  clearImplementationStatus: Boolean
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
+  clearImplementationDescription: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -69088,6 +70002,11 @@ input UpdateEvidenceInput {
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   the name of the evidence
   """
   name: String
@@ -69713,6 +70632,22 @@ input UpdateGroupInput {
   """
   displayName: String
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  clearOscalRole: Boolean
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  clearOscalPartyUUID: Boolean
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  appendOscalContactUuids: [String!]
+  clearOscalContactUuids: Boolean
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -70254,6 +71189,11 @@ input UpdateInternalPolicyInput {
   """
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -71118,6 +72058,9 @@ input UpdateOrganizationInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addSystemDetailIDs: [ID!]
+  removeSystemDetailIDs: [ID!]
+  clearSystemDetails: Boolean
   addProcedureIDs: [ID!]
   removeProcedureIDs: [ID!]
   clearProcedures: Boolean
@@ -71503,6 +72446,11 @@ input UpdatePlatformInput {
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   the name of the platform
   """
   name: String
@@ -71690,6 +72638,8 @@ input UpdatePlatformInput {
   clearGeneratedScans: Boolean
   platformOwnerID: ID
   clearPlatformOwner: Boolean
+  systemDetailID: ID
+  clearSystemDetail: Boolean
 }
 """
 UpdateProcedureInput is used for update Procedure object.
@@ -71881,6 +72831,11 @@ input UpdateProgramInput {
   programKindName: String
   clearProgramKindName: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   the name of the program
   """
   name: String
@@ -71984,6 +72939,8 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
+  systemDetailID: ID
+  clearSystemDetail: Boolean
   programOwnerID: ID
   clearProgramOwner: Boolean
 }
@@ -72383,6 +73340,11 @@ input UpdateRiskInput {
   """
   scopeName: String
   clearScopeName: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
   """
   the name of the risk
   """
@@ -72800,6 +73762,11 @@ input UpdateSubcontrolInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
+  """
   human readable title of the control for quick identification
   """
   title: String @externalReadOnly(source: FRAMEWORK)
@@ -72836,6 +73803,16 @@ input UpdateSubcontrolInput {
   """
   status: SubcontrolControlStatus
   clearStatus: Boolean
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolControlImplementationStatus
+  clearImplementationStatus: Boolean
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
+  clearImplementationDescription: Boolean
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -73063,6 +74040,62 @@ input UpdateSubscriberInput {
   clearEvents: Boolean
 }
 """
+UpdateSystemDetailInput is used for update SystemDetail object.
+Input was generated by ent.
+"""
+input UpdateSystemDetailInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  clearVersion: Boolean
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  clearAuthorizationBoundary: Boolean
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailSystemSensitivityLevel
+  clearSensitivityLevel: Boolean
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  clearLastReviewed: Boolean
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  appendRevisionHistory: [Any!]
+  clearRevisionHistory: Boolean
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+  clearOscalMetadataJSON: Boolean
+  programID: ID
+  clearProgram: Boolean
+  platformID: ID
+  clearPlatform: Boolean
+}
+"""
 UpdateTFASettingInput is used for update TFASetting object.
 Input was generated by ent.
 """
@@ -73137,6 +74170,11 @@ input UpdateTaskInput {
   """
   scopeName: String
   clearScopeName: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  clearExternalUUID: Boolean
   """
   the title of the task
   """

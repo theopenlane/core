@@ -243,6 +243,40 @@ func (_c *GroupHistoryCreate) SetNillableDisplayName(v *string) *GroupHistoryCre
 	return _c
 }
 
+// SetOscalRole sets the "oscal_role" field.
+func (_c *GroupHistoryCreate) SetOscalRole(v string) *GroupHistoryCreate {
+	_c.mutation.SetOscalRole(v)
+	return _c
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableOscalRole(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetOscalRole(*v)
+	}
+	return _c
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_c *GroupHistoryCreate) SetOscalPartyUUID(v string) *GroupHistoryCreate {
+	_c.mutation.SetOscalPartyUUID(v)
+	return _c
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableOscalPartyUUID(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetOscalPartyUUID(*v)
+	}
+	return _c
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_c *GroupHistoryCreate) SetOscalContactUuids(v []string) *GroupHistoryCreate {
+	_c.mutation.SetOscalContactUuids(v)
+	return _c
+}
+
 // SetScimExternalID sets the "scim_external_id" field.
 func (_c *GroupHistoryCreate) SetScimExternalID(v string) *GroupHistoryCreate {
 	_c.mutation.SetScimExternalID(v)
@@ -526,6 +560,18 @@ func (_c *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.OscalRole(); ok {
+		_spec.SetField(grouphistory.FieldOscalRole, field.TypeString, value)
+		_node.OscalRole = &value
+	}
+	if value, ok := _c.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(grouphistory.FieldOscalPartyUUID, field.TypeString, value)
+		_node.OscalPartyUUID = &value
+	}
+	if value, ok := _c.mutation.OscalContactUuids(); ok {
+		_spec.SetField(grouphistory.FieldOscalContactUuids, field.TypeJSON, value)
+		_node.OscalContactUuids = value
 	}
 	if value, ok := _c.mutation.ScimExternalID(); ok {
 		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
