@@ -63841,7 +63841,7 @@ input CreateDirectoryAccountInput {
   """
   scopeName: String
   """
-  directory source label set by the integration (e.g. google_workspace, github, slack)
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
   """
@@ -64839,7 +64839,7 @@ input CreateFindingInput {
   """
   externalOwnerID: String
   """
-  system that produced the finding, e.g. gcp_scc
+  system that produced the finding, e.g. gcpscc
   """
   source: String
   """
@@ -69859,7 +69859,7 @@ type DirectoryAccount implements Node {
   """
   identityHolderID: ID
   """
-  directory source label set by the integration (e.g. google_workspace, github, slack)
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
   """
@@ -79527,7 +79527,7 @@ type Finding implements Node {
   """
   externalOwnerID: String
   """
-  system that produced the finding, e.g. gcp_scc
+  system that produced the finding, e.g. gcpscc
   """
   source: String
   """
@@ -122516,7 +122516,7 @@ input UpdateDirectoryAccountInput {
   scopeName: String
   clearScopeName: Boolean
   """
-  directory source label set by the integration (e.g. google_workspace, github, slack)
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
   clearDirectoryName: Boolean
@@ -123832,7 +123832,7 @@ input UpdateFindingInput {
   externalOwnerID: String
   clearExternalOwnerID: Boolean
   """
-  system that produced the finding, e.g. gcp_scc
+  system that produced the finding, e.g. gcpscc
   """
   source: String
   clearSource: Boolean

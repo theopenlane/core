@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // InternalPolicy defines the policy schema.
@@ -196,6 +197,7 @@ func (i InternalPolicy) Policy() ent.Policy {
 				Program{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),
 		),
 	)

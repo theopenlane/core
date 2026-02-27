@@ -624,7 +624,11 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 }
 
 func TestMutationUpdateEvidence(t *testing.T) {
-	evidence := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
+
+	// add view only user to the program so that they have access to the evidence for testing update permissions
+	pm := (&ProgramMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
 
 	pdfFile := uploadFile(t, pdfFilePath)
 
@@ -659,13 +663,23 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update not allowed, no permissions",
+			name: "member allowed to add comment",
+			request: testclient.UpdateEvidenceInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is a comment",
+				},
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+		},
+		{
+			name: "update not allowed, no permissions to update but can view due to program membership",
 			request: testclient.UpdateEvidenceInput{
 				Description: lo.ToPtr("This is an updated description of evidence"),
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -737,6 +751,9 @@ func TestMutationUpdateEvidence(t *testing.T) {
 
 	// delete created evidence
 	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete created program and membership
+	(&Cleanup[*generated.ProgramMembershipDeleteOne]{client: suite.client.db.ProgramMembership, ID: pm.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEvidence(t *testing.T) {

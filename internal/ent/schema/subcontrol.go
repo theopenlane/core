@@ -191,6 +191,7 @@ func (s Subcontrol) Policy() ent.Policy {
 				Control{}.Name(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.SubcontrolMutation](),
 		),
 	)

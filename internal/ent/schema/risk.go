@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Risk defines the risk schema.
@@ -292,6 +293,7 @@ func (r Risk) Policy() ent.Policy {
 				Program{}.PluralName(),
 			}),
 			policy.CheckCreateAccess(),
+			rule.CheckIfCommentOnly(),
 			entfga.CheckEditAccess[*generated.RiskMutation](),
 		),
 	)
