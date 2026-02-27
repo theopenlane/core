@@ -41,7 +41,7 @@ type ProviderSpec struct {
 	// SchemaVersion identifies the spec schema version
 	SchemaVersion string `json:"schemaVersion,omitempty"`
 	// OAuth contains OAuth configuration when applicable
-	OAuth *OAuthSpec `json:"oauth,omitempty"`
+	OAuth *OAuthSpec `json:"oauth,omitempty" koanf:"oauth"`
 	// APIKey contains API key configuration when applicable
 	APIKey *APIKeySpec `json:"apiKey,omitempty"`
 	// UserInfo describes optional user info lookups
@@ -189,9 +189,9 @@ type PersistenceSpec struct {
 // OAuthSpec captures OAuth2/OIDC metadata from the JSON files
 type OAuthSpec struct {
 	// ClientID is the OAuth client identifier
-	ClientID string `json:"clientId"`
+	ClientID string `json:"clientId" koanf:"clientid"`
 	// ClientSecret is the OAuth client secret
-	ClientSecret string `json:"clientSecret"`
+	ClientSecret string `json:"clientSecret" koanf:"clientsecret" sensitive:"true"`
 	// AuthURL is the authorization endpoint
 	AuthURL string `json:"authUrl"`
 	// TokenURL is the token endpoint

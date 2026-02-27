@@ -3,6 +3,7 @@ package keymaker
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -160,7 +161,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		return BeginResponse{}, fmt.Errorf("keymaker: begin auth: %w", err)
 	}
 
-	state := session.State()
+	state := strings.TrimSpace(session.State())
 	if state == "" {
 		return BeginResponse{}, integrations.ErrStateRequired
 	}
