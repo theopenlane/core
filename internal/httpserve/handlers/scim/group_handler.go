@@ -37,22 +37,20 @@ func (h *GroupHandler) Create(r *http.Request, attributes scim.ResourceAttribute
 	client := transaction.FromContext(ctx)
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return scim.Resource{}, ErrOrgNotFound
+	if !ok || caller == nil {
+		return scim.Resource{}, auth.ErrNoAuthUser
 	}
 
-	orgID := caller.OrganizationID
+	orgID, orgOk := caller.ActiveOrg()
+	if !orgOk {
+		return scim.Resource{}, ErrOrgNotFound
+	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
 	}
 
-	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
-	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
-		ctx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
-	} else {
-		ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
-	}
+	ctx = auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter|auth.CapBypassManagedGroup))
 
 	ga, err := ExtractGroupAttributes(attributes)
 	if err != nil {
@@ -94,12 +92,10 @@ func (h *GroupHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return scim.Resource{}, ErrOrgNotFound
 	}
-
-	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
@@ -122,12 +118,10 @@ func (h *GroupHandler) GetAll(r *http.Request, params scim.ListRequestParams) (s
 	ctx := r.Context()
 	client := transaction.FromContext(ctx)
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return scim.Page{}, ErrOrgNotFound
 	}
-
-	orgID := caller.OrganizationID
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Page{}, err
@@ -177,22 +171,20 @@ func (h *GroupHandler) Replace(r *http.Request, id string, attributes scim.Resou
 	client := transaction.FromContext(ctx)
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return scim.Resource{}, ErrOrgNotFound
+	if !ok || caller == nil {
+		return scim.Resource{}, auth.ErrNoAuthUser
 	}
 
-	orgID := caller.OrganizationID
+	orgID, orgOk := caller.ActiveOrg()
+	if !orgOk {
+		return scim.Resource{}, ErrOrgNotFound
+	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
 	}
 
-	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
-	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
-		ctx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
-	} else {
-		ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
-	}
+	ctx = auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter|auth.CapBypassManagedGroup))
 
 	entGroup, err := client.Group.Query().Where(group.ID(id), group.HasOwnerWith(organization.ID(orgID))).Only(ctx)
 	if err != nil {
@@ -246,22 +238,20 @@ func (h *GroupHandler) Delete(r *http.Request, id string) error {
 	client := transaction.FromContext(ctx)
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return ErrOrgNotFound
+	if !ok || caller == nil {
+		return auth.ErrNoAuthUser
 	}
 
-	orgID := caller.OrganizationID
+	orgID, orgOk := caller.ActiveOrg()
+	if !orgOk {
+		return ErrOrgNotFound
+	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return err
 	}
 
-	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
-	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
-		ctx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
-	} else {
-		ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
-	}
+	ctx = auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter|auth.CapBypassManagedGroup))
 
 	count, err := client.Group.Delete().Where(group.ID(id), group.HasOwnerWith(organization.ID(orgID))).Exec(ctx)
 	if err != nil {
@@ -281,22 +271,20 @@ func (h *GroupHandler) Patch(r *http.Request, id string, operations []scim.Patch
 	client := transaction.FromContext(ctx)
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
-		return scim.Resource{}, ErrOrgNotFound
+	if !ok || caller == nil {
+		return scim.Resource{}, auth.ErrNoAuthUser
 	}
 
-	orgID := caller.OrganizationID
+	orgID, orgOk := caller.ActiveOrg()
+	if !orgOk {
+		return scim.Resource{}, ErrOrgNotFound
+	}
 
 	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
 		return scim.Resource{}, err
 	}
 
-	const managedCaps = auth.CapBypassOrgFilter | auth.CapBypassManagedGroup
-	if existingCaller, hasCaller := auth.CallerFromContext(ctx); hasCaller {
-		ctx = auth.WithCaller(ctx, existingCaller.WithCapabilities(managedCaps))
-	} else {
-		ctx = auth.WithCaller(ctx, &auth.Caller{Capabilities: managedCaps})
-	}
+	ctx = auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter|auth.CapBypassManagedGroup))
 
 	entGroup, err := client.Group.Query().Where(group.ID(id), group.HasOwnerWith(organization.ID(orgID))).Only(ctx)
 	if err != nil {

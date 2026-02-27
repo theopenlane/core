@@ -428,12 +428,8 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 		return nil
 	}
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return rout.NewMissingRequiredFieldError("owner_id")
-	}
-	orgID := caller.OrganizationID
-	if orgID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -643,12 +639,8 @@ func createSubcontrolRevisionUpdateInput(sc *generated.Subcontrol, standardRevis
 func (r *mutationResolver) updateControlsOnRevisionChange(ctx context.Context, controls []controlToUpdate) error {
 	logger := logx.FromContext(ctx)
 
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return rout.NewMissingRequiredFieldError("owner_id")
-	}
-	orgID := caller.OrganizationID
-	if orgID == "" {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 

@@ -35,26 +35,23 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	orgID, orgIDErr := h.getOrganizationID(in.ID, caller)
-	if orgIDErr != nil {
-		return h.BadRequest(ctx, orgIDErr, openapi)
+	orgID, err := h.getOrganizationID(in.ID, caller)
+	if err != nil {
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	in.ID = orgID
 
-	var (
-		features []string
-		featErr  error
-	)
+	var features []string
 
 	if in.ID != "" {
-		features, featErr = rule.GetFeaturesForSpecificOrganization(reqCtx, in.ID)
+		features, err = rule.GetFeaturesForSpecificOrganization(reqCtx, in.ID)
 	} else {
-		features, featErr = rule.GetOrgFeatures(reqCtx)
+		features, err = rule.GetOrgFeatures(reqCtx)
 	}
 
-	if featErr != nil {
-		logx.FromContext(reqCtx).Error().Err(featErr).Msg("error getting features")
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting features")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
