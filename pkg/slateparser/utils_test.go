@@ -113,3 +113,93 @@ func TestContainsCommentsInTextJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestOnlyCommentsAdded(t *testing.T) {
+	// Helper to wrap children in Slate element
+	makeSlate := func(children ...any) []any {
+		return []any{
+			map[string]any{
+				"type":     "paragraph",
+				"children": children,
+			},
+		}
+	}
+
+	t.Run("no changes", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello"})
+		newText := makeSlate(map[string]any{"text": "hello"})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("comment added", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello"})
+		newText := makeSlate(map[string]any{"text": "hello", "comment": "my comment"})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("comment changed", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello", "comment": "old"})
+		newText := makeSlate(map[string]any{"text": "hello", "comment": "new"})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("text changed", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello"})
+		newText := makeSlate(map[string]any{"text": "world"})
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("comment removed", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello", "comment": "gone"})
+		newText := makeSlate(map[string]any{"text": "hello"})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("multiple children, only comments added", func(t *testing.T) {
+		oldText := makeSlate(
+			map[string]any{"text": "a"},
+			map[string]any{"text": "b"},
+		)
+		newText := makeSlate(
+			map[string]any{"text": "a", "comment": "c1"},
+			map[string]any{"text": "b", "comment": "c2"},
+		)
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("multiple children, text changed in one", func(t *testing.T) {
+		oldText := makeSlate(
+			map[string]any{"text": "a"},
+			map[string]any{"text": "b"},
+		)
+		newText := makeSlate(
+			map[string]any{"text": "a"},
+			map[string]any{"text": "B"},
+		)
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("different number of children", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "a"})
+		newText := makeSlate(map[string]any{"text": "a"}, map[string]any{"text": "b"})
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("non-map children", func(t *testing.T) {
+		oldText := makeSlate("not a map")
+		newText := makeSlate("not a map")
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("comment added to one of multiple children", func(t *testing.T) {
+		oldText := makeSlate(
+			map[string]any{"text": "a"},
+			map[string]any{"text": "b"},
+		)
+		newText := makeSlate(
+			map[string]any{"text": "a", "comment": "c"},
+			map[string]any{"text": "b"},
+		)
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+}

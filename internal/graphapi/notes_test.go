@@ -95,6 +95,11 @@ func TestMutationUpdateNoteForTask(t *testing.T) {
 func TestMutationAddNoteForControl(t *testing.T) {
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	// ensure view only user caan see the control
+	_, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, control.ID != "")
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateControlInput
@@ -102,6 +107,16 @@ func TestMutationAddNoteForControl(t *testing.T) {
 		ctx         context.Context
 		expectedErr string
 	}{
+		{
+			name: "happy path, member can add comment",
+			request: testclient.UpdateControlInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is a test note",
+				},
+			},
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+		},
 		{
 			name: "happy path, add discussion",
 			request: testclient.UpdateControlInput{
@@ -137,6 +152,7 @@ func TestMutationAddNoteForControl(t *testing.T) {
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
 		},
+
 		{
 			name: "missing required field - text",
 			request: testclient.UpdateControlInput{
@@ -146,22 +162,10 @@ func TestMutationAddNoteForControl(t *testing.T) {
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
-		{
-			name: "control not found",
-			request: testclient.UpdateControlInput{
-				AddComment: &testclient.CreateNoteInput{
-					Text:    "This is a test note",
-					OwnerID: &testUser1.OrganizationID,
-				},
-			},
-			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx, // wrong user
-			expectedErr: notAuthorizedErrorMsg,
-		},
 	}
 
 	for idx, tc := range testCases {
-		t.Run("Create "+tc.name, func(t *testing.T) {
+		t.Run("Add Note "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.UpdateControl(tc.ctx, control.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
