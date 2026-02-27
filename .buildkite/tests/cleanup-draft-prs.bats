@@ -24,7 +24,7 @@ find_draft_prs() { echo "1:test-branch:\ud83d\udea7 DRAFT: Config changes from c
 check_core_pr_status() { echo '{"state":"MERGED","title":"Test","updatedAt":"2025-07-15T00:00:00Z"}'; }
 is_recent_pr_activity() { return 0; }
 close_pr() { echo "close_pr $1" >> "$TEST_TEMP_DIR/log"; }
-safe_delete_branch() { echo "delete_branch $1" >> "$TEST_TEMP_DIR/log"; }
+safe_delete_branch() { echo "delete_branch $1 $2" >> "$TEST_TEMP_DIR/log"; }
 extract_core_pr_number() { echo 10; }
 generate_closure_comment() { echo "comment"; }
 STUB
@@ -35,7 +35,7 @@ STUB
     CLEANUP_PR_STUB="$TEST_TEMP_DIR/stubs.sh" run bash .buildkite/cleanup-draft-prs.sh
     [ "$status" -eq 0 ]
     grep -q "close_pr 1" "$TEST_TEMP_DIR/log"
-    grep -q "delete_branch test-branch" "$TEST_TEMP_DIR/log"
+    grep -q "delete_branch test-branch theopenlane/openlane-infra" "$TEST_TEMP_DIR/log"
 }
 
 @test "draft PR kept when core PR open" {
@@ -45,7 +45,7 @@ validate_build_context() { return 0; }
 find_draft_prs() { echo "2:test-branch:\ud83d\udea7 DRAFT: Config changes from core PR #20"; }
 check_core_pr_status() { echo '{"state":"OPEN","title":"Test","updatedAt":"2025-07-15T00:00:00Z"}'; }
 close_pr() { echo "close_pr $1" >> "$TEST_TEMP_DIR/log"; }
-safe_delete_branch() { echo "delete_branch $1" >> "$TEST_TEMP_DIR/log"; }
+safe_delete_branch() { echo "delete_branch $1 $2" >> "$TEST_TEMP_DIR/log"; }
 extract_core_pr_number() { echo 20; }
 STUB
     source "$TEST_TEMP_DIR/stubs.sh"
@@ -64,7 +64,7 @@ validate_build_context() { return 0; }
 find_draft_prs() { echo "3:test-branch:\ud83d\udea7 DRAFT: Config changes from core PR #30"; }
 check_core_pr_status() { echo ""; }
 close_pr() { echo "close_pr $1" >> "$TEST_TEMP_DIR/log"; }
-safe_delete_branch() { echo "delete_branch $1" >> "$TEST_TEMP_DIR/log"; }
+safe_delete_branch() { echo "delete_branch $1 $2" >> "$TEST_TEMP_DIR/log"; }
 extract_core_pr_number() { echo 30; }
 generate_closure_comment() { echo "comment"; }
 STUB
