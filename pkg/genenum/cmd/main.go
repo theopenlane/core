@@ -70,6 +70,7 @@ func generateEnum(name string, values []string) error {
 		"ToCamel":         strcase.UpperCamelCase,
 		"ToUpper":         strings.ToUpper,
 		"lowerToSentence": lowerToSentence,
+		"untitle":         untitle,
 	}
 
 	tmplBytes, err := os.ReadFile("../pkg/genenum/cmd/templates/enums.tmpl")
@@ -119,4 +120,12 @@ func lowerToSentence(s string) string {
 	s = strings.ToLower(s)
 
 	return s
+}
+
+func untitle(s string) string {
+	if s == "" {
+		return s
+	}
+
+	return strings.ToLower(s[:1]) + s[1:]
 }

@@ -893,6 +893,46 @@ func ErrorMessageContainsFold(v string) predicate.Export {
 	return predicate.Export(sql.FieldContainsFold(FieldErrorMessage, v))
 }
 
+// ModeEQ applies the EQ predicate on the "mode" field.
+func ModeEQ(v enums.ExportMode) predicate.Export {
+	vc := v
+	return predicate.Export(sql.FieldEQ(FieldMode, vc))
+}
+
+// ModeNEQ applies the NEQ predicate on the "mode" field.
+func ModeNEQ(v enums.ExportMode) predicate.Export {
+	vc := v
+	return predicate.Export(sql.FieldNEQ(FieldMode, vc))
+}
+
+// ModeIn applies the In predicate on the "mode" field.
+func ModeIn(vs ...enums.ExportMode) predicate.Export {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Export(sql.FieldIn(FieldMode, v...))
+}
+
+// ModeNotIn applies the NotIn predicate on the "mode" field.
+func ModeNotIn(vs ...enums.ExportMode) predicate.Export {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Export(sql.FieldNotIn(FieldMode, v...))
+}
+
+// ExportMetadataIsNil applies the IsNil predicate on the "export_metadata" field.
+func ExportMetadataIsNil() predicate.Export {
+	return predicate.Export(sql.FieldIsNull(FieldExportMetadata))
+}
+
+// ExportMetadataNotNil applies the NotNil predicate on the "export_metadata" field.
+func ExportMetadataNotNil() predicate.Export {
+	return predicate.Export(sql.FieldNotNull(FieldExportMetadata))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Export {
 	return predicate.Export(func(s *sql.Selector) {

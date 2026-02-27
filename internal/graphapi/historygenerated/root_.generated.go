@@ -20593,6 +20593,10 @@ Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
 """
+ExportMetadata contains metadata for an export record
+"""
+scalar ExportMetadata
+"""
 Any is a generic fallback type
 """
 scalar Any`, BuiltIn: false},
