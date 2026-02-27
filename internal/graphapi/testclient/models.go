@@ -4019,6 +4019,16 @@ type ControlCategoryOrder struct {
 	Field ControlCategoryOrderField `json:"field"`
 }
 
+// ControlChange describes the diffs for a single control identified by refCode
+type ControlChange struct {
+	// The ref_code of the control
+	RefCode string `json:"refCode"`
+	// The title of the control at the new revision
+	Title string `json:"title"`
+	// Field-level diffs for this control
+	Diffs []*ControlFieldDiff `json:"diffs"`
+}
+
 // A connection to a list of items.
 type ControlConnection struct {
 	// A list of edges.
@@ -4041,12 +4051,46 @@ type ControlDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// ControlDiffInput is used to compare all controls under a standard across two revisions
+type ControlDiffInput struct {
+	// ID of the standard to compare controls for
+	StandardID string `json:"standardID"`
+	// base revision to compare from (e.g. "v1.0.0")
+	OldRevision string `json:"oldRevision"`
+	// target revision to compare to (e.g. "v2.0.0")
+	NewRevision string `json:"newRevision"`
+}
+
+// ControlDiffPayload contains the field-level diffs between two revisions of all controls under a standard
+type ControlDiffPayload struct {
+	// The standard ID being compared
+	StandardID string `json:"standardID"`
+	// The base revision
+	OldRevision string `json:"oldRevision"`
+	// The target revision
+	NewRevision string `json:"newRevision"`
+	// Per-control changes between the two revisions
+	Changes []*ControlChange `json:"changes"`
+}
+
 // An edge in a connection.
 type ControlEdge struct {
 	// The item at the end of the edge.
 	Node *Control `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+// ControlFieldDiff describes a single field that differs between two control revisions
+type ControlFieldDiff struct {
+	// Field name (snake_case)
+	Field string `json:"field"`
+	// Value in the old revision
+	OldValue any `json:"oldValue,omitempty"`
+	// Value in the new revision
+	NewValue any `json:"newValue,omitempty"`
+	// Unified diff text when applicable
+	Diff *string `json:"diff,omitempty"`
 }
 
 type ControlGroup struct {
@@ -6496,10 +6540,14 @@ type CreateExportInput struct {
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
 	// the specific filters to run against the exported data. This should be a well formatted graphql query
-	Filters  *string  `json:"filters,omitempty"`
-	OwnerID  *string  `json:"ownerID,omitempty"`
-	EventIDs []string `json:"eventIDs,omitempty"`
-	FileIDs  []string `json:"fileIDs,omitempty"`
+	Filters *string `json:"filters,omitempty"`
+	// the mode of export, e.g., flat or folder
+	Mode *enums.ExportMode `json:"mode,omitempty"`
+	// metadata for the export record
+	ExportMetadata *models.ExportMetadata `json:"exportMetadata,omitempty"`
+	OwnerID        *string                `json:"ownerID,omitempty"`
+	EventIDs       []string               `json:"eventIDs,omitempty"`
+	FileIDs        []string               `json:"fileIDs,omitempty"`
 }
 
 // CreateFileInput is used for create File object.
@@ -14941,10 +14989,14 @@ type Export struct {
 	// the specific filters to run against the exported data. This should be a well formatted graphql query
 	Filters *string `json:"filters,omitempty"`
 	// if we try to export and it fails, the error message will be stored here
-	ErrorMessage *string          `json:"errorMessage,omitempty"`
-	Owner        *Organization    `json:"owner,omitempty"`
-	Events       *EventConnection `json:"events"`
-	Files        *FileConnection  `json:"files"`
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	// the mode of export, e.g., flat or folder
+	Mode enums.ExportMode `json:"mode"`
+	// metadata for the export record
+	ExportMetadata *models.ExportMetadata `json:"exportMetadata,omitempty"`
+	Owner          *Organization          `json:"owner,omitempty"`
+	Events         *EventConnection       `json:"events"`
+	Files          *FileConnection        `json:"files"`
 }
 
 func (Export) IsNode() {}
@@ -15155,6 +15207,11 @@ type ExportWhereInput struct {
 	ErrorMessageNotNil       *bool    `json:"errorMessageNotNil,omitempty"`
 	ErrorMessageEqualFold    *string  `json:"errorMessageEqualFold,omitempty"`
 	ErrorMessageContainsFold *string  `json:"errorMessageContainsFold,omitempty"`
+	// mode field predicates
+	Mode      *enums.ExportMode  `json:"mode,omitempty"`
+	ModeNeq   *enums.ExportMode  `json:"modeNEQ,omitempty"`
+	ModeIn    []enums.ExportMode `json:"modeIn,omitempty"`
+	ModeNotIn []enums.ExportMode `json:"modeNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -38126,16 +38183,19 @@ type UpdateExportInput struct {
 	// the status of the export, e.g., pending, ready, failed
 	Status *enums.ExportStatus `json:"status,omitempty"`
 	// if we try to export and it fails, the error message will be stored here
-	ErrorMessage      *string  `json:"errorMessage,omitempty"`
-	ClearErrorMessage *bool    `json:"clearErrorMessage,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	ClearOwner        *bool    `json:"clearOwner,omitempty"`
-	AddEventIDs       []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs    []string `json:"removeEventIDs,omitempty"`
-	ClearEvents       *bool    `json:"clearEvents,omitempty"`
-	AddFileIDs        []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool    `json:"clearFiles,omitempty"`
+	ErrorMessage      *string `json:"errorMessage,omitempty"`
+	ClearErrorMessage *bool   `json:"clearErrorMessage,omitempty"`
+	// metadata for the export record
+	ExportMetadata      *models.ExportMetadata `json:"exportMetadata,omitempty"`
+	ClearExportMetadata *bool                  `json:"clearExportMetadata,omitempty"`
+	OwnerID             *string                `json:"ownerID,omitempty"`
+	ClearOwner          *bool                  `json:"clearOwner,omitempty"`
+	AddEventIDs         []string               `json:"addEventIDs,omitempty"`
+	RemoveEventIDs      []string               `json:"removeEventIDs,omitempty"`
+	ClearEvents         *bool                  `json:"clearEvents,omitempty"`
+	AddFileIDs          []string               `json:"addFileIDs,omitempty"`
+	RemoveFileIDs       []string               `json:"removeFileIDs,omitempty"`
+	ClearFiles          *bool                  `json:"clearFiles,omitempty"`
 }
 
 // UpdateFileInput is used for update File object.
@@ -47721,6 +47781,7 @@ const (
 	ExportOrderFieldExportType ExportOrderField = "export_type"
 	ExportOrderFieldFormat     ExportOrderField = "format"
 	ExportOrderFieldStatus     ExportOrderField = "status"
+	ExportOrderFieldMode       ExportOrderField = "mode"
 )
 
 var AllExportOrderField = []ExportOrderField{
@@ -47729,11 +47790,12 @@ var AllExportOrderField = []ExportOrderField{
 	ExportOrderFieldExportType,
 	ExportOrderFieldFormat,
 	ExportOrderFieldStatus,
+	ExportOrderFieldMode,
 }
 
 func (e ExportOrderField) IsValid() bool {
 	switch e {
-	case ExportOrderFieldCreatedAt, ExportOrderFieldUpdatedAt, ExportOrderFieldExportType, ExportOrderFieldFormat, ExportOrderFieldStatus:
+	case ExportOrderFieldCreatedAt, ExportOrderFieldUpdatedAt, ExportOrderFieldExportType, ExportOrderFieldFormat, ExportOrderFieldStatus, ExportOrderFieldMode:
 		return true
 	}
 	return false

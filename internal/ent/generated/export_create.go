@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -204,6 +205,34 @@ func (_c *ExportCreate) SetNillableErrorMessage(v *string) *ExportCreate {
 	return _c
 }
 
+// SetMode sets the "mode" field.
+func (_c *ExportCreate) SetMode(v enums.ExportMode) *ExportCreate {
+	_c.mutation.SetMode(v)
+	return _c
+}
+
+// SetNillableMode sets the "mode" field if the given value is not nil.
+func (_c *ExportCreate) SetNillableMode(v *enums.ExportMode) *ExportCreate {
+	if v != nil {
+		_c.SetMode(*v)
+	}
+	return _c
+}
+
+// SetExportMetadata sets the "export_metadata" field.
+func (_c *ExportCreate) SetExportMetadata(v models.ExportMetadata) *ExportCreate {
+	_c.mutation.SetExportMetadata(v)
+	return _c
+}
+
+// SetNillableExportMetadata sets the "export_metadata" field if the given value is not nil.
+func (_c *ExportCreate) SetNillableExportMetadata(v *models.ExportMetadata) *ExportCreate {
+	if v != nil {
+		_c.SetExportMetadata(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ExportCreate) SetID(v string) *ExportCreate {
 	_c.mutation.SetID(v)
@@ -316,6 +345,10 @@ func (_c *ExportCreate) defaults() error {
 		v := export.DefaultFields
 		_c.mutation.SetFields(v)
 	}
+	if _, ok := _c.mutation.Mode(); !ok {
+		v := export.DefaultMode
+		_c.mutation.SetMode(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if export.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized export.DefaultID (forgotten import generated/runtime?)")
@@ -355,6 +388,14 @@ func (_c *ExportCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := export.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Export.status": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Mode(); !ok {
+		return &ValidationError{Name: "mode", err: errors.New(`generated: missing required field "Export.mode"`)}
+	}
+	if v, ok := _c.mutation.Mode(); ok {
+		if err := export.ModeValidator(v); err != nil {
+			return &ValidationError{Name: "mode", err: fmt.Errorf(`generated: validator failed for field "Export.mode": %w`, err)}
 		}
 	}
 	return nil
@@ -444,6 +485,14 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ErrorMessage(); ok {
 		_spec.SetField(export.FieldErrorMessage, field.TypeString, value)
 		_node.ErrorMessage = value
+	}
+	if value, ok := _c.mutation.Mode(); ok {
+		_spec.SetField(export.FieldMode, field.TypeEnum, value)
+		_node.Mode = value
+	}
+	if value, ok := _c.mutation.ExportMetadata(); ok {
+		_spec.SetField(export.FieldExportMetadata, field.TypeJSON, value)
+		_node.ExportMetadata = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

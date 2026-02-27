@@ -8548,7 +8548,7 @@ func (ec *executionContext) _Mutation_createActionPlan(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateActionPlan(ctx, fc.Args["input"].(generated.CreateActionPlanInput))
+			return ec.Resolvers.Mutation().CreateActionPlan(ctx, fc.Args["input"].(generated.CreateActionPlanInput))
 		},
 		nil,
 		ec.marshalNActionPlanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanCreatePayload,
@@ -8593,7 +8593,7 @@ func (ec *executionContext) _Mutation_createBulkActionPlan(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkActionPlan(ctx, fc.Args["input"].([]*generated.CreateActionPlanInput))
+			return ec.Resolvers.Mutation().CreateBulkActionPlan(ctx, fc.Args["input"].([]*generated.CreateActionPlanInput))
 		},
 		nil,
 		ec.marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkCreatePayload,
@@ -8638,7 +8638,7 @@ func (ec *executionContext) _Mutation_createBulkCSVActionPlan(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkCSVActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVActionPlan(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVActionPlan(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkCreatePayload,
@@ -8683,7 +8683,7 @@ func (ec *executionContext) _Mutation_updateBulkActionPlan(ctx context.Context, 
 		ec.fieldContext_Mutation_updateBulkActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkActionPlan(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateActionPlanInput))
+			return ec.Resolvers.Mutation().UpdateBulkActionPlan(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateActionPlanInput))
 		},
 		nil,
 		ec.marshalNActionPlanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkUpdatePayload,
@@ -8730,7 +8730,7 @@ func (ec *executionContext) _Mutation_updateActionPlan(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateActionPlan(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateActionPlanInput))
+			return ec.Resolvers.Mutation().UpdateActionPlan(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateActionPlanInput))
 		},
 		nil,
 		ec.marshalNActionPlanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanUpdatePayload,
@@ -8775,7 +8775,7 @@ func (ec *executionContext) _Mutation_deleteActionPlan(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteActionPlan(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteActionPlan(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNActionPlanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanDeletePayload,
@@ -8820,7 +8820,7 @@ func (ec *executionContext) _Mutation_deleteBulkActionPlan(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteBulkActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkActionPlan(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkActionPlan(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload,
@@ -8865,7 +8865,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVActionPlan(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkCSVActionPlan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVActionPlan(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVActionPlan(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNActionPlanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkUpdatePayload,
@@ -8912,7 +8912,7 @@ func (ec *executionContext) _Mutation_createAPIToken(ctx context.Context, field 
 		ec.fieldContext_Mutation_createAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateAPIToken(ctx, fc.Args["input"].(generated.CreateAPITokenInput))
+			return ec.Resolvers.Mutation().CreateAPIToken(ctx, fc.Args["input"].(generated.CreateAPITokenInput))
 		},
 		nil,
 		ec.marshalNAPITokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload,
@@ -8957,7 +8957,7 @@ func (ec *executionContext) _Mutation_createBulkAPIToken(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkAPIToken(ctx, fc.Args["input"].([]*generated.CreateAPITokenInput))
+			return ec.Resolvers.Mutation().CreateBulkAPIToken(ctx, fc.Args["input"].([]*generated.CreateAPITokenInput))
 		},
 		nil,
 		ec.marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload,
@@ -9002,7 +9002,7 @@ func (ec *executionContext) _Mutation_createBulkCSVAPIToken(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkCSVAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVAPIToken(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVAPIToken(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload,
@@ -9047,7 +9047,7 @@ func (ec *executionContext) _Mutation_updateAPIToken(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateAPIToken(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAPITokenInput))
+			return ec.Resolvers.Mutation().UpdateAPIToken(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAPITokenInput))
 		},
 		nil,
 		ec.marshalNAPITokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload,
@@ -9092,7 +9092,7 @@ func (ec *executionContext) _Mutation_deleteAPIToken(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteAPIToken(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteAPIToken(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNAPITokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload,
@@ -9137,7 +9137,7 @@ func (ec *executionContext) _Mutation_deleteBulkAPIToken(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteBulkAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkAPIToken(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkAPIToken(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload,
@@ -9182,7 +9182,7 @@ func (ec *executionContext) _Mutation_updateBulkAPIToken(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateBulkAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkAPIToken(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateAPITokenInput))
+			return ec.Resolvers.Mutation().UpdateBulkAPIToken(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateAPITokenInput))
 		},
 		nil,
 		ec.marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload,
@@ -9229,7 +9229,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVAPIToken(ctx context.Context,
 		ec.fieldContext_Mutation_updateBulkCSVAPIToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVAPIToken(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVAPIToken(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload,
@@ -9276,7 +9276,7 @@ func (ec *executionContext) _Mutation_createAssessment(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createAssessment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateAssessment(ctx, fc.Args["input"].(generated.CreateAssessmentInput))
+			return ec.Resolvers.Mutation().CreateAssessment(ctx, fc.Args["input"].(generated.CreateAssessmentInput))
 		},
 		nil,
 		ec.marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload,
@@ -9321,7 +9321,7 @@ func (ec *executionContext) _Mutation_updateAssessment(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateAssessment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateAssessment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssessmentInput))
+			return ec.Resolvers.Mutation().UpdateAssessment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssessmentInput))
 		},
 		nil,
 		ec.marshalNAssessmentUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload,
@@ -9366,7 +9366,7 @@ func (ec *executionContext) _Mutation_deleteAssessment(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteAssessment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteAssessment(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteAssessment(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentDeletePayload,
@@ -9411,7 +9411,7 @@ func (ec *executionContext) _Mutation_deleteBulkAssessment(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteBulkAssessment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkAssessment(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkAssessment(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNAssessmentBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkDeletePayload,
@@ -9456,7 +9456,7 @@ func (ec *executionContext) _Mutation_createAssessmentResponse(ctx context.Conte
 		ec.fieldContext_Mutation_createAssessmentResponse,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateAssessmentResponse(ctx, fc.Args["input"].(generated.CreateAssessmentResponseInput))
+			return ec.Resolvers.Mutation().CreateAssessmentResponse(ctx, fc.Args["input"].(generated.CreateAssessmentResponseInput))
 		},
 		nil,
 		ec.marshalNAssessmentResponseCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload,
@@ -9501,7 +9501,7 @@ func (ec *executionContext) _Mutation_deleteAssessmentResponse(ctx context.Conte
 		ec.fieldContext_Mutation_deleteAssessmentResponse,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteAssessmentResponse(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteAssessmentResponse(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNAssessmentResponseDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload,
@@ -9546,7 +9546,7 @@ func (ec *executionContext) _Mutation_createAsset(ctx context.Context, field gra
 		ec.fieldContext_Mutation_createAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateAsset(ctx, fc.Args["input"].(generated.CreateAssetInput))
+			return ec.Resolvers.Mutation().CreateAsset(ctx, fc.Args["input"].(generated.CreateAssetInput))
 		},
 		nil,
 		ec.marshalNAssetCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetCreatePayload,
@@ -9591,7 +9591,7 @@ func (ec *executionContext) _Mutation_createBulkAsset(ctx context.Context, field
 		ec.fieldContext_Mutation_createBulkAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkAsset(ctx, fc.Args["input"].([]*generated.CreateAssetInput))
+			return ec.Resolvers.Mutation().CreateBulkAsset(ctx, fc.Args["input"].([]*generated.CreateAssetInput))
 		},
 		nil,
 		ec.marshalNAssetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkCreatePayload,
@@ -9636,7 +9636,7 @@ func (ec *executionContext) _Mutation_createBulkCSVAsset(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkCSVAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVAsset(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVAsset(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNAssetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkCreatePayload,
@@ -9681,7 +9681,7 @@ func (ec *executionContext) _Mutation_updateAsset(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateAsset(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssetInput))
+			return ec.Resolvers.Mutation().UpdateAsset(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssetInput))
 		},
 		nil,
 		ec.marshalNAssetUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetUpdatePayload,
@@ -9726,7 +9726,7 @@ func (ec *executionContext) _Mutation_deleteAsset(ctx context.Context, field gra
 		ec.fieldContext_Mutation_deleteAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteAsset(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteAsset(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNAssetDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetDeletePayload,
@@ -9771,7 +9771,7 @@ func (ec *executionContext) _Mutation_deleteBulkAsset(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteBulkAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkAsset(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkAsset(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNAssetBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkDeletePayload,
@@ -9816,7 +9816,7 @@ func (ec *executionContext) _Mutation_updateBulkAsset(ctx context.Context, field
 		ec.fieldContext_Mutation_updateBulkAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkAsset(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateAssetInput))
+			return ec.Resolvers.Mutation().UpdateBulkAsset(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateAssetInput))
 		},
 		nil,
 		ec.marshalNAssetBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkUpdatePayload,
@@ -9863,7 +9863,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVAsset(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateBulkCSVAsset,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVAsset(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVAsset(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNAssetBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkUpdatePayload,
@@ -9910,7 +9910,7 @@ func (ec *executionContext) _Mutation_createCampaign(ctx context.Context, field 
 		ec.fieldContext_Mutation_createCampaign,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateCampaign(ctx, fc.Args["input"].(generated.CreateCampaignInput))
+			return ec.Resolvers.Mutation().CreateCampaign(ctx, fc.Args["input"].(generated.CreateCampaignInput))
 		},
 		nil,
 		ec.marshalNCampaignCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreatePayload,
@@ -9955,7 +9955,7 @@ func (ec *executionContext) _Mutation_createBulkCampaign(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkCampaign,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCampaign(ctx, fc.Args["input"].([]*generated.CreateCampaignInput))
+			return ec.Resolvers.Mutation().CreateBulkCampaign(ctx, fc.Args["input"].([]*generated.CreateCampaignInput))
 		},
 		nil,
 		ec.marshalNCampaignBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignBulkCreatePayload,
@@ -10000,7 +10000,7 @@ func (ec *executionContext) _Mutation_createBulkCSVCampaign(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkCSVCampaign,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVCampaign(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVCampaign(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNCampaignBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignBulkCreatePayload,
@@ -10045,7 +10045,7 @@ func (ec *executionContext) _Mutation_updateCampaign(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateCampaign,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateCampaign(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCampaignInput))
+			return ec.Resolvers.Mutation().UpdateCampaign(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCampaignInput))
 		},
 		nil,
 		ec.marshalNCampaignUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignUpdatePayload,
@@ -10090,7 +10090,7 @@ func (ec *executionContext) _Mutation_deleteCampaign(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteCampaign,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteCampaign(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteCampaign(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNCampaignDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignDeletePayload,
@@ -10135,7 +10135,7 @@ func (ec *executionContext) _Mutation_createCampaignWithTargets(ctx context.Cont
 		ec.fieldContext_Mutation_createCampaignWithTargets,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateCampaignWithTargets(ctx, fc.Args["input"].(model.CreateCampaignWithTargetsInput))
+			return ec.Resolvers.Mutation().CreateCampaignWithTargets(ctx, fc.Args["input"].(model.CreateCampaignWithTargetsInput))
 		},
 		nil,
 		ec.marshalNCampaignCreateWithTargetsPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload,
@@ -10182,7 +10182,7 @@ func (ec *executionContext) _Mutation_createCampaignWithTargetsCSV(ctx context.C
 		ec.fieldContext_Mutation_createCampaignWithTargetsCSV,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateCampaignWithTargetsCSV(ctx, fc.Args["campaign"].(generated.CreateCampaignInput), fc.Args["targets"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateCampaignWithTargetsCSV(ctx, fc.Args["campaign"].(generated.CreateCampaignInput), fc.Args["targets"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNCampaignCreateWithTargetsPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload,
@@ -10229,7 +10229,7 @@ func (ec *executionContext) _Mutation_launchCampaign(ctx context.Context, field 
 		ec.fieldContext_Mutation_launchCampaign,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().LaunchCampaign(ctx, fc.Args["input"].(model.LaunchCampaignInput))
+			return ec.Resolvers.Mutation().LaunchCampaign(ctx, fc.Args["input"].(model.LaunchCampaignInput))
 		},
 		nil,
 		ec.marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload,
@@ -10278,7 +10278,7 @@ func (ec *executionContext) _Mutation_resendCampaignIncompleteTargets(ctx contex
 		ec.fieldContext_Mutation_resendCampaignIncompleteTargets,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ResendCampaignIncompleteTargets(ctx, fc.Args["input"].(model.ResendCampaignIncompleteInput))
+			return ec.Resolvers.Mutation().ResendCampaignIncompleteTargets(ctx, fc.Args["input"].(model.ResendCampaignIncompleteInput))
 		},
 		nil,
 		ec.marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload,
@@ -10327,7 +10327,7 @@ func (ec *executionContext) _Mutation_sendCampaignTestEmail(ctx context.Context,
 		ec.fieldContext_Mutation_sendCampaignTestEmail,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().SendCampaignTestEmail(ctx, fc.Args["input"].(model.SendCampaignTestEmailInput))
+			return ec.Resolvers.Mutation().SendCampaignTestEmail(ctx, fc.Args["input"].(model.SendCampaignTestEmailInput))
 		},
 		nil,
 		ec.marshalNCampaignTestEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTestEmailPayload,
@@ -10376,7 +10376,7 @@ func (ec *executionContext) _Mutation_createCampaignTarget(ctx context.Context, 
 		ec.fieldContext_Mutation_createCampaignTarget,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateCampaignTarget(ctx, fc.Args["input"].(generated.CreateCampaignTargetInput))
+			return ec.Resolvers.Mutation().CreateCampaignTarget(ctx, fc.Args["input"].(generated.CreateCampaignTargetInput))
 		},
 		nil,
 		ec.marshalNCampaignTargetCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetCreatePayload,
@@ -10421,7 +10421,7 @@ func (ec *executionContext) _Mutation_createBulkCampaignTarget(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkCampaignTarget,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCampaignTarget(ctx, fc.Args["input"].([]*generated.CreateCampaignTargetInput))
+			return ec.Resolvers.Mutation().CreateBulkCampaignTarget(ctx, fc.Args["input"].([]*generated.CreateCampaignTargetInput))
 		},
 		nil,
 		ec.marshalNCampaignTargetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetBulkCreatePayload,
@@ -10466,7 +10466,7 @@ func (ec *executionContext) _Mutation_createBulkCSVCampaignTarget(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVCampaignTarget,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVCampaignTarget(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVCampaignTarget(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNCampaignTargetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetBulkCreatePayload,
@@ -10511,7 +10511,7 @@ func (ec *executionContext) _Mutation_updateCampaignTarget(ctx context.Context, 
 		ec.fieldContext_Mutation_updateCampaignTarget,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateCampaignTarget(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCampaignTargetInput))
+			return ec.Resolvers.Mutation().UpdateCampaignTarget(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCampaignTargetInput))
 		},
 		nil,
 		ec.marshalNCampaignTargetUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetUpdatePayload,
@@ -10556,7 +10556,7 @@ func (ec *executionContext) _Mutation_deleteCampaignTarget(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteCampaignTarget,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteCampaignTarget(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteCampaignTarget(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNCampaignTargetDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetDeletePayload,
@@ -10601,7 +10601,7 @@ func (ec *executionContext) _Mutation_createContact(ctx context.Context, field g
 		ec.fieldContext_Mutation_createContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateContact(ctx, fc.Args["input"].(generated.CreateContactInput))
+			return ec.Resolvers.Mutation().CreateContact(ctx, fc.Args["input"].(generated.CreateContactInput))
 		},
 		nil,
 		ec.marshalNContactCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactCreatePayload,
@@ -10646,7 +10646,7 @@ func (ec *executionContext) _Mutation_createBulkContact(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkContact(ctx, fc.Args["input"].([]*generated.CreateContactInput))
+			return ec.Resolvers.Mutation().CreateBulkContact(ctx, fc.Args["input"].([]*generated.CreateContactInput))
 		},
 		nil,
 		ec.marshalNContactBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload,
@@ -10691,7 +10691,7 @@ func (ec *executionContext) _Mutation_createBulkCSVContact(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkCSVContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVContact(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVContact(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNContactBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload,
@@ -10736,7 +10736,7 @@ func (ec *executionContext) _Mutation_updateBulkContact(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkContact(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateContactInput))
+			return ec.Resolvers.Mutation().UpdateBulkContact(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateContactInput))
 		},
 		nil,
 		ec.marshalNContactBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload,
@@ -10783,7 +10783,7 @@ func (ec *executionContext) _Mutation_updateContact(ctx context.Context, field g
 		ec.fieldContext_Mutation_updateContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateContact(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateContactInput))
+			return ec.Resolvers.Mutation().UpdateContact(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateContactInput))
 		},
 		nil,
 		ec.marshalNContactUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactUpdatePayload,
@@ -10828,7 +10828,7 @@ func (ec *executionContext) _Mutation_deleteContact(ctx context.Context, field g
 		ec.fieldContext_Mutation_deleteContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteContact(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteContact(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNContactDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactDeletePayload,
@@ -10873,7 +10873,7 @@ func (ec *executionContext) _Mutation_deleteBulkContact(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteBulkContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkContact(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkContact(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNContactBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkDeletePayload,
@@ -10918,7 +10918,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVContact(ctx context.Context, 
 		ec.fieldContext_Mutation_updateBulkCSVContact,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVContact(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVContact(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNContactBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload,
@@ -10965,7 +10965,7 @@ func (ec *executionContext) _Mutation_createControl(ctx context.Context, field g
 		ec.fieldContext_Mutation_createControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateControl(ctx, fc.Args["input"].(generated.CreateControlInput))
+			return ec.Resolvers.Mutation().CreateControl(ctx, fc.Args["input"].(generated.CreateControlInput))
 		},
 		nil,
 		ec.marshalNControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCreatePayload,
@@ -11010,7 +11010,7 @@ func (ec *executionContext) _Mutation_createBulkControl(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkControl(ctx, fc.Args["input"].([]*generated.CreateControlInput))
+			return ec.Resolvers.Mutation().CreateBulkControl(ctx, fc.Args["input"].([]*generated.CreateControlInput))
 		},
 		nil,
 		ec.marshalNControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkCreatePayload,
@@ -11055,7 +11055,7 @@ func (ec *executionContext) _Mutation_createBulkCSVControl(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkCSVControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkCreatePayload,
@@ -11100,7 +11100,7 @@ func (ec *executionContext) _Mutation_updateBulkControl(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkControl(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlInput))
+			return ec.Resolvers.Mutation().UpdateBulkControl(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlInput))
 		},
 		nil,
 		ec.marshalNControlBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkUpdatePayload,
@@ -11147,7 +11147,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVControl(ctx context.Context, 
 		ec.fieldContext_Mutation_updateBulkCSVControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkUpdatePayload,
@@ -11194,7 +11194,7 @@ func (ec *executionContext) _Mutation_updateControl(ctx context.Context, field g
 		ec.fieldContext_Mutation_updateControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateControl(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlInput))
+			return ec.Resolvers.Mutation().UpdateControl(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlInput))
 		},
 		nil,
 		ec.marshalNControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlUpdatePayload,
@@ -11239,7 +11239,7 @@ func (ec *executionContext) _Mutation_deleteControl(ctx context.Context, field g
 		ec.fieldContext_Mutation_deleteControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteControl(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteControl(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlDeletePayload,
@@ -11284,7 +11284,7 @@ func (ec *executionContext) _Mutation_deleteBulkControl(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteBulkControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkControl(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkControl(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkDeletePayload,
@@ -11329,7 +11329,7 @@ func (ec *executionContext) _Mutation_createControlsByClone(ctx context.Context,
 		ec.fieldContext_Mutation_createControlsByClone,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateControlsByClone(ctx, fc.Args["input"].(*model.CloneControlInput))
+			return ec.Resolvers.Mutation().CreateControlsByClone(ctx, fc.Args["input"].(*model.CloneControlInput))
 		},
 		nil,
 		ec.marshalNControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkCreatePayload,
@@ -11374,7 +11374,7 @@ func (ec *executionContext) _Mutation_cloneBulkCSVControl(ctx context.Context, f
 		ec.fieldContext_Mutation_cloneBulkCSVControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CloneBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CloneBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkCreatePayload,
@@ -11419,7 +11419,7 @@ func (ec *executionContext) _Mutation_createControlImplementation(ctx context.Co
 		ec.fieldContext_Mutation_createControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateControlImplementation(ctx, fc.Args["input"].(generated.CreateControlImplementationInput))
+			return ec.Resolvers.Mutation().CreateControlImplementation(ctx, fc.Args["input"].(generated.CreateControlImplementationInput))
 		},
 		nil,
 		ec.marshalNControlImplementationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationCreatePayload,
@@ -11464,7 +11464,7 @@ func (ec *executionContext) _Mutation_createBulkControlImplementation(ctx contex
 		ec.fieldContext_Mutation_createBulkControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkControlImplementation(ctx, fc.Args["input"].([]*generated.CreateControlImplementationInput))
+			return ec.Resolvers.Mutation().CreateBulkControlImplementation(ctx, fc.Args["input"].([]*generated.CreateControlImplementationInput))
 		},
 		nil,
 		ec.marshalNControlImplementationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkCreatePayload,
@@ -11509,7 +11509,7 @@ func (ec *executionContext) _Mutation_createBulkCSVControlImplementation(ctx con
 		ec.fieldContext_Mutation_createBulkCSVControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVControlImplementation(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVControlImplementation(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlImplementationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkCreatePayload,
@@ -11554,7 +11554,7 @@ func (ec *executionContext) _Mutation_updateControlImplementation(ctx context.Co
 		ec.fieldContext_Mutation_updateControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateControlImplementation(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlImplementationInput))
+			return ec.Resolvers.Mutation().UpdateControlImplementation(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlImplementationInput))
 		},
 		nil,
 		ec.marshalNControlImplementationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationUpdatePayload,
@@ -11599,7 +11599,7 @@ func (ec *executionContext) _Mutation_deleteControlImplementation(ctx context.Co
 		ec.fieldContext_Mutation_deleteControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteControlImplementation(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteControlImplementation(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNControlImplementationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationDeletePayload,
@@ -11644,7 +11644,7 @@ func (ec *executionContext) _Mutation_deleteBulkControlImplementation(ctx contex
 		ec.fieldContext_Mutation_deleteBulkControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkControlImplementation(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkControlImplementation(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNControlImplementationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkDeletePayload,
@@ -11689,7 +11689,7 @@ func (ec *executionContext) _Mutation_updateBulkControlImplementation(ctx contex
 		ec.fieldContext_Mutation_updateBulkControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkControlImplementation(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlImplementationInput))
+			return ec.Resolvers.Mutation().UpdateBulkControlImplementation(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlImplementationInput))
 		},
 		nil,
 		ec.marshalNControlImplementationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkUpdatePayload,
@@ -11736,7 +11736,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVControlImplementation(ctx con
 		ec.fieldContext_Mutation_updateBulkCSVControlImplementation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVControlImplementation(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVControlImplementation(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlImplementationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkUpdatePayload,
@@ -11783,7 +11783,7 @@ func (ec *executionContext) _Mutation_createControlObjective(ctx context.Context
 		ec.fieldContext_Mutation_createControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateControlObjective(ctx, fc.Args["input"].(generated.CreateControlObjectiveInput))
+			return ec.Resolvers.Mutation().CreateControlObjective(ctx, fc.Args["input"].(generated.CreateControlObjectiveInput))
 		},
 		nil,
 		ec.marshalNControlObjectiveCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveCreatePayload,
@@ -11828,7 +11828,7 @@ func (ec *executionContext) _Mutation_createBulkControlObjective(ctx context.Con
 		ec.fieldContext_Mutation_createBulkControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkControlObjective(ctx, fc.Args["input"].([]*generated.CreateControlObjectiveInput))
+			return ec.Resolvers.Mutation().CreateBulkControlObjective(ctx, fc.Args["input"].([]*generated.CreateControlObjectiveInput))
 		},
 		nil,
 		ec.marshalNControlObjectiveBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkCreatePayload,
@@ -11873,7 +11873,7 @@ func (ec *executionContext) _Mutation_createBulkCSVControlObjective(ctx context.
 		ec.fieldContext_Mutation_createBulkCSVControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVControlObjective(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVControlObjective(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlObjectiveBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkCreatePayload,
@@ -11918,7 +11918,7 @@ func (ec *executionContext) _Mutation_updateControlObjective(ctx context.Context
 		ec.fieldContext_Mutation_updateControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateControlObjective(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlObjectiveInput))
+			return ec.Resolvers.Mutation().UpdateControlObjective(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateControlObjectiveInput))
 		},
 		nil,
 		ec.marshalNControlObjectiveUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveUpdatePayload,
@@ -11963,7 +11963,7 @@ func (ec *executionContext) _Mutation_deleteControlObjective(ctx context.Context
 		ec.fieldContext_Mutation_deleteControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteControlObjective(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteControlObjective(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNControlObjectiveDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveDeletePayload,
@@ -12008,7 +12008,7 @@ func (ec *executionContext) _Mutation_deleteBulkControlObjective(ctx context.Con
 		ec.fieldContext_Mutation_deleteBulkControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkControlObjective(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkControlObjective(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNControlObjectiveBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkDeletePayload,
@@ -12053,7 +12053,7 @@ func (ec *executionContext) _Mutation_updateBulkControlObjective(ctx context.Con
 		ec.fieldContext_Mutation_updateBulkControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkControlObjective(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlObjectiveInput))
+			return ec.Resolvers.Mutation().UpdateBulkControlObjective(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateControlObjectiveInput))
 		},
 		nil,
 		ec.marshalNControlObjectiveBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkUpdatePayload,
@@ -12100,7 +12100,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVControlObjective(ctx context.
 		ec.fieldContext_Mutation_updateBulkCSVControlObjective,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVControlObjective(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVControlObjective(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlObjectiveBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlObjectiveBulkUpdatePayload,
@@ -12147,7 +12147,7 @@ func (ec *executionContext) _Mutation_createCustomDomain(ctx context.Context, fi
 		ec.fieldContext_Mutation_createCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateCustomDomain(ctx, fc.Args["input"].(generated.CreateCustomDomainInput))
+			return ec.Resolvers.Mutation().CreateCustomDomain(ctx, fc.Args["input"].(generated.CreateCustomDomainInput))
 		},
 		nil,
 		ec.marshalNCustomDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainCreatePayload,
@@ -12192,7 +12192,7 @@ func (ec *executionContext) _Mutation_createBulkCustomDomain(ctx context.Context
 		ec.fieldContext_Mutation_createBulkCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCustomDomain(ctx, fc.Args["input"].([]*generated.CreateCustomDomainInput))
+			return ec.Resolvers.Mutation().CreateBulkCustomDomain(ctx, fc.Args["input"].([]*generated.CreateCustomDomainInput))
 		},
 		nil,
 		ec.marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload,
@@ -12237,7 +12237,7 @@ func (ec *executionContext) _Mutation_createBulkCSVCustomDomain(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkCSVCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVCustomDomain(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVCustomDomain(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload,
@@ -12282,7 +12282,7 @@ func (ec *executionContext) _Mutation_updateCustomDomain(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateCustomDomain(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCustomDomainInput))
+			return ec.Resolvers.Mutation().UpdateCustomDomain(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCustomDomainInput))
 		},
 		nil,
 		ec.marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainUpdatePayload,
@@ -12327,7 +12327,7 @@ func (ec *executionContext) _Mutation_deleteCustomDomain(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteCustomDomain(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteCustomDomain(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNCustomDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainDeletePayload,
@@ -12372,7 +12372,7 @@ func (ec *executionContext) _Mutation_deleteBulkCustomDomain(ctx context.Context
 		ec.fieldContext_Mutation_deleteBulkCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkCustomDomain(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkCustomDomain(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload,
@@ -12417,7 +12417,7 @@ func (ec *executionContext) _Mutation_validateCustomDomain(ctx context.Context, 
 		ec.fieldContext_Mutation_validateCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ValidateCustomDomain(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().ValidateCustomDomain(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNCustomDomainValidatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload,
@@ -12462,7 +12462,7 @@ func (ec *executionContext) _Mutation_updateBulkCustomDomain(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCustomDomain(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateCustomDomainInput))
+			return ec.Resolvers.Mutation().UpdateBulkCustomDomain(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateCustomDomainInput))
 		},
 		nil,
 		ec.marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload,
@@ -12509,7 +12509,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVCustomDomain(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkCSVCustomDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVCustomDomain(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVCustomDomain(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload,
@@ -12556,7 +12556,7 @@ func (ec *executionContext) _Mutation_createCustomTypeEnum(ctx context.Context, 
 		ec.fieldContext_Mutation_createCustomTypeEnum,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateCustomTypeEnum(ctx, fc.Args["input"].(generated.CreateCustomTypeEnumInput))
+			return ec.Resolvers.Mutation().CreateCustomTypeEnum(ctx, fc.Args["input"].(generated.CreateCustomTypeEnumInput))
 		},
 		nil,
 		ec.marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload,
@@ -12601,7 +12601,7 @@ func (ec *executionContext) _Mutation_createBulkCustomTypeEnum(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkCustomTypeEnum,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCustomTypeEnum(ctx, fc.Args["input"].([]*generated.CreateCustomTypeEnumInput))
+			return ec.Resolvers.Mutation().CreateBulkCustomTypeEnum(ctx, fc.Args["input"].([]*generated.CreateCustomTypeEnumInput))
 		},
 		nil,
 		ec.marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload,
@@ -12646,7 +12646,7 @@ func (ec *executionContext) _Mutation_createBulkCSVCustomTypeEnum(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVCustomTypeEnum,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVCustomTypeEnum(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVCustomTypeEnum(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload,
@@ -12691,7 +12691,7 @@ func (ec *executionContext) _Mutation_updateCustomTypeEnum(ctx context.Context, 
 		ec.fieldContext_Mutation_updateCustomTypeEnum,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateCustomTypeEnum(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCustomTypeEnumInput))
+			return ec.Resolvers.Mutation().UpdateCustomTypeEnum(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateCustomTypeEnumInput))
 		},
 		nil,
 		ec.marshalNCustomTypeEnumUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload,
@@ -12736,7 +12736,7 @@ func (ec *executionContext) _Mutation_deleteCustomTypeEnum(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteCustomTypeEnum,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteCustomTypeEnum(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteCustomTypeEnum(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload,
@@ -12781,7 +12781,7 @@ func (ec *executionContext) _Mutation_createDirectoryAccount(ctx context.Context
 		ec.fieldContext_Mutation_createDirectoryAccount,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDirectoryAccount(ctx, fc.Args["input"].(generated.CreateDirectoryAccountInput))
+			return ec.Resolvers.Mutation().CreateDirectoryAccount(ctx, fc.Args["input"].(generated.CreateDirectoryAccountInput))
 		},
 		nil,
 		ec.marshalNDirectoryAccountCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountCreatePayload,
@@ -12826,7 +12826,7 @@ func (ec *executionContext) _Mutation_createBulkDirectoryAccount(ctx context.Con
 		ec.fieldContext_Mutation_createBulkDirectoryAccount,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDirectoryAccount(ctx, fc.Args["input"].([]*generated.CreateDirectoryAccountInput))
+			return ec.Resolvers.Mutation().CreateBulkDirectoryAccount(ctx, fc.Args["input"].([]*generated.CreateDirectoryAccountInput))
 		},
 		nil,
 		ec.marshalNDirectoryAccountBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountBulkCreatePayload,
@@ -12871,7 +12871,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDirectoryAccount(ctx context.
 		ec.fieldContext_Mutation_createBulkCSVDirectoryAccount,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDirectoryAccount(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDirectoryAccount(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDirectoryAccountBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountBulkCreatePayload,
@@ -12916,7 +12916,7 @@ func (ec *executionContext) _Mutation_updateDirectoryAccount(ctx context.Context
 		ec.fieldContext_Mutation_updateDirectoryAccount,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDirectoryAccount(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectoryAccountInput))
+			return ec.Resolvers.Mutation().UpdateDirectoryAccount(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectoryAccountInput))
 		},
 		nil,
 		ec.marshalNDirectoryAccountUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountUpdatePayload,
@@ -12961,7 +12961,7 @@ func (ec *executionContext) _Mutation_deleteDirectoryAccount(ctx context.Context
 		ec.fieldContext_Mutation_deleteDirectoryAccount,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDirectoryAccount(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDirectoryAccount(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDirectoryAccountDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountDeletePayload,
@@ -13006,7 +13006,7 @@ func (ec *executionContext) _Mutation_createDirectoryGroup(ctx context.Context, 
 		ec.fieldContext_Mutation_createDirectoryGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDirectoryGroup(ctx, fc.Args["input"].(generated.CreateDirectoryGroupInput))
+			return ec.Resolvers.Mutation().CreateDirectoryGroup(ctx, fc.Args["input"].(generated.CreateDirectoryGroupInput))
 		},
 		nil,
 		ec.marshalNDirectoryGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupCreatePayload,
@@ -13051,7 +13051,7 @@ func (ec *executionContext) _Mutation_createBulkDirectoryGroup(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkDirectoryGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDirectoryGroup(ctx, fc.Args["input"].([]*generated.CreateDirectoryGroupInput))
+			return ec.Resolvers.Mutation().CreateBulkDirectoryGroup(ctx, fc.Args["input"].([]*generated.CreateDirectoryGroupInput))
 		},
 		nil,
 		ec.marshalNDirectoryGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupBulkCreatePayload,
@@ -13096,7 +13096,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDirectoryGroup(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVDirectoryGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDirectoryGroup(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDirectoryGroup(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDirectoryGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupBulkCreatePayload,
@@ -13141,7 +13141,7 @@ func (ec *executionContext) _Mutation_updateDirectoryGroup(ctx context.Context, 
 		ec.fieldContext_Mutation_updateDirectoryGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDirectoryGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectoryGroupInput))
+			return ec.Resolvers.Mutation().UpdateDirectoryGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectoryGroupInput))
 		},
 		nil,
 		ec.marshalNDirectoryGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupUpdatePayload,
@@ -13186,7 +13186,7 @@ func (ec *executionContext) _Mutation_deleteDirectoryGroup(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteDirectoryGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDirectoryGroup(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDirectoryGroup(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDirectoryGroupDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupDeletePayload,
@@ -13231,7 +13231,7 @@ func (ec *executionContext) _Mutation_createDirectoryMembership(ctx context.Cont
 		ec.fieldContext_Mutation_createDirectoryMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDirectoryMembership(ctx, fc.Args["input"].(generated.CreateDirectoryMembershipInput))
+			return ec.Resolvers.Mutation().CreateDirectoryMembership(ctx, fc.Args["input"].(generated.CreateDirectoryMembershipInput))
 		},
 		nil,
 		ec.marshalNDirectoryMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipCreatePayload,
@@ -13276,7 +13276,7 @@ func (ec *executionContext) _Mutation_createBulkDirectoryMembership(ctx context.
 		ec.fieldContext_Mutation_createBulkDirectoryMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDirectoryMembership(ctx, fc.Args["input"].([]*generated.CreateDirectoryMembershipInput))
+			return ec.Resolvers.Mutation().CreateBulkDirectoryMembership(ctx, fc.Args["input"].([]*generated.CreateDirectoryMembershipInput))
 		},
 		nil,
 		ec.marshalNDirectoryMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipBulkCreatePayload,
@@ -13321,7 +13321,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDirectoryMembership(ctx conte
 		ec.fieldContext_Mutation_createBulkCSVDirectoryMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDirectoryMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDirectoryMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDirectoryMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipBulkCreatePayload,
@@ -13366,7 +13366,7 @@ func (ec *executionContext) _Mutation_updateDirectoryMembership(ctx context.Cont
 		ec.fieldContext_Mutation_updateDirectoryMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDirectoryMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectoryMembershipInput))
+			return ec.Resolvers.Mutation().UpdateDirectoryMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectoryMembershipInput))
 		},
 		nil,
 		ec.marshalNDirectoryMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipUpdatePayload,
@@ -13411,7 +13411,7 @@ func (ec *executionContext) _Mutation_deleteDirectoryMembership(ctx context.Cont
 		ec.fieldContext_Mutation_deleteDirectoryMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDirectoryMembership(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDirectoryMembership(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDirectoryMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipDeletePayload,
@@ -13456,7 +13456,7 @@ func (ec *executionContext) _Mutation_createDirectorySyncRun(ctx context.Context
 		ec.fieldContext_Mutation_createDirectorySyncRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDirectorySyncRun(ctx, fc.Args["input"].(generated.CreateDirectorySyncRunInput))
+			return ec.Resolvers.Mutation().CreateDirectorySyncRun(ctx, fc.Args["input"].(generated.CreateDirectorySyncRunInput))
 		},
 		nil,
 		ec.marshalNDirectorySyncRunCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunCreatePayload,
@@ -13501,7 +13501,7 @@ func (ec *executionContext) _Mutation_createBulkDirectorySyncRun(ctx context.Con
 		ec.fieldContext_Mutation_createBulkDirectorySyncRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDirectorySyncRun(ctx, fc.Args["input"].([]*generated.CreateDirectorySyncRunInput))
+			return ec.Resolvers.Mutation().CreateBulkDirectorySyncRun(ctx, fc.Args["input"].([]*generated.CreateDirectorySyncRunInput))
 		},
 		nil,
 		ec.marshalNDirectorySyncRunBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload,
@@ -13546,7 +13546,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDirectorySyncRun(ctx context.
 		ec.fieldContext_Mutation_createBulkCSVDirectorySyncRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDirectorySyncRun(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDirectorySyncRun(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDirectorySyncRunBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload,
@@ -13591,7 +13591,7 @@ func (ec *executionContext) _Mutation_updateDirectorySyncRun(ctx context.Context
 		ec.fieldContext_Mutation_updateDirectorySyncRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDirectorySyncRun(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectorySyncRunInput))
+			return ec.Resolvers.Mutation().UpdateDirectorySyncRun(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectorySyncRunInput))
 		},
 		nil,
 		ec.marshalNDirectorySyncRunUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunUpdatePayload,
@@ -13636,7 +13636,7 @@ func (ec *executionContext) _Mutation_deleteDirectorySyncRun(ctx context.Context
 		ec.fieldContext_Mutation_deleteDirectorySyncRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDirectorySyncRun(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDirectorySyncRun(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDirectorySyncRunDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunDeletePayload,
@@ -13681,7 +13681,7 @@ func (ec *executionContext) _Mutation_createDiscussion(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createDiscussion,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDiscussion(ctx, fc.Args["input"].(generated.CreateDiscussionInput))
+			return ec.Resolvers.Mutation().CreateDiscussion(ctx, fc.Args["input"].(generated.CreateDiscussionInput))
 		},
 		nil,
 		ec.marshalNDiscussionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload,
@@ -13726,7 +13726,7 @@ func (ec *executionContext) _Mutation_createBulkDiscussion(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkDiscussion,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDiscussion(ctx, fc.Args["input"].([]*generated.CreateDiscussionInput))
+			return ec.Resolvers.Mutation().CreateBulkDiscussion(ctx, fc.Args["input"].([]*generated.CreateDiscussionInput))
 		},
 		nil,
 		ec.marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload,
@@ -13771,7 +13771,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDiscussion(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkCSVDiscussion,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDiscussion(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDiscussion(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload,
@@ -13816,7 +13816,7 @@ func (ec *executionContext) _Mutation_updateDiscussion(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateDiscussion,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDiscussion(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDiscussionInput))
+			return ec.Resolvers.Mutation().UpdateDiscussion(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDiscussionInput))
 		},
 		nil,
 		ec.marshalNDiscussionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload,
@@ -13861,7 +13861,7 @@ func (ec *executionContext) _Mutation_deleteDiscussion(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteDiscussion,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDiscussion(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDiscussion(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDiscussionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload,
@@ -13906,7 +13906,7 @@ func (ec *executionContext) _Mutation_createDNSVerification(ctx context.Context,
 		ec.fieldContext_Mutation_createDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDNSVerification(ctx, fc.Args["input"].(generated.CreateDNSVerificationInput))
+			return ec.Resolvers.Mutation().CreateDNSVerification(ctx, fc.Args["input"].(generated.CreateDNSVerificationInput))
 		},
 		nil,
 		ec.marshalNDNSVerificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload,
@@ -13951,7 +13951,7 @@ func (ec *executionContext) _Mutation_createBulkDNSVerification(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDNSVerification(ctx, fc.Args["input"].([]*generated.CreateDNSVerificationInput))
+			return ec.Resolvers.Mutation().CreateBulkDNSVerification(ctx, fc.Args["input"].([]*generated.CreateDNSVerificationInput))
 		},
 		nil,
 		ec.marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload,
@@ -13996,7 +13996,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDNSVerification(ctx context.C
 		ec.fieldContext_Mutation_createBulkCSVDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDNSVerification(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDNSVerification(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload,
@@ -14041,7 +14041,7 @@ func (ec *executionContext) _Mutation_updateDNSVerification(ctx context.Context,
 		ec.fieldContext_Mutation_updateDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDNSVerification(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDNSVerificationInput))
+			return ec.Resolvers.Mutation().UpdateDNSVerification(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDNSVerificationInput))
 		},
 		nil,
 		ec.marshalNDNSVerificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload,
@@ -14086,7 +14086,7 @@ func (ec *executionContext) _Mutation_deleteDNSVerification(ctx context.Context,
 		ec.fieldContext_Mutation_deleteDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDNSVerification(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDNSVerification(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDNSVerificationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload,
@@ -14131,7 +14131,7 @@ func (ec *executionContext) _Mutation_deleteBulkDNSVerification(ctx context.Cont
 		ec.fieldContext_Mutation_deleteBulkDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkDNSVerification(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkDNSVerification(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload,
@@ -14176,7 +14176,7 @@ func (ec *executionContext) _Mutation_updateBulkDNSVerification(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkDNSVerification(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateDNSVerificationInput))
+			return ec.Resolvers.Mutation().UpdateBulkDNSVerification(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateDNSVerificationInput))
 		},
 		nil,
 		ec.marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload,
@@ -14223,7 +14223,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVDNSVerification(ctx context.C
 		ec.fieldContext_Mutation_updateBulkCSVDNSVerification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVDNSVerification(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVDNSVerification(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload,
@@ -14270,7 +14270,7 @@ func (ec *executionContext) _Mutation_createDocumentData(ctx context.Context, fi
 		ec.fieldContext_Mutation_createDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateDocumentData(ctx, fc.Args["input"].(generated.CreateDocumentDataInput))
+			return ec.Resolvers.Mutation().CreateDocumentData(ctx, fc.Args["input"].(generated.CreateDocumentDataInput))
 		},
 		nil,
 		ec.marshalNDocumentDataCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload,
@@ -14315,7 +14315,7 @@ func (ec *executionContext) _Mutation_createBulkDocumentData(ctx context.Context
 		ec.fieldContext_Mutation_createBulkDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkDocumentData(ctx, fc.Args["input"].([]*generated.CreateDocumentDataInput))
+			return ec.Resolvers.Mutation().CreateBulkDocumentData(ctx, fc.Args["input"].([]*generated.CreateDocumentDataInput))
 		},
 		nil,
 		ec.marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload,
@@ -14360,7 +14360,7 @@ func (ec *executionContext) _Mutation_createBulkCSVDocumentData(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkCSVDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVDocumentData(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVDocumentData(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload,
@@ -14405,7 +14405,7 @@ func (ec *executionContext) _Mutation_updateDocumentData(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateDocumentData(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput), fc.Args["documentDataFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateDocumentData(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDocumentDataInput), fc.Args["documentDataFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNDocumentDataUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload,
@@ -14450,7 +14450,7 @@ func (ec *executionContext) _Mutation_deleteDocumentData(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteDocumentData(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteDocumentData(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNDocumentDataDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload,
@@ -14495,7 +14495,7 @@ func (ec *executionContext) _Mutation_deleteBulkDocumentData(ctx context.Context
 		ec.fieldContext_Mutation_deleteBulkDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkDocumentData(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkDocumentData(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload,
@@ -14540,7 +14540,7 @@ func (ec *executionContext) _Mutation_updateBulkDocumentData(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkDocumentData(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateDocumentDataInput))
+			return ec.Resolvers.Mutation().UpdateBulkDocumentData(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateDocumentDataInput))
 		},
 		nil,
 		ec.marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload,
@@ -14587,7 +14587,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVDocumentData(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkCSVDocumentData,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVDocumentData(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVDocumentData(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload,
@@ -14634,7 +14634,7 @@ func (ec *executionContext) _Mutation_createEmailBranding(ctx context.Context, f
 		ec.fieldContext_Mutation_createEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEmailBranding(ctx, fc.Args["input"].(generated.CreateEmailBrandingInput))
+			return ec.Resolvers.Mutation().CreateEmailBranding(ctx, fc.Args["input"].(generated.CreateEmailBrandingInput))
 		},
 		nil,
 		ec.marshalNEmailBrandingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingCreatePayload,
@@ -14679,7 +14679,7 @@ func (ec *executionContext) _Mutation_createBulkEmailBranding(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEmailBranding(ctx, fc.Args["input"].([]*generated.CreateEmailBrandingInput))
+			return ec.Resolvers.Mutation().CreateBulkEmailBranding(ctx, fc.Args["input"].([]*generated.CreateEmailBrandingInput))
 		},
 		nil,
 		ec.marshalNEmailBrandingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingBulkCreatePayload,
@@ -14724,7 +14724,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEmailBranding(ctx context.Con
 		ec.fieldContext_Mutation_createBulkCSVEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEmailBranding(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVEmailBranding(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEmailBrandingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingBulkCreatePayload,
@@ -14769,7 +14769,7 @@ func (ec *executionContext) _Mutation_updateBulkEmailBranding(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkEmailBranding(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEmailBrandingInput))
+			return ec.Resolvers.Mutation().UpdateBulkEmailBranding(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEmailBrandingInput))
 		},
 		nil,
 		ec.marshalNEmailBrandingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingBulkUpdatePayload,
@@ -14816,7 +14816,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVEmailBranding(ctx context.Con
 		ec.fieldContext_Mutation_updateBulkCSVEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVEmailBranding(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVEmailBranding(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEmailBrandingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingBulkUpdatePayload,
@@ -14863,7 +14863,7 @@ func (ec *executionContext) _Mutation_updateEmailBranding(ctx context.Context, f
 		ec.fieldContext_Mutation_updateEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEmailBranding(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEmailBrandingInput))
+			return ec.Resolvers.Mutation().UpdateEmailBranding(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEmailBrandingInput))
 		},
 		nil,
 		ec.marshalNEmailBrandingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingUpdatePayload,
@@ -14908,7 +14908,7 @@ func (ec *executionContext) _Mutation_deleteEmailBranding(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteEmailBranding(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteEmailBranding(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNEmailBrandingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingDeletePayload,
@@ -14953,7 +14953,7 @@ func (ec *executionContext) _Mutation_deleteBulkEmailBranding(ctx context.Contex
 		ec.fieldContext_Mutation_deleteBulkEmailBranding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkEmailBranding(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkEmailBranding(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNEmailBrandingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailBrandingBulkDeletePayload,
@@ -14998,7 +14998,7 @@ func (ec *executionContext) _Mutation_createEmailTemplate(ctx context.Context, f
 		ec.fieldContext_Mutation_createEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEmailTemplate(ctx, fc.Args["input"].(generated.CreateEmailTemplateInput))
+			return ec.Resolvers.Mutation().CreateEmailTemplate(ctx, fc.Args["input"].(generated.CreateEmailTemplateInput))
 		},
 		nil,
 		ec.marshalNEmailTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload,
@@ -15043,7 +15043,7 @@ func (ec *executionContext) _Mutation_createBulkEmailTemplate(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEmailTemplate(ctx, fc.Args["input"].([]*generated.CreateEmailTemplateInput))
+			return ec.Resolvers.Mutation().CreateBulkEmailTemplate(ctx, fc.Args["input"].([]*generated.CreateEmailTemplateInput))
 		},
 		nil,
 		ec.marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload,
@@ -15088,7 +15088,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEmailTemplate(ctx context.Con
 		ec.fieldContext_Mutation_createBulkCSVEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEmailTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVEmailTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload,
@@ -15133,7 +15133,7 @@ func (ec *executionContext) _Mutation_updateBulkEmailTemplate(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkEmailTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEmailTemplateInput))
+			return ec.Resolvers.Mutation().UpdateBulkEmailTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEmailTemplateInput))
 		},
 		nil,
 		ec.marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload,
@@ -15180,7 +15180,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVEmailTemplate(ctx context.Con
 		ec.fieldContext_Mutation_updateBulkCSVEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVEmailTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVEmailTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload,
@@ -15227,7 +15227,7 @@ func (ec *executionContext) _Mutation_updateEmailTemplate(ctx context.Context, f
 		ec.fieldContext_Mutation_updateEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEmailTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEmailTemplateInput))
+			return ec.Resolvers.Mutation().UpdateEmailTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEmailTemplateInput))
 		},
 		nil,
 		ec.marshalNEmailTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload,
@@ -15272,7 +15272,7 @@ func (ec *executionContext) _Mutation_deleteEmailTemplate(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteEmailTemplate(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteEmailTemplate(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNEmailTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload,
@@ -15317,7 +15317,7 @@ func (ec *executionContext) _Mutation_deleteBulkEmailTemplate(ctx context.Contex
 		ec.fieldContext_Mutation_deleteBulkEmailTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkEmailTemplate(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkEmailTemplate(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNEmailTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload,
@@ -15362,7 +15362,7 @@ func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
+			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
 		},
 		nil,
 		ec.marshalNEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityCreatePayload,
@@ -15407,7 +15407,7 @@ func (ec *executionContext) _Mutation_createBulkEntity(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createBulkEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEntity(ctx, fc.Args["input"].([]*generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
+			return ec.Resolvers.Mutation().CreateBulkEntity(ctx, fc.Args["input"].([]*generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
 		},
 		nil,
 		ec.marshalNEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkCreatePayload,
@@ -15452,7 +15452,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEntity(ctx context.Context, f
 		ec.fieldContext_Mutation_createBulkCSVEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEntity(ctx, fc.Args["input"].(graphql.Upload), fc.Args["entityTypeName"].(*string))
+			return ec.Resolvers.Mutation().CreateBulkCSVEntity(ctx, fc.Args["input"].(graphql.Upload), fc.Args["entityTypeName"].(*string))
 		},
 		nil,
 		ec.marshalNEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkCreatePayload,
@@ -15497,7 +15497,7 @@ func (ec *executionContext) _Mutation_updateEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput))
+			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput))
 		},
 		nil,
 		ec.marshalNEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityUpdatePayload,
@@ -15542,7 +15542,7 @@ func (ec *executionContext) _Mutation_deleteEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_deleteEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteEntity(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteEntity(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNEntityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityDeletePayload,
@@ -15587,7 +15587,7 @@ func (ec *executionContext) _Mutation_deleteBulkEntity(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteBulkEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkEntity(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkEntity(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNEntityBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkDeletePayload,
@@ -15632,7 +15632,7 @@ func (ec *executionContext) _Mutation_updateBulkEntity(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateBulkEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkEntity(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEntityInput))
+			return ec.Resolvers.Mutation().UpdateBulkEntity(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEntityInput))
 		},
 		nil,
 		ec.marshalNEntityBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkUpdatePayload,
@@ -15679,7 +15679,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVEntity(ctx context.Context, f
 		ec.fieldContext_Mutation_updateBulkCSVEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVEntity(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVEntity(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityBulkUpdatePayload,
@@ -15726,7 +15726,7 @@ func (ec *executionContext) _Mutation_createEntityType(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEntityType(ctx, fc.Args["input"].(generated.CreateEntityTypeInput))
+			return ec.Resolvers.Mutation().CreateEntityType(ctx, fc.Args["input"].(generated.CreateEntityTypeInput))
 		},
 		nil,
 		ec.marshalNEntityTypeCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeCreatePayload,
@@ -15771,7 +15771,7 @@ func (ec *executionContext) _Mutation_createBulkEntityType(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEntityType(ctx, fc.Args["input"].([]*generated.CreateEntityTypeInput))
+			return ec.Resolvers.Mutation().CreateBulkEntityType(ctx, fc.Args["input"].([]*generated.CreateEntityTypeInput))
 		},
 		nil,
 		ec.marshalNEntityTypeBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkCreatePayload,
@@ -15816,7 +15816,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEntityType(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkCSVEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEntityType(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVEntityType(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityTypeBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkCreatePayload,
@@ -15861,7 +15861,7 @@ func (ec *executionContext) _Mutation_updateEntityType(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEntityType(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityTypeInput))
+			return ec.Resolvers.Mutation().UpdateEntityType(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityTypeInput))
 		},
 		nil,
 		ec.marshalNEntityTypeUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeUpdatePayload,
@@ -15906,7 +15906,7 @@ func (ec *executionContext) _Mutation_deleteEntityType(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteEntityType(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteEntityType(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNEntityTypeDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeDeletePayload,
@@ -15951,7 +15951,7 @@ func (ec *executionContext) _Mutation_deleteBulkEntityType(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteBulkEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkEntityType(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkEntityType(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNEntityTypeBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkDeletePayload,
@@ -15996,7 +15996,7 @@ func (ec *executionContext) _Mutation_updateBulkEntityType(ctx context.Context, 
 		ec.fieldContext_Mutation_updateBulkEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkEntityType(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEntityTypeInput))
+			return ec.Resolvers.Mutation().UpdateBulkEntityType(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEntityTypeInput))
 		},
 		nil,
 		ec.marshalNEntityTypeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkUpdatePayload,
@@ -16043,7 +16043,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVEntityType(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkCSVEntityType,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVEntityType(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVEntityType(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityTypeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityTypeBulkUpdatePayload,
@@ -16090,7 +16090,7 @@ func (ec *executionContext) _Mutation_createEvent(ctx context.Context, field gra
 		ec.fieldContext_Mutation_createEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEvent(ctx, fc.Args["input"].(generated.CreateEventInput))
+			return ec.Resolvers.Mutation().CreateEvent(ctx, fc.Args["input"].(generated.CreateEventInput))
 		},
 		nil,
 		ec.marshalNEventCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventCreatePayload,
@@ -16135,7 +16135,7 @@ func (ec *executionContext) _Mutation_createBulkEvent(ctx context.Context, field
 		ec.fieldContext_Mutation_createBulkEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEvent(ctx, fc.Args["input"].([]*generated.CreateEventInput))
+			return ec.Resolvers.Mutation().CreateBulkEvent(ctx, fc.Args["input"].([]*generated.CreateEventInput))
 		},
 		nil,
 		ec.marshalNEventBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventBulkCreatePayload,
@@ -16180,7 +16180,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEvent(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkCSVEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEvent(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVEvent(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEventBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventBulkCreatePayload,
@@ -16225,7 +16225,7 @@ func (ec *executionContext) _Mutation_updateEvent(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEvent(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEventInput))
+			return ec.Resolvers.Mutation().UpdateEvent(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEventInput))
 		},
 		nil,
 		ec.marshalNEventUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventUpdatePayload,
@@ -16270,7 +16270,7 @@ func (ec *executionContext) _Mutation_deleteEvent(ctx context.Context, field gra
 		ec.fieldContext_Mutation_deleteEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteEvent(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteEvent(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNEventDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventDeletePayload,
@@ -16315,7 +16315,7 @@ func (ec *executionContext) _Mutation_deleteBulkEvent(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteBulkEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkEvent(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkEvent(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNEventBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventBulkDeletePayload,
@@ -16360,7 +16360,7 @@ func (ec *executionContext) _Mutation_updateBulkEvent(ctx context.Context, field
 		ec.fieldContext_Mutation_updateBulkEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkEvent(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEventInput))
+			return ec.Resolvers.Mutation().UpdateBulkEvent(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEventInput))
 		},
 		nil,
 		ec.marshalNEventBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventBulkUpdatePayload,
@@ -16407,7 +16407,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVEvent(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateBulkCSVEvent,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVEvent(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVEvent(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEventBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEventBulkUpdatePayload,
@@ -16454,7 +16454,7 @@ func (ec *executionContext) _Mutation_createEvidence(ctx context.Context, field 
 		ec.fieldContext_Mutation_createEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateEvidence(ctx, fc.Args["input"].(generated.CreateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateEvidence(ctx, fc.Args["input"].(generated.CreateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload,
@@ -16499,7 +16499,7 @@ func (ec *executionContext) _Mutation_createBulkEvidence(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkEvidence(ctx, fc.Args["input"].([]*generated.CreateEvidenceInput))
+			return ec.Resolvers.Mutation().CreateBulkEvidence(ctx, fc.Args["input"].([]*generated.CreateEvidenceInput))
 		},
 		nil,
 		ec.marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload,
@@ -16544,7 +16544,7 @@ func (ec *executionContext) _Mutation_createBulkCSVEvidence(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkCSVEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVEvidence(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVEvidence(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload,
@@ -16589,7 +16589,7 @@ func (ec *executionContext) _Mutation_updateBulkEvidence(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateBulkEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkEvidence(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEvidenceInput))
+			return ec.Resolvers.Mutation().UpdateBulkEvidence(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateEvidenceInput))
 		},
 		nil,
 		ec.marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload,
@@ -16636,7 +16636,7 @@ func (ec *executionContext) _Mutation_updateEvidence(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEvidence(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateEvidence(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload,
@@ -16681,7 +16681,7 @@ func (ec *executionContext) _Mutation_deleteEvidence(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteEvidence(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteEvidence(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload,
@@ -16726,7 +16726,7 @@ func (ec *executionContext) _Mutation_deleteBulkEvidence(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteBulkEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkEvidence(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkEvidence(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload,
@@ -16771,7 +16771,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVEvidence(ctx context.Context,
 		ec.fieldContext_Mutation_updateBulkCSVEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVEvidence(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVEvidence(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload,
@@ -16818,7 +16818,7 @@ func (ec *executionContext) _Mutation_createExport(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createExport,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateExport(ctx, fc.Args["input"].(generated.CreateExportInput))
+			return ec.Resolvers.Mutation().CreateExport(ctx, fc.Args["input"].(generated.CreateExportInput))
 		},
 		nil,
 		ec.marshalNExportCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportCreatePayload,
@@ -16863,7 +16863,7 @@ func (ec *executionContext) _Mutation_updateExport(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateExport,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateExport(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateExportInput), fc.Args["exportFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateExport(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateExportInput), fc.Args["exportFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNExportUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportUpdatePayload,
@@ -16908,7 +16908,7 @@ func (ec *executionContext) _Mutation_deleteExport(ctx context.Context, field gr
 		ec.fieldContext_Mutation_deleteExport,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteExport(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteExport(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNExportDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportDeletePayload,
@@ -16953,7 +16953,7 @@ func (ec *executionContext) _Mutation_deleteBulkExport(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteBulkExport,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkExport(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkExport(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNExportBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportBulkDeletePayload,
@@ -16998,7 +16998,7 @@ func (ec *executionContext) _Mutation_deleteFile(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteFile,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteFile(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteFile(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNFileDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileDeletePayload,
@@ -17043,7 +17043,7 @@ func (ec *executionContext) _Mutation_createFinding(ctx context.Context, field g
 		ec.fieldContext_Mutation_createFinding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateFinding(ctx, fc.Args["input"].(generated.CreateFindingInput))
+			return ec.Resolvers.Mutation().CreateFinding(ctx, fc.Args["input"].(generated.CreateFindingInput))
 		},
 		nil,
 		ec.marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload,
@@ -17088,7 +17088,7 @@ func (ec *executionContext) _Mutation_createBulkFinding(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkFinding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkFinding(ctx, fc.Args["input"].([]*generated.CreateFindingInput))
+			return ec.Resolvers.Mutation().CreateBulkFinding(ctx, fc.Args["input"].([]*generated.CreateFindingInput))
 		},
 		nil,
 		ec.marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload,
@@ -17133,7 +17133,7 @@ func (ec *executionContext) _Mutation_createBulkCSVFinding(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkCSVFinding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVFinding(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVFinding(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload,
@@ -17178,7 +17178,7 @@ func (ec *executionContext) _Mutation_updateFinding(ctx context.Context, field g
 		ec.fieldContext_Mutation_updateFinding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateFinding(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateFindingInput))
+			return ec.Resolvers.Mutation().UpdateFinding(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateFindingInput))
 		},
 		nil,
 		ec.marshalNFindingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload,
@@ -17223,7 +17223,7 @@ func (ec *executionContext) _Mutation_deleteFinding(ctx context.Context, field g
 		ec.fieldContext_Mutation_deleteFinding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteFinding(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteFinding(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload,
@@ -17268,7 +17268,7 @@ func (ec *executionContext) _Mutation_createFindingControl(ctx context.Context, 
 		ec.fieldContext_Mutation_createFindingControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateFindingControl(ctx, fc.Args["input"].(generated.CreateFindingControlInput))
+			return ec.Resolvers.Mutation().CreateFindingControl(ctx, fc.Args["input"].(generated.CreateFindingControlInput))
 		},
 		nil,
 		ec.marshalNFindingControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlCreatePayload,
@@ -17313,7 +17313,7 @@ func (ec *executionContext) _Mutation_createBulkFindingControl(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkFindingControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkFindingControl(ctx, fc.Args["input"].([]*generated.CreateFindingControlInput))
+			return ec.Resolvers.Mutation().CreateBulkFindingControl(ctx, fc.Args["input"].([]*generated.CreateFindingControlInput))
 		},
 		nil,
 		ec.marshalNFindingControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkCreatePayload,
@@ -17358,7 +17358,7 @@ func (ec *executionContext) _Mutation_createBulkCSVFindingControl(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVFindingControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVFindingControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVFindingControl(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNFindingControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkCreatePayload,
@@ -17403,7 +17403,7 @@ func (ec *executionContext) _Mutation_updateFindingControl(ctx context.Context, 
 		ec.fieldContext_Mutation_updateFindingControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateFindingControl(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateFindingControlInput))
+			return ec.Resolvers.Mutation().UpdateFindingControl(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateFindingControlInput))
 		},
 		nil,
 		ec.marshalNFindingControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlUpdatePayload,
@@ -17448,7 +17448,7 @@ func (ec *executionContext) _Mutation_deleteFindingControl(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteFindingControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteFindingControl(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteFindingControl(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNFindingControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlDeletePayload,
@@ -17493,7 +17493,7 @@ func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_createGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput))
+			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput))
 		},
 		nil,
 		ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload,
@@ -17538,7 +17538,7 @@ func (ec *executionContext) _Mutation_createBulkGroup(ctx context.Context, field
 		ec.fieldContext_Mutation_createBulkGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkGroup(ctx, fc.Args["input"].([]*generated.CreateGroupInput))
+			return ec.Resolvers.Mutation().CreateBulkGroup(ctx, fc.Args["input"].([]*generated.CreateGroupInput))
 		},
 		nil,
 		ec.marshalNGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkCreatePayload,
@@ -17583,7 +17583,7 @@ func (ec *executionContext) _Mutation_createBulkCSVGroup(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkCSVGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVGroup(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVGroup(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkCreatePayload,
@@ -17628,7 +17628,7 @@ func (ec *executionContext) _Mutation_updateGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput))
+			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput))
 		},
 		nil,
 		ec.marshalNGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload,
@@ -17673,7 +17673,7 @@ func (ec *executionContext) _Mutation_deleteGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_deleteGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteGroup(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteGroup(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNGroupDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupDeletePayload,
@@ -17718,7 +17718,7 @@ func (ec *executionContext) _Mutation_deleteBulkGroup(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteBulkGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkGroup(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkGroup(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNGroupBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkDeletePayload,
@@ -17763,7 +17763,7 @@ func (ec *executionContext) _Mutation_updateBulkGroup(ctx context.Context, field
 		ec.fieldContext_Mutation_updateBulkGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkGroup(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupInput))
+			return ec.Resolvers.Mutation().UpdateBulkGroup(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupInput))
 		},
 		nil,
 		ec.marshalNGroupBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload,
@@ -17810,7 +17810,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVGroup(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateBulkCSVGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVGroup(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVGroup(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload,
@@ -17857,7 +17857,7 @@ func (ec *executionContext) _Mutation_createGroupWithMembers(ctx context.Context
 		ec.fieldContext_Mutation_createGroupWithMembers,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateGroupWithMembers(ctx, fc.Args["groupInput"].(generated.CreateGroupInput), fc.Args["members"].([]*model.GroupMembersInput))
+			return ec.Resolvers.Mutation().CreateGroupWithMembers(ctx, fc.Args["groupInput"].(generated.CreateGroupInput), fc.Args["members"].([]*model.GroupMembersInput))
 		},
 		nil,
 		ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload,
@@ -17902,7 +17902,7 @@ func (ec *executionContext) _Mutation_createGroupByClone(ctx context.Context, fi
 		ec.fieldContext_Mutation_createGroupByClone,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateGroupByClone(ctx, fc.Args["groupInput"].(generated.CreateGroupInput), fc.Args["members"].([]*model.GroupMembersInput), fc.Args["inheritGroupPermissions"].(*string), fc.Args["cloneGroupMembers"].(*string))
+			return ec.Resolvers.Mutation().CreateGroupByClone(ctx, fc.Args["groupInput"].(generated.CreateGroupInput), fc.Args["members"].([]*model.GroupMembersInput), fc.Args["inheritGroupPermissions"].(*string), fc.Args["cloneGroupMembers"].(*string))
 		},
 		nil,
 		ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload,
@@ -17947,7 +17947,7 @@ func (ec *executionContext) _Mutation_createGroupMembership(ctx context.Context,
 		ec.fieldContext_Mutation_createGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateGroupMembership(ctx, fc.Args["input"].(generated.CreateGroupMembershipInput))
+			return ec.Resolvers.Mutation().CreateGroupMembership(ctx, fc.Args["input"].(generated.CreateGroupMembershipInput))
 		},
 		nil,
 		ec.marshalNGroupMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipCreatePayload,
@@ -17992,7 +17992,7 @@ func (ec *executionContext) _Mutation_createBulkGroupMembership(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkGroupMembership(ctx, fc.Args["input"].([]*generated.CreateGroupMembershipInput))
+			return ec.Resolvers.Mutation().CreateBulkGroupMembership(ctx, fc.Args["input"].([]*generated.CreateGroupMembershipInput))
 		},
 		nil,
 		ec.marshalNGroupMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkCreatePayload,
@@ -18037,7 +18037,7 @@ func (ec *executionContext) _Mutation_createBulkCSVGroupMembership(ctx context.C
 		ec.fieldContext_Mutation_createBulkCSVGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVGroupMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVGroupMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkCreatePayload,
@@ -18082,7 +18082,7 @@ func (ec *executionContext) _Mutation_updateGroupMembership(ctx context.Context,
 		ec.fieldContext_Mutation_updateGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateGroupMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupMembershipInput))
+			return ec.Resolvers.Mutation().UpdateGroupMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupMembershipInput))
 		},
 		nil,
 		ec.marshalNGroupMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipUpdatePayload,
@@ -18127,7 +18127,7 @@ func (ec *executionContext) _Mutation_deleteGroupMembership(ctx context.Context,
 		ec.fieldContext_Mutation_deleteGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteGroupMembership(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteGroupMembership(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNGroupMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipDeletePayload,
@@ -18172,7 +18172,7 @@ func (ec *executionContext) _Mutation_deleteBulkGroupMembership(ctx context.Cont
 		ec.fieldContext_Mutation_deleteBulkGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkGroupMembership(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkGroupMembership(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNGroupMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkDeletePayload,
@@ -18217,7 +18217,7 @@ func (ec *executionContext) _Mutation_updateBulkGroupMembership(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkGroupMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupMembershipInput))
+			return ec.Resolvers.Mutation().UpdateBulkGroupMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupMembershipInput))
 		},
 		nil,
 		ec.marshalNGroupMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkUpdatePayload,
@@ -18264,7 +18264,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVGroupMembership(ctx context.C
 		ec.fieldContext_Mutation_updateBulkCSVGroupMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVGroupMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVGroupMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembershipBulkUpdatePayload,
@@ -18311,7 +18311,7 @@ func (ec *executionContext) _Mutation_createGroupSetting(ctx context.Context, fi
 		ec.fieldContext_Mutation_createGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateGroupSetting(ctx, fc.Args["input"].(generated.CreateGroupSettingInput))
+			return ec.Resolvers.Mutation().CreateGroupSetting(ctx, fc.Args["input"].(generated.CreateGroupSettingInput))
 		},
 		nil,
 		ec.marshalNGroupSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingCreatePayload,
@@ -18356,7 +18356,7 @@ func (ec *executionContext) _Mutation_createBulkGroupSetting(ctx context.Context
 		ec.fieldContext_Mutation_createBulkGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkGroupSetting(ctx, fc.Args["input"].([]*generated.CreateGroupSettingInput))
+			return ec.Resolvers.Mutation().CreateBulkGroupSetting(ctx, fc.Args["input"].([]*generated.CreateGroupSettingInput))
 		},
 		nil,
 		ec.marshalNGroupSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkCreatePayload,
@@ -18401,7 +18401,7 @@ func (ec *executionContext) _Mutation_createBulkCSVGroupSetting(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkCSVGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVGroupSetting(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVGroupSetting(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkCreatePayload,
@@ -18446,7 +18446,7 @@ func (ec *executionContext) _Mutation_updateGroupSetting(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateGroupSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupSettingInput))
+			return ec.Resolvers.Mutation().UpdateGroupSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupSettingInput))
 		},
 		nil,
 		ec.marshalNGroupSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingUpdatePayload,
@@ -18491,7 +18491,7 @@ func (ec *executionContext) _Mutation_deleteGroupSetting(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteGroupSetting(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteGroupSetting(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNGroupSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingDeletePayload,
@@ -18536,7 +18536,7 @@ func (ec *executionContext) _Mutation_deleteBulkGroupSetting(ctx context.Context
 		ec.fieldContext_Mutation_deleteBulkGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkGroupSetting(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkGroupSetting(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNGroupSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkDeletePayload,
@@ -18581,7 +18581,7 @@ func (ec *executionContext) _Mutation_updateBulkGroupSetting(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkGroupSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupSettingInput))
+			return ec.Resolvers.Mutation().UpdateBulkGroupSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateGroupSettingInput))
 		},
 		nil,
 		ec.marshalNGroupSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkUpdatePayload,
@@ -18628,7 +18628,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVGroupSetting(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkCSVGroupSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVGroupSetting(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVGroupSetting(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkUpdatePayload,
@@ -18675,7 +18675,7 @@ func (ec *executionContext) _Mutation_createHush(ctx context.Context, field grap
 		ec.fieldContext_Mutation_createHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateHush(ctx, fc.Args["input"].(generated.CreateHushInput))
+			return ec.Resolvers.Mutation().CreateHush(ctx, fc.Args["input"].(generated.CreateHushInput))
 		},
 		nil,
 		ec.marshalNHushCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushCreatePayload,
@@ -18720,7 +18720,7 @@ func (ec *executionContext) _Mutation_createBulkHush(ctx context.Context, field 
 		ec.fieldContext_Mutation_createBulkHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkHush(ctx, fc.Args["input"].([]*generated.CreateHushInput))
+			return ec.Resolvers.Mutation().CreateBulkHush(ctx, fc.Args["input"].([]*generated.CreateHushInput))
 		},
 		nil,
 		ec.marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload,
@@ -18765,7 +18765,7 @@ func (ec *executionContext) _Mutation_createBulkCSVHush(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkCSVHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVHush(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVHush(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload,
@@ -18810,7 +18810,7 @@ func (ec *executionContext) _Mutation_updateBulkHush(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateBulkHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkHush(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateHushInput))
+			return ec.Resolvers.Mutation().UpdateBulkHush(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateHushInput))
 		},
 		nil,
 		ec.marshalNHushBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushBulkUpdatePayload,
@@ -18857,7 +18857,7 @@ func (ec *executionContext) _Mutation_updateHush(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateHush(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateHushInput))
+			return ec.Resolvers.Mutation().UpdateHush(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateHushInput))
 		},
 		nil,
 		ec.marshalNHushUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushUpdatePayload,
@@ -18902,7 +18902,7 @@ func (ec *executionContext) _Mutation_deleteHush(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteHush(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteHush(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNHushDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushDeletePayload,
@@ -18947,7 +18947,7 @@ func (ec *executionContext) _Mutation_deleteBulkHush(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteBulkHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkHush(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkHush(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNHushBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushBulkDeletePayload,
@@ -18992,7 +18992,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVHush(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkCSVHush,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVHush(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVHush(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNHushBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐHushBulkUpdatePayload,
@@ -19039,7 +19039,7 @@ func (ec *executionContext) _Mutation_createIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_createIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateIdentityHolder(ctx, fc.Args["input"].(generated.CreateIdentityHolderInput))
+			return ec.Resolvers.Mutation().CreateIdentityHolder(ctx, fc.Args["input"].(generated.CreateIdentityHolderInput))
 		},
 		nil,
 		ec.marshalNIdentityHolderCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderCreatePayload,
@@ -19084,7 +19084,7 @@ func (ec *executionContext) _Mutation_createBulkIdentityHolder(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkIdentityHolder(ctx, fc.Args["input"].([]*generated.CreateIdentityHolderInput))
+			return ec.Resolvers.Mutation().CreateBulkIdentityHolder(ctx, fc.Args["input"].([]*generated.CreateIdentityHolderInput))
 		},
 		nil,
 		ec.marshalNIdentityHolderBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkCreatePayload,
@@ -19129,7 +19129,7 @@ func (ec *executionContext) _Mutation_createBulkCSVIdentityHolder(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVIdentityHolder(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVIdentityHolder(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNIdentityHolderBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkCreatePayload,
@@ -19174,7 +19174,7 @@ func (ec *executionContext) _Mutation_updateIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_updateIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateIdentityHolder(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIdentityHolderInput))
+			return ec.Resolvers.Mutation().UpdateIdentityHolder(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIdentityHolderInput))
 		},
 		nil,
 		ec.marshalNIdentityHolderUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderUpdatePayload,
@@ -19219,7 +19219,7 @@ func (ec *executionContext) _Mutation_deleteIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteIdentityHolder(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteIdentityHolder(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNIdentityHolderDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderDeletePayload,
@@ -19264,7 +19264,7 @@ func (ec *executionContext) _Mutation_deleteBulkIdentityHolder(ctx context.Conte
 		ec.fieldContext_Mutation_deleteBulkIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkIdentityHolder(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkIdentityHolder(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNIdentityHolderBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkDeletePayload,
@@ -19309,7 +19309,7 @@ func (ec *executionContext) _Mutation_updateBulkIdentityHolder(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkIdentityHolder(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateIdentityHolderInput))
+			return ec.Resolvers.Mutation().UpdateBulkIdentityHolder(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateIdentityHolderInput))
 		},
 		nil,
 		ec.marshalNIdentityHolderBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkUpdatePayload,
@@ -19356,7 +19356,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVIdentityHolder(ctx context.Co
 		ec.fieldContext_Mutation_updateBulkCSVIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVIdentityHolder(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVIdentityHolder(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNIdentityHolderBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkUpdatePayload,
@@ -19403,7 +19403,7 @@ func (ec *executionContext) _Mutation_deleteIntegration(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteIntegration,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteIntegration(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteIntegration(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNIntegrationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload,
@@ -19448,7 +19448,7 @@ func (ec *executionContext) _Mutation_createInternalPolicy(ctx context.Context, 
 		ec.fieldContext_Mutation_createInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateInternalPolicy(ctx, fc.Args["input"].(generated.CreateInternalPolicyInput))
+			return ec.Resolvers.Mutation().CreateInternalPolicy(ctx, fc.Args["input"].(generated.CreateInternalPolicyInput))
 		},
 		nil,
 		ec.marshalNInternalPolicyCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload,
@@ -19493,7 +19493,7 @@ func (ec *executionContext) _Mutation_createUploadInternalPolicy(ctx context.Con
 		ec.fieldContext_Mutation_createUploadInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
 		},
 		nil,
 		ec.marshalNInternalPolicyCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload,
@@ -19538,7 +19538,7 @@ func (ec *executionContext) _Mutation_createBulkInternalPolicy(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkInternalPolicy(ctx, fc.Args["input"].([]*generated.CreateInternalPolicyInput))
+			return ec.Resolvers.Mutation().CreateBulkInternalPolicy(ctx, fc.Args["input"].([]*generated.CreateInternalPolicyInput))
 		},
 		nil,
 		ec.marshalNInternalPolicyBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkCreatePayload,
@@ -19583,7 +19583,7 @@ func (ec *executionContext) _Mutation_createBulkCSVInternalPolicy(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVInternalPolicy(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVInternalPolicy(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNInternalPolicyBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkCreatePayload,
@@ -19628,7 +19628,7 @@ func (ec *executionContext) _Mutation_updateBulkInternalPolicy(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkInternalPolicy(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateInternalPolicyInput))
+			return ec.Resolvers.Mutation().UpdateBulkInternalPolicy(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateInternalPolicyInput))
 		},
 		nil,
 		ec.marshalNInternalPolicyBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload,
@@ -19675,7 +19675,7 @@ func (ec *executionContext) _Mutation_updateInternalPolicy(ctx context.Context, 
 		ec.fieldContext_Mutation_updateInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateInternalPolicy(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput), fc.Args["internalPolicyFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateInternalPolicy(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput), fc.Args["internalPolicyFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload,
@@ -19720,7 +19720,7 @@ func (ec *executionContext) _Mutation_deleteInternalPolicy(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteInternalPolicy(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteInternalPolicy(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNInternalPolicyDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyDeletePayload,
@@ -19765,7 +19765,7 @@ func (ec *executionContext) _Mutation_deleteBulkInternalPolicy(ctx context.Conte
 		ec.fieldContext_Mutation_deleteBulkInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkInternalPolicy(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkInternalPolicy(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNInternalPolicyBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkDeletePayload,
@@ -19810,7 +19810,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVInternalPolicy(ctx context.Co
 		ec.fieldContext_Mutation_updateBulkCSVInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVInternalPolicy(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVInternalPolicy(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNInternalPolicyBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload,
@@ -19857,7 +19857,7 @@ func (ec *executionContext) _Mutation_createInvite(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateInvite(ctx, fc.Args["input"].(generated.CreateInviteInput))
+			return ec.Resolvers.Mutation().CreateInvite(ctx, fc.Args["input"].(generated.CreateInviteInput))
 		},
 		nil,
 		ec.marshalNInviteCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload,
@@ -19902,7 +19902,7 @@ func (ec *executionContext) _Mutation_createBulkInvite(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createBulkInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkInvite(ctx, fc.Args["input"].([]*generated.CreateInviteInput))
+			return ec.Resolvers.Mutation().CreateBulkInvite(ctx, fc.Args["input"].([]*generated.CreateInviteInput))
 		},
 		nil,
 		ec.marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload,
@@ -19947,7 +19947,7 @@ func (ec *executionContext) _Mutation_createBulkCSVInvite(ctx context.Context, f
 		ec.fieldContext_Mutation_createBulkCSVInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVInvite(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVInvite(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload,
@@ -19992,7 +19992,7 @@ func (ec *executionContext) _Mutation_updateInvite(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateInvite(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInviteInput))
+			return ec.Resolvers.Mutation().UpdateInvite(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInviteInput))
 		},
 		nil,
 		ec.marshalNInviteUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload,
@@ -20037,7 +20037,7 @@ func (ec *executionContext) _Mutation_deleteInvite(ctx context.Context, field gr
 		ec.fieldContext_Mutation_deleteInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteInvite(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteInvite(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNInviteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload,
@@ -20082,7 +20082,7 @@ func (ec *executionContext) _Mutation_deleteBulkInvite(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteBulkInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkInvite(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkInvite(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload,
@@ -20127,7 +20127,7 @@ func (ec *executionContext) _Mutation_updateBulkInvite(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateBulkInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkInvite(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateInviteInput))
+			return ec.Resolvers.Mutation().UpdateBulkInvite(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateInviteInput))
 		},
 		nil,
 		ec.marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload,
@@ -20174,7 +20174,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVInvite(ctx context.Context, f
 		ec.fieldContext_Mutation_updateBulkCSVInvite,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVInvite(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVInvite(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload,
@@ -20221,7 +20221,7 @@ func (ec *executionContext) _Mutation_createJobResult(ctx context.Context, field
 		ec.fieldContext_Mutation_createJobResult,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateJobResult(ctx, fc.Args["input"].(generated.CreateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateJobResult(ctx, fc.Args["input"].(generated.CreateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNJobResultCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobResultCreatePayload,
@@ -20266,7 +20266,7 @@ func (ec *executionContext) _Mutation_updateJobResult(ctx context.Context, field
 		ec.fieldContext_Mutation_updateJobResult,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateJobResult(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateJobResult(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNJobResultUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobResultUpdatePayload,
@@ -20311,7 +20311,7 @@ func (ec *executionContext) _Mutation_deleteJobResult(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteJobResult,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteJobResult(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteJobResult(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNJobResultDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobResultDeletePayload,
@@ -20356,7 +20356,7 @@ func (ec *executionContext) _Mutation_createJobRunner(ctx context.Context, field
 		ec.fieldContext_Mutation_createJobRunner,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateJobRunner(ctx, fc.Args["input"].(generated.CreateJobRunnerInput))
+			return ec.Resolvers.Mutation().CreateJobRunner(ctx, fc.Args["input"].(generated.CreateJobRunnerInput))
 		},
 		nil,
 		ec.marshalNJobRunnerCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerCreatePayload,
@@ -20401,7 +20401,7 @@ func (ec *executionContext) _Mutation_updateJobRunner(ctx context.Context, field
 		ec.fieldContext_Mutation_updateJobRunner,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateJobRunner(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobRunnerInput))
+			return ec.Resolvers.Mutation().UpdateJobRunner(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobRunnerInput))
 		},
 		nil,
 		ec.marshalNJobRunnerUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerUpdatePayload,
@@ -20446,7 +20446,7 @@ func (ec *executionContext) _Mutation_deleteJobRunner(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteJobRunner,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteJobRunner(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteJobRunner(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNJobRunnerDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerDeletePayload,
@@ -20491,7 +20491,7 @@ func (ec *executionContext) _Mutation_createJobRunnerRegistrationToken(ctx conte
 		ec.fieldContext_Mutation_createJobRunnerRegistrationToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateJobRunnerRegistrationToken(ctx, fc.Args["input"].(generated.CreateJobRunnerRegistrationTokenInput))
+			return ec.Resolvers.Mutation().CreateJobRunnerRegistrationToken(ctx, fc.Args["input"].(generated.CreateJobRunnerRegistrationTokenInput))
 		},
 		nil,
 		ec.marshalNJobRunnerRegistrationTokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerRegistrationTokenCreatePayload,
@@ -20536,7 +20536,7 @@ func (ec *executionContext) _Mutation_deleteJobRunnerRegistrationToken(ctx conte
 		ec.fieldContext_Mutation_deleteJobRunnerRegistrationToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteJobRunnerRegistrationToken(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteJobRunnerRegistrationToken(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNJobRunnerRegistrationTokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerRegistrationTokenDeletePayload,
@@ -20581,7 +20581,7 @@ func (ec *executionContext) _Mutation_createJobRunnerToken(ctx context.Context, 
 		ec.fieldContext_Mutation_createJobRunnerToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateJobRunnerToken(ctx, fc.Args["input"].(generated.CreateJobRunnerTokenInput))
+			return ec.Resolvers.Mutation().CreateJobRunnerToken(ctx, fc.Args["input"].(generated.CreateJobRunnerTokenInput))
 		},
 		nil,
 		ec.marshalNJobRunnerTokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerTokenCreatePayload,
@@ -20626,7 +20626,7 @@ func (ec *executionContext) _Mutation_deleteJobRunnerToken(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteJobRunnerToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteJobRunnerToken(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteJobRunnerToken(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNJobRunnerTokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerTokenDeletePayload,
@@ -20671,7 +20671,7 @@ func (ec *executionContext) _Mutation_createJobTemplate(ctx context.Context, fie
 		ec.fieldContext_Mutation_createJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateJobTemplate(ctx, fc.Args["input"].(generated.CreateJobTemplateInput))
+			return ec.Resolvers.Mutation().CreateJobTemplate(ctx, fc.Args["input"].(generated.CreateJobTemplateInput))
 		},
 		nil,
 		ec.marshalNJobTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateCreatePayload,
@@ -20716,7 +20716,7 @@ func (ec *executionContext) _Mutation_createBulkJobTemplate(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkJobTemplate(ctx, fc.Args["input"].([]*generated.CreateJobTemplateInput))
+			return ec.Resolvers.Mutation().CreateBulkJobTemplate(ctx, fc.Args["input"].([]*generated.CreateJobTemplateInput))
 		},
 		nil,
 		ec.marshalNJobTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkCreatePayload,
@@ -20761,7 +20761,7 @@ func (ec *executionContext) _Mutation_createBulkCSVJobTemplate(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkCSVJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVJobTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVJobTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNJobTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkCreatePayload,
@@ -20806,7 +20806,7 @@ func (ec *executionContext) _Mutation_updateJobTemplate(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateJobTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobTemplateInput))
+			return ec.Resolvers.Mutation().UpdateJobTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobTemplateInput))
 		},
 		nil,
 		ec.marshalNJobTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateUpdatePayload,
@@ -20851,7 +20851,7 @@ func (ec *executionContext) _Mutation_deleteJobTemplate(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteJobTemplate(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteJobTemplate(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNJobTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateDeletePayload,
@@ -20896,7 +20896,7 @@ func (ec *executionContext) _Mutation_deleteBulkJobTemplate(ctx context.Context,
 		ec.fieldContext_Mutation_deleteBulkJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkJobTemplate(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkJobTemplate(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNJobTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkDeletePayload,
@@ -20941,7 +20941,7 @@ func (ec *executionContext) _Mutation_updateBulkJobTemplate(ctx context.Context,
 		ec.fieldContext_Mutation_updateBulkJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkJobTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateJobTemplateInput))
+			return ec.Resolvers.Mutation().UpdateBulkJobTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateJobTemplateInput))
 		},
 		nil,
 		ec.marshalNJobTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkUpdatePayload,
@@ -20988,7 +20988,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVJobTemplate(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkCSVJobTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVJobTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVJobTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNJobTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobTemplateBulkUpdatePayload,
@@ -21035,7 +21035,7 @@ func (ec *executionContext) _Mutation_createMappableDomain(ctx context.Context, 
 		ec.fieldContext_Mutation_createMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateMappableDomain(ctx, fc.Args["input"].(generated.CreateMappableDomainInput))
+			return ec.Resolvers.Mutation().CreateMappableDomain(ctx, fc.Args["input"].(generated.CreateMappableDomainInput))
 		},
 		nil,
 		ec.marshalNMappableDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload,
@@ -21080,7 +21080,7 @@ func (ec *executionContext) _Mutation_createBulkMappableDomain(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkMappableDomain(ctx, fc.Args["input"].([]*generated.CreateMappableDomainInput))
+			return ec.Resolvers.Mutation().CreateBulkMappableDomain(ctx, fc.Args["input"].([]*generated.CreateMappableDomainInput))
 		},
 		nil,
 		ec.marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload,
@@ -21125,7 +21125,7 @@ func (ec *executionContext) _Mutation_createBulkCSVMappableDomain(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVMappableDomain(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVMappableDomain(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload,
@@ -21170,7 +21170,7 @@ func (ec *executionContext) _Mutation_updateMappableDomain(ctx context.Context, 
 		ec.fieldContext_Mutation_updateMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateMappableDomain(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateMappableDomainInput))
+			return ec.Resolvers.Mutation().UpdateMappableDomain(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateMappableDomainInput))
 		},
 		nil,
 		ec.marshalNMappableDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload,
@@ -21215,7 +21215,7 @@ func (ec *executionContext) _Mutation_deleteMappableDomain(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteMappableDomain(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteMappableDomain(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNMappableDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload,
@@ -21260,7 +21260,7 @@ func (ec *executionContext) _Mutation_deleteBulkMappableDomain(ctx context.Conte
 		ec.fieldContext_Mutation_deleteBulkMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkMappableDomain(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkMappableDomain(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload,
@@ -21305,7 +21305,7 @@ func (ec *executionContext) _Mutation_updateBulkMappableDomain(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkMappableDomain(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateMappableDomainInput))
+			return ec.Resolvers.Mutation().UpdateBulkMappableDomain(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateMappableDomainInput))
 		},
 		nil,
 		ec.marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload,
@@ -21352,7 +21352,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVMappableDomain(ctx context.Co
 		ec.fieldContext_Mutation_updateBulkCSVMappableDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVMappableDomain(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVMappableDomain(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload,
@@ -21399,7 +21399,7 @@ func (ec *executionContext) _Mutation_createMappedControl(ctx context.Context, f
 		ec.fieldContext_Mutation_createMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateMappedControl(ctx, fc.Args["input"].(generated.CreateMappedControlInput))
+			return ec.Resolvers.Mutation().CreateMappedControl(ctx, fc.Args["input"].(generated.CreateMappedControlInput))
 		},
 		nil,
 		ec.marshalNMappedControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlCreatePayload,
@@ -21444,7 +21444,7 @@ func (ec *executionContext) _Mutation_createBulkMappedControl(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkMappedControl(ctx, fc.Args["input"].([]*generated.CreateMappedControlInput))
+			return ec.Resolvers.Mutation().CreateBulkMappedControl(ctx, fc.Args["input"].([]*generated.CreateMappedControlInput))
 		},
 		nil,
 		ec.marshalNMappedControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkCreatePayload,
@@ -21489,7 +21489,7 @@ func (ec *executionContext) _Mutation_createBulkCSVMappedControl(ctx context.Con
 		ec.fieldContext_Mutation_createBulkCSVMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVMappedControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVMappedControl(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNMappedControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkCreatePayload,
@@ -21534,7 +21534,7 @@ func (ec *executionContext) _Mutation_updateMappedControl(ctx context.Context, f
 		ec.fieldContext_Mutation_updateMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateMappedControl(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateMappedControlInput))
+			return ec.Resolvers.Mutation().UpdateMappedControl(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateMappedControlInput))
 		},
 		nil,
 		ec.marshalNMappedControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlUpdatePayload,
@@ -21579,7 +21579,7 @@ func (ec *executionContext) _Mutation_deleteMappedControl(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteMappedControl(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteMappedControl(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNMappedControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlDeletePayload,
@@ -21624,7 +21624,7 @@ func (ec *executionContext) _Mutation_deleteBulkMappedControl(ctx context.Contex
 		ec.fieldContext_Mutation_deleteBulkMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkMappedControl(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkMappedControl(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNMappedControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload,
@@ -21669,7 +21669,7 @@ func (ec *executionContext) _Mutation_updateBulkMappedControl(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkMappedControl(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateMappedControlInput))
+			return ec.Resolvers.Mutation().UpdateBulkMappedControl(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateMappedControlInput))
 		},
 		nil,
 		ec.marshalNMappedControlBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkUpdatePayload,
@@ -21716,7 +21716,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVMappedControl(ctx context.Con
 		ec.fieldContext_Mutation_updateBulkCSVMappedControl,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVMappedControl(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVMappedControl(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNMappedControlBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkUpdatePayload,
@@ -21763,7 +21763,7 @@ func (ec *executionContext) _Mutation_createNarrative(ctx context.Context, field
 		ec.fieldContext_Mutation_createNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateNarrative(ctx, fc.Args["input"].(generated.CreateNarrativeInput))
+			return ec.Resolvers.Mutation().CreateNarrative(ctx, fc.Args["input"].(generated.CreateNarrativeInput))
 		},
 		nil,
 		ec.marshalNNarrativeCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeCreatePayload,
@@ -21808,7 +21808,7 @@ func (ec *executionContext) _Mutation_createBulkNarrative(ctx context.Context, f
 		ec.fieldContext_Mutation_createBulkNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkNarrative(ctx, fc.Args["input"].([]*generated.CreateNarrativeInput))
+			return ec.Resolvers.Mutation().CreateBulkNarrative(ctx, fc.Args["input"].([]*generated.CreateNarrativeInput))
 		},
 		nil,
 		ec.marshalNNarrativeBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkCreatePayload,
@@ -21853,7 +21853,7 @@ func (ec *executionContext) _Mutation_createBulkCSVNarrative(ctx context.Context
 		ec.fieldContext_Mutation_createBulkCSVNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVNarrative(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVNarrative(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNNarrativeBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkCreatePayload,
@@ -21898,7 +21898,7 @@ func (ec *executionContext) _Mutation_updateNarrative(ctx context.Context, field
 		ec.fieldContext_Mutation_updateNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateNarrative(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNarrativeInput))
+			return ec.Resolvers.Mutation().UpdateNarrative(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNarrativeInput))
 		},
 		nil,
 		ec.marshalNNarrativeUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeUpdatePayload,
@@ -21943,7 +21943,7 @@ func (ec *executionContext) _Mutation_deleteNarrative(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteNarrative(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteNarrative(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNNarrativeDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeDeletePayload,
@@ -21988,7 +21988,7 @@ func (ec *executionContext) _Mutation_deleteBulkNarrative(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteBulkNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkNarrative(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkNarrative(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNNarrativeBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkDeletePayload,
@@ -22033,7 +22033,7 @@ func (ec *executionContext) _Mutation_updateBulkNarrative(ctx context.Context, f
 		ec.fieldContext_Mutation_updateBulkNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkNarrative(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateNarrativeInput))
+			return ec.Resolvers.Mutation().UpdateBulkNarrative(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateNarrativeInput))
 		},
 		nil,
 		ec.marshalNNarrativeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkUpdatePayload,
@@ -22080,7 +22080,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVNarrative(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkCSVNarrative,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVNarrative(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVNarrative(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNNarrativeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkUpdatePayload,
@@ -22127,7 +22127,7 @@ func (ec *executionContext) _Mutation_updateTaskComment(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateTaskComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTaskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTaskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTaskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskUpdatePayload,
@@ -22172,7 +22172,7 @@ func (ec *executionContext) _Mutation_updateControlComment(ctx context.Context, 
 		ec.fieldContext_Mutation_updateControlComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateControlComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateControlComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlUpdatePayload,
@@ -22217,7 +22217,7 @@ func (ec *executionContext) _Mutation_updateSubcontrolComment(ctx context.Contex
 		ec.fieldContext_Mutation_updateSubcontrolComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateSubcontrolComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateSubcontrolComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubcontrolUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolUpdatePayload,
@@ -22262,7 +22262,7 @@ func (ec *executionContext) _Mutation_updateProcedureComment(ctx context.Context
 		ec.fieldContext_Mutation_updateProcedureComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateProcedureComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateProcedureComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNProcedureUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload,
@@ -22307,7 +22307,7 @@ func (ec *executionContext) _Mutation_updateRiskComment(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateRiskComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateRiskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateRiskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNRiskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskUpdatePayload,
@@ -22352,7 +22352,7 @@ func (ec *executionContext) _Mutation_updateInternalPolicyComment(ctx context.Co
 		ec.fieldContext_Mutation_updateInternalPolicyComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateInternalPolicyComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateInternalPolicyComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload,
@@ -22397,7 +22397,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterFAQComment(ctx context.Co
 		ec.fieldContext_Mutation_updateTrustCenterFAQComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterFAQComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterFAQComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQUpdatePayload,
@@ -22442,7 +22442,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterPost(ctx context.Context,
 		ec.fieldContext_Mutation_updateTrustCenterPost,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterPost(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterPost(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterUpdatePayload,
@@ -22487,7 +22487,7 @@ func (ec *executionContext) _Mutation_updateEvidenceComment(ctx context.Context,
 		ec.fieldContext_Mutation_updateEvidenceComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateEvidenceComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateEvidenceComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload,
@@ -22532,7 +22532,7 @@ func (ec *executionContext) _Mutation_deleteNote(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteNote,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteNote(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteNote(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload,
@@ -22577,7 +22577,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateNotification,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateNotification(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNotificationInput))
+			return ec.Resolvers.Mutation().UpdateNotification(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNotificationInput))
 		},
 		nil,
 		ec.marshalNNotificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload,
@@ -22622,7 +22622,7 @@ func (ec *executionContext) _Mutation_markNotificationsAsRead(ctx context.Contex
 		ec.fieldContext_Mutation_markNotificationsAsRead,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().MarkNotificationsAsRead(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().MarkNotificationsAsRead(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNActionNotificationsReadPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload,
@@ -22667,7 +22667,7 @@ func (ec *executionContext) _Mutation_createNotificationPreference(ctx context.C
 		ec.fieldContext_Mutation_createNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateNotificationPreference(ctx, fc.Args["input"].(generated.CreateNotificationPreferenceInput))
+			return ec.Resolvers.Mutation().CreateNotificationPreference(ctx, fc.Args["input"].(generated.CreateNotificationPreferenceInput))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceCreatePayload,
@@ -22712,7 +22712,7 @@ func (ec *executionContext) _Mutation_createBulkNotificationPreference(ctx conte
 		ec.fieldContext_Mutation_createBulkNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkNotificationPreference(ctx, fc.Args["input"].([]*generated.CreateNotificationPreferenceInput))
+			return ec.Resolvers.Mutation().CreateBulkNotificationPreference(ctx, fc.Args["input"].([]*generated.CreateNotificationPreferenceInput))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkCreatePayload,
@@ -22757,7 +22757,7 @@ func (ec *executionContext) _Mutation_createBulkCSVNotificationPreference(ctx co
 		ec.fieldContext_Mutation_createBulkCSVNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVNotificationPreference(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVNotificationPreference(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkCreatePayload,
@@ -22802,7 +22802,7 @@ func (ec *executionContext) _Mutation_updateBulkNotificationPreference(ctx conte
 		ec.fieldContext_Mutation_updateBulkNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkNotificationPreference(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateNotificationPreferenceInput))
+			return ec.Resolvers.Mutation().UpdateBulkNotificationPreference(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateNotificationPreferenceInput))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkUpdatePayload,
@@ -22849,7 +22849,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVNotificationPreference(ctx co
 		ec.fieldContext_Mutation_updateBulkCSVNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVNotificationPreference(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVNotificationPreference(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkUpdatePayload,
@@ -22896,7 +22896,7 @@ func (ec *executionContext) _Mutation_updateNotificationPreference(ctx context.C
 		ec.fieldContext_Mutation_updateNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateNotificationPreference(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNotificationPreferenceInput))
+			return ec.Resolvers.Mutation().UpdateNotificationPreference(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNotificationPreferenceInput))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceUpdatePayload,
@@ -22941,7 +22941,7 @@ func (ec *executionContext) _Mutation_deleteNotificationPreference(ctx context.C
 		ec.fieldContext_Mutation_deleteNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteNotificationPreference(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteNotificationPreference(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceDeletePayload,
@@ -22986,7 +22986,7 @@ func (ec *executionContext) _Mutation_deleteBulkNotificationPreference(ctx conte
 		ec.fieldContext_Mutation_deleteBulkNotificationPreference,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkNotificationPreference(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkNotificationPreference(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNNotificationPreferenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkDeletePayload,
@@ -23031,7 +23031,7 @@ func (ec *executionContext) _Mutation_createNotificationTemplate(ctx context.Con
 		ec.fieldContext_Mutation_createNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateNotificationTemplate(ctx, fc.Args["input"].(generated.CreateNotificationTemplateInput))
+			return ec.Resolvers.Mutation().CreateNotificationTemplate(ctx, fc.Args["input"].(generated.CreateNotificationTemplateInput))
 		},
 		nil,
 		ec.marshalNNotificationTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateCreatePayload,
@@ -23076,7 +23076,7 @@ func (ec *executionContext) _Mutation_createBulkNotificationTemplate(ctx context
 		ec.fieldContext_Mutation_createBulkNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkNotificationTemplate(ctx, fc.Args["input"].([]*generated.CreateNotificationTemplateInput))
+			return ec.Resolvers.Mutation().CreateBulkNotificationTemplate(ctx, fc.Args["input"].([]*generated.CreateNotificationTemplateInput))
 		},
 		nil,
 		ec.marshalNNotificationTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkCreatePayload,
@@ -23121,7 +23121,7 @@ func (ec *executionContext) _Mutation_createBulkCSVNotificationTemplate(ctx cont
 		ec.fieldContext_Mutation_createBulkCSVNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVNotificationTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVNotificationTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNNotificationTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkCreatePayload,
@@ -23166,7 +23166,7 @@ func (ec *executionContext) _Mutation_updateBulkNotificationTemplate(ctx context
 		ec.fieldContext_Mutation_updateBulkNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkNotificationTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateNotificationTemplateInput))
+			return ec.Resolvers.Mutation().UpdateBulkNotificationTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateNotificationTemplateInput))
 		},
 		nil,
 		ec.marshalNNotificationTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkUpdatePayload,
@@ -23213,7 +23213,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVNotificationTemplate(ctx cont
 		ec.fieldContext_Mutation_updateBulkCSVNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVNotificationTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVNotificationTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNNotificationTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkUpdatePayload,
@@ -23260,7 +23260,7 @@ func (ec *executionContext) _Mutation_updateNotificationTemplate(ctx context.Con
 		ec.fieldContext_Mutation_updateNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateNotificationTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNotificationTemplateInput))
+			return ec.Resolvers.Mutation().UpdateNotificationTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNotificationTemplateInput))
 		},
 		nil,
 		ec.marshalNNotificationTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateUpdatePayload,
@@ -23305,7 +23305,7 @@ func (ec *executionContext) _Mutation_deleteNotificationTemplate(ctx context.Con
 		ec.fieldContext_Mutation_deleteNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteNotificationTemplate(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteNotificationTemplate(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNNotificationTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateDeletePayload,
@@ -23350,7 +23350,7 @@ func (ec *executionContext) _Mutation_deleteBulkNotificationTemplate(ctx context
 		ec.fieldContext_Mutation_deleteBulkNotificationTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkNotificationTemplate(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkNotificationTemplate(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNNotificationTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationTemplateBulkDeletePayload,
@@ -23395,7 +23395,7 @@ func (ec *executionContext) _Mutation_createOnboarding(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createOnboarding,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateOnboarding(ctx, fc.Args["input"].(generated.CreateOnboardingInput))
+			return ec.Resolvers.Mutation().CreateOnboarding(ctx, fc.Args["input"].(generated.CreateOnboardingInput))
 		},
 		nil,
 		ec.marshalNOnboardingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload,
@@ -23440,7 +23440,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 		ec.fieldContext_Mutation_createOrganization,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateOrganization(ctx, fc.Args["input"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateOrganization(ctx, fc.Args["input"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload,
@@ -23485,7 +23485,7 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateOrganization,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateOrganization(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateOrganization(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNOrganizationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationUpdatePayload,
@@ -23530,7 +23530,7 @@ func (ec *executionContext) _Mutation_deleteOrganization(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteOrganization,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteOrganization(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteOrganization(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNOrganizationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationDeletePayload,
@@ -23575,7 +23575,7 @@ func (ec *executionContext) _Mutation_createOrganizationSetting(ctx context.Cont
 		ec.fieldContext_Mutation_createOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateOrganizationSetting(ctx, fc.Args["input"].(generated.CreateOrganizationSettingInput))
+			return ec.Resolvers.Mutation().CreateOrganizationSetting(ctx, fc.Args["input"].(generated.CreateOrganizationSettingInput))
 		},
 		nil,
 		ec.marshalNOrganizationSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload,
@@ -23620,7 +23620,7 @@ func (ec *executionContext) _Mutation_createBulkOrganizationSetting(ctx context.
 		ec.fieldContext_Mutation_createBulkOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkOrganizationSetting(ctx, fc.Args["input"].([]*generated.CreateOrganizationSettingInput))
+			return ec.Resolvers.Mutation().CreateBulkOrganizationSetting(ctx, fc.Args["input"].([]*generated.CreateOrganizationSettingInput))
 		},
 		nil,
 		ec.marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload,
@@ -23665,7 +23665,7 @@ func (ec *executionContext) _Mutation_createBulkCSVOrganizationSetting(ctx conte
 		ec.fieldContext_Mutation_createBulkCSVOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVOrganizationSetting(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVOrganizationSetting(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload,
@@ -23710,7 +23710,7 @@ func (ec *executionContext) _Mutation_updateOrganizationSetting(ctx context.Cont
 		ec.fieldContext_Mutation_updateOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateOrganizationSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationSettingInput))
+			return ec.Resolvers.Mutation().UpdateOrganizationSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrganizationSettingInput))
 		},
 		nil,
 		ec.marshalNOrganizationSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingUpdatePayload,
@@ -23755,7 +23755,7 @@ func (ec *executionContext) _Mutation_deleteOrganizationSetting(ctx context.Cont
 		ec.fieldContext_Mutation_deleteOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteOrganizationSetting(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteOrganizationSetting(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNOrganizationSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingDeletePayload,
@@ -23800,7 +23800,7 @@ func (ec *executionContext) _Mutation_deleteBulkOrganizationSetting(ctx context.
 		ec.fieldContext_Mutation_deleteBulkOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkOrganizationSetting(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkOrganizationSetting(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload,
@@ -23845,7 +23845,7 @@ func (ec *executionContext) _Mutation_updateBulkOrganizationSetting(ctx context.
 		ec.fieldContext_Mutation_updateBulkOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkOrganizationSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateOrganizationSettingInput))
+			return ec.Resolvers.Mutation().UpdateBulkOrganizationSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateOrganizationSettingInput))
 		},
 		nil,
 		ec.marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload,
@@ -23892,7 +23892,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVOrganizationSetting(ctx conte
 		ec.fieldContext_Mutation_updateBulkCSVOrganizationSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVOrganizationSetting(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVOrganizationSetting(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload,
@@ -23939,7 +23939,7 @@ func (ec *executionContext) _Mutation_createOrganizationWithMembers(ctx context.
 		ec.fieldContext_Mutation_createOrganizationWithMembers,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateOrganizationWithMembers(ctx, fc.Args["organizationInput"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["members"].([]*model.OrgMembersInput))
+			return ec.Resolvers.Mutation().CreateOrganizationWithMembers(ctx, fc.Args["organizationInput"].(generated.CreateOrganizationInput), fc.Args["avatarFile"].(*graphql.Upload), fc.Args["members"].([]*model.OrgMembersInput))
 		},
 		nil,
 		ec.marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload,
@@ -23984,7 +23984,7 @@ func (ec *executionContext) _Mutation_transferOrganizationOwnership(ctx context.
 		ec.fieldContext_Mutation_transferOrganizationOwnership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().TransferOrganizationOwnership(ctx, fc.Args["newOwnerEmail"].(string))
+			return ec.Resolvers.Mutation().TransferOrganizationOwnership(ctx, fc.Args["newOwnerEmail"].(string))
 		},
 		nil,
 		ec.marshalNOrganizationTransferOwnershipPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload,
@@ -24031,7 +24031,7 @@ func (ec *executionContext) _Mutation_createOrgMembership(ctx context.Context, f
 		ec.fieldContext_Mutation_createOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateOrgMembership(ctx, fc.Args["input"].(generated.CreateOrgMembershipInput))
+			return ec.Resolvers.Mutation().CreateOrgMembership(ctx, fc.Args["input"].(generated.CreateOrgMembershipInput))
 		},
 		nil,
 		ec.marshalNOrgMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipCreatePayload,
@@ -24076,7 +24076,7 @@ func (ec *executionContext) _Mutation_createBulkOrgMembership(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkOrgMembership(ctx, fc.Args["input"].([]*generated.CreateOrgMembershipInput))
+			return ec.Resolvers.Mutation().CreateBulkOrgMembership(ctx, fc.Args["input"].([]*generated.CreateOrgMembershipInput))
 		},
 		nil,
 		ec.marshalNOrgMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkCreatePayload,
@@ -24121,7 +24121,7 @@ func (ec *executionContext) _Mutation_createBulkCSVOrgMembership(ctx context.Con
 		ec.fieldContext_Mutation_createBulkCSVOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVOrgMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVOrgMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNOrgMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkCreatePayload,
@@ -24166,7 +24166,7 @@ func (ec *executionContext) _Mutation_updateOrgMembership(ctx context.Context, f
 		ec.fieldContext_Mutation_updateOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateOrgMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrgMembershipInput))
+			return ec.Resolvers.Mutation().UpdateOrgMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateOrgMembershipInput))
 		},
 		nil,
 		ec.marshalNOrgMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipUpdatePayload,
@@ -24211,7 +24211,7 @@ func (ec *executionContext) _Mutation_deleteOrgMembership(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteOrgMembership(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteOrgMembership(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNOrgMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipDeletePayload,
@@ -24256,7 +24256,7 @@ func (ec *executionContext) _Mutation_deleteBulkOrgMembership(ctx context.Contex
 		ec.fieldContext_Mutation_deleteBulkOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkOrgMembership(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkOrgMembership(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNOrgMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkDeletePayload,
@@ -24301,7 +24301,7 @@ func (ec *executionContext) _Mutation_updateBulkOrgMembership(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkOrgMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateOrgMembershipInput))
+			return ec.Resolvers.Mutation().UpdateBulkOrgMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateOrgMembershipInput))
 		},
 		nil,
 		ec.marshalNOrgMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkUpdatePayload,
@@ -24348,7 +24348,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVOrgMembership(ctx context.Con
 		ec.fieldContext_Mutation_updateBulkCSVOrgMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVOrgMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVOrgMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNOrgMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembershipBulkUpdatePayload,
@@ -24395,7 +24395,7 @@ func (ec *executionContext) _Mutation_createPersonalAccessToken(ctx context.Cont
 		ec.fieldContext_Mutation_createPersonalAccessToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreatePersonalAccessToken(ctx, fc.Args["input"].(generated.CreatePersonalAccessTokenInput))
+			return ec.Resolvers.Mutation().CreatePersonalAccessToken(ctx, fc.Args["input"].(generated.CreatePersonalAccessTokenInput))
 		},
 		nil,
 		ec.marshalNPersonalAccessTokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenCreatePayload,
@@ -24440,7 +24440,7 @@ func (ec *executionContext) _Mutation_updatePersonalAccessToken(ctx context.Cont
 		ec.fieldContext_Mutation_updatePersonalAccessToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdatePersonalAccessToken(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePersonalAccessTokenInput))
+			return ec.Resolvers.Mutation().UpdatePersonalAccessToken(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePersonalAccessTokenInput))
 		},
 		nil,
 		ec.marshalNPersonalAccessTokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenUpdatePayload,
@@ -24485,7 +24485,7 @@ func (ec *executionContext) _Mutation_deletePersonalAccessToken(ctx context.Cont
 		ec.fieldContext_Mutation_deletePersonalAccessToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeletePersonalAccessToken(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeletePersonalAccessToken(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNPersonalAccessTokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenDeletePayload,
@@ -24530,7 +24530,7 @@ func (ec *executionContext) _Mutation_createPlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_createPlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreatePlatform(ctx, fc.Args["input"].(generated.CreatePlatformInput))
+			return ec.Resolvers.Mutation().CreatePlatform(ctx, fc.Args["input"].(generated.CreatePlatformInput))
 		},
 		nil,
 		ec.marshalNPlatformCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformCreatePayload,
@@ -24575,7 +24575,7 @@ func (ec *executionContext) _Mutation_createBulkPlatform(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkPlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkPlatform(ctx, fc.Args["input"].([]*generated.CreatePlatformInput))
+			return ec.Resolvers.Mutation().CreateBulkPlatform(ctx, fc.Args["input"].([]*generated.CreatePlatformInput))
 		},
 		nil,
 		ec.marshalNPlatformBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformBulkCreatePayload,
@@ -24620,7 +24620,7 @@ func (ec *executionContext) _Mutation_createBulkCSVPlatform(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkCSVPlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVPlatform(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVPlatform(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNPlatformBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformBulkCreatePayload,
@@ -24665,7 +24665,7 @@ func (ec *executionContext) _Mutation_updatePlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_updatePlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdatePlatform(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePlatformInput))
+			return ec.Resolvers.Mutation().UpdatePlatform(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePlatformInput))
 		},
 		nil,
 		ec.marshalNPlatformUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformUpdatePayload,
@@ -24710,7 +24710,7 @@ func (ec *executionContext) _Mutation_deletePlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_deletePlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeletePlatform(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeletePlatform(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNPlatformDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformDeletePayload,
@@ -24755,7 +24755,7 @@ func (ec *executionContext) _Mutation_createProcedure(ctx context.Context, field
 		ec.fieldContext_Mutation_createProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateProcedure(ctx, fc.Args["input"].(generated.CreateProcedureInput))
+			return ec.Resolvers.Mutation().CreateProcedure(ctx, fc.Args["input"].(generated.CreateProcedureInput))
 		},
 		nil,
 		ec.marshalNProcedureCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureCreatePayload,
@@ -24800,7 +24800,7 @@ func (ec *executionContext) _Mutation_createUploadProcedure(ctx context.Context,
 		ec.fieldContext_Mutation_createUploadProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateUploadProcedure(ctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().CreateUploadProcedure(ctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["ownerID"].(*string))
 		},
 		nil,
 		ec.marshalNProcedureCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureCreatePayload,
@@ -24845,7 +24845,7 @@ func (ec *executionContext) _Mutation_createBulkProcedure(ctx context.Context, f
 		ec.fieldContext_Mutation_createBulkProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkProcedure(ctx, fc.Args["input"].([]*generated.CreateProcedureInput))
+			return ec.Resolvers.Mutation().CreateBulkProcedure(ctx, fc.Args["input"].([]*generated.CreateProcedureInput))
 		},
 		nil,
 		ec.marshalNProcedureBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkCreatePayload,
@@ -24890,7 +24890,7 @@ func (ec *executionContext) _Mutation_createBulkCSVProcedure(ctx context.Context
 		ec.fieldContext_Mutation_createBulkCSVProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVProcedure(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVProcedure(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNProcedureBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkCreatePayload,
@@ -24935,7 +24935,7 @@ func (ec *executionContext) _Mutation_updateBulkProcedure(ctx context.Context, f
 		ec.fieldContext_Mutation_updateBulkProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkProcedure(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProcedureInput))
+			return ec.Resolvers.Mutation().UpdateBulkProcedure(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProcedureInput))
 		},
 		nil,
 		ec.marshalNProcedureBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkUpdatePayload,
@@ -24982,7 +24982,7 @@ func (ec *executionContext) _Mutation_updateProcedure(ctx context.Context, field
 		ec.fieldContext_Mutation_updateProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateProcedure(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput), fc.Args["procedureFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateProcedure(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput), fc.Args["procedureFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNProcedureUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload,
@@ -25027,7 +25027,7 @@ func (ec *executionContext) _Mutation_deleteProcedure(ctx context.Context, field
 		ec.fieldContext_Mutation_deleteProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteProcedure(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteProcedure(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNProcedureDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureDeletePayload,
@@ -25072,7 +25072,7 @@ func (ec *executionContext) _Mutation_deleteBulkProcedure(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteBulkProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkProcedure(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkProcedure(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNProcedureBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkDeletePayload,
@@ -25117,7 +25117,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVProcedure(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkCSVProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVProcedure(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVProcedure(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNProcedureBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkUpdatePayload,
@@ -25164,7 +25164,7 @@ func (ec *executionContext) _Mutation_createProgram(ctx context.Context, field g
 		ec.fieldContext_Mutation_createProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateProgram(ctx, fc.Args["input"].(generated.CreateProgramInput))
+			return ec.Resolvers.Mutation().CreateProgram(ctx, fc.Args["input"].(generated.CreateProgramInput))
 		},
 		nil,
 		ec.marshalNProgramCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramCreatePayload,
@@ -25209,7 +25209,7 @@ func (ec *executionContext) _Mutation_createBulkProgram(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkProgram(ctx, fc.Args["input"].([]*generated.CreateProgramInput))
+			return ec.Resolvers.Mutation().CreateBulkProgram(ctx, fc.Args["input"].([]*generated.CreateProgramInput))
 		},
 		nil,
 		ec.marshalNProgramBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkCreatePayload,
@@ -25254,7 +25254,7 @@ func (ec *executionContext) _Mutation_createBulkCSVProgram(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkCSVProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVProgram(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVProgram(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNProgramBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkCreatePayload,
@@ -25299,7 +25299,7 @@ func (ec *executionContext) _Mutation_updateProgram(ctx context.Context, field g
 		ec.fieldContext_Mutation_updateProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateProgram(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProgramInput))
+			return ec.Resolvers.Mutation().UpdateProgram(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProgramInput))
 		},
 		nil,
 		ec.marshalNProgramUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramUpdatePayload,
@@ -25344,7 +25344,7 @@ func (ec *executionContext) _Mutation_deleteProgram(ctx context.Context, field g
 		ec.fieldContext_Mutation_deleteProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteProgram(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteProgram(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNProgramDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramDeletePayload,
@@ -25389,7 +25389,7 @@ func (ec *executionContext) _Mutation_deleteBulkProgram(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteBulkProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkProgram(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkProgram(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNProgramBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkDeletePayload,
@@ -25434,7 +25434,7 @@ func (ec *executionContext) _Mutation_updateBulkProgram(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkProgram(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProgramInput))
+			return ec.Resolvers.Mutation().UpdateBulkProgram(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProgramInput))
 		},
 		nil,
 		ec.marshalNProgramBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkUpdatePayload,
@@ -25481,7 +25481,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVProgram(ctx context.Context, 
 		ec.fieldContext_Mutation_updateBulkCSVProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVProgram(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVProgram(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNProgramBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramBulkUpdatePayload,
@@ -25528,7 +25528,7 @@ func (ec *executionContext) _Mutation_createProgramWithMembers(ctx context.Conte
 		ec.fieldContext_Mutation_createProgramWithMembers,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateProgramWithMembers(ctx, fc.Args["input"].(model.CreateProgramWithMembersInput))
+			return ec.Resolvers.Mutation().CreateProgramWithMembers(ctx, fc.Args["input"].(model.CreateProgramWithMembersInput))
 		},
 		nil,
 		ec.marshalNProgramCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramCreatePayload,
@@ -25573,7 +25573,7 @@ func (ec *executionContext) _Mutation_createFullProgram(ctx context.Context, fie
 		ec.fieldContext_Mutation_createFullProgram,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateFullProgram(ctx, fc.Args["input"].(model.CreateFullProgramInput))
+			return ec.Resolvers.Mutation().CreateFullProgram(ctx, fc.Args["input"].(model.CreateFullProgramInput))
 		},
 		nil,
 		ec.marshalNProgramCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramCreatePayload,
@@ -25618,7 +25618,7 @@ func (ec *executionContext) _Mutation_createControlWithSubcontrols(ctx context.C
 		ec.fieldContext_Mutation_createControlWithSubcontrols,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateControlWithSubcontrols(ctx, fc.Args["input"].(model.CreateControlWithSubcontrolsInput))
+			return ec.Resolvers.Mutation().CreateControlWithSubcontrols(ctx, fc.Args["input"].(model.CreateControlWithSubcontrolsInput))
 		},
 		nil,
 		ec.marshalNControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCreatePayload,
@@ -25663,7 +25663,7 @@ func (ec *executionContext) _Mutation_createProgramMembership(ctx context.Contex
 		ec.fieldContext_Mutation_createProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateProgramMembership(ctx, fc.Args["input"].(generated.CreateProgramMembershipInput))
+			return ec.Resolvers.Mutation().CreateProgramMembership(ctx, fc.Args["input"].(generated.CreateProgramMembershipInput))
 		},
 		nil,
 		ec.marshalNProgramMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipCreatePayload,
@@ -25708,7 +25708,7 @@ func (ec *executionContext) _Mutation_createBulkProgramMembership(ctx context.Co
 		ec.fieldContext_Mutation_createBulkProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkProgramMembership(ctx, fc.Args["input"].([]*generated.CreateProgramMembershipInput))
+			return ec.Resolvers.Mutation().CreateBulkProgramMembership(ctx, fc.Args["input"].([]*generated.CreateProgramMembershipInput))
 		},
 		nil,
 		ec.marshalNProgramMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkCreatePayload,
@@ -25753,7 +25753,7 @@ func (ec *executionContext) _Mutation_createBulkCSVProgramMembership(ctx context
 		ec.fieldContext_Mutation_createBulkCSVProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVProgramMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVProgramMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNProgramMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkCreatePayload,
@@ -25798,7 +25798,7 @@ func (ec *executionContext) _Mutation_updateProgramMembership(ctx context.Contex
 		ec.fieldContext_Mutation_updateProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateProgramMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProgramMembershipInput))
+			return ec.Resolvers.Mutation().UpdateProgramMembership(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProgramMembershipInput))
 		},
 		nil,
 		ec.marshalNProgramMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipUpdatePayload,
@@ -25843,7 +25843,7 @@ func (ec *executionContext) _Mutation_deleteProgramMembership(ctx context.Contex
 		ec.fieldContext_Mutation_deleteProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteProgramMembership(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteProgramMembership(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNProgramMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipDeletePayload,
@@ -25888,7 +25888,7 @@ func (ec *executionContext) _Mutation_deleteBulkProgramMembership(ctx context.Co
 		ec.fieldContext_Mutation_deleteBulkProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkProgramMembership(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkProgramMembership(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNProgramMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload,
@@ -25933,7 +25933,7 @@ func (ec *executionContext) _Mutation_updateBulkProgramMembership(ctx context.Co
 		ec.fieldContext_Mutation_updateBulkProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkProgramMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProgramMembershipInput))
+			return ec.Resolvers.Mutation().UpdateBulkProgramMembership(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateProgramMembershipInput))
 		},
 		nil,
 		ec.marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload,
@@ -25980,7 +25980,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVProgramMembership(ctx context
 		ec.fieldContext_Mutation_updateBulkCSVProgramMembership,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVProgramMembership(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVProgramMembership(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload,
@@ -26027,7 +26027,7 @@ func (ec *executionContext) _Mutation_createRemediation(ctx context.Context, fie
 		ec.fieldContext_Mutation_createRemediation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateRemediation(ctx, fc.Args["input"].(generated.CreateRemediationInput))
+			return ec.Resolvers.Mutation().CreateRemediation(ctx, fc.Args["input"].(generated.CreateRemediationInput))
 		},
 		nil,
 		ec.marshalNRemediationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationCreatePayload,
@@ -26072,7 +26072,7 @@ func (ec *executionContext) _Mutation_createBulkRemediation(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkRemediation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkRemediation(ctx, fc.Args["input"].([]*generated.CreateRemediationInput))
+			return ec.Resolvers.Mutation().CreateBulkRemediation(ctx, fc.Args["input"].([]*generated.CreateRemediationInput))
 		},
 		nil,
 		ec.marshalNRemediationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkCreatePayload,
@@ -26117,7 +26117,7 @@ func (ec *executionContext) _Mutation_createBulkCSVRemediation(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkCSVRemediation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVRemediation(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVRemediation(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNRemediationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkCreatePayload,
@@ -26162,7 +26162,7 @@ func (ec *executionContext) _Mutation_updateRemediation(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateRemediation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateRemediation(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRemediationInput))
+			return ec.Resolvers.Mutation().UpdateRemediation(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRemediationInput))
 		},
 		nil,
 		ec.marshalNRemediationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationUpdatePayload,
@@ -26207,7 +26207,7 @@ func (ec *executionContext) _Mutation_deleteRemediation(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteRemediation,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteRemediation(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteRemediation(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNRemediationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationDeletePayload,
@@ -26252,7 +26252,7 @@ func (ec *executionContext) _Mutation_createReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateReview(ctx, fc.Args["input"].(generated.CreateReviewInput))
+			return ec.Resolvers.Mutation().CreateReview(ctx, fc.Args["input"].(generated.CreateReviewInput))
 		},
 		nil,
 		ec.marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload,
@@ -26297,7 +26297,7 @@ func (ec *executionContext) _Mutation_createBulkReview(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createBulkReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkReview(ctx, fc.Args["input"].([]*generated.CreateReviewInput))
+			return ec.Resolvers.Mutation().CreateBulkReview(ctx, fc.Args["input"].([]*generated.CreateReviewInput))
 		},
 		nil,
 		ec.marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkCreatePayload,
@@ -26342,7 +26342,7 @@ func (ec *executionContext) _Mutation_createBulkCSVReview(ctx context.Context, f
 		ec.fieldContext_Mutation_createBulkCSVReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVReview(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVReview(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkCreatePayload,
@@ -26387,7 +26387,7 @@ func (ec *executionContext) _Mutation_updateReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateReview(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateReviewInput))
+			return ec.Resolvers.Mutation().UpdateReview(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateReviewInput))
 		},
 		nil,
 		ec.marshalNReviewUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload,
@@ -26432,7 +26432,7 @@ func (ec *executionContext) _Mutation_deleteReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_deleteReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteReview(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteReview(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNReviewDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewDeletePayload,
@@ -26477,7 +26477,7 @@ func (ec *executionContext) _Mutation_createRisk(ctx context.Context, field grap
 		ec.fieldContext_Mutation_createRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateRisk(ctx, fc.Args["input"].(generated.CreateRiskInput))
+			return ec.Resolvers.Mutation().CreateRisk(ctx, fc.Args["input"].(generated.CreateRiskInput))
 		},
 		nil,
 		ec.marshalNRiskCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskCreatePayload,
@@ -26522,7 +26522,7 @@ func (ec *executionContext) _Mutation_createBulkRisk(ctx context.Context, field 
 		ec.fieldContext_Mutation_createBulkRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkRisk(ctx, fc.Args["input"].([]*generated.CreateRiskInput))
+			return ec.Resolvers.Mutation().CreateBulkRisk(ctx, fc.Args["input"].([]*generated.CreateRiskInput))
 		},
 		nil,
 		ec.marshalNRiskBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkCreatePayload,
@@ -26567,7 +26567,7 @@ func (ec *executionContext) _Mutation_createBulkCSVRisk(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkCSVRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVRisk(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVRisk(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNRiskBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkCreatePayload,
@@ -26612,7 +26612,7 @@ func (ec *executionContext) _Mutation_updateBulkRisk(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateBulkRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkRisk(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateRiskInput))
+			return ec.Resolvers.Mutation().UpdateBulkRisk(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateRiskInput))
 		},
 		nil,
 		ec.marshalNRiskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload,
@@ -26659,7 +26659,7 @@ func (ec *executionContext) _Mutation_updateRisk(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateRisk(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRiskInput))
+			return ec.Resolvers.Mutation().UpdateRisk(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRiskInput))
 		},
 		nil,
 		ec.marshalNRiskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskUpdatePayload,
@@ -26704,7 +26704,7 @@ func (ec *executionContext) _Mutation_deleteRisk(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteRisk(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteRisk(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNRiskDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskDeletePayload,
@@ -26749,7 +26749,7 @@ func (ec *executionContext) _Mutation_deleteBulkRisk(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteBulkRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkRisk(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkRisk(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNRiskBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkDeletePayload,
@@ -26794,7 +26794,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVRisk(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkCSVRisk,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVRisk(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVRisk(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNRiskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload,
@@ -26841,7 +26841,7 @@ func (ec *executionContext) _Mutation_createScan(ctx context.Context, field grap
 		ec.fieldContext_Mutation_createScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateScan(ctx, fc.Args["input"].(generated.CreateScanInput))
+			return ec.Resolvers.Mutation().CreateScan(ctx, fc.Args["input"].(generated.CreateScanInput))
 		},
 		nil,
 		ec.marshalNScanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload,
@@ -26886,7 +26886,7 @@ func (ec *executionContext) _Mutation_createBulkScan(ctx context.Context, field 
 		ec.fieldContext_Mutation_createBulkScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkScan(ctx, fc.Args["input"].([]*generated.CreateScanInput))
+			return ec.Resolvers.Mutation().CreateBulkScan(ctx, fc.Args["input"].([]*generated.CreateScanInput))
 		},
 		nil,
 		ec.marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload,
@@ -26931,7 +26931,7 @@ func (ec *executionContext) _Mutation_createBulkCSVScan(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkCSVScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVScan(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVScan(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload,
@@ -26976,7 +26976,7 @@ func (ec *executionContext) _Mutation_updateBulkScan(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateBulkScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkScan(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateScanInput))
+			return ec.Resolvers.Mutation().UpdateBulkScan(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateScanInput))
 		},
 		nil,
 		ec.marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload,
@@ -27023,7 +27023,7 @@ func (ec *executionContext) _Mutation_updateScan(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateScan(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScanInput))
+			return ec.Resolvers.Mutation().UpdateScan(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScanInput))
 		},
 		nil,
 		ec.marshalNScanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload,
@@ -27068,7 +27068,7 @@ func (ec *executionContext) _Mutation_deleteScan(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteScan(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteScan(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNScanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload,
@@ -27113,7 +27113,7 @@ func (ec *executionContext) _Mutation_deleteBulkScan(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteBulkScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkScan(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkScan(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload,
@@ -27158,7 +27158,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVScan(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkCSVScan,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVScan(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVScan(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload,
@@ -27205,7 +27205,7 @@ func (ec *executionContext) _Mutation_createScheduledJob(ctx context.Context, fi
 		ec.fieldContext_Mutation_createScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateScheduledJob(ctx, fc.Args["input"].(generated.CreateScheduledJobInput))
+			return ec.Resolvers.Mutation().CreateScheduledJob(ctx, fc.Args["input"].(generated.CreateScheduledJobInput))
 		},
 		nil,
 		ec.marshalNScheduledJobCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobCreatePayload,
@@ -27250,7 +27250,7 @@ func (ec *executionContext) _Mutation_createBulkScheduledJob(ctx context.Context
 		ec.fieldContext_Mutation_createBulkScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkScheduledJob(ctx, fc.Args["input"].([]*generated.CreateScheduledJobInput))
+			return ec.Resolvers.Mutation().CreateBulkScheduledJob(ctx, fc.Args["input"].([]*generated.CreateScheduledJobInput))
 		},
 		nil,
 		ec.marshalNScheduledJobBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkCreatePayload,
@@ -27295,7 +27295,7 @@ func (ec *executionContext) _Mutation_createBulkCSVScheduledJob(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkCSVScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVScheduledJob(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVScheduledJob(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNScheduledJobBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkCreatePayload,
@@ -27340,7 +27340,7 @@ func (ec *executionContext) _Mutation_updateScheduledJob(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateScheduledJob(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScheduledJobInput))
+			return ec.Resolvers.Mutation().UpdateScheduledJob(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScheduledJobInput))
 		},
 		nil,
 		ec.marshalNScheduledJobUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobUpdatePayload,
@@ -27385,7 +27385,7 @@ func (ec *executionContext) _Mutation_deleteScheduledJob(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteScheduledJob(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteScheduledJob(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNScheduledJobDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobDeletePayload,
@@ -27430,7 +27430,7 @@ func (ec *executionContext) _Mutation_deleteBulkScheduledJob(ctx context.Context
 		ec.fieldContext_Mutation_deleteBulkScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkScheduledJob(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkScheduledJob(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNScheduledJobBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkDeletePayload,
@@ -27475,7 +27475,7 @@ func (ec *executionContext) _Mutation_updateBulkScheduledJob(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkScheduledJob(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateScheduledJobInput))
+			return ec.Resolvers.Mutation().UpdateBulkScheduledJob(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateScheduledJobInput))
 		},
 		nil,
 		ec.marshalNScheduledJobBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkUpdatePayload,
@@ -27522,7 +27522,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVScheduledJob(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkCSVScheduledJob,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVScheduledJob(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVScheduledJob(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNScheduledJobBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkUpdatePayload,
@@ -27569,7 +27569,7 @@ func (ec *executionContext) _Mutation_createScheduledJobRun(ctx context.Context,
 		ec.fieldContext_Mutation_createScheduledJobRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateScheduledJobRun(ctx, fc.Args["input"].(generated.CreateScheduledJobRunInput))
+			return ec.Resolvers.Mutation().CreateScheduledJobRun(ctx, fc.Args["input"].(generated.CreateScheduledJobRunInput))
 		},
 		nil,
 		ec.marshalNScheduledJobRunCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobRunCreatePayload,
@@ -27614,7 +27614,7 @@ func (ec *executionContext) _Mutation_updateScheduledJobRun(ctx context.Context,
 		ec.fieldContext_Mutation_updateScheduledJobRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateScheduledJobRun(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScheduledJobRunInput))
+			return ec.Resolvers.Mutation().UpdateScheduledJobRun(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScheduledJobRunInput))
 		},
 		nil,
 		ec.marshalNScheduledJobRunUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobRunUpdatePayload,
@@ -27659,7 +27659,7 @@ func (ec *executionContext) _Mutation_deleteScheduledJobRun(ctx context.Context,
 		ec.fieldContext_Mutation_deleteScheduledJobRun,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteScheduledJobRun(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteScheduledJobRun(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNScheduledJobRunDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobRunDeletePayload,
@@ -27704,7 +27704,7 @@ func (ec *executionContext) _Mutation_createStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_createStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateStandard(ctx, fc.Args["input"].(generated.CreateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateStandard(ctx, fc.Args["input"].(generated.CreateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNStandardCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardCreatePayload,
@@ -27749,7 +27749,7 @@ func (ec *executionContext) _Mutation_updateStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateStandard(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateStandard(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNStandardUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardUpdatePayload,
@@ -27794,7 +27794,7 @@ func (ec *executionContext) _Mutation_deleteStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteStandard(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteStandard(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNStandardDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardDeletePayload,
@@ -27839,7 +27839,7 @@ func (ec *executionContext) _Mutation_createSubcontrol(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateSubcontrol(ctx, fc.Args["input"].(generated.CreateSubcontrolInput))
+			return ec.Resolvers.Mutation().CreateSubcontrol(ctx, fc.Args["input"].(generated.CreateSubcontrolInput))
 		},
 		nil,
 		ec.marshalNSubcontrolCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolCreatePayload,
@@ -27884,7 +27884,7 @@ func (ec *executionContext) _Mutation_createBulkSubcontrol(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkSubcontrol(ctx, fc.Args["input"].([]*generated.CreateSubcontrolInput))
+			return ec.Resolvers.Mutation().CreateBulkSubcontrol(ctx, fc.Args["input"].([]*generated.CreateSubcontrolInput))
 		},
 		nil,
 		ec.marshalNSubcontrolBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkCreatePayload,
@@ -27929,7 +27929,7 @@ func (ec *executionContext) _Mutation_createBulkCSVSubcontrol(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkCSVSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVSubcontrol(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVSubcontrol(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubcontrolBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkCreatePayload,
@@ -27974,7 +27974,7 @@ func (ec *executionContext) _Mutation_updateSubcontrol(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateSubcontrol(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubcontrolInput))
+			return ec.Resolvers.Mutation().UpdateSubcontrol(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubcontrolInput))
 		},
 		nil,
 		ec.marshalNSubcontrolUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolUpdatePayload,
@@ -28019,7 +28019,7 @@ func (ec *executionContext) _Mutation_deleteSubcontrol(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteSubcontrol(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteSubcontrol(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNSubcontrolDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolDeletePayload,
@@ -28064,7 +28064,7 @@ func (ec *executionContext) _Mutation_deleteBulkSubcontrol(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteBulkSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkSubcontrol(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkSubcontrol(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNSubcontrolBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkDeletePayload,
@@ -28109,7 +28109,7 @@ func (ec *executionContext) _Mutation_updateBulkSubcontrol(ctx context.Context, 
 		ec.fieldContext_Mutation_updateBulkSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkSubcontrol(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateSubcontrolInput))
+			return ec.Resolvers.Mutation().UpdateBulkSubcontrol(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateSubcontrolInput))
 		},
 		nil,
 		ec.marshalNSubcontrolBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkUpdatePayload,
@@ -28156,7 +28156,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVSubcontrol(ctx context.Contex
 		ec.fieldContext_Mutation_updateBulkCSVSubcontrol,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVSubcontrol(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVSubcontrol(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubcontrolBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolBulkUpdatePayload,
@@ -28203,7 +28203,7 @@ func (ec *executionContext) _Mutation_createSubprocessor(ctx context.Context, fi
 		ec.fieldContext_Mutation_createSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateSubprocessor(ctx, fc.Args["input"].(generated.CreateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateSubprocessor(ctx, fc.Args["input"].(generated.CreateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubprocessorCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorCreatePayload,
@@ -28248,7 +28248,7 @@ func (ec *executionContext) _Mutation_createBulkSubprocessor(ctx context.Context
 		ec.fieldContext_Mutation_createBulkSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkSubprocessor(ctx, fc.Args["input"].([]*generated.CreateSubprocessorInput))
+			return ec.Resolvers.Mutation().CreateBulkSubprocessor(ctx, fc.Args["input"].([]*generated.CreateSubprocessorInput))
 		},
 		nil,
 		ec.marshalNSubprocessorBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkCreatePayload,
@@ -28293,7 +28293,7 @@ func (ec *executionContext) _Mutation_createBulkCSVSubprocessor(ctx context.Cont
 		ec.fieldContext_Mutation_createBulkCSVSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubprocessorBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkCreatePayload,
@@ -28338,7 +28338,7 @@ func (ec *executionContext) _Mutation_updateSubprocessor(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateSubprocessor(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateSubprocessor(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubprocessorUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorUpdatePayload,
@@ -28383,7 +28383,7 @@ func (ec *executionContext) _Mutation_updateBulkSubprocessor(ctx context.Context
 		ec.fieldContext_Mutation_updateBulkSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkSubprocessor(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateSubprocessorInput))
+			return ec.Resolvers.Mutation().UpdateBulkSubprocessor(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateSubprocessorInput))
 		},
 		nil,
 		ec.marshalNSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkUpdatePayload,
@@ -28430,7 +28430,7 @@ func (ec *executionContext) _Mutation_deleteSubprocessor(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteSubprocessor(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteSubprocessor(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNSubprocessorDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorDeletePayload,
@@ -28475,7 +28475,7 @@ func (ec *executionContext) _Mutation_deleteBulkSubprocessor(ctx context.Context
 		ec.fieldContext_Mutation_deleteBulkSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkSubprocessor(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkSubprocessor(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkDeletePayload,
@@ -28520,7 +28520,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVSubprocessor(ctx context.Cont
 		ec.fieldContext_Mutation_updateBulkCSVSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkUpdatePayload,
@@ -28567,7 +28567,7 @@ func (ec *executionContext) _Mutation_createSubscriber(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createSubscriber,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateSubscriber(ctx, fc.Args["input"].(generated.CreateSubscriberInput))
+			return ec.Resolvers.Mutation().CreateSubscriber(ctx, fc.Args["input"].(generated.CreateSubscriberInput))
 		},
 		nil,
 		ec.marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload,
@@ -28612,7 +28612,7 @@ func (ec *executionContext) _Mutation_createBulkSubscriber(ctx context.Context, 
 		ec.fieldContext_Mutation_createBulkSubscriber,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkSubscriber(ctx, fc.Args["input"].([]*generated.CreateSubscriberInput))
+			return ec.Resolvers.Mutation().CreateBulkSubscriber(ctx, fc.Args["input"].([]*generated.CreateSubscriberInput))
 		},
 		nil,
 		ec.marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload,
@@ -28657,7 +28657,7 @@ func (ec *executionContext) _Mutation_createBulkCSVSubscriber(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkCSVSubscriber,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVSubscriber(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVSubscriber(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload,
@@ -28702,7 +28702,7 @@ func (ec *executionContext) _Mutation_updateSubscriber(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateSubscriber,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateSubscriber(ctx, fc.Args["email"].(string), fc.Args["input"].(generated.UpdateSubscriberInput))
+			return ec.Resolvers.Mutation().UpdateSubscriber(ctx, fc.Args["email"].(string), fc.Args["input"].(generated.UpdateSubscriberInput))
 		},
 		nil,
 		ec.marshalNSubscriberUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload,
@@ -28747,7 +28747,7 @@ func (ec *executionContext) _Mutation_deleteSubscriber(ctx context.Context, fiel
 		ec.fieldContext_Mutation_deleteSubscriber,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteSubscriber(ctx, fc.Args["email"].(string), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().DeleteSubscriber(ctx, fc.Args["email"].(string), fc.Args["ownerID"].(*string))
 		},
 		nil,
 		ec.marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload,
@@ -28792,7 +28792,7 @@ func (ec *executionContext) _Mutation_createTagDefinition(ctx context.Context, f
 		ec.fieldContext_Mutation_createTagDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTagDefinition(ctx, fc.Args["input"].(generated.CreateTagDefinitionInput))
+			return ec.Resolvers.Mutation().CreateTagDefinition(ctx, fc.Args["input"].(generated.CreateTagDefinitionInput))
 		},
 		nil,
 		ec.marshalNTagDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload,
@@ -28837,7 +28837,7 @@ func (ec *executionContext) _Mutation_createBulkTagDefinition(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkTagDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTagDefinition(ctx, fc.Args["input"].([]*generated.CreateTagDefinitionInput))
+			return ec.Resolvers.Mutation().CreateBulkTagDefinition(ctx, fc.Args["input"].([]*generated.CreateTagDefinitionInput))
 		},
 		nil,
 		ec.marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload,
@@ -28882,7 +28882,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTagDefinition(ctx context.Con
 		ec.fieldContext_Mutation_createBulkCSVTagDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTagDefinition(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTagDefinition(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload,
@@ -28927,7 +28927,7 @@ func (ec *executionContext) _Mutation_updateTagDefinition(ctx context.Context, f
 		ec.fieldContext_Mutation_updateTagDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTagDefinition(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTagDefinitionInput))
+			return ec.Resolvers.Mutation().UpdateTagDefinition(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTagDefinitionInput))
 		},
 		nil,
 		ec.marshalNTagDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload,
@@ -28972,7 +28972,7 @@ func (ec *executionContext) _Mutation_deleteTagDefinition(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteTagDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTagDefinition(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTagDefinition(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTagDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload,
@@ -29017,7 +29017,7 @@ func (ec *executionContext) _Mutation_createTask(ctx context.Context, field grap
 		ec.fieldContext_Mutation_createTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTask(ctx, fc.Args["input"].(generated.CreateTaskInput))
+			return ec.Resolvers.Mutation().CreateTask(ctx, fc.Args["input"].(generated.CreateTaskInput))
 		},
 		nil,
 		ec.marshalNTaskCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskCreatePayload,
@@ -29062,7 +29062,7 @@ func (ec *executionContext) _Mutation_createBulkTask(ctx context.Context, field 
 		ec.fieldContext_Mutation_createBulkTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTask(ctx, fc.Args["input"].([]*generated.CreateTaskInput))
+			return ec.Resolvers.Mutation().CreateBulkTask(ctx, fc.Args["input"].([]*generated.CreateTaskInput))
 		},
 		nil,
 		ec.marshalNTaskBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkCreatePayload,
@@ -29107,7 +29107,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTask(ctx context.Context, fie
 		ec.fieldContext_Mutation_createBulkCSVTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTask(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTask(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTaskBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkCreatePayload,
@@ -29152,7 +29152,7 @@ func (ec *executionContext) _Mutation_updateBulkTask(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateBulkTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkTask(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTaskInput))
+			return ec.Resolvers.Mutation().UpdateBulkTask(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTaskInput))
 		},
 		nil,
 		ec.marshalNTaskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkUpdatePayload,
@@ -29199,7 +29199,7 @@ func (ec *executionContext) _Mutation_updateTask(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTask(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTaskInput))
+			return ec.Resolvers.Mutation().UpdateTask(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTaskInput))
 		},
 		nil,
 		ec.marshalNTaskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskUpdatePayload,
@@ -29244,7 +29244,7 @@ func (ec *executionContext) _Mutation_deleteTask(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTask(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTask(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTaskDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskDeletePayload,
@@ -29289,7 +29289,7 @@ func (ec *executionContext) _Mutation_deleteBulkTask(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteBulkTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTask(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTask(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTaskBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkDeletePayload,
@@ -29334,7 +29334,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVTask(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateBulkCSVTask,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVTask(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVTask(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTaskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskBulkUpdatePayload,
@@ -29381,7 +29381,7 @@ func (ec *executionContext) _Mutation_createTemplate(ctx context.Context, field 
 		ec.fieldContext_Mutation_createTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTemplate(ctx, fc.Args["input"].(generated.CreateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTemplate(ctx, fc.Args["input"].(generated.CreateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateCreatePayload,
@@ -29426,7 +29426,7 @@ func (ec *executionContext) _Mutation_createBulkTemplate(ctx context.Context, fi
 		ec.fieldContext_Mutation_createBulkTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTemplate(ctx, fc.Args["input"].([]*generated.CreateTemplateInput))
+			return ec.Resolvers.Mutation().CreateBulkTemplate(ctx, fc.Args["input"].([]*generated.CreateTemplateInput))
 		},
 		nil,
 		ec.marshalNTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkCreatePayload,
@@ -29471,7 +29471,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTemplate(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkCSVTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkCreatePayload,
@@ -29516,7 +29516,7 @@ func (ec *executionContext) _Mutation_updateTemplate(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateUpdatePayload,
@@ -29561,7 +29561,7 @@ func (ec *executionContext) _Mutation_deleteTemplate(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTemplate(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTemplate(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateDeletePayload,
@@ -29606,7 +29606,7 @@ func (ec *executionContext) _Mutation_deleteBulkTemplate(ctx context.Context, fi
 		ec.fieldContext_Mutation_deleteBulkTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTemplate(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTemplate(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkDeletePayload,
@@ -29651,7 +29651,7 @@ func (ec *executionContext) _Mutation_updateBulkTemplate(ctx context.Context, fi
 		ec.fieldContext_Mutation_updateBulkTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTemplateInput))
+			return ec.Resolvers.Mutation().UpdateBulkTemplate(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTemplateInput))
 		},
 		nil,
 		ec.marshalNTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkUpdatePayload,
@@ -29698,7 +29698,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVTemplate(ctx context.Context,
 		ec.fieldContext_Mutation_updateBulkCSVTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVTemplate(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVTemplate(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateBulkUpdatePayload,
@@ -29745,7 +29745,7 @@ func (ec *executionContext) _Mutation_createTFASetting(ctx context.Context, fiel
 		ec.fieldContext_Mutation_createTFASetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTFASetting(ctx, fc.Args["input"].(generated.CreateTFASettingInput))
+			return ec.Resolvers.Mutation().CreateTFASetting(ctx, fc.Args["input"].(generated.CreateTFASettingInput))
 		},
 		nil,
 		ec.marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload,
@@ -29794,7 +29794,7 @@ func (ec *executionContext) _Mutation_updateTFASetting(ctx context.Context, fiel
 		ec.fieldContext_Mutation_updateTFASetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTFASetting(ctx, fc.Args["input"].(generated.UpdateTFASettingInput))
+			return ec.Resolvers.Mutation().UpdateTFASetting(ctx, fc.Args["input"].(generated.UpdateTFASettingInput))
 		},
 		nil,
 		ec.marshalNTFASettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload,
@@ -29845,7 +29845,7 @@ func (ec *executionContext) _Mutation_createTrustCenter(ctx context.Context, fie
 		ec.fieldContext_Mutation_createTrustCenter,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenter(ctx, fc.Args["input"].(generated.CreateTrustCenterInput))
+			return ec.Resolvers.Mutation().CreateTrustCenter(ctx, fc.Args["input"].(generated.CreateTrustCenterInput))
 		},
 		nil,
 		ec.marshalNTrustCenterCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterCreatePayload,
@@ -29890,7 +29890,7 @@ func (ec *executionContext) _Mutation_updateTrustCenter(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateTrustCenter,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenter(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterInput))
+			return ec.Resolvers.Mutation().UpdateTrustCenter(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterInput))
 		},
 		nil,
 		ec.marshalNTrustCenterUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterUpdatePayload,
@@ -29935,7 +29935,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenter(ctx context.Context, fie
 		ec.fieldContext_Mutation_deleteTrustCenter,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenter(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenter(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDeletePayload,
@@ -29980,7 +29980,7 @@ func (ec *executionContext) _Mutation_createTrustCenterCompliance(ctx context.Co
 		ec.fieldContext_Mutation_createTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterCompliance(ctx, fc.Args["input"].(generated.CreateTrustCenterComplianceInput))
+			return ec.Resolvers.Mutation().CreateTrustCenterCompliance(ctx, fc.Args["input"].(generated.CreateTrustCenterComplianceInput))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceCreatePayload,
@@ -30025,7 +30025,7 @@ func (ec *executionContext) _Mutation_createBulkTrustCenterCompliance(ctx contex
 		ec.fieldContext_Mutation_createBulkTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustCenterCompliance(ctx, fc.Args["input"].([]*generated.CreateTrustCenterComplianceInput))
+			return ec.Resolvers.Mutation().CreateBulkTrustCenterCompliance(ctx, fc.Args["input"].([]*generated.CreateTrustCenterComplianceInput))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceBulkCreatePayload,
@@ -30070,7 +30070,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTrustCenterCompliance(ctx con
 		ec.fieldContext_Mutation_createBulkCSVTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterCompliance(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTrustCenterCompliance(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceBulkCreatePayload,
@@ -30115,7 +30115,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterCompliance(ctx context.Co
 		ec.fieldContext_Mutation_updateTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterCompliance(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterComplianceInput))
+			return ec.Resolvers.Mutation().UpdateTrustCenterCompliance(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterComplianceInput))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceUpdatePayload,
@@ -30160,7 +30160,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterCompliance(ctx context.Co
 		ec.fieldContext_Mutation_deleteTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterCompliance(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterCompliance(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceDeletePayload,
@@ -30205,7 +30205,7 @@ func (ec *executionContext) _Mutation_deleteBulkTrustCenterCompliance(ctx contex
 		ec.fieldContext_Mutation_deleteBulkTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTrustCenterCompliance(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTrustCenterCompliance(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceBulkDeletePayload,
@@ -30250,7 +30250,7 @@ func (ec *executionContext) _Mutation_updateBulkTrustCenterCompliance(ctx contex
 		ec.fieldContext_Mutation_updateBulkTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkTrustCenterCompliance(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterComplianceInput))
+			return ec.Resolvers.Mutation().UpdateBulkTrustCenterCompliance(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterComplianceInput))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceBulkUpdatePayload,
@@ -30297,7 +30297,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVTrustCenterCompliance(ctx con
 		ec.fieldContext_Mutation_updateBulkCSVTrustCenterCompliance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVTrustCenterCompliance(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVTrustCenterCompliance(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterComplianceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterComplianceBulkUpdatePayload,
@@ -30344,7 +30344,7 @@ func (ec *executionContext) _Mutation_createTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_createTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterDoc(ctx, fc.Args["input"].(generated.CreateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterDoc(ctx, fc.Args["input"].(generated.CreateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterDocCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocCreatePayload,
@@ -30389,7 +30389,7 @@ func (ec *executionContext) _Mutation_createBulkTrustCenterDoc(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustCenterDoc(ctx, fc.Args["input"].([]*generated.CreateTrustCenterDocInput))
+			return ec.Resolvers.Mutation().CreateBulkTrustCenterDoc(ctx, fc.Args["input"].([]*generated.CreateTrustCenterDocInput))
 		},
 		nil,
 		ec.marshalNTrustCenterDocBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkCreatePayload,
@@ -30434,7 +30434,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTrustCenterDoc(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterDoc(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTrustCenterDoc(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterDocBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkCreatePayload,
@@ -30479,7 +30479,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_updateTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterDoc(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(*graphql.Upload), fc.Args["watermarkedTrustCenterDocFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterDoc(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterDocInput), fc.Args["trustCenterDocFile"].(*graphql.Upload), fc.Args["watermarkedTrustCenterDocFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterDocUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocUpdatePayload,
@@ -30524,7 +30524,7 @@ func (ec *executionContext) _Mutation_updateBulkTrustCenterDoc(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkTrustCenterDoc(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterDocInput))
+			return ec.Resolvers.Mutation().UpdateBulkTrustCenterDoc(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterDocInput))
 		},
 		nil,
 		ec.marshalNTrustCenterDocBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload,
@@ -30571,7 +30571,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterDoc(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterDoc(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterDoc(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterDocDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocDeletePayload,
@@ -30616,7 +30616,7 @@ func (ec *executionContext) _Mutation_deleteBulkTrustCenterDoc(ctx context.Conte
 		ec.fieldContext_Mutation_deleteBulkTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTrustCenterDoc(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTrustCenterDoc(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTrustCenterDocBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkDeletePayload,
@@ -30661,7 +30661,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVTrustCenterDoc(ctx context.Co
 		ec.fieldContext_Mutation_updateBulkCSVTrustCenterDoc,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVTrustCenterDoc(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVTrustCenterDoc(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterDocBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload,
@@ -30708,7 +30708,7 @@ func (ec *executionContext) _Mutation_createTrustCenterDomain(ctx context.Contex
 		ec.fieldContext_Mutation_createTrustCenterDomain,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterDomain(ctx, fc.Args["input"].(model.CreateTrustCenterDomainInput))
+			return ec.Resolvers.Mutation().CreateTrustCenterDomain(ctx, fc.Args["input"].(model.CreateTrustCenterDomainInput))
 		},
 		nil,
 		ec.marshalNTrustCenterDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload,
@@ -30753,7 +30753,7 @@ func (ec *executionContext) _Mutation_createTrustCenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_createTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterEntity(ctx, fc.Args["input"].(generated.CreateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterEntity(ctx, fc.Args["input"].(generated.CreateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityCreatePayload,
@@ -30798,7 +30798,7 @@ func (ec *executionContext) _Mutation_createBulkTrustCenterEntity(ctx context.Co
 		ec.fieldContext_Mutation_createBulkTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustCenterEntity(ctx, fc.Args["input"].([]*generated.CreateTrustCenterEntityInput))
+			return ec.Resolvers.Mutation().CreateBulkTrustCenterEntity(ctx, fc.Args["input"].([]*generated.CreateTrustCenterEntityInput))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityBulkCreatePayload,
@@ -30843,7 +30843,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTrustCenterEntity(ctx context
 		ec.fieldContext_Mutation_createBulkCSVTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterEntity(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTrustCenterEntity(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityBulkCreatePayload,
@@ -30888,7 +30888,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_updateTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityUpdatePayload,
@@ -30933,7 +30933,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_deleteTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterEntity(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterEntity(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterEntityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityDeletePayload,
@@ -30978,7 +30978,7 @@ func (ec *executionContext) _Mutation_createTrustCenterFAQ(ctx context.Context, 
 		ec.fieldContext_Mutation_createTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterFaq(ctx, fc.Args["input"].(generated.CreateTrustCenterFAQInput))
+			return ec.Resolvers.Mutation().CreateTrustCenterFaq(ctx, fc.Args["input"].(generated.CreateTrustCenterFAQInput))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQCreatePayload,
@@ -31023,7 +31023,7 @@ func (ec *executionContext) _Mutation_createBulkTrustCenterFAQ(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustCenterFaq(ctx, fc.Args["input"].([]*generated.CreateTrustCenterFAQInput))
+			return ec.Resolvers.Mutation().CreateBulkTrustCenterFaq(ctx, fc.Args["input"].([]*generated.CreateTrustCenterFAQInput))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkCreatePayload,
@@ -31068,7 +31068,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTrustCenterFAQ(ctx context.Co
 		ec.fieldContext_Mutation_createBulkCSVTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterFaq(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTrustCenterFaq(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkCreatePayload,
@@ -31113,7 +31113,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterFAQ(ctx context.Context, 
 		ec.fieldContext_Mutation_updateTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterFaq(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterFAQInput))
+			return ec.Resolvers.Mutation().UpdateTrustCenterFaq(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterFAQInput))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQUpdatePayload,
@@ -31158,7 +31158,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterFAQ(ctx context.Context, 
 		ec.fieldContext_Mutation_deleteTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterFaq(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterFaq(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQDeletePayload,
@@ -31203,7 +31203,7 @@ func (ec *executionContext) _Mutation_deleteBulkTrustCenterFAQ(ctx context.Conte
 		ec.fieldContext_Mutation_deleteBulkTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTrustCenterFaq(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTrustCenterFaq(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkDeletePayload,
@@ -31248,7 +31248,7 @@ func (ec *executionContext) _Mutation_updateBulkTrustCenterFAQ(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkTrustCenterFaq(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterFAQInput))
+			return ec.Resolvers.Mutation().UpdateBulkTrustCenterFaq(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterFAQInput))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkUpdatePayload,
@@ -31295,7 +31295,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVTrustCenterFAQ(ctx context.Co
 		ec.fieldContext_Mutation_updateBulkCSVTrustCenterFAQ,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVTrustCenterFaq(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVTrustCenterFaq(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkUpdatePayload,
@@ -31342,7 +31342,7 @@ func (ec *executionContext) _Mutation_createTrustCenterNDA(ctx context.Context, 
 		ec.fieldContext_Mutation_createTrustCenterNDA,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterNda(ctx, fc.Args["input"].(model.CreateTrustCenterNDAInput), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterNda(ctx, fc.Args["input"].(model.CreateTrustCenterNDAInput), fc.Args["templateFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload,
@@ -31387,7 +31387,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterNDA(ctx context.Context, 
 		ec.fieldContext_Mutation_updateTrustCenterNDA,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterNda(ctx, fc.Args["id"].(string), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterNda(ctx, fc.Args["id"].(string), fc.Args["templateFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterNDAUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload,
@@ -31432,7 +31432,7 @@ func (ec *executionContext) _Mutation_submitTrustCenterNDAResponse(ctx context.C
 		ec.fieldContext_Mutation_submitTrustCenterNDAResponse,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().SubmitTrustCenterNDAResponse(ctx, fc.Args["input"].(model.SubmitTrustCenterNDAResponseInput))
+			return ec.Resolvers.Mutation().SubmitTrustCenterNDAResponse(ctx, fc.Args["input"].(model.SubmitTrustCenterNDAResponseInput))
 		},
 		nil,
 		ec.marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload,
@@ -31477,7 +31477,7 @@ func (ec *executionContext) _Mutation_createTrustCenterNDARequest(ctx context.Co
 		ec.fieldContext_Mutation_createTrustCenterNDARequest,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterNDARequest(ctx, fc.Args["input"].(generated.CreateTrustCenterNDARequestInput))
+			return ec.Resolvers.Mutation().CreateTrustCenterNDARequest(ctx, fc.Args["input"].(generated.CreateTrustCenterNDARequestInput))
 		},
 		nil,
 		ec.marshalNTrustCenterNDARequestCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestCreatePayload,
@@ -31522,7 +31522,7 @@ func (ec *executionContext) _Mutation_createBulkTrustCenterNDARequest(ctx contex
 		ec.fieldContext_Mutation_createBulkTrustCenterNDARequest,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustCenterNDARequest(ctx, fc.Args["input"].([]*generated.CreateTrustCenterNDARequestInput))
+			return ec.Resolvers.Mutation().CreateBulkTrustCenterNDARequest(ctx, fc.Args["input"].([]*generated.CreateTrustCenterNDARequestInput))
 		},
 		nil,
 		ec.marshalNTrustCenterNDARequestBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestBulkCreatePayload,
@@ -31567,7 +31567,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTrustCenterNDARequest(ctx con
 		ec.fieldContext_Mutation_createBulkCSVTrustCenterNDARequest,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterNDARequest(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTrustCenterNDARequest(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterNDARequestBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestBulkCreatePayload,
@@ -31612,7 +31612,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterNDARequest(ctx context.Co
 		ec.fieldContext_Mutation_updateTrustCenterNDARequest,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterNDARequest(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterNDARequestInput))
+			return ec.Resolvers.Mutation().UpdateTrustCenterNDARequest(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterNDARequestInput))
 		},
 		nil,
 		ec.marshalNTrustCenterNDARequestUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestUpdatePayload,
@@ -31657,7 +31657,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterNDARequest(ctx context.Co
 		ec.fieldContext_Mutation_deleteTrustCenterNDARequest,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterNDARequest(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterNDARequest(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterNDARequestDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestDeletePayload,
@@ -31702,7 +31702,7 @@ func (ec *executionContext) _Mutation_approveNDARequests(ctx context.Context, fi
 		ec.fieldContext_Mutation_approveNDARequests,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ApproveNDARequests(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().ApproveNDARequests(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNBulkUpdateStatusPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateStatusPayload,
@@ -31747,7 +31747,7 @@ func (ec *executionContext) _Mutation_denyNDARequests(ctx context.Context, field
 		ec.fieldContext_Mutation_denyNDARequests,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DenyNDARequests(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DenyNDARequests(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNBulkUpdateStatusPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateStatusPayload,
@@ -31792,7 +31792,7 @@ func (ec *executionContext) _Mutation_deleteBulkTrustCenterNDARequest(ctx contex
 		ec.fieldContext_Mutation_deleteBulkTrustCenterNDARequest,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTrustCenterNDARequest(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTrustCenterNDARequest(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTrustCenterNDARequestBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDARequestBulkDeletePayload,
@@ -31837,7 +31837,7 @@ func (ec *executionContext) _Mutation_requestNewTrustCenterToken(ctx context.Con
 		ec.fieldContext_Mutation_requestNewTrustCenterToken,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().RequestNewTrustCenterToken(ctx, fc.Args["email"].(string))
+			return ec.Resolvers.Mutation().RequestNewTrustCenterToken(ctx, fc.Args["email"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterAccessTokenPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterAccessTokenPayload,
@@ -31882,7 +31882,7 @@ func (ec *executionContext) _Mutation_createTrustCenterPreviewSetting(ctx contex
 		ec.fieldContext_Mutation_createTrustCenterPreviewSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterPreviewSetting(ctx, fc.Args["input"].(model.CreateTrustCenterPreviewSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterPreviewSetting(ctx, fc.Args["input"].(model.CreateTrustCenterPreviewSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload,
@@ -31927,7 +31927,7 @@ func (ec *executionContext) _Mutation_createTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_createTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterSetting(ctx, fc.Args["input"].(generated.CreateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterSetting(ctx, fc.Args["input"].(generated.CreateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload,
@@ -31972,7 +31972,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_updateTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
@@ -32017,7 +32017,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterPreviewSetting(ctx contex
 		ec.fieldContext_Mutation_updateTrustCenterPreviewSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
@@ -32061,7 +32061,7 @@ func (ec *executionContext) _Mutation_publishTrustCenterSetting(ctx context.Cont
 		field,
 		ec.fieldContext_Mutation_publishTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
-			return ec.resolvers.Mutation().PublishTrustCenterSetting(ctx)
+			return ec.Resolvers.Mutation().PublishTrustCenterSetting(ctx)
 		},
 		nil,
 		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
@@ -32095,7 +32095,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterSetting(ctx context.Conte
 		ec.fieldContext_Mutation_deleteTrustCenterSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterSetting(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterSetting(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingDeletePayload,
@@ -32140,7 +32140,7 @@ func (ec *executionContext) _Mutation_createTrustCenterSubprocessor(ctx context.
 		ec.fieldContext_Mutation_createTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterSubprocessor(ctx, fc.Args["input"].(generated.CreateTrustCenterSubprocessorInput))
+			return ec.Resolvers.Mutation().CreateTrustCenterSubprocessor(ctx, fc.Args["input"].(generated.CreateTrustCenterSubprocessorInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorCreatePayload,
@@ -32185,7 +32185,7 @@ func (ec *executionContext) _Mutation_createBulkTrustCenterSubprocessor(ctx cont
 		ec.fieldContext_Mutation_createBulkTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustCenterSubprocessor(ctx, fc.Args["input"].([]*generated.CreateTrustCenterSubprocessorInput))
+			return ec.Resolvers.Mutation().CreateBulkTrustCenterSubprocessor(ctx, fc.Args["input"].([]*generated.CreateTrustCenterSubprocessorInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkCreatePayload,
@@ -32230,7 +32230,7 @@ func (ec *executionContext) _Mutation_createBulkCSVTrustCenterSubprocessor(ctx c
 		ec.fieldContext_Mutation_createBulkCSVTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVTrustCenterSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkCreatePayload,
@@ -32275,7 +32275,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterSubprocessor(ctx context.
 		ec.fieldContext_Mutation_updateTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterSubprocessor(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSubprocessorInput))
+			return ec.Resolvers.Mutation().UpdateTrustCenterSubprocessor(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterSubprocessorInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorUpdatePayload,
@@ -32320,7 +32320,7 @@ func (ec *executionContext) _Mutation_updateBulkTrustCenterSubprocessor(ctx cont
 		ec.fieldContext_Mutation_updateBulkTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkTrustCenterSubprocessor(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterSubprocessorInput))
+			return ec.Resolvers.Mutation().UpdateBulkTrustCenterSubprocessor(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterSubprocessorInput))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkUpdatePayload,
@@ -32367,7 +32367,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterSubprocessor(ctx context.
 		ec.fieldContext_Mutation_deleteTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterSubprocessor(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterSubprocessor(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorDeletePayload,
@@ -32412,7 +32412,7 @@ func (ec *executionContext) _Mutation_deleteBulkTrustCenterSubprocessor(ctx cont
 		ec.fieldContext_Mutation_deleteBulkTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkTrustCenterSubprocessor(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkTrustCenterSubprocessor(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkDeletePayload,
@@ -32457,7 +32457,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVTrustCenterSubprocessor(ctx c
 		ec.fieldContext_Mutation_updateBulkCSVTrustCenterSubprocessor,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVTrustCenterSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVTrustCenterSubprocessor(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkUpdatePayload,
@@ -32504,7 +32504,7 @@ func (ec *executionContext) _Mutation_createTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_createTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterWatermarkConfig(ctx, fc.Args["input"].(generated.CreateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterWatermarkConfig(ctx, fc.Args["input"].(generated.CreateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload,
@@ -32549,7 +32549,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_updateTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload,
@@ -32594,7 +32594,7 @@ func (ec *executionContext) _Mutation_deleteTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_deleteTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload,
@@ -32639,7 +32639,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		ec.fieldContext_Mutation_createUser,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateUser(ctx, fc.Args["input"].(generated.CreateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateUser(ctx, fc.Args["input"].(generated.CreateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNUserCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserCreatePayload,
@@ -32684,7 +32684,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 		ec.fieldContext_Mutation_updateUser,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNUserUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserUpdatePayload,
@@ -32729,7 +32729,7 @@ func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field grap
 		ec.fieldContext_Mutation_deleteUser,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteUser(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteUser(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNUserDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserDeletePayload,
@@ -32774,7 +32774,7 @@ func (ec *executionContext) _Mutation_createUserSetting(ctx context.Context, fie
 		ec.fieldContext_Mutation_createUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateUserSetting(ctx, fc.Args["input"].(generated.CreateUserSettingInput))
+			return ec.Resolvers.Mutation().CreateUserSetting(ctx, fc.Args["input"].(generated.CreateUserSettingInput))
 		},
 		nil,
 		ec.marshalNUserSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingCreatePayload,
@@ -32819,7 +32819,7 @@ func (ec *executionContext) _Mutation_createBulkUserSetting(ctx context.Context,
 		ec.fieldContext_Mutation_createBulkUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkUserSetting(ctx, fc.Args["input"].([]*generated.CreateUserSettingInput))
+			return ec.Resolvers.Mutation().CreateBulkUserSetting(ctx, fc.Args["input"].([]*generated.CreateUserSettingInput))
 		},
 		nil,
 		ec.marshalNUserSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkCreatePayload,
@@ -32864,7 +32864,7 @@ func (ec *executionContext) _Mutation_createBulkCSVUserSetting(ctx context.Conte
 		ec.fieldContext_Mutation_createBulkCSVUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVUserSetting(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVUserSetting(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNUserSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkCreatePayload,
@@ -32909,7 +32909,7 @@ func (ec *executionContext) _Mutation_updateUserSetting(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateUserSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserSettingInput))
+			return ec.Resolvers.Mutation().UpdateUserSetting(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateUserSettingInput))
 		},
 		nil,
 		ec.marshalNUserSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingUpdatePayload,
@@ -32954,7 +32954,7 @@ func (ec *executionContext) _Mutation_deleteBulkUserSetting(ctx context.Context,
 		ec.fieldContext_Mutation_deleteBulkUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteBulkUserSetting(ctx, fc.Args["ids"].([]string))
+			return ec.Resolvers.Mutation().DeleteBulkUserSetting(ctx, fc.Args["ids"].([]string))
 		},
 		nil,
 		ec.marshalNUserSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkDeletePayload,
@@ -32999,7 +32999,7 @@ func (ec *executionContext) _Mutation_updateBulkUserSetting(ctx context.Context,
 		ec.fieldContext_Mutation_updateBulkUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkUserSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateUserSettingInput))
+			return ec.Resolvers.Mutation().UpdateBulkUserSetting(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateUserSettingInput))
 		},
 		nil,
 		ec.marshalNUserSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkUpdatePayload,
@@ -33046,7 +33046,7 @@ func (ec *executionContext) _Mutation_updateBulkCSVUserSetting(ctx context.Conte
 		ec.fieldContext_Mutation_updateBulkCSVUserSetting,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateBulkCSVUserSetting(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateBulkCSVUserSetting(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNUserSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkUpdatePayload,
@@ -33093,7 +33093,7 @@ func (ec *executionContext) _Mutation_createVulnerability(ctx context.Context, f
 		ec.fieldContext_Mutation_createVulnerability,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateVulnerability(ctx, fc.Args["input"].(generated.CreateVulnerabilityInput))
+			return ec.Resolvers.Mutation().CreateVulnerability(ctx, fc.Args["input"].(generated.CreateVulnerabilityInput))
 		},
 		nil,
 		ec.marshalNVulnerabilityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVulnerabilityCreatePayload,
@@ -33138,7 +33138,7 @@ func (ec *executionContext) _Mutation_createBulkVulnerability(ctx context.Contex
 		ec.fieldContext_Mutation_createBulkVulnerability,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkVulnerability(ctx, fc.Args["input"].([]*generated.CreateVulnerabilityInput))
+			return ec.Resolvers.Mutation().CreateBulkVulnerability(ctx, fc.Args["input"].([]*generated.CreateVulnerabilityInput))
 		},
 		nil,
 		ec.marshalNVulnerabilityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVulnerabilityBulkCreatePayload,
@@ -33183,7 +33183,7 @@ func (ec *executionContext) _Mutation_createBulkCSVVulnerability(ctx context.Con
 		ec.fieldContext_Mutation_createBulkCSVVulnerability,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVVulnerability(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVVulnerability(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNVulnerabilityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVulnerabilityBulkCreatePayload,
@@ -33228,7 +33228,7 @@ func (ec *executionContext) _Mutation_updateVulnerability(ctx context.Context, f
 		ec.fieldContext_Mutation_updateVulnerability,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateVulnerability(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateVulnerabilityInput))
+			return ec.Resolvers.Mutation().UpdateVulnerability(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateVulnerabilityInput))
 		},
 		nil,
 		ec.marshalNVulnerabilityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVulnerabilityUpdatePayload,
@@ -33273,7 +33273,7 @@ func (ec *executionContext) _Mutation_deleteVulnerability(ctx context.Context, f
 		ec.fieldContext_Mutation_deleteVulnerability,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteVulnerability(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteVulnerability(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNVulnerabilityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVulnerabilityDeletePayload,
@@ -33318,7 +33318,7 @@ func (ec *executionContext) _Mutation_resolveVulnerability(ctx context.Context, 
 		ec.fieldContext_Mutation_resolveVulnerability,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ResolveVulnerability(ctx, fc.Args["id"].(string), fc.Args["input"].(model.ResolveVulnerabilityInput))
+			return ec.Resolvers.Mutation().ResolveVulnerability(ctx, fc.Args["id"].(string), fc.Args["input"].(model.ResolveVulnerabilityInput))
 		},
 		nil,
 		ec.marshalNVulnerabilityResolvePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVulnerabilityResolvePayload,
@@ -33365,7 +33365,7 @@ func (ec *executionContext) _Mutation_deleteWebauthn(ctx context.Context, field 
 		ec.fieldContext_Mutation_deleteWebauthn,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteWebauthn(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteWebauthn(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNWebauthnDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload,
@@ -33410,7 +33410,7 @@ func (ec *executionContext) _Mutation_forceCompleteWorkflowInstance(ctx context.
 		ec.fieldContext_Mutation_forceCompleteWorkflowInstance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ForceCompleteWorkflowInstance(ctx, fc.Args["id"].(string), fc.Args["applyProposal"].(*bool))
+			return ec.Resolvers.Mutation().ForceCompleteWorkflowInstance(ctx, fc.Args["id"].(string), fc.Args["applyProposal"].(*bool))
 		},
 		nil,
 		ec.marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload,
@@ -33455,7 +33455,7 @@ func (ec *executionContext) _Mutation_cancelWorkflowInstance(ctx context.Context
 		ec.fieldContext_Mutation_cancelWorkflowInstance,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CancelWorkflowInstance(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string))
+			return ec.Resolvers.Mutation().CancelWorkflowInstance(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string))
 		},
 		nil,
 		ec.marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload,
@@ -33500,7 +33500,7 @@ func (ec *executionContext) _Mutation_bulkForceCompleteWorkflowInstances(ctx con
 		ec.fieldContext_Mutation_bulkForceCompleteWorkflowInstances,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().BulkForceCompleteWorkflowInstances(ctx, fc.Args["ids"].([]string), fc.Args["applyProposal"].(*bool))
+			return ec.Resolvers.Mutation().BulkForceCompleteWorkflowInstances(ctx, fc.Args["ids"].([]string), fc.Args["applyProposal"].(*bool))
 		},
 		nil,
 		ec.marshalNWorkflowInstanceBulkAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload,
@@ -33545,7 +33545,7 @@ func (ec *executionContext) _Mutation_bulkCancelWorkflowInstances(ctx context.Co
 		ec.fieldContext_Mutation_bulkCancelWorkflowInstances,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().BulkCancelWorkflowInstances(ctx, fc.Args["ids"].([]string), fc.Args["reason"].(*string))
+			return ec.Resolvers.Mutation().BulkCancelWorkflowInstances(ctx, fc.Args["ids"].([]string), fc.Args["reason"].(*string))
 		},
 		nil,
 		ec.marshalNWorkflowInstanceBulkAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload,
@@ -33590,7 +33590,7 @@ func (ec *executionContext) _Mutation_adminReassignWorkflowAssignment(ctx contex
 		ec.fieldContext_Mutation_adminReassignWorkflowAssignment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().AdminReassignWorkflowAssignment(ctx, fc.Args["input"].(model.ReassignWorkflowAssignmentInput))
+			return ec.Resolvers.Mutation().AdminReassignWorkflowAssignment(ctx, fc.Args["input"].(model.ReassignWorkflowAssignmentInput))
 		},
 		nil,
 		ec.marshalNWorkflowAssignmentReassignPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload,
@@ -33635,7 +33635,7 @@ func (ec *executionContext) _Mutation_approveWorkflowAssignment(ctx context.Cont
 		ec.fieldContext_Mutation_approveWorkflowAssignment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ApproveWorkflowAssignment(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().ApproveWorkflowAssignment(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNWorkflowAssignmentApprovePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload,
@@ -33680,7 +33680,7 @@ func (ec *executionContext) _Mutation_rejectWorkflowAssignment(ctx context.Conte
 		ec.fieldContext_Mutation_rejectWorkflowAssignment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().RejectWorkflowAssignment(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string))
+			return ec.Resolvers.Mutation().RejectWorkflowAssignment(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string))
 		},
 		nil,
 		ec.marshalNWorkflowAssignmentRejectPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload,
@@ -33725,7 +33725,7 @@ func (ec *executionContext) _Mutation_requestChangesWorkflowAssignment(ctx conte
 		ec.fieldContext_Mutation_requestChangesWorkflowAssignment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().RequestChangesWorkflowAssignment(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string), fc.Args["inputs"].(map[string]any))
+			return ec.Resolvers.Mutation().RequestChangesWorkflowAssignment(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string), fc.Args["inputs"].(map[string]any))
 		},
 		nil,
 		ec.marshalNWorkflowAssignmentRejectPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload,
@@ -33770,7 +33770,7 @@ func (ec *executionContext) _Mutation_reassignWorkflowAssignment(ctx context.Con
 		ec.fieldContext_Mutation_reassignWorkflowAssignment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().ReassignWorkflowAssignment(ctx, fc.Args["id"].(string), fc.Args["targetUserID"].(string))
+			return ec.Resolvers.Mutation().ReassignWorkflowAssignment(ctx, fc.Args["id"].(string), fc.Args["targetUserID"].(string))
 		},
 		nil,
 		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment,
@@ -33869,7 +33869,7 @@ func (ec *executionContext) _Mutation_createWorkflowDefinition(ctx context.Conte
 		ec.fieldContext_Mutation_createWorkflowDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateWorkflowDefinition(ctx, fc.Args["input"].(generated.CreateWorkflowDefinitionInput))
+			return ec.Resolvers.Mutation().CreateWorkflowDefinition(ctx, fc.Args["input"].(generated.CreateWorkflowDefinitionInput))
 		},
 		nil,
 		ec.marshalNWorkflowDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload,
@@ -33914,7 +33914,7 @@ func (ec *executionContext) _Mutation_createBulkWorkflowDefinition(ctx context.C
 		ec.fieldContext_Mutation_createBulkWorkflowDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkWorkflowDefinition(ctx, fc.Args["input"].([]*generated.CreateWorkflowDefinitionInput))
+			return ec.Resolvers.Mutation().CreateBulkWorkflowDefinition(ctx, fc.Args["input"].([]*generated.CreateWorkflowDefinitionInput))
 		},
 		nil,
 		ec.marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload,
@@ -33959,7 +33959,7 @@ func (ec *executionContext) _Mutation_createBulkCSVWorkflowDefinition(ctx contex
 		ec.fieldContext_Mutation_createBulkCSVWorkflowDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVWorkflowDefinition(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.Resolvers.Mutation().CreateBulkCSVWorkflowDefinition(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
 		ec.marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload,
@@ -34004,7 +34004,7 @@ func (ec *executionContext) _Mutation_updateWorkflowDefinition(ctx context.Conte
 		ec.fieldContext_Mutation_updateWorkflowDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateWorkflowDefinition(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateWorkflowDefinitionInput))
+			return ec.Resolvers.Mutation().UpdateWorkflowDefinition(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateWorkflowDefinitionInput))
 		},
 		nil,
 		ec.marshalNWorkflowDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload,
@@ -34049,7 +34049,7 @@ func (ec *executionContext) _Mutation_deleteWorkflowDefinition(ctx context.Conte
 		ec.fieldContext_Mutation_deleteWorkflowDefinition,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteWorkflowDefinition(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().DeleteWorkflowDefinition(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNWorkflowDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload,
@@ -34094,7 +34094,7 @@ func (ec *executionContext) _Mutation_updateWorkflowProposalChanges(ctx context.
 		ec.fieldContext_Mutation_updateWorkflowProposalChanges,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateWorkflowProposalChanges(ctx, fc.Args["input"].(model.UpdateWorkflowProposalChangesInput))
+			return ec.Resolvers.Mutation().UpdateWorkflowProposalChanges(ctx, fc.Args["input"].(model.UpdateWorkflowProposalChangesInput))
 		},
 		nil,
 		ec.marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload,
@@ -34139,7 +34139,7 @@ func (ec *executionContext) _Mutation_submitWorkflowProposal(ctx context.Context
 		ec.fieldContext_Mutation_submitWorkflowProposal,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().SubmitWorkflowProposal(ctx, fc.Args["id"].(string))
+			return ec.Resolvers.Mutation().SubmitWorkflowProposal(ctx, fc.Args["id"].(string))
 		},
 		nil,
 		ec.marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload,
@@ -34184,7 +34184,7 @@ func (ec *executionContext) _Mutation_withdrawWorkflowProposal(ctx context.Conte
 		ec.fieldContext_Mutation_withdrawWorkflowProposal,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().WithdrawWorkflowProposal(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string))
+			return ec.Resolvers.Mutation().WithdrawWorkflowProposal(ctx, fc.Args["id"].(string), fc.Args["reason"].(*string))
 		},
 		nil,
 		ec.marshalNWorkflowProposalWithdrawPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload,
@@ -34255,10 +34255,10 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -34294,10 +34294,10 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -34332,10 +34332,10 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -34371,10 +34371,10 @@ func (ec *executionContext) _ActionPlanCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -34410,10 +34410,10 @@ func (ec *executionContext) _ActionPlanDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -34449,10 +34449,10 @@ func (ec *executionContext) _ActionPlanUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,
@@ -38446,10 +38446,10 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
 
 	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
 			Label:    label,
 			Path:     graphql.GetPath(ctx),
 			FieldSet: dfs,

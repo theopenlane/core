@@ -12336,6 +12336,10 @@ scalar EvidenceRequests
 The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
 """
 scalar ExampleEvidence
+"""
+ExportMetadata contains metadata for an export record
+"""
+scalar ExportMetadata
 type FileHistory implements Node {
 	id: ID!
 	historyTime: Time!

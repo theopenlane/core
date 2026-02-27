@@ -1,6 +1,10 @@
 package jobspec
 
-import "github.com/riverqueue/river"
+import (
+	"github.com/riverqueue/river"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+)
 
 // ExportContentArgs for the worker to process and update the record for the updated content
 type ExportContentArgs struct {
@@ -10,6 +14,10 @@ type ExportContentArgs struct {
 	UserID string `json:"user_id,omitempty"`
 	// OrganizationID of the organization context for the export
 	OrganizationID string `json:"organization_id,omitempty"`
+	// Mode is the export mode (e.g., flat or folder)
+	Mode enums.ExportMode `json:"mode,omitempty"`
+	// ExportMetadata contains additional metadata for the export
+	ExportMetadata *models.ExportMetadata `json:"export_metadata,omitempty"`
 }
 
 // Kind satisfies the river.Job interface

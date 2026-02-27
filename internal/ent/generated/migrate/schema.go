@@ -2462,6 +2462,8 @@ var (
 		{Name: "fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "filters", Type: field.TypeString, Nullable: true},
 		{Name: "error_message", Type: field.TypeString, Nullable: true},
+		{Name: "mode", Type: field.TypeEnum, Enums: []string{"FLAT", "FOLDER"}, Default: "FLAT"},
+		{Name: "export_metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ExportsTable holds the schema information for the "exports" table.
@@ -2472,7 +2474,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "exports_organizations_exports",
-				Columns:    []*schema.Column{ExportsColumns[14]},
+				Columns:    []*schema.Column{ExportsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2481,7 +2483,7 @@ var (
 			{
 				Name:    "export_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ExportsColumns[14]},
+				Columns: []*schema.Column{ExportsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4575,7 +4577,7 @@ var (
 		{Name: "data", Type: field.TypeJSON, Nullable: true},
 		{Name: "read_at", Type: field.TypeTime, Nullable: true},
 		{Name: "channels", Type: field.TypeJSON, Nullable: true},
-		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT"}},
+		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE"}},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},

@@ -396,6 +396,16 @@ type ControlCategoryOrder struct {
 	Field ControlCategoryOrderField `json:"field"`
 }
 
+// ControlChange describes the diffs for a single control identified by refCode
+type ControlChange struct {
+	// The ref_code of the control
+	RefCode string `json:"refCode"`
+	// The title of the control at the new revision
+	Title string `json:"title"`
+	// Field-level diffs for this control
+	Diffs []*ControlFieldDiff `json:"diffs"`
+}
+
 // Return response for createControl mutation
 type ControlCreatePayload struct {
 	// Created control
@@ -406,6 +416,40 @@ type ControlCreatePayload struct {
 type ControlDeletePayload struct {
 	// Deleted control ID
 	DeletedID string `json:"deletedID"`
+}
+
+// ControlDiffInput is used to compare all controls under a standard across two revisions
+type ControlDiffInput struct {
+	// ID of the standard to compare controls for
+	StandardID string `json:"standardID"`
+	// base revision to compare from (e.g. "v1.0.0")
+	OldRevision string `json:"oldRevision"`
+	// target revision to compare to (e.g. "v2.0.0")
+	NewRevision string `json:"newRevision"`
+}
+
+// ControlDiffPayload contains the field-level diffs between two revisions of all controls under a standard
+type ControlDiffPayload struct {
+	// The standard ID being compared
+	StandardID string `json:"standardID"`
+	// The base revision
+	OldRevision string `json:"oldRevision"`
+	// The target revision
+	NewRevision string `json:"newRevision"`
+	// Per-control changes between the two revisions
+	Changes []*ControlChange `json:"changes"`
+}
+
+// ControlFieldDiff describes a single field that differs between two control revisions
+type ControlFieldDiff struct {
+	// Field name (snake_case)
+	Field string `json:"field"`
+	// Value in the old revision
+	OldValue any `json:"oldValue,omitempty"`
+	// Value in the new revision
+	NewValue any `json:"newValue,omitempty"`
+	// Unified diff text when applicable
+	Diff *string `json:"diff,omitempty"`
 }
 
 type ControlGroup struct {
