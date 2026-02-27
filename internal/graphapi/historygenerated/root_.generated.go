@@ -372,9 +372,12 @@ type ComplexityRoot struct {
 		EnvironmentName            func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		ExternalUUID               func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
+		ImplementationStatus       func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		IsTrustCenterControl       func(childComplexity int) int
 		MappedCategories           func(childComplexity int) int
@@ -937,6 +940,7 @@ type ComplexityRoot struct {
 		DisplayID              func(childComplexity int) int
 		EnvironmentID          func(childComplexity int) int
 		EnvironmentName        func(childComplexity int) int
+		ExternalUUID           func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IsAutomated            func(childComplexity int) int
@@ -1115,27 +1119,30 @@ type ComplexityRoot struct {
 	}
 
 	GroupHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		GravatarLogoURL  func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		IsManaged        func(childComplexity int) int
-		LogoURL          func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ScimActive       func(childComplexity int) int
-		ScimDisplayName  func(childComplexity int) int
-		ScimExternalID   func(childComplexity int) int
-		ScimGroupMailing func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Description       func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
+		DisplayName       func(childComplexity int) int
+		GravatarLogoURL   func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsManaged         func(childComplexity int) int
+		LogoURL           func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OscalContactUuids func(childComplexity int) int
+		OscalPartyUUID    func(childComplexity int) int
+		OscalRole         func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		ScimActive        func(childComplexity int) int
+		ScimDisplayName   func(childComplexity int) int
+		ScimExternalID    func(childComplexity int) int
+		ScimGroupMailing  func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	GroupHistoryConnection struct {
@@ -1339,6 +1346,7 @@ type ComplexityRoot struct {
 		DisplayID                       func(childComplexity int) int
 		EnvironmentID                   func(childComplexity int) int
 		EnvironmentName                 func(childComplexity int) int
+		ExternalUUID                    func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -1783,6 +1791,7 @@ type ComplexityRoot struct {
 		EnvironmentName                func(childComplexity int) int
 		EstimatedMonthlyCost           func(childComplexity int) int
 		ExternalReferenceID            func(childComplexity int) int
+		ExternalUUID                   func(childComplexity int) int
 		HistoryTime                    func(childComplexity int) int
 		ID                             func(childComplexity int) int
 		InternalOwner                  func(childComplexity int) int
@@ -1899,6 +1908,7 @@ type ComplexityRoot struct {
 		Description          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		EndDate              func(childComplexity int) int
+		ExternalUUID         func(childComplexity int) int
 		FrameworkName        func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -2010,6 +2020,7 @@ type ComplexityRoot struct {
 		StandardHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.StandardHistoryOrder, where *historygenerated.StandardHistoryWhereInput) int
 		SubcontrolHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SubcontrolHistoryOrder, where *historygenerated.SubcontrolHistoryWhereInput) int
 		SubprocessorHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SubprocessorHistoryOrder, where *historygenerated.SubprocessorHistoryWhereInput) int
+		SystemDetailHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SystemDetailHistoryOrder, where *historygenerated.SystemDetailHistoryWhereInput) int
 		TaskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TaskHistoryOrder, where *historygenerated.TaskHistoryWhereInput) int
 		TemplateHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TemplateHistoryOrder, where *historygenerated.TemplateHistoryWhereInput) int
 		TrustCenterComplianceHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterComplianceHistoryOrder, where *historygenerated.TrustCenterComplianceHistoryWhereInput) int
@@ -2143,6 +2154,7 @@ type ComplexityRoot struct {
 		DisplayID         func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
+		ExternalUUID      func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
@@ -2313,9 +2325,12 @@ type ComplexityRoot struct {
 		DisplayID                  func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		ExternalUUID               func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
+		ImplementationStatus       func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
@@ -2384,6 +2399,41 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	SystemDetailHistory struct {
+		AuthorizationBoundary func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		LastReviewed          func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OscalMetadataJSON     func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		PlatformID            func(childComplexity int) int
+		ProgramID             func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		RevisionHistory       func(childComplexity int) int
+		SensitivityLevel      func(childComplexity int) int
+		SystemName            func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		Version               func(childComplexity int) int
+	}
+
+	SystemDetailHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SystemDetailHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	TaskHistory struct {
 		AssigneeID           func(childComplexity int) int
 		AssignerID           func(childComplexity int) int
@@ -2397,6 +2447,7 @@ type ComplexityRoot struct {
 		EnvironmentID        func(childComplexity int) int
 		EnvironmentName      func(childComplexity int) int
 		ExternalReferenceURL func(childComplexity int) int
+		ExternalUUID         func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		IdempotencyKey       func(childComplexity int) int
@@ -5039,6 +5090,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ControlHistory.ExampleEvidence(childComplexity), true
 
+	case "ControlHistory.externalUUID":
+		if e.ComplexityRoot.ControlHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ExternalUUID(childComplexity), true
+
 	case "ControlHistory.historyTime":
 		if e.ComplexityRoot.ControlHistory.HistoryTime == nil {
 			break
@@ -5053,12 +5111,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ControlHistory.ID(childComplexity), true
 
+	case "ControlHistory.implementationDescription":
+		if e.ComplexityRoot.ControlHistory.ImplementationDescription == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ImplementationDescription(childComplexity), true
+
 	case "ControlHistory.implementationGuidance":
 		if e.ComplexityRoot.ControlHistory.ImplementationGuidance == nil {
 			break
 		}
 
 		return e.ComplexityRoot.ControlHistory.ImplementationGuidance(childComplexity), true
+
+	case "ControlHistory.implementationStatus":
+		if e.ComplexityRoot.ControlHistory.ImplementationStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ImplementationStatus(childComplexity), true
 
 	case "ControlHistory.internalNotes":
 		if e.ComplexityRoot.ControlHistory.InternalNotes == nil {
@@ -8112,6 +8184,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EvidenceHistory.EnvironmentName(childComplexity), true
 
+	case "EvidenceHistory.externalUUID":
+		if e.ComplexityRoot.EvidenceHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.ExternalUUID(childComplexity), true
+
 	case "EvidenceHistory.historyTime":
 		if e.ComplexityRoot.EvidenceHistory.HistoryTime == nil {
 			break
@@ -9189,6 +9268,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.Operation(childComplexity), true
+
+	case "GroupHistory.oscalContactUuids":
+		if e.ComplexityRoot.GroupHistory.OscalContactUuids == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.OscalContactUuids(childComplexity), true
+
+	case "GroupHistory.oscalPartyUUID":
+		if e.ComplexityRoot.GroupHistory.OscalPartyUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.OscalPartyUUID(childComplexity), true
+
+	case "GroupHistory.oscalRole":
+		if e.ComplexityRoot.GroupHistory.OscalRole == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.OscalRole(childComplexity), true
 
 	case "GroupHistory.ownerID":
 		if e.ComplexityRoot.GroupHistory.OwnerID == nil {
@@ -10295,6 +10395,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicyHistory.EnvironmentName(childComplexity), true
+
+	case "InternalPolicyHistory.externalUUID":
+		if e.ComplexityRoot.InternalPolicyHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.ExternalUUID(childComplexity), true
 
 	case "InternalPolicyHistory.fileID":
 		if e.ComplexityRoot.InternalPolicyHistory.FileID == nil {
@@ -12627,6 +12734,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.PlatformHistory.ExternalReferenceID(childComplexity), true
 
+	case "PlatformHistory.externalUUID":
+		if e.ComplexityRoot.PlatformHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.ExternalUUID(childComplexity), true
+
 	case "PlatformHistory.historyTime":
 		if e.ComplexityRoot.PlatformHistory.HistoryTime == nil {
 			break
@@ -13312,6 +13426,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.EndDate(childComplexity), true
+
+	case "ProgramHistory.externalUUID":
+		if e.ComplexityRoot.ProgramHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.ExternalUUID(childComplexity), true
 
 	case "ProgramHistory.frameworkName":
 		if e.ComplexityRoot.ProgramHistory.FrameworkName == nil {
@@ -14249,6 +14370,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.SubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SubprocessorHistoryOrder), args["where"].(*historygenerated.SubprocessorHistoryWhereInput)), true
 
+	case "Query.systemDetailHistories":
+		if e.ComplexityRoot.Query.SystemDetailHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_systemDetailHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SystemDetailHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.SystemDetailHistoryOrder), args["where"].(*historygenerated.SystemDetailHistoryWhereInput)), true
+
 	case "Query.taskHistories":
 		if e.ComplexityRoot.Query.TaskHistories == nil {
 			break
@@ -15132,6 +15265,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.EnvironmentName(childComplexity), true
+
+	case "RiskHistory.externalUUID":
+		if e.ComplexityRoot.RiskHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ExternalUUID(childComplexity), true
 
 	case "RiskHistory.historyTime":
 		if e.ComplexityRoot.RiskHistory.HistoryTime == nil {
@@ -16071,6 +16211,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubcontrolHistory.ExampleEvidence(childComplexity), true
 
+	case "SubcontrolHistory.externalUUID":
+		if e.ComplexityRoot.SubcontrolHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ExternalUUID(childComplexity), true
+
 	case "SubcontrolHistory.historyTime":
 		if e.ComplexityRoot.SubcontrolHistory.HistoryTime == nil {
 			break
@@ -16085,12 +16232,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubcontrolHistory.ID(childComplexity), true
 
+	case "SubcontrolHistory.implementationDescription":
+		if e.ComplexityRoot.SubcontrolHistory.ImplementationDescription == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ImplementationDescription(childComplexity), true
+
 	case "SubcontrolHistory.implementationGuidance":
 		if e.ComplexityRoot.SubcontrolHistory.ImplementationGuidance == nil {
 			break
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.ImplementationGuidance(childComplexity), true
+
+	case "SubcontrolHistory.implementationStatus":
+		if e.ComplexityRoot.SubcontrolHistory.ImplementationStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ImplementationStatus(childComplexity), true
 
 	case "SubcontrolHistory.internalNotes":
 		if e.ComplexityRoot.SubcontrolHistory.InternalNotes == nil {
@@ -16449,6 +16610,188 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubprocessorHistoryEdge.Node(childComplexity), true
 
+	case "SystemDetailHistory.authorizationBoundary":
+		if e.ComplexityRoot.SystemDetailHistory.AuthorizationBoundary == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.AuthorizationBoundary(childComplexity), true
+
+	case "SystemDetailHistory.createdAt":
+		if e.ComplexityRoot.SystemDetailHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.CreatedAt(childComplexity), true
+
+	case "SystemDetailHistory.createdBy":
+		if e.ComplexityRoot.SystemDetailHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.CreatedBy(childComplexity), true
+
+	case "SystemDetailHistory.description":
+		if e.ComplexityRoot.SystemDetailHistory.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.Description(childComplexity), true
+
+	case "SystemDetailHistory.displayID":
+		if e.ComplexityRoot.SystemDetailHistory.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.DisplayID(childComplexity), true
+
+	case "SystemDetailHistory.historyTime":
+		if e.ComplexityRoot.SystemDetailHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.HistoryTime(childComplexity), true
+
+	case "SystemDetailHistory.id":
+		if e.ComplexityRoot.SystemDetailHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.ID(childComplexity), true
+
+	case "SystemDetailHistory.lastReviewed":
+		if e.ComplexityRoot.SystemDetailHistory.LastReviewed == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.LastReviewed(childComplexity), true
+
+	case "SystemDetailHistory.operation":
+		if e.ComplexityRoot.SystemDetailHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.Operation(childComplexity), true
+
+	case "SystemDetailHistory.oscalMetadataJSON":
+		if e.ComplexityRoot.SystemDetailHistory.OscalMetadataJSON == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.OscalMetadataJSON(childComplexity), true
+
+	case "SystemDetailHistory.ownerID":
+		if e.ComplexityRoot.SystemDetailHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.OwnerID(childComplexity), true
+
+	case "SystemDetailHistory.platformID":
+		if e.ComplexityRoot.SystemDetailHistory.PlatformID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.PlatformID(childComplexity), true
+
+	case "SystemDetailHistory.programID":
+		if e.ComplexityRoot.SystemDetailHistory.ProgramID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.ProgramID(childComplexity), true
+
+	case "SystemDetailHistory.ref":
+		if e.ComplexityRoot.SystemDetailHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.Ref(childComplexity), true
+
+	case "SystemDetailHistory.revisionHistory":
+		if e.ComplexityRoot.SystemDetailHistory.RevisionHistory == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.RevisionHistory(childComplexity), true
+
+	case "SystemDetailHistory.sensitivityLevel":
+		if e.ComplexityRoot.SystemDetailHistory.SensitivityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.SensitivityLevel(childComplexity), true
+
+	case "SystemDetailHistory.systemName":
+		if e.ComplexityRoot.SystemDetailHistory.SystemName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.SystemName(childComplexity), true
+
+	case "SystemDetailHistory.tags":
+		if e.ComplexityRoot.SystemDetailHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.Tags(childComplexity), true
+
+	case "SystemDetailHistory.updatedAt":
+		if e.ComplexityRoot.SystemDetailHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.UpdatedAt(childComplexity), true
+
+	case "SystemDetailHistory.updatedBy":
+		if e.ComplexityRoot.SystemDetailHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.UpdatedBy(childComplexity), true
+
+	case "SystemDetailHistory.version":
+		if e.ComplexityRoot.SystemDetailHistory.Version == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.Version(childComplexity), true
+
+	case "SystemDetailHistoryConnection.edges":
+		if e.ComplexityRoot.SystemDetailHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistoryConnection.Edges(childComplexity), true
+
+	case "SystemDetailHistoryConnection.pageInfo":
+		if e.ComplexityRoot.SystemDetailHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistoryConnection.PageInfo(childComplexity), true
+
+	case "SystemDetailHistoryConnection.totalCount":
+		if e.ComplexityRoot.SystemDetailHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistoryConnection.TotalCount(childComplexity), true
+
+	case "SystemDetailHistoryEdge.cursor":
+		if e.ComplexityRoot.SystemDetailHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistoryEdge.Cursor(childComplexity), true
+
+	case "SystemDetailHistoryEdge.node":
+		if e.ComplexityRoot.SystemDetailHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistoryEdge.Node(childComplexity), true
+
 	case "TaskHistory.assigneeID":
 		if e.ComplexityRoot.TaskHistory.AssigneeID == nil {
 			break
@@ -16532,6 +16875,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.ExternalReferenceURL(childComplexity), true
+
+	case "TaskHistory.externalUUID":
+		if e.ComplexityRoot.TaskHistory.ExternalUUID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.ExternalUUID(childComplexity), true
 
 	case "TaskHistory.historyTime":
 		if e.ComplexityRoot.TaskHistory.HistoryTime == nil {
@@ -20361,6 +20711,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSubcontrolHistoryWhereInput,
 		ec.unmarshalInputSubprocessorHistoryOrder,
 		ec.unmarshalInputSubprocessorHistoryWhereInput,
+		ec.unmarshalInputSystemDetailHistoryOrder,
+		ec.unmarshalInputSystemDetailHistoryWhereInput,
 		ec.unmarshalInputTaskHistoryOrder,
 		ec.unmarshalInputTaskHistoryWhereInput,
 		ec.unmarshalInputTemplateHistoryOrder,
@@ -24812,6 +25164,10 @@ type ControlHistory implements Node {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalSource(source: FRAMEWORK)
@@ -24843,6 +25199,14 @@ type ControlHistory implements Node {
   status of the control
   """
   status: ControlHistoryControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: ControlHistoryControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -24988,6 +25352,16 @@ type ControlHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+ControlHistoryControlImplementationStatus is enum for the field implementation_status
+"""
+enum ControlHistoryControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+  PLANNED
+  IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  INHERITED
+  NOT_APPLICABLE
 }
 """
 ControlHistoryControlSource is enum for the field source
@@ -25202,6 +25576,24 @@ input ControlHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -25300,6 +25692,33 @@ input ControlHistoryWhereInput {
   statusNotIn: [ControlHistoryControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  implementation_status field predicates
+  """
+  implementationStatus: ControlHistoryControlImplementationStatus
+  implementationStatusNEQ: ControlHistoryControlImplementationStatus
+  implementationStatusIn: [ControlHistoryControlImplementationStatus!]
+  implementationStatusNotIn: [ControlHistoryControlImplementationStatus!]
+  implementationStatusIsNil: Boolean
+  implementationStatusNotNil: Boolean
+  """
+  implementation_description field predicates
+  """
+  implementationDescription: String
+  implementationDescriptionNEQ: String
+  implementationDescriptionIn: [String!]
+  implementationDescriptionNotIn: [String!]
+  implementationDescriptionGT: String
+  implementationDescriptionGTE: String
+  implementationDescriptionLT: String
+  implementationDescriptionLTE: String
+  implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
+  implementationDescriptionHasSuffix: String
+  implementationDescriptionIsNil: Boolean
+  implementationDescriptionNotNil: Boolean
+  implementationDescriptionEqualFold: String
+  implementationDescriptionContainsFold: String
   """
   source field predicates
   """
@@ -32388,6 +32807,10 @@ type EvidenceHistory implements Node {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the evidence
   """
   name: String!
@@ -32731,6 +33154,24 @@ input EvidenceHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -34907,6 +35348,18 @@ type GroupHistory implements Node {
   """
   displayName: String!
   """
+  OSCAL role identifier used for role-based responsibility mapping
+  """
+  oscalRole: String
+  """
+  OSCAL party UUID linked to this group for responsibility mapping
+  """
+  oscalPartyUUID: String
+  """
+  OSCAL contact UUID references associated with this group
+  """
+  oscalContactUuids: [String!]
+  """
   the SCIM external ID for the group
   """
   scimExternalID: String
@@ -35176,6 +35629,42 @@ input GroupHistoryWhereInput {
   displayNameHasSuffix: String
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """
+  oscal_role field predicates
+  """
+  oscalRole: String
+  oscalRoleNEQ: String
+  oscalRoleIn: [String!]
+  oscalRoleNotIn: [String!]
+  oscalRoleGT: String
+  oscalRoleGTE: String
+  oscalRoleLT: String
+  oscalRoleLTE: String
+  oscalRoleContains: String
+  oscalRoleHasPrefix: String
+  oscalRoleHasSuffix: String
+  oscalRoleIsNil: Boolean
+  oscalRoleNotNil: Boolean
+  oscalRoleEqualFold: String
+  oscalRoleContainsFold: String
+  """
+  oscal_party_uuid field predicates
+  """
+  oscalPartyUUID: String
+  oscalPartyUUIDNEQ: String
+  oscalPartyUUIDIn: [String!]
+  oscalPartyUUIDNotIn: [String!]
+  oscalPartyUUIDGT: String
+  oscalPartyUUIDGTE: String
+  oscalPartyUUIDLT: String
+  oscalPartyUUIDLTE: String
+  oscalPartyUUIDContains: String
+  oscalPartyUUIDHasPrefix: String
+  oscalPartyUUIDHasSuffix: String
+  oscalPartyUUIDIsNil: Boolean
+  oscalPartyUUIDNotNil: Boolean
+  oscalPartyUUIDEqualFold: String
+  oscalPartyUUIDContainsFold: String
   """
   scim_external_id field predicates
   """
@@ -37487,6 +37976,10 @@ type InternalPolicyHistory implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
 }
 """
 A connection to a list of items.
@@ -38044,6 +38537,24 @@ input InternalPolicyHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
 }
 type JobTemplateHistory implements Node {
   id: ID!
@@ -42538,6 +43049,10 @@ type PlatformHistory implements Node {
   """
   workflowEligibleMarker: Boolean
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the platform
   """
   name: String!
@@ -43366,6 +43881,24 @@ input PlatformHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -44296,6 +44829,10 @@ type ProgramHistory implements Node {
   """
   programKindID: String
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the program
   """
   name: String!
@@ -44612,6 +45149,24 @@ input ProgramHistoryWhereInput {
   programKindIDNotNil: Boolean
   programKindIDEqualFold: String
   programKindIDContainsFold: String
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -46748,6 +47303,37 @@ type Query {
     """
     where: SubprocessorHistoryWhereInput
   ): SubprocessorHistoryConnection!
+  systemDetailHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SystemDetailHistories returned from the connection.
+    """
+    orderBy: SystemDetailHistoryOrder
+
+    """
+    Filtering options for SystemDetailHistories returned from the connection.
+    """
+    where: SystemDetailHistoryWhereInput
+  ): SystemDetailHistoryConnection!
   taskHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -48884,6 +49470,10 @@ type RiskHistory implements Node {
   """
   scopeID: String
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   the name of the risk
   """
   name: String!
@@ -49329,6 +49919,24 @@ input RiskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   name field predicates
   """
@@ -50981,6 +51589,10 @@ type SubcontrolHistory implements Node {
   """
   tags: [String!]
   """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
+  """
   human readable title of the control for quick identification
   """
   title: String @externalSource(source: FRAMEWORK)
@@ -51012,6 +51624,14 @@ type SubcontrolHistory implements Node {
   status of the control
   """
   status: SubcontrolHistoryControlStatus
+  """
+  OSCAL-aligned implementation status of the control
+  """
+  implementationStatus: SubcontrolHistoryControlImplementationStatus
+  """
+  narrative describing current implementation state for OSCAL export
+  """
+  implementationDescription: String
   """
   source of the control, e.g. framework, template, custom, etc.
   """
@@ -51133,6 +51753,16 @@ type SubcontrolHistoryConnection {
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
+}
+"""
+SubcontrolHistoryControlImplementationStatus is enum for the field implementation_status
+"""
+enum SubcontrolHistoryControlImplementationStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlImplementationStatus") {
+  PLANNED
+  IMPLEMENTED
+  PARTIALLY_IMPLEMENTED
+  INHERITED
+  NOT_APPLICABLE
 }
 """
 SubcontrolHistoryControlSource is enum for the field source
@@ -51340,6 +51970,24 @@ input SubcontrolHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
+  """
   title field predicates
   """
   title: String
@@ -51438,6 +52086,33 @@ input SubcontrolHistoryWhereInput {
   statusNotIn: [SubcontrolHistoryControlStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  implementation_status field predicates
+  """
+  implementationStatus: SubcontrolHistoryControlImplementationStatus
+  implementationStatusNEQ: SubcontrolHistoryControlImplementationStatus
+  implementationStatusIn: [SubcontrolHistoryControlImplementationStatus!]
+  implementationStatusNotIn: [SubcontrolHistoryControlImplementationStatus!]
+  implementationStatusIsNil: Boolean
+  implementationStatusNotNil: Boolean
+  """
+  implementation_description field predicates
+  """
+  implementationDescription: String
+  implementationDescriptionNEQ: String
+  implementationDescriptionIn: [String!]
+  implementationDescriptionNotIn: [String!]
+  implementationDescriptionGT: String
+  implementationDescriptionGTE: String
+  implementationDescriptionLT: String
+  implementationDescriptionLTE: String
+  implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
+  implementationDescriptionHasSuffix: String
+  implementationDescriptionIsNil: Boolean
+  implementationDescriptionNotNil: Boolean
+  implementationDescriptionEqualFold: String
+  implementationDescriptionContainsFold: String
   """
   source field predicates
   """
@@ -52067,6 +52742,419 @@ input SubprocessorHistoryWhereInput {
   logoFileIDEqualFold: String
   logoFileIDContainsFold: String
 }
+type SystemDetailHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: SystemDetailHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String
+  """
+  optional program anchor for this system detail
+  """
+  programID: String
+  """
+  optional platform anchor for this system detail
+  """
+  platformID: String
+  """
+  system name used in OSCAL metadata
+  """
+  systemName: String!
+  """
+  system version used in OSCAL metadata
+  """
+  version: String
+  """
+  system description used in OSCAL metadata
+  """
+  description: String
+  """
+  authorization boundary narrative for OSCAL export
+  """
+  authorizationBoundary: String
+  """
+  security sensitivity level of the system
+  """
+  sensitivityLevel: SystemDetailHistorySystemSensitivityLevel
+  """
+  timestamp when metadata was last reviewed
+  """
+  lastReviewed: DateTime
+  """
+  structured revision history for OSCAL metadata
+  """
+  revisionHistory: [Any!]
+  """
+  optional escape hatch for additional OSCAL metadata fields
+  """
+  oscalMetadataJSON: Map
+}
+"""
+A connection to a list of items.
+"""
+type SystemDetailHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [SystemDetailHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SystemDetailHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SystemDetailHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+SystemDetailHistoryOpType is enum for the field operation
+"""
+enum SystemDetailHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for SystemDetailHistory connections
+"""
+input SystemDetailHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SystemDetailHistories.
+  """
+  field: SystemDetailHistoryOrderField!
+}
+"""
+Properties by which SystemDetailHistory connections can be ordered.
+"""
+enum SystemDetailHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  system_name
+}
+"""
+SystemDetailHistorySystemSensitivityLevel is enum for the field sensitivity_level
+"""
+enum SystemDetailHistorySystemSensitivityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SystemSensitivityLevel") {
+  LOW
+  MODERATE
+  HIGH
+  UNKNOWN
+}
+"""
+SystemDetailHistoryWhereInput is used for filtering SystemDetailHistory objects.
+Input was generated by ent.
+"""
+input SystemDetailHistoryWhereInput {
+  not: SystemDetailHistoryWhereInput
+  and: [SystemDetailHistoryWhereInput!]
+  or: [SystemDetailHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: SystemDetailHistoryOpType
+  operationNEQ: SystemDetailHistoryOpType
+  operationIn: [SystemDetailHistoryOpType!]
+  operationNotIn: [SystemDetailHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  program_id field predicates
+  """
+  programID: String
+  programIDNEQ: String
+  programIDIn: [String!]
+  programIDNotIn: [String!]
+  programIDGT: String
+  programIDGTE: String
+  programIDLT: String
+  programIDLTE: String
+  programIDContains: String
+  programIDHasPrefix: String
+  programIDHasSuffix: String
+  programIDIsNil: Boolean
+  programIDNotNil: Boolean
+  programIDEqualFold: String
+  programIDContainsFold: String
+  """
+  platform_id field predicates
+  """
+  platformID: String
+  platformIDNEQ: String
+  platformIDIn: [String!]
+  platformIDNotIn: [String!]
+  platformIDGT: String
+  platformIDGTE: String
+  platformIDLT: String
+  platformIDLTE: String
+  platformIDContains: String
+  platformIDHasPrefix: String
+  platformIDHasSuffix: String
+  platformIDIsNil: Boolean
+  platformIDNotNil: Boolean
+  platformIDEqualFold: String
+  platformIDContainsFold: String
+  """
+  system_name field predicates
+  """
+  systemName: String
+  systemNameNEQ: String
+  systemNameIn: [String!]
+  systemNameNotIn: [String!]
+  systemNameGT: String
+  systemNameGTE: String
+  systemNameLT: String
+  systemNameLTE: String
+  systemNameContains: String
+  systemNameHasPrefix: String
+  systemNameHasSuffix: String
+  systemNameEqualFold: String
+  systemNameContainsFold: String
+  """
+  version field predicates
+  """
+  version: String
+  versionNEQ: String
+  versionIn: [String!]
+  versionNotIn: [String!]
+  versionGT: String
+  versionGTE: String
+  versionLT: String
+  versionLTE: String
+  versionContains: String
+  versionHasPrefix: String
+  versionHasSuffix: String
+  versionIsNil: Boolean
+  versionNotNil: Boolean
+  versionEqualFold: String
+  versionContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  authorization_boundary field predicates
+  """
+  authorizationBoundary: String
+  authorizationBoundaryNEQ: String
+  authorizationBoundaryIn: [String!]
+  authorizationBoundaryNotIn: [String!]
+  authorizationBoundaryGT: String
+  authorizationBoundaryGTE: String
+  authorizationBoundaryLT: String
+  authorizationBoundaryLTE: String
+  authorizationBoundaryContains: String
+  authorizationBoundaryHasPrefix: String
+  authorizationBoundaryHasSuffix: String
+  authorizationBoundaryIsNil: Boolean
+  authorizationBoundaryNotNil: Boolean
+  authorizationBoundaryEqualFold: String
+  authorizationBoundaryContainsFold: String
+  """
+  sensitivity_level field predicates
+  """
+  sensitivityLevel: SystemDetailHistorySystemSensitivityLevel
+  sensitivityLevelNEQ: SystemDetailHistorySystemSensitivityLevel
+  sensitivityLevelIn: [SystemDetailHistorySystemSensitivityLevel!]
+  sensitivityLevelNotIn: [SystemDetailHistorySystemSensitivityLevel!]
+  sensitivityLevelIsNil: Boolean
+  sensitivityLevelNotNil: Boolean
+  """
+  last_reviewed field predicates
+  """
+  lastReviewed: DateTime
+  lastReviewedNEQ: DateTime
+  lastReviewedIn: [DateTime!]
+  lastReviewedNotIn: [DateTime!]
+  lastReviewedGT: DateTime
+  lastReviewedGTE: DateTime
+  lastReviewedLT: DateTime
+  lastReviewedLTE: DateTime
+  lastReviewedIsNil: Boolean
+  lastReviewedNotNil: Boolean
+}
 type TaskHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -52112,6 +53200,10 @@ type TaskHistory implements Node {
   the scope of the task
   """
   scopeID: String
+  """
+  stable external UUID for deterministic OSCAL export and round-tripping
+  """
+  externalUUID: String
   """
   the title of the task
   """
@@ -52495,6 +53587,24 @@ input TaskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  external_uuid field predicates
+  """
+  externalUUID: String
+  externalUUIDNEQ: String
+  externalUUIDIn: [String!]
+  externalUUIDNotIn: [String!]
+  externalUUIDGT: String
+  externalUUIDGTE: String
+  externalUUIDLT: String
+  externalUUIDLTE: String
+  externalUUIDContains: String
+  externalUUIDHasPrefix: String
+  externalUUIDHasSuffix: String
+  externalUUIDIsNil: Boolean
+  externalUUIDNotNil: Boolean
+  externalUUIDEqualFold: String
+  externalUUIDContainsFold: String
   """
   title field predicates
   """

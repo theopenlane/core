@@ -88,6 +88,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -2303,6 +2304,33 @@ func (f TraverseSubscriber) Traverse(ctx context.Context, q generated.Query) err
 	return fmt.Errorf("unexpected query type %T. expect *generated.SubscriberQuery", q)
 }
 
+// The SystemDetailFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SystemDetailFunc func(context.Context, *generated.SystemDetailQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SystemDetailFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SystemDetailQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SystemDetailQuery", q)
+}
+
+// The TraverseSystemDetail type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSystemDetail func(context.Context, *generated.SystemDetailQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSystemDetail) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSystemDetail) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SystemDetailQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SystemDetailQuery", q)
+}
+
 // The TFASettingFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TFASettingFunc func(context.Context, *generated.TFASettingQuery) (generated.Value, error)
 
@@ -3112,6 +3140,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SubprocessorQuery, predicate.Subprocessor, subprocessor.OrderOption]{typ: generated.TypeSubprocessor, tq: q}, nil
 	case *generated.SubscriberQuery:
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
+	case *generated.SystemDetailQuery:
+		return &query[*generated.SystemDetailQuery, predicate.SystemDetail, systemdetail.OrderOption]{typ: generated.TypeSystemDetail, tq: q}, nil
 	case *generated.TFASettingQuery:
 		return &query[*generated.TFASettingQuery, predicate.TFASetting, tfasetting.OrderOption]{typ: generated.TypeTFASetting, tq: q}, nil
 	case *generated.TagDefinitionQuery:

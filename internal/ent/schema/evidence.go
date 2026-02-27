@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -48,16 +49,50 @@ func (Evidence) PluralName() string {
 // Fields of the Evidence
 func (Evidence) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_uuid").
+			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
+			Optional().
+			Nillable().
+			Unique().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("name").
 			Comment("the name of the evidence").
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+				),
 			).
 			NotEmpty(),
 		field.String("description").
 			Comment("the description of the evidence, what is contained in the uploaded file(s) or url(s)").
-			Optional(),
+			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+				),
+			),
 		field.Text("collection_procedure").
 			Comment("description of how the evidence was collected").
 			Optional(),
@@ -124,6 +159,14 @@ func (e Evidence) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Control{}.Name()),
 				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToControlID,
+					oscalgen.WithOSCALRelationshipModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+				),
 			},
 		}),
 		// users with only view access should be able to link
@@ -176,6 +219,14 @@ func (e Evidence) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
+		),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(
+				oscalgen.OSCALModelComponentDefinition,
+				oscalgen.OSCALModelSSP,
+				oscalgen.OSCALModelPOAM,
+			),
+			oscalgen.WithOSCALAssembly("back-matter-resource"),
 		),
 	}
 }

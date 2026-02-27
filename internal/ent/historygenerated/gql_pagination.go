@@ -71,6 +71,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -23415,6 +23416,356 @@ func (_m *SubprocessorHistory) ToEdge(order *SubprocessorHistoryOrder) *Subproce
 		order = DefaultSubprocessorHistoryOrder
 	}
 	return &SubprocessorHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// SystemDetailHistoryEdge is the edge representation of SystemDetailHistory.
+type SystemDetailHistoryEdge struct {
+	Node   *SystemDetailHistory `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// SystemDetailHistoryConnection is the connection containing edges to SystemDetailHistory.
+type SystemDetailHistoryConnection struct {
+	Edges      []*SystemDetailHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *SystemDetailHistoryConnection) build(nodes []*SystemDetailHistory, pager *systemdetailhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SystemDetailHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SystemDetailHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SystemDetailHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SystemDetailHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SystemDetailHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SystemDetailHistoryPaginateOption enables pagination customization.
+type SystemDetailHistoryPaginateOption func(*systemdetailhistoryPager) error
+
+// WithSystemDetailHistoryOrder configures pagination ordering.
+func WithSystemDetailHistoryOrder(order *SystemDetailHistoryOrder) SystemDetailHistoryPaginateOption {
+	if order == nil {
+		order = DefaultSystemDetailHistoryOrder
+	}
+	o := *order
+	return func(pager *systemdetailhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultSystemDetailHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithSystemDetailHistoryFilter configures pagination filter.
+func WithSystemDetailHistoryFilter(filter func(*SystemDetailHistoryQuery) (*SystemDetailHistoryQuery, error)) SystemDetailHistoryPaginateOption {
+	return func(pager *systemdetailhistoryPager) error {
+		if filter == nil {
+			return errors.New("SystemDetailHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type systemdetailhistoryPager struct {
+	reverse bool
+	order   *SystemDetailHistoryOrder
+	filter  func(*SystemDetailHistoryQuery) (*SystemDetailHistoryQuery, error)
+}
+
+func newSystemDetailHistoryPager(opts []SystemDetailHistoryPaginateOption, reverse bool) (*systemdetailhistoryPager, error) {
+	pager := &systemdetailhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultSystemDetailHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *systemdetailhistoryPager) applyFilter(query *SystemDetailHistoryQuery) (*SystemDetailHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *systemdetailhistoryPager) toCursor(_m *SystemDetailHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *systemdetailhistoryPager) applyCursors(query *SystemDetailHistoryQuery, after, before *Cursor) (*SystemDetailHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultSystemDetailHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *systemdetailhistoryPager) applyOrder(query *SystemDetailHistoryQuery) *SystemDetailHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultSystemDetailHistoryOrder.Field {
+		query = query.Order(DefaultSystemDetailHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *systemdetailhistoryPager) orderExpr(query *SystemDetailHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultSystemDetailHistoryOrder.Field {
+			b.Comma().Ident(DefaultSystemDetailHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SystemDetailHistory.
+func (_m *SystemDetailHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SystemDetailHistoryPaginateOption,
+) (*SystemDetailHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSystemDetailHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &SystemDetailHistoryConnection{Edges: []*SystemDetailHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SystemDetailHistoryOrderFieldHistoryTime orders SystemDetailHistory by history_time.
+	SystemDetailHistoryOrderFieldHistoryTime = &SystemDetailHistoryOrderField{
+		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: systemdetailhistory.FieldHistoryTime,
+		toTerm: systemdetailhistory.ByHistoryTime,
+		toCursor: func(_m *SystemDetailHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// SystemDetailHistoryOrderFieldCreatedAt orders SystemDetailHistory by created_at.
+	SystemDetailHistoryOrderFieldCreatedAt = &SystemDetailHistoryOrderField{
+		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: systemdetailhistory.FieldCreatedAt,
+		toTerm: systemdetailhistory.ByCreatedAt,
+		toCursor: func(_m *SystemDetailHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// SystemDetailHistoryOrderFieldUpdatedAt orders SystemDetailHistory by updated_at.
+	SystemDetailHistoryOrderFieldUpdatedAt = &SystemDetailHistoryOrderField{
+		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: systemdetailhistory.FieldUpdatedAt,
+		toTerm: systemdetailhistory.ByUpdatedAt,
+		toCursor: func(_m *SystemDetailHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// SystemDetailHistoryOrderFieldSystemName orders SystemDetailHistory by system_name.
+	SystemDetailHistoryOrderFieldSystemName = &SystemDetailHistoryOrderField{
+		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
+			return _m.SystemName, nil
+		},
+		column: systemdetailhistory.FieldSystemName,
+		toTerm: systemdetailhistory.BySystemName,
+		toCursor: func(_m *SystemDetailHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SystemName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SystemDetailHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case SystemDetailHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case SystemDetailHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SystemDetailHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SystemDetailHistoryOrderFieldSystemName.column:
+		str = "system_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SystemDetailHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SystemDetailHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SystemDetailHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *SystemDetailHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *SystemDetailHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SystemDetailHistoryOrderFieldUpdatedAt
+	case "system_name":
+		*f = *SystemDetailHistoryOrderFieldSystemName
+	default:
+		return fmt.Errorf("%s is not a valid SystemDetailHistoryOrderField", str)
+	}
+	return nil
+}
+
+// SystemDetailHistoryOrderField defines the ordering field of SystemDetailHistory.
+type SystemDetailHistoryOrderField struct {
+	// Value extracts the ordering value from the given SystemDetailHistory.
+	Value    func(*SystemDetailHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) systemdetailhistory.OrderOption
+	toCursor func(*SystemDetailHistory) Cursor
+}
+
+// SystemDetailHistoryOrder defines the ordering of SystemDetailHistory.
+type SystemDetailHistoryOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *SystemDetailHistoryOrderField `json:"field"`
+}
+
+// DefaultSystemDetailHistoryOrder is the default ordering of SystemDetailHistory.
+var DefaultSystemDetailHistoryOrder = &SystemDetailHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SystemDetailHistoryOrderField{
+		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: systemdetailhistory.FieldID,
+		toTerm: systemdetailhistory.ByID,
+		toCursor: func(_m *SystemDetailHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts SystemDetailHistory into SystemDetailHistoryEdge.
+func (_m *SystemDetailHistory) ToEdge(order *SystemDetailHistoryOrder) *SystemDetailHistoryEdge {
+	if order == nil {
+		order = DefaultSystemDetailHistoryOrder
+	}
+	return &SystemDetailHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -218,6 +220,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -358,6 +362,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -498,6 +504,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_scopeID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Evidence_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":

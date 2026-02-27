@@ -2970,6 +2970,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -3000,6 +3004,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
+	}
+
+	if implementationStatus, exists := m.ImplementationStatus(); exists {
+		create = create.SetImplementationStatus(implementationStatus)
+	}
+
+	if implementationDescription, exists := m.ImplementationDescription(); exists {
+		create = create.SetImplementationDescription(implementationDescription)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -3209,6 +3221,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(control.Tags)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(control.ExternalUUID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -3255,6 +3273,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(control.Status)
+		}
+
+		if implementationStatus, exists := m.ImplementationStatus(); exists {
+			create = create.SetImplementationStatus(implementationStatus)
+		} else {
+			create = create.SetImplementationStatus(control.ImplementationStatus)
+		}
+
+		if implementationDescription, exists := m.ImplementationDescription(); exists {
+			create = create.SetImplementationDescription(implementationDescription)
+		} else {
+			create = create.SetImplementationDescription(control.ImplementationDescription)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -3492,6 +3522,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(control.DeletedBy).
 			SetDisplayID(control.DisplayID).
 			SetTags(control.Tags).
+			SetNillableExternalUUID(control.ExternalUUID).
 			SetTitle(control.Title).
 			SetDescription(control.Description).
 			SetDescriptionJSON(control.DescriptionJSON).
@@ -3500,6 +3531,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAuditorReferenceID(control.AuditorReferenceID).
 			SetResponsiblePartyID(control.ResponsiblePartyID).
 			SetStatus(control.Status).
+			SetImplementationStatus(control.ImplementationStatus).
+			SetImplementationDescription(control.ImplementationDescription).
 			SetSource(control.Source).
 			SetNillableReferenceFramework(control.ReferenceFramework).
 			SetNillableReferenceFrameworkRevision(control.ReferenceFrameworkRevision).
@@ -8085,6 +8118,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -8236,6 +8273,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetWorkflowEligibleMarker(evidence.WorkflowEligibleMarker)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(evidence.ExternalUUID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -8339,6 +8382,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetScopeName(evidence.ScopeName).
 			SetScopeID(evidence.ScopeID).
 			SetWorkflowEligibleMarker(evidence.WorkflowEligibleMarker).
+			SetNillableExternalUUID(evidence.ExternalUUID).
 			SetName(evidence.Name).
 			SetDescription(evidence.Description).
 			SetCollectionProcedure(evidence.CollectionProcedure).
@@ -9784,6 +9828,18 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDisplayName(displayName)
 	}
 
+	if oscalRole, exists := m.OscalRole(); exists {
+		create = create.SetNillableOscalRole(&oscalRole)
+	}
+
+	if oscalPartyUUID, exists := m.OscalPartyUUID(); exists {
+		create = create.SetNillableOscalPartyUUID(&oscalPartyUUID)
+	}
+
+	if oscalContactUuids, exists := m.OscalContactUuids(); exists {
+		create = create.SetOscalContactUuids(oscalContactUuids)
+	}
+
 	if scimExternalID, exists := m.ScimExternalID(); exists {
 		create = create.SetNillableScimExternalID(&scimExternalID)
 	}
@@ -9921,6 +9977,24 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDisplayName(group.DisplayName)
 		}
 
+		if oscalRole, exists := m.OscalRole(); exists {
+			create = create.SetNillableOscalRole(&oscalRole)
+		} else {
+			create = create.SetNillableOscalRole(group.OscalRole)
+		}
+
+		if oscalPartyUUID, exists := m.OscalPartyUUID(); exists {
+			create = create.SetNillableOscalPartyUUID(&oscalPartyUUID)
+		} else {
+			create = create.SetNillableOscalPartyUUID(group.OscalPartyUUID)
+		}
+
+		if oscalContactUuids, exists := m.OscalContactUuids(); exists {
+			create = create.SetOscalContactUuids(oscalContactUuids)
+		} else {
+			create = create.SetOscalContactUuids(group.OscalContactUuids)
+		}
+
 		if scimExternalID, exists := m.ScimExternalID(); exists {
 			create = create.SetNillableScimExternalID(&scimExternalID)
 		} else {
@@ -9995,6 +10069,9 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetGravatarLogoURL(group.GravatarLogoURL).
 			SetLogoURL(group.LogoURL).
 			SetDisplayName(group.DisplayName).
+			SetNillableOscalRole(group.OscalRole).
+			SetNillableOscalPartyUUID(group.OscalPartyUUID).
+			SetOscalContactUuids(group.OscalContactUuids).
 			SetNillableScimExternalID(group.ScimExternalID).
 			SetNillableScimDisplayName(group.ScimDisplayName).
 			SetScimActive(group.ScimActive).
@@ -11698,6 +11775,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11957,6 +12038,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetWorkflowEligibleMarker(internalpolicy.WorkflowEligibleMarker)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(internalpolicy.ExternalUUID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -12030,6 +12117,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetScopeName(internalpolicy.ScopeName).
 			SetScopeID(internalpolicy.ScopeID).
 			SetWorkflowEligibleMarker(internalpolicy.WorkflowEligibleMarker).
+			SetNillableExternalUUID(internalpolicy.ExternalUUID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -15408,6 +15496,10 @@ func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -15739,6 +15831,12 @@ func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetWorkflowEligibleMarker(platform.WorkflowEligibleMarker)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(platform.ExternalUUID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -15920,6 +16018,7 @@ func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetCriticalityName(platform.CriticalityName).
 			SetCriticalityID(platform.CriticalityID).
 			SetWorkflowEligibleMarker(platform.WorkflowEligibleMarker).
+			SetNillableExternalUUID(platform.ExternalUUID).
 			SetName(platform.Name).
 			SetDescription(platform.Description).
 			SetBusinessPurpose(platform.BusinessPurpose).
@@ -16516,6 +16615,10 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetProgramKindID(programKindID)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -16665,6 +16768,12 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetProgramKindID(program.ProgramKindID)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(program.ExternalUUID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -16789,6 +16898,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetOwnerID(program.OwnerID).
 			SetProgramKindName(program.ProgramKindName).
 			SetProgramKindID(program.ProgramKindID).
+			SetNillableExternalUUID(program.ExternalUUID).
 			SetName(program.Name).
 			SetDescription(program.Description).
 			SetStatus(program.Status).
@@ -17993,6 +18103,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -18178,6 +18292,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(risk.ScopeID)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(risk.ExternalUUID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -18308,6 +18428,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(risk.EnvironmentID).
 			SetScopeName(risk.ScopeName).
 			SetScopeID(risk.ScopeID).
+			SetNillableExternalUUID(risk.ExternalUUID).
 			SetName(risk.Name).
 			SetStatus(risk.Status).
 			SetImpact(risk.Impact).
@@ -19410,6 +19531,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetTags(tags)
 	}
 
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -19440,6 +19565,14 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
+	}
+
+	if implementationStatus, exists := m.ImplementationStatus(); exists {
+		create = create.SetImplementationStatus(implementationStatus)
+	}
+
+	if implementationDescription, exists := m.ImplementationDescription(); exists {
+		create = create.SetImplementationDescription(implementationDescription)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -19625,6 +19758,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTags(subcontrol.Tags)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(subcontrol.ExternalUUID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -19671,6 +19810,18 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(subcontrol.Status)
+		}
+
+		if implementationStatus, exists := m.ImplementationStatus(); exists {
+			create = create.SetImplementationStatus(implementationStatus)
+		} else {
+			create = create.SetImplementationStatus(subcontrol.ImplementationStatus)
+		}
+
+		if implementationDescription, exists := m.ImplementationDescription(); exists {
+			create = create.SetImplementationDescription(implementationDescription)
+		} else {
+			create = create.SetImplementationDescription(subcontrol.ImplementationDescription)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -19872,6 +20023,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(subcontrol.DeletedBy).
 			SetDisplayID(subcontrol.DisplayID).
 			SetTags(subcontrol.Tags).
+			SetNillableExternalUUID(subcontrol.ExternalUUID).
 			SetTitle(subcontrol.Title).
 			SetDescription(subcontrol.Description).
 			SetDescriptionJSON(subcontrol.DescriptionJSON).
@@ -19880,6 +20032,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
 			SetResponsiblePartyID(subcontrol.ResponsiblePartyID).
 			SetStatus(subcontrol.Status).
+			SetImplementationStatus(subcontrol.ImplementationStatus).
+			SetImplementationDescription(subcontrol.ImplementationDescription).
 			SetSource(subcontrol.Source).
 			SetNillableReferenceFramework(subcontrol.ReferenceFramework).
 			SetNillableReferenceFrameworkRevision(subcontrol.ReferenceFrameworkRevision).
@@ -20171,6 +20325,306 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.SystemDetailHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if programID, exists := m.ProgramID(); exists {
+		create = create.SetNillableProgramID(&programID)
+	}
+
+	if platformID, exists := m.PlatformID(); exists {
+		create = create.SetNillablePlatformID(&platformID)
+	}
+
+	if systemName, exists := m.SystemName(); exists {
+		create = create.SetSystemName(systemName)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if authorizationBoundary, exists := m.AuthorizationBoundary(); exists {
+		create = create.SetAuthorizationBoundary(authorizationBoundary)
+	}
+
+	if sensitivityLevel, exists := m.SensitivityLevel(); exists {
+		create = create.SetSensitivityLevel(sensitivityLevel)
+	}
+
+	if lastReviewed, exists := m.LastReviewed(); exists {
+		create = create.SetNillableLastReviewed(&lastReviewed)
+	}
+
+	if revisionHistory, exists := m.RevisionHistory(); exists {
+		create = create.SetRevisionHistory(revisionHistory)
+	}
+
+	if oscalMetadataJSON, exists := m.OscalMetadataJSON(); exists {
+		create = create.SetOscalMetadataJSON(oscalMetadataJSON)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		systemdetail, err := client.SystemDetail.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.SystemDetailHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(systemdetail.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(systemdetail.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(systemdetail.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(systemdetail.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(systemdetail.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(systemdetail.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(systemdetail.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(systemdetail.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(systemdetail.OwnerID)
+		}
+
+		if programID, exists := m.ProgramID(); exists {
+			create = create.SetNillableProgramID(&programID)
+		} else {
+			create = create.SetNillableProgramID(systemdetail.ProgramID)
+		}
+
+		if platformID, exists := m.PlatformID(); exists {
+			create = create.SetNillablePlatformID(&platformID)
+		} else {
+			create = create.SetNillablePlatformID(systemdetail.PlatformID)
+		}
+
+		if systemName, exists := m.SystemName(); exists {
+			create = create.SetSystemName(systemName)
+		} else {
+			create = create.SetSystemName(systemdetail.SystemName)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(systemdetail.Version)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(systemdetail.Description)
+		}
+
+		if authorizationBoundary, exists := m.AuthorizationBoundary(); exists {
+			create = create.SetAuthorizationBoundary(authorizationBoundary)
+		} else {
+			create = create.SetAuthorizationBoundary(systemdetail.AuthorizationBoundary)
+		}
+
+		if sensitivityLevel, exists := m.SensitivityLevel(); exists {
+			create = create.SetSensitivityLevel(sensitivityLevel)
+		} else {
+			create = create.SetSensitivityLevel(systemdetail.SensitivityLevel)
+		}
+
+		if lastReviewed, exists := m.LastReviewed(); exists {
+			create = create.SetNillableLastReviewed(&lastReviewed)
+		} else {
+			create = create.SetNillableLastReviewed(systemdetail.LastReviewed)
+		}
+
+		if revisionHistory, exists := m.RevisionHistory(); exists {
+			create = create.SetRevisionHistory(revisionHistory)
+		} else {
+			create = create.SetRevisionHistory(systemdetail.RevisionHistory)
+		}
+
+		if oscalMetadataJSON, exists := m.OscalMetadataJSON(); exists {
+			create = create.SetOscalMetadataJSON(oscalMetadataJSON)
+		} else {
+			create = create.SetOscalMetadataJSON(systemdetail.OscalMetadataJSON)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		systemdetail, err := client.SystemDetail.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.SystemDetailHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(systemdetail.CreatedAt).
+			SetUpdatedAt(systemdetail.UpdatedAt).
+			SetCreatedBy(systemdetail.CreatedBy).
+			SetUpdatedBy(systemdetail.UpdatedBy).
+			SetDeletedAt(systemdetail.DeletedAt).
+			SetDeletedBy(systemdetail.DeletedBy).
+			SetDisplayID(systemdetail.DisplayID).
+			SetTags(systemdetail.Tags).
+			SetOwnerID(systemdetail.OwnerID).
+			SetNillableProgramID(systemdetail.ProgramID).
+			SetNillablePlatformID(systemdetail.PlatformID).
+			SetSystemName(systemdetail.SystemName).
+			SetVersion(systemdetail.Version).
+			SetDescription(systemdetail.Description).
+			SetAuthorizationBoundary(systemdetail.AuthorizationBoundary).
+			SetSensitivityLevel(systemdetail.SensitivityLevel).
+			SetNillableLastReviewed(systemdetail.LastReviewed).
+			SetRevisionHistory(systemdetail.RevisionHistory).
+			SetOscalMetadataJSON(systemdetail.OscalMetadataJSON).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -20245,6 +20699,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if scopeID, exists := m.ScopeID(); exists {
 		create = create.SetScopeID(scopeID)
+	}
+
+	if externalUUID, exists := m.ExternalUUID(); exists {
+		create = create.SetNillableExternalUUID(&externalUUID)
 	}
 
 	if title, exists := m.Title(); exists {
@@ -20416,6 +20874,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(task.ScopeID)
 		}
 
+		if externalUUID, exists := m.ExternalUUID(); exists {
+			create = create.SetNillableExternalUUID(&externalUUID)
+		} else {
+			create = create.SetNillableExternalUUID(task.ExternalUUID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -20538,6 +21002,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(task.EnvironmentID).
 			SetScopeName(task.ScopeName).
 			SetScopeID(task.ScopeID).
+			SetNillableExternalUUID(task.ExternalUUID).
 			SetTitle(task.Title).
 			SetDetails(task.Details).
 			SetDetailsJSON(task.DetailsJSON).

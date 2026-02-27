@@ -1,0 +1,266 @@
+
+mutation CreateBulkCSVSystemDetail($input: Upload!) {
+  createBulkCSVSystemDetail(input: $input) {
+    systemDetails {
+      authorizationBoundary
+      createdAt
+      createdBy
+      description
+      displayID
+      id
+      lastReviewed
+      oscalMetadataJSON
+      ownerID
+      platformID
+      programID
+      revisionHistory
+      sensitivityLevel
+      systemName
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkSystemDetail($input: [CreateSystemDetailInput!]) {
+  createBulkSystemDetail(input: $input) {
+    systemDetails {
+      authorizationBoundary
+      createdAt
+      createdBy
+      description
+      displayID
+      id
+      lastReviewed
+      oscalMetadataJSON
+      ownerID
+      platformID
+      programID
+      revisionHistory
+      sensitivityLevel
+      systemName
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateSystemDetail($input: CreateSystemDetailInput!) {
+  createSystemDetail(input: $input) {
+    systemDetail {
+      authorizationBoundary
+      createdAt
+      createdBy
+      description
+      displayID
+      id
+      lastReviewed
+      oscalMetadataJSON
+      ownerID
+      platformID
+      programID
+      revisionHistory
+      sensitivityLevel
+      systemName
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteSystemDetail($deleteSystemDetailId: ID!) {
+  deleteSystemDetail(id: $deleteSystemDetailId) {
+    deletedID
+  }
+}
+
+mutation UpdateBulkSystemDetail($ids: [ID!]!, $input: UpdateSystemDetailInput!) {
+  updateBulkSystemDetail(ids: $ids, input: $input) {
+    systemDetails {
+      authorizationBoundary
+      createdAt
+      createdBy
+      description
+      displayID
+      id
+      lastReviewed
+      oscalMetadataJSON
+      ownerID
+      platformID
+      programID
+      revisionHistory
+      sensitivityLevel
+      systemName
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkCSVSystemDetail($input: Upload!) {
+  updateBulkCSVSystemDetail(input: $input) {
+    systemDetails {
+      authorizationBoundary
+      createdAt
+      createdBy
+      description
+      displayID
+      id
+      lastReviewed
+      oscalMetadataJSON
+      ownerID
+      platformID
+      programID
+      revisionHistory
+      sensitivityLevel
+      systemName
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+    updatedIDs
+  }
+}
+
+mutation DeleteBulkSystemDetail($ids: [ID!]!) {
+  deleteBulkSystemDetail(ids: $ids) {
+    deletedIDs
+  }
+}
+
+query GetAllSystemDetails($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SystemDetailOrder!]){
+  systemDetails(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authorizationBoundary
+        createdAt
+        createdBy
+        description
+        displayID
+        id
+        lastReviewed
+        oscalMetadataJSON
+        ownerID
+        platformID
+        programID
+        revisionHistory
+        sensitivityLevel
+        systemName
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetSystemDetailByID($systemDetailId: ID!) {
+  systemDetail(id: $systemDetailId) {
+    authorizationBoundary
+    createdAt
+    createdBy
+    description
+    displayID
+    id
+    lastReviewed
+    oscalMetadataJSON
+    ownerID
+    platformID
+    programID
+    revisionHistory
+    sensitivityLevel
+    systemName
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetSystemDetails($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SystemDetailOrder!], $where: SystemDetailWhereInput) {
+  systemDetails(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authorizationBoundary
+        createdAt
+        createdBy
+        description
+        displayID
+        id
+        lastReviewed
+        oscalMetadataJSON
+        ownerID
+        platformID
+        programID
+        revisionHistory
+        sensitivityLevel
+        systemName
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateSystemDetail($updateSystemDetailId: ID!, $input: UpdateSystemDetailInput!) {
+  updateSystemDetail(id: $updateSystemDetailId, input: $input) {
+    systemDetail {
+      authorizationBoundary
+      createdAt
+      createdBy
+      description
+      displayID
+      id
+      lastReviewed
+      oscalMetadataJSON
+      ownerID
+      platformID
+      programID
+      revisionHistory
+      sensitivityLevel
+      systemName
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

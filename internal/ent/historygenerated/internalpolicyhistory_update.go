@@ -685,6 +685,26 @@ func (_u *InternalPolicyHistoryUpdate) ClearWorkflowEligibleMarker() *InternalPo
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *InternalPolicyHistoryUpdate) SetExternalUUID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableExternalUUID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *InternalPolicyHistoryUpdate) ClearExternalUUID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (_u *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
 	return _u.mutation
@@ -1017,6 +1037,12 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalUUID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1692,6 +1718,26 @@ func (_u *InternalPolicyHistoryUpdateOne) ClearWorkflowEligibleMarker() *Interna
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetExternalUUID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableExternalUUID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearExternalUUID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (_u *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
 	return _u.mutation
@@ -2054,6 +2100,12 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalUUID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

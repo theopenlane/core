@@ -1,0 +1,86 @@
+query GetAllSystemDetailHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SystemDetailHistoryOrder!]) {
+  systemDetailHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authorizationBoundary
+        createdAt
+        createdBy
+        description
+        displayID
+        historyTime
+        id
+        lastReviewed
+        operation
+        oscalMetadataJSON
+        ownerID
+        platformID
+        programID
+        ref
+        revisionHistory
+        sensitivityLevel
+        systemName
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetSystemDetailHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SystemDetailHistoryOrder!], $where: SystemDetailHistoryWhereInput) {
+  systemDetailHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authorizationBoundary
+        createdAt
+        createdBy
+        description
+        displayID
+        historyTime
+        id
+        lastReviewed
+        operation
+        oscalMetadataJSON
+        ownerID
+        platformID
+        programID
+        ref
+        revisionHistory
+        sensitivityLevel
+        systemName
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}

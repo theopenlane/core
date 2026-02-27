@@ -66,6 +66,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -1629,6 +1630,33 @@ func (f TraverseSubprocessorHistory) Traverse(ctx context.Context, q historygene
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SubprocessorHistoryQuery", q)
 }
 
+// The SystemDetailHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SystemDetailHistoryFunc func(context.Context, *historygenerated.SystemDetailHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SystemDetailHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.SystemDetailHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.SystemDetailHistoryQuery", q)
+}
+
+// The TraverseSystemDetailHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSystemDetailHistory func(context.Context, *historygenerated.SystemDetailHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSystemDetailHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSystemDetailHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.SystemDetailHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SystemDetailHistoryQuery", q)
+}
+
 // The TaskHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TaskHistoryFunc func(context.Context, *historygenerated.TaskHistoryQuery) (historygenerated.Value, error)
 
@@ -2282,6 +2310,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.SubcontrolHistoryQuery, predicate.SubcontrolHistory, subcontrolhistory.OrderOption]{typ: historygenerated.TypeSubcontrolHistory, tq: q}, nil
 	case *historygenerated.SubprocessorHistoryQuery:
 		return &query[*historygenerated.SubprocessorHistoryQuery, predicate.SubprocessorHistory, subprocessorhistory.OrderOption]{typ: historygenerated.TypeSubprocessorHistory, tq: q}, nil
+	case *historygenerated.SystemDetailHistoryQuery:
+		return &query[*historygenerated.SystemDetailHistoryQuery, predicate.SystemDetailHistory, systemdetailhistory.OrderOption]{typ: historygenerated.TypeSystemDetailHistory, tq: q}, nil
 	case *historygenerated.TaskHistoryQuery:
 		return &query[*historygenerated.TaskHistoryQuery, predicate.TaskHistory, taskhistory.OrderOption]{typ: historygenerated.TypeTaskHistory, tq: q}, nil
 	case *historygenerated.TemplateHistoryQuery:

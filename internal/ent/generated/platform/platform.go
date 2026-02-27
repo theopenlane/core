@@ -94,6 +94,8 @@ const (
 	FieldCriticalityID = "criticality_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -216,6 +218,8 @@ const (
 	EdgeGeneratedScans = "generated_scans"
 	// EdgePlatformOwner holds the string denoting the platform_owner edge name in mutations.
 	EdgePlatformOwner = "platform_owner"
+	// EdgeSystemDetail holds the string denoting the system_detail edge name in mutations.
+	EdgeSystemDetail = "system_detail"
 	// Table holds the table name of the platform in the database.
 	Table = "platforms"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -485,6 +489,13 @@ const (
 	PlatformOwnerInverseTable = "users"
 	// PlatformOwnerColumn is the table column denoting the platform_owner relation/edge.
 	PlatformOwnerColumn = "platform_owner_id"
+	// SystemDetailTable is the table that holds the system_detail relation/edge.
+	SystemDetailTable = "system_details"
+	// SystemDetailInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailInverseTable = "system_details"
+	// SystemDetailColumn is the table column denoting the system_detail relation/edge.
+	SystemDetailColumn = "platform_id"
 )
 
 // Columns holds all SQL columns for platform fields.
@@ -528,6 +539,7 @@ var Columns = []string{
 	FieldCriticalityName,
 	FieldCriticalityID,
 	FieldWorkflowEligibleMarker,
+	FieldExternalUUID,
 	FieldName,
 	FieldDescription,
 	FieldBusinessPurpose,
@@ -870,6 +882,11 @@ func ByCriticalityID(opts ...sql.OrderTermOption) OrderOption {
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
+}
+
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -1432,6 +1449,13 @@ func ByPlatformOwnerField(field string, opts ...sql.OrderTermOption) OrderOption
 		sqlgraph.OrderByNeighborTerms(s, newPlatformOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// BySystemDetailField orders the results by system_detail field.
+func BySystemDetailField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1731,6 +1755,13 @@ func newPlatformOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformOwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, PlatformOwnerTable, PlatformOwnerColumn),
+	)
+}
+func newSystemDetailStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
 	)
 }
 

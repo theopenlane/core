@@ -2356,6 +2356,40 @@ func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[st
 	return res, err
 }
 
+// SystemDetails is the resolver for the systemDetails field.
+func (r *queryResolver) SystemDetails(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SystemDetailOrder, where *generated.SystemDetailWhereInput) (*generated.SystemDetailConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SystemDetailOrder{
+			{
+				Field:     generated.SystemDetailOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SystemDetail.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "systemdetail"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSystemDetailOrder(orderBy),
+		generated.WithSystemDetailFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "systemdetail"})
+	}
+
+	return res, err
+}
+
 // TfaSettings is the resolver for the tfaSettings field.
 func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) (*generated.TFASettingConnection, error) {
 	// set page limit if nothing was set

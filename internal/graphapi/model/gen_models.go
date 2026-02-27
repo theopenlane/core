@@ -2446,6 +2446,7 @@ type SearchResults struct {
 	Subcontrols           *generated.SubcontrolConnection           `json:"subcontrols,omitempty"`
 	Subprocessors         *generated.SubprocessorConnection         `json:"subprocessors,omitempty"`
 	Subscribers           *generated.SubscriberConnection           `json:"subscribers,omitempty"`
+	SystemDetails         *generated.SystemDetailConnection         `json:"systemDetails,omitempty"`
 	TagDefinitions        *generated.TagDefinitionConnection        `json:"tagDefinitions,omitempty"`
 	Tasks                 *generated.TaskConnection                 `json:"tasks,omitempty"`
 	Templates             *generated.TemplateConnection             `json:"templates,omitempty"`
@@ -2598,6 +2599,44 @@ type SubscriberUpdatePayload struct {
 }
 
 type Subscription struct {
+}
+
+// Return response for createBulkSystemDetail mutation
+type SystemDetailBulkCreatePayload struct {
+	// Created systemDetails
+	SystemDetails []*generated.SystemDetail `json:"systemDetails,omitempty"`
+}
+
+// Return response for deleteBulkSystemDetail mutation
+type SystemDetailBulkDeletePayload struct {
+	// Deleted systemDetail IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkSystemDetail mutation
+type SystemDetailBulkUpdatePayload struct {
+	// Updated systemDetails
+	SystemDetails []*generated.SystemDetail `json:"systemDetails,omitempty"`
+	// IDs of the updated systemDetails
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createSystemDetail mutation
+type SystemDetailCreatePayload struct {
+	// Created systemDetail
+	SystemDetail *generated.SystemDetail `json:"systemDetail"`
+}
+
+// Return response for deleteSystemDetail mutation
+type SystemDetailDeletePayload struct {
+	// Deleted systemDetail ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateSystemDetail mutation
+type SystemDetailUpdatePayload struct {
+	// Updated systemDetail
+	SystemDetail *generated.SystemDetail `json:"systemDetail"`
 }
 
 // Return response for createTFASetting mutation

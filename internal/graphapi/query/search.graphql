@@ -635,6 +635,23 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    systemDetails {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          systemName
+          tags
+        }
+      }
+    }
     tagDefinitions {
       totalCount
       pageInfo {

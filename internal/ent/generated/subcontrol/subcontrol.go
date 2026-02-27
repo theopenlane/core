@@ -34,6 +34,8 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
+	FieldExternalUUID = "external_uuid"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -50,6 +52,10 @@ const (
 	FieldResponsiblePartyID = "responsible_party_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldImplementationStatus holds the string denoting the implementation_status field in the database.
+	FieldImplementationStatus = "implementation_status"
+	// FieldImplementationDescription holds the string denoting the implementation_description field in the database.
+	FieldImplementationDescription = "implementation_description"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// FieldReferenceFramework holds the string denoting the reference_framework field in the database.
@@ -286,6 +292,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldExternalUUID,
 	FieldTitle,
 	FieldDescription,
 	FieldDescriptionJSON,
@@ -294,6 +301,8 @@ var Columns = []string{
 	FieldAuditorReferenceID,
 	FieldResponsiblePartyID,
 	FieldStatus,
+	FieldImplementationStatus,
+	FieldImplementationDescription,
 	FieldSource,
 	FieldReferenceFramework,
 	FieldReferenceFrameworkRevision,
@@ -429,6 +438,18 @@ func StatusValidator(s enums.ControlStatus) error {
 	}
 }
 
+const DefaultImplementationStatus enums.ControlImplementationStatus = "PLANNED"
+
+// ImplementationStatusValidator is a validator for the "implementation_status" field enum values. It is called by the builders before save.
+func ImplementationStatusValidator(is enums.ControlImplementationStatus) error {
+	switch is.String() {
+	case "PLANNED", "IMPLEMENTED", "PARTIALLY_IMPLEMENTED", "INHERITED", "NOT_APPLICABLE":
+		return nil
+	default:
+		return fmt.Errorf("subcontrol: invalid enum value for implementation_status field: %q", is)
+	}
+}
+
 const DefaultSource enums.ControlSource = "USER_DEFINED"
 
 // SourceValidator is a validator for the "source" field enum values. It is called by the builders before save.
@@ -484,6 +505,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// ByExternalUUID orders the results by the external_uuid field.
+func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
+}
+
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
@@ -512,6 +538,16 @@ func ByResponsiblePartyID(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByImplementationStatus orders the results by the implementation_status field.
+func ByImplementationStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImplementationStatus, opts...).ToFunc()
+}
+
+// ByImplementationDescription orders the results by the implementation_description field.
+func ByImplementationDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImplementationDescription, opts...).ToFunc()
 }
 
 // BySource orders the results by the source field.
@@ -1003,6 +1039,13 @@ var (
 	_ graphql.Marshaler = (*enums.ControlStatus)(nil)
 	// enums.ControlStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ControlStatus)(nil)
+)
+
+var (
+	// enums.ControlImplementationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ControlImplementationStatus)(nil)
+	// enums.ControlImplementationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ControlImplementationStatus)(nil)
 )
 
 var (

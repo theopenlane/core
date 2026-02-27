@@ -699,6 +699,26 @@ func (_u *InternalPolicyUpdate) ClearWorkflowEligibleMarker() *InternalPolicyUpd
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *InternalPolicyUpdate) SetExternalUUID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableExternalUUID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *InternalPolicyUpdate) ClearExternalUUID() *InternalPolicyUpdate {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InternalPolicyUpdate) SetOwner(v *Organization) *InternalPolicyUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -1577,6 +1597,12 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalUUID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3141,6 +3167,26 @@ func (_u *InternalPolicyUpdateOne) ClearWorkflowEligibleMarker() *InternalPolicy
 	return _u
 }
 
+// SetExternalUUID sets the "external_uuid" field.
+func (_u *InternalPolicyUpdateOne) SetExternalUUID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetExternalUUID(v)
+	return _u
+}
+
+// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableExternalUUID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetExternalUUID(*v)
+	}
+	return _u
+}
+
+// ClearExternalUUID clears the value of the "external_uuid" field.
+func (_u *InternalPolicyUpdateOne) ClearExternalUUID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearExternalUUID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InternalPolicyUpdateOne) SetOwner(v *Organization) *InternalPolicyUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -4049,6 +4095,12 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
+	if value, ok := _u.mutation.ExternalUUID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalUUID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalUUIDCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalUUID, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

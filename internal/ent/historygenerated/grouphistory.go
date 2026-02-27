@@ -57,6 +57,12 @@ type GroupHistory struct {
 	LogoURL string `json:"logo_url,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"display_name,omitempty"`
+	// OSCAL role identifier used for role-based responsibility mapping
+	OscalRole *string `json:"oscal_role,omitempty"`
+	// OSCAL party UUID linked to this group for responsibility mapping
+	OscalPartyUUID *string `json:"oscal_party_uuid,omitempty"`
+	// OSCAL contact UUID references associated with this group
+	OscalContactUuids []string `json:"oscal_contact_uuids,omitempty"`
 	// the SCIM external ID for the group
 	ScimExternalID *string `json:"scim_external_id,omitempty"`
 	// the SCIM displayname for the group
@@ -73,13 +79,13 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case grouphistory.FieldTags:
+		case grouphistory.FieldTags, grouphistory.FieldOscalContactUuids:
 			values[i] = new([]byte)
 		case grouphistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case grouphistory.FieldIsManaged, grouphistory.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
+		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName, grouphistory.FieldOscalRole, grouphistory.FieldOscalPartyUUID, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,6 +220,28 @@ func (_m *GroupHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DisplayName = value.String
 			}
+		case grouphistory.FieldOscalRole:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field oscal_role", values[i])
+			} else if value.Valid {
+				_m.OscalRole = new(string)
+				*_m.OscalRole = value.String
+			}
+		case grouphistory.FieldOscalPartyUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field oscal_party_uuid", values[i])
+			} else if value.Valid {
+				_m.OscalPartyUUID = new(string)
+				*_m.OscalPartyUUID = value.String
+			}
+		case grouphistory.FieldOscalContactUuids:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field oscal_contact_uuids", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.OscalContactUuids); err != nil {
+					return fmt.Errorf("unmarshal field oscal_contact_uuids: %w", err)
+				}
+			}
 		case grouphistory.FieldScimExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scim_external_id", values[i])
@@ -330,6 +358,19 @@ func (_m *GroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)
+	builder.WriteString(", ")
+	if v := _m.OscalRole; v != nil {
+		builder.WriteString("oscal_role=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.OscalPartyUUID; v != nil {
+		builder.WriteString("oscal_party_uuid=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("oscal_contact_uuids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OscalContactUuids))
 	builder.WriteString(", ")
 	if v := _m.ScimExternalID; v != nil {
 		builder.WriteString("scim_external_id=")

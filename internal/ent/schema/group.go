@@ -13,6 +13,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -98,6 +99,38 @@ func (Group) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
 			),
+		field.String("oscal_role").
+			Comment("OSCAL role identifier used for role-based responsibility mapping").
+			Optional().
+			Nillable().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleResponsibleRole,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+				),
+			),
+		field.String("oscal_party_uuid").
+			Comment("OSCAL party UUID linked to this group for responsibility mapping").
+			Optional().
+			Nillable().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
+		field.Strings("oscal_contact_uuids").
+			Comment("OSCAL contact UUID references associated with this group").
+			Optional(),
 		field.String("scim_external_id").
 			Comment("the SCIM external ID for the group").
 			Optional().
@@ -199,6 +232,14 @@ func (g Group) Annotations() []schema.Annotation {
 			},
 		),
 		entfga.SelfAccessChecks(),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(
+				oscalgen.OSCALModelComponentDefinition,
+				oscalgen.OSCALModelSSP,
+				oscalgen.OSCALModelPOAM,
+			),
+			oscalgen.WithOSCALAssembly("responsible-party"),
+		),
 	}
 }
 

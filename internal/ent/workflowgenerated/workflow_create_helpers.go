@@ -119,6 +119,7 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	NormalizeSchemaType("Subcontrol"):    makeCreateEntry[generated.CreateSubcontrolInput](func(client *generated.Client) *generated.SubcontrolCreate { return client.Subcontrol.Create() }),
 	NormalizeSchemaType("Subprocessor"):  makeCreateEntry[generated.CreateSubprocessorInput](func(client *generated.Client) *generated.SubprocessorCreate { return client.Subprocessor.Create() }),
 	NormalizeSchemaType("Subscriber"):    makeCreateEntry[generated.CreateSubscriberInput](func(client *generated.Client) *generated.SubscriberCreate { return client.Subscriber.Create() }),
+	NormalizeSchemaType("SystemDetail"):  makeCreateEntry[generated.CreateSystemDetailInput](func(client *generated.Client) *generated.SystemDetailCreate { return client.SystemDetail.Create() }),
 	NormalizeSchemaType("TFASetting"):    makeCreateEntry[generated.CreateTFASettingInput](func(client *generated.Client) *generated.TFASettingCreate { return client.TFASetting.Create() }),
 	NormalizeSchemaType("TagDefinition"): makeCreateEntry[generated.CreateTagDefinitionInput](func(client *generated.Client) *generated.TagDefinitionCreate { return client.TagDefinition.Create() }),
 	NormalizeSchemaType("Task"):          makeCreateEntry[generated.CreateTaskInput](func(client *generated.Client) *generated.TaskCreate { return client.Task.Create() }),

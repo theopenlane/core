@@ -80,6 +80,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -765,6 +766,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).SystemDetail.Query().Where((systemdetail.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if systemdetailCount, err := FromContext(ctx).SystemDetail.Delete().Where(systemdetail.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", systemdetailCount).Msg("error deleting systemdetail")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).Procedure.Query().Where((procedure.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if procedureCount, err := FromContext(ctx).Procedure.Delete().Where(procedure.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", procedureCount).Msg("error deleting procedure")
@@ -1223,6 +1231,12 @@ func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
 
 func SubscriberEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func SystemDetailEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup systemdetail edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

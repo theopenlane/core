@@ -230,6 +230,40 @@ func (_c *GroupCreate) SetNillableDisplayName(v *string) *GroupCreate {
 	return _c
 }
 
+// SetOscalRole sets the "oscal_role" field.
+func (_c *GroupCreate) SetOscalRole(v string) *GroupCreate {
+	_c.mutation.SetOscalRole(v)
+	return _c
+}
+
+// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableOscalRole(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetOscalRole(*v)
+	}
+	return _c
+}
+
+// SetOscalPartyUUID sets the "oscal_party_uuid" field.
+func (_c *GroupCreate) SetOscalPartyUUID(v string) *GroupCreate {
+	_c.mutation.SetOscalPartyUUID(v)
+	return _c
+}
+
+// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableOscalPartyUUID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetOscalPartyUUID(*v)
+	}
+	return _c
+}
+
+// SetOscalContactUuids sets the "oscal_contact_uuids" field.
+func (_c *GroupCreate) SetOscalContactUuids(v []string) *GroupCreate {
+	_c.mutation.SetOscalContactUuids(v)
+	return _c
+}
+
 // SetScimExternalID sets the "scim_external_id" field.
 func (_c *GroupCreate) SetScimExternalID(v string) *GroupCreate {
 	_c.mutation.SetScimExternalID(v)
@@ -1238,6 +1272,18 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(group.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
+	}
+	if value, ok := _c.mutation.OscalRole(); ok {
+		_spec.SetField(group.FieldOscalRole, field.TypeString, value)
+		_node.OscalRole = &value
+	}
+	if value, ok := _c.mutation.OscalPartyUUID(); ok {
+		_spec.SetField(group.FieldOscalPartyUUID, field.TypeString, value)
+		_node.OscalPartyUUID = &value
+	}
+	if value, ok := _c.mutation.OscalContactUuids(); ok {
+		_spec.SetField(group.FieldOscalContactUuids, field.TypeJSON, value)
+		_node.OscalContactUuids = value
 	}
 	if value, ok := _c.mutation.ScimExternalID(); ok {
 		_spec.SetField(group.FieldScimExternalID, field.TypeString, value)

@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx/oscalgen"
 
 	"github.com/theopenlane/iam/entfga"
 
@@ -73,11 +74,21 @@ func (ControlImplementation) Fields() []ent.Field {
 			Comment("date the control implementation was verified"),
 		field.Text("details").
 			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleImplementationDetails,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			).
 			Comment("details of the control implementation"),
 		field.JSON("details_json", []any{}).
 			Optional().
 			Annotations(
 				entgql.Type("[Any!]"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleImplementationDetails,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			).
 			Comment("structured details of the control implementation in JSON format"),
 	}
@@ -101,8 +112,26 @@ func (c ControlImplementation) Mixin() []ent.Mixin {
 // Edges of the ControlImplementation
 func (c ControlImplementation) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFromWithPagination(c, Control{}),
-		defaultEdgeFromWithPagination(c, Subcontrol{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToControlID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToStatementID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			},
+		}),
 
 		defaultEdgeToWithPagination(c, Task{}),
 	}
@@ -126,6 +155,10 @@ func (ControlImplementation) Modules() []models.OrgModule {
 func (c ControlImplementation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("implemented-requirement"),
+		),
 	}
 }
 

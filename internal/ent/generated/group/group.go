@@ -45,6 +45,12 @@ const (
 	FieldLogoURL = "logo_url"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
+	// FieldOscalRole holds the string denoting the oscal_role field in the database.
+	FieldOscalRole = "oscal_role"
+	// FieldOscalPartyUUID holds the string denoting the oscal_party_uuid field in the database.
+	FieldOscalPartyUUID = "oscal_party_uuid"
+	// FieldOscalContactUuids holds the string denoting the oscal_contact_uuids field in the database.
+	FieldOscalContactUuids = "oscal_contact_uuids"
 	// FieldScimExternalID holds the string denoting the scim_external_id field in the database.
 	FieldScimExternalID = "scim_external_id"
 	// FieldScimDisplayName holds the string denoting the scim_display_name field in the database.
@@ -428,6 +434,9 @@ var Columns = []string{
 	FieldGravatarLogoURL,
 	FieldLogoURL,
 	FieldDisplayName,
+	FieldOscalRole,
+	FieldOscalPartyUUID,
+	FieldOscalContactUuids,
 	FieldScimExternalID,
 	FieldScimDisplayName,
 	FieldScimActive,
@@ -769,6 +778,16 @@ func ByLogoURL(opts ...sql.OrderTermOption) OrderOption {
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
+}
+
+// ByOscalRole orders the results by the oscal_role field.
+func ByOscalRole(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOscalRole, opts...).ToFunc()
+}
+
+// ByOscalPartyUUID orders the results by the oscal_party_uuid field.
+func ByOscalPartyUUID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOscalPartyUUID, opts...).ToFunc()
 }
 
 // ByScimExternalID orders the results by the scim_external_id field.

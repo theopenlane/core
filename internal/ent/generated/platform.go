@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -100,6 +101,8 @@ type Platform struct {
 	CriticalityID string `json:"criticality_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
+	// stable external UUID for deterministic OSCAL export and round-tripping
+	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the name of the platform
 	Name string `json:"name,omitempty"`
 	// the description of the platform boundary
@@ -232,11 +235,13 @@ type PlatformEdges struct {
 	GeneratedScans []*Scan `json:"generated_scans,omitempty"`
 	// PlatformOwner holds the value of the platform_owner edge.
 	PlatformOwner *User `json:"platform_owner,omitempty"`
+	// SystemDetail holds the value of the system_detail edge.
+	SystemDetail *SystemDetail `json:"system_detail,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [43]bool
+	loadedTypes [44]bool
 	// totalCount holds the count of the edges above.
-	totalCount [43]map[string]int
+	totalCount [44]map[string]int
 
 	namedBlockedGroups        map[string][]*Group
 	namedEditors              map[string][]*Group
@@ -688,6 +693,17 @@ func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "platform_owner"}
 }
 
+// SystemDetailOrErr returns the SystemDetail value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PlatformEdges) SystemDetailOrErr() (*SystemDetail, error) {
+	if e.SystemDetail != nil {
+		return e.SystemDetail, nil
+	} else if e.loadedTypes[43] {
+		return nil, &NotFoundError{label: systemdetail.Label}
+	}
+	return nil, &NotLoadedError{edge: "system_detail"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Platform) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -701,7 +717,7 @@ func (*Platform) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case platform.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case platform.FieldID, platform.FieldCreatedBy, platform.FieldUpdatedBy, platform.FieldDeletedBy, platform.FieldDisplayID, platform.FieldOwnerID, platform.FieldInternalOwner, platform.FieldInternalOwnerUserID, platform.FieldInternalOwnerGroupID, platform.FieldBusinessOwner, platform.FieldBusinessOwnerUserID, platform.FieldBusinessOwnerGroupID, platform.FieldTechnicalOwner, platform.FieldTechnicalOwnerUserID, platform.FieldTechnicalOwnerGroupID, platform.FieldSecurityOwner, platform.FieldSecurityOwnerUserID, platform.FieldSecurityOwnerGroupID, platform.FieldPlatformKindName, platform.FieldPlatformKindID, platform.FieldPlatformDataClassificationName, platform.FieldPlatformDataClassificationID, platform.FieldEnvironmentName, platform.FieldEnvironmentID, platform.FieldScopeName, platform.FieldScopeID, platform.FieldAccessModelName, platform.FieldAccessModelID, platform.FieldEncryptionStatusName, platform.FieldEncryptionStatusID, platform.FieldSecurityTierName, platform.FieldSecurityTierID, platform.FieldCriticalityName, platform.FieldCriticalityID, platform.FieldName, platform.FieldDescription, platform.FieldBusinessPurpose, platform.FieldScopeStatement, platform.FieldTrustBoundaryDescription, platform.FieldDataFlowSummary, platform.FieldStatus, platform.FieldPhysicalLocation, platform.FieldRegion, platform.FieldSourceType, platform.FieldSourceIdentifier, platform.FieldCostCenter, platform.FieldPlatformOwnerID, platform.FieldExternalReferenceID:
+		case platform.FieldID, platform.FieldCreatedBy, platform.FieldUpdatedBy, platform.FieldDeletedBy, platform.FieldDisplayID, platform.FieldOwnerID, platform.FieldInternalOwner, platform.FieldInternalOwnerUserID, platform.FieldInternalOwnerGroupID, platform.FieldBusinessOwner, platform.FieldBusinessOwnerUserID, platform.FieldBusinessOwnerGroupID, platform.FieldTechnicalOwner, platform.FieldTechnicalOwnerUserID, platform.FieldTechnicalOwnerGroupID, platform.FieldSecurityOwner, platform.FieldSecurityOwnerUserID, platform.FieldSecurityOwnerGroupID, platform.FieldPlatformKindName, platform.FieldPlatformKindID, platform.FieldPlatformDataClassificationName, platform.FieldPlatformDataClassificationID, platform.FieldEnvironmentName, platform.FieldEnvironmentID, platform.FieldScopeName, platform.FieldScopeID, platform.FieldAccessModelName, platform.FieldAccessModelID, platform.FieldEncryptionStatusName, platform.FieldEncryptionStatusID, platform.FieldSecurityTierName, platform.FieldSecurityTierID, platform.FieldCriticalityName, platform.FieldCriticalityID, platform.FieldExternalUUID, platform.FieldName, platform.FieldDescription, platform.FieldBusinessPurpose, platform.FieldScopeStatement, platform.FieldTrustBoundaryDescription, platform.FieldDataFlowSummary, platform.FieldStatus, platform.FieldPhysicalLocation, platform.FieldRegion, platform.FieldSourceType, platform.FieldSourceIdentifier, platform.FieldCostCenter, platform.FieldPlatformOwnerID, platform.FieldExternalReferenceID:
 			values[i] = new(sql.NullString)
 		case platform.FieldCreatedAt, platform.FieldUpdatedAt, platform.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -959,6 +975,13 @@ func (_m *Platform) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
+			}
+		case platform.FieldExternalUUID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
+			} else if value.Valid {
+				_m.ExternalUUID = new(string)
+				*_m.ExternalUUID = value.String
 			}
 		case platform.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1313,6 +1336,11 @@ func (_m *Platform) QueryPlatformOwner() *UserQuery {
 	return NewPlatformClient(_m.config).QueryPlatformOwner(_m)
 }
 
+// QuerySystemDetail queries the "system_detail" edge of the Platform entity.
+func (_m *Platform) QuerySystemDetail() *SystemDetailQuery {
+	return NewPlatformClient(_m.config).QuerySystemDetail(_m)
+}
+
 // Update returns a builder for updating this Platform.
 // Note that you need to call Platform.Unwrap() before calling this method if this Platform
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -1449,6 +1477,11 @@ func (_m *Platform) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
+	if v := _m.ExternalUUID; v != nil {
+		builder.WriteString("external_uuid=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

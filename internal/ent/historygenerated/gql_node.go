@@ -66,6 +66,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
@@ -367,6 +368,11 @@ var subprocessorhistoryImplementors = []string{"SubprocessorHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*SubprocessorHistory) IsNode() {}
+
+var systemdetailhistoryImplementors = []string{"SystemDetailHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*SystemDetailHistory) IsNode() {}
 
 var taskhistoryImplementors = []string{"TaskHistory", "Node"}
 
@@ -1017,6 +1023,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(subprocessorhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, subprocessorhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case systemdetailhistory.Table:
+		query := c.SystemDetailHistory.Query().
+			Where(systemdetailhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, systemdetailhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2142,6 +2157,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.SubprocessorHistory.Query().
 			Where(subprocessorhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, subprocessorhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case systemdetailhistory.Table:
+		query := c.SystemDetailHistory.Query().
+			Where(systemdetailhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, systemdetailhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

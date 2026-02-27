@@ -126,6 +126,8 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_criticalityID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Platform_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Platform_name(ctx, field)
 			case "description":
@@ -248,6 +250,8 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_generatedScans(ctx, field)
 			case "platformOwner":
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Platform_systemDetail(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -361,6 +365,8 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_criticalityID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Platform_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Platform_name(ctx, field)
 			case "description":
@@ -483,6 +489,8 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_generatedScans(ctx, field)
 			case "platformOwner":
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Platform_systemDetail(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -625,6 +633,8 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_criticalityID(ctx, field)
 			case "workflowEligibleMarker":
 				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
+			case "externalUUID":
+				return ec.fieldContext_Platform_externalUUID(ctx, field)
 			case "name":
 				return ec.fieldContext_Platform_name(ctx, field)
 			case "description":
@@ -747,6 +757,8 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_generatedScans(ctx, field)
 			case "platformOwner":
 				return ec.fieldContext_Platform_platformOwner(ctx, field)
+			case "systemDetail":
+				return ec.fieldContext_Platform_systemDetail(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
