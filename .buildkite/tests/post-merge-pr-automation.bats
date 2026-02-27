@@ -18,13 +18,13 @@ find_draft_prs() { echo "5:draft-core-pr-42:🚧 DRAFT: Config changes from core
 check_core_pr_status() { echo '{"state":"MERGED","updatedAt":"2026-01-01T00:00:00Z"}'; }
 generate_closure_comment() { echo "comment"; }
 close_pr() { echo "close_pr $1" >> "$TEST_TEMP_DIR/log"; return 0; }
-safe_delete_branch() { echo "delete_branch $1" >> "$TEST_TEMP_DIR/log"; return 0; }
+safe_delete_branch() { echo "delete_branch $1 $2" >> "$TEST_TEMP_DIR/log"; return 0; }
 STUB
 
     POST_MERGE_PR_STUB="$TEST_TEMP_DIR/stubs.sh" run bash .buildkite/post-merge-pr-automation.sh
     [ "$status" -eq 0 ]
     grep -q "close_pr 5" "$TEST_TEMP_DIR/log"
-    grep -q "delete_branch draft-core-pr-42" "$TEST_TEMP_DIR/log"
+    grep -q "delete_branch draft-core-pr-42 theopenlane/openlane-infra" "$TEST_TEMP_DIR/log"
 }
 
 @test "keeps draft PR open when core PR is still open" {
@@ -35,7 +35,7 @@ find_draft_prs() { echo "6:draft-core-pr-43:🚧 DRAFT: Config changes from core
 check_core_pr_status() { echo '{"state":"OPEN","updatedAt":"2026-01-01T00:00:00Z"}'; }
 generate_closure_comment() { echo "comment"; }
 close_pr() { echo "close_pr $1" >> "$TEST_TEMP_DIR/log"; return 0; }
-safe_delete_branch() { echo "delete_branch $1" >> "$TEST_TEMP_DIR/log"; return 0; }
+safe_delete_branch() { echo "delete_branch $1 $2" >> "$TEST_TEMP_DIR/log"; return 0; }
 STUB
 
     POST_MERGE_PR_STUB="$TEST_TEMP_DIR/stubs.sh" run bash .buildkite/post-merge-pr-automation.sh

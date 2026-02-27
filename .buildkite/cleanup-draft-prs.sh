@@ -69,7 +69,7 @@ while IFS=':' read -r pr_number branch_name title; do
 
     closing_comment=$(generate_closure_comment "$core_pr_number" "closed")
     if close_pr "$pr_number" "$repo" "$closing_comment"; then
-      safe_delete_branch "$branch_name"
+      safe_delete_branch "$branch_name" "$repo"
     fi
     continue
   fi
@@ -97,7 +97,7 @@ while IFS=':' read -r pr_number branch_name title; do
   fi
 
   if close_pr "$pr_number" "$repo" "$closing_comment"; then
-    safe_delete_branch "$branch_name"
+    safe_delete_branch "$branch_name" "$repo"
   fi
 
 done <<< "$draft_prs"
