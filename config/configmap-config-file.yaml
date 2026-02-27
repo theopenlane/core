@@ -1065,6 +1065,11 @@ data:
       successredirecturl: ""
       {{- end }}
     {{- end }}
+    {{- $mapValue := (.Values.openlane.coreConfiguration.integrationproviders | default (dict)) }}
+    {{- if gt (len $mapValue) 0 }}
+    integrationproviders:
+    {{- toYaml $mapValue | nindent 6 }}
+    {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationgithubapp }}
     integrationgithubapp:
       {{- if .Values.openlane.coreConfiguration.integrationgithubapp.enabled }}

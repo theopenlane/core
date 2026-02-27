@@ -595,7 +595,7 @@ components:
             properties:
                 Provider:
                     description: Integration provider identifier
-                    example: gcp_scc
+                    example: gcpscc
                     type: string
                 payload:
                     properties:
@@ -633,7 +633,7 @@ components:
             properties:
                 Provider:
                     description: Integration provider identifier
-                    example: gcp_scc
+                    example: gcpscc
                     type: string
                 payload:
                     properties:
@@ -4045,7 +4045,7 @@ paths:
                         examples:
                             success:
                                 value:
-                                    Provider: gcp_scc
+                                    Provider: gcpscc
                                     payload:
                                         audience: //iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider
                                         organizationId: "1234567890"
@@ -4062,7 +4062,7 @@ paths:
                             examples:
                                 success:
                                     value:
-                                        provider: gcp_scc
+                                        provider: gcpscc
                                         success: true
                             schema:
                                 $ref: '#/components/schemas/IntegrationConfigResponse'
@@ -4100,7 +4100,7 @@ paths:
                         examples:
                             success:
                                 value:
-                                    Provider: gcp_scc
+                                    Provider: gcpscc
                                     payload:
                                         config:
                                             filter: severity="HIGH"
@@ -4120,7 +4120,7 @@ paths:
                                         details:
                                             totalFindings: 5
                                         operation: findings.collect
-                                        provider: gcp_scc
+                                        provider: gcpscc
                                         status: ok
                                         success: true
                                         summary: Collected 5 findings from organizations/123/sources/456

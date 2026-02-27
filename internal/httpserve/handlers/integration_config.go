@@ -51,7 +51,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
-	if !spec.Active {
+	if spec.Active == nil || !*spec.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 

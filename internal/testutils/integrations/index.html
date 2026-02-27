@@ -959,7 +959,7 @@
               addButton("Refresh Token", "outline-warning", () => handleRefresh(provider.name));
             }
 
-            if (provider.authType === "github_app" || provider.name === "github_app") {
+            if (provider.authType === "githubapp" || provider.name === "githubapp") {
               addButton("Start GitHub App Install", "dark", () => handleGitHubAppInstall(provider.name));
               addButton("Run GitHub App Health", "outline-success", () =>
                 handleOperation(provider.name, "health.default", "", false),

@@ -1,8 +1,8 @@
 {
-  "name": "github_app",
+  "name": "githubapp",
   "displayName": "GitHub App",
   "category": "code",
-  "authType": "github_app",
+  "authType": "githubapp",
   "authStartPath": "/v1/integrations/github/app/install",
   "authCallbackPath": "/v1/integrations/github/app/callback",
   "active": true,

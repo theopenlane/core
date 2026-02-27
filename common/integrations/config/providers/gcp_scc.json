@@ -1,5 +1,5 @@
 {
-  "name": "gcp_scc",
+  "name": "gcpscc",
   "displayName": "Google Cloud SCC",
   "category": "cloud",
   "authType": "workload_identity",

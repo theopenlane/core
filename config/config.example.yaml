@@ -175,6 +175,85 @@ integrationgithubapp:
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
+integrationproviders:
+    azureentraid:
+        authType: ""
+        category: ""
+        displayName: ""
+        docsUrl: ""
+        logoUrl: ""
+        name: ""
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+    github:
+        authType: ""
+        category: ""
+        displayName: ""
+        docsUrl: ""
+        logoUrl: ""
+        name: ""
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+    googleworkspace:
+        authType: ""
+        category: ""
+        displayName: ""
+        docsUrl: ""
+        logoUrl: ""
+        name: ""
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+    microsoftteams:
+        authType: ""
+        category: ""
+        displayName: ""
+        docsUrl: ""
+        logoUrl: ""
+        name: ""
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+    oidcgeneric:
+        authType: ""
+        category: ""
+        displayName: ""
+        docsUrl: ""
+        logoUrl: ""
+        name: ""
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+    slack:
+        authType: ""
+        category: ""
+        displayName: ""
+        docsUrl: ""
+        logoUrl: ""
+        name: ""
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:

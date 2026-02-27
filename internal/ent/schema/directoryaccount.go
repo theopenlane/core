@@ -71,7 +71,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 				entx.CSVRef().FromColumn("DirectoryAccountIdentityHolderEmail").MatchOn("email"),
 			),
 		field.String("directory_name").
-			Comment("directory source label set by the integration (e.g. google_workspace, github, slack)").
+			Comment("directory source label set by the integration (e.g. googleworkspace, github, slack)").
 			Optional().
 			Nillable().
 			Annotations(

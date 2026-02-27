@@ -1,5 +1,5 @@
 {
-  "name": "microsoft_teams",
+  "name": "microsoftteams",
   "displayName": "Microsoft Teams",
   "category": "collab",
   "authType": "oauth2",
@@ -10,8 +10,8 @@
   "logoUrl": "",
   "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/overview",
   "oauth": {
-    "clientId": "${MICROSOFT_TEAMS_CLIENT_ID}",
-    "clientSecret": "${MICROSOFT_TEAMS_CLIENT_SECRET}",
+    "clientId": "",
+    "clientSecret": "",
     "authUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
     "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
     "scopes": [

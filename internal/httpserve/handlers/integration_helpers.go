@@ -67,7 +67,6 @@ func buildStatePayload(orgID, provider string, randomBytes []byte) string {
 
 // parseStatePayload decodes the OAuth state payload and extracts the org and provider values.
 func parseStatePayload(state string) (string, string, error) {
-	state = strings.TrimSpace(state)
 	if state == "" {
 		return "", "", ErrInvalidStateFormat
 	}
@@ -82,9 +81,9 @@ func parseStatePayload(state string) (string, string, error) {
 		return "", "", ErrInvalidStateFormat
 	}
 
-	orgID := strings.TrimSpace(parts[0])
-	provider := strings.TrimSpace(parts[1])
-	randomPart := strings.TrimSpace(parts[2])
+	orgID := parts[0]
+	provider := parts[1]
+	randomPart := parts[2]
 	if orgID == "" || provider == "" || randomPart == "" {
 		return "", "", ErrInvalidStateFormat
 	}
@@ -111,7 +110,7 @@ func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integra
 	}
 
 	spec, ok := h.IntegrationRegistry.Config(provider)
-	if !ok || !spec.Active {
+	if !ok || spec.Active == nil || !*spec.Active {
 		return nil
 	}
 

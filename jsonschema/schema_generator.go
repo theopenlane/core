@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/utils/envparse"
 
 	"github.com/theopenlane/core/config"
+	integrationconfig "github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 
@@ -244,7 +245,36 @@ func buildDefaultConfig() *config.Config {
 	defaults.SetDefaults(cfg)
 	initializeStripeWebhookSecrets(cfg)
 	initializeRateLimitOptions(cfg)
+	initializeIntegrationProviders(cfg)
 	return cfg
+}
+
+// initializeIntegrationProviders seeds the integration providers map from the embedded provider specs,
+// including only those that declare OAuth configuration, so the schema generator walks into OAuthSpec
+// and produces env vars and external secrets for clientid and clientsecret
+func initializeIntegrationProviders(cfg *config.Config) {
+	loader := integrationconfig.NewFSLoader(integrationconfig.ProvidersFS, "providers")
+
+	specs, err := loader.Load()
+	if err != nil {
+		panic(fmt.Errorf("failed to load integration provider specs: %w", err))
+	}
+
+	if cfg.IntegrationProviders == nil {
+		cfg.IntegrationProviders = make(map[string]integrationconfig.ProviderSpec, len(specs))
+	}
+
+	for _, spec := range specs {
+		if spec.OAuth == nil {
+			continue
+		}
+
+		if _, exists := cfg.IntegrationProviders[spec.Name]; !exists {
+			cfg.IntegrationProviders[spec.Name] = integrationconfig.ProviderSpec{
+				OAuth: &integrationconfig.OAuthSpec{},
+			}
+		}
+	}
 }
 
 // initializeStripeWebhookSecrets ensures the stripe webhook secrets map includes entries for the current and discard API versions

@@ -9,7 +9,7 @@ import (
 )
 
 // TypeAzureSecurityCenter identifies the Azure Security Center provider.
-const TypeAzureSecurityCenter = types.ProviderType("azure_security_center")
+const TypeAzureSecurityCenter = types.ProviderType("azuresecuritycenter")
 
 // Builder returns the Azure Security Center provider builder.
 func Builder() providers.Builder {

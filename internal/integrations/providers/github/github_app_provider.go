@@ -26,7 +26,7 @@ import (
 
 const (
 	// TypeGitHubApp identifies the GitHub App provider
-	TypeGitHubApp = types.ProviderType("github_app")
+	TypeGitHubApp = types.ProviderType("githubapp")
 )
 
 var _ types.ClientProvider = (*appProvider)(nil)
