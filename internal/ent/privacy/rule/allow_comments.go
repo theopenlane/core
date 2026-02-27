@@ -24,15 +24,15 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 		fields := m.Fields()
 		addedFields := m.AddedFields() // get numeric fields
 
-		ignore_fields := []string{"updated_at", "updated_by", "owner_id"}
-		allowed_edges := []string{"comments"}
+		ignoreFields := []string{"updated_at", "updated_by", "owner_id"}
+		allowedEdges := []string{"comments"}
 
 		// remove ignored fields from the list of fields being set in the mutation
-		fields = lo.Without(fields, ignore_fields...)
+		fields = lo.Without(fields, ignoreFields...)
 
 		// remove allowed edges from the list of added and removed edges
-		addedEdges = lo.Without(addedEdges, allowed_edges...)
-		removedEdges = lo.Without(removedEdges, allowed_edges...)
+		addedEdges = lo.Without(addedEdges, allowedEdges...)
+		removedEdges = lo.Without(removedEdges, allowedEdges...)
 
 		if len(addedEdges) == 0 && len(removedEdges) == 0 && len(fields) == 0 && len(addedFields) == 0 {
 			return privacy.Allowf("mutation has no changes beyond allowed edges, allowing")

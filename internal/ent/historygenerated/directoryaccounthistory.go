@@ -58,7 +58,7 @@ type DirectoryAccountHistory struct {
 	PlatformID string `json:"platform_id,omitempty"`
 	// deduplicated identity holder linked to this directory account
 	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
-	// directory source label set by the integration (e.g. google_workspace, github, slack)
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directory_name,omitempty"`
 	// stable identifier from the directory system
 	ExternalID string `json:"external_id,omitempty"`

@@ -6815,7 +6815,7 @@ type DirectoryAccountHistory implements Node {
   """
   identityHolderID: String
   """
-  directory source label set by the integration (e.g. google_workspace, github, slack)
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
   """
@@ -13431,7 +13431,7 @@ type FindingHistory implements Node {
   """
   externalOwnerID: String
   """
-  system that produced the finding, e.g. gcp_scc
+  system that produced the finding, e.g. gcpscc
   """
   source: String
   """
