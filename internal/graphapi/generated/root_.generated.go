@@ -78350,6 +78350,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
   RISK
   SUBPROCESSOR
   SUBSCRIBER
+  SYSTEM_DETAIL
   TASK
   TRUST_CENTER_FAQ
   TRUST_CENTER_SUBPROCESSOR

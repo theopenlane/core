@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -56,7 +57,14 @@ func (Asset) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the asset, e.g. matts computer, office router, IP address, etc").
 			NotEmpty().
-			Annotations(entgql.OrderField("name"), entx.FieldSearchable()),
+			Annotations(
+				entgql.OrderField("name"),
+				entx.FieldSearchable(),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			),
 		field.String("display_name").
 			Comment("the display name of the asset").
 			MaxLen(nameMaxLen).
@@ -67,10 +75,23 @@ func (Asset) Fields() []ent.Field {
 				entgql.OrderField("display_name"),
 			),
 		field.String("description").
-			Optional(),
+			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
+			),
 		field.String("identifier").
 			Optional().
-			Comment("unique identifier like domain, device id, etc"),
+			Comment("unique identifier like domain, device id, etc").
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleInventoryItemIdentifier,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("website").
 			Comment("the website of the asset, if applicable").
 			Optional(),
@@ -238,6 +259,10 @@ func (a Asset) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("inventory-item"),
+		),
 	}
 }
 

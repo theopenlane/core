@@ -23,7 +23,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/core v1.11.4
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.22.5
+	github.com/theopenlane/entx v0.22.6
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.7.0
 	github.com/zitadel/oidc/v3 v3.45.4

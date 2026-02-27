@@ -8,10 +8,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -57,13 +59,23 @@ func (SystemDetail) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("system_name"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleSystemName,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelSSP),
+				),
 			),
 		field.String("version").
 			Comment("system version used in OSCAL metadata").
 			Optional(),
 		field.Text("description").
 			Comment("system description used in OSCAL metadata").
-			Optional(),
+			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelSSP),
+				),
+			),
 		field.Text("authorization_boundary").
 			Comment("authorization boundary narrative for OSCAL export").
 			Optional(),
@@ -114,7 +126,7 @@ func (s SystemDetail) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "SDT",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[SystemDetail](s,
+			newObjectOwnedMixin[generated.SystemDetail](s,
 				withParents(Program{}, Platform{}),
 				withOrganizationOwner(true),
 				withListObjectsFilter(),
@@ -152,6 +164,10 @@ func (SystemDetail) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
+		),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("system-characteristics"),
 		),
 	}
 }

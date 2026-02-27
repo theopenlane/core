@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -56,18 +57,45 @@ func (Program) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique(),
+			Unique().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("name").
 			Comment("the name of the program").
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+				),
 			),
 		field.String("description").
 			Comment("the description of the program").
 			Annotations(
 				entx.FieldSearchable(),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(
+						oscalgen.OSCALModelComponentDefinition,
+						oscalgen.OSCALModelSSP,
+						oscalgen.OSCALModelPOAM,
+					),
+				),
 			).
 			Optional(),
 		field.Enum("status").
@@ -149,6 +177,10 @@ func (p Program) Edges() []ent.Edge {
 			edgeSchema: Control{},
 			annotations: []schema.Annotation{
 				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleComponentContains,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				),
 			},
 		}),
 		// programs can have 1:many subcontrols
@@ -221,6 +253,14 @@ func (p Program) Annotations() []schema.Annotation {
 			},
 		),
 		entfga.SelfAccessChecks(),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(
+				oscalgen.OSCALModelComponentDefinition,
+				oscalgen.OSCALModelSSP,
+				oscalgen.OSCALModelPOAM,
+			),
+			oscalgen.WithOSCALAssembly("implementation-scope"),
+		),
 	}
 }
 

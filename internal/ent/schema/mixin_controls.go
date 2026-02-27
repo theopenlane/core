@@ -11,6 +11,7 @@ import (
 	"golang.org/x/mod/semver"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/rout"
 
@@ -203,7 +204,14 @@ var controlFields = []ent.Field{
 		Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 		Optional().
 		Nillable().
-		Unique(),
+		Unique().
+		Annotations(
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleUUID,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+				oscalgen.WithOSCALIdentityAnchor(),
+			),
+		),
 	field.String("title").
 		Optional().
 		Annotations(
@@ -212,6 +220,10 @@ var controlFields = []ent.Field{
 			entx.FieldWebhookPayloadField(),
 			directives.ExternalSourceDirectiveAnnotation,
 			entx.FieldWorkflowEligible(),
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleTitle,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
 		).
 		Comment("human readable title of the control for quick identification"),
 	field.Text("description").
@@ -219,6 +231,10 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 			directives.ExternalSourceDirectiveAnnotation,
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleDescription,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
 		).
 		Comment("description of what the control is supposed to accomplish"),
 	field.JSON("description_json", []any{}).
@@ -261,10 +277,22 @@ var controlFields = []ent.Field{
 		Comment("OSCAL-aligned implementation status of the control").
 		GoType(enums.ControlImplementationStatus("")).
 		Optional().
-		Default(enums.ControlImplementationStatusPlanned.String()),
+		Default(enums.ControlImplementationStatusPlanned.String()).
+		Annotations(
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleImplementationStatus,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
+		),
 	field.Text("implementation_description").
 		Comment("narrative describing current implementation state for OSCAL export").
-		Optional(),
+		Optional().
+		Annotations(
+			oscalgen.NewOSCALField(
+				oscalgen.OSCALFieldRoleImplementationDetails,
+				oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
+			),
+		),
 	field.Enum("source").
 		GoType(enums.ControlSource("")).
 		Optional().

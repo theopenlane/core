@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/entx/accessmap"
@@ -55,17 +56,34 @@ func (Task) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique(),
+			Unique().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("title").
 			Comment("the title of the task").
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("title"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
+				),
 			).
 			NotEmpty(),
 		field.Text("details").
 			Comment("the details of the task").
-			Optional(),
+			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleImplementationDetails,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
+				),
+			),
 		field.JSON("details_json", []any{}).
 			Optional().
 			Annotations(
@@ -206,6 +224,10 @@ func (t Task) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Control{}.Name()),
 				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToControlID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
+				),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
@@ -302,6 +324,10 @@ func (Task) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
+		),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
+			oscalgen.WithOSCALAssembly("poam-item"),
 		),
 	}
 }

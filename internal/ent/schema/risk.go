@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -52,12 +53,23 @@ func (Risk) Fields() []ent.Field {
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique(),
+			Unique().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleUUID,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
+					oscalgen.WithOSCALIdentityAnchor(),
+				),
+			),
 		field.String("name").
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleTitle,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
+				),
 			).
 			Comment("the name of the risk"),
 		field.Enum("status").
@@ -102,6 +114,12 @@ func (Risk) Fields() []ent.Field {
 			Comment("structured details of the mitigation in JSON format"),
 		field.Text("details").
 			Optional().
+			Annotations(
+				oscalgen.NewOSCALField(
+					oscalgen.OSCALFieldRoleDescription,
+					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
+				),
+			).
 			Comment("details of the risk"),
 		field.JSON("details_json", []any{}).
 			Optional().
@@ -146,6 +164,10 @@ func (r Risk) Edges() []ent.Edge {
 			edgeSchema: Control{},
 			annotations: []schema.Annotation{
 				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				oscalgen.NewOSCALRelationship(
+					oscalgen.OSCALRelationshipRoleLinksToControlID,
+					oscalgen.WithOSCALRelationshipModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
+				),
 			},
 		}),
 		defaultEdgeFromWithPagination(r, Subcontrol{}),
@@ -254,6 +276,10 @@ func (r Risk) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
+		),
+		oscalgen.NewOSCALModel(
+			oscalgen.WithOSCALModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
+			oscalgen.WithOSCALAssembly("risk"),
 		),
 	}
 }
