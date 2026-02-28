@@ -23,6 +23,15 @@ type OperationManager struct {
 	descriptors map[operationKey]types.OperationDescriptor
 }
 
+// IntegrationCredentialSource extends CredentialSource with integration-specific lookup methods.
+type IntegrationCredentialSource interface {
+	CredentialSource
+	// GetForIntegration retrieves credentials scoped to a specific integration.
+	GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error)
+	// MintForIntegration refreshes credentials scoped to a specific integration.
+	MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error)
+}
+
 // OperationManagerOption customizes manager construction
 type OperationManagerOption func(*OperationManager)
 
@@ -104,7 +113,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		return types.OperationResult{}, err
 	}
 
-	client, err := m.resolveClient(ctx, req, descriptor)
+	client, err := m.resolveClient(ctx, req, descriptor, payload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -194,6 +203,16 @@ func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req typ
 
 // resolveCredential retrieves or refreshes the credential based on the request flags
 func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (types.CredentialPayload, error) {
+	if req.IntegrationID != "" {
+		if source, ok := m.source.(IntegrationCredentialSource); ok {
+			if req.Force {
+				return source.MintForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+			}
+
+			return source.GetForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+		}
+	}
+
 	if req.Force {
 		return m.source.Mint(ctx, req.OrgID, req.Provider)
 	}
@@ -202,9 +221,13 @@ func (m *OperationManager) resolveCredential(ctx context.Context, req types.Oper
 }
 
 // resolveClient retrieves a client instance if the operation requires one
-func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor) (any, error) {
+func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload) (any, error) {
 	if descriptor.Client == "" {
 		return nil, nil
+	}
+
+	if req.IntegrationID != "" {
+		return m.resolveClientFromPayload(ctx, req, descriptor, payload)
 	}
 
 	if m.clients == nil {

@@ -8,12 +8,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
@@ -21,6 +23,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -33,12 +36,13 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// GitHub webhook header names and limits.
+// GitHub webhook header names and limits
 const (
-	githubWebhookSignatureHeader = "X-Hub-Signature-256"
-	githubWebhookEventHeader     = "X-GitHub-Event"
-	githubWebhookDeliveryHeader  = "X-GitHub-Delivery"
-	maxGitHubWebhookBodyBytes    = int64(1024 * 1024)
+	githubWebhookSignatureHeader  = "X-Hub-Signature-256"
+	githubWebhookEventHeader      = "X-GitHub-Event"
+	githubWebhookDeliveryHeader   = "X-GitHub-Delivery"
+	maxGitHubWebhookBodyBytes     = int64(1024 * 1024)
+	githubWebhookVerifiedMetadata = "githubWebhookVerifiedAt"
 )
 
 var (
@@ -84,6 +88,7 @@ var (
 	)
 )
 
+// init registers GitHub App webhook metrics
 func init() {
 	prometheus.MustRegister(githubAppWebhookReceivedCounter)
 	prometheus.MustRegister(githubAppWebhookResponseCounter)
@@ -92,19 +97,16 @@ func init() {
 	prometheus.MustRegister(githubAppWebhookEmitErrorsCounter)
 }
 
+// normalizeGitHubWebhookEventType normalizes the event type used in metric labels
 func normalizeGitHubWebhookEventType(eventType string) string {
-	var normalized types.LowerString
-	if err := normalized.UnmarshalText([]byte(eventType)); err != nil {
+	if eventType == "" {
 		return "unknown"
 	}
 
-	if normalized == "" {
-		return "unknown"
-	}
-
-	return normalized.String()
+	return eventType
 }
 
+// recordGitHubWebhookResponse increments webhook response metrics
 func recordGitHubWebhookResponse(eventType string, statusCode int, result string) {
 	githubAppWebhookResponseCounter.WithLabelValues(
 		normalizeGitHubWebhookEventType(eventType),
@@ -113,7 +115,7 @@ func recordGitHubWebhookResponse(eventType string, statusCode int, result string
 	).Inc()
 }
 
-// GitHubIntegrationWebhookHandler ingests GitHub App security alert webhooks.
+// GitHubIntegrationWebhookHandler ingests GitHub App security alert webhooks
 func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	if isRegistrationContext(ctx) {
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
@@ -154,7 +156,20 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 
 	if eventType == "" {
 		recordGitHubWebhookResponse(eventType, http.StatusBadRequest, "missing_event_header")
-		return h.BadRequest(ctx, rout.MissingField(githubWebhookEventHeader), openapi)
+		return h.BadRequest(ctx, ErrGitHubWebhookEventHeaderMissing, openapi)
+	}
+
+	webhookSecret := h.IntegrationGitHubApp.WebhookSecret
+	if webhookSecret == "" {
+		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "missing_webhook_secret")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
+	if !validateGitHubWebhookSignature(webhookSecret, req.Header.Get(githubWebhookSignatureHeader), payload) {
+		recordGitHubWebhookResponse(eventType, http.StatusBadRequest, "invalid_signature")
+
+		return h.BadRequest(ctx, ErrGitHubWebhookSignatureInvalid, openapi)
 	}
 
 	var envelope githubWebhookEnvelope
@@ -165,6 +180,21 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	installationID := githubInstallationID(envelope.Installation)
+	if installationID == "" {
+		installationID = githubInstallationIDFromPayload(payload)
+	}
+	if eventType == "ping" {
+		if installationID != "" {
+			if err := h.markGitHubWebhookVerifiedAt(req.Context(), installationID, time.Now().UTC()); err != nil {
+				logx.FromContext(req.Context()).Warn().Err(err).Str("installation_id", installationID).Msg("failed to persist github webhook verification timestamp")
+			}
+		}
+
+		recordGitHubWebhookResponse(eventType, http.StatusOK, "ping_accepted")
+
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+	}
+
 	if installationID == "" {
 		logx.FromContext(req.Context()).Info().Str("event", eventType).Msg("github webhook missing installation id")
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "missing_installation_id")
@@ -183,19 +213,6 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "integration_not_configured")
 
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
-	}
-
-	webhookSecret := h.IntegrationGitHubApp.WebhookSecret
-	if webhookSecret == "" {
-		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "missing_webhook_secret")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
-	if !validateGitHubWebhookSignature(webhookSecret, req.Header.Get(githubWebhookSignatureHeader), payload) {
-		recordGitHubWebhookResponse(eventType, http.StatusBadRequest, "invalid_signature")
-
-		return h.BadRequest(ctx, rout.InvalidField(githubWebhookSignatureHeader), openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
@@ -220,13 +237,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		}
 	}
 
-	if eventType == "ping" {
-		recordGitHubWebhookResponse(eventType, http.StatusOK, "ping_ignored")
-
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
-	}
-
-	if strings.EqualFold(eventType, "installation") {
+	if eventType == "installation" {
 		return h.handleGitHubInstallationWebhook(ctx, openapi, eventType, envelope, integrationRecord)
 	}
 
@@ -276,9 +287,9 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}, openapi)
 }
 
-// handleGitHubInstallationWebhook sends a Slack notification when an installation is created.
+// handleGitHubInstallationWebhook sends a Slack notification when an installation is created
 func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *OpenAPIContext, eventType string, envelope githubWebhookEnvelope, integrationRecord *ent.Integration) error {
-	if !strings.EqualFold(envelope.Action, "created") {
+	if envelope.Action != "created" {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_action_ignored")
 
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
@@ -328,55 +339,55 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 	}, openapi)
 }
 
-// githubWebhookEnvelope captures GitHub webhook fields required for alert processing.
+// githubWebhookEnvelope captures GitHub webhook fields required for alert processing
 type githubWebhookEnvelope struct {
-	// Action represents the GitHub webhook action (created, resolved, etc).
+	// Action represents the GitHub webhook action (created, resolved, etc)
 	Action string `json:"action"`
-	// Installation describes the GitHub App installation context.
+	// Installation describes the GitHub App installation context
 	Installation *githubWebhookInstallation `json:"installation"`
-	// Repository describes the repository associated with the alert.
+	// Repository describes the repository associated with the alert
 	Repository *githubWebhookRepository `json:"repository"`
-	// Alert contains the raw alert payload.
+	// Alert contains the raw alert payload
 	Alert json.RawMessage `json:"alert"`
 }
 
-// githubWebhookInstallation identifies a GitHub App installation.
+// githubWebhookInstallation identifies a GitHub App installation
 type githubWebhookInstallation struct {
-	// ID is the installation identifier.
+	// ID is the installation identifier
 	ID int64 `json:"id"`
-	// Account identifies the user or organization that owns the installation.
+	// Account identifies the user or organization that owns the installation
 	Account *githubWebhookAccount `json:"account"`
-	// TargetType is the installation target type provided by GitHub.
+	// TargetType is the installation target type provided by GitHub
 	TargetType string `json:"target_type"`
 }
 
-// githubWebhookAccount captures the GitHub account metadata in webhook payloads.
+// githubWebhookAccount captures the GitHub account metadata in webhook payloads
 type githubWebhookAccount struct {
-	// Login is the GitHub account login.
+	// Login is the GitHub account login
 	Login string `json:"login"`
-	// Type is the GitHub account type.
+	// Type is the GitHub account type
 	Type string `json:"type"`
 }
 
-// githubWebhookRepository captures repository details from a webhook payload.
+// githubWebhookRepository captures repository details from a webhook payload
 type githubWebhookRepository struct {
-	// FullName is the repository full name (owner/name).
+	// FullName is the repository full name (owner/name)
 	FullName string `json:"full_name"`
-	// Name is the repository name.
+	// Name is the repository name
 	Name string `json:"name"`
-	// HTMLURL is the repository URL in GitHub.
+	// HTMLURL is the repository URL in GitHub
 	HTMLURL string `json:"html_url"`
-	// Owner identifies the repository owner.
+	// Owner identifies the repository owner
 	Owner githubWebhookRepoOwner `json:"owner"`
 }
 
-// githubWebhookRepoOwner captures repository owner info.
+// githubWebhookRepoOwner captures repository owner info
 type githubWebhookRepoOwner struct {
-	// Login is the owner login name.
+	// Login is the owner login name
 	Login string `json:"login"`
 }
 
-// githubInstallationID returns the installation ID as a string.
+// githubInstallationID returns the installation ID as a string
 func githubInstallationID(installation *githubWebhookInstallation) string {
 	if installation == nil || installation.ID == 0 {
 		return ""
@@ -385,25 +396,66 @@ func githubInstallationID(installation *githubWebhookInstallation) string {
 	return fmt.Sprintf("%d", installation.ID)
 }
 
-// githubRepoFromWebhook derives the repo name from a webhook repository payload.
+// githubInstallationIDFromPayload extracts installation.id directly from webhook payloads
+func githubInstallationIDFromPayload(payload []byte) string {
+	if len(payload) == 0 {
+		return ""
+	}
+
+	var decoded map[string]any
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		return ""
+	}
+
+	installationRaw, ok := decoded["installation"]
+	if !ok || installationRaw == nil {
+		return ""
+	}
+
+	installation, ok := installationRaw.(map[string]any)
+	if !ok {
+		return ""
+	}
+
+	idRaw, ok := installation["id"]
+	if !ok || idRaw == nil {
+		return ""
+	}
+
+	switch id := idRaw.(type) {
+	case float64:
+		if id <= 0 {
+			return ""
+		}
+		return strconv.FormatInt(int64(id), 10)
+	case string:
+		return id
+	case json.Number:
+		return id.String()
+	default:
+		return ""
+	}
+}
+
+// githubRepoFromWebhook derives the repo name from a webhook repository payload
 func githubRepoFromWebhook(repo *githubWebhookRepository) string {
 	if repo == nil {
 		return ""
 	}
-	if strings.TrimSpace(repo.FullName) != "" {
-		return strings.TrimSpace(repo.FullName)
+	if repo.FullName != "" {
+		return repo.FullName
 	}
-	owner := strings.TrimSpace(repo.Owner.Login)
-	name := strings.TrimSpace(repo.Name)
+	owner := repo.Owner.Login
+	name := repo.Name
 	if owner != "" && name != "" {
 		return owner + "/" + name
 	}
 	return name
 }
 
-// githubAlertTypeFromEvent maps GitHub webhook event names to alert types.
+// githubAlertTypeFromEvent maps GitHub webhook event names to alert types
 func githubAlertTypeFromEvent(eventType string) (string, bool) {
-	switch strings.ToLower(strings.TrimSpace(eventType)) {
+	switch eventType {
 	case "dependabot_alert":
 		return "dependabot", true
 	case "code_scanning_alert":
@@ -415,14 +467,12 @@ func githubAlertTypeFromEvent(eventType string) (string, bool) {
 	}
 }
 
-// validateGitHubWebhookSignature checks the webhook signature using the shared secret.
+// validateGitHubWebhookSignature checks the webhook signature using the shared secret
 func validateGitHubWebhookSignature(secret string, signatureHeader string, payload []byte) bool {
-	secret = strings.TrimSpace(secret)
 	if secret == "" {
 		return false
 	}
 
-	signatureHeader = strings.TrimSpace(signatureHeader)
 	if signatureHeader == "" {
 		return false
 	}
@@ -440,9 +490,8 @@ func validateGitHubWebhookSignature(secret string, signatureHeader string, paylo
 	return hmac.Equal([]byte(expected), []byte(provided))
 }
 
-// findGitHubAppIntegrationByInstallationID locates the integration record for an installation ID.
+// findGitHubAppIntegrationByInstallationID locates the integration record for an installation ID
 func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, installationID string) (*ent.Integration, error) {
-	installationID = strings.TrimSpace(installationID)
 	if installationID == "" {
 		return nil, nil
 	}
@@ -468,4 +517,35 @@ func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, 
 	}
 
 	return record, nil
+}
+
+// markGitHubWebhookVerifiedAt updates provider state and metadata when webhook verification succeeds
+func (h *Handler) markGitHubWebhookVerifiedAt(ctx context.Context, installationID string, verifiedAt time.Time) error {
+	if h.DBClient == nil {
+		return errDBClientNotConfigured
+	}
+
+	integrationRecord, err := h.findGitHubAppIntegrationByInstallationID(ctx, installationID)
+	if err != nil {
+		return err
+	}
+	if integrationRecord == nil {
+		return nil
+	}
+
+	nextState := integrationRecord.ProviderState
+	if nextState.GitHub == nil {
+		nextState.GitHub = &state.GitHubState{}
+	}
+	nextState.GitHub.InstallationID = installationID
+	nextState.GitHub.WebhookVerifiedAt = &verifiedAt
+
+	nextMetadata := lo.Assign(map[string]any{}, maps.Clone(integrationRecord.Metadata), map[string]any{
+		githubWebhookVerifiedMetadata: verifiedAt,
+	})
+
+	return h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
+		SetProviderState(nextState).
+		SetMetadata(nextMetadata).
+		Exec(ctx)
 }

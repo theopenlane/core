@@ -18,6 +18,7 @@ import (
 )
 
 const (
+	mappingSchemaDirectoryAccount     = integrationgenerated.IntegrationMappingSchemaDirectoryAccount
 	mappingSchemaVulnerability        = integrationgenerated.IntegrationMappingSchemaVulnerability
 	defaultCELInterruptCheckFrequency = 100
 	defaultCELParserRecursionLimit    = 250
@@ -191,9 +192,9 @@ func (m *MappingEvaluator) EvaluateMap(ctx context.Context, expression string, v
 	return out, nil
 }
 
-// normalizeMappingKey lowercases mapping override keys for comparison
+// normalizeMappingKey normalizes mapping override keys for comparison
 func normalizeMappingKey(value string) string {
-	return strings.ToLower(strings.TrimSpace(value))
+	return value
 }
 
 type mappingOverrideIndex struct {
@@ -356,7 +357,7 @@ func validateMappingOutput(schema integrationgenerated.IntegrationMappingSchema,
 		if !ok || value == nil {
 			return ErrMappingRequiredField
 		}
-		if str, ok := value.(string); ok && strings.TrimSpace(str) == "" {
+		if str, ok := value.(string); ok && str == "" {
 			return ErrMappingRequiredField
 		}
 	}

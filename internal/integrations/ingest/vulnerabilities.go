@@ -3,7 +3,6 @@ package ingest
 import (
 	"context"
 	"encoding/json"
-	"strings"
 
 	"github.com/samber/lo"
 
@@ -267,20 +266,12 @@ func decodeVulnerabilityInput(data map[string]any) (generated.CreateVulnerabilit
 
 // upsertVulnerability inserts or updates a vulnerability based on external identifiers
 func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string, integrationID string, input generated.CreateVulnerabilityInput) (bool, error) {
-	externalID := strings.TrimSpace(input.ExternalID)
+	externalID := input.ExternalID
 	if externalID == "" {
 		return false, ErrExternalIDRequired
 	}
 
 	input.ExternalID = externalID
-	if input.CveID != nil {
-		trimmed := strings.TrimSpace(*input.CveID)
-		if trimmed == "" {
-			input.CveID = nil
-		} else {
-			input.CveID = &trimmed
-		}
-	}
 
 	existingID, err := findVulnerabilityID(ctx, db, orgID, input.ExternalID, input.CveID)
 	if err != nil {
@@ -323,7 +314,6 @@ func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string
 
 // findVulnerabilityID locates an existing vulnerability by external ID or CVE
 func findVulnerabilityID(ctx context.Context, db *generated.Client, orgID string, externalID string, cveID *string) (string, error) {
-	externalID = strings.TrimSpace(externalID)
 	id, err := db.Vulnerability.Query().
 		Where(
 			vulnerability.OwnerIDEQ(orgID),
@@ -337,14 +327,14 @@ func findVulnerabilityID(ctx context.Context, db *generated.Client, orgID string
 		return "", err
 	}
 
-	if cveID == nil || strings.TrimSpace(*cveID) == "" {
+	if cveID == nil || *cveID == "" {
 		return "", nil
 	}
 
 	id, err = db.Vulnerability.Query().
 		Where(
 			vulnerability.OwnerIDEQ(orgID),
-			vulnerability.CveIDEQ(strings.TrimSpace(*cveID)),
+			vulnerability.CveIDEQ(*cveID),
 		).
 		OnlyID(ctx)
 	if err == nil {
