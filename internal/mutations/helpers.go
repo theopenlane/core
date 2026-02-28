@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/helpers"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // ChangeSet captures mutation deltas shared across eventing and workflow trigger contexts
@@ -28,9 +28,9 @@ func NewChangeSet(changedFields, changedEdges []string, addedIDs, removedIDs map
 	return ChangeSet{
 		ChangedFields:   append([]string(nil), changedFields...),
 		ChangedEdges:    append([]string(nil), changedEdges...),
-		AddedIDs:        CloneStringSliceMap(addedIDs),
-		RemovedIDs:      CloneStringSliceMap(removedIDs),
-		ProposedChanges: CloneAnyMap(proposedChanges),
+		AddedIDs:        mapx.CloneMapStringSlice(addedIDs),
+		RemovedIDs:      mapx.CloneMapStringSlice(removedIDs),
+		ProposedChanges: mapx.DeepCloneMapAny(proposedChanges),
 	}
 }
 
@@ -68,9 +68,7 @@ func BuildProposedChanges(source ProposedChangeSource, changedFields []string) m
 		return nil
 	}
 
-	clearedSet := lo.SliceToMap(NormalizeStrings(source.ClearedFields()), func(field string) (string, struct{}) {
-		return field, struct{}{}
-	})
+	clearedSet := mapx.MapSetFromSlice(NormalizeStrings(source.ClearedFields()))
 
 	proposed := make(map[string]any, len(changedFields))
 	for _, field := range changedFields {
@@ -111,33 +109,4 @@ func NormalizeStrings(values []string) []string {
 	}
 
 	return normalized
-}
-
-// CloneStringSliceMap deep-copies map values while dropping blank keys
-func CloneStringSliceMap(values map[string][]string) map[string][]string {
-	if len(values) == 0 {
-		return nil
-	}
-
-	filtered := lo.PickBy(values, func(key string, _ []string) bool { return strings.TrimSpace(key) != "" })
-	cloned := lo.MapValues(filtered, func(list []string, _ string) []string { return append([]string(nil), list...) })
-	if len(cloned) == 0 {
-		return nil
-	}
-
-	return cloned
-}
-
-// CloneAnyMap deep-copies map values while dropping blank keys
-func CloneAnyMap(values map[string]any) map[string]any {
-	if len(values) == 0 {
-		return nil
-	}
-
-	filtered := lo.PickBy(values, func(key string, _ any) bool { return strings.TrimSpace(key) != "" })
-	if len(filtered) == 0 {
-		return nil
-	}
-
-	return helpers.DeepCloneMap(filtered)
 }

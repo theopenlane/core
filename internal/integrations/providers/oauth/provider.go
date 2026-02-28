@@ -2,9 +2,9 @@ package oauth
 
 import (
 	"context"
+	"maps"
 	"strings"
 
-	"github.com/samber/lo"
 	"golang.org/x/oauth2"
 
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
@@ -80,8 +80,8 @@ func New(spec config.ProviderSpec, options ...ProviderOption) (*Provider, error)
 		spec:         spec,
 		oauthConfig:  cfg,
 		relyingParty: rparty,
-		authParams:   lo.Assign(map[string]string{}, spec.OAuth.AuthParams),
-		tokenParams:  lo.Assign(map[string]string{}, spec.OAuth.TokenParams),
+		authParams:   maps.Clone(spec.OAuth.AuthParams),
+		tokenParams:  maps.Clone(spec.OAuth.TokenParams),
 	}
 
 	for _, opt := range options {

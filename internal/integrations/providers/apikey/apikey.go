@@ -2,8 +2,8 @@ package apikey
 
 import (
 	"context"
+	"maps"
 
-	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -107,7 +107,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		return types.CredentialPayload{}, ErrTokenFieldRequired
 	}
 
-	cloned := auth.CloneMetadata(providerData)
+	cloned := maps.Clone(providerData)
 
 	builder := types.NewCredentialBuilder(p.Type()).With(
 		types.WithCredentialKind(types.CredentialKindAPIKey),
