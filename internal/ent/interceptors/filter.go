@@ -396,16 +396,16 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 		subjectType string
 	)
 
-	if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
-		subjectID = anon.SubjectID
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
+
+	subjectID = caller.SubjectID
+
+	if caller.IsAnonymous() {
 		subjectType = auth.UserSubjectType
 	} else {
-		caller, ok := auth.CallerFromContext(ctx)
-		if !ok || caller == nil {
-			return []string{}, nil
-		}
-
-		subjectID = caller.SubjectID
 		subjectType = caller.SubjectType()
 		context = utils.NewOrganizationContextKey(caller.SubjectEmail)
 	}

@@ -155,32 +155,32 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 
 	reqCtx := ctx.Request().Context()
 
-	// Get impersonated user from context
-	impUser, ok := auth.ImpersonatedUserFromContext(reqCtx)
-	if !ok {
+	// Get impersonation details from the caller in context.
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil || caller.Impersonation == nil {
 		return h.BadRequest(ctx, ErrNoActiveImpersonationSession, openapi)
 	}
 
 	// Validate session ID matches
-	if impUser.ImpersonationContext.SessionID != req.SessionID {
+	if caller.Impersonation.SessionID != req.SessionID {
 		return h.BadRequest(ctx, ErrInvalidSessionID, openapi)
 	}
 
 	// Log impersonation end
 	if err := h.logImpersonationEvent(reqCtx, "end", &auth.ImpersonationAuditLog{
 		SessionID:         req.SessionID,
-		Type:              impUser.ImpersonationContext.Type,
-		ImpersonatorID:    impUser.ImpersonationContext.ImpersonatorID,
-		ImpersonatorEmail: impUser.ImpersonationContext.ImpersonatorEmail,
-		TargetUserID:      impUser.ImpersonationContext.TargetUserID,
-		TargetUserEmail:   impUser.ImpersonationContext.TargetUserEmail,
+		Type:              caller.Impersonation.Type,
+		ImpersonatorID:    caller.Impersonation.ImpersonatorID,
+		ImpersonatorEmail: caller.Impersonation.ImpersonatorEmail,
+		TargetUserID:      caller.Impersonation.TargetUserID,
+		TargetUserEmail:   caller.Impersonation.TargetUserEmail,
 		Action:            "end",
 		Reason:            req.Reason,
 		Timestamp:         time.Now(),
 		IPAddress:         ctx.RealIP(),
 		UserAgent:         ctx.Request().UserAgent(),
-		OrganizationID:    impUser.OrganizationID,
-		Scopes:            impUser.ImpersonationContext.Scopes,
+		OrganizationID:    caller.OrganizationID,
+		Scopes:            caller.Impersonation.Scopes,
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation end event")
 	}

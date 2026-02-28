@@ -222,11 +222,9 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user-123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				impUser := &auth.Caller{
+					SubjectID: "user-123",
+					Impersonation: &auth.ImpersonationContext{
 						SessionID:         "session-123",
 						ImpersonatorID:    "admin-456",
 						TargetUserID:      "user-123",
@@ -235,11 +233,8 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 						Type:              auth.SupportImpersonation,
 						Scopes:            []string{"read", "debug"},
 					},
-					OriginalUser: &auth.Caller{
-						SubjectID: "admin-456",
-					},
 				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				return auth.WithCaller(ctx, impUser)
 			},
 			expectedStatus: http.StatusOK,
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
@@ -277,15 +272,13 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			},
 			setupContext: func() context.Context {
 				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user-123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				impUser := &auth.Caller{
+					SubjectID: "user-123",
+					Impersonation: &auth.ImpersonationContext{
 						SessionID: "session-123",
 					},
 				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				return auth.WithCaller(ctx, impUser)
 			},
 			expectedStatus: http.StatusBadRequest,
 		},

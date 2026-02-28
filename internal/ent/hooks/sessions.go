@@ -51,7 +51,7 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	// add the organization ID to the authenticated user context
 	sessionCaller.OrganizationID = newOrgID
 
-	err = auth.SetOrganizationIDInAuthContext(ctx, newOrgID)
+	ctx, err = auth.SetOrganizationIDInAuthContext(ctx, newOrgID)
 	if err != nil {
 		return err
 	}
@@ -60,8 +60,8 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	auth.SetAuthCookies(ec.Response().Writer, out.AccessToken, out.RefreshToken, *am.GetSessionConfig().CookieConfig)
 
 	// update the context with the new tokens and session
-	auth.WithContextValue(ctx, auth.AccessTokenKey, out.AccessToken)
-	auth.WithContextValue(ctx, auth.RefreshTokenKey, out.RefreshToken)
+	ctx = auth.WithAccessToken(ctx, out.AccessToken)
+	ctx = auth.WithRefreshToken(ctx, out.RefreshToken)
 
 	return err
 }

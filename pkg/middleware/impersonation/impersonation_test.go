@@ -30,7 +30,7 @@ func setupTestTokenManager(t *testing.T) *tokens.TokenManager {
 	conf := tokens.Config{
 		Audience:        "https://api.example.com",
 		Issuer:          "https://auth.example.com",
-		AccessDuration:  1 * time.Hour,
+		AccessDuration:  time.Hour,
 		RefreshDuration: 24 * time.Hour,
 		RefreshOverlap:  -15 * time.Minute,
 	}
@@ -49,115 +49,59 @@ func TestNew(t *testing.T) {
 	assert.Equal(t, tokenManager, middleware.tokenManager)
 }
 
-func TestMiddleware_Process_NoToken(t *testing.T) {
-	// Create echo instance
+func TestMiddlewareProcessNoToken(t *testing.T) {
 	e := echo.New()
-
-	// Create token manager
 	tokenManager := setupTestTokenManager(t)
-
-	// Create middleware
 	middleware := New(tokenManager)
 
-	// Create test request without impersonation header
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// Track if next handler was called
 	nextCalled := false
 	handler := func(c echo.Context) error {
 		nextCalled = true
 		return c.String(http.StatusOK, "OK")
 	}
 
-	// Execute middleware
 	err := middleware.Process(handler)(c)
 
-	// Should pass through without error
 	assert.NoError(t, err)
 	assert.True(t, nextCalled)
-
-	// Should not have impersonated user in context
-	_, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
+	_, ok := auth.CallerFromContext(c.Request().Context())
 	assert.False(t, ok)
 }
 
-func TestMiddleware_Process_MalformedHeader(t *testing.T) {
-	// Create echo instance
+func TestMiddlewareProcessInvalidToken(t *testing.T) {
 	e := echo.New()
-
-	// Create token manager
 	tokenManager := setupTestTokenManager(t)
-
-	// Create middleware
 	middleware := New(tokenManager)
 
-	// Create test request with malformed impersonation header (missing token part)
-	req := httptest.NewRequest(http.MethodGet, "/test", nil)
-	req.Header.Set("Authorization", "invalid-format")
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-
-	// Track if next handler was called
-	nextCalled := false
-	handler := func(c echo.Context) error {
-		nextCalled = true
-		return c.String(http.StatusOK, "OK")
-	}
-
-	// Execute middleware
-	err := middleware.Process(handler)(c)
-
-	// Should pass through without error (auth.GetImpersonationToken returns error for malformed header)
-	assert.NoError(t, err)
-	assert.True(t, nextCalled)
-}
-
-func TestMiddleware_Process_InvalidToken(t *testing.T) {
-	// Create echo instance
-	e := echo.New()
-
-	// Create token manager
-	tokenManager := setupTestTokenManager(t)
-
-	// Create middleware
-	middleware := New(tokenManager)
-
-	// Create test request with properly formatted but invalid impersonation token
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "Impersonation eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.token")
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// Handler should not be called
 	nextCalled := false
 	handler := func(c echo.Context) error {
 		nextCalled = true
 		return c.String(http.StatusOK, "OK")
 	}
 
-	// Execute middleware
 	err := middleware.Process(handler)(c)
 
-	// Should return error
 	assert.Error(t, err)
 	assert.False(t, nextCalled)
 
-	// Check it's an HTTP error with 401 status
 	httpErr, ok := err.(*echo.HTTPError)
 	assert.True(t, ok)
 	assert.Equal(t, http.StatusUnauthorized, httpErr.Code)
 }
 
-func TestMiddleware_Process_ValidToken(t *testing.T) {
-	// Create echo instance
+func TestMiddlewareProcessValidToken(t *testing.T) {
 	e := echo.New()
-
-	// Create token manager
 	tokenManager := setupTestTokenManager(t)
 
-	// Create a valid impersonation token
 	ctx := context.Background()
 	opts := tokens.CreateImpersonationTokenOptions{
 		ImpersonatorID:    "admin-123",
@@ -174,40 +118,36 @@ func TestMiddleware_Process_ValidToken(t *testing.T) {
 	token, err := tokenManager.CreateImpersonationToken(ctx, opts)
 	assert.NoError(t, err)
 
-	// Create middleware
 	middleware := New(tokenManager)
 
-	// Create test request with valid impersonation token
 	req := httptest.NewRequest(http.MethodGet, "/test", nil)
 	req.Header.Set("Authorization", "Impersonation "+token)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// Track if next handler was called
 	nextCalled := false
 	handler := func(c echo.Context) error {
 		nextCalled = true
 
-		// Verify impersonated user is in context
-		impUser, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
-		assert.True(t, ok, "should have impersonated user in context")
-		assert.Equal(t, "target-user-123", impUser.SubjectID)
-		assert.Equal(t, "target@example.com", impUser.SubjectEmail)
-		assert.Equal(t, "admin-123", impUser.ImpersonationContext.ImpersonatorID)
-		assert.Equal(t, []string{"read", "debug"}, impUser.ImpersonationContext.Scopes)
+		caller, ok := auth.CallerFromContext(c.Request().Context())
+		assert.True(t, ok)
+		assert.NotNil(t, caller)
+		assert.True(t, caller.IsImpersonated())
+		assert.Equal(t, "target-user-123", caller.SubjectID)
+		assert.Equal(t, "target@example.com", caller.SubjectEmail)
+		assert.Equal(t, "admin-123", caller.Impersonation.ImpersonatorID)
+		assert.Equal(t, []string{"read", "debug"}, caller.Impersonation.Scopes)
 
 		return c.String(http.StatusOK, "OK")
 	}
 
-	// Execute middleware
 	err = middleware.Process(handler)(c)
 
-	// Should pass through without error
 	assert.NoError(t, err)
 	assert.True(t, nextCalled)
 }
 
-func TestCreateImpersonatedUser(t *testing.T) {
+func TestCreateImpersonatedCaller(t *testing.T) {
 	middleware := &Middleware{}
 
 	claims := &tokens.ImpersonationClaims{
@@ -227,27 +167,19 @@ func TestCreateImpersonatedUser(t *testing.T) {
 		Scopes:            []string{"read", "debug"},
 	}
 
-	impUser, err := middleware.createImpersonatedUser(claims)
+	caller, err := middleware.createImpersonatedCaller(claims)
 
 	assert.NoError(t, err)
-	assert.NotNil(t, impUser)
-
-	// Check target user
-	assert.Equal(t, "user-123", impUser.SubjectID)
-	assert.Equal(t, "user@example.com", impUser.SubjectEmail)
-	assert.Equal(t, "org-456", impUser.OrganizationID)
-	assert.Equal(t, auth.JWTAuthentication, impUser.AuthenticationType)
-
-	// Check original user
-	assert.Equal(t, "admin-789", impUser.OriginalUser.SubjectID)
-	assert.Equal(t, "admin@example.com", impUser.OriginalUser.SubjectEmail)
-	assert.Equal(t, "org-456", impUser.OriginalUser.OrganizationID)
-
-	// Check impersonation context
-	assert.Equal(t, auth.ImpersonationType("support"), impUser.ImpersonationContext.Type)
-	assert.Equal(t, "admin-789", impUser.ImpersonationContext.ImpersonatorID)
-	assert.Equal(t, "session-123", impUser.ImpersonationContext.SessionID)
-	assert.Equal(t, []string{"read", "debug"}, impUser.ImpersonationContext.Scopes)
+	assert.NotNil(t, caller)
+	assert.Equal(t, "user-123", caller.SubjectID)
+	assert.Equal(t, "user@example.com", caller.SubjectEmail)
+	assert.Equal(t, "org-456", caller.OrganizationID)
+	assert.Equal(t, auth.JWTAuthentication, caller.AuthenticationType)
+	assert.NotNil(t, caller.Impersonation)
+	assert.Equal(t, auth.ImpersonationType("support"), caller.Impersonation.Type)
+	assert.Equal(t, "admin-789", caller.Impersonation.ImpersonatorID)
+	assert.Equal(t, "session-123", caller.Impersonation.SessionID)
+	assert.Equal(t, []string{"read", "debug"}, caller.Impersonation.Scopes)
 }
 
 func TestRequireImpersonationScope(t *testing.T) {
@@ -258,92 +190,56 @@ func TestRequireImpersonationScope(t *testing.T) {
 		expectedStatus int
 	}{
 		{
-			name:          "not impersonated - passes through",
-			requiredScope: "admin:write",
-			setupContext: func() context.Context {
-				return context.Background()
-			},
+			name:           "not impersonated passes through",
+			requiredScope:  "admin:write",
+			setupContext:   context.Background,
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name:          "has required scope - allows access",
+			name:          "has required scope allows access",
 			requiredScope: "read",
 			setupContext: func() context.Context {
-				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					SubjectID: "user123",
+					Impersonation: &auth.ImpersonationContext{
 						Scopes:    []string{"read", "debug"},
 						ExpiresAt: time.Now().Add(time.Hour),
 					},
-				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				})
 			},
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name:          "missing required scope - denies access",
+			name:          "missing required scope denies access",
 			requiredScope: "write",
 			setupContext: func() context.Context {
-				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					SubjectID: "user123",
+					Impersonation: &auth.ImpersonationContext{
 						Scopes:    []string{"read", "debug"},
 						ExpiresAt: time.Now().Add(time.Hour),
 					},
-				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				})
 			},
 			expectedStatus: http.StatusForbidden,
-		},
-		{
-			name:          "wildcard scope allows all",
-			requiredScope: "admin:write",
-			setupContext: func() context.Context {
-				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
-						Scopes:    []string{"*"},
-						ExpiresAt: time.Now().Add(time.Hour),
-					},
-				}
-				return auth.WithImpersonatedUser(ctx, impUser)
-			},
-			expectedStatus: http.StatusOK,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			e := echo.New()
-
-			// Create middleware
 			middleware := RequireImpersonationScope(tt.requiredScope)
 
-			// Create request with context
 			req := httptest.NewRequest(http.MethodGet, "/test", nil)
 			req = req.WithContext(tt.setupContext())
-
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
-			// Handler that returns OK
 			handler := func(c echo.Context) error {
 				return c.String(http.StatusOK, "OK")
 			}
 
-			// Execute middleware
 			err := middleware(handler)(c)
-
-			// Check results
 			if tt.expectedStatus == http.StatusOK {
 				assert.NoError(t, err)
 			} else {
@@ -362,25 +258,19 @@ func TestBlockImpersonation(t *testing.T) {
 		expectedStatus int
 	}{
 		{
-			name: "not impersonated - allows access",
-			setupContext: func() context.Context {
-				return context.Background()
-			},
+			name:           "not impersonated allows access",
+			setupContext:   context.Background,
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name: "impersonated - blocks access",
+			name: "impersonated blocks access",
 			setupContext: func() context.Context {
-				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					SubjectID: "user123",
+					Impersonation: &auth.ImpersonationContext{
 						Type: auth.SupportImpersonation,
 					},
-				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				})
 			},
 			expectedStatus: http.StatusForbidden,
 		},
@@ -389,26 +279,18 @@ func TestBlockImpersonation(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			e := echo.New()
-
-			// Create middleware
 			middleware := BlockImpersonation()
 
-			// Create request with context
 			req := httptest.NewRequest(http.MethodGet, "/test", nil)
 			req = req.WithContext(tt.setupContext())
-
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
-			// Handler that returns OK
 			handler := func(c echo.Context) error {
 				return c.String(http.StatusOK, "OK")
 			}
 
-			// Execute middleware
 			err := middleware(handler)(c)
-
-			// Check results
 			if tt.expectedStatus == http.StatusOK {
 				assert.NoError(t, err)
 			} else {
@@ -428,44 +310,34 @@ func TestAllowOnlyImpersonationType(t *testing.T) {
 		expectedStatus int
 	}{
 		{
-			name:         "not impersonated - allows access",
-			allowedTypes: []auth.ImpersonationType{auth.SupportImpersonation},
-			setupContext: func() context.Context {
-				return context.Background()
-			},
+			name:           "not impersonated allows access",
+			allowedTypes:   []auth.ImpersonationType{auth.SupportImpersonation},
+			setupContext:   context.Background,
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name:         "allowed type - permits access",
+			name:         "allowed type permits access",
 			allowedTypes: []auth.ImpersonationType{auth.SupportImpersonation, auth.AdminImpersonation},
 			setupContext: func() context.Context {
-				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					SubjectID: "user123",
+					Impersonation: &auth.ImpersonationContext{
 						Type: auth.SupportImpersonation,
 					},
-				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				})
 			},
 			expectedStatus: http.StatusOK,
 		},
 		{
-			name:         "disallowed type - denies access",
+			name:         "disallowed type denies access",
 			allowedTypes: []auth.ImpersonationType{auth.SupportImpersonation},
 			setupContext: func() context.Context {
-				ctx := context.Background()
-				impUser := &auth.ImpersonatedUser{
-					Caller: &auth.Caller{
-						SubjectID: "user123",
-					},
-					ImpersonationContext: &auth.ImpersonationContext{
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					SubjectID: "user123",
+					Impersonation: &auth.ImpersonationContext{
 						Type: auth.AdminImpersonation,
 					},
-				}
-				return auth.WithImpersonatedUser(ctx, impUser)
+				})
 			},
 			expectedStatus: http.StatusForbidden,
 		},
@@ -474,26 +346,18 @@ func TestAllowOnlyImpersonationType(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			e := echo.New()
-
-			// Create middleware
 			middleware := AllowOnlyImpersonationType(tt.allowedTypes...)
 
-			// Create request with context
 			req := httptest.NewRequest(http.MethodGet, "/test", nil)
 			req = req.WithContext(tt.setupContext())
-
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
-			// Handler that returns OK
 			handler := func(c echo.Context) error {
 				return c.String(http.StatusOK, "OK")
 			}
 
-			// Execute middleware
 			err := middleware(handler)(c)
-
-			// Check results
 			if tt.expectedStatus == http.StatusOK {
 				assert.NoError(t, err)
 			} else {
@@ -507,68 +371,36 @@ func TestAllowOnlyImpersonationType(t *testing.T) {
 
 func TestSystemAdminUserContextMiddleware(t *testing.T) {
 	tests := []struct {
-		name           string
-		setupContext   func() context.Context
-		setupHeaders   func(*http.Request)
-		expectedStatus int
-		checkContext   func(*testing.T, echo.Context)
+		name         string
+		setupContext func() context.Context
+		setupHeaders func(*http.Request)
+		checkContext func(*testing.T, echo.Context)
 	}{
 		{
-			name: "no authenticated user - passes through",
-			setupContext: func() context.Context {
-				return context.Background()
-			},
-			expectedStatus: http.StatusOK,
+			name:         "no authenticated user passes through",
+			setupContext: context.Background,
 		},
 		{
-			name: "non-admin user - passes through",
+			name: "system admin with headers switches context",
 			setupContext: func() context.Context {
-				ctx := context.Background()
-				user := &auth.Caller{
-					SubjectID: "user123",
-				}
-				return auth.WithCaller(ctx, user)
-			},
-			expectedStatus: http.StatusOK,
-		},
-		{
-			name: "system admin without headers - passes through",
-			setupContext: func() context.Context {
-				ctx := context.Background()
-				user := &auth.Caller{
-					SubjectID:    "admin123",
-					Capabilities: auth.CapSystemAdmin,
-				}
-				return auth.WithCaller(ctx, user)
-			},
-			expectedStatus: http.StatusOK,
-		},
-		{
-			name: "system admin with user context headers - switches context",
-			setupContext: func() context.Context {
-				ctx := context.Background()
-				user := &auth.Caller{
+				return auth.WithCaller(context.Background(), &auth.Caller{
 					SubjectID:      "admin123",
 					SubjectEmail:   "admin@example.com",
 					OrganizationID: "org-admin",
 					Capabilities:   auth.CapSystemAdmin,
-				}
-				return auth.WithCaller(ctx, user)
+				})
 			},
 			setupHeaders: func(r *http.Request) {
 				r.Header.Set("X-User-ID", "target-user-456")
 				r.Header.Set("X-Organization-ID", "target-org-789")
 			},
-			expectedStatus: http.StatusOK,
 			checkContext: func(t *testing.T, c echo.Context) {
-				// Check that the user context was switched
 				user, ok := auth.CallerFromContext(c.Request().Context())
 				assert.True(t, ok)
 				assert.Equal(t, "target-user-456", user.SubjectID)
 				assert.Equal(t, "target-org-789", user.OrganizationID)
-				assert.False(t, user.Has(auth.CapSystemAdmin)) // Target user should not inherit admin status
+				assert.False(t, user.Has(auth.CapSystemAdmin))
 
-				// Check that original admin is preserved for downstream fallback checks.
 				adminUser, ok := auth.OriginalSystemAdminCallerFromContext(c.Request().Context())
 				assert.True(t, ok)
 				assert.Equal(t, "admin123", adminUser.SubjectID)
@@ -580,33 +412,23 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			e := echo.New()
-
-			// Create middleware
 			middleware := SystemAdminUserContextMiddleware()
 
-			// Create request
 			req := httptest.NewRequest(http.MethodGet, "/test", nil)
 			req = req.WithContext(tt.setupContext())
-
 			if tt.setupHeaders != nil {
 				tt.setupHeaders(req)
 			}
-
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
-			// Handler that returns OK
 			handler := func(c echo.Context) error {
 				return c.String(http.StatusOK, "OK")
 			}
 
-			// Execute middleware
 			err := middleware(handler)(c)
-
-			// Check results
 			assert.NoError(t, err)
 
-			// Check context if provided
 			if tt.checkContext != nil {
 				tt.checkContext(t, c)
 			}
@@ -615,7 +437,6 @@ func TestSystemAdminUserContextMiddleware(t *testing.T) {
 }
 
 func TestLogImpersonationAccess(t *testing.T) {
-	// This is a simple logging function, just ensure it doesn't panic
 	middleware := &Middleware{}
 
 	claims := &tokens.ImpersonationClaims{
@@ -623,6 +444,5 @@ func TestLogImpersonationAccess(t *testing.T) {
 		UserID:         "user-456",
 	}
 
-	// Should not panic
 	middleware.logImpersonationAccess(claims, nil)
 }

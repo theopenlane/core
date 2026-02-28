@@ -1104,13 +1104,9 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 	for _, id := range ndaReqIDs {
 		subjectID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id)
 
-		anonCtx := auth.WithContextValue(context.Background(), auth.AnonymousTrustCenterUserKey, &auth.AnonymousTrustCenterUser{
-			SubjectID:          subjectID,
-			SubjectName:        "Anonymous User",
-			OrganizationID:     trustCenter.OwnerID,
-			AuthenticationType: auth.JWTAuthentication,
-			TrustCenterID:      trustCenter.ID,
-		})
+		anonCaller := auth.NewTrustCenterCaller(trustCenter.OwnerID, subjectID, "Anonymous User", "")
+		anonCtx := auth.WithCaller(context.Background(), anonCaller)
+		anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
 
 		anonCtxs = append(anonCtxs, anonCtx)
 

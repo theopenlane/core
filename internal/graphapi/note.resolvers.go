@@ -35,7 +35,8 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -304,7 +305,8 @@ func (r *createTrustCenterFAQInputResolver) CreateNote(ctx context.Context, obj 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -327,7 +329,8 @@ func (r *updateControlInputResolver) AddDiscussion(ctx context.Context, obj *gen
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -394,7 +397,8 @@ func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *genera
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -432,7 +436,8 @@ func (r *updateEvidenceInputResolver) AddComment(ctx context.Context, obj *gener
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -470,7 +475,8 @@ func (r *updateInternalPolicyInputResolver) AddDiscussion(ctx context.Context, o
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -537,7 +543,8 @@ func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -575,7 +582,8 @@ func (r *updateProcedureInputResolver) AddDiscussion(ctx context.Context, obj *g
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -642,7 +650,8 @@ func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *gene
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -680,7 +689,8 @@ func (r *updateRiskInputResolver) AddDiscussion(ctx context.Context, obj *genera
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -747,7 +757,8 @@ func (r *updateRiskInputResolver) AddComment(ctx context.Context, obj *generated
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -785,7 +796,8 @@ func (r *updateSubcontrolInputResolver) AddDiscussion(ctx context.Context, obj *
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -852,7 +864,8 @@ func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *gen
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -890,7 +903,8 @@ func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -928,7 +942,8 @@ func (r *updateTrustCenterFAQInputResolver) AddComment(ctx context.Context, obj 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -961,7 +976,8 @@ func (r *updateTrustCenterInputResolver) AddPost(ctx context.Context, obj *gener
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, data.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")

@@ -17,7 +17,7 @@ func TraverseSubprocessor() ent.Interceptor {
 	return intercept.TraverseSubprocessor(func(ctx context.Context, q *generated.SubprocessorQuery) error {
 		// allow anonymous access to subprocessors this will only allow view
 		// access to the trust center-owned subprocessors
-		if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
+		if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
 			q.Where(
 				subprocessor.Or(
 					subprocessor.And(
@@ -25,7 +25,7 @@ func TraverseSubprocessor() ent.Interceptor {
 						subprocessor.SystemOwned(true),
 					),
 					subprocessor.HasTrustCenterSubprocessorsWith(
-						trustcentersubprocessor.TrustCenterID(anon.TrustCenterID),
+						trustcentersubprocessor.TrustCenterID(tcID),
 					),
 				),
 			)

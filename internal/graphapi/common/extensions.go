@@ -194,8 +194,8 @@ func getAuthData(ctx context.Context) Auth {
 		return Auth{}
 	}
 
-	at, _ := auth.ContextValue(ctx, auth.AccessTokenKey)
-	rt, _ := auth.ContextValue(ctx, auth.RefreshTokenKey)
+	at, _ := auth.AccessTokenFromContext(ctx)
+	rt, _ := auth.RefreshTokenFromContext(ctx)
 	session, _ := sessions.SessionToken(ctx)
 
 	return Auth{

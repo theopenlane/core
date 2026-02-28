@@ -50,7 +50,8 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -190,19 +191,20 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 // submitTrustCenterNDAResponse submits a trust center NDA response
 func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error) {
-	anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey)
-	if !ok || anon.SubjectEmail == "" || anon.TrustCenterID == "" || anon.OrganizationID == "" {
+	tcID, hasTCID := auth.ActiveTrustCenterIDKey.Get(ctx)
+	caller, hasCaller := auth.CallerFromContext(ctx)
+	if !hasTCID || tcID == "" || !hasCaller || caller == nil || caller.SubjectEmail == "" || caller.OrganizationID == "" {
 		return nil, newPermissionDeniedError()
 	}
 
-	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), auth.NewTrustCenterCaller(anon.OrganizationID, anon.SubjectID, anon.SubjectName, anon.SubjectEmail))
+	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), caller)
 
 	txnCtx := withTransactionalMutation(allowCtx)
 
 	ndaRequest, err := txnCtx.TrustCenterNDARequest.Query().
 		Where(
-			trustcenterndarequest.EmailEqualFold(anon.SubjectEmail),
-			trustcenterndarequest.TrustCenterID(anon.TrustCenterID),
+			trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
+			trustcenterndarequest.TrustCenterID(tcID),
 		).First(allowCtx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})

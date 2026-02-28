@@ -34,34 +34,6 @@ var (
 	oauthUserIDCookieName = "oauth_user_id"
 )
 
-func (h *Handler) setOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig, values map[string]string) {
-	writer := ctx.Response().Writer
-	for name, value := range values {
-		if value == "" {
-			continue
-
-		}
-
-		sessions.SetCookie(writer, value, name, cfg)
-	}
-
-	if accessCookie, err := sessions.GetCookie(ctx.Request(), auth.AccessTokenCookie); err == nil {
-		sessions.SetCookie(writer, accessCookie.Value, auth.AccessTokenCookie, cfg)
-	}
-
-	if refreshCookie, err := sessions.GetCookie(ctx.Request(), auth.RefreshTokenCookie); err == nil {
-		sessions.SetCookie(writer, refreshCookie.Value, auth.RefreshTokenCookie, cfg)
-	}
-}
-
-func (h *Handler) clearOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	clearCookies(ctx.Response().Writer, cfg, []string{
-		oauthStateCookieName,
-		oauthOrgIDCookieName,
-		oauthUserIDCookieName,
-	})
-}
-
 // StartOAuthFlow initiates the OAuth flow for a third-party integration.
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleOAuthFlowRequest, openapi.ExampleOAuthFlowResponse, openapiCtx.Registry)
@@ -97,7 +69,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
 	}
 
-	state, err := h.generateOAuthState(user.OrganizationID, string(providerType))
+	state, err := h.generateOAuthState(caller.OrganizationID, string(providerType))
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Msg("error generating oauth state")
 
@@ -107,7 +79,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	scopes := mergeScopes(spec, in.Scopes)
 
 	begin, err := h.IntegrationActivation.BeginOAuth(userCtx, activation.BeginOAuthRequest{
-		OrgID:    user.OrganizationID,
+		OrgID:    caller.OrganizationID,
 		Provider: providerType,
 		Scopes:   scopes,
 		State:    state,
@@ -118,11 +90,12 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.setOAuthCookies(ctx, cfg, map[string]string{
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
 		oauthOrgIDCookieName:  caller.OrganizationID,
 		oauthUserIDCookieName: caller.SubjectID,
 		oauthStateCookieName:  begin.State,
 	})
+	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
 	out := openapi.OAuthFlowResponse{
 		Reply:   rout.Reply{Success: true},
@@ -218,7 +191,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.clearOAuthCookies(ctx, cfg)
+	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
 	redirectURL := buildIntegrationRedirectURL(h.IntegrationOauthProvider.SuccessRedirectURL, result.Provider)
 	if redirectURL == "" {

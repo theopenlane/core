@@ -5729,10 +5729,10 @@ func (q *SystemDetailQuery) CheckAccess(ctx context.Context) error {
 		return privacy.Skipf("not a graphql request, no context to check")
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get authenticated user from context")
-		return privacy.Skipf("unable to get authenticated user from context")
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		log.Error().Msg("unable to get caller from context")
+		return privacy.Skipf("unable to get caller from context")
 	}
 
 	var objectID string
@@ -5762,10 +5762,10 @@ func (q *SystemDetailQuery) CheckAccess(ctx context.Context) error {
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanView,
 		ObjectType:  "system_detail",
-		SubjectType: auth.GetAuthzSubjectType(ctx),
-		SubjectID:   au.SubjectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
 		ObjectID:    objectID,
-		Context:     newOrganizationContextKey(au.SubjectEmail),
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	access, err := q.Authz.CheckAccess(ctx, ac)
@@ -5797,19 +5797,19 @@ func (m *SystemDetailMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get authenticated user from context")
-		return privacy.Skipf("unable to get authenticated user from context")
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		log.Error().Msg("unable to get caller from context")
+		return privacy.Skipf("unable to get caller from context")
 	}
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanEdit,
 		ObjectType:  "system_detail",
 		ObjectID:    objectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
-		SubjectID:   au.SubjectID,
-		Context:     newOrganizationContextKey(au.SubjectEmail),
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
@@ -5840,19 +5840,19 @@ func (m *SystemDetailMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get authenticated user from context")
-		return privacy.Skipf("unable to get authenticated user from context")
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		log.Error().Msg("unable to get caller from context")
+		return privacy.Skipf("unable to get caller from context")
 	}
 
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
 		ObjectType:  "system_detail",
 		ObjectID:    objectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
-		SubjectID:   au.SubjectID,
-		Context:     newOrganizationContextKey(au.SubjectEmail),
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")

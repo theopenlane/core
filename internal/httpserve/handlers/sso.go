@@ -200,8 +200,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
-		sessions.RemoveCookie(ctx.Response().Writer, "token_id", sessions.CookieConfig{Path: "/"})
-		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
+		sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "token_id", "token_type")
 	}
 
 	ssoTestCookie, err := sessions.GetCookie(ctx.Request(), authenticatedUserSSOCookieName)
@@ -220,8 +219,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 	// if a return URL was set, redirect there and clean up cookies
 	if ret, err := sessions.GetCookie(ctx.Request(), "return"); err == nil && ret.Value != "" {
-		sessions.RemoveCookie(ctx.Response().Writer, "return", sessions.CookieConfig{Path: "/"})
-		sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
+		sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "return", "organization_id")
 
 		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.Email))
 
@@ -439,13 +437,14 @@ func (h *Handler) generateSSOAuthURL(ctx echo.Context, orgID string) (string, er
 	cfg := *h.SessionConfig.CookieConfig
 
 	// set the org ID as a cookie for the OIDC flow
-	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cfg)
-
 	state := ulids.New().String()
 	nonce := ulids.New().String()
 
-	sessions.SetCookie(ctx.Response().Writer, state, "state", cfg)
-	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", cfg)
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
+		"organization_id": orgID,
+		"state":           state,
+		"nonce":           nonce,
+	})
 
 	return rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce)), nil
 }

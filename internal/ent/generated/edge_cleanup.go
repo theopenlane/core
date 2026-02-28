@@ -1235,7 +1235,7 @@ func SubscriberEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func SystemDetailEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup systemdetail edge")), entfga.DeleteTuplesFirstKey{})
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup systemdetail edge")))
 
 	return nil
 }

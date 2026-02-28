@@ -16,7 +16,8 @@ func validateCustomDomain(ctx context.Context, id string, r *mutationResolver) (
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "customdomain"})
 	}
 
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

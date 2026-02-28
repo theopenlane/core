@@ -56,9 +56,11 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 	// set token-specific cookies for the token SSO flow
 	cfg := *h.SessionConfig.CookieConfig
 
-	sessions.SetCookie(ctx.Response().Writer, in.TokenID, "token_id", cfg)
-	sessions.SetCookie(ctx.Response().Writer, in.TokenType, "token_type", cfg)
-	sessions.SetCookie(ctx.Response().Writer, authenticatedUserSSOCookieValue, authenticatedUserSSOCookieName, cfg)
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
+		"token_id":                     in.TokenID,
+		"token_type":                   in.TokenType,
+		authenticatedUserSSOCookieName: authenticatedUserSSOCookieValue,
+	})
 
 	out := apimodels.SSOLoginReply{
 		Reply:       rout.Reply{Success: true},
@@ -161,9 +163,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 	}
 
 	// cleanup cookies
-	for _, name := range []string{"token_id", "token_type", "organization_id", "state", "nonce"} {
-		sessions.RemoveCookie(ctx.Response().Writer, name, sessions.CookieConfig{Path: "/"})
-	}
+	sessions.RemoveCookies(ctx.Response().Writer, sessions.CookieConfig{Path: "/"}, "token_id", "token_type", "organization_id", "state", "nonce")
 
 	out := apimodels.SSOTokenAuthorizeReply{
 		Reply:          rout.Reply{Success: true},

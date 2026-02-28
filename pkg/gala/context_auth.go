@@ -41,13 +41,16 @@ type AuthSnapshot struct {
 	AuthenticationType string `json:"authentication_type,omitempty"`
 	// OrganizationRole captures the caller role within the active organization
 	OrganizationRole string `json:"organization_role,omitempty"`
+	// Capabilities is the full capability bitset carried by the caller.
+	Capabilities uint64 `json:"capabilities,omitempty"`
 	// IsSystemAdmin reports whether the caller has system-admin privileges
+	// and is kept for backward compatibility with older snapshots.
 	IsSystemAdmin bool `json:"is_system_admin,omitempty"`
 }
 
 // toCaller converts a snapshot into an auth.Caller
 func (s AuthSnapshot) toCaller() *auth.Caller {
-	var caps auth.Capability
+	caps := auth.Capability(s.Capabilities)
 	if s.IsSystemAdmin {
 		caps |= auth.CapSystemAdmin
 	}
@@ -80,6 +83,7 @@ func authSnapshotFromCaller(caller *auth.Caller) *AuthSnapshot {
 		OrganizationIDs:    append([]string(nil), caller.OrgIDs()...),
 		AuthenticationType: string(caller.AuthenticationType),
 		OrganizationRole:   string(caller.OrganizationRole),
+		Capabilities:       uint64(caller.Capabilities),
 		IsSystemAdmin:      caller.Has(auth.CapSystemAdmin),
 	}
 }

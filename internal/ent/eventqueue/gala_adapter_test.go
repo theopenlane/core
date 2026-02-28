@@ -79,9 +79,9 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	assert.NoError(t, err)
 
 	restoredCaller, restoredOk := auth.CallerFromContext(restoredContext)
-	require.True(t, restoredOk)
-	require.Equal(t, "subject_123", restoredCaller.SubjectID)
-	require.Equal(t, "org_123", restoredCaller.OrganizationID)
+	assert.True(t, restoredOk)
+	assert.Equal(t, "subject_123", restoredCaller.SubjectID)
+	assert.Equal(t, "org_123", restoredCaller.OrganizationID)
 
 	decodedAny, err := runtime.Registry().DecodePayload(topic.Name, envelope.Payload)
 	assert.NoError(t, err)

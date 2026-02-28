@@ -22,7 +22,8 @@ import (
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
 func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input model.CreateProgramWithMembersInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.Program.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -97,7 +98,8 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 // CreateFullProgram is the resolver for the createFullProgram field.
 func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.Program.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}

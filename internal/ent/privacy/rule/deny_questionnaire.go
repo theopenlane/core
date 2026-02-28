@@ -24,7 +24,7 @@ func DenyIfMissingQuestionnaireContext() privacy.MutationRule {
 			return privacy.Skip
 		}
 
-		if _, ok := auth.ContextValue(ctx, auth.AnonymousQuestionnaireUserKey); ok {
+		if _, ok := auth.ActiveAssessmentIDKey.Get(ctx); ok {
 			return privacy.Skip
 		}
 

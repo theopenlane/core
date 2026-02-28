@@ -27,24 +27,28 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 
 	reqCtx := ctx.Request().Context()
 
-	anonUser, ok := auth.ContextValue(reqCtx, auth.AnonymousQuestionnaireUserKey)
+	assessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx)
 	if !ok {
 		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
 	}
 
-	assessmentID := anonUser.AssessmentID
 	if assessmentID == "" {
 		return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
 	}
 
-	email := anonUser.SubjectEmail
+	caller, callerOk := auth.CallerFromContext(reqCtx)
+	if !callerOk || caller == nil {
+		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
+	}
+
+	email := caller.SubjectEmail
 	if email == "" {
 		return h.BadRequest(ctx, ErrMissingEmail, openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
-	allowCtx = auth.WithContextValue(allowCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
+	allowCtx = auth.WithCaller(allowCtx, caller)
+	allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 
 	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
 		Where(
@@ -128,13 +132,16 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	if anonUser, ok := auth.ContextValue(reqCtx, auth.AnonymousQuestionnaireUserKey); ok {
-		assessmentID = anonUser.AssessmentID
-		email = anonUser.SubjectEmail
+	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
+		assessmentID = anonAssessmentID
 
-		allowCtx = auth.WithCaller(allowCtx, auth.NewQuestionnaireCaller(anonUser.OrganizationID, anonUser.SubjectID, anonUser.SubjectName, anonUser.SubjectEmail))
-		allowCtx = auth.WithContextValue(allowCtx, auth.AnonymousQuestionnaireUserKey, anonUser)
+		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
+		if callerOk && anonCaller != nil {
+			email = anonCaller.SubjectEmail
+			allowCtx = auth.WithCaller(allowCtx, anonCaller)
+		}
 
+		allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 	} else {
 		qCaller, qOk := auth.CallerFromContext(reqCtx)
 		if !qOk || qCaller == nil {

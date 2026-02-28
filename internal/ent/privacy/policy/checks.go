@@ -82,7 +82,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 // CheckOrgReadAccess checks if the requestor has access to read the organization
 func CheckOrgReadAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
-		if _, hasAnon := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); hasAnon {
+		if _, hasAnon := auth.ActiveTrustCenterIDKey.Get(ctx); hasAnon {
 			return privacy.Deny
 		}
 		// check if the user has access to view the organization
