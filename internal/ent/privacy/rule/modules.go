@@ -244,12 +244,8 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		return true
 	}
 
-	// bypass module checks on anonymous trust center and questionnaire users (migration fallback)
-	if _, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
-		return true
-	}
-
-	if _, ok := auth.ContextValue(ctx, auth.AnonymousQuestionnaireUserKey); ok {
+	// bypass module checks on anonymous trust center and questionnaire users
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsAnonymous() {
 		return true
 	}
 

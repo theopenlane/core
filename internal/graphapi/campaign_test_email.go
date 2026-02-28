@@ -52,7 +52,8 @@ func (r *mutationResolver) initTestEmailState(ctx context.Context, input model.S
 
 // validateTestEmailCampaign checks permissions and campaign eligibility for test emails.
 func (r *mutationResolver) validateTestEmailCampaign(ctx context.Context, campaignObj *generated.Campaign) error {
-	if err := common.SetOrganizationInAuthContext(ctx, &campaignObj.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, &campaignObj.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return rout.ErrPermissionDenied
 	}

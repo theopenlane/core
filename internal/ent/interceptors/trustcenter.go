@@ -23,8 +23,8 @@ import (
 // InterceptorTrustCenter is middleware to change the TrustCenter query
 func InterceptorTrustCenter() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
-			q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
+		if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
+			q.WhereP(trustcenter.IDEQ(tcID))
 		}
 
 		return nil
@@ -50,7 +50,7 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 				logx.FromContext(ctx).Err(err).Str("type", query.Type()).Msg("trust center child query failed")
 
 				// only do this for anon trust center tokens
-				if _, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok && graphql.HasOperationContext(ctx) {
+				if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && graphql.HasOperationContext(ctx) {
 					entity := pluralize.NewClient().Plural(strings.ToLower(query.Type()))
 
 					path := graphql.GetPath(ctx)
@@ -92,11 +92,9 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query) error 
 		return nil
 	}
 
-	if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
-		if anon.TrustCenterID != "" && anon.OrganizationID != "" {
-			q.WhereP(sql.FieldEQ("trust_center_id", anon.TrustCenterID))
-			return nil
-		}
+	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" && caller != nil && caller.OrganizationID != "" {
+		q.WhereP(sql.FieldEQ("trust_center_id", tcID))
+		return nil
 	}
 
 	if !ok || caller == nil {

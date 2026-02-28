@@ -162,7 +162,7 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// add the org to the authenticated context for querying
-			err := auth.AddOrganizationIDToContext(ctx, ownerID)
+			ctx, err := auth.AddOrganizationIDToContext(ctx, ownerID)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to add organization ID to context")
 				return nil, err

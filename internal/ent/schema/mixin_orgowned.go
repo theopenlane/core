@@ -290,14 +290,15 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		anon, hasAnonUser := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey)
+		tcID, hasAnonTCUser := auth.ActiveTrustCenterIDKey.Get(ctx)
 
-		if o.AllowAnonymousTrustCenterAccess && hasAnonUser {
-			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
-				o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
+		if o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
+			caller, callerOk := auth.CallerFromContext(ctx)
+			if callerOk && caller != nil && tcID != "" && caller.OrganizationID != "" {
+				o.PWithField(q, ownerFieldName, []string{caller.OrganizationID})
 				return nil
 			}
-		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonUser {
+		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
 			return privacy.Denyf("anonymous trust center access not allowed")
 		}
 

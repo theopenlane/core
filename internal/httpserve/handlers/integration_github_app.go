@@ -82,11 +82,12 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.setOAuthCookies(ctx, cfg, map[string]string{
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
 		githubAppStateCookieName:  state,
 		githubAppOrgIDCookieName:  caller.OrganizationID,
 		githubAppUserIDCookieName: caller.SubjectID,
 	})
+	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
 	out := openapi.GitHubAppInstallResponse{
 		Reply:      rout.Reply{Success: true},
@@ -207,7 +208,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.clearGitHubAppCookies(ctx, cfg)
+	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
 
 	redirectURL := buildIntegrationRedirectURL(h.IntegrationGitHubApp.SuccessRedirectURL, github.TypeGitHubApp)
 	if redirectURL == "" {
@@ -215,15 +216,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	return h.Redirect(ctx, redirectURL, openapiCtx)
-}
-
-// clearGitHubAppCookies removes cookies used during GitHub App installation.
-func (h *Handler) clearGitHubAppCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	clearCookies(ctx.Response().Writer, cfg, []string{
-		githubAppStateCookieName,
-		githubAppOrgIDCookieName,
-		githubAppUserIDCookieName,
-	})
 }
 
 // validateGitHubAppConfig ensures required GitHub App settings are present.

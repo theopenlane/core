@@ -35,7 +35,8 @@ func (r *mutationResolver) CreateCampaignWithTargetsCSV(ctx context.Context, cam
 		return nil, rout.NewMissingRequiredFieldError("targets")
 	}
 
-	if err := common.SetOrganizationInAuthContext(ctx, campaign.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, campaign.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if campaign.OwnerID == nil || *campaign.OwnerID == "" {

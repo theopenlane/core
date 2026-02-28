@@ -54,8 +54,8 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 // AuthenticateSkipperFuncForImpersonation determines whether Authenticate middleware should be skipped
 // based on the presence of impersonation token
 var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
-	_, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
-	return ok
+	caller, ok := auth.CallerFromContext(c.Request().Context())
+	return ok && caller != nil && caller.IsImpersonated()
 }
 
 // AuthenticateSkipperFuncForWebsockets determines whether Authenticate middleware should be skipped for websocket upgrades
@@ -135,25 +135,14 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					}
 
 					switch strings.HasPrefix(claims.UserID, "anon_questionnaire") {
-
 					case true:
-						an, err := createAnonymousQuestionnaireFromClaims(claims, auth.JWTAuthentication)
-						if err != nil {
-							return unauthorized(c, err, conf, validator)
-						}
-
-						auth.SetEchoContextValue(c, auth.AnonymousQuestionnaireUserKey, an)
-					auth.SetEchoContextValue(c, auth.CallerKey, auth.NewQuestionnaireCaller(an.OrganizationID, an.SubjectID, an.SubjectName, an.SubjectEmail))
-
+						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
+						c.SetRequest(c.Request().WithContext(ctx))
 					default:
-
-						an, err := createAnonymousTrustCenterUserFromClaims(claims, auth.JWTAuthentication)
-						if err != nil {
-							return unauthorized(c, err, conf, validator)
-						}
-
-						auth.SetEchoContextValue(c, auth.AnonymousTrustCenterUserKey, an)
-					auth.SetEchoContextValue(c, auth.CallerKey, auth.NewTrustCenterCaller(an.OrganizationID, an.SubjectID, an.SubjectName, an.SubjectEmail))
+						ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+						ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
+						c.SetRequest(c.Request().WithContext(ctx))
 					}
 
 					// Record anonymous JWT authentication
@@ -168,13 +157,14 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					return unauthorized(c, err, conf, validator)
 				}
 
-				auth.SetEchoContextValue(c, auth.RefreshTokenKey, bearerToken)
+				ctx := auth.WithRefreshToken(c.Request().Context(), bearerToken)
+				c.SetRequest(c.Request().WithContext(ctx))
 
 				// Record regular JWT authentication
 				metrics.RecordAuthentication(metrics.AuthTypeJWT)
 			}
 
-			auth.SetEchoContextValue(c, auth.CallerKey, caller)
+			c.SetRequest(c.Request().WithContext(auth.WithCaller(c.Request().Context(), caller)))
 
 			if conf.RedisClient != nil {
 				permissioncache.SetCacheContext(c, conf.RedisClient)
@@ -326,29 +316,6 @@ func createCallerFromClaims(ctx context.Context, dbClient *ent.Client, claims *t
 	}
 
 	return caller, nil
-}
-
-func createAnonymousQuestionnaireFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousQuestionnaireUser, error) {
-	return &auth.AnonymousQuestionnaireUser{
-		SubjectID:          claims.UserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     claims.OrgID,
-		AuthenticationType: authType,
-		SubjectEmail:       claims.Email,
-		AssessmentID:       claims.AssessmentID,
-	}, nil
-}
-
-func createAnonymousTrustCenterUserFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousTrustCenterUser, error) {
-	return &auth.AnonymousTrustCenterUser{
-		SubjectID:          claims.UserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     claims.OrgID,
-		AuthenticationType: authType,
-		TrustCenterID:      claims.TrustCenterID,
-		SubjectEmail:       claims.Email,
-		OrganizationRole:   auth.AnonymousRole,
-	}, nil
 }
 
 // checkToken checks the bearer authorization token against the database to see if the provided
@@ -642,9 +609,9 @@ func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID stri
 		return false, err
 	}
 
-	ctx = auth.WithContextValue(ctx, models.SSOAuthorizationsContextKey, &pat.SSOAuthorizations)
+	ctx = models.SSOAuthorizationsContextKey.Set(ctx, &pat.SSOAuthorizations)
 
-	auths, ok := auth.ContextValue(ctx, models.SSOAuthorizationsContextKey)
+	auths, ok := models.SSOAuthorizationsContextKey.Get(ctx)
 	if !ok || auths == nil {
 		return false, nil
 	}

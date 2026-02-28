@@ -189,7 +189,7 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	// except for blocked groups (e.g. controls)
 	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		// anonymous trust center users don't belong to groups, skip group filtering
-		if _, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
+		if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
 			return nil
 		}
 

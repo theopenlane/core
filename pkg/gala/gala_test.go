@@ -1873,7 +1873,7 @@ func TestContextCodecCaptureAndRestore(t *testing.T) {
 		OrganizationID:   "org_test",
 		OrganizationName: "org_name_test",
 		OrganizationIDs:  []string{"org_1", "org_2"},
-		Capabilities:     auth.CapSystemAdmin,
+		Capabilities:     auth.CapSystemAdmin | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
 	raw, present, err := codec.Capture(ctx)
@@ -1910,6 +1910,10 @@ func TestContextCodecCaptureAndRestore(t *testing.T) {
 	if !restoredCaller.Has(auth.CapSystemAdmin) {
 		t.Fatalf("expected IsSystemAdmin to be true")
 	}
+
+	if restoredCaller.Capabilities != auth.CapSystemAdmin|auth.CapBypassFGA|auth.CapInternalOperation {
+		t.Fatalf("expected capabilities to round-trip, got %d", restoredCaller.Capabilities)
+	}
 }
 
 func TestContextCodecRestoreInvalidJSON(t *testing.T) {
@@ -1931,6 +1935,7 @@ func TestAuthContextSnapshotToCaller(t *testing.T) {
 		OrganizationIDs:    []string{"org_456", "org_789"},
 		AuthenticationType: string(auth.JWTAuthentication),
 		OrganizationRole:   string(auth.OwnerRole),
+		Capabilities:       uint64(auth.CapBypassFGA),
 		IsSystemAdmin:      true,
 	}
 
@@ -1950,6 +1955,10 @@ func TestAuthContextSnapshotToCaller(t *testing.T) {
 
 	if !caller.Has(auth.CapSystemAdmin) {
 		t.Fatalf("expected system admin capability to be set")
+	}
+
+	if !caller.Has(auth.CapBypassFGA) {
+		t.Fatalf("expected non-admin capabilities to be restored")
 	}
 }
 

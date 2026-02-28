@@ -20,11 +20,9 @@ func TrustCenterScopePredicate() func(*sql.Selector) {
 			return
 		}
 
-		if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
-			if anon.TrustCenterID != "" {
-				s.Where(sql.EQ(s.C("trust_center_id"), anon.TrustCenterID))
-				return
-			}
+		if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
+			s.Where(sql.EQ(s.C("trust_center_id"), tcID))
+			return
 		}
 
 		if !ok || caller == nil {

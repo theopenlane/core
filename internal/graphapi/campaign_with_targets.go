@@ -48,7 +48,8 @@ func validateCampaignWithTargetsInput(ctx context.Context, campaignInput *genera
 		return rout.NewMissingRequiredFieldError("campaign")
 	}
 
-	if err := common.SetOrganizationInAuthContext(ctx, campaignInput.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, campaignInput.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if lo.FromPtrOr(campaignInput.OwnerID, "") == "" {

@@ -12,6 +12,7 @@ tool (
 
 replace (
 	github.com/theopenlane/core/common => ./common
+	github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
 	github.com/theopenlane/iam => ../iam
 )
 

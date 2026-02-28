@@ -5,10 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"net/http"
 	"strings"
-
-	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/core/common/integrations/types"
 )
@@ -123,11 +120,4 @@ func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integra
 	return h.DBClient.Integration.UpdateOneID(integrationID).
 		SetProviderMetadata(entry).
 		Exec(ctx)
-}
-
-// clearCookies removes the specified cookies from the response
-func clearCookies(w http.ResponseWriter, cfg sessions.CookieConfig, names []string) {
-	for _, name := range names {
-		sessions.RemoveCookie(w, name, cfg)
-	}
 }

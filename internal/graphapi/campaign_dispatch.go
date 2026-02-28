@@ -109,7 +109,8 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 
 // validateCampaignDispatch checks permissions and campaign state for dispatch eligibility.
 func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaignObj *generated.Campaign) error {
-	if err := common.SetOrganizationInAuthContext(ctx, &campaignObj.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, &campaignObj.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return rout.ErrPermissionDenied
 	}

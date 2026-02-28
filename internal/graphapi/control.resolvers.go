@@ -42,7 +42,8 @@ func (r *controlResolver) WorkflowTimeline(ctx context.Context, obj *generated.C
 // CreateControl is the resolver for the createControl field.
 func (r *mutationResolver) CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -66,7 +67,8 @@ func (r *mutationResolver) CreateBulkControl(ctx context.Context, input []*gener
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -90,7 +92,8 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
@@ -149,7 +152,8 @@ func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input g
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

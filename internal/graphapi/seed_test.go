@@ -73,8 +73,6 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
-	// the user is always their own admin in their organization
-	auth.SetOrganizationRoleInContext(testUser.UserCtx, auth.OwnerRole)
 
 	// create a group under the organization
 	testGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -167,10 +165,6 @@ func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, t *testi
 
 	// update the user context for the org member
 	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
-
-	if orgRole, ok := auth.ToOrganizationRoleType(role.String()); ok {
-		auth.SetOrganizationRoleInContext(userDetails.UserCtx, orgRole)
-	}
 }
 
 func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.T) testUserDetails {

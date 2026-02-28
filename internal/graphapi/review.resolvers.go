@@ -38,7 +38,8 @@ func (r *mutationResolver) CreateBulkReview(ctx context.Context, input []*genera
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -62,7 +63,8 @@ func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphq
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {

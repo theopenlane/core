@@ -141,10 +141,9 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			ObjectType:       generated.TypeStandard,
 		}
 
-		notificationCtx := auth.WithAuthenticatedUser(ctx.Context, &auth.AuthenticatedUser{
-			SubjectID:       ids[0],
-			OrganizationID:  orgID,
-			OrganizationIDs: []string{orgID},
+		notificationCtx := auth.WithCaller(ctx.Context, &auth.Caller{
+			SubjectID:      ids[0],
+			OrganizationID: orgID,
 		})
 
 		if err := newNotificationCreation(notificationCtx, client, ids, notifInput); err != nil {

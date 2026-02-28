@@ -16,25 +16,21 @@ type skipEventEmissionFlag struct {
 	skip bool
 }
 
-var (
-	workflowBypassContextKey             = contextx.NewKey[WorkflowBypassContextKey]()
-	workflowAllowEventEmissionContextKey = contextx.NewKey[WorkflowAllowEventEmissionKey]()
-	skipEventEmissionFlagContextKey      = contextx.NewKey[*skipEventEmissionFlag]()
-)
+var skipEventEmissionFlagContextKey = contextx.NewKey[*skipEventEmissionFlag]()
 
-// WithContext sets the workflow bypass context
-// Operations with this context will skip workflow approval interceptors
+// WithContext sets the workflow bypass flag in the context.
+// Operations with this context will skip workflow approval interceptors.
 func WithContext(ctx context.Context) context.Context {
-	return workflowBypassContextKey.Set(ctx, WorkflowBypassContextKey{})
+	return gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
 
-// FromContext retrieves the workflow bypass context
-func FromContext(ctx context.Context) (WorkflowBypassContextKey, bool) {
-	return workflowBypassContextKey.Get(ctx)
+// FromContext reports whether the workflow bypass flag is set in the context.
+func FromContext(ctx context.Context) bool {
+	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
 
-// IsWorkflowBypass checks if the context has workflow bypass enabled
-// Used by workflow interceptors to skip approval routing for system operations
+// IsWorkflowBypass checks if the context has workflow bypass enabled.
+// Used by workflow interceptors to skip approval routing for system operations.
 func IsWorkflowBypass(ctx context.Context) bool {
 	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
@@ -45,11 +41,7 @@ func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
 		return ctx
 	}
 
-	if _, ok := workflowAllowEventEmissionContextKey.Get(ctx); ok {
-		return ctx
-	}
-
-	return workflowAllowEventEmissionContextKey.Set(ctx, WorkflowAllowEventEmissionKey{})
+	return gala.WithFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
 }
 
 // AllowWorkflowEventEmission reports whether workflow events should be emitted even when bypass is set.
@@ -58,9 +50,7 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 		return false
 	}
 
-	_, ok := workflowAllowEventEmissionContextKey.Get(ctx)
-
-	return ok
+	return gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
 }
 
 // WithSkipEventEmission installs a mutable flag in the context so inner hooks can

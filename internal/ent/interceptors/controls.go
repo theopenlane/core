@@ -30,7 +30,7 @@ func InterceptorTrustCenterControl() ent.Interceptor {
 		// anonymous trust center users can only see controls that are:
 		// 1. marked as trust center controls (cloned from the trust center standard)
 		// 2. have public visibility
-		if _, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
+		if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
 			q.WhereP(
 				sql.FieldEQ(control.FieldIsTrustCenterControl, true),
 				sql.FieldEQ(control.FieldTrustCenterVisibility, enums.TrustCenterControlVisibilityPubliclyVisible),

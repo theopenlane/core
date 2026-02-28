@@ -60,7 +60,8 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 	}
 
 	if proposal.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -114,7 +115,8 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 	userID := submitCaller.SubjectID
 
 	if proposal.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -176,7 +178,8 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 	userID := withdrawCaller.SubjectID
 
 	if proposal.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -285,7 +288,8 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
 	}
 	if ownerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &ownerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &ownerID)
+		if err != nil {
 			return nil, err
 		}
 	}

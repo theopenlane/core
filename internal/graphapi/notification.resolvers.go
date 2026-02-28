@@ -28,7 +28,8 @@ func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, in
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -90,7 +91,8 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 
 	// Verify all notifications belong to the user's organization
 	for _, notif := range notifications {
-		if err := common.SetOrganizationInAuthContext(ctx, &notif.OwnerID); err != nil {
+		ctx, err = common.SetOrganizationInAuthContext(ctx, &notif.OwnerID)
+		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notification_id", notif.ID).Msg("failed to set organization in auth context")
 			return nil, rout.ErrPermissionDenied
 		}

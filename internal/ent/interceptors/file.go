@@ -27,24 +27,18 @@ func InterceptorFile() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		logx.FromContext(ctx).Debug().Msg("InterceptorFile")
 
-		var orgs []string
-		if anon, ok := auth.ContextValue(ctx, auth.AnonymousTrustCenterUserKey); ok {
-			// q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
-			orgs = []string{anon.OrganizationID}
-		} else {
-			caller, ok := auth.CallerFromContext(ctx)
-			if !ok || caller == nil {
-				return auth.ErrNoAuthUser
-			}
-
-			if caller.Has(auth.CapSystemAdmin) {
-				logx.FromContext(ctx).Debug().Msg("user is system admin, skipping organization filter")
-
-				return nil
-			}
-
-			orgs = caller.OrgIDs()
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		if caller.Has(auth.CapSystemAdmin) {
+			logx.FromContext(ctx).Debug().Msg("user is system admin, skipping organization filter")
+
+			return nil
+		}
+
+		orgs := caller.OrgIDs()
 
 		if len(orgs) == 0 {
 			return nil

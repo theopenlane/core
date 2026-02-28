@@ -1092,91 +1092,45 @@ func GetBulkUploadOwnerInput[T any](input []*T) (*string, error) {
 	return ownerID, nil
 }
 
-// SetOrganizationInAuthContext sets the organization in the auth context based on the input if it is not already set
-// in most cases this is a no-op because the organization id is set in the auth middleware
-// only when multiple organizations are authorized (e.g. with a PAT) is this necessary
-func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error {
-	// if org is in context or the user is a system admin, return
-	if ok, err := checkOrgInContext(ctx); ok && err == nil {
-		return nil
+// SetOrganizationInAuthContext sets the organization in the auth context based on the input if it is not already set.
+// In most cases this is a no-op because the organization id is set in the auth middleware.
+// Only when multiple organizations are authorized (e.g. with a PAT) is this necessary.
+// System admins bypass the check entirely.
+func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) (context.Context, error) {
+	if isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && isAdmin {
+		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
+
+		return ctx, nil
 	}
 
-	// If no input provided, fallback to a single authorized org (e.g., API token with one org)
-	if inputOrgID == nil {
-		if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-			orgIDs := caller.OrgIDs()
-			if len(orgIDs) == 1 && orgIDs[0] != "" {
-				caller.OrganizationID = orgIDs[0]
-				return auth.SetOrganizationIDInAuthContext(ctx, orgIDs[0])
-			}
-		}
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+		return ctx, nil
 	}
 
-	return setOrgFromInputInContext(ctx, inputOrgID)
+	return auth.ResolveOrganizationForContext(ctx, inputOrgID)
 }
 
-// SetOrganizationInAuthContextBulkRequest sets the organization in the auth context based on the input if it is not already set
-// in most cases this is a no-op because the organization id is set in the auth middleware
-// in the case of personal access tokens, this is necessary to ensure the organization id is set
-// the organization must be the same across all inputs in the bulk request
-func SetOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input []*T) error {
-	// if org is in context or the user is a system admin, return
-	if ok, err := checkOrgInContext(ctx); ok && err == nil {
-		return nil
+// SetOrganizationInAuthContextBulkRequest sets the organization in the auth context based on the input if it is not already set.
+// In most cases this is a no-op because the organization id is set in the auth middleware.
+// In the case of personal access tokens, this is necessary to ensure the organization id is set.
+// The organization must be the same across all inputs in the bulk request.
+func SetOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input []*T) (context.Context, error) {
+	if isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && isAdmin {
+		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
+
+		return ctx, nil
+	}
+
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+		return ctx, nil
 	}
 
 	ownerID, err := GetBulkUploadOwnerInput(input)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
-	return setOrgFromInputInContext(ctx, ownerID)
-}
-
-// checkOrgInContext checks if the organization is already set in the context
-// if the organization is set, it returns true
-// if the user is a system admin, it also returns true
-func checkOrgInContext(ctx context.Context) (bool, error) {
-	// allow system admins to bypass the organization check
-	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-	if err == nil && isAdmin {
-		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
-
-		return true, nil
-	}
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.OrganizationID != "" {
-		return true, nil
-	}
-
-	return false, nil
-}
-
-// setOrgFromInputInContext sets the organization in the auth context based on the input org ID, ensuring
-// the org is authenticated and exists in the context
-func setOrgFromInputInContext(ctx context.Context, inputOrgID *string) error {
-	if inputOrgID == nil {
-		// this would happen on a PAT authenticated request because the org id is not set
-		return ErrNoOrganizationID
-	}
-
-	// ensure this org is authenticated
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return auth.ErrNoAuthUser
-	}
-	orgIDs := caller.OrgIDs()
-
-	if !lo.Contains(orgIDs, *inputOrgID) {
-		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, *inputOrgID)
-	}
-
-	if err := auth.SetOrganizationIDInAuthContext(ctx, *inputOrgID); err != nil {
-		return err
-	}
-
-	return nil
+	return auth.ResolveOrganizationForContext(ctx, ownerID)
 }
 
 // CheckAllowedAuthType checks how the user is authenticated and returns an error
@@ -1333,7 +1287,9 @@ func setOrganizationForUploads(ctx context.Context, variables map[string]any, in
 		return err
 	}
 
-	return SetOrganizationInAuthContext(ctx, ownerID)
+	_, err = SetOrganizationInAuthContext(ctx, ownerID)
+
+	return err
 }
 
 // getOwnerIDFromVariables attempts to extract an owner/organization ID from the GraphQL variables map
