@@ -112,6 +112,113 @@ func TestOperationManagerRunForceRefresh(t *testing.T) {
 	}
 }
 
+func TestOperationManagerRunUsesIntegrationScopedCredential(t *testing.T) {
+	t.Parallel()
+
+	provider := types.ProviderType("acme")
+	source := &credentialSourceStub{
+		getPayload: types.CredentialPayload{
+			Provider: provider,
+			Kind:     types.CredentialKindAPIKey,
+			Data:     models.CredentialSet{APIToken: "default"},
+		},
+		getForIntegrationPayload: types.CredentialPayload{
+			Provider: provider,
+			Kind:     types.CredentialKindAPIKey,
+			Data:     models.CredentialSet{APIToken: "scoped"},
+		},
+	}
+
+	var captured types.OperationInput
+	descriptor := types.OperationDescriptor{
+		Provider: provider,
+		Name:     types.OperationName("notify"),
+		Run: func(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
+			captured = input
+			return types.OperationResult{Status: types.OperationStatusOK}, nil
+		},
+	}
+
+	manager, err := NewOperationManager(source, []types.OperationDescriptor{descriptor})
+	if err != nil {
+		t.Fatalf("NewOperationManager() error = %v", err)
+	}
+
+	_, err = manager.Run(context.Background(), types.OperationRequest{
+		OrgID:         "org-1",
+		IntegrationID: "int-1",
+		Provider:      provider,
+		Name:          descriptor.Name,
+	})
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+
+	if source.getForIntegrationCount != 1 || source.getCount != 0 {
+		t.Fatalf("expected integration scoped Get call, got scoped=%d plain=%d", source.getForIntegrationCount, source.getCount)
+	}
+	if source.lastGetIntegrationID != "int-1" {
+		t.Fatalf("expected integration id int-1, got %s", source.lastGetIntegrationID)
+	}
+	if captured.Credential.Data.APIToken != "scoped" {
+		t.Fatalf("expected scoped credential payload, got %s", captured.Credential.Data.APIToken)
+	}
+}
+
+func TestOperationManagerRunForceRefreshUsesIntegrationScopedMint(t *testing.T) {
+	t.Parallel()
+
+	provider := types.ProviderType("acme")
+	source := &credentialSourceStub{
+		mintPayload: types.CredentialPayload{
+			Provider: provider,
+			Kind:     types.CredentialKindAPIKey,
+			Data:     models.CredentialSet{APIToken: "default"},
+		},
+		mintForIntegrationPayload: types.CredentialPayload{
+			Provider: provider,
+			Kind:     types.CredentialKindAPIKey,
+			Data:     models.CredentialSet{APIToken: "scoped-minted"},
+		},
+	}
+
+	var captured types.CredentialPayload
+	descriptor := types.OperationDescriptor{
+		Provider: provider,
+		Name:     types.OperationName("refresh"),
+		Run: func(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
+			captured = input.Credential
+			return types.OperationResult{Status: types.OperationStatusOK}, nil
+		},
+	}
+
+	manager, err := NewOperationManager(source, []types.OperationDescriptor{descriptor})
+	if err != nil {
+		t.Fatalf("NewOperationManager() error = %v", err)
+	}
+
+	_, err = manager.Run(context.Background(), types.OperationRequest{
+		OrgID:         "org-1",
+		IntegrationID: "int-2",
+		Provider:      provider,
+		Name:          descriptor.Name,
+		Force:         true,
+	})
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+
+	if source.mintForIntegrationCount != 1 || source.mintCount != 0 {
+		t.Fatalf("expected integration scoped Mint call, got scoped=%d plain=%d", source.mintForIntegrationCount, source.mintCount)
+	}
+	if source.lastMintIntegrationID != "int-2" {
+		t.Fatalf("expected integration id int-2, got %s", source.lastMintIntegrationID)
+	}
+	if captured.Data.APIToken != "scoped-minted" {
+		t.Fatalf("expected scoped minted credential, got %s", captured.Data.APIToken)
+	}
+}
+
 func TestOperationManagerRunRequiresClientManager(t *testing.T) {
 	t.Parallel()
 

@@ -7,11 +7,13 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
@@ -19,33 +21,34 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// GitHub App cookie names used during install callbacks.
+// GitHub App cookie names used during install callbacks
 const (
 	githubAppStateCookieName  = "githubapp_state"
 	githubAppOrgIDCookieName  = "githubapp_org_id"
 	githubAppUserIDCookieName = "githubapp_user_id"
 )
 
-// IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
+// IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration
 type IntegrationGitHubAppConfig struct {
-	// Enabled toggles the GitHub App integration handlers.
+	// Enabled toggles the GitHub App integration handlers
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// AppID is the GitHub App ID used for JWT signing.
+	// AppID is the GitHub App ID used for JWT signing
 	AppID string `json:"appid" koanf:"appid" default:"" sensitive:"true"`
-	// AppSlug is the GitHub App slug used for the install URL.
+	// AppSlug is the GitHub App slug used for the install URL
 	AppSlug string `json:"appslug" koanf:"appslug" default:""`
-	// PrivateKey is the PEM-encoded GitHub App private key.
+	// PrivateKey is the PEM-encoded GitHub App private key
 	PrivateKey string `json:"privatekey" koanf:"privatekey" default:"" sensitive:"true"`
-	// WebhookSecret is the shared secret used to validate GitHub webhooks.
+	// WebhookSecret is the shared secret used to validate GitHub webhooks
 	WebhookSecret string `json:"webhooksecret" koanf:"webhooksecret" default:"" sensitive:"true"`
-	// SuccessRedirectURL is the URL to redirect to after successful installation.
+	// SuccessRedirectURL is the URL to redirect to after successful installation
 	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
 }
 
-// StartGitHubAppInstallation initiates the GitHub App installation flow.
+// StartGitHubAppInstallation initiates the GitHub App installation flow
 func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	_, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleGitHubAppInstallRequest, openapi.ExampleGitHubAppInstallResponse, openapiCtx.Registry)
 	if err != nil {
@@ -98,7 +101,7 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	return h.Success(ctx, out, openapiCtx)
 }
 
-// GitHubAppInstallCallback finalizes GitHub App installation and stores credentials.
+// GitHubAppInstallCallback finalizes GitHub App installation and stores credentials
 func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapiCtx.Operation, openapi.ExampleGitHubAppInstallCallbackRequest, openapi.ExampleGitHubAppInstallCallbackResponse, openapiCtx.Registry)
 	if err != nil {
@@ -157,7 +160,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
-	if strings.TrimSpace(userCookie.Value) == "" {
+	if userCookie.Value == "" {
 		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}
 
@@ -178,7 +181,8 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		"privateKey":     normalizeGitHubAppPrivateKey(h.IntegrationGitHubApp.PrivateKey),
 	}
 
-	if _, err := h.IntegrationStore.EnsureIntegration(systemCtx, orgID, github.TypeGitHubApp); err != nil {
+	integrationRecord, err := h.IntegrationStore.EnsureIntegration(systemCtx, orgID, github.TypeGitHubApp)
+	if err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure github app integration")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -203,9 +207,11 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 			errors.Is(err, errIntegrationRegistryNotConfigured):
 			return h.InternalServerError(ctx, err, openapiCtx)
 		default:
-			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+			return h.BadRequest(ctx, err, openapiCtx)
 		}
 	}
+
+	h.queueGitHubVulnerabilityBackfill(systemCtx, orgID, integrationRecord.ID)
 
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
@@ -224,27 +230,29 @@ func (h *Handler) validateGitHubAppConfig() error {
 	if !cfg.Enabled {
 		return ErrProviderDisabled
 	}
-	if strings.TrimSpace(cfg.AppSlug) == "" {
-		return rout.MissingField("appSlug")
+	if cfg.AppSlug == "" {
+		return ErrGitHubAppSlugRequired
 	}
-	if strings.TrimSpace(cfg.AppID) == "" {
-		return rout.MissingField("appId")
+	if cfg.AppID == "" {
+		return ErrGitHubAppIDRequired
 	}
-	if strings.TrimSpace(cfg.PrivateKey) == "" {
-		return rout.MissingField("privateKey")
+	if cfg.PrivateKey == "" {
+		return ErrGitHubAppPrivateKeyRequired
 	}
-	if strings.TrimSpace(cfg.WebhookSecret) == "" {
-		return rout.MissingField("webhookSecret")
+	if cfg.WebhookSecret == "" {
+		return ErrGitHubAppWebhookSecretRequired
 	}
+
 	return nil
 }
 
-// githubAppInstallURL builds the GitHub App installation URL including the state parameter.
+// githubAppInstallURL builds the GitHub App installation URL including the state parameter
 func (h *Handler) githubAppInstallURL(state string) (string, error) {
-	slug := strings.TrimSpace(h.IntegrationGitHubApp.AppSlug)
+	slug := h.IntegrationGitHubApp.AppSlug
 	if slug == "" {
-		return "", rout.MissingField("appSlug")
+		return "", ErrGitHubAppSlugRequired
 	}
+
 	u := url.URL{
 		Scheme: "https",
 		Host:   "github.com",
@@ -257,23 +265,22 @@ func (h *Handler) githubAppInstallURL(state string) (string, error) {
 	return u.String(), nil
 }
 
-// normalizeGitHubAppPrivateKey ensures escaped newlines are converted to PEM newlines.
+// normalizeGitHubAppPrivateKey ensures escaped newlines are converted to PEM newlines
 func normalizeGitHubAppPrivateKey(key string) string {
-	trimmed := strings.TrimSpace(key)
-	if trimmed == "" {
+	if key == "" {
 		return ""
 	}
 
-	if strings.Contains(trimmed, "\\n") && !strings.Contains(trimmed, "\n") {
-		return strings.ReplaceAll(trimmed, "\\n", "\n")
+	if strings.Contains(key, "\\n") && !strings.Contains(key, "\n") {
+		return strings.ReplaceAll(key, "\\n", "\n")
 	}
 
-	return trimmed
+	return key
 }
 
-// updateGitHubAppIntegrationMetadata stores the GitHub App installation metadata on the integration record.
+// updateGitHubAppIntegrationMetadata stores the GitHub App installation metadata on the integration record
 func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID string, attrs map[string]any) error {
-	if h == nil || h.DBClient == nil {
+	if h.DBClient == nil {
 		return errDBClientNotConfigured
 	}
 
@@ -299,9 +306,9 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID 
 		Exec(ctx)
 }
 
-// resolveOpenlaneOrganizationName returns display_name, then name, then ID.
+// resolveOpenlaneOrganizationName returns display_name, then name, then ID
 func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID string) string {
-	if orgID == "" || h == nil || h.DBClient == nil {
+	if orgID == "" || h.DBClient == nil {
 		return orgID
 	}
 
@@ -341,23 +348,52 @@ func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, p
 	}
 
 	if result.Status != types.OperationStatusOK {
-		summary := strings.TrimSpace(result.Summary)
-		if summary == "" {
-			return ErrProviderHealthCheckFailed
-		}
-		return fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, summary)
+		return ErrProviderHealthCheckFailed
 	}
 
 	return nil
 }
 
-// providerHasHealthOperation checks if the provider has a health check operation defined
-func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
-	for _, descriptor := range h.IntegrationRegistry.OperationDescriptors(provider) {
-		if descriptor.Name == defaultHealthOperation {
-			return true
-		}
+// queueGitHubVulnerabilityBackfill schedules an initial vulnerability collection run after app installation
+func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, integrationID string) {
+	if orgID == "" || integrationID == "" {
+		return
 	}
 
-	return false
+	if h.WorkflowEngine == nil {
+		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: workflow engine not configured")
+		return
+	}
+	if h.Gala == nil {
+		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: gala runtime not configured")
+		return
+	}
+
+	operationName := types.OperationVulnerabilitiesCollect
+	if _, err := h.WorkflowEngine.QueueIntegrationOperation(context.WithoutCancel(ctx), engine.IntegrationQueueRequest{
+		OrgID:         orgID,
+		Provider:      github.TypeGitHubApp,
+		IntegrationID: integrationID,
+		Operation:     operationName,
+		Force:         true,
+		RunType:       enums.IntegrationRunTypeEvent,
+	}); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Str("integration_id", integrationID).Msg("failed to queue github vulnerability backfill operation")
+	}
+}
+
+// providerHasHealthOperation checks if the provider has a health check operation defined
+func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
+	return h.providerHasOperation(provider, defaultHealthOperation)
+}
+
+// providerHasOperation checks whether a provider publishes a specific operation descriptor
+func (h *Handler) providerHasOperation(provider types.ProviderType, operation types.OperationName) bool {
+	if h.IntegrationRegistry == nil {
+		return false
+	}
+
+	return lo.ContainsBy(h.IntegrationRegistry.OperationDescriptors(provider), func(descriptor types.OperationDescriptor) bool {
+		return descriptor.Name == operation
+	})
 }

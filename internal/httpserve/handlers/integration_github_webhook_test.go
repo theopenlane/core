@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -19,7 +22,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 )
 
-// TestGitHubIntegrationWebhookHandlerMissingEventHeader verifies the missing event header response.
+// githubWebhookSignature returns a GitHub-compatible HMAC signature for webhook tests
+func githubWebhookSignature(secret string, payload []byte) string {
+	mac := hmac.New(sha256.New, []byte(secret))
+	_, _ = mac.Write(payload)
+	return "sha256=" + hex.EncodeToString(mac.Sum(nil))
+}
+
+// TestGitHubIntegrationWebhookHandlerMissingEventHeader verifies the missing event header response
 func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
 	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{
 		Enabled:       true,
@@ -46,10 +56,10 @@ func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
 	var reply rout.Reply
 	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&reply))
 	assert.False(t, reply.Success)
-	assert.Equal(t, rout.MissingField(githubWebhookEventHeader).Error(), reply.Error)
+	assert.Equal(t, ErrGitHubWebhookEventHeaderMissing.Error(), reply.Error)
 }
 
-// TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics verifies empty payload metrics and status.
+// TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics verifies empty payload metrics and status
 func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
 	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{
 		Enabled:       true,
@@ -74,7 +84,43 @@ func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
 	assert.Equal(t, responseBefore+1, testutil.ToFloat64(githubAppWebhookResponseCounter.WithLabelValues("dependabot_alert", "400", "empty_payload")))
 }
 
-// TestHandleGitHubInstallationWebhookSendsSlack verifies installation.created webhooks notify Slack.
+// TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID verifies ping payloads are accepted without installation IDs
+func TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID(t *testing.T) {
+	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{
+		Enabled:       true,
+		AppID:         "123",
+		AppSlug:       "openlane",
+		PrivateKey:    "private-key",
+		WebhookSecret: "secret",
+	}}
+
+	payload := []byte(`{"zen":"keep it logically awesome"}`)
+	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
+	req.Header.Set(githubWebhookEventHeader, "ping")
+	req.Header.Set(githubWebhookSignatureHeader, githubWebhookSignature("secret", payload))
+	rec := httptest.NewRecorder()
+	ctx := echo.New().NewContext(req, rec)
+
+	pingBefore := testutil.ToFloat64(githubAppWebhookResponseCounter.WithLabelValues("ping", "200", "ping_accepted"))
+	missingInstallationBefore := testutil.ToFloat64(githubAppWebhookResponseCounter.WithLabelValues("ping", "200", "missing_installation_id"))
+
+	err := h.GitHubIntegrationWebhookHandler(ctx, nil)
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, pingBefore+1, testutil.ToFloat64(githubAppWebhookResponseCounter.WithLabelValues("ping", "200", "ping_accepted")))
+	assert.Equal(t, missingInstallationBefore, testutil.ToFloat64(githubAppWebhookResponseCounter.WithLabelValues("ping", "200", "missing_installation_id")))
+}
+
+// TestGitHubInstallationIDFromPayload verifies fallback extraction of installation IDs from raw webhook payloads
+func TestGitHubInstallationIDFromPayload(t *testing.T) {
+	assert.Equal(t, "123", githubInstallationIDFromPayload([]byte(`{"installation":{"id":123}}`)))
+	assert.Equal(t, "987", githubInstallationIDFromPayload([]byte(`{"installation":{"id":"987"}}`)))
+	assert.Equal(t, "", githubInstallationIDFromPayload([]byte(`{"installation":{}}`)))
+	assert.Equal(t, "", githubInstallationIDFromPayload([]byte(`{"foo":"bar"}`)))
+	assert.Equal(t, "", githubInstallationIDFromPayload([]byte(`{`)))
+}
+
+// TestHandleGitHubInstallationWebhookSendsSlack verifies installation.created webhooks notify Slack
 func TestHandleGitHubInstallationWebhookSendsSlack(t *testing.T) {
 	var (
 		mu       sync.Mutex
@@ -126,7 +172,7 @@ func TestHandleGitHubInstallationWebhookSendsSlack(t *testing.T) {
 	assert.Contains(t, requests[0], "Openlane organization: openlane-org-id")
 }
 
-// TestHandleGitHubInstallationWebhookSkipsWhenSlackDisabled verifies no-op when webhook config is absent.
+// TestHandleGitHubInstallationWebhookSkipsWhenSlackDisabled verifies no-op when webhook config is absent
 func TestHandleGitHubInstallationWebhookSkipsWhenSlackDisabled(t *testing.T) {
 	hooks.SetSlackConfig(hooks.SlackConfig{})
 	t.Cleanup(func() {

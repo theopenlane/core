@@ -62,49 +62,29 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 
 	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
 
-	secretName := string(payload.Provider)
-	envelope := payloadToCredentialSet(payload, s.now)
+	return s.saveCredentialForIntegrationRecord(systemCtx, orgID, payload, integrationRecord)
+}
 
-	existing, err := s.db.Hush.Query().
+// SaveCredentialForIntegration upserts credentials for a specific integration record.
+func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	systemCtx = contextx.With(systemCtx, auth.KeyStoreContextKey{})
+
+	integrationRecord, err := s.db.Integration.Query().
 		Where(
-			hushschema.And(
-				hushschema.OwnerID(orgID),
-				hushschema.SecretName(secretName),
-				hushschema.HasIntegrationsWith(integration.ID(integrationRecord.ID)),
-			),
+			integration.IDEQ(integrationID),
+			integration.OwnerIDEQ(orgID),
+			integration.KindEQ(string(payload.Provider)),
 		).
 		Only(systemCtx)
-
 	if err != nil {
-		if !ent.IsNotFound(err) {
-			logx.FromContext(systemCtx).Error().Err(err).Msg("failed to query existing credential")
-			return types.CredentialPayload{}, err
-		}
-
-		createErr := s.db.Hush.Create().
-			SetOwnerID(orgID).
-			SetName(secretName).
-			SetSecretName(secretName).
-			SetKind(string(payload.Kind)).
-			SetCredentialSet(envelope).
-			AddIntegrations(integrationRecord).
-			Exec(systemCtx)
-		if createErr != nil {
-			logx.FromContext(systemCtx).Error().Err(createErr).Msg("failed to create credential record")
-			return types.CredentialPayload{}, createErr
-		}
-	} else {
-		updateErr := existing.Update().
-			SetCredentialSet(envelope).
-			SetKind(string(payload.Kind)).
-			Exec(systemCtx)
-		if updateErr != nil {
-			logx.FromContext(systemCtx).Error().Err(updateErr).Msg("failed to update credential record")
-			return types.CredentialPayload{}, updateErr
-		}
+		logx.FromContext(systemCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to load integration record for credential save")
+		return types.CredentialPayload{}, err
 	}
 
-	return payload, nil
+	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
+
+	return s.saveCredentialForIntegrationRecord(systemCtx, orgID, payload, integrationRecord)
 }
 
 // EnsureIntegration guarantees an integration record exists for the given org/provider pair
@@ -140,28 +120,28 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 		return types.CredentialPayload{}, err
 	}
 
-	secretName := string(provider)
+	return s.loadCredentialFromIntegrationRecord(ctx, provider, integrationRecord)
+}
 
-	for _, secret := range integrationRecord.Edges.Secrets {
-		if secret.SecretName != secretName {
-			continue
+// LoadCredentialForIntegration retrieves the credential payload for a specific integration record.
+func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
+	integrationRecord, err := s.db.Integration.Query().
+		Where(
+			integration.IDEQ(integrationID),
+			integration.OwnerIDEQ(orgID),
+			integration.KindEQ(string(provider)),
+		).
+		WithSecrets().
+		Only(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return types.CredentialPayload{}, ErrCredentialNotFound
 		}
 
-		envelope := secret.CredentialSet
-
-		s.updateIntegrationProviderState(ctx, integrationRecord, provider, envelope.ProviderData)
-
-		payload, err := credentialSetToPayload(provider, envelope)
-		if err != nil {
-			return types.CredentialPayload{}, err
-		}
-		providerState := integrationRecord.ProviderState
-		payload.ProviderState = &providerState
-
-		return payload, nil
+		return types.CredentialPayload{}, err
 	}
 
-	return types.CredentialPayload{}, ErrCredentialNotFound
+	return s.loadCredentialFromIntegrationRecord(ctx, provider, integrationRecord)
 }
 
 // DeleteIntegration removes the integration and associated secrets for the given org
@@ -245,6 +225,84 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 		return nil, createErr
 	}
 	return record, nil
+}
+
+func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID string, payload types.CredentialPayload, integrationRecord *ent.Integration) (types.CredentialPayload, error) {
+	if integrationRecord == nil {
+		return types.CredentialPayload{}, ErrCredentialNotFound
+	}
+
+	secretName := string(payload.Provider)
+	envelope := payloadToCredentialSet(payload, s.now)
+
+	existing, err := s.db.Hush.Query().
+		Where(
+			hushschema.And(
+				hushschema.OwnerID(orgID),
+				hushschema.SecretName(secretName),
+				hushschema.HasIntegrationsWith(integration.ID(integrationRecord.ID)),
+			),
+		).
+		Only(ctx)
+
+	if err != nil {
+		if !ent.IsNotFound(err) {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to query existing credential")
+			return types.CredentialPayload{}, err
+		}
+
+		createErr := s.db.Hush.Create().
+			SetOwnerID(orgID).
+			SetName(secretName).
+			SetSecretName(secretName).
+			SetKind(string(payload.Kind)).
+			SetCredentialSet(envelope).
+			AddIntegrations(integrationRecord).
+			Exec(ctx)
+		if createErr != nil {
+			logx.FromContext(ctx).Error().Err(createErr).Msg("failed to create credential record")
+			return types.CredentialPayload{}, createErr
+		}
+	} else {
+		updateErr := existing.Update().
+			SetCredentialSet(envelope).
+			SetKind(string(payload.Kind)).
+			Exec(ctx)
+		if updateErr != nil {
+			logx.FromContext(ctx).Error().Err(updateErr).Msg("failed to update credential record")
+			return types.CredentialPayload{}, updateErr
+		}
+	}
+
+	return payload, nil
+}
+
+func (s *Store) loadCredentialFromIntegrationRecord(ctx context.Context, provider types.ProviderType, integrationRecord *ent.Integration) (types.CredentialPayload, error) {
+	if integrationRecord == nil {
+		return types.CredentialPayload{}, ErrCredentialNotFound
+	}
+
+	secretName := string(provider)
+	for _, secret := range integrationRecord.Edges.Secrets {
+		if secret.SecretName != secretName {
+			continue
+		}
+
+		envelope := secret.CredentialSet
+
+		s.updateIntegrationProviderState(ctx, integrationRecord, provider, envelope.ProviderData)
+
+		payload, err := credentialSetToPayload(provider, envelope)
+		if err != nil {
+			return types.CredentialPayload{}, err
+		}
+		providerState := integrationRecord.ProviderState
+		payload.ProviderState = &providerState
+
+		return payload, nil
+	}
+
+	return types.CredentialPayload{}, ErrCredentialNotFound
 }
 
 func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {

@@ -1,6 +1,8 @@
 package state
 
-// IntegrationProviderState stores provider-specific integration state captured during auth/config.
+import "time"
+
+// IntegrationProviderState stores provider-specific integration state captured during auth/config
 type IntegrationProviderState struct {
 	// GitHub contains the GitHub integration state
 	GitHub *GitHubState `json:"github,omitempty"`
@@ -8,15 +10,17 @@ type IntegrationProviderState struct {
 	Slack *SlackState `json:"slack,omitempty"`
 }
 
-// GitHubState captures GitHub App installation details for an integration.
+// GitHubState captures GitHub App installation details for an integration
 type GitHubState struct {
 	// AppID is the GitHub App ID
 	AppID string `json:"appId,omitempty"`
 	// InstallationID is the GitHub App installation ID
 	InstallationID string `json:"installationId,omitempty"`
+	// WebhookVerifiedAt is the timestamp of the most recent verified webhook from GitHub
+	WebhookVerifiedAt *time.Time `json:"webhookVerifiedAt,omitempty"`
 }
 
-// SlackState captures Slack workspace details for an integration.
+// SlackState captures Slack workspace details for an integration
 type SlackState struct {
 	// AppID is the Slack App ID
 	AppID string `json:"appId,omitempty"`

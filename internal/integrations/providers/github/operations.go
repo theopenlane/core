@@ -65,7 +65,7 @@ var (
 	githubVulnerabilityConfigSchema = operations.SchemaFrom[githubVulnerabilityOperationConfig]()
 )
 
-// githubOperations returns the GitHub operations supported by this provider.
+// githubOperations returns the GitHub operations supported by this provider
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(githubOperationHealth, "Validate GitHub OAuth token by calling the /user endpoint.", ClientGitHubAPI, runGitHubHealthOperation),
@@ -89,7 +89,7 @@ func githubOperations() []types.OperationDescriptor {
 	}
 }
 
-// githubAppOperations returns the GitHub App operations supported by this provider.
+// githubAppOperations returns the GitHub App operations supported by this provider
 func githubAppOperations(baseURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(
@@ -99,10 +99,18 @@ func githubAppOperations(baseURL string) []types.OperationDescriptor {
 			runGitHubAppHealthOperation(baseURL),
 		),
 		githubOrganizationRepoOperationDescriptor(),
+		{
+			Name:         githubOperationVulnCollect,
+			Kind:         types.OperationKindCollectFindings,
+			Description:  "Collect GitHub vulnerability alerts (Dependabot, code scanning, secret scanning) for repositories accessible to the app installation.",
+			Client:       ClientGitHubAPI,
+			Run:          runGitHubVulnerabilityOperation,
+			ConfigSchema: githubVulnerabilityConfigSchema,
+		},
 	}
 }
 
-// githubOrganizationRepoOperationDescriptor builds the shared org repository GraphQL descriptor.
+// githubOrganizationRepoOperationDescriptor builds the shared org repository GraphQL descriptor
 func githubOrganizationRepoOperationDescriptor() types.OperationDescriptor {
 	return types.OperationDescriptor{
 		Name:         githubOperationOrgRepos,
@@ -145,15 +153,15 @@ type githubRepoOwner struct {
 	ID int64 `json:"id"`
 }
 
-// githubAppInstallationReposResponse models the installation repositories response.
+// githubAppInstallationReposResponse models the installation repositories response
 type githubAppInstallationReposResponse struct {
-	// TotalCount is the total number of repositories.
+	// TotalCount is the total number of repositories
 	TotalCount int `json:"total_count"`
-	// Repositories lists repositories visible to the installation.
+	// Repositories lists repositories visible to the installation
 	Repositories []githubRepoResponse `json:"repositories"`
 }
 
-// runGitHubHealthOperation validates GitHub OAuth credentials.
+// runGitHubHealthOperation validates GitHub OAuth credentials
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
@@ -178,7 +186,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 	}, nil
 }
 
-// runGitHubAppHealthOperation validates GitHub App installation tokens.
+// runGitHubAppHealthOperation validates GitHub App installation tokens
 func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 		client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
@@ -204,7 +212,7 @@ func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 	}
 }
 
-// runGitHubRepoOperation lists repositories for the authenticated account.
+// runGitHubRepoOperation lists repositories for the authenticated account
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
@@ -246,12 +254,12 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}, nil
 }
 
-// fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support.
+// fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support
 func fetchGitHubResource(ctx context.Context, client *auth.AuthenticatedClient, token, path string, params url.Values, out any) error {
 	return fetchGitHubResourceWithBaseURL(ctx, client, token, githubAPIBaseURL, path, params, out)
 }
 
-// fetchGitHubResourceWithBaseURL retrieves GitHub REST API resources using a custom base URL.
+// fetchGitHubResourceWithBaseURL retrieves GitHub REST API resources using a custom base URL
 func fetchGitHubResourceWithBaseURL(ctx context.Context, client *auth.AuthenticatedClient, token, baseURL, path string, params url.Values, out any) error {
 	endpoint := strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(path, "/")
 	if params != nil {
