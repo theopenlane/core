@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Export holds the schema definition for export records used for exporting various content types.
@@ -123,13 +124,13 @@ func (e Export) Annotations() []schema.Annotation {
 func (e Export) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
+			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(
 			policy.AllowCreate(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,
-			policy.CheckOrgWriteAccess(),
+			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
 }

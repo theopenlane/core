@@ -150,7 +150,7 @@ const DefaultFormat enums.ExportFormat = "CSV"
 // FormatValidator is a validator for the "format" field enum values. It is called by the builders before save.
 func FormatValidator(f enums.ExportFormat) error {
 	switch f.String() {
-	case "CSV", "MarkDown", "DOCX", "PDF":
+	case "CSV", "MARKDOWN", "DOCX", "PDF":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for format field: %q", f)

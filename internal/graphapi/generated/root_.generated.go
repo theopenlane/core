@@ -78315,7 +78315,7 @@ ExportExportFormat is enum for the field format
 """
 enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enums.ExportFormat") {
   CSV
-  MarkDown
+  MARKDOWN
   DOCX
   PDF
 }
