@@ -34,6 +34,8 @@ type cacheKey struct {
 	orgID string
 	// provider identifies which provider issued the credential
 	provider types.ProviderType
+	// integrationID scopes cache entries to a specific installed integration when provided
+	integrationID string
 }
 
 // cachedCredential holds a credential payload and its expiry time
@@ -56,7 +58,7 @@ func NewBroker(store *Store, reg *registry.Registry) *Broker {
 
 // Get returns the latest credential payload for the given org/provider pair (using cache when valid)
 func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) {
-	if payload, ok := b.getCached(orgID, provider); ok {
+	if payload, ok := b.getCached(orgID, provider, ""); ok {
 		return payload, nil
 	}
 
@@ -65,7 +67,23 @@ func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderT
 		return types.CredentialPayload{}, err
 	}
 
-	b.setCached(orgID, provider, payload)
+	b.setCached(orgID, provider, "", payload)
+
+	return payload, nil
+}
+
+// GetForIntegration returns credentials scoped to a specific integration record.
+func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
+	if payload, ok := b.getCached(orgID, provider, integrationID); ok {
+		return payload, nil
+	}
+
+	payload, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
+
+	b.setCached(orgID, provider, integrationID, payload)
 
 	return payload, nil
 }
@@ -102,7 +120,45 @@ func (b *Broker) Mint(ctx context.Context, orgID string, provider types.Provider
 		return types.CredentialPayload{}, err
 	}
 
-	b.setCached(orgID, provider, persisted)
+	b.setCached(orgID, provider, "", persisted)
+
+	return persisted, nil
+}
+
+// MintForIntegration refreshes and persists credentials scoped to a specific integration record.
+func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
+	providerInstance, err := b.lookupProvider(provider)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
+
+	stored, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
+
+	subject := types.CredentialSubject{
+		Provider:      provider,
+		OrgID:         orgID,
+		IntegrationID: integrationID,
+		Credential:    stored,
+	}
+
+	minted, err := providerInstance.Mint(ctx, subject)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
+
+	if minted.Provider == types.ProviderUnknown {
+		minted.Provider = provider
+	}
+
+	persisted, err := b.store.SaveCredentialForIntegration(ctx, orgID, integrationID, minted)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
+
+	b.setCached(orgID, provider, integrationID, persisted)
 
 	return persisted, nil
 }
@@ -122,11 +178,11 @@ func (b *Broker) lookupProvider(provider types.ProviderType) (types.Provider, er
 }
 
 // getCached retrieves a cached credential if it exists and is not expired
-func (b *Broker) getCached(orgID string, provider types.ProviderType) (types.CredentialPayload, bool) {
+func (b *Broker) getCached(orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool) {
 	b.mu.RLock()
 	defer b.mu.RUnlock()
 
-	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider}]
+	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}]
 	if !ok {
 		return types.CredentialPayload{}, false
 	}
@@ -139,13 +195,13 @@ func (b *Broker) getCached(orgID string, provider types.ProviderType) (types.Cre
 }
 
 // setCached stores the credential payload in the cache with an expiry time
-func (b *Broker) setCached(orgID string, provider types.ProviderType, payload types.CredentialPayload) {
+func (b *Broker) setCached(orgID string, provider types.ProviderType, integrationID string, payload types.CredentialPayload) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
 	expiry := cacheExpiry(payload, b.now)
 
-	b.cache[cacheKey{orgID: orgID, provider: provider}] = cachedCredential{
+	b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}] = cachedCredential{
 		payload: payload,
 		expires: expiry,
 	}

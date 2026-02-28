@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/integrations/config"
@@ -11,7 +12,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 )
 
-// TestGitHubAppCredentialsFromPayload validates credential parsing and normalization.
+// TestGitHubAppCredentialsFromPayload validates credential parsing and normalization
 func TestGitHubAppCredentialsFromPayload(t *testing.T) {
 	payload := types.CredentialPayload{Provider: types.ProviderUnknown}
 	_, _, _, err := githubAppCredentialsFromPayload(payload)
@@ -40,7 +41,7 @@ func TestGitHubAppCredentialsFromPayload(t *testing.T) {
 	require.Equal(t, "line1\nline2", privateKey)
 }
 
-// TestAppBuilderClientDescriptors verifies GitHub App providers publish pooled REST and GraphQL clients.
+// TestAppBuilderClientDescriptors verifies GitHub App providers publish pooled REST and GraphQL clients
 func TestAppBuilderClientDescriptors(t *testing.T) {
 	spec := config.ProviderSpec{
 		Name:     string(TypeGitHubApp),
@@ -62,4 +63,24 @@ func TestAppBuilderClientDescriptors(t *testing.T) {
 	require.Len(t, descriptors, 2)
 	require.Equal(t, ClientGitHubAPI, descriptors[0].Name)
 	require.Equal(t, ClientGitHubGraphQL, descriptors[1].Name)
+}
+
+// TestAppBuilderOperationsIncludeVulnerabilityCollect verifies GitHub App providers expose vulnerability collection
+func TestAppBuilderOperationsIncludeVulnerabilityCollect(t *testing.T) {
+	spec := config.ProviderSpec{
+		Name:     string(TypeGitHubApp),
+		AuthType: types.AuthKindGitHubApp,
+	}
+
+	provider, err := AppBuilder().Build(context.Background(), spec)
+	require.NoError(t, err)
+	require.NotNil(t, provider)
+
+	operationProvider, ok := provider.(types.OperationProvider)
+	require.True(t, ok)
+
+	operations := operationProvider.Operations()
+	require.True(t, lo.ContainsBy(operations, func(op types.OperationDescriptor) bool {
+		return op.Name == githubOperationVulnCollect
+	}), "expected github app operations to include %q", githubOperationVulnCollect)
 }

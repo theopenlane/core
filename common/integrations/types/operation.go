@@ -25,6 +25,8 @@ const (
 const (
 	// OperationVulnerabilitiesCollect identifies the vulnerabilities collection operation.
 	OperationVulnerabilitiesCollect OperationName = "vulnerabilities.collect"
+	// OperationDirectorySync identifies the directory synchronization operation.
+	OperationDirectorySync OperationName = "directory.sync"
 )
 
 // OperationStatus communicates the result of an operation run
@@ -102,6 +104,8 @@ type OperationFunc func(ctx context.Context, input OperationInput) (OperationRes
 type OperationRequest struct {
 	// OrgID identifies the organization requesting the operation
 	OrgID string
+	// IntegrationID identifies a specific installed integration to use for credential lookup
+	IntegrationID string
 	// Provider identifies which provider to use
 	Provider ProviderType
 	// Name identifies which operation to execute

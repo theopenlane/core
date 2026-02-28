@@ -110,13 +110,16 @@ var githubVulnerabilityMappings = map[string]openapi.IntegrationMappingOverride{
 
 // defaultMappingSpec returns built-in mappings for supported providers
 func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
-	if normalizeMappingKey(schemaName) != normalizedVulnerabilitySchema {
-		return openapi.IntegrationMappingOverride{}, false
-	}
-
-	switch provider {
-	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
-		return githubMappingSpec(variant)
+	switch normalizeMappingKey(schemaName) {
+	case normalizedVulnerabilitySchema:
+		switch provider {
+		case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
+			return githubMappingSpec(variant)
+		default:
+			return openapi.IntegrationMappingOverride{}, false
+		}
+	case normalizedDirectoryAccountSchema:
+		return directoryAccountMappingSpec(provider, variant)
 	default:
 		return openapi.IntegrationMappingOverride{}, false
 	}
@@ -124,13 +127,17 @@ func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName strin
 
 // supportsDefaultMapping reports whether built-in mappings exist for a schema
 func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName string) bool {
-	if normalizeMappingKey(schemaName) != normalizedVulnerabilitySchema {
-		return false
-	}
-
-	switch provider {
-	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
-		return true
+	switch normalizeMappingKey(schemaName) {
+	case normalizedVulnerabilitySchema:
+		switch provider {
+		case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
+			return true
+		default:
+			return false
+		}
+	case normalizedDirectoryAccountSchema:
+		_, ok := directoryAccountMappingSpec(provider, "")
+		return ok
 	default:
 		return false
 	}
