@@ -6,12 +6,12 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"maps"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/samber/lo"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/common/integrations/auth"
@@ -154,7 +154,7 @@ func (p *appProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 	payload := types.NewCredentialBuilder(p.provider).With(
 		types.WithCredentialKind(types.CredentialKindOAuthToken),
 		types.WithCredentialSet(models.CredentialSet{
-			ProviderData: lo.Assign(map[string]any{}, subject.Credential.Data.ProviderData),
+			ProviderData: maps.Clone(subject.Credential.Data.ProviderData),
 		}),
 		types.WithOAuthToken(installToken),
 	)

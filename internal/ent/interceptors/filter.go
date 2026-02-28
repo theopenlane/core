@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // FilterListQuery filters any list query to only include the objects that the user has access to
@@ -292,7 +293,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 	// filter the results based on the allowed ids
 	// this must be done in the same order as the original list
 	// to maintain the order of the results
-	allowed := utils.SliceToMap(allowedIDs)
+	allowed := mapx.MapSetFromSlice(allowedIDs)
 
 	filteredResults := make([]*T, 0, len(allowedIDs))
 

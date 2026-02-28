@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
@@ -157,7 +158,7 @@ func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgMo
 		return false, nil, err
 	}
 
-	enabledSet := utils.SliceToMap(enabled)
+	enabledSet := mapx.MapSetFromSlice(enabled)
 
 	if requireAll {
 		// all features must be enabled

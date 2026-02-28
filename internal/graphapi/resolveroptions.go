@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/mapx"
 	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
@@ -43,10 +44,7 @@ func (r Resolver) WithDevelopment(dev bool) *Resolver {
 
 // WithAllowedOrigins sets the allowed origins for websocket connections
 func (r Resolver) WithAllowedOrigins(origins []string) *Resolver {
-	r.origins = make(map[string]struct{}, len(origins))
-	for _, o := range origins {
-		r.origins[o] = struct{}{}
-	}
+	r.origins = mapx.MapSetFromSlice(origins)
 
 	return &r
 }

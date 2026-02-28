@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // CheckCreateAccess checks if the user has access to create an object in the org
@@ -62,7 +63,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 
 		addedEdges := m.AddedEdges()
 
-		edgesToCheck := utils.GetIntersection(edges, addedEdges)
+		edgesToCheck := mapx.MapIntersectionUnique(edges, addedEdges)
 
 		if len(edgesToCheck) == 0 {
 			return privacy.Skipf("no parent permission edges, cannot authorize creation")

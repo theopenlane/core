@@ -86,49 +86,6 @@ func AuthzClient(ctx context.Context, m generated.Mutation) *fgax.Client {
 	return nil
 }
 
-// SliceToMap converts a slice of strings to a map for faster lookups
-func SliceToMap(s []string) map[string]any {
-	m := make(map[string]any)
-	for _, t := range s {
-		m[t] = struct{}{}
-	}
-
-	return m
-}
-
-// CheckContains checks if any of the elements in `e` are contained in `s`
-func CheckContains(s []string, e []string) bool {
-	m := SliceToMap(s)
-
-	for _, item := range e {
-		if _, exists := m[item]; exists {
-			return true
-		}
-	}
-
-	return false
-}
-
-// GetIntersection returns the results that are included in both slices
-// removing any duplicates
-func GetIntersection(s1 []string, s2 []string) []string {
-	m := SliceToMap(s1)
-
-	set := make(map[string]any)
-	intersection := make([]string, 0)
-
-	for _, item := range s2 {
-		if _, exists := m[item]; exists {
-			if _, seen := set[item]; !seen {
-				set[item] = struct{}{}
-				intersection = append(intersection, item)
-			}
-		}
-	}
-
-	return intersection
-}
-
 // ModulesEnabled checks if the modules feature is enabled for the given client
 func ModulesEnabled(client *generated.Client) bool {
 	if client == nil {

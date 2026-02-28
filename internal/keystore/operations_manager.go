@@ -7,8 +7,8 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // OperationManager executes provider-published operations using stored credentials and optional client pools
@@ -114,7 +114,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		Provider:   req.Provider,
 		Credential: payload,
 		Client:     client,
-		Config:     helpers.DeepCloneMap(req.Config),
+		Config:     mapx.DeepCloneMapAny(req.Config),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)
@@ -164,7 +164,7 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 		Provider:   req.Provider,
 		Credential: payload,
 		Client:     client,
-		Config:     helpers.DeepCloneMap(req.Config),
+		Config:     mapx.DeepCloneMapAny(req.Config),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)

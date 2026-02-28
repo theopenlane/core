@@ -2,6 +2,7 @@ package workflows
 
 import (
 	"context"
+	"maps"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // FindOrphanWorkflowInstanceIDs returns workflow instance IDs whose definitions are missing or soft-deleted.
@@ -76,7 +78,7 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 		return err
 	}
 
-	proposalIDSet := make(map[string]struct{})
+	proposalIDSet := map[string]struct{}{}
 	if len(objRefIDs) > 0 {
 		proposalIDs, err := client.WorkflowProposal.Query().
 			Where(workflowproposal.WorkflowObjectRefIDIn(objRefIDs...)).
@@ -86,11 +88,7 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 			return err
 		}
 
-		for _, proposalID := range proposalIDs {
-			if proposalID != "" {
-				proposalIDSet[proposalID] = struct{}{}
-			}
-		}
+		maps.Copy(proposalIDSet, mapx.MapSetFromSlice(proposalIDs))
 	}
 
 	proposalIDsFromInstances, err := client.WorkflowInstance.Query().
@@ -103,11 +101,8 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 	if err != nil {
 		return err
 	}
-	for _, proposalID := range proposalIDsFromInstances {
-		if proposalID != "" {
-			proposalIDSet[proposalID] = struct{}{}
-		}
-	}
+	maps.Copy(proposalIDSet, mapx.MapSetFromSlice(proposalIDsFromInstances))
+	delete(proposalIDSet, "")
 
 	if len(proposalIDSet) > 0 {
 		proposalIDs := make([]string, 0, len(proposalIDSet))
