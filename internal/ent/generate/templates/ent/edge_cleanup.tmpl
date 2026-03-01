@@ -10,8 +10,8 @@
 	{{/* For each schema */}}
 	{{- range $node := $.Nodes }}
 			{{/* create an EdgeCleanup function accepting an ID */}}
-			func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
-				ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")), entfga.DeleteTuplesFirstKey{})
+				func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
+					ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")))
 
 			   {{/* For each edge */}}
 			   {{- range $edge := $node.Edges }}
@@ -59,4 +59,3 @@
 			}
 	{{ end }}
 {{ end }}
-

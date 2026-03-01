@@ -25,39 +25,39 @@ var (
 	PreRelease VersionBump = "DRAFT"
 )
 
-// WithVersionBumpContext adds the VersionBump to the context
+var VersionBumpContextKey = contextx.NewKey[*VersionBump]()
+
+// WithVersionBumpContext stores the bump in ctx.
 func WithVersionBumpContext(ctx context.Context, v *VersionBump) context.Context {
-	return contextx.With(ctx, v)
+	return VersionBumpContextKey.Set(ctx, v)
 }
 
-// VersionBumpFromContext returns the VersionBump from the context
+// VersionBumpFromContext retrieves the bump from ctx.
 func VersionBumpFromContext(ctx context.Context) (*VersionBump, bool) {
-	return contextx.From[*VersionBump](ctx)
+	return VersionBumpContextKey.Get(ctx)
 }
 
-// WithVersionBumpContext adds the VersionBump to the context
+// WithVersionBumpRequestContext stores the bump inside the request context (if available).
 func WithVersionBumpRequestContext(ctx context.Context, v *VersionBump) {
-	ec, err := echocontext.EchoContextFromContext(ctx)
-	if err == nil {
-		ctx = WithVersionBumpContext(ctx, v)
-
-		ec.SetRequest(ec.Request().WithContext(ctx))
-	}
+	applyVersionBumpOnRequest(ctx, v)
 }
 
-// VersionBumpFromContext returns the VersionBump from the context
+// VersionBumpFromRequestContext returns the bump previously stored on the request context.
 func VersionBumpFromRequestContext(ctx context.Context) (*VersionBump, bool) {
+	if ec, err := echocontext.EchoContextFromContext(ctx); err == nil {
+		return VersionBumpFromContext(ec.Request().Context())
+	}
+
+	return VersionBumpFromContext(ctx)
+}
+
+func applyVersionBumpOnRequest(ctx context.Context, v *VersionBump) {
 	ec, err := echocontext.EchoContextFromContext(ctx)
 	if err != nil {
-		// try getting it from the context directly
-		if v, ok := VersionBumpFromContext(ctx); ok {
-			return v, true
-		}
-
-		return nil, false
+		return
 	}
 
-	return VersionBumpFromContext(ec.Request().Context())
+	ec.SetRequest(ec.Request().WithContext(WithVersionBumpContext(ec.Request().Context(), v)))
 }
 
 // String returns the role as a string

@@ -14,12 +14,12 @@ func wrapGeneratedFn[F csvgenerated.CSVLookupFn | csvgenerated.CSVCreateFn](fn F
 	return func(ctx context.Context, values []string) (map[string]string, error) {
 		client := withTransactionalMutation(ctx)
 
-		orgID, err := auth.GetOrganizationIDFromContext(ctx)
-		if err != nil {
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil || caller.OrganizationID == "" {
 			return nil, common.NewValidationError("organization id not found in context")
 		}
 
-		return (csvgenerated.CSVLookupFn)(fn)(ctx, client, orgID, values)
+		return (csvgenerated.CSVLookupFn)(fn)(ctx, client, caller.OrganizationID, values)
 	}
 }
 

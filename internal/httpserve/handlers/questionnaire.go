@@ -6,7 +6,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -28,24 +27,28 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 
 	reqCtx := ctx.Request().Context()
 
-	anonUser, ok := auth.AnonymousQuestionnaireUserFromContext(reqCtx)
+	assessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx)
 	if !ok {
 		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
 	}
 
-	assessmentID := anonUser.AssessmentID
 	if assessmentID == "" {
 		return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
 	}
 
-	email := anonUser.SubjectEmail
+	caller, callerOk := auth.CallerFromContext(reqCtx)
+	if !callerOk || caller == nil {
+		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
+	}
+
+	email := caller.SubjectEmail
 	if email == "" {
 		return h.BadRequest(ctx, ErrMissingEmail, openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
-	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+	allowCtx = auth.WithCaller(allowCtx, caller)
+	allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 
 	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
 		Where(
@@ -121,13 +124,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	reqCtx := ctx.Request().Context()
 
-	// check if the user is authenticated
-	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
 	var (
 		assessmentID string
 		email        string
@@ -135,15 +131,23 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	)
 
 	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
 
-	if anonUser, ok := auth.AnonymousQuestionnaireUserFromContext(reqCtx); ok {
-		assessmentID = anonUser.AssessmentID
-		email = anonUser.SubjectEmail
+	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
+		assessmentID = anonAssessmentID
 
-		allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
+		if callerOk && anonCaller != nil {
+			email = anonCaller.SubjectEmail
+			allowCtx = auth.WithCaller(allowCtx, anonCaller)
+		}
 
+		allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 	} else {
+		qCaller, qOk := auth.CallerFromContext(reqCtx)
+		if !qOk || qCaller == nil {
+			logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
 
 		// for regular/normal authenticated users, we expect the assessment id to be passed
 		// in the request by the client.
@@ -154,7 +158,15 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		}
 
 		assessmentID = req.AssessmentID
-		email = au.SubjectEmail
+		email = qCaller.SubjectEmail
+
+		// bypass org filter and FGA tuple creation for questionnaire submissions;
+		// DocumentData ownership is tracked via AssessmentResponse, not FGA tuples
+		allowCtx = auth.WithCaller(allowCtx, &auth.Caller{
+			OrganizationID: qCaller.OrganizationID,
+			SubjectID:      qCaller.SubjectID,
+			Capabilities:   auth.CapBypassFGA | auth.CapBypassOrgFilter,
+		})
 	}
 
 	if assessmentID == "" {

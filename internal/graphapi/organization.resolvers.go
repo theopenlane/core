@@ -27,7 +27,9 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 
 	// set the parent organization in the auth context, used when creating a sub-organization with a personal access token
 	if input.ParentID != nil {
-		if err := common.SetOrganizationInAuthContext(ctx, input.ParentID); err != nil {
+		var err error
+		ctx, err = common.SetOrganizationInAuthContext(ctx, input.ParentID)
+		if err != nil {
 			logx.FromContext(ctx).Error().Str("organization_id", *input.ParentID).Err(err).Msg("failed to set organization in auth context for parent organization")
 
 			return nil, common.NewNotFoundError("parent_id")
@@ -97,7 +99,8 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 
 // Organization is the resolver for the organization field.
 func (r *queryResolver) Organization(ctx context.Context, id string) (*generated.Organization, error) {
-	if err := common.SetOrganizationInAuthContext(ctx, &id); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, &id)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, common.NewNotFoundError("id")

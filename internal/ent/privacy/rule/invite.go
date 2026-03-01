@@ -26,9 +26,9 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			return privacy.Skipf("no owner set on request, cannot check access")
 		}
 
-		user, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			return err
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
 
 		relation, err := getRelationToCheck(ctx, m)
@@ -39,11 +39,11 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 		}
 
 		ac := fgax.AccessCheck{
-			SubjectID:   user.SubjectID,
-			SubjectType: auth.GetAuthzSubjectType(ctx),
+			SubjectID:   caller.SubjectID,
+			SubjectType: caller.SubjectType(),
 			ObjectID:    oID,
 			Relation:    relation,
-			Context:     utils.NewOrganizationContextKey(user.SubjectEmail),
+			Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 		}
 
 		logx.FromContext(ctx).Debug().Interface("tuple", ac).Msg("checking relationship tuples")
@@ -71,7 +71,12 @@ func getInviteOwnerID(ctx context.Context, m *generated.InviteMutation) (string,
 		return oID, nil
 	}
 
-	return auth.GetOrganizationIDFromContext(ctx)
+	caller, callerOk := auth.CallerFromContext(ctx)
+	if !callerOk || caller == nil {
+		return "", auth.ErrNoAuthUser
+	}
+
+	return caller.OrganizationID, nil
 }
 
 // getRelationToCheck returns the relation to check based on the role on the mutation

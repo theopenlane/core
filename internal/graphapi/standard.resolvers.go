@@ -20,7 +20,8 @@ import (
 // CreateStandard is the resolver for the createStandard field.
 func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload) (*model.StandardCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -44,7 +45,8 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

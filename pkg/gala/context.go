@@ -53,6 +53,8 @@ type contextFlagSet struct {
 	Flags map[ContextFlag]bool
 }
 
+var contextFlagSetContextKey = contextx.NewKey[contextFlagSet]()
+
 // NewContextManager creates a context manager and registers any initial codecs
 func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
 	manager := &ContextManager{codecs: map[ContextKey]ContextCodec{}}
@@ -189,9 +191,12 @@ func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) 
 // WithFlag sets a typed context flag
 func WithFlag(ctx context.Context, flag ContextFlag) context.Context {
 	flags := flagsFromContext(ctx)
+	if flags == nil {
+		flags = map[ContextFlag]bool{}
+	}
 	flags[flag] = true
 
-	return contextx.With(ctx, contextFlagSet{Flags: flags})
+	return contextFlagSetContextKey.Set(ctx, contextFlagSet{Flags: flags})
 }
 
 // HasFlag reports whether a typed context flag is set
@@ -203,10 +208,7 @@ func HasFlag(ctx context.Context, flag ContextFlag) bool {
 
 // flagsFromContext extracts the current context flags and clones the map
 func flagsFromContext(ctx context.Context) map[ContextFlag]bool {
-	existing := contextx.FromOr(ctx, contextFlagSet{})
-	if existing.Flags == nil {
-		return make(map[ContextFlag]bool)
-	}
+	existing := contextFlagSetContextKey.GetOr(ctx, contextFlagSet{})
 
 	return maps.Clone(existing.Flags)
 }

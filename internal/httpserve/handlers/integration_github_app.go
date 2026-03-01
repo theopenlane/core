@@ -57,9 +57,9 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	}
 
 	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(userCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	if h.IntegrationStore == nil {
@@ -70,7 +70,7 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	state, err := h.generateOAuthState(user.OrganizationID, string(github.TypeGitHubApp))
+	state, err := h.generateOAuthState(caller.OrganizationID, string(github.TypeGitHubApp))
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Msg("error generating github app state")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -82,11 +82,12 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.setOAuthCookies(ctx, cfg, map[string]string{
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
 		githubAppStateCookieName:  state,
-		githubAppOrgIDCookieName:  user.OrganizationID,
-		githubAppUserIDCookieName: user.SubjectID,
+		githubAppOrgIDCookieName:  caller.OrganizationID,
+		githubAppUserIDCookieName: caller.SubjectID,
 	})
+	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
 	out := openapi.GitHubAppInstallResponse{
 		Reply:      rout.Reply{Success: true},
@@ -161,12 +162,12 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	// Mirror integration_flow behavior: use cookie/state context to set the authenticated user.
-	auth.SetAuthenticatedUserContext(ctx, &auth.AuthenticatedUser{
+	ctx.SetRequest(ctx.Request().WithContext(auth.WithCaller(ctx.Request().Context(), &auth.Caller{
 		SubjectID:          userCookie.Value,
 		OrganizationID:     orgID,
 		OrganizationIDs:    []string{orgID},
 		AuthenticationType: auth.JWTAuthentication,
-	})
+	})))
 	reqCtx = ctx.Request().Context()
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -207,7 +208,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.clearGitHubAppCookies(ctx, cfg)
+	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
 
 	redirectURL := buildIntegrationRedirectURL(h.IntegrationGitHubApp.SuccessRedirectURL, github.TypeGitHubApp)
 	if redirectURL == "" {
@@ -215,15 +216,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	return h.Redirect(ctx, redirectURL, openapiCtx)
-}
-
-// clearGitHubAppCookies removes cookies used during GitHub App installation.
-func (h *Handler) clearGitHubAppCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	clearCookies(ctx.Response().Writer, cfg, []string{
-		githubAppStateCookieName,
-		githubAppOrgIDCookieName,
-		githubAppUserIDCookieName,
-	})
 }
 
 // validateGitHubAppConfig ensures required GitHub App settings are present.

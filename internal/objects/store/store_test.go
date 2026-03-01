@@ -46,7 +46,7 @@ func TestAddFilePermissionsAvatarMissingOrg(t *testing.T) {
 
 	_, err := AddFilePermissions(ctx)
 	assert.Error(t, err)
-	assert.ErrorIs(t, err, auth.ErrNoAuthUser)
+	assert.ErrorIs(t, err, ErrMissingOrganizationID)
 }
 
 func TestGetOrgOwnerIDWithUserType(t *testing.T) {
@@ -59,11 +59,11 @@ func TestGetOrgOwnerIDWithUserType(t *testing.T) {
 }
 
 func TestGetOrgOwnerIDUsesAuthContext(t *testing.T) {
-	user := &auth.AuthenticatedUser{
+	user := &auth.Caller{
 		OrganizationID: "01HYQZ5YTVJ0P2R2HF7N3W3MQZ",
 	}
 
-	ctx := auth.WithAuthenticatedUser(context.Background(), user)
+	ctx := auth.WithCaller(context.Background(), user)
 	orgID, err := getOrgOwnerID(ctx, pkgobjects.File{
 		CorrelatedObjectType: "program",
 	})

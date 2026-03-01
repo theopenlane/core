@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -94,7 +93,7 @@ func HookStandardDelete() ent.Hook {
 				return nil, ErrPublicStandardCannotBeDeleted
 			}
 
-			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
+			ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")))
 
 			// remove standard_id mapping from org owned controls
 			err = m.Client().Control.Update().ClearStandardID().

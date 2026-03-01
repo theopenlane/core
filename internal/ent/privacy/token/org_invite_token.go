@@ -2,8 +2,6 @@ package token
 
 import (
 	"context"
-
-	"github.com/theopenlane/utils/contextx"
 )
 
 // OrgInviteToken that implements the PrivacyToken interface
@@ -32,14 +30,16 @@ func (token *OrgInviteToken) SetToken(t string) {
 
 // NewContextWithOrgInviteToken returns a new context with the reset token inside
 func NewContextWithOrgInviteToken(parent context.Context, orgInviteToken string) context.Context {
-	return contextx.With(parent, &OrgInviteToken{
+	ctx := orgInviteTokenContextKey.Set(parent, &OrgInviteToken{
 		token: orgInviteToken,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // OrgInviteTokenFromContext parses a context for a reset token and returns the token
 func OrgInviteTokenFromContext(ctx context.Context) *OrgInviteToken {
-	token, ok := contextx.From[*OrgInviteToken](ctx)
+	token, ok := orgInviteTokenContextKey.Get(ctx)
 	if !ok {
 		return nil
 	}

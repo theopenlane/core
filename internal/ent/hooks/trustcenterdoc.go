@@ -18,8 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 )
 
-// internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
-type internalTrustCenterDocUpdateKey struct{}
+var internalTrustCenterDocUpdateContextKey = contextx.NewKey[struct{}]()
 
 // HookCreateTrustCenterDoc is an ent hook that processes file uploads and sets appropriate fields and permissions on create
 func HookCreateTrustCenterDoc() ent.Hook {
@@ -143,7 +142,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
 			// Skip hook logic if this is an internal operation from the create hook
-			if _, isInternal := contextx.From[internalTrustCenterDocUpdateKey](ctx); isInternal {
+			if _, isInternal := internalTrustCenterDocUpdateContextKey.Get(ctx); isInternal {
 				logx.FromContext(ctx).Debug().Msg("skipping update hook for internal operation")
 				return next.Mutate(ctx, m)
 			}
@@ -273,7 +272,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 					// Use privacy allow context for internal update operation to bypass authorization checks
 					// and mark as internal operation to avoid triggering the update hook logic
 					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-					internalCtx := contextx.With(allowCtx, internalTrustCenterDocUpdateKey{})
+					internalCtx := internalTrustCenterDocUpdateContextKey.Set(allowCtx, struct{}{})
 					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
 					if err != nil {
 						return nil, err

@@ -44,7 +44,7 @@ func (d SoftDeleteMixin) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 			// Skip soft-delete, means include soft-deleted entities.
-			if skip, _ := ctx.Value(entx.SoftDeleteSkipKey{}).(bool); skip {
+			if entx.CheckSkipSoftDelete(ctx) {
 				return nil
 			}
 
@@ -67,13 +67,13 @@ func (d SoftDeleteMixin) SoftDeleteHook(next ent.Mutator) ent.Mutator {
 	}
 
 	return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-		if skip, _ := ctx.Value(entx.SoftDeleteSkipKey{}).(bool); skip {
+		if entx.CheckSkipSoftDelete(ctx) {
 			return next.Mutate(ctx, m)
 		}
 
-		actor, err := auth.GetSubjectIDFromContext(ctx)
-		if err != nil {
-			actor = "unknown"
+		actor := "unknown"
+		if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
+			actor = caller.SubjectID
 		}
 
 		sd, ok := m.(SoftDelete)

@@ -24,26 +24,11 @@ func DefaultClientDescriptors(provider types.ProviderType, name types.ClientName
 	}
 }
 
-// OAuthClientBuilder returns a ClientBuilderFunc that extracts an OAuth token and creates an AuthenticatedClient.
-func OAuthClientBuilder(headers map[string]string) types.ClientBuilderFunc {
+// TokenClientBuilder returns a ClientBuilderFunc that extracts a token and creates an AuthenticatedClient.
+func TokenClientBuilder(extract TokenExtractor, headers map[string]string) types.ClientBuilderFunc {
 	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-		token, err := OAuthTokenFromPayload(payload)
-		if err != nil {
-			return nil, err
-		}
+		token, err := extract(payload)
 
-		return NewAuthenticatedClient(token, headers), nil
-	}
-}
-
-// APITokenClientBuilder returns a ClientBuilderFunc that extracts an API token and creates an AuthenticatedClient.
-func APITokenClientBuilder(headers map[string]string) types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
-		token, err := APITokenFromPayload(payload)
-		if err != nil {
-			return nil, err
-		}
-
-		return NewAuthenticatedClient(token, headers), nil
+		return NewAuthenticatedClient(token, headers), err
 	}
 }

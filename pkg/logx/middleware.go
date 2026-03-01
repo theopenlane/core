@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/utils/contextx"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
@@ -277,5 +276,5 @@ func storeDurableField(ctx context.Context, key string, value any) context.Conte
 
 	fields[key] = value
 
-	return contextx.With(ctx, fields)
+	return logFieldsContextKey.Set(ctx, fields)
 }

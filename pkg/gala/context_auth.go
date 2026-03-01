@@ -17,13 +17,13 @@ const (
 
 // DurableContextSnapshot captures context values that should persist across durable event processing
 type DurableContextSnapshot struct {
-	// Auth contains authenticated user context when present
+	// Auth contains caller context when present
 	Auth *AuthSnapshot `json:"auth,omitempty"`
 	// LogFields contains logger context fields for correlation and tracing
 	LogFields map[string]any `json:"log_fields,omitempty"`
 }
 
-// AuthSnapshot is a JSON-safe snapshot of authenticated user context values
+// AuthSnapshot is a JSON-safe snapshot of caller context values.
 type AuthSnapshot struct {
 	// SubjectID is the authenticated principal identifier
 	SubjectID string `json:"subject_id,omitempty"`
@@ -41,13 +41,28 @@ type AuthSnapshot struct {
 	AuthenticationType string `json:"authentication_type,omitempty"`
 	// OrganizationRole captures the caller role within the active organization
 	OrganizationRole string `json:"organization_role,omitempty"`
+	// ActiveSubscription reports whether the active organization has an active subscription
+	ActiveSubscription bool `json:"active_subscription,omitempty"`
+	// Capabilities is the full capability bitset carried by the caller.
+	Capabilities uint64 `json:"capabilities,omitempty"`
+	// Impersonation carries active impersonation metadata when present.
+	Impersonation *auth.ImpersonationContext `json:"impersonation,omitempty"`
+	// OriginalSystemAdmin preserves caller lineage when a system admin is acting
+	// as another user.
+	OriginalSystemAdmin *AuthSnapshot `json:"original_system_admin,omitempty"`
 	// IsSystemAdmin reports whether the caller has system-admin privileges
+	// and is kept for backward compatibility with older snapshots.
 	IsSystemAdmin bool `json:"is_system_admin,omitempty"`
 }
 
-// ToAuthenticatedUser converts a snapshot into an auth.AuthenticatedUser payload
-func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
-	return &auth.AuthenticatedUser{
+// toCaller converts a snapshot into an auth.Caller
+func (s AuthSnapshot) toCaller() *auth.Caller {
+	caps := auth.Capability(s.Capabilities)
+	if s.IsSystemAdmin {
+		caps |= auth.CapSystemAdmin
+	}
+
+	return &auth.Caller{
 		SubjectID:          s.SubjectID,
 		SubjectName:        s.SubjectName,
 		SubjectEmail:       s.SubjectEmail,
@@ -56,35 +71,66 @@ func (s AuthSnapshot) ToAuthenticatedUser() *auth.AuthenticatedUser {
 		OrganizationIDs:    append([]string(nil), s.OrganizationIDs...),
 		AuthenticationType: auth.AuthenticationType(s.AuthenticationType),
 		OrganizationRole:   auth.OrganizationRoleType(s.OrganizationRole),
-		IsSystemAdmin:      s.IsSystemAdmin,
+		ActiveSubscription: s.ActiveSubscription,
+		Capabilities:       caps,
+		Impersonation:      s.Impersonation,
+		OriginalSystemAdmin: func() *auth.Caller {
+			if s.OriginalSystemAdmin == nil {
+				return nil
+			}
+
+			return s.OriginalSystemAdmin.toCaller()
+		}(),
 	}
 }
 
-// authSnapshotFromUser converts an auth.AuthenticatedUser into a JSON-safe snapshot
-func authSnapshotFromUser(user *auth.AuthenticatedUser) *AuthSnapshot {
-	if user == nil {
+// authSnapshotFromCaller converts an auth.Caller into a JSON-safe snapshot
+func authSnapshotFromCaller(caller *auth.Caller) *AuthSnapshot {
+	if caller == nil {
 		return nil
 	}
 
 	return &AuthSnapshot{
-		SubjectID:          user.SubjectID,
-		SubjectName:        user.SubjectName,
-		SubjectEmail:       user.SubjectEmail,
-		OrganizationID:     user.OrganizationID,
-		OrganizationName:   user.OrganizationName,
-		OrganizationIDs:    append([]string(nil), user.OrganizationIDs...),
-		AuthenticationType: string(user.AuthenticationType),
-		OrganizationRole:   string(user.OrganizationRole),
-		IsSystemAdmin:      user.IsSystemAdmin,
+		SubjectID:          caller.SubjectID,
+		SubjectName:        caller.SubjectName,
+		SubjectEmail:       caller.SubjectEmail,
+		OrganizationID:     caller.OrganizationID,
+		OrganizationName:   caller.OrganizationName,
+		OrganizationIDs:    append([]string(nil), caller.OrgIDs()...),
+		AuthenticationType: string(caller.AuthenticationType),
+		OrganizationRole:   string(caller.OrganizationRole),
+		ActiveSubscription: caller.ActiveSubscription,
+		Capabilities:       uint64(caller.Capabilities),
+		Impersonation:      caller.Impersonation,
+		OriginalSystemAdmin: func() *AuthSnapshot {
+			if caller.OriginalSystemAdmin == nil {
+				return nil
+			}
+
+			return authSnapshotFromCaller(caller.OriginalSystemAdmin)
+		}(),
+		IsSystemAdmin: caller.Has(auth.CapSystemAdmin),
 	}
 }
 
 // DurableContextCodec captures and restores durable context values including auth and logger fields
-type DurableContextCodec struct{}
+type DurableContextCodec struct {
+	capture bool
+}
 
 // NewContextCodec creates a context codec for durable context capture
 func NewContextCodec() DurableContextCodec {
-	return DurableContextCodec{}
+	return DurableContextCodec{
+		capture: true,
+	}
+}
+
+// NewLegacyContextCodec creates a codec that restores old "durable" snapshots
+// but does not emit new "durable" payloads.
+func NewLegacyContextCodec() DurableContextCodec {
+	return DurableContextCodec{
+		capture: false,
+	}
 }
 
 // Key returns the stable snapshot key used by the context codec
@@ -93,13 +139,17 @@ func (DurableContextCodec) Key() ContextKey {
 }
 
 // Capture extracts durable context values and encodes them as JSON
-func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
+func (c DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
+	if !c.capture {
+		return nil, false, nil
+	}
+
 	snapshot := DurableContextSnapshot{}
 	hasData := false
 
 	// Capture auth context
-	if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && au != nil {
-		snapshot.Auth = authSnapshotFromUser(au)
+	if caller, callerOk := auth.CallerFromContext(ctx); callerOk && caller != nil {
+		snapshot.Auth = authSnapshotFromCaller(caller)
 		hasData = true
 	}
 
@@ -131,7 +181,7 @@ func (DurableContextCodec) Restore(ctx context.Context, raw json.RawMessage) (co
 
 	// Restore auth context
 	if snapshot.Auth != nil {
-		ctx = auth.WithAuthenticatedUser(ctx, snapshot.Auth.ToAuthenticatedUser())
+		ctx = auth.WithCaller(ctx, snapshot.Auth.toCaller())
 	}
 
 	// Restore logger with captured fields

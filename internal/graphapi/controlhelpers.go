@@ -166,7 +166,8 @@ func constructWherePredicatesFromStandardRefCodes[T predicate.Control | predicat
 	predicates := []T{}
 
 	// use to determine if we should filter by system owned controls
-	systemOwned := auth.IsSystemAdminFromContext(ctx)
+	caller, _ := auth.CallerFromContext(ctx)
+	systemOwned := caller != nil && caller.Has(auth.CapSystemAdmin)
 
 	for standardShortName, refCodes := range standardRefCodes {
 		switch any(*new(T)).(type) {

@@ -71,10 +71,8 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 	testOrg := (&OrganizationBuilder{client: suite.client, Features: features}).MustNew(userCtx, t)
 	testUser.OrganizationID = testOrg.ID
 
-	// setup user context with the org (and not the personal org)
-	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
-	// the user is always their own admin in their organization
-	auth.SetOrganizationRoleInContext(testUser.UserCtx, auth.OwnerRole)
+	// setup user context with the org; users who create an org are owners
+	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
 
 	// create a group under the organization
 	testGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -165,12 +163,10 @@ func (suite *GraphTestSuite) addUserToOrganization(ctx context.Context, t *testi
 
 	userDetails.OrganizationID = organizationID
 
-	// update the user context for the org member
-	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
-
-	if orgRole, ok := auth.ToOrganizationRoleType(role.String()); ok {
-		auth.SetOrganizationRoleInContext(userDetails.UserCtx, orgRole)
-	}
+	// update the user context for the org member; set the role so permission checks that read
+	// caller.OrganizationRole (instead of querying the DB) work correctly
+	orgRole, _ := auth.ToOrganizationRoleType(role.String())
+	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID, auth.WithOrganizationRole(orgRole))
 }
 
 func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.T) testUserDetails {
@@ -202,13 +198,13 @@ func resetContext(ctx context.Context, t *testing.T) context.Context {
 		return ctx
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	assert.NilError(t, err)
+	caller, callerOk := auth.CallerFromContext(ctx)
+	assert.Check(t, callerOk, "caller not found in context")
 
 	// ensure system admin context is kept in the new context
-	if au.IsSystemAdmin {
-		return auth.NewTestContextForSystemAdmin(au.SubjectID, au.OrganizationID)
+	if caller.Has(auth.CapSystemAdmin) {
+		return auth.NewTestContextForSystemAdmin(caller.SubjectID, caller.OrganizationID)
 	}
 
-	return auth.NewTestContextWithOrgID(au.SubjectID, au.OrganizationID)
+	return auth.NewTestContextWithOrgID(caller.SubjectID, caller.OrganizationID, auth.WithOrganizationRole(caller.OrganizationRole))
 }

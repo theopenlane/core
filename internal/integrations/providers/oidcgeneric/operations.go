@@ -25,7 +25,7 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 // runOIDCHealth builds a health check function for OIDC tokens
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client, token, err := auth.ClientAndOAuthToken(input)
+		client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 		if err != nil {
 			return types.OperationResult{}, err
 		}

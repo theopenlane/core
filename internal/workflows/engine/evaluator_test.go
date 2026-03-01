@@ -259,12 +259,12 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 
 	testCases := []struct {
 		name      string
-		authUser  *auth.AuthenticatedUser
+		caller    *auth.Caller
 		expectErr bool
 	}{
 		{
 			name: "jwt with selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          userID,
 				OrganizationID:     orgID,
 				OrganizationIDs:    []string{orgID},
@@ -273,7 +273,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name: "pat with selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          userID,
 				OrganizationID:     orgID,
 				OrganizationIDs:    []string{orgID},
@@ -282,7 +282,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name: "pat with single authorized organization and no selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          userID,
 				OrganizationIDs:    []string{orgID},
 				AuthenticationType: auth.PATAuthentication,
@@ -290,7 +290,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name: "pat with multiple authorized organizations and no selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          userID,
 				OrganizationIDs:    []string{orgID, otherOrgID},
 				AuthenticationType: auth.PATAuthentication,
@@ -299,7 +299,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name: "pat with empty authorized organizations and no selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          userID,
 				OrganizationIDs:    []string{},
 				AuthenticationType: auth.PATAuthentication,
@@ -308,7 +308,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name: "api token with selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          apiTokenSubjectID,
 				OrganizationID:     orgID,
 				OrganizationIDs:    []string{orgID},
@@ -317,7 +317,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name: "api token with single authorized organization and no selected organization",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				SubjectID:          apiTokenSubjectID,
 				OrganizationIDs:    []string{orgID},
 				AuthenticationType: auth.APITokenAuthentication,
@@ -325,7 +325,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		},
 		{
 			name:      "missing authenticated user",
-			authUser:  nil,
+			caller:    nil,
 			expectErr: true,
 		},
 	}
@@ -333,8 +333,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			ctx := context.Background()
-			if tc.authUser != nil {
-				ctx = auth.WithAuthenticatedUser(ctx, tc.authUser)
+			if tc.caller != nil {
+				ctx = auth.WithCaller(ctx, tc.caller)
 			}
 			ctx = generated.NewContext(ctx, s.client)
 

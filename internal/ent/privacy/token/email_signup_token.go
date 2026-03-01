@@ -2,8 +2,6 @@ package token
 
 import (
 	"context"
-
-	"github.com/theopenlane/utils/contextx"
 )
 
 // PrivacyToken interface
@@ -39,9 +37,11 @@ func (token *SignUpToken) SetEmail(email string) {
 // parent context and a sign-up token as parameters and returns a new context with
 // the sign-up token added
 func NewContextWithSignUpToken(parent context.Context, email string) context.Context {
-	return contextx.With(parent, &SignUpToken{
+	ctx := signUpTokenContextKey.Set(parent, &SignUpToken{
 		email: email,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // EmailSignUpTokenFromContext retrieves the value associated with the
@@ -49,7 +49,7 @@ func NewContextWithSignUpToken(parent context.Context, email string) context.Con
 // It then type asserts the value to an EmailSignUpToken and returns it. If the
 // value is not of type EmailSignUpToken, it returns nil
 func EmailSignUpTokenFromContext(ctx context.Context) *SignUpToken {
-	token, ok := contextx.From[*SignUpToken](ctx)
+	token, ok := signUpTokenContextKey.Get(ctx)
 	if !ok {
 		return nil
 	}

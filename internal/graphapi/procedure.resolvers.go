@@ -22,7 +22,8 @@ import (
 // CreateProcedure is the resolver for the createProcedure field.
 func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -47,7 +48,8 @@ func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureF
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, ownerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, ownerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -70,7 +72,8 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -94,7 +97,8 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
@@ -133,7 +137,8 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

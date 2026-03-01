@@ -27,9 +27,9 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 	trustCenterDocNotVisible := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityNotVisible}).MustNew(testUser1.UserCtx, t)
 
 	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
-	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
-		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
 		ObjectID:    trustCenter.ID,
 		ObjectType:  "trust_center",
@@ -189,9 +189,9 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 	// anonymous contexts
 	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
 	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
-	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
-		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
 		ObjectID:    trustCenter.ID,
 		ObjectType:  "trust_center",
@@ -556,9 +556,9 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 	trustCenterDoc1 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter1.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc2 := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(testUser2.UserCtx, t)
 	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID)
-	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
-		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
 		ObjectID:    trustCenter1.ID,
 		ObjectType:  "trust_center",
@@ -848,9 +848,9 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 	createPDFUpload := uploadFileFunc(t, pdfFilePath)
 
 	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
-	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
-		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
 		ObjectID:    trustCenter.ID,
 		ObjectType:  "trust_center",
@@ -1267,9 +1267,9 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 	}).MustNew(testUser2.UserCtx, t)
 
 	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter1.ID, testUser1.OrganizationID)
-	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	signedNDACaller, _ := auth.CallerFromContext(signedNdaAnonCtx)
 	req := fgax.TupleRequest{
-		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectID:   signedNDACaller.SubjectID,
 		SubjectType: "user",
 		ObjectID:    trustCenter1.ID,
 		ObjectType:  "trust_center",

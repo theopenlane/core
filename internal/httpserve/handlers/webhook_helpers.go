@@ -8,7 +8,6 @@ import (
 	"github.com/stripe/stripe-go/v84"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -71,7 +70,7 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 
 // upsertOrgProduct creates or updates an OrgProduct based on the Stripe product data
 func upsertOrgProduct(ctx context.Context, orgSub *ent.OrgSubscription, p *stripe.Product) (*ent.OrgProduct, error) {
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
 	tx := transaction.FromContext(ctx)
 
 	existing, err := tx.OrgProduct.Query().Where(orgproduct.StripeProductID(p.ID), orgproduct.SubscriptionID(orgSub.ID)).Only(allowCtx)
@@ -99,7 +98,7 @@ func upsertOrgProduct(ctx context.Context, orgSub *ent.OrgSubscription, p *strip
 
 // upsertOrgPrice creates or updates an OrgPrice based on the Stripe price data
 func upsertOrgPrice(ctx context.Context, orgSub *ent.OrgSubscription, prod *ent.OrgProduct, price *stripe.Price) (*ent.OrgPrice, error) {
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
 	tx := transaction.FromContext(ctx)
 
 	existing, err := tx.OrgPrice.Query().Where(orgprice.StripePriceID(price.ID), orgprice.SubscriptionID(orgSub.ID)).Only(allowCtx)
@@ -136,15 +135,15 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 		return nil, nil
 	}
 
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
 	tx := transaction.FromContext(ctx)
 
 	productMetadata := em.GetProductMetadata(ctx, item.Price.Product, client)
 	moduleKey := strings.TrimSpace(productMetadata["module"])
 
 	if moduleKey == models.CatalogTrustCenterModule.String() {
-		// use a fresh context to avoid inheriting the OrgSubscriptionContextKey bypass and others
-		newCtx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+		// use a fresh context to avoid inheriting the webhook caller bypass and others
+		newCtx := auth.WithCaller(context.Background(), &auth.Caller{
 			SubjectID:          orgSub.CreatedBy,
 			OrganizationID:     orgSub.OwnerID,
 			OrganizationIDs:    []string{orgSub.OwnerID},
@@ -166,7 +165,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	// include softdeleted modules in the query
 	// if the module was previously marked as deleted, bring it back
 	// instead of making a new record/row
-	queryCtx := context.WithValue(allowCtx, entx.SoftDeleteSkipKey{}, true)
+	queryCtx := entx.SkipSoftDelete(allowCtx)
 
 	existing, err := tx.OrgModule.Query().Where(
 		orgmodule.And(
@@ -205,7 +204,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 // reconcileModules makes sure to match the modules accessible to the org
 // with what is in stripe
 func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentModules []models.OrgModule) error {
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
 	tx := transaction.FromContext(ctx)
 
 	_, err := tx.OrgModule.Delete().Where(
@@ -226,7 +225,7 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 		return err
 	}
 
-	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
 	tx := transaction.FromContext(ctx)
 
 	_, err = tx.OrgModule.Delete().Where(

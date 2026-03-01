@@ -13,18 +13,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // TraverseStandard only returns public standards and standards owned by the organization
 func TraverseStandard() ent.Interceptor {
 	return intercept.TraverseStandard(func(ctx context.Context, q *generated.StandardQuery) error {
-		anon, isAnon := auth.AnonymousTrustCenterUserFromContext(ctx)
-		if isAnon {
+		caller, ok := auth.CallerFromContext(ctx)
+		if ok && caller != nil && caller.IsAnonymous() {
 			q.Where(
 				standard.HasTrustCenterCompliancesWith(
 					trustcentercompliance.HasTrustCenterWith(
-						trustcenter.OwnerID(anon.OrganizationID),
+						trustcenter.OwnerID(caller.OrganizationID),
 					),
 				),
 			)
@@ -32,22 +31,18 @@ func TraverseStandard() ent.Interceptor {
 			return nil
 		}
 
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			return err
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
 		}
+
+		orgIDs := caller.OrgIDs()
 
 		systemStandardPredicates := []predicate.Standard{
 			standard.OwnerIDIsNil(),
 			standard.SystemOwned(true),
 		}
 
-		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return err
-		}
-
-		if !admin {
+		if !auth.IsSystemAdminFromContext(ctx) {
 			// if the user is a not-system admin, restrict to only public standards
 			systemStandardPredicates = append(systemStandardPredicates, standard.IsPublic(true))
 		}

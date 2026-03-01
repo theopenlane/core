@@ -7,10 +7,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -203,10 +201,16 @@ func skipUserParentTupleFunc(_ context.Context, m ent.Mutation) bool {
 
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
 func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
-	// if the context has the organization creation context key, skip the hook
-	// because we don't want the owner to be based on the current organization
-	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+	caller, ok := auth.CallerFromContext(ctx)
+	// skip setting owner if this is a service-level internal operation (e.g. org creation, subscription management)
+	// CapBypassFGA distinguishes real service callers from test internal contexts created by
+	// rule.WithInternalContext, which adds CapInternalOperation but not CapBypassFGA
+	if ok && caller != nil && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
 		return nil
+	}
+
+	if !ok || caller == nil {
+		return fmt.Errorf("failed to get organization id from context: %w", auth.ErrNoAuthUser)
 	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
@@ -223,10 +227,8 @@ func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) e
 }
 
 // addOrganizationOwnerEditorRelation adds the organization owner as an editor to the object
-func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
-	var orgID string
-
-	orgID, err = auth.GetOrganizationIDFromContext(ctx)
+func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id string) error {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
@@ -252,10 +254,8 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 // addOrganizationOwnerParentRelation adds the organization as a parent to the object
 // This is used for service-only objects where users can view through org membership
 // but cannot edit (unlike addOrganizationOwnerEditorRelation which grants editor access)
-func addOrganizationOwnerParentRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
-	var orgID string
-
-	orgID, err = auth.GetOrganizationIDFromContext(ctx)
+func addOrganizationOwnerParentRelation(ctx context.Context, m ent.Mutation, id string) error {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get organization id from context: %w", err)
 	}
@@ -291,14 +291,15 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		anon, hasAnonUser := auth.AnonymousTrustCenterUserFromContext(ctx)
+		tcID, hasAnonTCUser := auth.ActiveTrustCenterIDKey.Get(ctx)
 
-		if o.AllowAnonymousTrustCenterAccess && hasAnonUser {
-			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
-				o.PWithField(q, ownerFieldName, []string{anon.OrganizationID})
+		if o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
+			caller, callerOk := auth.CallerFromContext(ctx)
+			if callerOk && caller != nil && tcID != "" && caller.OrganizationID != "" {
+				o.PWithField(q, ownerFieldName, []string{caller.OrganizationID})
 				return nil
 			}
-		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonUser {
+		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonTCUser {
 			return privacy.Denyf("anonymous trust center access not allowed")
 		}
 
@@ -320,80 +321,14 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 }
 
 // orgInterceptorSkipper skips the organization interceptor based on the context
-// and query type
-// if soft deletes are bypassed; so is the interceptor - the user will no longer have access to the organization and
-// filters will skip the organization
-// if the context has a privacy token type, the interceptor is skipped
-// if the context has the managed group key, the interceptor is skipped
-// if the query is for a token and explicitly allowed, the interceptor is skipped
-// if the context has an internal request key, the interceptor is skipped
-// if the user is a system admin and AllowEmptyForSystemAdmin is true, the interceptor is skipped
+// and query type. Callers with CapBypassOrgFilter skip the interceptor.
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
-	// allow for tests and internal requests to skip the interceptor
-	if rule.IsInternalRequest(ctx) {
-		return true
-	}
-
-	allow, err := rule.CheckIsSystemAdminWithContext(ctx)
-	if err == nil && allow {
-		return true
-	}
-
-	if entx.CheckSkipSoftDelete(ctx) {
-		return true
-	}
-
-	// skip the interceptor if the context has the token type
-	// this is useful for tokens, where the user is not yet authenticated to
-	// a particular organization yet
-	if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
-		return true
-	}
-
-	// Allow the interceptor to skip the query if the context has an allow
-	// bypass and its for a token
-	// these are queried during the auth flow and should not be filtered
-	if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypePersonalAccessToken {
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return true
-		}
-	}
-
-	// skip the interceptor if the context has the organization creation context key
-	// the events need to query the subscription for updates
-	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
-		return true
-	}
-
-	// skip the interceptor if the context has the acme solver context key
-	if _, acmeSolver := contextx.From[auth.AcmeSolverContextKey](ctx); acmeSolver {
-		return true
-	}
-
-	if _, trustCenterAnonAuth := contextx.From[auth.TrustCenterContextKey](ctx); trustCenterAnonAuth {
-		// Keep anonymous trust center template queries scoped by owner/trust center context
-		// instead of bypassing org filtering entirely.
-		if q.Type() == generated.TypeTemplate {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
+		// anonymous callers (trust center, questionnaire) still scope template queries by org
+		if caller.OrganizationRole == auth.AnonymousRole && q.Type() == generated.TypeTemplate {
 			return false
 		}
 
-		return true
-	}
-
-	if _, trustCenterNda := contextx.From[auth.TrustCenterNDAContextKey](ctx); trustCenterNda {
-		return true
-	}
-
-	if _, questionnaireAnonAuth := contextx.From[auth.QuestionnaireContextKey](ctx); questionnaireAnonAuth {
-		return true
-	}
-
-	// skip interceptor if the context has the managed group key
-	if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
-		return true
-	}
-
-	if _, keystore := contextx.From[auth.KeyStoreContextKey](ctx); keystore {
 		return true
 	}
 
@@ -410,14 +345,10 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context) (bool, error) {
 		return true, nil
 	}
 
-	// skip the interceptor if the context has the organization creation context key
-	// the events need to query for objects such as api tokens, which are org owned
-	if _, orgSubscription := contextx.From[auth.OrgSubscriptionContextKey](ctx); orgSubscription {
-		return true, nil
-	}
-
-	// skip the interceptor if the context has the acme solver context key
-	if _, acmeSolver := contextx.From[auth.AcmeSolverContextKey](ctx); acmeSolver {
+	// skip the hook for internal operations (subscription management, acme solver, keystore, etc.)
+	// CapBypassFGA distinguishes real service callers from test internal contexts created by
+	// rule.WithInternalContext, which adds CapBypassOrgFilter|CapInternalOperation but not CapBypassFGA
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapBypassFGA) {
 		return true, nil
 	}
 

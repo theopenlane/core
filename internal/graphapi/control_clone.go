@@ -125,12 +125,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// track subcontrols to create
 	subcontrolsToCreate := []subcontrolToCreate{}
 
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil || ac.OrganizationID == "" {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	orgID := ac.OrganizationID
+	orgID := caller.OrganizationID
 
 	if r.db.EntConfig != nil && r.db.EntConfig.Modules.Enabled {
 		// check if the organization has the required modules for Control entities before the parallel execution
@@ -141,7 +141,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 
 		if !hasModules {
-			logger.Error().Str("organization_id", ac.OrganizationID).Msg("organization does not have required modules enabled for control operations")
+			logger.Error().Str("organization_id", caller.OrganizationID).Msg("organization does not have required modules enabled for control operations")
 
 			return nil, generated.ErrPermissionDenied
 		}
@@ -222,15 +222,15 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			ObjectType:  generated.TypeProgram,
 			ObjectID:    *programID,
 			Relation:    fgax.CanEdit,
-			SubjectID:   ac.SubjectID,
-			SubjectType: auth.GetAuthzSubjectType(ctx),
+			SubjectID:   caller.SubjectID,
+			SubjectType: caller.SubjectType(),
 		})
 		if err != nil {
 			return nil, err
 		}
 
 		if !allow {
-			logger.Error().Str("organization_id", ac.OrganizationID).Str("user_id", ac.SubjectID).Msg("no access to edit specified program")
+			logger.Error().Str("organization_id", caller.OrganizationID).Str("user_id", caller.SubjectID).Msg("no access to edit specified program")
 
 			return nil, generated.ErrPermissionDenied
 		}

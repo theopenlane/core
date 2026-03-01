@@ -28,7 +28,8 @@ import (
 func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error) {
 	logger := logx.FromContext(ctx)
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
+	if err != nil {
 		logger.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")

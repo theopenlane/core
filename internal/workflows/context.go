@@ -16,14 +16,21 @@ type skipEventEmissionFlag struct {
 	skip bool
 }
 
-// WithContext sets the workflow bypass context
-// Operations with this context will skip workflow approval interceptors
+var skipEventEmissionFlagContextKey = contextx.NewKey[*skipEventEmissionFlag]()
+
+// WithContext sets the workflow bypass flag in the context.
+// Operations with this context will skip workflow approval interceptors.
 func WithContext(ctx context.Context) context.Context {
 	return gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
 
-// IsWorkflowBypass checks if the context has workflow bypass enabled
-// Used by workflow interceptors to skip approval routing for system operations
+// FromContext reports whether the workflow bypass flag is set in the context.
+func FromContext(ctx context.Context) bool {
+	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
+}
+
+// IsWorkflowBypass checks if the context has workflow bypass enabled.
+// Used by workflow interceptors to skip approval routing for system operations.
 func IsWorkflowBypass(ctx context.Context) bool {
 	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
 }
@@ -31,10 +38,6 @@ func IsWorkflowBypass(ctx context.Context) bool {
 // WithAllowWorkflowEventEmission marks the context to allow workflow event emission even when bypass is set.
 func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
 	if ctx == nil {
-		return ctx
-	}
-
-	if gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission) {
 		return ctx
 	}
 
@@ -57,11 +60,11 @@ func WithSkipEventEmission(ctx context.Context) context.Context {
 		return ctx
 	}
 
-	if existing, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && existing != nil {
+	if existing, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && existing != nil {
 		return ctx
 	}
 
-	return contextx.With(ctx, &skipEventEmissionFlag{})
+	return skipEventEmissionFlagContextKey.Set(ctx, &skipEventEmissionFlag{})
 }
 
 // MarkSkipEventEmission marks the context to skip emitting mutation events.
@@ -69,7 +72,7 @@ func MarkSkipEventEmission(ctx context.Context) {
 	if ctx == nil {
 		return
 	}
-	if flag, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && flag != nil {
+	if flag, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && flag != nil {
 		flag.skip = true
 	}
 }
@@ -80,7 +83,7 @@ func ShouldSkipEventEmission(ctx context.Context) bool {
 		return false
 	}
 
-	if flag, ok := contextx.From[*skipEventEmissionFlag](ctx); ok && flag != nil {
+	if flag, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && flag != nil {
 		return flag.skip
 	}
 
@@ -120,14 +123,15 @@ func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, str
 		allowCtx = WithContext(allowCtx)
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		// PAT-authenticated requests can legitimately carry only OrganizationIDs (no selected OrganizationID)
-		// until an org context header is provided. For single-org tokens, default to that sole org.
-		if orgIDs, orgIDsErr := auth.GetOrganizationIDsFromContext(ctx); orgIDsErr == nil && len(orgIDs) == 1 && orgIDs[0] != "" {
-			return allowCtx, orgIDs[0], nil
-		}
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return allowCtx, "", auth.ErrNoAuthUser
 	}
 
-	return allowCtx, orgID, err
+	orgID, ok := caller.ActiveOrg()
+	if !ok {
+		return allowCtx, "", auth.ErrNoAuthUser
+	}
+
+	return allowCtx, orgID, nil
 }

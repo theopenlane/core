@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -34,34 +33,6 @@ var (
 	oauthUserIDCookieName = "oauth_user_id"
 )
 
-func (h *Handler) setOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig, values map[string]string) {
-	writer := ctx.Response().Writer
-	for name, value := range values {
-		if value == "" {
-			continue
-
-		}
-
-		sessions.SetCookie(writer, value, name, cfg)
-	}
-
-	if accessCookie, err := sessions.GetCookie(ctx.Request(), auth.AccessTokenCookie); err == nil {
-		sessions.SetCookie(writer, accessCookie.Value, auth.AccessTokenCookie, cfg)
-	}
-
-	if refreshCookie, err := sessions.GetCookie(ctx.Request(), auth.RefreshTokenCookie); err == nil {
-		sessions.SetCookie(writer, refreshCookie.Value, auth.RefreshTokenCookie, cfg)
-	}
-}
-
-func (h *Handler) clearOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig) {
-	clearCookies(ctx.Response().Writer, cfg, []string{
-		oauthStateCookieName,
-		oauthOrgIDCookieName,
-		oauthUserIDCookieName,
-	})
-}
-
 // StartOAuthFlow initiates the OAuth flow for a third-party integration.
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleOAuthFlowRequest, openapi.ExampleOAuthFlowResponse, openapiCtx.Registry)
@@ -70,9 +41,9 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	}
 
 	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(userCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	providerType, err := parseProviderType(in.Provider)
@@ -80,8 +51,8 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	spec, ok := h.IntegrationRegistry.Config(providerType)
-	if !ok {
+	spec, specOk := h.IntegrationRegistry.Config(providerType)
+	if !specOk {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
@@ -97,7 +68,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
 	}
 
-	state, err := h.generateOAuthState(user.OrganizationID, string(providerType))
+	state, err := h.generateOAuthState(caller.OrganizationID, string(providerType))
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Msg("error generating oauth state")
 
@@ -107,7 +78,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	scopes := mergeScopes(spec, in.Scopes)
 
 	begin, err := h.IntegrationActivation.BeginOAuth(userCtx, activation.BeginOAuthRequest{
-		OrgID:    user.OrganizationID,
+		OrgID:    caller.OrganizationID,
 		Provider: providerType,
 		Scopes:   scopes,
 		State:    state,
@@ -118,11 +89,12 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.setOAuthCookies(ctx, cfg, map[string]string{
-		oauthOrgIDCookieName:  user.OrganizationID,
-		oauthUserIDCookieName: user.SubjectID,
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
+		oauthOrgIDCookieName:  caller.OrganizationID,
+		oauthUserIDCookieName: caller.SubjectID,
 		oauthStateCookieName:  begin.State,
 	})
+	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
 	out := openapi.OAuthFlowResponse{
 		Reply:   rout.Reply{Success: true},
@@ -173,18 +145,18 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}
 
-	user, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	callbackCaller, callbackOk := auth.CallerFromContext(reqCtx)
+	if !callbackOk || callbackCaller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	if user.OrganizationID != orgCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("cookieOrgID", orgCookie.Value).Str("userOrgID", user.OrganizationID).Msg("oauth organization cookie mismatch")
+	if callbackCaller.OrganizationID != orgCookie.Value {
+		logx.FromContext(reqCtx).Error().Str("cookieOrgID", orgCookie.Value).Str("userOrgID", callbackCaller.OrganizationID).Msg("oauth organization cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
-	if user.SubjectID != userCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("cookieUserID", userCookie.Value).Str("userID", user.SubjectID).Msg("oauth user cookie mismatch")
+	if callbackCaller.SubjectID != userCookie.Value {
+		logx.FromContext(reqCtx).Error().Str("cookieUserID", userCookie.Value).Str("userID", callbackCaller.SubjectID).Msg("oauth user cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
@@ -218,7 +190,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.clearOAuthCookies(ctx, cfg)
+	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
 	redirectURL := buildIntegrationRedirectURL(h.IntegrationOauthProvider.SuccessRedirectURL, result.Provider)
 	if redirectURL == "" {
@@ -230,12 +202,14 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 // generateOAuthState creates a secure state parameter containing org ID and provider.
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
-	const stateRandomBytesLength = 16
-
-	randomBytes := make([]byte, stateRandomBytesLength)
-
-	if _, err := rand.Read(randomBytes); err != nil {
+	randomPart, err := auth.GenerateOAuthState(16)
+	if err != nil {
 		return "", err
+	}
+
+	randomBytes, err := base64.RawURLEncoding.DecodeString(randomPart)
+	if err != nil {
+		return "", ErrInvalidStateFormat
 	}
 
 	stateData := buildStatePayload(orgID, provider, randomBytes)
@@ -318,12 +292,12 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	}
 
 	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	refreshCaller, refreshOk := auth.CallerFromContext(userCtx)
+	if !refreshOk || refreshCaller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	tokenData, err := h.RefreshIntegrationToken(userCtx, user.OrganizationID, in.Provider)
+	tokenData, err := h.RefreshIntegrationToken(userCtx, refreshCaller.OrganizationID, in.Provider)
 	if err != nil {
 		switch {
 		case errors.Is(err, keystore.ErrCredentialNotFound):

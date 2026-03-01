@@ -11,14 +11,14 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
-// websocketConnectionTrackerKey will be used to track when the webhook connection was opened
-type websocketConnectionTrackerKey struct{}
+var websocketConnectionTrackerContextKey = contextx.NewKey[time.Time]()
 
 // CreateWebsocketClient creates a websocket transport with the appropriate settings
 func (r *Resolver) CreateWebsocketClient() transport.Websocket {
@@ -28,7 +28,7 @@ func (r *Resolver) CreateWebsocketClient() transport.Websocket {
 		InitFunc:              r.webSocketInit,
 		Upgrader:              r.upgraderFunc(),
 		CloseFunc: func(ctx context.Context, _ int) {
-			t, ok := ctx.Value(websocketConnectionTrackerKey{}).(time.Time)
+			t, ok := websocketConnectionTrackerContextKey.Get(ctx)
 			if !ok {
 				return
 			}
@@ -45,12 +45,12 @@ func (r *Resolver) createSSEClient() transport.SSE {
 	}
 }
 
-// webSocketInit handles the websocket init payload for authentication and returns the context with the authenticated user
+// webSocketInit handles the websocket init payload for authentication and returns the context with the authenticated caller
 func (r *Resolver) webSocketInit(
 	ctx context.Context,
 	initPayload transport.InitPayload,
 ) (context.Context, *transport.InitPayload, error) {
-	au, err := authmw.AuthenticateTransport(
+	caller, err := authmw.AuthenticateTransport(
 		ctx,
 		initPayload,
 		r.authOptions,
@@ -61,10 +61,10 @@ func (r *Resolver) webSocketInit(
 		return ctx, nil, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("user_id", au.SubjectID).Msg("websocket connection authenticated")
+	logx.FromContext(ctx).Debug().Str("user_id", caller.SubjectID).Msg("websocket connection authenticated")
 
-	ctx = auth.WithAuthenticatedUser(ctx, au)
-	ctx = context.WithValue(ctx, websocketConnectionTrackerKey{}, time.Now())
+	ctx = auth.WithCaller(ctx, caller)
+	ctx = websocketConnectionTrackerContextKey.Set(ctx, time.Now())
 
 	metrics.RecordSubscriptionOpened()
 

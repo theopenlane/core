@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
@@ -70,7 +70,7 @@ var HiddenDirectiveAnnotation = entgql.Directives(
 // if the user is a system admin, the field will be returned
 // otherwise, the field will be returned as nil
 var HiddenDirective = func(ctx context.Context, _ any, next graphql.Resolver, isHidden *bool) (any, error) {
-	if admin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && admin {
+	if auth.IsSystemAdminFromContext(ctx) {
 		// if the user is a system admin, always return the field
 		return next(ctx)
 	}
@@ -104,7 +104,7 @@ var ReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Resolver) 
 	}
 
 	// check if the user is a system admin, if so allow the mutation
-	if admin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && admin {
+	if auth.IsSystemAdminFromContext(ctx) {
 		// if the user is a system admin, always return the field
 		return next(ctx)
 	}
@@ -132,7 +132,7 @@ var ExternalReadOnlyDirectiveAnnotation = entgql.Directives(
 // ExternalReadOnlyDirective is the implementation for the external read only directive that can be used to indicate a field cannot be set by users for objects that are system-owned because it is populated by an external source
 // only system admins can change this field on system-owned objects, on objects that are not system-owned, the field can be set by anyone with permission to update the object
 var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Resolver, source *enums.ControlSource) (any, error) {
-	if admin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && admin {
+	if auth.IsSystemAdminFromContext(ctx) {
 		// if the user is a system admin, always return the field
 		return next(ctx)
 	}

@@ -29,16 +29,17 @@ func InterceptorUserSetting() ent.Interceptor {
 			return nil
 		}
 
+		caller, ok := auth.CallerFromContext(ctx)
+
 		switch qCtx.Type {
 		// if we are looking at a user in the context of an organization or group
 		// filter for just those users
 		case "OrgMembership", "GroupMembership":
-			orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-			if err == nil {
+			if ok && caller != nil {
 				q.Where(usersetting.HasUserWith(
 					user.HasOrgMembershipsWith(
 						orgmembership.HasOrganizationWith(
-							organization.IDIn(orgIDs...),
+							organization.IDIn(caller.OrgIDs()...),
 						),
 					)),
 				)
@@ -47,9 +48,8 @@ func InterceptorUserSetting() ent.Interceptor {
 			}
 		default:
 			// if we are looking at self
-			userID, err := auth.GetSubjectIDFromContext(ctx)
-			if err == nil {
-				q.Where(usersetting.UserID(userID))
+			if ok && caller != nil && caller.SubjectID != "" {
+				q.Where(usersetting.UserID(caller.SubjectID))
 
 				return nil
 			}

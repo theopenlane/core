@@ -23,8 +23,8 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 
 	userCtx := ctx.Request().Context()
 
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
+	caller, ok := auth.CallerFromContext(userCtx)
+	if !ok || caller == nil {
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
@@ -42,7 +42,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 	if integrationID == "" {
 		record, err := h.DBClient.Integration.Query().
 			Where(
-				integration.OwnerID(user.OrganizationID),
+				integration.OwnerID(caller.OrganizationID),
 				integration.Kind(string(providerType)),
 			).
 			Only(userCtx)
@@ -55,7 +55,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		integrationID = record.ID
 	}
 
-	deletedProvider, deletedID, err := h.IntegrationStore.DeleteIntegration(userCtx, user.OrganizationID, integrationID)
+	deletedProvider, deletedID, err := h.IntegrationStore.DeleteIntegration(userCtx, caller.OrganizationID, integrationID)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):

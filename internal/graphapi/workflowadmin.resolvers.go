@@ -122,7 +122,8 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 	}
 
 	if assignment.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &assignment.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &assignment.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}

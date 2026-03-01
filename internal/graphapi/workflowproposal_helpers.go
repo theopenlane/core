@@ -21,12 +21,16 @@ func (r *Resolver) requireWorkflowObjectEditAccess(ctx context.Context, objectTy
 		return fmt.Errorf("%w: missing workflow object context", rout.ErrBadRequest)
 	}
 
-	if auth.IsSystemAdminFromContext(ctx) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return rout.ErrPermissionDenied
+	}
+
+	if caller.Has(auth.CapSystemAdmin) {
 		return nil
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	if caller.SubjectID == "" {
 		return rout.ErrPermissionDenied
 	}
 
@@ -34,8 +38,8 @@ func (r *Resolver) requireWorkflowObjectEditAccess(ctx context.Context, objectTy
 		ObjectType:  fgax.Kind(strcase.SnakeCase(objectType.String())),
 		ObjectID:    objectID,
 		Relation:    fgax.CanEdit,
-		SubjectID:   userID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
 	})
 	if err != nil {
 		return err

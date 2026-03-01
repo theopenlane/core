@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 )
 
 type fakeProvider struct {
@@ -97,17 +96,17 @@ func TestServiceBuildResolutionContextAppliesHints(t *testing.T) {
 
 	ctx = svc.buildResolutionContext(ctx, opts)
 
-	if pref, ok := contextx.From[PreferredProviderHint](ctx); !ok || storagetypes.ProviderType(pref) != storage.S3Provider {
+	if pref, ok := PreferredProviderHintFromContext(ctx); !ok || storagetypes.ProviderType(pref) != storage.S3Provider {
 		t.Fatal("expected preferred provider hint to be applied to context")
 	}
-	if size, ok := contextx.From[SizeBytesHint](ctx); !ok || int64(size) != 1024 {
+	if size, ok := SizeBytesHintFromContext(ctx); !ok || int64(size) != 1024 {
 		t.Fatalf("expected size hint to be applied")
 	}
 }
 
 func TestServiceResolveUploadProviderSuccess(t *testing.T) {
 	orgID := ulid.Make().String()
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
 		SubjectID:          ulid.Make().String(),
 		OrganizationID:     orgID,
 		AuthenticationType: auth.APITokenAuthentication,

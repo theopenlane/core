@@ -284,11 +284,11 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 
 	orgID := instance.OwnerID
 	if orgID == "" {
-		ownerID, err := auth.GetOrganizationIDFromContext(ctx)
-		if err != nil {
+		integCaller, integOk := auth.CallerFromContext(ctx)
+		if !integOk || integCaller == nil || integCaller.OrganizationID == "" {
 			return ErrIntegrationOwnerRequired
 		}
-		orgID = ownerID
+		orgID = integCaller.OrganizationID
 	}
 
 	meta := &IntegrationWorkflowMeta{

@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -31,7 +30,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
-	ctx = contextx.With(ctx, auth.AcmeSolverContextKey{})
+	ctx = auth.WithCaller(ctx, auth.NewAcmeSolverCaller(""))
 
 	// Test data
 	testPath := gofakeit.UUID()

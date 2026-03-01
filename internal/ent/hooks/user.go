@@ -385,7 +385,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 	}
 
 	for _, membership := range memberships {
-		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+		newCtx := auth.WithCaller(ctx, &auth.Caller{
 			SubjectID:       user.ID,
 			OrganizationID:  membership.OrganizationID,
 			OrganizationIDs: []string{membership.OrganizationID},

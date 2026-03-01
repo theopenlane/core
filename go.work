@@ -3,6 +3,8 @@ go 1.25.7
 use (
 	// core is the main module containing the API and business logic, nothing in pkg or internal should be imported by other modules
 	.
+	// iam is the identity and access management module, referenced locally during development
+	../iam
 	// cli contains the command-line interface for the core api, using go-client
 	./cli
 	// common contains shared code between core and other components, anything that needs to be imported by other modules should

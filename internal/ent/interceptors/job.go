@@ -5,11 +5,12 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // InterceptorJobRunnerRegistrationToken is middleware to only list non expired
@@ -34,12 +35,7 @@ func InterceptorJobRunnerRegistrationToken() ent.Interceptor {
 func InterceptorJobRunnerFilterSystemOwned() ent.Interceptor {
 	return intercept.TraverseJobRunner(
 		func(ctx context.Context, q *generated.JobRunnerQuery) error {
-			isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-			if err != nil {
-				return err
-			}
-
-			if isAdmin {
+			if auth.IsSystemAdminFromContext(ctx) {
 				return nil
 			}
 

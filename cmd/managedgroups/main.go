@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -21,7 +22,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -103,7 +103,7 @@ func createDB(c *cli.Command) (*generated.Client, error) {
 		generated.Authz(*fgaClient),
 	}
 
-	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts, entOpts...)
+	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts, []entdb.Option{}, entOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("database client: %w", err) //nolint:err113
 	}
@@ -173,7 +173,7 @@ func reconcileManagedGroups(ctx context.Context, c *cli.Command) error {
 		for _, m := range memberships {
 			log.Debug().Str("user_id", m.UserID).Str("org_id", m.OrganizationID).Msg("processing org membership")
 
-			newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+			newCtx := auth.WithCaller(ctx, &auth.Caller{
 				SubjectID:       m.UserID,
 				OrganizationID:  m.OrganizationID,
 				OrganizationIDs: []string{m.OrganizationID},

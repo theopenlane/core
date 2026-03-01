@@ -64,19 +64,12 @@ const (
 // HealthCheckRunner creates a health check operation function using the common pattern.
 func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg string, resultFn func(T) (string, map[string]any)) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		var client *auth.AuthenticatedClient
-		var token string
-		var err error
-
-		switch tokenType {
-		case TokenTypeOAuth:
-			client, token, err = auth.ClientAndOAuthToken(input)
-		case TokenTypeAPI:
-			client, token, err = auth.ClientAndAPIToken(input)
-		default:
+		extract, err := tokenExtractor(tokenType)
+		if err != nil {
 			return types.OperationResult{}, ErrUnsupportedTokenType
 		}
 
+		client, token, err := auth.ClientAndToken(input, extract)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
@@ -89,5 +82,16 @@ func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg s
 		summary, details := resultFn(resp)
 
 		return OperationSuccess(summary, details), nil
+	}
+}
+
+func tokenExtractor(tokenType TokenType) (auth.TokenExtractor, error) {
+	switch tokenType {
+	case TokenTypeOAuth:
+		return auth.OAuthTokenFromPayload, nil
+	case TokenTypeAPI:
+		return auth.APITokenFromPayload, nil
+	default:
+		return nil, ErrUnsupportedTokenType
 	}
 }

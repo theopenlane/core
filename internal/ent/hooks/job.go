@@ -71,9 +71,14 @@ func HookJobRunnerCreate() ent.Hook {
 					return v, err
 				}
 
-				subjectID, err := auth.GetSubjectIDFromContext(ctx)
-				if err != nil {
-					return nil, err
+				runnerCaller, ok := auth.CallerFromContext(ctx)
+				if !ok || runnerCaller == nil {
+					return nil, auth.ErrNoAuthUser
+				}
+
+				subjectID := runnerCaller.SubjectID
+				if subjectID == "" {
+					return nil, auth.ErrNoAuthUser
 				}
 
 				// make sure we cannot reuse the registration token

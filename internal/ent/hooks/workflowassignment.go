@@ -49,7 +49,7 @@ func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 			}
 
 			userID, err := auth.GetSubjectIDFromContext(ctx)
-			if err != nil || userID == "" {
+			if err != nil {
 				return nil, privacy.Denyf("workflow assignment approval requires a user")
 			}
 

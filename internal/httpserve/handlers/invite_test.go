@@ -138,6 +138,9 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			assert.Equal(t, testUser1.OrganizationID, out.JoinedOrgID)
 			assert.Equal(t, tc.email, out.Email)
 
+			// update context to reflect the joined org for subsequent queries
+			recipientCtx = auth.NewTestContextWithOrgID(recipient.ID, testUser1.OrganizationID)
+
 			// Test the default org is updated
 			user, err := suite.api.GetUserByID(recipientCtx, recipient.ID)
 			require.NoError(t, err)

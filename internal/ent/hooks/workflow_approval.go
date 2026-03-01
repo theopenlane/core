@@ -150,8 +150,8 @@ func HookWorkflowApprovalRouting() ent.Hook {
 
 // routeMutationToProposals stores the mutation in WorkflowProposal records instead of applying it directly.
 func routeMutationToProposals(ctx context.Context, client *generated.Client, m utils.GenericMutation, proposedChanges map[string]any, defs []*generated.WorkflowDefinition) (ent.Value, error) {
-	user, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
+	wfaCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || wfaCaller == nil {
 		return nil, ErrFailedToGetUserFromContext
 	}
 
@@ -180,7 +180,7 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 	}
 
 	for _, def := range defs {
-		if err := stageWorkflowProposals(ctx, client, def, *objectType, id, proposedChanges, user.SubjectID); err != nil {
+		if err := stageWorkflowProposals(ctx, client, def, *objectType, id, proposedChanges, wfaCaller.SubjectID); err != nil {
 			return nil, err
 		}
 	}

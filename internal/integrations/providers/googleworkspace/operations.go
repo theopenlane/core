@@ -48,7 +48,7 @@ func googleWorkspaceOperations() []types.OperationDescriptor {
 
 // runGoogleWorkspaceUsers returns a small sample of directory users for posture checks.
 func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

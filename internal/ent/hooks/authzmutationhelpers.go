@@ -406,8 +406,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 
 // addTokenEditPermissions adds the edit permissions for the api token to the object
 func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID string, objectType string) error {
-	// get auth info from context
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
@@ -415,7 +414,7 @@ func addTokenEditPermissions(ctx context.Context, m generated.Mutation, oID stri
 	}
 
 	req := fgax.TupleRequest{
-		SubjectID:   ac.SubjectID,
+		SubjectID:   subjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    fgax.CanEdit,
 		ObjectID:    oID,
@@ -460,7 +459,7 @@ func addUserRelation(ctx context.Context, m generated.Mutation, relation string)
 		return nil
 	}
 
-	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
@@ -468,7 +467,7 @@ func addUserRelation(ctx context.Context, m generated.Mutation, relation string)
 	}
 
 	req := fgax.TupleRequest{
-		SubjectID:   ac.SubjectID,
+		SubjectID:   subjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    relation,
 		ObjectID:    objID,

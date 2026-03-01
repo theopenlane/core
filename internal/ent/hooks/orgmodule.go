@@ -172,7 +172,7 @@ func handleOrgModuleBulkDelete(ctx context.Context, omm *generated.OrgModuleMuta
 		return next.Mutate(ctx, omm)
 	}
 
-	queryCtx := context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
+	queryCtx := entx.SkipSoftDelete(ctx)
 
 	modulesToDelete, err := omm.Client().OrgModule.Query().
 		Where(orgmodule.IDIn(ids...)).

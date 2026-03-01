@@ -27,9 +27,9 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 
 	requestCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(requestCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, ok := auth.CallerFromContext(requestCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	providerType := types.ProviderTypeFromString(req.Provider)
@@ -56,7 +56,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		}
 
 		result, err := h.IntegrationOperations.Run(queueCtx, types.OperationRequest{
-			OrgID:    user.OrganizationID,
+			OrgID:    caller.OrganizationID,
 			Provider: providerType,
 			Name:     operationName,
 			Config:   req.Body.Config,
@@ -97,7 +97,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
-		OrgID:     user.OrganizationID,
+		OrgID:     caller.OrganizationID,
 		Provider:  providerType,
 		Operation: operationName,
 		Config:    req.Body.Config,

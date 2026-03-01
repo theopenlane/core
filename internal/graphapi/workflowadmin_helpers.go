@@ -80,26 +80,25 @@ func (r *Resolver) requireWorkflowAdmin(ctx context.Context, ownerID string) err
 		return fmt.Errorf("%w: missing organization", rout.ErrBadRequest)
 	}
 
-	if auth.IsSystemAdminFromContext(ctx) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return rout.ErrPermissionDenied
+	}
+
+	if caller.Has(auth.CapSystemAdmin) {
 		return nil
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	if caller.SubjectID == "" {
 		return rout.ErrPermissionDenied
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	// make sure the `ownerID` matches the organgaizationID
-	if au.OrganizationID != ownerID {
+	// make sure the `ownerID` matches the organizationID
+	if caller.OrganizationID != ownerID {
 		return rout.ErrPermissionDenied
 	}
 
-	if au.OrganizationRole != auth.OwnerRole && au.OrganizationRole != auth.AdminRole {
+	if caller.OrganizationRole != auth.OwnerRole && caller.OrganizationRole != auth.AdminRole {
 		return rout.ErrPermissionDenied
 	}
 
@@ -117,7 +116,9 @@ func closeWorkflowAssignments(ctx context.Context, client *generated.Client, ins
 
 	allowCtx := workflows.AllowContext(ctx)
 	if ownerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &ownerID); err != nil {
+		var err error
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &ownerID)
+		if err != nil {
 			return err
 		}
 	}
@@ -195,12 +196,16 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 	workflows.MarkSkipEventEmission(skipCtx)
 
 	if instance.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID); err != nil {
+		skipCtx, err = common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx)
+	var userID string
+	if waCaller, ok := auth.CallerFromContext(ctx); ok && waCaller != nil {
+		userID = waCaller.SubjectID
+	}
 	applied := false
 
 	if instance.WorkflowProposalID != "" {
@@ -280,12 +285,16 @@ func (r *mutationResolver) cancelWorkflowInstance(ctx context.Context, id string
 	workflows.MarkSkipEventEmission(skipCtx)
 
 	if instance.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID); err != nil {
+		skipCtx, err = common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx)
+	var userID string
+	if cancelCaller, ok := auth.CallerFromContext(ctx); ok && cancelCaller != nil {
+		userID = cancelCaller.SubjectID
+	}
 
 	if instance.WorkflowProposalID != "" {
 		if err := r.db.WorkflowProposal.UpdateOneID(instance.WorkflowProposalID).

@@ -37,7 +37,8 @@ func (r *mutationResolver) CreateBulkGroupMembership(ctx context.Context, input 
 	}
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")

@@ -104,8 +104,12 @@ func controlFilterByStandard(ctx context.Context, opts cloneFilterOptions, std *
 	if std.IsPublic {
 		where = append(where, control.SystemOwned(true))
 	} else {
-		orgID, err := auth.GetOrganizationIDFromContext(ctx)
-		if err != nil || orgID == "" {
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return nil, rout.NewMissingRequiredFieldError("owner_id")
+		}
+		orgID := caller.OrganizationID
+		if orgID == "" {
 			return nil, rout.NewMissingRequiredFieldError("owner_id")
 		}
 

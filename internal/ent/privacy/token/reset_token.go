@@ -2,8 +2,6 @@ package token
 
 import (
 	"context"
-
-	"github.com/theopenlane/utils/contextx"
 )
 
 // ResetToken that implements the PrivacyToken interface
@@ -32,14 +30,16 @@ func (token *ResetToken) SetToken(t string) {
 
 // NewContextWithResetToken returns a new context with the reset token inside
 func NewContextWithResetToken(parent context.Context, resetToken string) context.Context {
-	return contextx.With(parent, &ResetToken{
+	ctx := resetTokenContextKey.Set(parent, &ResetToken{
 		token: resetToken,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // ResetTokenFromContext parses a context for a reset token and returns the token
 func ResetTokenFromContext(ctx context.Context) *ResetToken {
-	token, ok := contextx.From[*ResetToken](ctx)
+	token, ok := resetTokenContextKey.Get(ctx)
 	if !ok {
 		return nil
 	}

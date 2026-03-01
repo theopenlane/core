@@ -94,7 +94,7 @@ type teamsProfileResponse struct {
 
 // runTeamsSample collects a sample of joined Teams for the authenticated user
 func runTeamsSample(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -132,7 +132,7 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 
 // runTeamsMessageSendOperation posts a message to a Teams channel
 func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	_, token, err := auth.ClientAndOAuthToken(input)
+	_, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

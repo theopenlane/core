@@ -6,22 +6,26 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
+// HookGroupMembers checks the users role, ensures they are a member of the org, and prevents direct modifications to managed groups unless the caller has the bypass capability
 func HookGroupMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.GroupMembershipFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) (generated.Value, error) {
-			// skip if we are creating an organization
-			if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
+			// skip for real internal system operations (e.g. org creation) where the user may not
+			// yet be a member of the org. CapBypassFGA distinguishes real service callers from
+			// test contexts created by rule.WithInternalContext, which adds CapInternalOperation
+			// but not CapBypassFGA.
+			if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
 				return next.Mutate(ctx, m)
 			}
 
-			if _, ok := contextx.From[auth.ManagedGroupContextKey](ctx); ok {
+			// skip if this is an explicit managed group bypass
+			if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassManagedGroup) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -43,9 +47,10 @@ func HookGroupMembers() ent.Hook {
 				return nil, err
 			}
 
-			// allow general allow context to bypass managed group check
+			// allow general allow context or managed group bypass to modify managed groups
 			_, allowCtx := privacy.DecisionFromContext(ctx)
-			_, allowManagedCtx := contextx.From[ManagedContextKey](ctx)
+			caller, _ := auth.CallerFromContext(ctx)
+			allowManagedCtx := caller != nil && caller.Has(auth.CapBypassManagedGroup)
 
 			if group.IsManaged && (!allowManagedCtx && !allowCtx) {
 				return nil, ErrManagedGroup

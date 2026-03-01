@@ -78,8 +78,8 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 // GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
 // has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax.Relation) ([]string, error) {
-	user, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
 		return []string{}, nil
 	}
 
@@ -87,12 +87,12 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	objectType := strings.Replace(queryType, "History", "", 1)
 
 	req := fgax.ListRequest{
-		SubjectID:   user.SubjectID,
-		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
 		ObjectType:  strcase.SnakeCase(objectType),
 		Relation:    relation.String(),
 		// add email domain to satisfy any list requests with organization conditions
-		ConditionContext: utils.NewOrganizationContextKey(user.SubjectEmail),
+		ConditionContext: utils.NewOrganizationContextKey(caller.SubjectEmail),
 	}
 
 	if strings.Contains(queryType, "History") {
@@ -212,7 +212,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 
 func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
 	}
 
@@ -396,18 +396,18 @@ func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs
 		subjectType string
 	)
 
-	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		subjectID = anon.SubjectID
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return []string{}, nil
+	}
+
+	subjectID = caller.SubjectID
+
+	if caller.IsAnonymous() {
 		subjectType = auth.UserSubjectType
 	} else {
-		user, err := auth.GetAuthenticatedUserFromContext(ctx)
-		if err != nil {
-			return []string{}, nil
-		}
-
-		subjectID = user.SubjectID
-		subjectType = auth.GetAuthzSubjectType(ctx)
-		context = utils.NewOrganizationContextKey(user.SubjectEmail)
+		subjectType = caller.SubjectType()
+		context = utils.NewOrganizationContextKey(caller.SubjectEmail)
 	}
 
 	checks := []fgax.AccessCheck{}

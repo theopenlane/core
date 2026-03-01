@@ -27,12 +27,14 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 
 	reqCtx := ctx.Request().Context()
 
-	userID, err := auth.GetSubjectIDFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
+	tfaCaller, tfaOk := auth.CallerFromContext(reqCtx)
+	if !tfaOk || tfaCaller == nil || tfaCaller.SubjectID == "" {
+		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
+
+	userID := tfaCaller.SubjectID
 
 	// get user from database by subject
 	user, err := h.getUserTFASettings(reqCtx, userID)
