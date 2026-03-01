@@ -26,7 +26,7 @@
 - user: contact:contact-1
   relation: parent
   object: file:file-3 # contact has access to file
--
+
 #setup organization with empty domain condition
 - user: organization:contact-org#member
   relation: access
