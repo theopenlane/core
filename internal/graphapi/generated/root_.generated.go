@@ -7339,6 +7339,7 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowMetadata struct {
+		Extensions  func(childComplexity int) int
 		ObjectTypes func(childComplexity int) int
 	}
 
@@ -49977,6 +49978,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowInstanceEdge.Node(childComplexity), true
+
+	case "WorkflowMetadata.extensions":
+		if e.ComplexityRoot.WorkflowMetadata.Extensions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkflowMetadata.Extensions(childComplexity), true
 
 	case "WorkflowMetadata.objectTypes":
 		if e.ComplexityRoot.WorkflowMetadata.ObjectTypes == nil {
@@ -135569,6 +135577,7 @@ enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theo
   GROUP
   ROLE
   RESOLVER
+  CHANNEL
 }
 """
 WorkflowAssignmentWhereInput is used for filtering WorkflowAssignment objects.
@@ -149556,6 +149565,10 @@ type WorkflowMetadata {
     Available workflow object types
     """
     objectTypes: [WorkflowObjectTypeMetadata!]!
+    """
+    Extensible workflow metadata payload for action configuration surfaces
+    """
+    extensions: Map!
 }
 
 """

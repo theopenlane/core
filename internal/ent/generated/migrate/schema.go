@@ -8011,7 +8011,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "target_type", Type: field.TypeEnum, Enums: []string{"USER", "GROUP", "ROLE", "RESOLVER"}},
+		{Name: "target_type", Type: field.TypeEnum, Enums: []string{"USER", "GROUP", "ROLE", "RESOLVER", "CHANNEL"}},
 		{Name: "resolver_key", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_assignment_workflow_assignment_targets", Type: field.TypeString, Nullable: true},

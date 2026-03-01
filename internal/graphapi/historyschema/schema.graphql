@@ -40154,6 +40154,7 @@ enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.c
 	GROUP
 	ROLE
 	RESOLVER
+	CHANNEL
 }
 """
 WorkflowDefinitionDocument captures triggers, conditions, actions, and selectors that define a workflow.

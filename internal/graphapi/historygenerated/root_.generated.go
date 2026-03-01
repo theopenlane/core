@@ -61328,6 +61328,7 @@ enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.c
   GROUP
   ROLE
   RESOLVER
+  CHANNEL
 }
 type WorkflowDefinitionHistory implements Node {
   id: ID!

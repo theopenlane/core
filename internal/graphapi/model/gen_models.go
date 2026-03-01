@@ -3377,6 +3377,8 @@ type WorkflowInstanceBulkAdminPayload struct {
 type WorkflowMetadata struct {
 	// Available workflow object types
 	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
+	// Extensible workflow metadata payload for action configuration surfaces
+	Extensions map[string]any `json:"extensions"`
 }
 
 // Metadata for a workflow object type
