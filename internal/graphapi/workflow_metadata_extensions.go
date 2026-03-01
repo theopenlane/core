@@ -1,12 +1,10 @@
 package graphapi
 
 import (
-	"reflect"
 	"sort"
 
 	"github.com/theopenlane/core/common/enums"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/internal/graphapi/model"
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -101,8 +99,8 @@ func workflowMetadataExtensions(source integrationMetadataSource) map[string]any
 	}
 
 	extensions, err := jsonx.ToMap(doc)
-	if err != nil {
-		return nil
+	if err != nil || extensions == nil {
+		return map[string]any{}
 	}
 
 	return extensions
@@ -164,30 +162,4 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 	}
 
 	return providerEntries
-}
-
-// setWorkflowMetadataExtensions sets workflow metadata extensions when the generated GraphQL model includes the field
-func setWorkflowMetadataExtensions(metadata *model.WorkflowMetadata, extensions map[string]any) {
-	if metadata == nil || len(extensions) == 0 {
-		return
-	}
-
-	value := reflect.ValueOf(metadata)
-	if value.Kind() != reflect.Pointer || value.IsNil() {
-		return
-	}
-
-	field := value.Elem().FieldByName("Extensions")
-	if !field.IsValid() || !field.CanSet() {
-		return
-	}
-
-	extensionsValue := reflect.ValueOf(extensions)
-	if extensionsValue.Type().AssignableTo(field.Type()) {
-		field.Set(extensionsValue)
-		return
-	}
-	if extensionsValue.Type().ConvertibleTo(field.Type()) {
-		field.Set(extensionsValue.Convert(field.Type()))
-	}
 }
