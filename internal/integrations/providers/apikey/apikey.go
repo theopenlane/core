@@ -4,6 +4,8 @@ import (
 	"context"
 	"strings"
 
+	"github.com/theopenlane/core/common/integrations/auth"
+
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
