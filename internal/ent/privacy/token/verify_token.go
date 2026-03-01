@@ -30,9 +30,11 @@ func (token *VerifyToken) SetToken(t string) {
 
 // NewContextWithVerifyToken returns a new context with the verify token inside
 func NewContextWithVerifyToken(parent context.Context, verifyToken string) context.Context {
-	return verifyTokenContextKey.Set(parent, &VerifyToken{
+	ctx := verifyTokenContextKey.Set(parent, &VerifyToken{
 		token: verifyToken,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // VerifyTokenFromContext parses a context for a verify token and returns the token

@@ -12,7 +12,9 @@ func NewWebauthnCreationContextKeyWithEmail() WebauthnCreationContextKey {
 }
 
 func NewContextWithWebauthnCreationContextKey(parent context.Context) context.Context {
-	return webauthnCreationContextKey.Set(parent, &WebauthnCreationContextKey{})
+	ctx := webauthnCreationContextKey.Set(parent, &WebauthnCreationContextKey{})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 func WebauthnCreationContextKeyFromContext(ctx context.Context) *WebauthnCreationContextKey {

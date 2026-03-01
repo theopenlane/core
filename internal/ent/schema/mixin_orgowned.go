@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -322,33 +321,8 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 }
 
 // orgInterceptorSkipper skips the organization interceptor based on the context
-// and query type
-// if soft deletes are bypassed; so is the interceptor - the user will no longer have access to the organization and
-// filters will skip the organization
-// if the context has a privacy token type, the interceptor is skipped
-// if the query is for a token and explicitly allowed, the interceptor is skipped
-// callers with CapBypassOrgFilter skip the interceptor.
+// and query type. Callers with CapBypassOrgFilter skip the interceptor.
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
-	if entx.CheckSkipSoftDelete(ctx) {
-		return true
-	}
-
-	// skip the interceptor if the context has the token type
-	// this is useful for tokens, where the user is not yet authenticated to
-	// a particular organization yet
-	if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
-		return true
-	}
-
-	// Allow the interceptor to skip the query if the context has an allow
-	// bypass and its for a token
-	// these are queried during the auth flow and should not be filtered
-	if q.Type() == generated.TypeAPIToken || q.Type() == generated.TypePersonalAccessToken {
-		if _, allow := privacy.DecisionFromContext(ctx); allow {
-			return true
-		}
-	}
-
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
 		// anonymous callers (trust center, questionnaire) still scope template queries by org
 		if caller.OrganizationRole == auth.AnonymousRole && q.Type() == generated.TypeTemplate {

@@ -195,7 +195,7 @@ func orgAllowContext(ctx context.Context) context.Context {
 func softDeleteAllowContext(ctx context.Context) context.Context {
 	ctx = orgAllowContext(ctx)
 
-	return context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
+	return entx.SkipSoftDelete(ctx)
 }
 
 // newEntitlementInvocation gathers prerequisites for entitlement mutation handling.

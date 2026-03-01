@@ -223,13 +223,22 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 	return auth.JWTAuthentication
 }
 
+func withOrgFilterBypass(ctx context.Context) context.Context {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		caller = &auth.Caller{}
+	}
+
+	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter))
+}
+
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Caller, tokenID string) error {
 	logger := logx.FromContext(ctx)
 	switch caller.AuthenticationType {
 	case auth.PATAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		allowCtx := withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
 		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for personal access token")
 
@@ -237,7 +246,7 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Call
 		}
 	case auth.APITokenAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		allowCtx := withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
 		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for API token")
 
@@ -323,7 +332,7 @@ func createCallerFromClaims(ctx context.Context, dbClient *ent.Client, claims *t
 // If the token is valid, the caller is returned
 func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string) (*auth.Caller, string, error) {
 	// allow check to bypass privacy rules
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
 
 	// check if the token is a personal access token
 	caller, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)

@@ -11,6 +11,4 @@ var (
 	ErrInvalidSecretLength = errors.New("secret must be 128 bytes when provided")
 	// ErrCallerRequired indicates that a caller is required in the context.
 	ErrCallerRequired = errors.New("caller required in context")
-	// ErrAuthenticatedUserRequired is kept as a backward-compatible alias.
-	ErrAuthenticatedUserRequired = ErrCallerRequired
 )

@@ -1,7 +1,6 @@
 package scim
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/mail"
@@ -360,7 +359,7 @@ func (h *UserHandler) Delete(r *http.Request, id string) error {
 // Patch updates one or more attributes of a SCIM resource using a sequence of operations.
 func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchOperation) (scim.Resource, error) {
 	ctx := r.Context()
-	ctx = context.WithValue(ctx, entx.SoftDeleteSkipKey{}, true)
+	ctx = entx.SkipSoftDelete(ctx)
 	client := transaction.FromContext(ctx)
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
