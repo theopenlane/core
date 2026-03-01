@@ -73,7 +73,7 @@ func TestNewMutationGalaEnvelope(t *testing.T) {
 	assert.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowBypass])
 	assert.Equal(t, true, envelope.ContextSnapshot.Flags[gala.ContextFlagWorkflowAllowEventEmission])
 	assert.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("adapter_actor"))
-	assert.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("durable"))
+	assert.Contains(t, envelope.ContextSnapshot.Values, gala.ContextKey("caller"))
 
 	restoredContext, err := runtime.ContextManager().Restore(context.Background(), envelope.ContextSnapshot)
 	assert.NoError(t, err)

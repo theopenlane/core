@@ -3,18 +3,18 @@ package oauth
 import (
 	"context"
 	"maps"
-	"strings"
 
 	"golang.org/x/oauth2"
 
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
+	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/common/integrations/auth"
+	integrationauth "github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	iamauth "github.com/theopenlane/iam/auth"
 )
 
 const (
@@ -103,7 +103,7 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 	state := input.State
 
 	if state == "" {
-		generated, err := auth.RandomState(stateLength)
+		generated, err := iamauth.GenerateOAuthState(stateLength)
 		if err != nil {
 			return nil, providers.ErrStateGeneration
 		}
@@ -111,22 +111,7 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 		state = generated
 	}
 
-	var authOpts []rp.AuthURLOpt
-
-	if len(scopes) > 0 {
-		scopeValue := strings.Join(scopes, " ")
-		authOpts = append(authOpts, func() []oauth2.AuthCodeOption {
-			return []oauth2.AuthCodeOption{oauth2.SetAuthURLParam("scope", scopeValue)}
-		})
-	}
-
-	for key, value := range p.authParams {
-		k := key
-		v := value
-		authOpts = append(authOpts, func() []oauth2.AuthCodeOption {
-			return []oauth2.AuthCodeOption{oauth2.SetAuthURLParam(k, v)}
-		})
-	}
+	authOpts := buildAuthURLOpts(scopes, p.authParams)
 
 	authURL := rp.AuthURL(state, p.relyingParty, authOpts...)
 
@@ -151,19 +136,15 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 		return types.CredentialPayload{}, providers.ErrTokenRefresh
 	}
 
-	builder := types.NewCredentialBuilder(p.Type()).
-		With(
-			types.WithCredentialSet(models.CredentialSet{}),
-			types.WithOAuthToken(freshToken),
-			types.WithCredentialKind(types.CredentialKindOAuthToken),
-		)
-	if claimOpt := subject.Credential.ClaimsOption(); claimOpt.IsPresent() {
-		builder = builder.With(types.WithOIDCClaims(claimOpt.MustGet()))
+	var claims *oidc.IDTokenClaims
+	claimOpt := subject.Credential.ClaimsOption()
+	if claimOpt.IsPresent() {
+		claims = claimOpt.MustGet()
 	}
 
-	payload, buildErr := builder.Build()
-	if buildErr != nil {
-		return types.CredentialPayload{}, buildErr
+	payload, err := integrationauth.BuildOAuthCredentialPayload(p.Type(), freshToken, claims)
+	if err != nil {
+		return types.CredentialPayload{}, err
 	}
 
 	return payload, nil

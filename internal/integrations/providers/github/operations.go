@@ -155,7 +155,7 @@ type githubAppInstallationReposResponse struct {
 
 // runGitHubHealthOperation validates GitHub OAuth credentials.
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -181,7 +181,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 // runGitHubAppHealthOperation validates GitHub App installation tokens.
 func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client, token, err := auth.ClientAndOAuthToken(input)
+		client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
@@ -206,7 +206,7 @@ func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 
 // runGitHubRepoOperation lists repositories for the authenticated account.
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

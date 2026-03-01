@@ -12,5 +12,5 @@ const (
 
 // azureEntraClientDescriptors returns the client descriptors published by Azure Entra ID.
 func azureEntraClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeAzureEntraID, ClientAzureEntraAPI, "Microsoft Graph API client", auth.OAuthClientBuilder(nil))
+	return auth.DefaultClientDescriptors(TypeAzureEntraID, ClientAzureEntraAPI, "Microsoft Graph API client", auth.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
 }

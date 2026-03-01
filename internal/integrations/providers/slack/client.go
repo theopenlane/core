@@ -12,5 +12,5 @@ const (
 
 // slackClientDescriptors returns the client descriptors published by Slack.
 func slackClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeSlack, ClientSlackAPI, "Slack Web API client", auth.OAuthClientBuilder(nil))
+	return auth.DefaultClientDescriptors(TypeSlack, ClientSlackAPI, "Slack Web API client", auth.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
 }

@@ -828,7 +828,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	suite.db.Template.DeleteOneID(template.ID).Exec(allowCtx)
 }
 
-func (suite *HandlerTestSuite) TestSubmitQuestionnaireAuthenticatedUser() {
+func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 	t := suite.T()
 
 	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")

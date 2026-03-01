@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
-	"github.com/theopenlane/utils/ulids"
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"golang.org/x/oauth2"
@@ -437,8 +436,14 @@ func (h *Handler) generateSSOAuthURL(ctx echo.Context, orgID string) (string, er
 	cfg := *h.SessionConfig.CookieConfig
 
 	// set the org ID as a cookie for the OIDC flow
-	state := ulids.New().String()
-	nonce := ulids.New().String()
+	state, err := auth.GenerateOAuthState(16)
+	if err != nil {
+		return "", err
+	}
+	nonce, err := auth.GenerateOAuthState(16)
+	if err != nil {
+		return "", err
+	}
 
 	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
 		"organization_id": orgID,

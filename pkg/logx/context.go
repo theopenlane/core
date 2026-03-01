@@ -14,6 +14,11 @@ type LogFields map[string]any
 
 var logFieldsContextKey = contextx.NewKey[LogFields]()
 
+// FieldsKey returns the context key used to store durable structured log fields.
+func FieldsKey() contextx.Key[LogFields] {
+	return logFieldsContextKey
+}
+
 // WithContext returns a new context with the provided logger
 func (l Logger) WithContext(ctx context.Context) context.Context {
 	zerologger := l.Unwrap()
@@ -81,9 +86,7 @@ func WithFields(ctx context.Context, fields map[string]any) context.Context {
 	existing := FieldsFromContext(ctx)
 	merged := make(LogFields, len(existing)+len(fields))
 
-	for k, v := range existing {
-		merged[k] = v
-	}
+	maps.Copy(merged, existing)
 
 	logCtx := FromContext(ctx).With()
 
@@ -92,7 +95,7 @@ func WithFields(ctx context.Context, fields map[string]any) context.Context {
 		logCtx = logCtx.Interface(k, v)
 	}
 
-	ctx = logFieldsContextKey.Set(ctx, existing)
+	ctx = logFieldsContextKey.Set(ctx, merged)
 
 	return logCtx.Logger().WithContext(ctx)
 }

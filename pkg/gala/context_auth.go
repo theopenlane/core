@@ -17,13 +17,13 @@ const (
 
 // DurableContextSnapshot captures context values that should persist across durable event processing
 type DurableContextSnapshot struct {
-	// Auth contains authenticated user context when present
+	// Auth contains caller context when present
 	Auth *AuthSnapshot `json:"auth,omitempty"`
 	// LogFields contains logger context fields for correlation and tracing
 	LogFields map[string]any `json:"log_fields,omitempty"`
 }
 
-// AuthSnapshot is a JSON-safe snapshot of authenticated user context values
+// AuthSnapshot is a JSON-safe snapshot of caller context values.
 type AuthSnapshot struct {
 	// SubjectID is the authenticated principal identifier
 	SubjectID string `json:"subject_id,omitempty"`
@@ -41,8 +41,15 @@ type AuthSnapshot struct {
 	AuthenticationType string `json:"authentication_type,omitempty"`
 	// OrganizationRole captures the caller role within the active organization
 	OrganizationRole string `json:"organization_role,omitempty"`
+	// ActiveSubscription reports whether the active organization has an active subscription
+	ActiveSubscription bool `json:"active_subscription,omitempty"`
 	// Capabilities is the full capability bitset carried by the caller.
 	Capabilities uint64 `json:"capabilities,omitempty"`
+	// Impersonation carries active impersonation metadata when present.
+	Impersonation *auth.ImpersonationContext `json:"impersonation,omitempty"`
+	// OriginalSystemAdmin preserves caller lineage when a system admin is acting
+	// as another user.
+	OriginalSystemAdmin *AuthSnapshot `json:"original_system_admin,omitempty"`
 	// IsSystemAdmin reports whether the caller has system-admin privileges
 	// and is kept for backward compatibility with older snapshots.
 	IsSystemAdmin bool `json:"is_system_admin,omitempty"`
@@ -64,7 +71,16 @@ func (s AuthSnapshot) toCaller() *auth.Caller {
 		OrganizationIDs:    append([]string(nil), s.OrganizationIDs...),
 		AuthenticationType: auth.AuthenticationType(s.AuthenticationType),
 		OrganizationRole:   auth.OrganizationRoleType(s.OrganizationRole),
+		ActiveSubscription: s.ActiveSubscription,
 		Capabilities:       caps,
+		Impersonation:      s.Impersonation,
+		OriginalSystemAdmin: func() *auth.Caller {
+			if s.OriginalSystemAdmin == nil {
+				return nil
+			}
+
+			return s.OriginalSystemAdmin.toCaller()
+		}(),
 	}
 }
 
@@ -83,17 +99,38 @@ func authSnapshotFromCaller(caller *auth.Caller) *AuthSnapshot {
 		OrganizationIDs:    append([]string(nil), caller.OrgIDs()...),
 		AuthenticationType: string(caller.AuthenticationType),
 		OrganizationRole:   string(caller.OrganizationRole),
+		ActiveSubscription: caller.ActiveSubscription,
 		Capabilities:       uint64(caller.Capabilities),
-		IsSystemAdmin:      caller.Has(auth.CapSystemAdmin),
+		Impersonation:      caller.Impersonation,
+		OriginalSystemAdmin: func() *AuthSnapshot {
+			if caller.OriginalSystemAdmin == nil {
+				return nil
+			}
+
+			return authSnapshotFromCaller(caller.OriginalSystemAdmin)
+		}(),
+		IsSystemAdmin: caller.Has(auth.CapSystemAdmin),
 	}
 }
 
 // DurableContextCodec captures and restores durable context values including auth and logger fields
-type DurableContextCodec struct{}
+type DurableContextCodec struct {
+	capture bool
+}
 
 // NewContextCodec creates a context codec for durable context capture
 func NewContextCodec() DurableContextCodec {
-	return DurableContextCodec{}
+	return DurableContextCodec{
+		capture: true,
+	}
+}
+
+// NewLegacyContextCodec creates a codec that restores old "durable" snapshots
+// but does not emit new "durable" payloads.
+func NewLegacyContextCodec() DurableContextCodec {
+	return DurableContextCodec{
+		capture: false,
+	}
 }
 
 // Key returns the stable snapshot key used by the context codec
@@ -102,7 +139,11 @@ func (DurableContextCodec) Key() ContextKey {
 }
 
 // Capture extracts durable context values and encodes them as JSON
-func (DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
+func (c DurableContextCodec) Capture(ctx context.Context) (json.RawMessage, bool, error) {
+	if !c.capture {
+		return nil, false, nil
+	}
+
 	snapshot := DurableContextSnapshot{}
 	hasData := false
 

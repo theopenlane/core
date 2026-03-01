@@ -191,6 +191,9 @@ func (m *ContextManager) Restore(ctx context.Context, snapshot ContextSnapshot) 
 // WithFlag sets a typed context flag
 func WithFlag(ctx context.Context, flag ContextFlag) context.Context {
 	flags := flagsFromContext(ctx)
+	if flags == nil {
+		flags = map[ContextFlag]bool{}
+	}
 	flags[flag] = true
 
 	return contextFlagSetContextKey.Set(ctx, contextFlagSet{Flags: flags})

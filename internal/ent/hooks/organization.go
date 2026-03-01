@@ -137,6 +137,9 @@ func HookOrganization() ent.Hook {
 					// so that callers holding the same *Caller see the updated org
 					if existingCaller != nil {
 						existingCaller.OrganizationID = orgCreated.ID
+						if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
+							existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
+						}
 					}
 
 					if err := postOrganizationCreation(ctx, orgCreated, m); err != nil {

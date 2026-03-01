@@ -2,12 +2,11 @@ package apikey
 
 import (
 	"context"
-	"maps"
+	"strings"
 
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
 )
 
@@ -93,29 +92,22 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint materializes a stored API key configuration into a credential payload.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	providerData := subject.Credential.Data.ProviderData
-	if len(providerData) == 0 {
-		if token := subject.Credential.Data.APIToken; token != "" {
-			return subject.Credential, nil
-		}
+	metadata := auth.CloneMetadata(subject.Credential.Data.ProviderData)
+	token, _ := metadata[p.tokenField].(string)
+	token = strings.TrimSpace(token)
 
-		return types.CredentialPayload{}, ErrProviderMetadataRequired
-	}
-
-	token, _ := providerData[p.tokenField].(string)
 	if token == "" {
-		return types.CredentialPayload{}, ErrTokenFieldRequired
+		token = strings.TrimSpace(subject.Credential.Data.APIToken)
+		if token == "" {
+			if len(metadata) == 0 {
+				return types.CredentialPayload{}, ErrProviderMetadataRequired
+			}
+
+			return types.CredentialPayload{}, ErrTokenFieldRequired
+		}
 	}
 
-	cloned := maps.Clone(providerData)
+	metadata[p.tokenField] = token
 
-	builder := types.NewCredentialBuilder(p.Type()).With(
-		types.WithCredentialKind(types.CredentialKindAPIKey),
-		types.WithCredentialSet(models.CredentialSet{
-			APIToken:     token,
-			ProviderData: cloned,
-		}),
-	)
-
-	return builder.Build()
+	return auth.BuildAPITokenCredentialPayload(p.Type(), token, metadata)
 }
