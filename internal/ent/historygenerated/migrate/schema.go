@@ -3174,7 +3174,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_assignment_id", Type: field.TypeString},
-		{Name: "target_type", Type: field.TypeEnum, Enums: []string{"USER", "GROUP", "ROLE", "RESOLVER"}},
+		{Name: "target_type", Type: field.TypeEnum, Enums: []string{"USER", "GROUP", "ROLE", "RESOLVER", "CHANNEL"}},
 		{Name: "target_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "target_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "resolver_key", Type: field.TypeString, Nullable: true},

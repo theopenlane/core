@@ -79748,6 +79748,7 @@ enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theo
   GROUP
   ROLE
   RESOLVER
+  CHANNEL
 }
 """
 WorkflowAssignmentWhereInput is used for filtering WorkflowAssignment objects.

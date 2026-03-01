@@ -93552,6 +93552,7 @@ enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theo
 	GROUP
 	ROLE
 	RESOLVER
+	CHANNEL
 }
 """
 WorkflowAssignmentWhereInput is used for filtering WorkflowAssignment objects.
@@ -95690,6 +95691,10 @@ type WorkflowMetadata {
 	Available workflow object types
 	"""
 	objectTypes: [WorkflowObjectTypeMetadata!]!
+	"""
+	Extensible workflow metadata payload for action configuration surfaces
+	"""
+	extensions: Map!
 }
 type WorkflowObjectRef implements Node {
 	id: ID!
