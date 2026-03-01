@@ -9,8 +9,18 @@ import (
 )
 
 // LoadWorkflowObject loads an ent object that participates in workflows.
-func LoadWorkflowObject(ctx context.Context, client *generated.Client, schemaType string, objectID string) (any, error) {
-	return client.LoadWorkflowObject(ctx, schemaType, objectID)
+func LoadWorkflowObject(ctx context.Context, client *generated.Client, schemaType string, objectID string) (generated.Noder, error) {
+	entity, err := client.LoadWorkflowObject(ctx, schemaType, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	node, ok := entity.(generated.Noder)
+	if !ok {
+		return nil, ErrWorkflowObjectNodeInvalid
+	}
+
+	return node, nil
 }
 
 // ObjectOwnerID resolves the owner ID for a workflow object via generated helpers.

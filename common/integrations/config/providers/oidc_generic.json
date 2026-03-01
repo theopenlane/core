@@ -18,7 +18,7 @@
       "email",
       "offline_access"
     ],
-    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/oauth/callback"
   },
   "userInfo": {
     "url": "https://openidconnect.googleapis.com/v1/userinfo",

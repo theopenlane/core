@@ -2,6 +2,7 @@ package gcpscc
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -65,6 +66,51 @@ type securityCenterFindingsSchema struct {
 	IncludePayloads bool `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
 }
 
+type securityCenterHealthDetails struct {
+	Parents []string `json:"parents"`
+}
+
+type securityCenterFindingSample struct {
+	Name     string `json:"name"`
+	Category string `json:"category"`
+	State    string `json:"state"`
+	Severity string `json:"severity"`
+	Source   string `json:"source"`
+}
+
+type securityCenterFindingsDetails struct {
+	Sources          []string                      `json:"sources"`
+	SourceCount      int                           `json:"sourceCount"`
+	Filter           string                        `json:"filter"`
+	TotalFindings    int                           `json:"totalFindings"`
+	FindingsBySource map[string]int                `json:"findingsBySource"`
+	SeverityCounts   map[string]int                `json:"severity_counts"`
+	StateCounts      map[string]int                `json:"state_counts"`
+	Samples          []securityCenterFindingSample `json:"samples"`
+	Alerts           []types.AlertEnvelope         `json:"alerts,omitempty"`
+}
+
+type securityCenterNotificationConfigSample struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	PubSubTopic string `json:"pubsubTopic"`
+	Parent      string `json:"parent"`
+}
+
+type securityCenterSettingsDetails struct {
+	Parents                   []string                                 `json:"parents"`
+	NotificationConfigCount   int                                      `json:"notificationConfigCount"`
+	SampleNotificationConfigs []securityCenterNotificationConfigSample `json:"sampleNotificationConfigs"`
+}
+
+type securityCenterFailureDetails struct {
+	Parent  string   `json:"parent,omitempty"`
+	Parents []string `json:"parents,omitempty"`
+	Source  string   `json:"source,omitempty"`
+	Sources []string `json:"sources,omitempty"`
+	Filter  string   `json:"filter,omitempty"`
+}
+
 var securityCenterFindingsConfigSchema = operations.SchemaFrom[securityCenterFindingsSchema]()
 
 // Operations returns the provider operations published by GCP SCC.
@@ -105,7 +151,7 @@ func runSecurityCenterHealthOperation(ctx context.Context, input types.Operation
 		return types.OperationResult{}, err
 	}
 
-	client, ok := input.Client.(*cloudscc.Client)
+	client, ok := types.ClientInstanceAs[*cloudscc.Client](input.Client)
 	if !ok || client == nil {
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
@@ -127,20 +173,16 @@ func runSecurityCenterHealthOperation(ctx context.Context, input types.Operation
 			err = nil
 		}
 		if err != nil {
-			return operations.OperationFailure("Security Command Center list sources failed", err, map[string]any{
-				"parent":  parent,
-				"parents": parents,
+			return operations.OperationFailure("Security Command Center list sources failed", err, securityCenterFailureDetails{
+				Parent:  parent,
+				Parents: parents,
 			})
 		}
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Security Command Center reachable for %d parent(s)", len(parents)),
-		Details: map[string]any{
-			"parents": parents,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Security Command Center reachable for %d parent(s)", len(parents)), securityCenterHealthDetails{
+		Parents: parents,
+	}), nil
 }
 
 // runSecurityCenterFindingsOperation collects findings from SCC
@@ -155,7 +197,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, err
 	}
 
-	client, ok := input.Client.(*cloudscc.Client)
+	client, ok := types.ClientInstanceAs[*cloudscc.Client](input.Client)
 	if !ok || client == nil {
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
@@ -178,7 +220,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	maxFindings := config.MaxFindings
 
 	total := 0
-	samples := make([]map[string]any, 0, operations.DefaultSampleSize)
+	samples := make([]securityCenterFindingSample, 0, operations.DefaultSampleSize)
 	envelopes := make([]types.AlertEnvelope, 0)
 	severityCounts := map[string]int{}
 	stateCounts := map[string]int{}
@@ -201,10 +243,10 @@ collectLoop:
 				break
 			}
 			if err != nil {
-				return operations.OperationFailure("Security Command Center list findings failed", err, map[string]any{
-					"sources": sources,
-					"filter":  filter,
-					"source":  sourceName,
+				return operations.OperationFailure("Security Command Center list findings failed", err, securityCenterFailureDetails{
+					Sources: sources,
+					Filter:  filter,
+					Source:  sourceName,
 				})
 			}
 
@@ -219,9 +261,9 @@ collectLoop:
 
 			payload, err := marshaler.Marshal(finding)
 			if err != nil {
-				return operations.OperationFailure("Security Command Center finding serialization failed", err, map[string]any{
-					"sources": sources,
-					"source":  sourceName,
+				return operations.OperationFailure("Security Command Center finding serialization failed", err, securityCenterFailureDetails{
+					Sources: sources,
+					Source:  sourceName,
 				})
 			}
 
@@ -248,34 +290,32 @@ collectLoop:
 			}
 
 			if len(samples) < cap(samples) {
-				samples = append(samples, map[string]any{
-					"name":     finding.GetName(),
-					"category": finding.GetCategory(),
-					"state":    finding.GetState().String(),
-					"severity": finding.GetSeverity().String(),
-					"source":   sourceName,
+				samples = append(samples, securityCenterFindingSample{
+					Name:     finding.GetName(),
+					Category: finding.GetCategory(),
+					State:    finding.GetState().String(),
+					Severity: finding.GetSeverity().String(),
+					Source:   sourceName,
 				})
 			}
 		}
 	}
 
-	details := map[string]any{
-		"sources":          sources,
-		"sourceCount":      len(sources),
-		"filter":           filter,
-		"totalFindings":    total,
-		"findingsBySource": sourceCounts,
-		"severity_counts":  severityCounts,
-		"state_counts":     stateCounts,
-		"samples":          samples,
+	details := securityCenterFindingsDetails{
+		Sources:          sources,
+		SourceCount:      len(sources),
+		Filter:           filter,
+		TotalFindings:    total,
+		FindingsBySource: sourceCounts,
+		SeverityCounts:   severityCounts,
+		StateCounts:      stateCounts,
+		Samples:          samples,
 	}
-	details = operations.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
+	if config.IncludePayloads {
+		details.Alerts = envelopes
+	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d findings from %d source(s)", total, len(sources)),
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d findings from %d source(s)", total, len(sources)), details), nil
 }
 
 // runSecurityCenterSettingsOperation lists SCC notification configs
@@ -285,7 +325,7 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, err
 	}
 
-	client, ok := input.Client.(*cloudscc.Client)
+	client, ok := types.ClientInstanceAs[*cloudscc.Client](input.Client)
 	if !ok || client == nil {
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
@@ -295,7 +335,7 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 		return types.OperationResult{}, err
 	}
 
-	configs := make([]map[string]any, 0, sampleConfigsCapacity)
+	configs := make([]securityCenterNotificationConfigSample, 0, sampleConfigsCapacity)
 	count := 0
 
 	for _, parent := range parents {
@@ -311,33 +351,29 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 				break
 			}
 			if err != nil {
-				return operations.OperationFailure("Security Command Center notification config scan failed", err, map[string]any{
-					"parents": parents,
-					"parent":  parent,
+				return operations.OperationFailure("Security Command Center notification config scan failed", err, securityCenterFailureDetails{
+					Parents: parents,
+					Parent:  parent,
 				})
 			}
 
 			count++
 			if len(configs) < cap(configs) {
-				configs = append(configs, map[string]any{
-					"name":        cfg.GetName(),
-					"description": cfg.GetDescription(),
-					"pubsubTopic": cfg.GetPubsubTopic(),
-					"parent":      parent,
+				configs = append(configs, securityCenterNotificationConfigSample{
+					Name:        cfg.GetName(),
+					Description: cfg.GetDescription(),
+					PubSubTopic: cfg.GetPubsubTopic(),
+					Parent:      parent,
 				})
 			}
 		}
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Discovered %d notification configs across %d parent(s)", count, len(parents)),
-		Details: map[string]any{
-			"parents":                   parents,
-			"notificationConfigCount":   count,
-			"sampleNotificationConfigs": configs,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Discovered %d notification configs across %d parent(s)", count, len(parents)), securityCenterSettingsDetails{
+		Parents:                   parents,
+		NotificationConfigCount:   count,
+		SampleNotificationConfigs: configs,
+	}), nil
 }
 
 // resolveSecurityCenterParents chooses the SCC parent resources used for health/settings checks.
@@ -414,7 +450,7 @@ func resolveSecurityCenterSources(meta credentialMetadata, config securityCenter
 }
 
 // decodeSecurityCenterFindingsConfig decodes operation config into a typed struct
-func decodeSecurityCenterFindingsConfig(config map[string]any) (securityCenterFindingsConfig, error) {
+func decodeSecurityCenterFindingsConfig(config json.RawMessage) (securityCenterFindingsConfig, error) {
 	var decoded securityCenterFindingsConfig
 	if err := operations.DecodeConfig(config, &decoded); err != nil {
 		return decoded, err

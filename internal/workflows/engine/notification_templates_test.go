@@ -20,7 +20,7 @@ func TestBuildNotificationOperationConfigSlack(t *testing.T) {
 	rendered := &renderedNotificationTemplate{
 		Title:  "Title",
 		Body:   "Body text",
-		Blocks: []any{map[string]any{"type": "section"}},
+		Blocks: []map[string]any{{"type": "section"}},
 	}
 
 	config, err := buildNotificationOperationConfig(enums.ChannelSlack, preference, rendered)
@@ -71,4 +71,20 @@ func TestOperationNameForChannel(t *testing.T) {
 
 	_, err = operationNameForChannel(enums.ChannelInvalid)
 	require.Error(t, err)
+}
+
+// TestProviderForNotificationChannel verifies channel to provider mapping
+func TestProviderForNotificationChannel(t *testing.T) {
+	provider, err := providerForNotificationChannel(enums.ChannelSlack)
+	require.NoError(t, err)
+	require.Equal(t, "slack", string(provider))
+
+	_, err = providerForNotificationChannel(enums.ChannelInvalid)
+	require.Error(t, err)
+}
+
+// TestIntegrationIDForRecord verifies integration id extraction from records
+func TestIntegrationIDForRecord(t *testing.T) {
+	require.Equal(t, "", integrationIDForRecord(nil))
+	require.Equal(t, "int_123", integrationIDForRecord(&generated.Integration{ID: "int_123"}))
 }

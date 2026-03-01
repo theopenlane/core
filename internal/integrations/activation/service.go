@@ -3,7 +3,6 @@ package activation
 import (
 	"context"
 	"maps"
-	"strings"
 
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
@@ -104,7 +103,7 @@ func (s *Service) BeginOAuth(ctx context.Context, req BeginOAuthRequest) (BeginO
 		Scopes:         append([]string(nil), req.Scopes...),
 		Metadata:       maps.Clone(req.Metadata),
 		LabelOverrides: maps.Clone(req.LabelOverrides),
-		State:          strings.TrimSpace(req.State),
+		State:          req.State,
 	})
 	if err != nil {
 		return BeginOAuthResponse{}, err

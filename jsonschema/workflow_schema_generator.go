@@ -54,7 +54,7 @@ func generateWorkflowSchema(outputPath string) error {
 	// Add enum mappers for workflow-specific enums
 	r.Mapper = workflowTypeMapper
 
-	schema := r.Reflect(reflectSchemaValue(workflows.WorkflowDefinitionSchemaRootType.Value))
+	schema := r.Reflect(reflectSchemaType(workflows.WorkflowDefinitionSchemaRootType.Type))
 
 	schema.Version = workflows.WorkflowDefinitionJSONSchemaVersion
 	schema.ID = workflows.WorkflowDefinitionJSONSchemaID
@@ -81,15 +81,14 @@ func generateWorkflowSchema(outputPath string) error {
 	return nil
 }
 
-// reflectSchemaValue returns a pointer value suitable for jsonschema reflection
-func reflectSchemaValue(value any) any {
-	typ := reflect.TypeOf(value)
+// reflectSchemaType returns a pointer value suitable for jsonschema reflection
+func reflectSchemaType(typ reflect.Type) any {
 	if typ == nil {
 		return nil
 	}
 
 	if typ.Kind() == reflect.Pointer {
-		return value
+		return reflect.New(typ.Elem()).Interface()
 	}
 
 	return reflect.New(typ).Interface()
@@ -126,7 +125,7 @@ func workflowTypeMapper(t reflect.Type) *jsonschema.Schema {
 		return &jsonschema.Schema{
 			Type:        "string",
 			Enum:        toInterfaceSlice(enums.WorkflowTargetTypes),
-			Description: "The type of target (USER, GROUP, ROLE, RESOLVER)",
+			Description: "The type of target (USER, GROUP, ROLE, RESOLVER, CHANNEL)",
 		}
 	case reflect.TypeOf(enums.WorkflowActionType("")):
 		return &jsonschema.Schema{
@@ -178,7 +177,7 @@ func addWorkflowDefinitions(schema *jsonschema.Schema) error {
 	r.Mapper = workflowTypeMapper
 
 	for _, definition := range workflows.WorkflowDefinitionSchemaExtensionTypes {
-		definitionSchema := r.Reflect(reflectSchemaValue(definition.Value))
+		definitionSchema := r.Reflect(reflectSchemaType(definition.Type))
 		schema.Definitions[definition.Name] = definitionSchema
 
 		if decorate, ok := workflowDefinitionDecorators[definition.Name]; ok {
@@ -198,13 +197,22 @@ func addTargetConfigDescription(schema *jsonschema.Schema) {
 
 	if schema.Properties != nil {
 		if prop, ok := schema.Properties.Get("type"); ok {
-			prop.Description = "Target type: USER (specific user), GROUP (group members), ROLE (role holders), or RESOLVER (dynamic resolution)"
+			prop.Description = "Target type: USER (specific user), GROUP (group members), ROLE (role holders), RESOLVER (dynamic resolution), or CHANNEL (direct external destination)"
 		}
 		if prop, ok := schema.Properties.Get("id"); ok {
 			prop.Description = "The ID of the target user, group, or role (required for USER, GROUP, ROLE types)"
 		}
 		if prop, ok := schema.Properties.Get("resolver_key"); ok {
 			prop.Description = "The resolver key for dynamic target resolution (required for RESOLVER type)"
+		}
+		if prop, ok := schema.Properties.Get("channel"); ok {
+			prop.Description = "Notification delivery channel for CHANNEL targets (required for CHANNEL type)"
+		}
+		if prop, ok := schema.Properties.Get("destination"); ok {
+			prop.Description = "External destination identifier for CHANNEL targets (required for CHANNEL type)"
+		}
+		if prop, ok := schema.Properties.Get("config"); ok {
+			prop.Description = "Optional provider-specific message settings for CHANNEL targets"
 		}
 	}
 }
@@ -257,11 +265,11 @@ func addReviewParamsDescription(schema *jsonschema.Schema) {
 // addNotificationParamsDescription adds descriptions to NotificationActionParams schema
 func addNotificationParamsDescription(schema *jsonschema.Schema) {
 	schema.Title = "NotificationActionParams"
-	schema.Description = "Parameters for NOTIFY actions that send notifications to users"
+	schema.Description = "Parameters for NOTIFY actions that send notifications to users and direct channel destinations"
 
 	if schema.Properties != nil {
 		if prop, ok := schema.Properties.Get("targets"); ok {
-			prop.Description = "List of users, groups, roles, or resolvers to receive the notification"
+			prop.Description = "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications and CHANNEL for direct external channel sends"
 		}
 		if prop, ok := schema.Properties.Get("channels"); ok {
 			prop.Description = "Notification delivery channels (IN_APP, SLACK, EMAIL)"
@@ -332,17 +340,29 @@ func addIntegrationParamsDescription(schema *jsonschema.Schema) {
 	schema.Description = "Parameters for INTEGRATION actions that interact with external systems"
 
 	if schema.Properties != nil {
-		if prop, ok := schema.Properties.Get("integration"); ok {
+		if prop, ok := schema.Properties.Get("integration_id"); ok {
 			prop.Description = "Integration identifier"
 		}
 		if prop, ok := schema.Properties.Get("provider"); ok {
-			prop.Description = "Provider override for the integration"
+			prop.Description = "Provider criteria for integration target resolution"
 		}
-		if prop, ok := schema.Properties.Get("operation"); ok {
-			prop.Description = "The integration operation to perform"
+		if prop, ok := schema.Properties.Get("operation_name"); ok {
+			prop.Description = "Exact operation name criteria for integration target resolution"
+		}
+		if prop, ok := schema.Properties.Get("operation_kind"); ok {
+			prop.Description = "Operation kind criteria for integration target resolution when operation_name is omitted"
 		}
 		if prop, ok := schema.Properties.Get("config"); ok {
 			prop.Description = "Integration-specific configuration payload"
+		}
+		if prop, ok := schema.Properties.Get("scope_expression"); ok {
+			prop.Description = "Optional CEL condition that gates whether the integration action should execute"
+		}
+		if prop, ok := schema.Properties.Get("scope_payload"); ok {
+			prop.Description = "Optional scope payload exposed to scope_expression evaluation"
+		}
+		if prop, ok := schema.Properties.Get("scope_resource"); ok {
+			prop.Description = "Optional scope resource identity exposed to scope_expression evaluation"
 		}
 		if prop, ok := schema.Properties.Get("timeout_ms"); ok {
 			prop.Description = "Operation timeout in milliseconds"

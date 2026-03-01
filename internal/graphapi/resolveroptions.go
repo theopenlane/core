@@ -78,6 +78,13 @@ func (r Resolver) WithWorkflowsConfig(cfg workflows.Config) *Resolver {
 	return &r
 }
 
+// WithIntegrationMetadataSource sets integration metadata source for workflow metadata resolver surfaces
+func (r Resolver) WithIntegrationMetadataSource(source integrationMetadataSource) *Resolver {
+	r.integrationSource = source
+
+	return &r
+}
+
 // WithWebsocketPingInterval sets the websocket ping interval for the resolver
 func (r Resolver) WithWebsocketPingInterval(interval time.Duration) *Resolver {
 	r.websocketPingInterval = interval

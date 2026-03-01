@@ -30,8 +30,8 @@ func TestSanitizeOperationDescriptors(t *testing.T) {
 
 func TestSanitizeClientDescriptors(t *testing.T) {
 	provider := types.ProviderType("test")
-	build := func(context.Context, types.CredentialPayload, map[string]any) (any, error) {
-		return nil, nil
+	build := func(context.Context, types.CredentialPayload, map[string]any) (types.ClientInstance, error) {
+		return types.EmptyClientInstance(), nil
 	}
 
 	descriptors := []types.ClientDescriptor{

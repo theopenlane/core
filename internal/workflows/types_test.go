@@ -13,6 +13,10 @@ import (
 	"github.com/theopenlane/core/internal/workflows/observability"
 )
 
+type workflowTestNode struct{}
+
+func (*workflowTestNode) IsNode() {}
+
 // TestCELValue verifies CEL value construction for objects
 func TestCELValue(t *testing.T) {
 	var nilObj *Object
@@ -26,7 +30,7 @@ func TestCELValue(t *testing.T) {
 	assert.Equal(t, "obj1", mapped["id"])
 	assert.Equal(t, enums.WorkflowObjectTypeControl, mapped["type"])
 
-	node := map[string]any{"k": "v"}
+	node := &workflowTestNode{}
 	obj.Node = node
 	assert.Equal(t, node, obj.CELValue())
 }

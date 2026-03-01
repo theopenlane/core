@@ -5,9 +5,14 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 func TestOperationFailure(t *testing.T) {
+	type regionDetails struct {
+		Region string `json:"region"`
+	}
+
 	res, retErr := OperationFailure("failed", nil, nil)
 	if res.Status != types.OperationStatusFailed {
 		t.Fatalf("expected failed status")
@@ -24,18 +29,20 @@ func TestOperationFailure(t *testing.T) {
 
 	err := context.Canceled
 	res, retErr = OperationFailure("failed", err, nil)
-	if res.Details == nil || res.Details["error"] != err.Error() {
+	details, _ := jsonx.ToMap(res.Details)
+	if details == nil || details["error"] != err.Error() {
 		t.Fatalf("expected error details")
 	}
 	if retErr != err {
 		t.Fatalf("expected returned error to match input")
 	}
 
-	res, retErr = OperationFailure("with context", err, map[string]any{"region": "us-east-1"})
-	if res.Details["region"] != "us-east-1" {
+	res, retErr = OperationFailure("with context", err, regionDetails{Region: "us-east-1"})
+	details, _ = jsonx.ToMap(res.Details)
+	if details["region"] != "us-east-1" {
 		t.Fatalf("expected region in details")
 	}
-	if res.Details["error"] != err.Error() {
+	if details["error"] != err.Error() {
 		t.Fatalf("expected auto-injected error in details")
 	}
 	if retErr != err {

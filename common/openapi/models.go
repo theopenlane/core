@@ -2822,7 +2822,7 @@ type IntegrationOperationRequest struct {
 	// Operation is the operation value.
 	Operation string `json:"operation" validate:"required"`
 	// Config is the config value.
-	Config map[string]any `json:"config,omitempty"`
+	Config json.RawMessage `json:"config,omitempty"`
 	// Force is the force value.
 	Force bool `json:"force,omitempty"`
 }
@@ -2840,11 +2840,8 @@ var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
 	IntegrationOperationParams: IntegrationOperationParams{Provider: "gcpscc"},
 	Body: IntegrationOperationRequest{
 		Operation: "findings.collect",
-		Config: map[string]any{
-			"sourceId": "organizations/123/sources/456",
-			"filter":   `severity="HIGH"`,
-		},
-		Force: true,
+		Config:    json.RawMessage(`{"sourceId":"organizations/123/sources/456","filter":"severity=\"HIGH\""}`),
+		Force:     true,
 	},
 }
 
@@ -2954,12 +2951,6 @@ type IntegrationConfig struct {
 // This is separate from provider metadata (catalog) and per-run configuration.
 type IntegrationProviderState = state.IntegrationProviderState
 
-// IntegrationGitHubState captures GitHub App installation details for an integration.
-type IntegrationGitHubState = state.GitHubState
-
-// IntegrationSlackState captures Slack workspace details for an integration.
-type IntegrationSlackState = state.SlackState
-
 // ExampleIntegrationConfigPayload demonstrates a full integration configuration request.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 	IntegrationConfigParams: IntegrationConfigParams{Provider: "gcpscc"},
@@ -3026,7 +3017,7 @@ type IntegrationOperationResponse struct {
 	// Summary is the summary value.
 	Summary string `json:"summary"`
 	// Details is the details value.
-	Details map[string]any `json:"details,omitempty"`
+	Details json.RawMessage `json:"details,omitempty"`
 }
 
 // ExampleResponse returns an example IntegrationConfigResponse for OpenAPI documentation.
@@ -3045,9 +3036,7 @@ func (r *IntegrationOperationResponse) ExampleResponse() any {
 		Operation: "findings.collect",
 		Status:    "ok",
 		Summary:   "Collected 5 findings from organizations/123/sources/456",
-		Details: map[string]any{
-			"totalFindings": exampleFindingsCount,
-		},
+		Details:   json.RawMessage(`{"totalFindings":5}`),
 	}
 }
 

@@ -51,6 +51,17 @@ type githubVulnerabilityConfig struct {
 	Ecosystem types.LowerString `json:"ecosystem"`
 }
 
+type githubVulnerabilityDetails struct {
+	RepositoriesScanned int                   `json:"repositories_scanned"`
+	AlertsTotal         int                   `json:"alerts_total"`
+	AlertTypeCounts     map[string]int        `json:"alert_type_counts,omitempty"`
+	Alerts              []types.AlertEnvelope `json:"alerts,omitempty"`
+}
+
+type githubRepositoryFailureDetails struct {
+	Repository string `json:"repository,omitempty"`
+}
+
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
@@ -75,14 +86,10 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	}
 
 	if len(repoNames) == 0 {
-		return types.OperationResult{
-			Status:  types.OperationStatusOK,
-			Summary: "No repositories available for vulnerability alerts",
-			Details: map[string]any{
-				"repositories": 0,
-				"alerts":       0,
-			},
-		}, nil
+		return operations.OperationSuccess("No repositories available for vulnerability alerts", githubVulnerabilityDetails{
+			RepositoriesScanned: 0,
+			AlertsTotal:         0,
+		}), nil
 	}
 
 	if maxRepos := config.MaxRepos; maxRepos > 0 && len(repoNames) > maxRepos {
@@ -99,8 +106,8 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeDependabot) {
 			batch, err := listDependabotAlerts(ctx, client, token, repo, config)
 			if err != nil {
-				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, map[string]any{
-					"repository": repo,
+				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, githubRepositoryFailureDetails{
+					Repository: repo,
 				})
 			}
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeDependabot, repo, batch)
@@ -111,8 +118,8 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
 			batch, err := listCodeScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
-				return operations.OperationFailure("GitHub code scanning alert collection failed", err, map[string]any{
-					"repository": repo,
+				return operations.OperationFailure("GitHub code scanning alert collection failed", err, githubRepositoryFailureDetails{
+					Repository: repo,
 				})
 			}
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeCodeScanning, repo, batch)
@@ -123,8 +130,8 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
 			batch, err := listSecretScanningAlerts(ctx, client, token, repo, config)
 			if err != nil {
-				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, map[string]any{
-					"repository": repo,
+				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, githubRepositoryFailureDetails{
+					Repository: repo,
 				})
 			}
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeSecretScanning, repo, batch)
@@ -133,18 +140,16 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		}
 	}
 
-	details := map[string]any{
-		"repositories_scanned": len(repoNames),
-		"alerts_total":         totalAlerts,
-		"alert_type_counts":    alertTypeCounts,
+	details := githubVulnerabilityDetails{
+		RepositoriesScanned: len(repoNames),
+		AlertsTotal:         totalAlerts,
+		AlertTypeCounts:     alertTypeCounts,
 	}
-	details = operations.AddPayloadIf(details, config.IncludePayloads, "alerts", envelopes)
+	if config.IncludePayloads {
+		details.Alerts = envelopes
+	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d vulnerability alerts from %d repositories", totalAlerts, len(repoNames)),
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d vulnerability alerts from %d repositories", totalAlerts, len(repoNames)), details), nil
 }
 
 // listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens

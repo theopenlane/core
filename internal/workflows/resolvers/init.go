@@ -77,7 +77,7 @@ type ownerQueryer interface {
 }
 
 // loadWorkflowNode loads the workflow node for the given object, using the node if present or loading from the client otherwise
-func loadWorkflowNode(ctx context.Context, client *generated.Client, obj *workflows.Object) (any, error) {
+func loadWorkflowNode(ctx context.Context, client *generated.Client, obj *workflows.Object) (generated.Noder, error) {
 	if obj.Node != nil {
 		return obj.Node, nil
 	}

@@ -43,6 +43,8 @@ var (
 	ErrExecutorNotAvailable = errors.New("executor is nil")
 	// ErrIntegrationStoreRequired is returned when an integration store dependency is missing
 	ErrIntegrationStoreRequired = errors.New("integration store required")
+	// ErrIntegrationRegistryRequired is returned when an integration registry dependency is missing
+	ErrIntegrationRegistryRequired = errors.New("integration registry required")
 	// ErrIntegrationOperationsRequired is returned when integration operations are not configured
 	ErrIntegrationOperationsRequired = errors.New("integration operations required")
 	// ErrIntegrationRunIDRequired indicates the integration run identifier is missing
@@ -53,10 +55,14 @@ var (
 	ErrIntegrationProviderUnknown = errors.New("integration provider unknown")
 	// ErrIntegrationOperationNameRequired indicates the run operation name is missing
 	ErrIntegrationOperationNameRequired = errors.New("integration operation name required")
+	// ErrIntegrationOperationCriteriaRequired indicates operation name or operation kind is required
+	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation criteria required")
 	// ErrIntegrationOperationFailed indicates the operation failed to execute successfully
 	ErrIntegrationOperationFailed = errors.New("integration operation failed")
 	// ErrIntegrationAlertPayloadsMissing indicates alert payloads are missing from operation output
 	ErrIntegrationAlertPayloadsMissing = errors.New("integration alert payloads missing")
+	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation
+	ErrIntegrationScopeConditionFalse = errors.New("integration scope condition false")
 	// ErrIntegrationActionQueued indicates the integration action was queued for async processing
 	ErrIntegrationActionQueued = errors.New("integration action queued")
 	// ErrObjectNil is returned when the workflow object is nil
@@ -85,6 +91,10 @@ var (
 	ErrNotificationTemplateChannelMismatch = errors.New("notification template channel mismatch")
 	// ErrNotificationChannelUnsupported is returned when a notification channel lacks integration support
 	ErrNotificationChannelUnsupported = errors.New("notification channel unsupported")
+	// ErrNotificationChannelTargetChannelRequired is returned when a CHANNEL target omits channel
+	ErrNotificationChannelTargetChannelRequired = errors.New("notification channel target requires channel")
+	// ErrNotificationChannelTargetDestinationRequired is returned when a CHANNEL target omits destination
+	ErrNotificationChannelTargetDestinationRequired = errors.New("notification channel target requires destination")
 	// ErrWebhookURLRequired is returned when webhook action is missing URL
 	ErrWebhookURLRequired = errors.New("webhook action requires url")
 	// ErrAssignmentUpdateFailed is returned when assignment update fails
@@ -127,4 +137,6 @@ var (
 	ErrReviewNoTargets = errors.New("review action has no resolved targets")
 	// ErrTemplateRenderDepthExceeded is returned when template rendering exceeds the maximum depth
 	ErrTemplateRenderDepthExceeded = errors.New("template render depth exceeded")
+	// ErrNotificationTemplateBlocksInvalid is returned when rendered template blocks are not a valid block list
+	ErrNotificationTemplateBlocksInvalid = errors.New("notification template blocks invalid")
 )

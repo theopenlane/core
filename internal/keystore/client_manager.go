@@ -17,7 +17,7 @@ type ClientPoolManager struct {
 	// mu protects concurrent access to pools and descriptors maps
 	mu sync.RWMutex
 	// pools indexes client pools by provider and client name
-	pools map[clientDescriptorKey]*ClientPool[any, map[string]any]
+	pools map[clientDescriptorKey]*ClientPool[types.ClientInstance, map[string]any]
 	// descriptors stores registered client descriptors
 	descriptors map[clientDescriptorKey]types.ClientDescriptor
 }
@@ -30,7 +30,7 @@ func NewClientPoolManager(source CredentialSource, descriptors []types.ClientDes
 
 	manager := &ClientPoolManager{
 		source:      source,
-		pools:       map[clientDescriptorKey]*ClientPool[any, map[string]any]{},
+		pools:       map[clientDescriptorKey]*ClientPool[types.ClientInstance, map[string]any]{},
 		descriptors: map[clientDescriptorKey]types.ClientDescriptor{},
 	}
 
@@ -53,7 +53,7 @@ func (m *ClientPoolManager) RegisterDescriptor(descriptor types.ClientDescriptor
 	builder := descriptorClientBuilder{descriptor: descriptor}
 
 	pool, err := NewClientPool(m.source, builder,
-		WithClientConfigClone[any](mapx.DeepCloneMapAny))
+		WithClientConfigClone[types.ClientInstance](mapx.DeepCloneMapAny))
 	if err != nil {
 		return err
 	}
@@ -68,18 +68,18 @@ func (m *ClientPoolManager) RegisterDescriptor(descriptor types.ClientDescriptor
 }
 
 // Get retrieves a client for the given provider/client name pair
-func (m *ClientPoolManager) Get(ctx context.Context, orgID string, provider types.ProviderType, client types.ClientName, opts ...ClientRequestOption[map[string]any]) (any, error) {
+func (m *ClientPoolManager) Get(ctx context.Context, orgID string, provider types.ProviderType, client types.ClientName, opts ...ClientRequestOption[map[string]any]) (types.ClientInstance, error) {
 	m.mu.RLock()
 	pool := m.pools[clientDescriptorKey{Provider: provider, Name: client}]
 	m.mu.RUnlock()
 
 	if pool == nil {
-		return nil, ErrClientNotRegistered
+		return types.EmptyClientInstance(), ErrClientNotRegistered
 	}
 
 	clientResult, err := pool.Get(ctx, orgID, opts...)
 	if err != nil {
-		return nil, err
+		return types.EmptyClientInstance(), err
 	}
 
 	return clientResult, nil
@@ -129,7 +129,7 @@ type descriptorClientBuilder struct {
 }
 
 // Build constructs a client using the descriptor's build function
-func (b descriptorClientBuilder) Build(ctx context.Context, payload types.CredentialPayload, config map[string]any) (any, error) {
+func (b descriptorClientBuilder) Build(ctx context.Context, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 	cloned := mapx.DeepCloneMapAny(config)
 	return b.descriptor.Build(ctx, payload, cloned)
 }
@@ -148,13 +148,13 @@ type clientDescriptorKey struct {
 }
 
 // BuildFromPayload constructs a client directly from the provided payload without using the credential store or pool
-func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types.ProviderType, client types.ClientName, payload types.CredentialPayload, config map[string]any) (any, error) {
+func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types.ProviderType, client types.ClientName, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 	m.mu.RLock()
 	descriptor, ok := m.descriptors[clientDescriptorKey{Provider: provider, Name: client}]
 	m.mu.RUnlock()
 
 	if !ok {
-		return nil, ErrClientNotRegistered
+		return types.EmptyClientInstance(), ErrClientNotRegistered
 	}
 
 	return descriptor.Build(ctx, payload, mapx.DeepCloneMapAny(config))

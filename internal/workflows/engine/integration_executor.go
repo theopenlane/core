@@ -4,26 +4,26 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"maps"
 	"time"
 
-	"github.com/samber/lo"
+	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/ingest"
-	"github.com/theopenlane/core/internal/keystore"
+	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
+	"github.com/theopenlane/core/internal/integrations/targetresolver"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -76,8 +76,16 @@ type IntegrationQueueRequest struct {
 	IntegrationID string
 	// Operation identifies the provider operation
 	Operation types.OperationName
-	// Config carries the operation configuration payload
-	Config map[string]any
+	// OperationKind identifies the provider operation kind when operation name is omitted
+	OperationKind types.OperationKind
+	// Config carries the operation configuration payload as a JSON object document
+	Config json.RawMessage
+	// ScopeExpression is an optional CEL expression gate for command execution
+	ScopeExpression string
+	// ScopePayload is optional data exposed to scope expression evaluation as a JSON object document
+	ScopePayload json.RawMessage
+	// ScopeResource is optional resource identity exposed to scope expression evaluation
+	ScopeResource string
 	// Force requests credential refresh
 	Force bool
 	// ClientForce requests client refresh
@@ -96,6 +104,35 @@ type IntegrationQueueResult struct {
 	EventID string
 	// Status captures the run status at queue time
 	Status enums.IntegrationRunStatus
+}
+
+// integrationActionRuntimeParams defines the integration action params used at runtime.
+// Config/scope payload stay as raw JSON until execution boundaries to avoid early map assertions.
+type integrationActionRuntimeParams struct {
+	// IntegrationID is the explicit integration identifier for the operation
+	IntegrationID string `json:"integration_id,omitempty"`
+	// Provider overrides the integration identifier when set
+	Provider string `json:"provider"`
+	// OperationName identifies the explicit integration operation name
+	OperationName string `json:"operation_name,omitempty"`
+	// OperationKind identifies the integration operation kind when operation name is omitted
+	OperationKind string `json:"operation_kind,omitempty"`
+	// Config holds the integration-specific configuration payload
+	Config json.RawMessage `json:"config,omitempty"`
+	// ScopeExpression is an optional CEL expression gate for this integration action
+	ScopeExpression string `json:"scope_expression,omitempty"`
+	// ScopePayload is optional payload data exposed to scope expression evaluation
+	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
+	// ScopeResource is optional resource identity data exposed to scope expression evaluation
+	ScopeResource string `json:"scope_resource,omitempty"`
+	// TimeoutMS overrides the operation timeout in milliseconds
+	TimeoutMS int `json:"timeout_ms"`
+	// Retries overrides the retry count when non-zero
+	Retries int `json:"retries"`
+	// Force requests a refresh for the provider
+	Force bool `json:"force_refresh"`
+	// ClientForce requests a client-side refresh for the provider
+	ClientForce bool `json:"client_force"`
 }
 
 // SetIntegrationDeps attaches integration dependencies and registers listeners when possible
@@ -151,56 +188,91 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	operationName := req.Operation
-	if operationName == "" {
-		return IntegrationQueueResult{}, ErrIntegrationOperationNameRequired
+	operationKind := req.OperationKind
+	if operationName == "" && operationKind == "" {
+		return IntegrationQueueResult{}, ErrIntegrationOperationCriteriaRequired
 	}
 
 	provider := req.Provider
 	integrationID := req.IntegrationID
 
 	allowCtx := workflows.AllowContext(ctx)
-	var integrationRecord *ent.Integration
-	var err error
+	if e.integrationRegistry == nil {
+		return IntegrationQueueResult{}, ErrIntegrationRegistryRequired
+	}
 
-	switch {
-	case integrationID != "":
-		integrationRecord, err = e.client.Integration.Query().
-			Where(
-				integration.IDEQ(integrationID),
-				integration.OwnerIDEQ(orgID),
-			).
-			Only(allowCtx)
-		if err != nil {
-			return IntegrationQueueResult{}, err
-		}
-		if provider == types.ProviderUnknown {
-			provider = types.ProviderTypeFromString(integrationRecord.Kind)
-			if provider == types.ProviderUnknown {
-				return IntegrationQueueResult{}, ErrIntegrationProviderUnknown
-			}
-		}
-	default:
+	if integrationID == "" {
 		if provider == types.ProviderUnknown {
 			return IntegrationQueueResult{}, ErrIntegrationProviderRequired
 		}
 		if e.integrationStore == nil {
 			return IntegrationQueueResult{}, ErrIntegrationStoreRequired
 		}
-		integrationRecord, err = e.integrationStore.EnsureIntegration(allowCtx, orgID, provider)
+
+		integrationRecord, err := e.integrationStore.EnsureIntegration(allowCtx, orgID, provider)
 		if err != nil {
 			return IntegrationQueueResult{}, err
 		}
+
+		integrationID = integrationRecord.ID
 	}
 
-	if e.integrationRegistry != nil && !operationDescriptorRegistered(e.integrationRegistry, provider, operationName) {
-		return IntegrationQueueResult{}, keystore.ErrOperationNotRegistered
+	source, err := targetresolver.NewEntSource(e.client)
+	if err != nil {
+		return IntegrationQueueResult{}, err
 	}
 
-	operationConfig := maps.Clone(req.Config)
-	if merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), req.Config); err != nil {
+	resolver, err := targetresolver.NewResolver(source, e.integrationRegistry)
+	if err != nil {
+		return IntegrationQueueResult{}, err
+	}
+
+	criteria := targetresolver.ResolveCriteria{OwnerID: orgID}
+	if integrationID != "" {
+		criteria.IntegrationID = mo.Some(integrationID)
+	}
+	if provider != types.ProviderUnknown {
+		criteria.Provider = mo.Some(provider)
+	}
+	if operationName != "" {
+		criteria.OperationName = mo.Some(operationName)
+	}
+	if operationKind != "" {
+		criteria.OperationKind = mo.Some(operationKind)
+	}
+
+	resolution, err := resolver.Resolve(allowCtx, criteria)
+	if err != nil {
+		return IntegrationQueueResult{}, err
+	}
+
+	integrationRecord := resolution.Integration
+	provider = resolution.Provider
+	operationName = resolution.Operation.Name
+	operationKind = resolution.Operation.Kind
+
+	operationConfig, err := decodeJSONObjectDocument(req.Config)
+	if err != nil {
+		return IntegrationQueueResult{}, err
+	}
+
+	if merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), operationConfig); err != nil {
 		return IntegrationQueueResult{}, err
 	} else if merged != nil {
 		operationConfig = merged
+	}
+
+	scopePayload, err := decodeJSONObjectDocument(req.ScopePayload)
+	if err != nil {
+		return IntegrationQueueResult{}, err
+	}
+
+	scopeAllowed, err := evaluateIntegrationScope(allowCtx, req, integrationRecord, resolution.Provider, operationName, operationConfig, scopePayload)
+	if err != nil {
+		return IntegrationQueueResult{}, err
+	}
+	if !scopeAllowed {
+		return IntegrationQueueResult{}, ErrIntegrationScopeConditionFalse
 	}
 
 	if operationName == types.OperationVulnerabilitiesCollect {
@@ -216,6 +288,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		SetOwnerID(orgID).
 		SetIntegrationID(integrationRecord.ID).
 		SetOperationName(string(operationName)).
+		SetOperationKind(integrationRunOperationKind(runType, operationKind)).
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending)
 	if operationConfig != nil {
@@ -228,12 +301,14 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	payload := integrations.IntegrationOperationRequestedPayload{
-		RunID:       runRecord.ID,
-		OrgID:       orgID,
-		Provider:    string(provider),
-		Operation:   string(operationName),
-		Force:       req.Force,
-		ClientForce: req.ClientForce,
+		RunID:         runRecord.ID,
+		OrgID:         orgID,
+		Provider:      string(resolution.Provider),
+		Operation:     string(operationName),
+		OperationKind: operationKind,
+		RunType:       runType,
+		Force:         req.Force,
+		ClientForce:   req.ClientForce,
 	}
 	if req.WorkflowMeta != nil {
 		payload.WorkflowInstanceID = req.WorkflowMeta.InstanceID
@@ -272,14 +347,15 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		return ErrIntegrationOperationsRequired
 	}
 
-	var params workflows.IntegrationActionParams
-	if err := json.Unmarshal(action.Params, &params); err != nil {
+	var params integrationActionRuntimeParams
+	if err := jsonx.RoundTrip(action.Params, &params); err != nil {
 		return errors.Join(ErrUnmarshalParams, err)
 	}
 
-	operationName := types.OperationName(params.Operation)
-	if operationName == "" {
-		return ErrIntegrationOperationNameRequired
+	operationName := types.OperationName(params.OperationName)
+	operationKind := types.OperationKind(params.OperationKind)
+	if operationName == "" && operationKind == "" {
+		return ErrIntegrationOperationCriteriaRequired
 	}
 
 	orgID := instance.OwnerID
@@ -302,17 +378,24 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 	}
 
 	_, err := e.queueIntegrationOperation(ctx, IntegrationQueueRequest{
-		OrgID:         orgID,
-		Provider:      types.ProviderTypeFromString(params.Provider),
-		IntegrationID: params.Integration,
-		Operation:     operationName,
-		Config:        maps.Clone(params.Config),
-		Force:         params.Force,
-		ClientForce:   params.ClientForce,
-		RunType:       enums.IntegrationRunTypeEvent,
-		WorkflowMeta:  meta,
+		OrgID:           orgID,
+		Provider:        types.ProviderTypeFromString(params.Provider),
+		IntegrationID:   params.IntegrationID,
+		Operation:       operationName,
+		OperationKind:   operationKind,
+		Config:          append(json.RawMessage(nil), params.Config...),
+		ScopeExpression: params.ScopeExpression,
+		ScopePayload:    append(json.RawMessage(nil), params.ScopePayload...),
+		ScopeResource:   params.ScopeResource,
+		Force:           params.Force,
+		ClientForce:     params.ClientForce,
+		RunType:         enums.IntegrationRunTypeEvent,
+		WorkflowMeta:    meta,
 	})
 	if err != nil {
+		if errors.Is(err, ErrIntegrationScopeConditionFalse) {
+			return nil
+		}
 		return err
 	}
 
@@ -371,21 +454,29 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		return err
 	}
 
-	operationConfig := maps.Clone(run.OperationConfig)
+	operationConfig := mapx.DeepCloneMapAny(run.OperationConfig)
 	if operationName == types.OperationVulnerabilitiesCollect {
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
+	}
+
+	var operationConfigDoc json.RawMessage
+	if len(operationConfig) > 0 {
+		if err := jsonx.RoundTrip(operationConfig, &operationConfigDoc); err != nil {
+			return err
+		}
 	}
 
 	operationCtx, cancel := integrationOperationContext(systemCtx, envelope.TimeoutSeconds)
 	defer cancel()
 
 	result, opErr := e.integrationOperations.Run(operationCtx, types.OperationRequest{
-		OrgID:       run.OwnerID,
-		Provider:    provider,
-		Name:        operationName,
-		Config:      operationConfig,
-		Force:       payload.Force,
-		ClientForce: payload.ClientForce,
+		OrgID:         run.OwnerID,
+		IntegrationID: run.IntegrationID,
+		Provider:      provider,
+		Name:          operationName,
+		Config:        operationConfigDoc,
+		Force:         payload.Force,
+		ClientForce:   payload.ClientForce,
 	})
 
 	runStatus := enums.IntegrationRunStatusSuccess
@@ -400,7 +491,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		}
 	}
 
-	metrics := buildOperationMetrics(result)
+	metricsDoc := buildOperationMetrics(result)
 
 	if runStatus == enums.IntegrationRunStatusSuccess && operationName == types.OperationVulnerabilitiesCollect {
 		var ingestErr error
@@ -427,7 +518,39 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 			ingestErr = ingest.ErrMappingNotFound
 		}
 
-		metrics = appendIngestMetrics(metrics, ingestResult)
+		metricsDoc = appendVulnerabilityIngestMetrics(metricsDoc, ingestResult)
+		if ingestErr != nil {
+			runStatus = enums.IntegrationRunStatusFailed
+			errorText = ingestErr.Error()
+		}
+	}
+
+	if runStatus == enums.IntegrationRunStatusSuccess && operationName == types.OperationDirectorySync {
+		var ingestErr error
+		var ingestResult ingest.DirectoryAccountIngestResult
+
+		if ingest.SupportsDirectoryAccountIngest(provider, integrationRecord.Config) {
+			envelopes, err := extractAlertEnvelopes(result.Details)
+			if err != nil {
+				ingestErr = err
+			} else {
+				ingestResult, ingestErr = ingest.DirectoryAccounts(operationCtx, ingest.DirectoryAccountIngestRequest{
+					OrgID:             run.OwnerID,
+					IntegrationID:     integrationRecord.ID,
+					Provider:          provider,
+					Operation:         operationName,
+					IntegrationConfig: integrationRecord.Config,
+					ProviderState:     integrationRecord.ProviderState,
+					OperationConfig:   operationConfig,
+					Envelopes:         envelopes,
+					DB:                e.client,
+				})
+			}
+		} else {
+			ingestErr = ingest.ErrMappingNotFound
+		}
+
+		metricsDoc = appendDirectoryAccountIngestMetrics(metricsDoc, ingestResult)
 		if ingestErr != nil {
 			runStatus = enums.IntegrationRunStatusFailed
 			errorText = ingestErr.Error()
@@ -436,6 +559,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 
 	finishedAt := time.Now()
 	durationMs := int(finishedAt.Sub(startedAt).Milliseconds())
+	metrics := encodeIntegrationRunMetrics(metricsDoc)
 	finalize := e.client.IntegrationRun.UpdateOneID(run.ID).
 		SetStatus(runStatus).
 		SetFinishedAt(finishedAt).
@@ -461,6 +585,78 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 	return nil
 }
 
+// evaluateIntegrationScope evaluates optional scope expressions before queueing integration runs
+func evaluateIntegrationScope(ctx context.Context, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig map[string]any, scopePayload map[string]any) (bool, error) {
+	if req.ScopeExpression == "" {
+		return true, nil
+	}
+
+	evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+	if err != nil {
+		return false, err
+	}
+
+	integrationConfig, err := jsonx.ToMap(integrationRecord.Config)
+	if err != nil {
+		return false, err
+	}
+
+	providerState, err := jsonx.ToMap(integrationRecord.ProviderState)
+	if err != nil {
+		return false, err
+	}
+
+	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, integrationscope.ScopeVars{
+		Payload:           mapx.DeepCloneMapAny(scopePayload),
+		Resource:          req.ScopeResource,
+		Provider:          provider,
+		Operation:         operationName,
+		Config:            mapx.DeepCloneMapAny(operationConfig),
+		IntegrationConfig: integrationConfig,
+		ProviderState:     providerState,
+		OrgID:             req.OrgID,
+		IntegrationID:     integrationRecord.ID,
+	})
+}
+
+// decodeJSONObjectDocument decodes a raw JSON document into a map payload when provided.
+func decodeJSONObjectDocument(raw json.RawMessage) (map[string]any, error) {
+	if len(raw) == 0 {
+		return nil, nil
+	}
+
+	decoded, err := jsonx.ToMap(raw)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(decoded) == 0 {
+		return nil, nil
+	}
+
+	return decoded, nil
+}
+
+// integrationRunOperationKind maps operation descriptors into integration run operation kinds
+func integrationRunOperationKind(runType enums.IntegrationRunType, operationKind types.OperationKind) enums.IntegrationOperationKind {
+	switch runType {
+	case enums.IntegrationRunTypeWebhook:
+		return enums.IntegrationOperationKindWebhook
+	case enums.IntegrationRunTypeScheduled:
+		return enums.IntegrationOperationKindScheduled
+	}
+
+	switch operationKind {
+	case types.OperationKindNotify:
+		return enums.IntegrationOperationKindPush
+	case types.OperationKindCollectFindings, types.OperationKindScanSettings:
+		return enums.IntegrationOperationKindPull
+	default:
+		return enums.IntegrationOperationKindSync
+	}
+}
+
+// integrationOperationContext applies optional timeout policy to operation execution
 func integrationOperationContext(parent context.Context, timeoutSeconds int) (context.Context, context.CancelFunc) {
 	if timeoutSeconds <= 0 {
 		return parent, func() {}
@@ -496,93 +692,121 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 	}
 }
 
-// operationDescriptorRegistered reports whether a provider operation is registered
-func operationDescriptorRegistered(reg IntegrationRegistry, provider types.ProviderType, name types.OperationName) bool {
-	if reg == nil {
-		return true
-	}
-
-	return lo.ContainsBy(reg.OperationDescriptors(provider), func(descriptor types.OperationDescriptor) bool {
-		return descriptor.Name == name
-	})
-}
-
 // extractAlertEnvelopes pulls alert envelopes from operation details
-func extractAlertEnvelopes(details map[string]any) ([]types.AlertEnvelope, error) {
-	if details == nil {
+func extractAlertEnvelopes(details json.RawMessage) ([]types.AlertEnvelope, error) {
+	if len(details) == 0 {
 		return nil, ErrIntegrationAlertPayloadsMissing
 	}
 
-	raw, ok := details["alerts"]
-	if !ok || raw == nil {
+	var payload struct {
+		Alerts json.RawMessage `json:"alerts"`
+	}
+	if err := jsonx.RoundTrip(details, &payload); err != nil {
+		return nil, err
+	}
+	if len(payload.Alerts) == 0 {
 		return nil, ErrIntegrationAlertPayloadsMissing
 	}
 
-	switch value := raw.(type) {
-	case []types.AlertEnvelope:
-		return value, nil
-	case []any:
-		envelopes := make([]types.AlertEnvelope, 0, len(value))
-		for _, item := range value {
-			if typed, ok := item.(types.AlertEnvelope); ok {
-				envelopes = append(envelopes, typed)
-				continue
-			}
-
-			envelope, err := decodeAlertEnvelope(item)
-			if err != nil {
-				return nil, err
-			}
-
-			envelopes = append(envelopes, envelope)
-		}
-
+	var envelopes []types.AlertEnvelope
+	if err := jsonx.RoundTrip(payload.Alerts, &envelopes); err == nil {
 		return envelopes, nil
-	default:
-		envelope, err := decodeAlertEnvelope(value)
-		if err != nil {
-			return nil, err
-		}
-
-		return []types.AlertEnvelope{envelope}, nil
 	}
-}
 
-// decodeAlertEnvelope coerces an envelope from a dynamic payload
-func decodeAlertEnvelope(value any) (types.AlertEnvelope, error) {
 	var envelope types.AlertEnvelope
-	if err := jsonx.RoundTrip(value, &envelope); err != nil {
-		return envelope, err
+	if err := jsonx.RoundTrip(payload.Alerts, &envelope); err != nil {
+		return nil, err
 	}
 
-	return envelope, nil
+	return []types.AlertEnvelope{envelope}, nil
 }
 
-// buildOperationMetrics builds a metrics map for operation output
-func buildOperationMetrics(result types.OperationResult) map[string]any {
-	operation := map[string]any{
-		"status":  string(result.Status),
-		"summary": result.Summary,
+// integrationRunOperationMetrics captures operation execution metrics
+type integrationRunOperationMetrics struct {
+	// Status is the operation status value
+	Status string `json:"status"`
+	// Summary is the operation summary value
+	Summary string `json:"summary"`
+	// Details captures optional operation details
+	Details json.RawMessage `json:"details,omitempty"`
+}
+
+// integrationRunMetrics captures integration run metrics persisted on integration runs
+type integrationRunMetrics struct {
+	// Operation captures operation execution metrics
+	Operation integrationRunOperationMetrics `json:"operation"`
+	// IngestSummary captures ingest summary metrics
+	IngestSummary json.RawMessage `json:"ingest_summary,omitempty"`
+	// IngestErrors captures ingest error metrics
+	IngestErrors []string `json:"ingest_errors,omitempty"`
+}
+
+// encodeIntegrationRunOperationDetails normalizes operation details for metrics payloads
+func encodeIntegrationRunOperationDetails(details json.RawMessage) json.RawMessage {
+	if len(details) == 0 {
+		return nil
 	}
-	metrics := map[string]any{
-		"operation": operation,
+
+	return append(json.RawMessage(nil), details...)
+}
+
+// encodeIntegrationRunVulnerabilitySummary encodes vulnerability ingest summaries for metrics payloads
+func encodeIntegrationRunVulnerabilitySummary(summary ingest.VulnerabilityIngestSummary) json.RawMessage {
+	raw, err := json.Marshal(summary)
+	if err != nil {
+		return nil
 	}
-	if result.Details != nil {
-		operation["details"] = result.Details
+
+	return raw
+}
+
+// encodeIntegrationRunDirectorySummary encodes directory account ingest summaries for metrics payloads
+func encodeIntegrationRunDirectorySummary(summary ingest.DirectoryAccountIngestSummary) json.RawMessage {
+	raw, err := json.Marshal(summary)
+	if err != nil {
+		return nil
+	}
+
+	return raw
+}
+
+// buildOperationMetrics builds a metrics document for operation output
+func buildOperationMetrics(result types.OperationResult) integrationRunMetrics {
+	return integrationRunMetrics{
+		Operation: integrationRunOperationMetrics{
+			Status:  string(result.Status),
+			Summary: result.Summary,
+			Details: encodeIntegrationRunOperationDetails(result.Details),
+		},
+	}
+}
+
+// encodeIntegrationRunMetrics converts integration run metrics into persisted map form
+func encodeIntegrationRunMetrics(metrics integrationRunMetrics) map[string]any {
+	metricsMap, err := jsonx.ToMap(metrics)
+	if err != nil {
+		return nil
+	}
+
+	return metricsMap
+}
+
+// appendIntegrationIngestMetrics attaches ingest summary and errors to integration run metrics
+func appendIntegrationIngestMetrics(metrics integrationRunMetrics, summary json.RawMessage, ingestErrors []string) integrationRunMetrics {
+	metrics.IngestSummary = summary
+	if len(ingestErrors) > 0 {
+		metrics.IngestErrors = append([]string(nil), ingestErrors...)
 	}
 
 	return metrics
 }
 
-// appendIngestMetrics attaches ingest results to metrics
-func appendIngestMetrics(metrics map[string]any, result ingest.VulnerabilityIngestResult) map[string]any {
-	if metrics == nil {
-		metrics = map[string]any{}
-	}
-	metrics["ingest_summary"] = result.Summary
-	if len(result.Errors) > 0 {
-		metrics["ingest_errors"] = result.Errors
-	}
+// appendVulnerabilityIngestMetrics attaches vulnerability ingest results to metrics
+func appendVulnerabilityIngestMetrics(metrics integrationRunMetrics, result ingest.VulnerabilityIngestResult) integrationRunMetrics {
+	return appendIntegrationIngestMetrics(metrics, encodeIntegrationRunVulnerabilitySummary(result.Summary), result.Errors)
+}
 
-	return metrics
+// appendDirectoryAccountIngestMetrics attaches directory account ingest results to metrics
+func appendDirectoryAccountIngestMetrics(metrics integrationRunMetrics, result ingest.DirectoryAccountIngestResult) integrationRunMetrics {
+	return appendIntegrationIngestMetrics(metrics, encodeIntegrationRunDirectorySummary(result.Summary), result.Errors)
 }

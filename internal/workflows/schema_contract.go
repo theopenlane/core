@@ -1,6 +1,10 @@
 package workflows
 
-import "github.com/theopenlane/core/common/models"
+import (
+	"reflect"
+
+	"github.com/theopenlane/core/common/models"
+)
 
 const (
 	// WorkflowDefinitionJSONSchemaVersion is the JSON Schema draft used for workflow definition schemas
@@ -17,32 +21,32 @@ const (
 type WorkflowSchemaTypeDefinition struct {
 	// Name is the schema definition name under $defs
 	Name string
-	// Value is a zero value of the Go type represented by this schema definition
-	Value any
+	// Type is the reflected Go type represented by this schema definition
+	Type reflect.Type
 }
 
 // WorkflowDefinitionSchemaRootType is the root Go type for workflow definition schema generation
 var WorkflowDefinitionSchemaRootType = WorkflowSchemaTypeDefinition{
-	Name:  "WorkflowDefinitionDocument",
-	Value: models.WorkflowDefinitionDocument{},
+	Name: "WorkflowDefinitionDocument",
+	Type: reflect.TypeOf(models.WorkflowDefinitionDocument{}),
 }
 
 // WorkflowDefinitionSchemaModelTypes are model definition types expected in workflow schema $defs
 var WorkflowDefinitionSchemaModelTypes = []WorkflowSchemaTypeDefinition{
-	{Name: "WorkflowTrigger", Value: models.WorkflowTrigger{}},
-	{Name: "WorkflowCondition", Value: models.WorkflowCondition{}},
-	{Name: "WorkflowAction", Value: models.WorkflowAction{}},
-	{Name: "WorkflowSelector", Value: models.WorkflowSelector{}},
+	{Name: "WorkflowTrigger", Type: reflect.TypeOf(models.WorkflowTrigger{})},
+	{Name: "WorkflowCondition", Type: reflect.TypeOf(models.WorkflowCondition{})},
+	{Name: "WorkflowAction", Type: reflect.TypeOf(models.WorkflowAction{})},
+	{Name: "WorkflowSelector", Type: reflect.TypeOf(models.WorkflowSelector{})},
 }
 
 // WorkflowDefinitionSchemaExtensionTypes are additional workflow schema definitions beyond the root model graph
 var WorkflowDefinitionSchemaExtensionTypes = []WorkflowSchemaTypeDefinition{
-	{Name: "TargetConfig", Value: TargetConfig{}},
-	{Name: "ApprovalActionParams", Value: ApprovalActionParams{}},
-	{Name: "ReviewActionParams", Value: ReviewActionParams{}},
-	{Name: "NotificationActionParams", Value: NotificationActionParams{}},
-	{Name: "WebhookActionParams", Value: WebhookActionParams{}},
-	{Name: "FieldUpdateActionParams", Value: FieldUpdateActionParams{}},
-	{Name: "IntegrationActionParams", Value: IntegrationActionParams{}},
-	{Name: "CreateObjectActionParams", Value: CreateObjectActionParams{}},
+	{Name: "TargetConfig", Type: reflect.TypeOf(TargetConfig{})},
+	{Name: "ApprovalActionParams", Type: reflect.TypeOf(ApprovalActionParams{})},
+	{Name: "ReviewActionParams", Type: reflect.TypeOf(ReviewActionParams{})},
+	{Name: "NotificationActionParams", Type: reflect.TypeOf(NotificationActionParams{})},
+	{Name: "WebhookActionParams", Type: reflect.TypeOf(WebhookActionParams{})},
+	{Name: "FieldUpdateActionParams", Type: reflect.TypeOf(FieldUpdateActionParams{})},
+	{Name: "IntegrationActionParams", Type: reflect.TypeOf(IntegrationActionParams{})},
+	{Name: "CreateObjectActionParams", Type: reflect.TypeOf(CreateObjectActionParams{})},
 }

@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
-	"time"
 
 	"github.com/stretchr/testify/require"
 
@@ -38,12 +37,15 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetKind(string(github.TypeGitHubApp)).
-		SetProviderState(state.IntegrationProviderState{
-			GitHub: &state.GitHubState{
-				AppID:          "123",
-				InstallationID: "456",
-			},
-		}).
+		SetProviderState(func() state.IntegrationProviderState {
+			doc := state.IntegrationProviderState{}
+			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), map[string]any{
+				"appId":          "123",
+				"installationId": "456",
+			})
+			require.NoError(t, mergeErr)
+			return doc
+		}()).
 		Save(user.UserCtx)
 	require.NoError(t, err)
 
@@ -62,9 +64,12 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	require.NoError(t, err)
-	require.NotNil(t, updated.ProviderState.GitHub)
-	require.NotNil(t, updated.ProviderState.GitHub.WebhookVerifiedAt)
-	require.WithinDuration(t, time.Now().UTC(), *updated.ProviderState.GitHub.WebhookVerifiedAt, time.Minute)
+	providerState, err := updated.ProviderState.ProviderDataMap(string(github.TypeGitHubApp))
+	require.NoError(t, err)
+	require.NotNil(t, providerState)
+	webhookVerifiedAt, ok := providerState["webhookVerifiedAt"].(string)
+	require.True(t, ok)
+	require.NotEmpty(t, webhookVerifiedAt)
 
 	verifiedAtValue, ok := updated.Metadata["githubWebhookVerifiedAt"]
 	require.True(t, ok)

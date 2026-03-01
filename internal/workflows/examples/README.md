@@ -113,7 +113,10 @@ Notifications can be triggered conditionally based on assignment state:
   "type": "NOTIFY",
   "when": "assignments.by_action[\"approval\"].status == \"APPROVED\"",
   "params": {
-    "targets": [{"type": "RESOLVER", "resolver_key": "OBJECT_CREATOR"}],
+    "targets": [
+      {"type": "RESOLVER", "resolver_key": "OBJECT_CREATOR"},
+      {"type": "CHANNEL", "channel": "SLACK", "destination": "C01234567"}
+    ],
     "title": "Request Approved",
     "body": "Your {{object_type}} change request has been approved",
     "channels": ["IN_APP"]
@@ -124,7 +127,10 @@ Notifications can be triggered conditionally based on assignment state:
 #### Notification Action Notes
 - `when` expressions are re-evaluated when assignment status changes
 - Notifications with `when` expressions only fire once per workflow instance
-- Available channels: `IN_APP`, `EMAIL`, `SLACK`
+- `targets` may include user-resolved targets (`USER`, `GROUP`, `ROLE`, `RESOLVER`) and direct channel targets (`CHANNEL`)
+- `CHANNEL` targets require `channel` and `destination`; these sends bypass per-user notification preferences
+- `channels` applies to user-resolved targets only
+- Available channel enum values: `IN_APP`, `EMAIL`, `SLACK`, `TEAMS`
 - Built-in resolver keys: `CONTROL_OWNER`, `CONTROL_AUDITOR`, `RESPONSIBLE_PARTY`, `POLICY_OWNER`, `POLICY_APPROVER`, `POLICY_DELEGATE`, `EVIDENCE_OWNER`, `OBJECT_CREATOR`
 - There is no `INITIATOR` target resolver; use `OBJECT_CREATOR` or a static `USER`/`GROUP` target and reference `initiator` in `when` expressions if needed
 - Template variables: `{{instance_id}}`, `{{object_id}}`, `{{object_type}}`, `{{action_key}}`

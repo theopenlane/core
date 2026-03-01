@@ -2,13 +2,14 @@ package keystore
 
 import (
 	"context"
+	"encoding/json"
 	"maps"
 	"sync"
 
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // OperationManager executes provider-published operations using stored credentials and optional client pools
@@ -113,7 +114,12 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		return types.OperationResult{}, err
 	}
 
-	client, err := m.resolveClient(ctx, req, descriptor, payload)
+	operationConfig, err := decodeOperationRequestConfig(req)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+
+	client, err := m.resolveClient(ctx, req, descriptor, payload, operationConfig)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -123,7 +129,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		Provider:   req.Provider,
 		Credential: payload,
 		Client:     client,
-		Config:     mapx.DeepCloneMapAny(req.Config),
+		Config:     append(json.RawMessage(nil), req.Config...),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)
@@ -163,7 +169,12 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 		return types.OperationResult{}, ErrOperationNotRegistered
 	}
 
-	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload)
+	operationConfig, err := decodeOperationRequestConfig(req)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+
+	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload, operationConfig)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -173,7 +184,7 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 		Provider:   req.Provider,
 		Credential: payload,
 		Client:     client,
-		Config:     mapx.DeepCloneMapAny(req.Config),
+		Config:     append(json.RawMessage(nil), req.Config...),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)
@@ -189,16 +200,16 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 }
 
 // resolveClientFromPayload builds a client from the provided payload when the operation requires one
-func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload) (any, error) {
+func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
-		return nil, nil
+		return types.EmptyClientInstance(), nil
 	}
 
 	if m.clients == nil {
-		return nil, ErrOperationClientManagerRequired
+		return types.EmptyClientInstance(), ErrOperationClientManagerRequired
 	}
 
-	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, payload, maps.Clone(req.Config))
+	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, payload, maps.Clone(config))
 }
 
 // resolveCredential retrieves or refreshes the credential based on the request flags
@@ -221,28 +232,45 @@ func (m *OperationManager) resolveCredential(ctx context.Context, req types.Oper
 }
 
 // resolveClient retrieves a client instance if the operation requires one
-func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload) (any, error) {
+func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
-		return nil, nil
+		return types.EmptyClientInstance(), nil
 	}
 
 	if req.IntegrationID != "" {
-		return m.resolveClientFromPayload(ctx, req, descriptor, payload)
+		return m.resolveClientFromPayload(ctx, req, descriptor, payload, config)
 	}
 
 	if m.clients == nil {
-		return nil, ErrOperationClientManagerRequired
+		return types.EmptyClientInstance(), ErrOperationClientManagerRequired
 	}
 
 	opts := []ClientRequestOption[map[string]any]{}
-	if len(req.Config) > 0 {
-		opts = append(opts, WithClientConfig(maps.Clone(req.Config)))
+	if len(config) > 0 {
+		opts = append(opts, WithClientConfig(maps.Clone(config)))
 	}
 	if req.ClientForce {
 		opts = append(opts, WithClientForceRefresh[map[string]any]())
 	}
 
 	return m.clients.Get(ctx, req.OrgID, req.Provider, descriptor.Client, opts...)
+}
+
+func decodeOperationRequestConfig(req types.OperationRequest) (map[string]any, error) {
+	if len(req.Config) == 0 {
+		return nil, nil
+	}
+
+	config, err := jsonx.ToMap(req.Config)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(config) == 0 {
+		return nil, nil
+	}
+
+	return config, nil
 }
 
 // Descriptors returns a copy of all registered operations keyed by provider

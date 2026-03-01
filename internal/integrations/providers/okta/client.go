@@ -18,15 +18,15 @@ func oktaClientDescriptors() []types.ClientDescriptor {
 }
 
 // buildOktaClient constructs an authenticated Okta API client.
-func buildOktaClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
+func buildOktaClient(_ context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
 	apiToken, err := auth.APITokenFromPayload(payload)
 	if err != nil {
-		return nil, err
+		return types.EmptyClientInstance(), err
 	}
 
 	headers := map[string]string{
 		"Authorization": "SSWS " + apiToken,
 	}
 
-	return auth.NewAuthenticatedClient("", headers), nil
+	return types.NewClientInstance(auth.NewAuthenticatedClient("", headers)), nil
 }

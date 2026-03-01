@@ -3,6 +3,7 @@ package graphapi
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"sort"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )
@@ -297,8 +299,14 @@ func validateNotificationActionParams(params json.RawMessage) error {
 		return err
 	}
 
-	if strings.TrimSpace(input.TemplateID) != "" && strings.TrimSpace(input.TemplateKey) != "" {
+	if input.TemplateID != "" && input.TemplateKey != "" {
 		return ErrNotificationTemplateBothIDAndKey
+	}
+
+	for _, target := range input.Targets {
+		if err := validateNotificationTarget(target); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -315,12 +323,29 @@ func validateIntegrationActionParams(params json.RawMessage) error {
 		return err
 	}
 
-	if strings.TrimSpace(input.Operation) == "" {
+	if input.OperationName == "" && input.OperationKind == "" {
 		return ErrIntegrationOperationRequired
 	}
 
-	if strings.TrimSpace(input.Integration) == "" && strings.TrimSpace(input.Provider) == "" {
+	if input.IntegrationID == "" && input.Provider == "" {
 		return ErrIntegrationConfigRequired
+	}
+	if input.ScopeExpression == "" && (len(input.ScopePayload) > 0 || input.ScopeResource != "") {
+		return ErrIntegrationScopeExpressionRequired
+	}
+	if input.ScopeExpression != "" {
+		evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+		if err != nil {
+			return ErrIntegrationScopeEvaluatorInit
+		}
+
+		if err := evaluator.Validate(input.ScopeExpression); err != nil {
+			if errors.Is(err, integrationscope.ErrScopeCompilationFailed) || errors.Is(err, integrationscope.ErrScopeProgramCreationFailed) || errors.Is(err, integrationscope.ErrScopeExpressionRequired) {
+				return ErrIntegrationScopeExpressionInvalid
+			}
+
+			return ErrIntegrationScopeExpressionInvalid
+		}
 	}
 
 	return nil
@@ -805,6 +830,25 @@ func validateTarget(t workflows.TargetConfig) error {
 		}
 	default:
 		return fmt.Errorf("%w: %q", ErrTargetInvalidType, t.Type)
+	}
+
+	return nil
+}
+
+// validateNotificationTarget validates target configuration for notification actions
+func validateNotificationTarget(t workflows.TargetConfig) error {
+	if t.Type != enums.WorkflowTargetTypeChannel {
+		return validateTarget(t)
+	}
+
+	if t.Channel == "" || t.Channel == enums.ChannelInvalid {
+		return ErrTargetMissingChannel
+	}
+	if t.Channel == enums.ChannelInApp {
+		return ErrTargetUnsupportedChannel
+	}
+	if t.Destination == "" {
+		return ErrTargetMissingDestination
 	}
 
 	return nil
