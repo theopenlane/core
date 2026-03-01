@@ -180,9 +180,6 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 
 			targetUserID, targetOrgID := auth.GetUserContextHeaders(c)
 
-			// Preserve the original admin caller for downstream admin-only checks.
-			ctx = auth.WithOriginalSystemAdminCaller(ctx, caller)
-
 			// Replace the caller in the context with the target user
 			ctx = auth.WithCaller(ctx, &auth.Caller{
 				SubjectID:          targetUserID,
@@ -190,6 +187,8 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 				OrganizationIDs:    []string{targetOrgID},
 				AuthenticationType: auth.PATAuthentication,
 			})
+			// Preserve the original admin caller on the active caller lineage.
+			ctx = auth.WithOriginalSystemAdminCaller(ctx, caller)
 			c.SetRequest(c.Request().WithContext(ctx))
 
 			// Log the system admin user context switch

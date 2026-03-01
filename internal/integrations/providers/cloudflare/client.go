@@ -12,5 +12,5 @@ const (
 
 // cloudflareClientDescriptors returns the client descriptors published by Cloudflare.
 func cloudflareClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", auth.APITokenClientBuilder(map[string]string{"Content-Type": "application/json"}))
+	return auth.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", auth.TokenClientBuilder(auth.APITokenFromPayload, map[string]string{"Content-Type": "application/json"}))
 }

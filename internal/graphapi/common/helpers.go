@@ -24,7 +24,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/store"
@@ -404,11 +403,7 @@ func writeCSVRecords(records [][]string, originalData []byte) []byte {
 
 // csvListFieldKinds collects CSV list-capable field kinds for a generic input type.
 func csvListFieldKinds[T any]() map[string]reflect.Kind {
-	var value T
-	t := reflect.TypeOf(value)
-	if t == nil {
-		t = reflect.TypeOf((*T)(nil)).Elem()
-	}
+	t := reflect.TypeFor[T]()
 	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
@@ -491,11 +486,7 @@ func prefixCSVInputHeaders[T any](headers []string) bool {
 		return false
 	}
 
-	var value T
-	t := reflect.TypeOf(value)
-	if t == nil {
-		t = reflect.TypeOf((*T)(nil)).Elem()
-	}
+	t := reflect.TypeFor[T]()
 	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
@@ -1097,8 +1088,8 @@ func GetBulkUploadOwnerInput[T any](input []*T) (*string, error) {
 // Only when multiple organizations are authorized (e.g. with a PAT) is this necessary.
 // System admins bypass the check entirely.
 func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) (context.Context, error) {
-	if isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && isAdmin {
-		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
+	if auth.IsSystemAdminFromContext(ctx) {
+		log.Debug().Bool("isAdmin", true).Msg("user is system admin, bypassing setting organization in auth context")
 
 		return ctx, nil
 	}
@@ -1115,8 +1106,8 @@ func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) (cont
 // In the case of personal access tokens, this is necessary to ensure the organization id is set.
 // The organization must be the same across all inputs in the bulk request.
 func SetOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input []*T) (context.Context, error) {
-	if isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx); err == nil && isAdmin {
-		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
+	if auth.IsSystemAdminFromContext(ctx) {
+		log.Debug().Bool("isAdmin", true).Msg("user is system admin, bypassing setting organization in auth context")
 
 		return ctx, nil
 	}
@@ -1288,8 +1279,11 @@ func setOrganizationForUploads(ctx context.Context, variables map[string]any, in
 	}
 
 	_, err = SetOrganizationInAuthContext(ctx, ownerID)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrNoOrganizationID, err)
+	}
 
-	return err
+	return nil
 }
 
 // getOwnerIDFromVariables attempts to extract an owner/organization ID from the GraphQL variables map

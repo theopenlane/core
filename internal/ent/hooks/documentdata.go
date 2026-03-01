@@ -22,13 +22,13 @@ import (
 )
 
 var (
-	errMissingTemplate                      = errors.New("missing template")
-	errDocInfoDoesNotMatchAuthenticatedUser = errors.New("NDA submission does not match authenticated user")
-	errUserHasAlreadySignedNDA              = errors.New("user has already signed the NDA")
-	errValidationFailed                     = errors.New("validation failed")
-	errMustBeAnonymousUser                  = errors.New("must be an anonymous user")
-	errMissingResponse                      = errors.New("missing response")
-	errOnlyOneDocumentData                  = errors.New("you can only upload one document data file for an nda")
+	errMissingTemplate           = errors.New("missing template")
+	errDocInfoDoesNotMatchCaller = errors.New("NDA submission does not match authenticated user")
+	errUserHasAlreadySignedNDA   = errors.New("user has already signed the NDA")
+	errValidationFailed          = errors.New("validation failed")
+	errMustBeAnonymousUser       = errors.New("must be an anonymous user")
+	errMissingResponse           = errors.New("missing response")
+	errOnlyOneDocumentData       = errors.New("you can only upload one document data file for an nda")
 )
 
 // HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
@@ -171,12 +171,8 @@ func HookDocumentDataFile() ent.Hook {
 				return nil, errOnlyOneDocumentData
 			}
 
-			isSystemAdmin := auth.IsSystemAdminFromContext(ctx)
-			if !isSystemAdmin {
-				if admin, ok := auth.OriginalSystemAdminCallerFromContext(ctx); ok && admin != nil && admin.Has(auth.CapSystemAdmin) {
-					isSystemAdmin = true
-				}
-			}
+			caller, callerOK := auth.CallerFromContext(ctx)
+			isSystemAdmin := callerOK && caller != nil && caller.HasInLineage(auth.CapSystemAdmin)
 
 			if !isSystemAdmin {
 				return nil, generated.ErrPermissionDenied
@@ -222,7 +218,7 @@ func validateTrustCenterNDAJSON(schema interface{}, document map[string]interfac
 	if document["trust_center_id"] != trustCenterID ||
 		signatoryInfo["email"] != subjectEmail ||
 		document["signature_metadata"].(map[string]any)["user_id"] != subjectID {
-		return errDocInfoDoesNotMatchAuthenticatedUser
+		return errDocInfoDoesNotMatchCaller
 	}
 
 	firstName, _ := signatoryInfo["first_name"].(string)

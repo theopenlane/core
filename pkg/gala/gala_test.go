@@ -131,9 +131,9 @@ func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *
 	}
 }
 
-// TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext verifies default runtime codecs
+// TestRuntimeDispatchEnvelopeWithCallerContext verifies default runtime codecs
 // rehydrate auth context values for listener execution.
-func TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext(t *testing.T) {
+func TestRuntimeDispatchEnvelopeWithCallerContext(t *testing.T) {
 	runtime := newTestGala(t, nil)
 
 	topic := Topic[runtimeTestPayload]{
@@ -173,7 +173,21 @@ func TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext(t *testing.T) {
 		OrganizationIDs:    []string{"org_123", "org_234"},
 		AuthenticationType: auth.JWTAuthentication,
 		OrganizationRole:   auth.OwnerRole,
+		ActiveSubscription: true,
 		Capabilities:       auth.CapSystemAdmin,
+		Impersonation: &auth.ImpersonationContext{
+			Type:              auth.AdminImpersonation,
+			ImpersonatorID:    "admin_123",
+			ImpersonatorEmail: "admin@example.com",
+			TargetUserID:      "subject_123",
+			TargetUserEmail:   "codex@example.com",
+			Reason:            "support",
+		},
+		OriginalSystemAdmin: &auth.Caller{
+			SubjectID:    "admin_123",
+			SubjectEmail: "admin@example.com",
+			Capabilities: auth.CapSystemAdmin,
+		},
 	})
 
 	encodedPayload, err := runtime.Registry().EncodePayload(topic.Name, runtimeTestPayload{Message: "auth"})
@@ -209,6 +223,18 @@ func TestRuntimeDispatchEnvelopeWithAuthenticatedUserContext(t *testing.T) {
 
 	if !observed.Has(auth.CapSystemAdmin) {
 		t.Fatalf("expected system admin flag to be true")
+	}
+
+	if !observed.ActiveSubscription {
+		t.Fatalf("expected active subscription flag to round-trip")
+	}
+
+	if observed.Impersonation == nil || observed.Impersonation.ImpersonatorID != "admin_123" {
+		t.Fatalf("expected impersonation context to round-trip")
+	}
+
+	if observed.OriginalSystemAdmin == nil || observed.OriginalSystemAdmin.SubjectID != "admin_123" {
+		t.Fatalf("expected original system admin lineage to round-trip")
 	}
 }
 
@@ -1869,11 +1895,24 @@ func TestContextCodecCaptureAndRestore(t *testing.T) {
 	codec := NewContextCodec()
 
 	ctx := auth.WithCaller(context.Background(), &auth.Caller{
-		SubjectID:        "subject_test",
-		OrganizationID:   "org_test",
-		OrganizationName: "org_name_test",
-		OrganizationIDs:  []string{"org_1", "org_2"},
-		Capabilities:     auth.CapSystemAdmin | auth.CapBypassFGA | auth.CapInternalOperation,
+		SubjectID:          "subject_test",
+		OrganizationID:     "org_test",
+		OrganizationName:   "org_name_test",
+		OrganizationIDs:    []string{"org_1", "org_2"},
+		ActiveSubscription: true,
+		Capabilities:       auth.CapSystemAdmin | auth.CapBypassFGA | auth.CapInternalOperation,
+		Impersonation: &auth.ImpersonationContext{
+			Type:              auth.AdminImpersonation,
+			ImpersonatorID:    "admin_test",
+			ImpersonatorEmail: "admin@example.com",
+			TargetUserID:      "subject_test",
+			TargetUserEmail:   "subject@example.com",
+			Reason:            "legacy-compat",
+		},
+		OriginalSystemAdmin: &auth.Caller{
+			SubjectID:    "admin_test",
+			Capabilities: auth.CapSystemAdmin,
+		},
 	})
 
 	raw, present, err := codec.Capture(ctx)
@@ -1907,6 +1946,18 @@ func TestContextCodecCaptureAndRestore(t *testing.T) {
 		t.Fatalf("expected organization name 'org_name_test', got %q", restoredCaller.OrganizationName)
 	}
 
+	if !restoredCaller.ActiveSubscription {
+		t.Fatalf("expected active subscription to round-trip")
+	}
+
+	if restoredCaller.Impersonation == nil || restoredCaller.Impersonation.ImpersonatorID != "admin_test" {
+		t.Fatalf("expected impersonation to round-trip")
+	}
+
+	if restoredCaller.OriginalSystemAdmin == nil || restoredCaller.OriginalSystemAdmin.SubjectID != "admin_test" {
+		t.Fatalf("expected original system admin to round-trip")
+	}
+
 	if !restoredCaller.Has(auth.CapSystemAdmin) {
 		t.Fatalf("expected IsSystemAdmin to be true")
 	}
@@ -1925,6 +1976,25 @@ func TestContextCodecRestoreInvalidJSON(t *testing.T) {
 	}
 }
 
+func TestLegacyContextCodecCaptureDisabled(t *testing.T) {
+	codec := NewLegacyContextCodec()
+
+	raw, present, err := codec.Capture(auth.WithCaller(context.Background(), &auth.Caller{
+		SubjectID: "subject_legacy",
+	}))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if present {
+		t.Fatalf("expected legacy codec capture to be disabled")
+	}
+
+	if raw != nil {
+		t.Fatalf("expected no snapshot payload when capture is disabled")
+	}
+}
+
 func TestAuthContextSnapshotToCaller(t *testing.T) {
 	snapshot := AuthSnapshot{
 		SubjectID:          "sub_123",
@@ -1935,8 +2005,21 @@ func TestAuthContextSnapshotToCaller(t *testing.T) {
 		OrganizationIDs:    []string{"org_456", "org_789"},
 		AuthenticationType: string(auth.JWTAuthentication),
 		OrganizationRole:   string(auth.OwnerRole),
+		ActiveSubscription: true,
 		Capabilities:       uint64(auth.CapBypassFGA),
-		IsSystemAdmin:      true,
+		Impersonation: &auth.ImpersonationContext{
+			Type:              auth.AdminImpersonation,
+			ImpersonatorID:    "admin_1",
+			ImpersonatorEmail: "admin@example.com",
+			TargetUserID:      "sub_123",
+			TargetUserEmail:   "test@example.com",
+			Reason:            "compat",
+		},
+		OriginalSystemAdmin: &AuthSnapshot{
+			SubjectID:    "admin_1",
+			Capabilities: uint64(auth.CapSystemAdmin),
+		},
+		IsSystemAdmin: true,
 	}
 
 	caller := snapshot.toCaller()
@@ -1959,6 +2042,18 @@ func TestAuthContextSnapshotToCaller(t *testing.T) {
 
 	if !caller.Has(auth.CapBypassFGA) {
 		t.Fatalf("expected non-admin capabilities to be restored")
+	}
+
+	if !caller.ActiveSubscription {
+		t.Fatalf("expected active subscription to be restored")
+	}
+
+	if caller.Impersonation == nil || caller.Impersonation.ImpersonatorID != "admin_1" {
+		t.Fatalf("expected impersonation to be restored")
+	}
+
+	if caller.OriginalSystemAdmin == nil || caller.OriginalSystemAdmin.SubjectID != "admin_1" {
+		t.Fatalf("expected original system admin to be restored")
 	}
 }
 

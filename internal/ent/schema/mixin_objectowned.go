@@ -413,16 +413,9 @@ var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins
 func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context) (bool, error) {
-	if o.AllowEmptyForSystemAdmin {
-		isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return false, err
-		}
-
+	if o.AllowEmptyForSystemAdmin && auth.IsSystemAdminFromContext(ctx) {
 		// skip hook for system admins to create system level objects
-		if isAdmin {
-			return true, nil
-		}
+		return true, nil
 	}
 
 	return false, nil

@@ -68,7 +68,7 @@ func parseStatePayload(state string) (string, string, error) {
 		return "", "", ErrInvalidStateFormat
 	}
 
-	decoded, err := base64.URLEncoding.DecodeString(state)
+	decoded, err := decodeURLBase64(state)
 	if err != nil {
 		return "", "", ErrInvalidStateFormat
 	}
@@ -85,11 +85,19 @@ func parseStatePayload(state string) (string, string, error) {
 		return "", "", ErrInvalidStateFormat
 	}
 
-	if _, err := base64.URLEncoding.DecodeString(randomPart); err != nil {
+	if _, err := decodeURLBase64(randomPart); err != nil {
 		return "", "", ErrInvalidStateFormat
 	}
 
 	return orgID, provider, nil
+}
+
+func decodeURLBase64(value string) ([]byte, error) {
+	if decoded, err := base64.URLEncoding.DecodeString(value); err == nil {
+		return decoded, nil
+	}
+
+	return base64.RawURLEncoding.DecodeString(value)
 }
 
 // OAuth error helpers reused across handlers to preserve consistent messaging.

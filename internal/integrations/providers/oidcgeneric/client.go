@@ -12,5 +12,5 @@ const (
 
 // oidcClientDescriptors returns the client descriptors published by the generic OIDC provider.
 func oidcClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeOIDCGeneric, ClientOIDCAPI, "OIDC userinfo HTTP client", auth.OAuthClientBuilder(nil))
+	return auth.DefaultClientDescriptors(TypeOIDCGeneric, ClientOIDCAPI, "OIDC userinfo HTTP client", auth.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
 }

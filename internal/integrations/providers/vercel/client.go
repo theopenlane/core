@@ -12,5 +12,5 @@ const (
 
 // vercelClientDescriptors returns the client descriptors published by Vercel.
 func vercelClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeVercel, ClientVercelAPI, "Vercel REST API client", auth.APITokenClientBuilder(nil))
+	return auth.DefaultClientDescriptors(TypeVercel, ClientVercelAPI, "Vercel REST API client", auth.TokenClientBuilder(auth.APITokenFromPayload, nil))
 }

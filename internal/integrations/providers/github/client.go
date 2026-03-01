@@ -19,7 +19,7 @@ var githubClientHeaders = map[string]string{
 
 // githubClientDescriptors returns the client descriptors for the GitHub provider.
 func githubClientDescriptors(provider types.ProviderType) []types.ClientDescriptor {
-	descriptors := auth.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", auth.OAuthClientBuilder(githubClientHeaders))
+	descriptors := auth.DefaultClientDescriptors(provider, ClientGitHubAPI, "GitHub REST API client", auth.TokenClientBuilder(auth.OAuthTokenFromPayload, githubClientHeaders))
 	descriptors = append(descriptors, auth.DefaultClientDescriptor(
 		provider,
 		ClientGitHubGraphQL,

@@ -29,20 +29,11 @@ func AllowQueryIfSystemAdmin() privacy.QueryRule {
 // it uses the context, instead of checking the authz client directly
 // this value will be set my the auth middleware
 func systemAdminCheck(ctx context.Context) error {
-	if auth.IsSystemAdminFromContext(ctx) {
-		return privacy.Allow
-	}
-
-	if admin, ok := auth.OriginalSystemAdminCallerFromContext(ctx); ok && admin != nil && admin.Has(auth.CapSystemAdmin) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if ok && caller != nil && caller.HasInLineage(auth.CapSystemAdmin) {
 		return privacy.Allow
 	}
 
 	// if not a system admin, skip to the next rule
 	return privacy.Skip
-}
-
-// CheckIsSystemAdminWithContext checks if the user is a system admin based on the authz service
-// using the authz client from the context
-func CheckIsSystemAdminWithContext(ctx context.Context) (bool, error) {
-	return auth.IsSystemAdminFromContext(ctx), nil
 }

@@ -70,20 +70,3 @@ func (f TraverseFunc) Traverse(ctx context.Context, q ent.Query) error {
 
 	return f(ctx, query)
 }
-
-// type autoTraverseFunc struct {
-// 	fn func(context.Context, Query) error
-// }
-
-// func (f *autoTraverseFunc) Intercept(next ent.Querier) ent.Querier {
-// 	return next
-// }
-
-// func (f *autoTraverseFunc) Traverse(ctx context.Context, q ent.Query) error {
-// 	wrappedQuery, err := NewInterceptQuery(q)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	return f.fn(ctx, wrappedQuery)
-// }

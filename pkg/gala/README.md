@@ -144,7 +144,7 @@ When using `RegisterListeners`, topics are auto-registered with `JSONCodec`.
 
 ## Context Propagation
 
-Gala snapshots context values at emit time and restores them when the listener executes. This happens transparently for authenticated user context (`auth.AuthenticatedUser`), so listeners can access the original caller's identity even when processing asynchronously.
+Gala snapshots context values at emit time and restores them when the listener executes. This happens transparently for caller context (`auth.Caller`), so listeners can access the original caller identity and capabilities even when processing asynchronously.
 
 ```mermaid
 flowchart LR

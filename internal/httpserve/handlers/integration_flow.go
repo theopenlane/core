@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -203,12 +202,14 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 // generateOAuthState creates a secure state parameter containing org ID and provider.
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
-	const stateRandomBytesLength = 16
-
-	randomBytes := make([]byte, stateRandomBytesLength)
-
-	if _, err := rand.Read(randomBytes); err != nil {
+	randomPart, err := auth.GenerateOAuthState(16)
+	if err != nil {
 		return "", err
+	}
+
+	randomBytes, err := base64.RawURLEncoding.DecodeString(randomPart)
+	if err != nil {
+		return "", ErrInvalidStateFormat
 	}
 
 	stateData := buildStatePayload(orgID, provider, randomBytes)

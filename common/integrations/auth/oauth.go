@@ -2,9 +2,6 @@ package auth
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/base64"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -52,44 +49,15 @@ func APITokenFromPayload(payload types.CredentialPayload) (string, error) {
 
 // HTTPGetJSON issues a GET request with the provided bearer token and decodes JSON responses
 func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer string, headers map[string]string, out any) error {
-	requester := defaultHTTPRequester
-	if client != nil {
-		var err error
-		requester, err = httpsling.New(httpsling.WithHTTPClient(client))
-		if err != nil {
-			return err
-		}
-	}
-
-	options := []httpsling.Option{
-		httpsling.Get(url),
-		httpsling.Header(httpsling.HeaderAccept, httpsling.ContentTypeJSON),
-	}
-
-	if bearer != "" {
-		options = append(options, httpsling.BearerAuth(bearer))
-	}
-
-	if len(headers) > 0 {
-		options = append(options, httpsling.HeadersFromMap(headers))
-	}
-
-	resp, err := requester.ReceiveWithContext(ctx, out, options...)
-	if err != nil {
-		return err
-	}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= http.StatusBadRequest {
-		return httpRequestError(resp, url)
-	}
-
-	return nil
+	return httpJSON(ctx, client, http.MethodGet, url, bearer, headers, nil, out)
 }
 
 // HTTPPostJSON issues a POST request with the provided bearer token and JSON body, then decodes JSON responses
 func HTTPPostJSON(ctx context.Context, client *http.Client, url string, bearer string, headers map[string]string, body any, out any) error {
+	return httpJSON(ctx, client, http.MethodPost, url, bearer, headers, body, out)
+}
+
+func httpJSON(ctx context.Context, client *http.Client, method string, url string, bearer string, headers map[string]string, body any, out any) error {
 	requester := defaultHTTPRequester
 	if client != nil {
 		var err error
@@ -100,7 +68,8 @@ func HTTPPostJSON(ctx context.Context, client *http.Client, url string, bearer s
 	}
 
 	options := []httpsling.Option{
-		httpsling.Post(url),
+		httpsling.Method(method),
+		httpsling.URL(url),
 		httpsling.Header(httpsling.HeaderAccept, httpsling.ContentTypeJSON),
 	}
 
@@ -128,20 +97,6 @@ func HTTPPostJSON(ctx context.Context, client *http.Client, url string, bearer s
 	}
 
 	return nil
-}
-
-// RandomState generates a URL-safe random string using crypto/rand
-func RandomState(bytes int) (string, error) {
-	if bytes <= 0 {
-		bytes = 32
-	}
-
-	buf := make([]byte, bytes)
-	if _, err := rand.Read(buf); err != nil {
-		return "", fmt.Errorf("%w: %w", ErrRandomStateGeneration, err)
-	}
-
-	return base64.RawURLEncoding.EncodeToString(buf), nil
 }
 
 // httpRequestError constructs an HTTPRequestError from a non-2xx HTTP response

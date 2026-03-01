@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // TraverseStandard only returns public standards and standards owned by the organization
@@ -43,12 +42,7 @@ func TraverseStandard() ent.Interceptor {
 			standard.SystemOwned(true),
 		}
 
-		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return err
-		}
-
-		if !admin {
+		if !auth.IsSystemAdminFromContext(ctx) {
 			// if the user is a not-system admin, restrict to only public standards
 			systemStandardPredicates = append(systemStandardPredicates, standard.IsPublic(true))
 		}

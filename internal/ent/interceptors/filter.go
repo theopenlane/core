@@ -212,7 +212,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 
 func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
 	}
 

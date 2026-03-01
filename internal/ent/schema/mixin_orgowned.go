@@ -203,8 +203,10 @@ func skipUserParentTupleFunc(_ context.Context, m ent.Mutation) bool {
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
 func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	caller, ok := auth.CallerFromContext(ctx)
-	// skip setting owner if this is an internal operation (e.g. org creation, subscription management)
-	if ok && caller != nil && caller.Has(auth.CapInternalOperation) {
+	// skip setting owner if this is a service-level internal operation (e.g. org creation, subscription management)
+	// CapBypassFGA distinguishes real service callers from test internal contexts created by
+	// rule.WithInternalContext, which adds CapInternalOperation but not CapBypassFGA
+	if ok && caller != nil && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
 		return nil
 	}
 
@@ -324,21 +326,9 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // if soft deletes are bypassed; so is the interceptor - the user will no longer have access to the organization and
 // filters will skip the organization
 // if the context has a privacy token type, the interceptor is skipped
-// if the context has the managed group key, the interceptor is skipped
 // if the query is for a token and explicitly allowed, the interceptor is skipped
-// if the context has an internal request key, the interceptor is skipped
-// if the user is a system admin and AllowEmptyForSystemAdmin is true, the interceptor is skipped
+// callers with CapBypassOrgFilter skip the interceptor.
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept.Query) bool {
-	// allow for tests and internal requests to skip the interceptor
-	if rule.IsInternalRequest(ctx) {
-		return true
-	}
-
-	allow, err := rule.CheckIsSystemAdminWithContext(ctx)
-	if err == nil && allow {
-		return true
-	}
-
 	if entx.CheckSkipSoftDelete(ctx) {
 		return true
 	}
@@ -382,7 +372,9 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context) (bool, error) {
 	}
 
 	// skip the hook for internal operations (subscription management, acme solver, keystore, etc.)
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter|auth.CapInternalOperation) {
+	// CapBypassFGA distinguishes real service callers from test internal contexts created by
+	// rule.WithInternalContext, which adds CapBypassOrgFilter|CapInternalOperation but not CapBypassFGA
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapBypassFGA) {
 		return true, nil
 	}
 
