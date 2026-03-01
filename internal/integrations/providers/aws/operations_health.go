@@ -14,6 +14,14 @@ import (
 
 const awsHealthDefault types.OperationName = "health.default"
 
+type awsHealthDetails struct {
+	Region    string `json:"region,omitempty"`
+	RoleArn   string `json:"roleArn,omitempty"`
+	AccountID string `json:"accountId,omitempty"`
+	ARN       string `json:"arn,omitempty"`
+	UserID    string `json:"userId,omitempty"`
+}
+
 // awsHealthOperation builds the AWS health operation descriptor
 func awsHealthOperation() types.OperationDescriptor {
 	return operations.HealthOperation(awsHealthDefault, "Validate AWS access via STS GetCallerIdentity.", "", runAWSHealth)
@@ -43,18 +51,18 @@ func runAWSHealth(ctx context.Context, input types.OperationInput) (types.Operat
 	}
 
 	accountID := awssdk.ToString(resp.Account)
-	details := map[string]any{
-		"region":  meta.Region,
-		"roleArn": meta.RoleARN,
+	details := awsHealthDetails{
+		Region:  meta.Region,
+		RoleArn: meta.RoleARN,
 	}
 	if accountID != "" {
-		details["accountId"] = accountID
+		details.AccountID = accountID
 	}
 	if arn := awssdk.ToString(resp.Arn); arn != "" {
-		details["arn"] = arn
+		details.ARN = arn
 	}
 	if userID := awssdk.ToString(resp.UserId); userID != "" {
-		details["userId"] = userID
+		details.UserID = userID
 	}
 
 	summary := "AWS credentials verified"
@@ -62,9 +70,5 @@ func runAWSHealth(ctx context.Context, input types.OperationInput) (types.Operat
 		summary = fmt.Sprintf("AWS credentials verified for account %s", accountID)
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: summary,
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(summary, details), nil
 }

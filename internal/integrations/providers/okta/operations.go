@@ -16,6 +16,11 @@ const (
 	oktaPoliciesOp types.OperationName = "policies.collect"
 )
 
+type oktaPoliciesDetails struct {
+	Count   int               `json:"count"`
+	Samples []map[string]any `json:"samples"`
+}
+
 // oktaOperations returns the Okta operations supported by this provider.
 func oktaOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -32,7 +37,7 @@ func oktaOperations() []types.OperationDescriptor {
 
 // runOktaHealth verifies the Okta API token by fetching the org information
 func runOktaHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := auth.AuthenticatedClientFromAny(input.Client)
+	client := auth.AuthenticatedClientFromClient(input.Client)
 	baseURL, apiToken, err := oktaCredentials(input)
 	if err != nil {
 		return types.OperationResult{}, err
@@ -45,16 +50,12 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 	}
 
 	summary := fmt.Sprintf("Okta org %s reachable", baseURL)
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: summary,
-		Details: resp,
-	}, nil
+	return operations.OperationSuccess(summary, resp), nil
 }
 
 // runOktaPolicies collects a sample of Okta sign-on policies for reporting
 func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := auth.AuthenticatedClientFromAny(input.Client)
+	client := auth.AuthenticatedClientFromClient(input.Client)
 	baseURL, apiToken, err := oktaCredentials(input)
 	if err != nil {
 		return types.OperationResult{}, err
@@ -68,14 +69,10 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 
 	samples := resp[:min(len(resp), operations.DefaultSampleSize)]
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d sign-on policies", len(resp)),
-		Details: map[string]any{
-			"count":   len(resp),
-			"samples": samples,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d sign-on policies", len(resp)), oktaPoliciesDetails{
+		Count:   len(resp),
+		Samples: samples,
+	}), nil
 }
 
 // oktaCredentials extracts the Okta base URL and API token from the credential payload

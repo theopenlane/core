@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"strings"
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
@@ -22,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -46,6 +46,24 @@ type IntegrationGitHubAppConfig struct {
 	WebhookSecret string `json:"webhooksecret" koanf:"webhooksecret" default:"" sensitive:"true"`
 	// SuccessRedirectURL is the URL to redirect to after successful installation
 	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
+}
+
+// githubAppCredentialPayload captures persisted credential attributes for GitHub App integrations
+type githubAppCredentialPayload struct {
+	// AppID is the GitHub App identifier
+	AppID string `json:"appId"`
+	// InstallationID is the installed GitHub App installation identifier
+	InstallationID string `json:"installationId"`
+	// PrivateKey is the PEM key used to mint app tokens
+	PrivateKey string `json:"privateKey"`
+}
+
+// githubAppProviderStatePatch captures provider state fields persisted on the integration record
+type githubAppProviderStatePatch struct {
+	// AppID is the GitHub App identifier
+	AppID string `json:"appId"`
+	// InstallationID is the installed GitHub App installation identifier
+	InstallationID string `json:"installationId"`
 }
 
 // StartGitHubAppInstallation initiates the GitHub App installation flow
@@ -175,10 +193,14 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	attrs := map[string]any{
-		"appId":          h.IntegrationGitHubApp.AppID,
-		"installationId": in.InstallationID,
-		"privateKey":     normalizeGitHubAppPrivateKey(h.IntegrationGitHubApp.PrivateKey),
+	credentialPayload := githubAppCredentialPayload{
+		AppID:          h.IntegrationGitHubApp.AppID,
+		InstallationID: in.InstallationID,
+		PrivateKey:     h.IntegrationGitHubApp.PrivateKey,
+	}
+	credentialAttrs, err := jsonx.ToMap(credentialPayload)
+	if err != nil {
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	integrationRecord, err := h.IntegrationStore.EnsureIntegration(systemCtx, orgID, github.TypeGitHubApp)
@@ -188,13 +210,13 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.persistCredentialConfiguration(systemCtx, orgID, github.TypeGitHubApp, attrs); err != nil {
+	if err := h.persistCredentialConfiguration(systemCtx, orgID, github.TypeGitHubApp, credentialAttrs); err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to persist github app credentials")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.updateGitHubAppIntegrationMetadata(systemCtx, orgID, attrs); err != nil {
+	if err := h.updateGitHubAppIntegrationMetadata(systemCtx, orgID, credentialPayload); err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to update github app integration metadata")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -231,16 +253,16 @@ func (h *Handler) validateGitHubAppConfig() error {
 		return ErrProviderDisabled
 	}
 	if cfg.AppSlug == "" {
-		return ErrGitHubAppSlugRequired
+		return rout.MissingField("appSlug")
 	}
 	if cfg.AppID == "" {
-		return ErrGitHubAppIDRequired
+		return rout.MissingField("appId")
 	}
 	if cfg.PrivateKey == "" {
-		return ErrGitHubAppPrivateKeyRequired
+		return rout.MissingField("privateKey")
 	}
 	if cfg.WebhookSecret == "" {
-		return ErrGitHubAppWebhookSecretRequired
+		return rout.MissingField("webhookSecret")
 	}
 
 	return nil
@@ -250,7 +272,7 @@ func (h *Handler) validateGitHubAppConfig() error {
 func (h *Handler) githubAppInstallURL(state string) (string, error) {
 	slug := h.IntegrationGitHubApp.AppSlug
 	if slug == "" {
-		return "", ErrGitHubAppSlugRequired
+		return "", rout.MissingField("appSlug")
 	}
 
 	u := url.URL{
@@ -265,36 +287,27 @@ func (h *Handler) githubAppInstallURL(state string) (string, error) {
 	return u.String(), nil
 }
 
-// normalizeGitHubAppPrivateKey ensures escaped newlines are converted to PEM newlines
-func normalizeGitHubAppPrivateKey(key string) string {
-	if key == "" {
-		return ""
-	}
-
-	if strings.Contains(key, "\\n") && !strings.Contains(key, "\n") {
-		return strings.ReplaceAll(key, "\\n", "\n")
-	}
-
-	return key
-}
-
 // updateGitHubAppIntegrationMetadata stores the GitHub App installation metadata on the integration record
-func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID string, attrs map[string]any) error {
+func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID string, payload githubAppCredentialPayload) error {
 	if h.DBClient == nil {
 		return errDBClientNotConfigured
 	}
 
-	appID, _ := attrs["appId"].(string)
-	installationID, _ := attrs["installationId"].(string)
-	if appID == "" || installationID == "" {
+	if payload.AppID == "" || payload.InstallationID == "" {
 		return ErrInvalidStateFormat
 	}
 
-	statePayload := state.IntegrationProviderState{
-		GitHub: &state.GitHubState{
-			AppID:          appID,
-			InstallationID: installationID,
-		},
+	statePatch, err := jsonx.ToMap(githubAppProviderStatePatch{
+		AppID:          payload.AppID,
+		InstallationID: payload.InstallationID,
+	})
+	if err != nil {
+		return ErrInvalidStateFormat
+	}
+
+	statePayload := state.IntegrationProviderState{}
+	if _, err := statePayload.MergeProviderData(string(github.TypeGitHubApp), statePatch); err != nil {
+		return ErrInvalidStateFormat
 	}
 
 	return h.DBClient.Integration.Update().

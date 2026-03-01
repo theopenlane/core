@@ -1,9 +1,8 @@
 package operations
 
 import (
-	"strings"
+	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -22,7 +21,6 @@ func OperationTemplateFor(config *openapi.IntegrationConfig, operation string) (
 		return OperationTemplate{}, false
 	}
 
-	operation = strings.TrimSpace(operation)
 	if operation == "" {
 		return OperationTemplate{}, false
 	}
@@ -74,12 +72,14 @@ func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string,
 
 // parseOverrideKeys normalizes and deduplicates override keys
 func parseOverrideKeys(values []string) map[string]struct{} {
-	normalized := types.NormalizeStringSlice(values)
-	if len(normalized) == 0 {
+	filtered := lo.Filter(values, func(value string, _ int) bool {
+		return value != ""
+	})
+	if len(filtered) == 0 {
 		return nil
 	}
 
-	return mapx.MapSetFromSlice(normalized)
+	return mapx.MapSetFromSlice(lo.Uniq(filtered))
 }
 
 // operationTemplateFromConfig converts stored template config into an OperationTemplate

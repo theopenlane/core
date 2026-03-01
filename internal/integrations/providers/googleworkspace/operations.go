@@ -2,8 +2,10 @@ package googleworkspace
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -11,8 +13,14 @@ import (
 )
 
 const (
-	googleWorkspaceHealthOp types.OperationName = "health.default"
-	googleWorkspaceUsersOp  types.OperationName = "directory.sample_users"
+	googleWorkspaceHealthOp           types.OperationName = "health.default"
+	googleWorkspaceDirectorySyncOp    types.OperationName = types.OperationDirectorySync
+	googleWorkspaceDirectoryAlertType string              = "directory_account"
+
+	googleWorkspaceDirectoryUsersEndpoint string = "https://admin.googleapis.com/admin/directory/v1/users"
+	googleWorkspaceDirectoryFields        string = "nextPageToken,users(id,primaryEmail,name/fullName,name/givenName,name/familyName,thumbnailPhotoUrl,organizations/title,organizations/department,orgUnitPath,suspended,archived,isEnforcedIn2Sv,isEnrolledIn2Sv,lastLoginTime)"
+
+	googleWorkspaceDirectoryDefaultPageSize = 200
 )
 
 type googleUserinfoResponse struct {
@@ -24,24 +32,62 @@ type googleUserinfoResponse struct {
 	Name string `json:"name"`
 }
 
-// googleWorkspaceOperations returns the Google Workspace operations supported by this provider.
+type googleWorkspaceDirectoryUsersResponse struct {
+	// Users is the page of returned directory users
+	Users []map[string]any `json:"users"`
+	// NextPageToken is the pagination token for the next page
+	NextPageToken string `json:"nextPageToken"`
+}
+
+type googleWorkspaceDirectoryConfig struct {
+	// Customer overrides the default customer selector.
+	Customer string `json:"customer"`
+	// Domain scopes the user listing to a domain.
+	Domain string `json:"domain"`
+	// Query applies an Admin SDK user query filter.
+	Query string `json:"query"`
+	// OrgUnitPath filters results by org unit path.
+	OrgUnitPath string `json:"orgUnitPath"`
+}
+
+// googleWorkspaceHealthDetails captures Google userinfo health payload details
+type googleWorkspaceHealthDetails struct {
+	// Sub is the subject identifier for the user
+	Sub string `json:"sub,omitempty"`
+	// Email is the primary email address
+	Email string `json:"email,omitempty"`
+	// Name is the display name for the user
+	Name string `json:"name,omitempty"`
+}
+
+// googleWorkspaceDirectorySyncDetails captures directory sync operation details
+type googleWorkspaceDirectorySyncDetails struct {
+	// UsersTotal is the number of users returned by Google APIs
+	UsersTotal int `json:"users_total"`
+	// AlertsTotal is the number of emitted ingest envelopes
+	AlertsTotal int `json:"alerts_total"`
+	// Alerts is the emitted ingest envelopes
+	Alerts []types.AlertEnvelope `json:"alerts"`
+}
+
+// googleWorkspaceOperations returns the Google Workspace operations supported by this provider
 func googleWorkspaceOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(googleWorkspaceHealthOp, "Call Google OAuth userinfo to verify the workspace token.", ClientGoogleWorkspaceAPI,
+		operations.HealthOperation(googleWorkspaceHealthOp, "Call Google OAuth userinfo to verify the workspace token", ClientGoogleWorkspaceAPI,
 			operations.HealthCheckRunner(operations.TokenTypeOAuth, "https://www.googleapis.com/oauth2/v3/userinfo", "Google userinfo failed",
-				func(resp googleUserinfoResponse) (string, map[string]any) {
-					return fmt.Sprintf("Google token valid for %s", resp.Email), map[string]any{
-						"sub":   resp.Sub,
-						"email": resp.Email,
-						"name":  resp.Name,
+				func(resp googleUserinfoResponse) (string, any) {
+					return fmt.Sprintf("Google token valid for %s", resp.Email), googleWorkspaceHealthDetails{
+						Sub:   resp.Sub,
+						Email: resp.Email,
+						Name:  resp.Name,
 					}
 				})),
 		{
-			Name:        googleWorkspaceUsersOp,
+			Name:        googleWorkspaceDirectorySyncOp,
 			Kind:        types.OperationKindCollectFindings,
-			Description: "List sample Admin Directory users for posture checks.",
+			Description: "Collect Google Workspace directory users and emit directory account envelopes",
 			Client:      ClientGoogleWorkspaceAPI,
-			Run:         runGoogleWorkspaceUsers,
+			Run:         runGoogleWorkspaceDirectorySync,
 		},
 	}
 }
@@ -55,45 +101,85 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 
 	params := url.Values{}
 	params.Set("customer", "my_customer")
-	params.Set("maxResults", "5")
+	params.Set("maxResults", fmt.Sprintf("%d", googleWorkspaceDirectoryDefaultPageSize))
 	params.Set("projection", "full")
 	params.Set("viewType", "admin_view")
-	params.Set("fields", "users(primaryEmail,name/fullName,thumbnailPhotoUrl)")
+	params.Set("fields", googleWorkspaceDirectoryFields)
 
-	endpoint := "https://admin.googleapis.com/admin/directory/v1/users?" + params.Encode()
-	var resp struct {
-		// Users lists users returned from the directory API
-		Users []struct {
-			// PrimaryEmail is the user's primary email address
-			PrimaryEmail string `json:"primaryEmail"`
-			// Name holds the user's name metadata
-			Name struct {
-				// FullName is the user's full display name
-				FullName string `json:"fullName"`
-			} `json:"name"`
-			// ThumbnailPhotoURL is the user avatar URL from Google Directory.
-			ThumbnailPhotoURL string `json:"thumbnailPhotoUrl"`
-		} `json:"users"`
+	config, err := operations.Decode[googleWorkspaceDirectoryConfig](input.Config)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+	if config.Customer != "" {
+		params.Set("customer", config.Customer)
+	}
+	if config.Domain != "" {
+		params.Del("customer")
+		params.Set("domain", config.Domain)
+	}
+	if config.Query != "" {
+		params.Set("query", config.Query)
+	}
+	if config.OrgUnitPath != "" {
+		params.Set("orgUnitPath", config.OrgUnitPath)
+	}
+	observedAt := time.Now().UTC().Format(time.RFC3339)
+	envelopes := make([]types.AlertEnvelope, 0)
+	totalUsers := 0
+	pageToken := ""
+
+	for {
+		if pageToken == "" {
+			params.Del("pageToken")
+		} else {
+			params.Set("pageToken", pageToken)
+		}
+
+		endpoint := googleWorkspaceDirectoryUsersEndpoint + "?" + params.Encode()
+
+		var resp googleWorkspaceDirectoryUsersResponse
+		if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+			return operations.OperationFailure("Directory users fetch failed", err, nil)
+		}
+
+		for _, user := range resp.Users {
+			user["observedAt"] = observedAt
+
+			payload, err := json.Marshal(user)
+			if err != nil {
+				return operations.OperationFailure("Directory user payload encoding failed", err, nil)
+			}
+
+			envelopes = append(envelopes, types.AlertEnvelope{
+				AlertType: googleWorkspaceDirectoryAlertType,
+				Resource:  googleWorkspaceDirectoryResource(user),
+				Payload:   payload,
+			})
+			totalUsers++
+		}
+
+		if resp.NextPageToken == "" {
+			break
+		}
+
+		pageToken = resp.NextPageToken
 	}
 
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return operations.OperationFailure("Directory users fetch failed", err, nil)
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d directory accounts", len(envelopes)), googleWorkspaceDirectorySyncDetails{
+		UsersTotal:  totalUsers,
+		AlertsTotal: len(envelopes),
+		Alerts:      envelopes,
+	}), nil
+}
+
+// googleWorkspaceDirectoryResource selects the envelope resource identity for a user
+func googleWorkspaceDirectoryResource(user map[string]any) string {
+	if primaryEmail, ok := user["primaryEmail"].(string); ok {
+		return primaryEmail
+	}
+	if id, ok := user["id"].(string); ok {
+		return id
 	}
 
-	samples := make([]map[string]any, 0, len(resp.Users))
-	for _, user := range resp.Users {
-		samples = append(samples, map[string]any{
-			"email":             user.PrimaryEmail,
-			"name":              user.Name.FullName,
-			"avatar_remote_url": user.ThumbnailPhotoURL,
-		})
-	}
-
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Fetched %d sample users", len(samples)),
-		Details: map[string]any{
-			"samples": samples,
-		},
-	}, nil
+	return ""
 }

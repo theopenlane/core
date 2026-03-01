@@ -23,20 +23,30 @@ This HTML interface provides comprehensive end-to-end testing for OAuth integrat
    http://localhost:17608/v1/github/callback              # For social login
    ```
 
-3. **Configure Integration OAuth Settings**: Add the integration OAuth configuration:
+3. **Configure Integration OAuth Settings**: Add integration OAuth configuration:
 
 ```yaml
 # config.yaml - Integration OAuth configuration (separate from social login)
-integrationOauthProvider:
+integrationoauthprovider:
+  enabled: true
+
+integrationproviders:
   github:
-    clientId: "your_github_client_id"        # Can be same as social login
-    clientSecret: "your_github_client_secret" # Can be same as social login
-    clientEndpoint: "http://localhost:17608" # Base URL for callbacks
-    scopes: ["read:user", "user:email", "repo"] # Extended scopes for API access
+    oauth:
+      clientId: "your_github_client_id"         # Can be same as social login
+      clientSecret: "your_github_client_secret" # Can be same as social login
+      redirectUri: "http://localhost:17608/v1/integrations/oauth/callback"
+      scopes: ["read:user", "user:email", "repo"]
+  slack:
+    oauth:
+      clientId: "your_slack_client_id"
+      clientSecret: "your_slack_client_secret"
+      redirectUri: "http://localhost:17608/v1/integrations/oauth/callback"
+      scopes: ["chat:write", "chat:write.public", "team:read"]
 ```
 
 **Key Differences from Social Login:**
-- ✅ **Separate configuration section**: `integrationOauthProvider` vs `auth.providers`
+- ✅ **Separate configuration sections**: `integrationoauthprovider` + `integrationproviders` vs `auth.providers`
 - ✅ **Different callback URL**: `/v1/integrations/oauth/callback` vs `/v1/github/callback`
 - ✅ **Extended scopes**: Includes `repo` for API access
 - ✅ **Different token storage**: Organization-scoped in Hush vs session-based
@@ -186,12 +196,13 @@ The interface tests these OAuth integration endpoints:
 ## Configuration Requirements
 
 ### GitHub Integration:
-- Requires `integrationOauthProvider.github` configuration in your settings
+- Requires `integrationoauthprovider.enabled: true` and `integrationproviders.github.oauth` config
 - OAuth app configured with callback URL: `http://localhost:17608/v1/integrations/oauth/callback`
 
 ### Slack Integration:
-- Requires `integrationOauthProvider.slack` configuration in your settings
-- Slack app configured with callback URL: `http:s//localhost:17608/v1/integrations/oauth/callback`
+- Requires `integrationoauthprovider.enabled: true` and `integrationproviders.slack.oauth` config
+- Slack app configured with callback URL: `http://localhost:17608/v1/integrations/oauth/callback`
+- Slack bot scopes should include at least: `chat:write`; recommended: `chat:write.public`, `team:read`
 
 ## Troubleshooting
 

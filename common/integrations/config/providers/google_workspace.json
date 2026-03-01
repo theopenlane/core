@@ -23,7 +23,7 @@
       "access_type": "offline",
       "prompt": "consent"
     },
-    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/oauth/callback"
   },
   "userInfo": {
     "url": "https://openidconnect.googleapis.com/v1/userinfo",

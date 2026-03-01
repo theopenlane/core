@@ -2,7 +2,6 @@ package ingest
 
 import (
 	"context"
-	"strings"
 
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -50,17 +49,18 @@ func RegisterIngestListeners(registry *gala.Registry, db *ent.Client) ([]gala.Li
 	)
 }
 
+// handleIngestRequested executes ingest materialization for a requested schema payload batch
 func handleIngestRequested(ctx context.Context, db *ent.Client, payload RequestedPayload) error {
 	if len(payload.Envelopes) == 0 {
 		return nil
 	}
 
-	integrationID := strings.TrimSpace(payload.IntegrationID)
+	integrationID := payload.IntegrationID
 	if integrationID == "" {
 		return ErrIngestIntegrationRequired
 	}
 
-	schema := strings.TrimSpace(payload.Schema)
+	schema := payload.Schema
 	if schema == "" {
 		return ErrIngestSchemaRequired
 	}

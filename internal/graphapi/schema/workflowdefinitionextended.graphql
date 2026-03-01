@@ -13,6 +13,10 @@ type WorkflowMetadata {
     Available workflow object types
     """
     objectTypes: [WorkflowObjectTypeMetadata!]!
+    """
+    Extensible workflow metadata payload for action configuration surfaces
+    """
+    extensions: Map!
 }
 
 """

@@ -123,10 +123,11 @@ var (
 	WorkflowTargetTypeGroup    WorkflowTargetType = "GROUP"
 	WorkflowTargetTypeRole     WorkflowTargetType = "ROLE"
 	WorkflowTargetTypeResolver WorkflowTargetType = "RESOLVER"
+	WorkflowTargetTypeChannel  WorkflowTargetType = "CHANNEL"
 )
 
 var workflowTargetTypeValues = []WorkflowTargetType{
-	WorkflowTargetTypeUser, WorkflowTargetTypeGroup, WorkflowTargetTypeRole, WorkflowTargetTypeResolver,
+	WorkflowTargetTypeUser, WorkflowTargetTypeGroup, WorkflowTargetTypeRole, WorkflowTargetTypeResolver, WorkflowTargetTypeChannel,
 }
 
 // WorkflowTargetTypes lists all valid workflow target types as strings.

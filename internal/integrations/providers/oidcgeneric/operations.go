@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/zitadel/oidc/v3/pkg/oidc"
+
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -47,11 +49,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 			summary = fmt.Sprintf("OIDC userinfo succeeded for %s", subject)
 		}
 
-		return types.OperationResult{
-			Status:  types.OperationStatusOK,
-			Summary: summary,
-			Details: resp,
-		}, nil
+		return operations.OperationSuccess(summary, resp), nil
 	}
 }
 
@@ -65,9 +63,9 @@ func runOIDCClaims(_ context.Context, input types.OperationInput) (types.Operati
 		}, nil
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: "OIDC claims available",
-		Details: map[string]any{"claims": claims},
-	}, nil
+	return operations.OperationSuccess("OIDC claims available", struct {
+		Claims *oidc.IDTokenClaims `json:"claims"`
+	}{
+		Claims: claims,
+	}), nil
 }

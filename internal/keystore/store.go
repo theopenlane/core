@@ -3,7 +3,6 @@ package keystore
 import (
 	"context"
 	"maps"
-	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -19,7 +17,6 @@ import (
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
-	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -47,7 +44,7 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 		return types.CredentialPayload{}, ErrProviderRequired
 	}
 
-	if strings.TrimSpace(orgID) == "" {
+	if orgID == "" {
 		return types.CredentialPayload{}, ErrOrgIDRequired
 	}
 
@@ -102,7 +99,7 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 		return types.CredentialPayload{}, ErrProviderRequired
 	}
 
-	if strings.TrimSpace(orgID) == "" {
+	if orgID == "" {
 		return types.CredentialPayload{}, ErrOrgIDRequired
 	}
 
@@ -150,10 +147,10 @@ func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integration
 		return types.ProviderUnknown, "", ErrStoreNotInitialized
 	}
 
-	if strings.TrimSpace(orgID) == "" {
+	if orgID == "" {
 		return types.ProviderUnknown, "", integrations.ErrOrgIDRequired
 	}
-	if strings.TrimSpace(integrationID) == "" {
+	if integrationID == "" {
 		return types.ProviderUnknown, "", integrations.ErrIntegrationIDRequired
 	}
 
@@ -306,57 +303,17 @@ func (s *Store) loadCredentialFromIntegrationRecord(ctx context.Context, provide
 }
 
 func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {
-	if len(data) == 0 {
+	if record == nil || provider == types.ProviderUnknown || len(data) == 0 {
 		return
 	}
 
-	var (
-		updated bool
-		next    = record.ProviderState
-	)
-
-	switch provider {
-	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
-		appID, _ := data["appId"].(string)
-		installationID, _ := data["installationId"].(string)
-		if appID == "" && installationID == "" {
-			return
-		}
-
-		current := next.GitHub
-		currentAppID := ""
-		currentInstallationID := ""
-		if current != nil {
-			currentAppID = current.AppID
-			currentInstallationID = current.InstallationID
-		}
-
-		nextAppID := currentAppID
-		if appID != "" {
-			nextAppID = appID
-		}
-		nextInstallationID := currentInstallationID
-		if installationID != "" {
-			nextInstallationID = installationID
-		}
-
-		if nextAppID == currentAppID && nextInstallationID == currentInstallationID {
-			return
-		}
-
-		nextGitHub := state.GitHubState{}
-		if current != nil {
-			nextGitHub = *current
-		}
-		nextGitHub.AppID = nextAppID
-		nextGitHub.InstallationID = nextInstallationID
-		next.GitHub = &nextGitHub
-		updated = true
-	default:
+	next := record.ProviderState
+	changed, err := next.MergeProviderData(string(provider), data)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to merge integration provider state")
 		return
 	}
-
-	if !updated {
+	if !changed {
 		return
 	}
 
@@ -425,7 +382,7 @@ func credentialSetToPayload(provider types.ProviderType, set models.CredentialSe
 
 // tokenFromSet constructs an oauth2.Token from the CredentialSet if token data is present
 func tokenFromSet(set models.CredentialSet) *oauth2.Token {
-	if strings.TrimSpace(set.OAuthAccessToken) == "" && strings.TrimSpace(set.OAuthRefreshToken) == "" {
+	if set.OAuthAccessToken == "" && set.OAuthRefreshToken == "" {
 		return nil
 	}
 

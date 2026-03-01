@@ -12,6 +12,34 @@ const (
 	cloudflareHealthOp types.OperationName = "health.default"
 )
 
+type cloudflareHealthDetails struct {
+	IssuedOn  string `json:"issuedOn,omitempty"`
+	ExpiresOn string `json:"expiresOn,omitempty"`
+}
+
+type cloudflareAPIError struct {
+	// Message is the error message returned by the API
+	Message string `json:"message"`
+}
+
+type cloudflareTokenVerificationResponse struct {
+	// Success indicates whether the API call succeeded
+	Success bool `json:"success"`
+	// Result holds token metadata returned by the API
+	Result struct {
+		// IssuedOn is the token issued timestamp
+		IssuedOn string `json:"issued_on"`
+		// ExpiresOn is the token expiration timestamp
+		ExpiresOn string `json:"expires_on"`
+	} `json:"result"`
+	// Errors lists any API errors returned by the verification call
+	Errors []cloudflareAPIError `json:"errors"`
+}
+
+type cloudflareVerificationFailureDetails struct {
+	Errors []cloudflareAPIError `json:"errors,omitempty"`
+}
+
 // cloudflareOperations returns Cloudflare operation descriptors
 func cloudflareOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -26,22 +54,7 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 		return types.OperationResult{}, err
 	}
 
-	var resp struct {
-		// Success indicates whether the API call succeeded
-		Success bool `json:"success"`
-		// Result holds token metadata returned by the API
-		Result struct {
-			// IssuedOn is the token issued timestamp
-			IssuedOn string `json:"issued_on"`
-			// ExpiresOn is the token expiration timestamp
-			ExpiresOn string `json:"expires_on"`
-		} `json:"result"`
-		// Errors lists any API errors returned by the verification call
-		Errors []struct {
-			// Message is the error message returned by the API
-			Message string `json:"message"`
-		} `json:"errors"`
-	}
+	var resp cloudflareTokenVerificationResponse
 
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -52,17 +65,13 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 	}
 
 	if !resp.Success {
-		return operations.OperationFailure("Cloudflare token verification returned errors", ErrTokenVerificationFailed, map[string]any{
-			"errors": resp.Errors,
+		return operations.OperationFailure("Cloudflare token verification returned errors", ErrTokenVerificationFailed, cloudflareVerificationFailureDetails{
+			Errors: resp.Errors,
 		})
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: "Cloudflare token verified",
-		Details: map[string]any{
-			"issuedOn":  resp.Result.IssuedOn,
-			"expiresOn": resp.Result.ExpiresOn,
-		},
-	}, nil
+	return operations.OperationSuccess("Cloudflare token verified", cloudflareHealthDetails{
+		IssuedOn:  resp.Result.IssuedOn,
+		ExpiresOn: resp.Result.ExpiresOn,
+	}), nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/activation"
@@ -60,19 +61,15 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 type mockOperationRunner struct{}
 
 func (m *mockOperationRunner) Run(_ context.Context, _ types.OperationRequest) (types.OperationResult, error) {
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: "mock health check passed",
-		Details: map[string]any{"mock": true},
-	}, nil
+	return operations.OperationSuccess("mock health check passed", struct {
+		Mock bool `json:"mock"`
+	}{Mock: true}), nil
 }
 
 func (m *mockOperationRunner) RunWithPayload(_ context.Context, _ types.OperationRequest, _ types.CredentialPayload) (types.OperationResult, error) {
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: "mock health check passed",
-		Details: map[string]any{"mock": true},
-	}, nil
+	return operations.OperationSuccess("mock health check passed", struct {
+		Mock bool `json:"mock"`
+	}{Mock: true}), nil
 }
 
 // mockPayloadMinter implements activation.PayloadMinter for tests

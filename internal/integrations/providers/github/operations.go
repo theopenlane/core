@@ -153,6 +153,28 @@ type githubRepoOwner struct {
 	ID int64 `json:"id"`
 }
 
+type githubHealthDetails struct {
+	Login string `json:"login"`
+	ID    int64  `json:"id"`
+	Name  string `json:"name"`
+}
+
+type githubAppHealthDetails struct {
+	Count int `json:"count"`
+}
+
+type githubRepoSample struct {
+	Name      string    `json:"name"`
+	Private   bool      `json:"private"`
+	UpdatedAt time.Time `json:"updated_at"`
+	URL       string    `json:"url"`
+}
+
+type githubRepoCollectionDetails struct {
+	Count   int                `json:"count"`
+	Samples []githubRepoSample `json:"samples"`
+}
+
 // githubAppInstallationReposResponse models the installation repositories response
 type githubAppInstallationReposResponse struct {
 	// TotalCount is the total number of repositories
@@ -173,17 +195,13 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 		return operations.OperationFailure("GitHub user lookup failed", err, nil)
 	}
 
-	details := map[string]any{
-		"login": user.Login,
-		"id":    user.ID,
-		"name":  user.Name,
+	details := githubHealthDetails{
+		Login: user.Login,
+		ID:    user.ID,
+		Name:  user.Name,
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("GitHub token valid for %s", user.Login),
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("GitHub token valid for %s", user.Login), details), nil
 }
 
 // runGitHubAppHealthOperation validates GitHub App installation tokens
@@ -204,11 +222,7 @@ func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 			count = len(resp.Repositories)
 		}
 
-		return types.OperationResult{
-			Status:  types.OperationStatusOK,
-			Summary: fmt.Sprintf("GitHub App token valid for %d repositories", count),
-			Details: map[string]any{"count": count},
-		}, nil
+		return operations.OperationSuccess(fmt.Sprintf("GitHub App token valid for %d repositories", count), githubAppHealthDetails{Count: count}), nil
 	}
 }
 
@@ -235,23 +249,19 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		return operations.OperationFailure("GitHub repository collection failed", err, nil)
 	}
 
-	samples := lo.Map(repos[:min(len(repos), operations.DefaultSampleSize)], func(repo githubRepoResponse, _ int) map[string]any {
-		return map[string]any{
-			"name":       repo.Name,
-			"private":    repo.Private,
-			"updated_at": repo.UpdatedAt,
-			"url":        repo.HTMLURL,
+	samples := lo.Map(repos[:min(len(repos), operations.DefaultSampleSize)], func(repo githubRepoResponse, _ int) githubRepoSample {
+		return githubRepoSample{
+			Name:      repo.Name,
+			Private:   repo.Private,
+			UpdatedAt: repo.UpdatedAt,
+			URL:       repo.HTMLURL,
 		}
 	})
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d repositories", len(repos)),
-		Details: map[string]any{
-			"count":   len(repos),
-			"samples": samples,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d repositories", len(repos)), githubRepoCollectionDetails{
+		Count:   len(repos),
+		Samples: samples,
+	}), nil
 }
 
 // fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support

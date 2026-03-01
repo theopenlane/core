@@ -3,6 +3,8 @@ package auth
 import (
 	"context"
 	"maps"
+
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // AuthenticatedClient wraps a bearer token and headers for simple HTTP JSON calls
@@ -35,13 +37,12 @@ func GetJSONWithClient(ctx context.Context, client *AuthenticatedClient, endpoin
 	return HTTPGetJSON(ctx, nil, endpoint, bearer, headers, out)
 }
 
-// AuthenticatedClientFromAny attempts to unwrap an AuthenticatedClient from an arbitrary value
-func AuthenticatedClientFromAny(value any) *AuthenticatedClient {
-	client, ok := value.(*AuthenticatedClient)
+// AuthenticatedClientFromClient attempts to unwrap an AuthenticatedClient from a wrapped client value
+func AuthenticatedClientFromClient(value types.ClientInstance) *AuthenticatedClient {
+	client, ok := types.ClientInstanceAs[*AuthenticatedClient](value)
 	if !ok {
 		return nil
 	}
 
 	return client
 }
-

@@ -111,13 +111,11 @@ func TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID(t *tes
 	assert.Equal(t, missingInstallationBefore, testutil.ToFloat64(githubAppWebhookResponseCounter.WithLabelValues("ping", "200", "missing_installation_id")))
 }
 
-// TestGitHubInstallationIDFromPayload verifies fallback extraction of installation IDs from raw webhook payloads
-func TestGitHubInstallationIDFromPayload(t *testing.T) {
-	assert.Equal(t, "123", githubInstallationIDFromPayload([]byte(`{"installation":{"id":123}}`)))
-	assert.Equal(t, "987", githubInstallationIDFromPayload([]byte(`{"installation":{"id":"987"}}`)))
-	assert.Equal(t, "", githubInstallationIDFromPayload([]byte(`{"installation":{}}`)))
-	assert.Equal(t, "", githubInstallationIDFromPayload([]byte(`{"foo":"bar"}`)))
-	assert.Equal(t, "", githubInstallationIDFromPayload([]byte(`{`)))
+// TestGitHubInstallationID verifies installation ID extraction from typed webhook installation payloads
+func TestGitHubInstallationID(t *testing.T) {
+	assert.Equal(t, "123", githubInstallationID(&githubWebhookInstallation{ID: 123}))
+	assert.Equal(t, "", githubInstallationID(&githubWebhookInstallation{}))
+	assert.Equal(t, "", githubInstallationID(nil))
 }
 
 // TestHandleGitHubInstallationWebhookSendsSlack verifies installation.created webhooks notify Slack

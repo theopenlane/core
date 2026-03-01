@@ -23,6 +23,17 @@ type githubOrgRepoOperationConfig struct {
 	Organization types.TrimmedString `json:"organization" jsonschema:"description=GitHub organization login used to collect repositories."`
 }
 
+type githubOrganizationRepositoriesDetails struct {
+	Organization string                         `json:"organization"`
+	Count        int                            `json:"count"`
+	Samples      []githubOrganizationRepository `json:"samples"`
+	Repositories []githubOrganizationRepository `json:"repositories,omitempty"`
+}
+
+type githubOrganizationFailureDetails struct {
+	Organization string `json:"organization,omitempty"`
+}
+
 // runGitHubOrganizationReposOperation collects organization repositories through the GraphQL API.
 func runGitHubOrganizationReposOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	config, err := operations.Decode[githubOrgRepoOperationConfig](input.Config)
@@ -42,8 +53,8 @@ func runGitHubOrganizationReposOperation(ctx context.Context, input types.Operat
 	pageSize := clampPerPage(config.EffectivePageSize(maxPerPage))
 	repositories, err := listGitHubOrganizationRepositories(ctx, client, config.Organization, pageSize)
 	if err != nil {
-		return operations.OperationFailure("GitHub organization repository collection failed", err, map[string]any{
-			"organization": config.Organization.String(),
+		return operations.OperationFailure("GitHub organization repository collection failed", err, githubOrganizationFailureDetails{
+			Organization: config.Organization.String(),
 		})
 	}
 
@@ -51,19 +62,16 @@ func runGitHubOrganizationReposOperation(ctx context.Context, input types.Operat
 	samples := make([]githubOrganizationRepository, sampleCount)
 	copy(samples, repositories[:sampleCount])
 
-	details := map[string]any{
-		"organization": config.Organization.String(),
-		"count":        len(repositories),
-		"samples":      samples,
+	details := githubOrganizationRepositoriesDetails{
+		Organization: config.Organization.String(),
+		Count:        len(repositories),
+		Samples:      samples,
+	}
+	if config.IncludePayloads {
+		details.Repositories = repositories
 	}
 
-	details = operations.AddPayloadIf(details, config.IncludePayloads, "repositories", repositories)
-
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d repositories for organization %s", len(repositories), config.Organization.String()),
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d repositories for organization %s", len(repositories), config.Organization.String()), details), nil
 }
 
 // githubOrganizationRepository stores normalized GraphQL repository metadata.
@@ -192,7 +200,7 @@ func listGitHubOrganizationRepositories(ctx context.Context, client *githubv4.Cl
 
 // githubGraphQLClientForOperation returns a pooled GraphQL client or a token-derived fallback.
 func githubGraphQLClientForOperation(input types.OperationInput) (*githubv4.Client, error) {
-	client := githubGraphQLClientFromAny(input.Client)
+	client := githubGraphQLClientFromClient(input.Client)
 	if client != nil {
 		return client, nil
 	}

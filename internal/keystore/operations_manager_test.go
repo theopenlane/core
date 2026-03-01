@@ -2,11 +2,13 @@ package keystore
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 func TestOperationManagerRunUsesStoredCredential(t *testing.T) {
@@ -276,13 +278,13 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 	clientDescriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, payload types.CredentialPayload, config map[string]any) (any, error) {
+		Build: func(_ context.Context, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 			if payload.Data.APIToken == "" {
 				t.Fatalf("expected credential payload")
 			}
 			builderRegion = config["region"]
 			config["region"] = "builder-mutated"
-			return &pooledClient{id: payload.Data.APIToken}, nil
+			return types.NewClientInstance(&pooledClient{id: payload.Data.APIToken}), nil
 		},
 	}
 
@@ -309,18 +311,23 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 	}
 
 	reqConfig := map[string]any{"region": "us-west-2"}
+	var reqConfigDoc json.RawMessage
+	if err := jsonx.RoundTrip(reqConfig, &reqConfigDoc); err != nil {
+		t.Fatalf("RoundTrip() error = %v", err)
+	}
+
 	result, err := manager.Run(context.Background(), types.OperationRequest{
 		OrgID:       "org-1",
 		Provider:    provider,
 		Name:        opDescriptor.Name,
-		Config:      reqConfig,
+		Config:      reqConfigDoc,
 		ClientForce: true,
 	})
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
 
-	client, ok := captured.Client.(*pooledClient)
+	client, ok := types.ClientInstanceAs[*pooledClient](captured.Client)
 	if !ok {
 		t.Fatalf("expected pooled client type, got %T", captured.Client)
 	}
@@ -332,8 +339,12 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 		t.Fatalf("expected client force flag to mint credentials")
 	}
 
-	if captured.Config["region"] != "us-west-2" {
-		t.Fatalf("expected operation config clone, got %v", captured.Config["region"])
+	capturedConfig, err := jsonx.ToMap(captured.Config)
+	if err != nil {
+		t.Fatalf("expected decodable operation config, got %v", err)
+	}
+	if capturedConfig["region"] != "us-west-2" {
+		t.Fatalf("expected operation config clone, got %v", capturedConfig["region"])
 	}
 	if reqConfig["region"] != "us-west-2" {
 		t.Fatalf("expected request config to remain unchanged, got %v", reqConfig["region"])

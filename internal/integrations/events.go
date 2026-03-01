@@ -2,24 +2,10 @@ package integrations
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
-)
-
-// IntegrationOperationType classifies integration workload behavior for queue policy.
-type IntegrationOperationType string
-
-const (
-	// IntegrationOperationTypeSync is the default operation class.
-	IntegrationOperationTypeSync IntegrationOperationType = "sync"
-	// IntegrationOperationTypeImport captures import-style workloads.
-	IntegrationOperationTypeImport IntegrationOperationType = "import"
-	// IntegrationOperationTypeExport captures export-style workloads.
-	IntegrationOperationTypeExport IntegrationOperationType = "export"
-	// IntegrationOperationTypeWebhook captures webhook-driven workloads.
-	IntegrationOperationTypeWebhook IntegrationOperationType = "webhook"
 )
 
 // IntegrationOperationRequestedPayload captures a queued integration operation request
@@ -32,6 +18,10 @@ type IntegrationOperationRequestedPayload struct {
 	Provider string `json:"provider"`
 	// Operation is the operation identifier
 	Operation string `json:"operation"`
+	// OperationKind is the operation kind from the provider descriptor
+	OperationKind types.OperationKind `json:"operation_kind,omitempty"`
+	// RunType identifies how the run was triggered
+	RunType enums.IntegrationRunType `json:"run_type,omitempty"`
 	// Force indicates the run should refresh credentials
 	Force bool `json:"force,omitempty"`
 	// ClientForce forces a client refresh
@@ -59,8 +49,6 @@ const (
 type IntegrationOperationEnvelope struct {
 	// Request is the integration operation request payload.
 	Request IntegrationOperationRequestedPayload `json:"request"`
-	// Type classifies operation behavior for policy routing.
-	Type IntegrationOperationType `json:"type"`
 	// TimeoutSeconds is the recommended execution timeout budget.
 	TimeoutSeconds int `json:"timeout_seconds"`
 	// MaxAttempts is the River retry budget for this operation.
@@ -85,36 +73,27 @@ const (
 	integrationWebhookMaxAttempts    = 3
 )
 
-var integrationOperationPolicies = map[IntegrationOperationType]integrationOperationPolicy{
-	IntegrationOperationTypeSync: {
-		timeoutSeconds: integrationSyncTimeoutSeconds,
-		maxAttempts:    integrationSyncMaxAttempts,
-	},
-	IntegrationOperationTypeImport: {
-		timeoutSeconds: integrationLongRunningTimeoutSeconds,
-		maxAttempts:    integrationLongRunningMaxAttempts,
-	},
-	IntegrationOperationTypeExport: {
-		timeoutSeconds: integrationLongRunningTimeoutSeconds,
-		maxAttempts:    integrationLongRunningMaxAttempts,
-	},
-	IntegrationOperationTypeWebhook: {
-		timeoutSeconds: integrationWebhookTimeoutSeconds,
-		maxAttempts:    integrationWebhookMaxAttempts,
-	},
+var integrationDefaultOperationPolicy = integrationOperationPolicy{
+	timeoutSeconds: integrationSyncTimeoutSeconds,
+	maxAttempts:    integrationSyncMaxAttempts,
+}
+
+var integrationLongRunningOperationPolicy = integrationOperationPolicy{
+	timeoutSeconds: integrationLongRunningTimeoutSeconds,
+	maxAttempts:    integrationLongRunningMaxAttempts,
+}
+
+var integrationWebhookOperationPolicy = integrationOperationPolicy{
+	timeoutSeconds: integrationWebhookTimeoutSeconds,
+	maxAttempts:    integrationWebhookMaxAttempts,
 }
 
 // NewIntegrationOperationEnvelope derives queue and retry policy for a requested integration operation.
 func NewIntegrationOperationEnvelope(payload IntegrationOperationRequestedPayload) IntegrationOperationEnvelope {
-	operationType := classifyIntegrationOperationType(payload.Operation)
-	policy, ok := integrationOperationPolicies[operationType]
-	if !ok {
-		policy = integrationOperationPolicies[IntegrationOperationTypeSync]
-	}
+	policy := integrationOperationPolicyForPayload(payload)
 
 	return IntegrationOperationEnvelope{
 		Request:        payload,
-		Type:           operationType,
 		TimeoutSeconds: policy.timeoutSeconds,
 		MaxAttempts:    policy.maxAttempts,
 		IdempotencyKey: integrationOperationIdempotencyKey(payload),
@@ -124,32 +103,32 @@ func NewIntegrationOperationEnvelope(payload IntegrationOperationRequestedPayloa
 // Headers converts envelope policy into Gala dispatch headers.
 func (e IntegrationOperationEnvelope) Headers() gala.Headers {
 	return gala.Headers{
-		IdempotencyKey: strings.TrimSpace(e.IdempotencyKey),
+		IdempotencyKey: e.IdempotencyKey,
 		Queue:          IntegrationQueueName,
 		MaxAttempts:    e.MaxAttempts,
 	}
 }
 
-func classifyIntegrationOperationType(operation string) IntegrationOperationType {
-	normalized := strings.ToLower(strings.TrimSpace(operation))
+// integrationOperationPolicyForPayload derives runtime retry and timeout policy from explicit request metadata
+func integrationOperationPolicyForPayload(payload IntegrationOperationRequestedPayload) integrationOperationPolicy {
+	if payload.RunType == enums.IntegrationRunTypeWebhook {
+		return integrationWebhookOperationPolicy
+	}
 
-	switch {
-	case strings.Contains(normalized, "webhook"):
-		return IntegrationOperationTypeWebhook
-	case strings.Contains(normalized, "export"):
-		return IntegrationOperationTypeExport
-	case strings.Contains(normalized, "collect"), strings.Contains(normalized, "import"):
-		return IntegrationOperationTypeImport
+	switch payload.OperationKind {
+	case types.OperationKindCollectFindings, types.OperationKindScanSettings:
+		return integrationLongRunningOperationPolicy
 	default:
-		return IntegrationOperationTypeSync
+		return integrationDefaultOperationPolicy
 	}
 }
 
+// integrationOperationIdempotencyKey builds a deterministic idempotency key for queue dedupe
 func integrationOperationIdempotencyKey(payload IntegrationOperationRequestedPayload) string {
-	runID := strings.TrimSpace(payload.RunID)
-	orgID := strings.TrimSpace(payload.OrgID)
-	provider := strings.TrimSpace(payload.Provider)
-	operation := strings.TrimSpace(payload.Operation)
+	runID := payload.RunID
+	orgID := payload.OrgID
+	provider := payload.Provider
+	operation := payload.Operation
 
 	if runID != "" {
 		return fmt.Sprintf("%s:%s:%s:%s", provider, operation, orgID, runID)

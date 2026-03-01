@@ -11,6 +11,7 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
+	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/directives"
@@ -43,12 +44,21 @@ type Resolver struct {
 	complexityLimit   int
 	maxResultLimit    *int
 	workflowsConfig   workflows.Config
+	integrationSource integrationMetadataSource
 
 	// subscription settings
 	subscriptionSettings
 
 	// trust center settings
 	trustCenterSettings
+}
+
+// integrationMetadataSource exposes provider metadata needed by workflow metadata resolvers
+type integrationMetadataSource interface {
+	// ProviderMetadataCatalog returns provider metadata catalog
+	ProviderMetadataCatalog() map[integrationtypes.ProviderType]integrationtypes.ProviderConfig
+	// OperationDescriptors returns operation descriptors for a provider
+	OperationDescriptors(provider integrationtypes.ProviderType) []integrationtypes.OperationDescriptor
 }
 
 // trustCenterSettings holds the settings for trust center domains

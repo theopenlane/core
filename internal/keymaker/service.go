@@ -192,10 +192,10 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 
 // CompleteAuthorization finalizes an OAuth/OIDC transaction and persists the resulting credential
 func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest) (CompleteResult, error) {
-	if req.State == "" {
+	if strings.TrimSpace(req.State) == "" {
 		return CompleteResult{}, integrations.ErrStateRequired
 	}
-	if req.Code == "" {
+	if strings.TrimSpace(req.Code) == "" {
 		return CompleteResult{}, integrations.ErrAuthorizationCodeRequired
 	}
 

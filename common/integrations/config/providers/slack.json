@@ -15,11 +15,14 @@
     "authUrl": "https://slack.com/oauth/v2/authorize",
     "tokenUrl": "https://slack.com/api/oauth.v2.access",
     "scopes": [
-      "identity.basic",
-      "identity.email",
-      "chat:write"
+      "chat:write",
+      "chat:write.public",
+      "team:read",
+      "chat:write.customize",
+      "users:read"
+
     ],
-    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/oauth/callback"
   },
   "userInfo": {
     "url": "https://slack.com/api/users.identity",

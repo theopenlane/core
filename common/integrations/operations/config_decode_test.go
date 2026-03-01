@@ -1,6 +1,7 @@
 package operations
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -25,14 +26,14 @@ type normalizedConfig struct {
 
 // TestDecodeConfigNormalizedStrings verifies normalized strings are decoded correctly
 func TestDecodeConfigNormalizedStrings(t *testing.T) {
-	config := map[string]any{
-		"name":  "  Alice ",
+	config := json.RawMessage(`{
+		"name": "  Alice ",
 		"label": "  FooBar ",
-		"code":  "  ab-12 ",
-		"tags":  []string{" one ", "two"},
-		"modes": []string{"  ON ", " Off "},
-		"flags": []string{" aa ", "BB "},
-	}
+		"code": "  ab-12 ",
+		"tags": [" one ", "two"],
+		"modes": ["  ON ", " Off "],
+		"flags": [" aa ", "BB "]
+	}`)
 
 	var decoded normalizedConfig
 	require.NoError(t, DecodeConfig(config, &decoded))
@@ -51,10 +52,7 @@ func TestDecodeConfigUnknownField(t *testing.T) {
 	}
 
 	var decoded sample
-	err := DecodeConfig(map[string]any{
-		"name":  "ok",
-		"extra": "nope",
-	}, &decoded)
+	err := DecodeConfig(json.RawMessage(`{"name":"ok","extra":"nope"}`), &decoded)
 	if err == nil {
 		t.Fatalf("expected error for unknown field")
 	}

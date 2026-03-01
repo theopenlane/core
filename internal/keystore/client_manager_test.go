@@ -32,7 +32,7 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (any, error) {
+		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 			buildCount.Add(1)
 			if cred.Data.AccessKeyID == "" {
 				t.Fatalf("expected credential payload in builder")
@@ -40,7 +40,7 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 			if config != nil {
 				config["region"] = "builder"
 			}
-			return &pooledClient{id: cred.Data.AccessKeyID}, nil
+			return types.NewClientInstance(&pooledClient{id: cred.Data.AccessKeyID}), nil
 		},
 	}
 
@@ -112,8 +112,8 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing provider",
 			descriptor: types.ClientDescriptor{
 				Name: types.ClientName("rest"),
-				Build: func(context.Context, types.CredentialPayload, map[string]any) (any, error) {
-					return nil, nil
+				Build: func(context.Context, types.CredentialPayload, map[string]any) (types.ClientInstance, error) {
+					return types.EmptyClientInstance(), nil
 				},
 			},
 			wantErr: ErrProviderRequired,
@@ -122,8 +122,8 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing name",
 			descriptor: types.ClientDescriptor{
 				Provider: provider,
-				Build: func(context.Context, types.CredentialPayload, map[string]any) (any, error) {
-					return nil, nil
+				Build: func(context.Context, types.CredentialPayload, map[string]any) (types.ClientInstance, error) {
+					return types.EmptyClientInstance(), nil
 				},
 			},
 			wantErr: ErrClientDescriptorInvalid,
@@ -166,10 +166,10 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (any, error) {
+		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
 			captured = cred
 			capturedConfig = config
-			return &pooledClient{id: cred.Data.APIToken}, nil
+			return types.NewClientInstance(&pooledClient{id: cred.Data.APIToken}), nil
 		},
 	}
 
@@ -184,7 +184,7 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 		t.Fatalf("BuildFromPayload() error = %v", err)
 	}
 
-	client, ok := result.(*pooledClient)
+	client, ok := types.ClientInstanceAs[*pooledClient](result)
 	if !ok {
 		t.Fatalf("expected *pooledClient, got %T", result)
 	}

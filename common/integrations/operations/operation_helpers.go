@@ -2,39 +2,63 @@ package operations
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // OperationFailure builds a failed operation result with optional contextual details.
 // When err is non-nil it is automatically added under the "error" key unless the
 // caller already provided one.
-func OperationFailure(summary string, err error, details map[string]any) (types.OperationResult, error) {
+func OperationFailure(summary string, err error, details any) (types.OperationResult, error) {
 	if err != nil {
-		if details == nil {
-			details = map[string]any{}
+		detailMap := map[string]any{}
+		if details != nil {
+			if parsed, parseErr := jsonx.ToMap(details); parseErr == nil && parsed != nil {
+				detailMap = parsed
+			}
 		}
 
-		if _, exists := details["error"]; !exists {
-			details["error"] = err.Error()
+		if _, exists := detailMap["error"]; !exists {
+			detailMap["error"] = err.Error()
 		}
+
+		details = detailMap
 	}
 
 	return types.OperationResult{
 		Status:  types.OperationStatusFailed,
 		Summary: summary,
-		Details: details,
+		Details: encodeOperationDetails(details),
 	}, err
 }
 
 // OperationSuccess builds a successful operation result.
-func OperationSuccess(summary string, details map[string]any) types.OperationResult {
+func OperationSuccess(summary string, details any) types.OperationResult {
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
 		Summary: summary,
-		Details: details,
+		Details: encodeOperationDetails(details),
 	}
+}
+
+func encodeOperationDetails(details any) json.RawMessage {
+	if details == nil {
+		return nil
+	}
+
+	var raw json.RawMessage
+	if err := jsonx.RoundTrip(details, &raw); err != nil {
+		return nil
+	}
+
+	if len(raw) == 0 || string(raw) == "null" {
+		return nil
+	}
+
+	return raw
 }
 
 // HealthOperation builds a standard health check descriptor.
@@ -62,7 +86,7 @@ const (
 )
 
 // HealthCheckRunner creates a health check operation function using the common pattern.
-func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg string, resultFn func(T) (string, map[string]any)) types.OperationFunc {
+func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg string, resultFn func(T) (string, any)) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 		extract, err := tokenExtractor(tokenType)
 		if err != nil {

@@ -86,7 +86,7 @@ type Provider interface {
 type ClientName string
 
 // ClientBuilderFunc constructs provider-specific clients using persisted credentials and optional config
-type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config map[string]any) (any, error)
+type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config map[string]any) (ClientInstance, error)
 
 // ClientDescriptor describes a provider-managed client that can be pooled/reused downstream
 type ClientDescriptor struct {

@@ -15,7 +15,7 @@ type Object struct {
 	// Type is the workflow object type.
 	Type enums.WorkflowObjectType
 	// Node is the concrete ent entity when available.
-	Node any
+	Node generated.Noder
 }
 
 // CELValue exposes the value used inside CEL expressions.
@@ -54,6 +54,12 @@ type TargetConfig struct {
 	ID string `json:"id,omitempty"`
 	// ResolverKey names the resolver used for dynamic targets.
 	ResolverKey string `json:"resolver_key,omitempty"`
+	// Channel identifies the notification channel when Type is CHANNEL.
+	Channel enums.Channel `json:"channel,omitempty"`
+	// Destination identifies the external channel destination when Type is CHANNEL.
+	Destination string `json:"destination,omitempty"`
+	// Config carries optional provider-specific message settings when Type is CHANNEL.
+	Config map[string]any `json:"config,omitempty"`
 }
 
 // CELContextBuilder can override how CEL activation variables are built per object type.

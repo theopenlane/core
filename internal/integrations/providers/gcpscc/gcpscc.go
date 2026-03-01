@@ -271,15 +271,15 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 }
 
 // buildSecurityCenterClient builds the SCC client using stored credentials
-func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
+func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
 	meta, err := metadataFromPayload(payload)
 	if err != nil {
-		return nil, err
+		return types.EmptyClientInstance(), err
 	}
 
 	clientOpts, err := securityCenterClientOptions(ctx, meta, payload.Token)
 	if err != nil {
-		return nil, err
+		return types.EmptyClientInstance(), err
 	}
 
 	opts := append([]option.ClientOption{}, clientOpts...)
@@ -289,10 +289,10 @@ func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayl
 
 	client, err := cloudscc.NewClient(ctx, opts...)
 	if err != nil {
-		return nil, ErrSecurityCenterClientCreate
+		return types.EmptyClientInstance(), ErrSecurityCenterClientCreate
 	}
 
-	return client, nil
+	return types.NewClientInstance(client), nil
 }
 
 // securityCenterClientOptions builds client options based on available credentials

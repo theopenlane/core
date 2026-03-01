@@ -30,15 +30,26 @@ type Provider struct {
 	relyingParty rp.RelyingParty
 	authParams   map[string]string
 	tokenParams  map[string]string
+	credentialSetBuilder CredentialSetBuilder
 }
 
 // ProviderOption customizes OAuth provider construction.
 type ProviderOption func(*Provider)
 
+// CredentialSetBuilder builds provider-specific credential metadata from an OAuth token
+type CredentialSetBuilder func(token *oauth2.Token) models.CredentialSet
+
 // WithClientDescriptors registers client descriptors for pooling.
 func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
 	return func(p *Provider) {
 		p.Clients = operations.SanitizeClientDescriptors(p.Type(), descriptors)
+	}
+}
+
+// WithCredentialSetBuilder configures provider-specific credential metadata extraction from OAuth tokens
+func WithCredentialSetBuilder(builder CredentialSetBuilder) ProviderOption {
+	return func(p *Provider) {
+		p.credentialSetBuilder = builder
 	}
 }
 

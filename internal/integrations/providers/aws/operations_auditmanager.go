@@ -16,6 +16,12 @@ const (
 	awsAuditAssessmentsOp types.OperationName = "audit_manager.assessments.list"
 )
 
+type awsAuditManagerDetails struct {
+	RoleArn   string `json:"roleArn,omitempty"`
+	Region    string `json:"region,omitempty"`
+	AccountID string `json:"accountId,omitempty"`
+}
+
 // awsAuditManagerOperations lists the AWS Audit Manager operations supported by this provider.
 func awsAuditManagerOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -40,17 +46,17 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 		MaxResults: awssdk.Int32(1),
 	})
 	if err != nil {
-		return operations.OperationFailure("AWS Audit Manager list assessments failed", err, map[string]any{
-			"region": meta.Region,
+		return operations.OperationFailure("AWS Audit Manager list assessments failed", err, awsAuditManagerDetails{
+			Region: meta.Region,
 		})
 	}
 
-	details := map[string]any{
-		"roleArn": meta.RoleARN,
-		"region":  meta.Region,
+	details := awsAuditManagerDetails{
+		RoleArn: meta.RoleARN,
+		Region:  meta.Region,
 	}
 	if meta.AccountID != "" {
-		details["accountId"] = meta.AccountID
+		details.AccountID = meta.AccountID
 	}
 
 	summary := "AWS Audit Manager reachable"
@@ -58,11 +64,7 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 		summary = fmt.Sprintf("AWS Audit Manager reachable for account %s", meta.AccountID)
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: summary,
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(summary, details), nil
 }
 
 // newAuditManagerClient wraps auditmanager.NewFromConfig for use with generic helpers

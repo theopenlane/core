@@ -38,6 +38,17 @@ type securityHubFindingsConfig struct {
 	IncludePayloads bool `json:"include_payloads,omitempty" jsonschema:"description=Return raw finding payloads in the response (defaults to false)."`
 }
 
+type securityHubFindingsDetails struct {
+	Region          string                `json:"region"`
+	AlertsTotal     int                   `json:"alerts_total"`
+	AlertTypeCounts map[string]int        `json:"alert_type_counts"`
+	Alerts          []types.AlertEnvelope `json:"alerts,omitempty"`
+}
+
+type securityHubFailureDetails struct {
+	Region string `json:"region,omitempty"`
+}
+
 var securityHubFindingsSchema = operations.SchemaFrom[securityHubFindingsConfig]()
 
 // awsSecurityHubOperations lists the AWS Security Hub operations supported by this provider.
@@ -93,8 +104,8 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			Filters:    filters,
 		})
 		if err != nil {
-			return operations.OperationFailure("AWS Security Hub findings fetch failed", err, map[string]any{
-				"region": meta.Region,
+			return operations.OperationFailure("AWS Security Hub findings fetch failed", err, securityHubFailureDetails{
+				Region: meta.Region,
 			})
 		}
 
@@ -128,8 +139,8 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 
 			payload, err := json.Marshal(finding)
 			if err != nil {
-				return operations.OperationFailure("AWS Security Hub finding serialization failed", err, map[string]any{
-					"region": meta.Region,
+				return operations.OperationFailure("AWS Security Hub finding serialization failed", err, securityHubFailureDetails{
+					Region: meta.Region,
 				})
 			}
 
@@ -159,21 +170,18 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 		nextToken = resp.NextToken
 	}
 
-	alertTypeCounts := map[string]int{
-		awsSecurityHubAlertTypeFinding: total,
+	details := securityHubFindingsDetails{
+		Region:      meta.Region,
+		AlertsTotal: total,
+		AlertTypeCounts: map[string]int{
+			awsSecurityHubAlertTypeFinding: total,
+		},
 	}
-	details := map[string]any{
-		"region":            meta.Region,
-		"alerts_total":      total,
-		"alert_type_counts": alertTypeCounts,
+	if cfg.IncludePayloads {
+		details.Alerts = envelopes
 	}
-	details = operations.AddPayloadIf(details, cfg.IncludePayloads, "alerts", envelopes)
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d Security Hub findings", total),
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d Security Hub findings", total), details), nil
 }
 
 // newSecurityHubClient wraps securityhub.NewFromConfig for use with generic helpers

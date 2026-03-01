@@ -18,7 +18,7 @@
       "https://graph.microsoft.com/.default",
       "offline_access"
     ],
-    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/oauth/callback"
   },
   "userInfo": {
     "url": "https://graph.microsoft.com/v1.0/me",

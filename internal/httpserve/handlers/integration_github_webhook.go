@@ -8,14 +8,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"maps"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
@@ -23,7 +21,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -34,16 +31,55 @@ import (
 	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // GitHub webhook header names and limits
 const (
-	githubWebhookSignatureHeader  = "X-Hub-Signature-256"
-	githubWebhookEventHeader      = "X-GitHub-Event"
-	githubWebhookDeliveryHeader   = "X-GitHub-Delivery"
-	maxGitHubWebhookBodyBytes     = int64(1024 * 1024)
-	githubWebhookVerifiedMetadata = "githubWebhookVerifiedAt"
+	githubWebhookSignatureHeader = "X-Hub-Signature-256"
+	githubWebhookEventHeader     = "X-GitHub-Event"
+	githubWebhookDeliveryHeader  = "X-GitHub-Delivery"
+	maxGitHubWebhookBodyBytes    = int64(1024 * 1024)
 )
+
+// githubWebhookVerificationStatePatch captures provider state fields persisted after webhook verification
+type githubWebhookVerificationStatePatch struct {
+	// InstallationID is the installed GitHub App installation identifier
+	InstallationID string `json:"installationId"`
+	// WebhookVerifiedAt marks the verified timestamp
+	WebhookVerifiedAt time.Time `json:"webhookVerifiedAt"`
+}
+
+// githubWebhookVerificationMetadata captures integration metadata fields persisted after webhook verification
+type githubWebhookVerificationMetadata struct {
+	// GitHubWebhookVerifiedAt marks the verified timestamp for UI and operational visibility
+	GitHubWebhookVerifiedAt time.Time `json:"githubWebhookVerifiedAt"`
+}
+
+// githubWebhookPersistedRegistration summarizes registration-safe webhook persisted counters
+type githubWebhookPersistedRegistration struct {
+	// Created is the number of created records
+	Created int `json:"created"`
+	// Updated is the number of updated records
+	Updated int `json:"updated"`
+	// Skipped is the number of skipped records
+	Skipped int `json:"skipped"`
+}
+
+// githubWebhookPersistedQueue summarizes queued envelope counters
+type githubWebhookPersistedQueue struct {
+	// Queued is the number of queued alerts
+	Queued int `json:"queued"`
+	// Total is the total number of queued alerts
+	Total int `json:"total"`
+}
+
+// githubWebhookPersistedNotification summarizes installation notification results
+type githubWebhookPersistedNotification struct {
+	// Notified indicates whether installation notification was sent
+	Notified bool `json:"notified"`
+}
 
 var (
 	githubAppWebhookReceivedCounter = prometheus.NewCounterVec(
@@ -97,6 +133,16 @@ func init() {
 	prometheus.MustRegister(githubAppWebhookEmitErrorsCounter)
 }
 
+// githubWebhookPersistedMap encodes persisted response payloads into map form for OpenAPI response types
+func githubWebhookPersistedMap(value any) map[string]any {
+	persisted, err := jsonx.ToMap(value)
+	if err != nil {
+		return nil
+	}
+
+	return persisted
+}
+
 // normalizeGitHubWebhookEventType normalizes the event type used in metric labels
 func normalizeGitHubWebhookEventType(eventType string) string {
 	if eventType == "" {
@@ -120,7 +166,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	if isRegistrationContext(ctx) {
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
 			Reply:     rout.Reply{Success: true},
-			Persisted: map[string]any{"created": 0, "updated": 0, "skipped": 0},
+			Persisted: githubWebhookPersistedMap(githubWebhookPersistedRegistration{}),
 		}, openapi)
 	}
 
@@ -180,9 +226,6 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	installationID := githubInstallationID(envelope.Installation)
-	if installationID == "" {
-		installationID = githubInstallationIDFromPayload(payload)
-	}
 	if eventType == "ping" {
 		if installationID != "" {
 			if err := h.markGitHubWebhookVerifiedAt(req.Context(), installationID, time.Now().UTC()); err != nil {
@@ -280,10 +323,10 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 
 	return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
 		Reply: rout.Reply{Success: true},
-		Persisted: map[string]any{
-			"queued": len(alerts),
-			"total":  len(alerts),
-		},
+		Persisted: githubWebhookPersistedMap(githubWebhookPersistedQueue{
+			Queued: len(alerts),
+			Total:  len(alerts),
+		}),
 	}, openapi)
 }
 
@@ -332,10 +375,8 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 	recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_sent")
 
 	return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
-		Reply: rout.Reply{Success: true},
-		Persisted: map[string]any{
-			"notified": true,
-		},
+		Reply:     rout.Reply{Success: true},
+		Persisted: githubWebhookPersistedMap(githubWebhookPersistedNotification{Notified: true}),
 	}, openapi)
 }
 
@@ -396,47 +437,6 @@ func githubInstallationID(installation *githubWebhookInstallation) string {
 	return fmt.Sprintf("%d", installation.ID)
 }
 
-// githubInstallationIDFromPayload extracts installation.id directly from webhook payloads
-func githubInstallationIDFromPayload(payload []byte) string {
-	if len(payload) == 0 {
-		return ""
-	}
-
-	var decoded map[string]any
-	if err := json.Unmarshal(payload, &decoded); err != nil {
-		return ""
-	}
-
-	installationRaw, ok := decoded["installation"]
-	if !ok || installationRaw == nil {
-		return ""
-	}
-
-	installation, ok := installationRaw.(map[string]any)
-	if !ok {
-		return ""
-	}
-
-	idRaw, ok := installation["id"]
-	if !ok || idRaw == nil {
-		return ""
-	}
-
-	switch id := idRaw.(type) {
-	case float64:
-		if id <= 0 {
-			return ""
-		}
-		return strconv.FormatInt(int64(id), 10)
-	case string:
-		return id
-	case json.Number:
-		return id.String()
-	default:
-		return ""
-	}
-}
-
 // githubRepoFromWebhook derives the repo name from a webhook repository payload
 func githubRepoFromWebhook(repo *githubWebhookRepository) string {
 	if repo == nil {
@@ -482,7 +482,7 @@ func validateGitHubWebhookSignature(secret string, signatureHeader string, paylo
 		return false
 	}
 
-	provided := strings.TrimPrefix(signatureHeader, prefix)
+	provided := signatureHeader[len(prefix):]
 	mac := hmac.New(sha256.New, []byte(secret))
 	_, _ = mac.Write(payload)
 	expected := hex.EncodeToString(mac.Sum(nil))
@@ -500,7 +500,7 @@ func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, 
 		Where(
 			integration.KindEQ(string(github.TypeGitHubApp)),
 			func(s *sql.Selector) {
-				s.Where(sqljson.ValueEQ(integration.FieldProviderState, installationID, sqljson.Path("github", "installationId")))
+				s.Where(sqljson.ValueEQ(integration.FieldProviderState, installationID, sqljson.Path("providers", string(github.TypeGitHubApp), "installationId")))
 			},
 		)
 	record, err := query.Only(ctx)
@@ -533,16 +533,27 @@ func (h *Handler) markGitHubWebhookVerifiedAt(ctx context.Context, installationI
 		return nil
 	}
 
-	nextState := integrationRecord.ProviderState
-	if nextState.GitHub == nil {
-		nextState.GitHub = &state.GitHubState{}
-	}
-	nextState.GitHub.InstallationID = installationID
-	nextState.GitHub.WebhookVerifiedAt = &verifiedAt
-
-	nextMetadata := lo.Assign(map[string]any{}, maps.Clone(integrationRecord.Metadata), map[string]any{
-		githubWebhookVerifiedMetadata: verifiedAt,
+	statePatch, err := jsonx.ToMap(githubWebhookVerificationStatePatch{
+		InstallationID:    installationID,
+		WebhookVerifiedAt: verifiedAt,
 	})
+	if err != nil {
+		return ErrInvalidStateFormat
+	}
+
+	nextState := integrationRecord.ProviderState
+	if _, err := nextState.MergeProviderData(string(github.TypeGitHubApp), statePatch); err != nil {
+		return ErrInvalidStateFormat
+	}
+
+	metadataPatch, err := jsonx.ToMap(githubWebhookVerificationMetadata{
+		GitHubWebhookVerifiedAt: verifiedAt,
+	})
+	if err != nil {
+		return ErrInvalidStateFormat
+	}
+
+	nextMetadata := mapx.DeepMergeMapAny(mapx.DeepCloneMapAny(integrationRecord.Metadata), metadataPatch)
 
 	return h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
 		SetProviderState(nextState).

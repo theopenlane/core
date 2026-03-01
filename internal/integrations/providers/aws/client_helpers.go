@@ -36,7 +36,7 @@ func buildAWSClient[T any](ctx context.Context, payload types.CredentialPayload,
 
 // resolveAWSClient returns a pooled client when supplied or builds one on demand
 func resolveAWSClient[T any](ctx context.Context, input types.OperationInput, constructor ClientConstructor[T]) (T, auth.AWSMetadata, error) {
-	if client, ok := input.Client.(T); ok {
+	if client, ok := types.ClientInstanceAs[T](input.Client); ok {
 		meta, err := awsMetadataFromPayload(input.Credential, awsDefaultSession)
 		if err != nil {
 			var zero T

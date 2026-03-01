@@ -52,7 +52,10 @@ func (r *queryResolver) WorkflowMetadata(ctx context.Context) (*model.WorkflowMe
 		})
 	}
 
-	return &model.WorkflowMetadata{
+	result := &model.WorkflowMetadata{
 		ObjectTypes: objectTypes,
-	}, nil
+	}
+	setWorkflowMetadataExtensions(result, workflowMetadataExtensions(r.integrationSource))
+
+	return result, nil
 }
