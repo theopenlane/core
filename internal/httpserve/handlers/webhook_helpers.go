@@ -165,7 +165,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 	// include softdeleted modules in the query
 	// if the module was previously marked as deleted, bring it back
 	// instead of making a new record/row
-	queryCtx := context.WithValue(allowCtx, entx.SoftDeleteSkipKey{}, true)
+	queryCtx := entx.SkipSoftDelete(allowCtx)
 
 	existing, err := tx.OrgModule.Query().Where(
 		orgmodule.And(

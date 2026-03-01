@@ -37,9 +37,11 @@ func (token *SignUpToken) SetEmail(email string) {
 // parent context and a sign-up token as parameters and returns a new context with
 // the sign-up token added
 func NewContextWithSignUpToken(parent context.Context, email string) context.Context {
-	return signUpTokenContextKey.Set(parent, &SignUpToken{
+	ctx := signUpTokenContextKey.Set(parent, &SignUpToken{
 		email: email,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // EmailSignUpTokenFromContext retrieves the value associated with the

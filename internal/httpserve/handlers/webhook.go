@@ -398,7 +398,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 			// if we got here we could not find the org subscription
 			// first check to see if the org was deleted already
-			allowCtx = entx.SkipSoftDelete(ctx)
+			allowCtx = entx.SkipSoftDelete(allowCtx)
 			if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
 				orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
 					Where(orgsubscription.ID(orgSubID)).Only(allowCtx)

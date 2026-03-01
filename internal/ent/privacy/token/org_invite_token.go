@@ -30,9 +30,11 @@ func (token *OrgInviteToken) SetToken(t string) {
 
 // NewContextWithOrgInviteToken returns a new context with the reset token inside
 func NewContextWithOrgInviteToken(parent context.Context, orgInviteToken string) context.Context {
-	return orgInviteTokenContextKey.Set(parent, &OrgInviteToken{
+	ctx := orgInviteTokenContextKey.Set(parent, &OrgInviteToken{
 		token: orgInviteToken,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // OrgInviteTokenFromContext parses a context for a reset token and returns the token

@@ -29,9 +29,11 @@ func (token *JobRunnerRegistrationToken) SetToken(s string) {
 
 // NewContextWithJobRunnerRegistrationToken returns a new context with the job runner registration token
 func NewContextWithJobRunnerRegistrationToken(parent context.Context, token string) context.Context {
-	return jobRunnerRegistrationTokenContextKey.Set(parent, &JobRunnerRegistrationToken{
+	ctx := jobRunnerRegistrationTokenContextKey.Set(parent, &JobRunnerRegistrationToken{
 		token: token,
 	})
+
+	return withTokenContextBypassCaller(ctx)
 }
 
 // JobRunnerRegistrationTokenFromContext returns the registration token if available from the context
