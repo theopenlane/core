@@ -884,10 +884,7 @@
           },
           "payload": {
             "properties": {
-              "config": {
-                "additionalProperties": {},
-                "type": "object"
-              },
+              "config": {},
               "force": {
                 "type": "boolean"
               },
@@ -902,10 +899,7 @@
       },
       "IntegrationOperationResponse": {
         "properties": {
-          "details": {
-            "additionalProperties": {},
-            "type": "object"
-          },
+          "details": {},
           "error": {
             "description": "The error message if the request was unsuccessful",
             "type": "string"

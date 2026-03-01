@@ -158,6 +158,35 @@ func (ec *executionContext) fieldContext_WorkflowMetadata_objectTypes(_ context.
 	return fc, nil
 }
 
+func (ec *executionContext) _WorkflowMetadata_extensions(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowMetadata) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_WorkflowMetadata_extensions,
+		func(ctx context.Context) (any, error) {
+			return obj.Extensions, nil
+		},
+		nil,
+		ec.marshalNMap2map,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_WorkflowMetadata_extensions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "WorkflowMetadata",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Map does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _WorkflowObjectTypeMetadata_type(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectTypeMetadata) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -414,6 +443,11 @@ func (ec *executionContext) _WorkflowMetadata(ctx context.Context, sel ast.Selec
 			out.Values[i] = graphql.MarshalString("WorkflowMetadata")
 		case "objectTypes":
 			out.Values[i] = ec._WorkflowMetadata_objectTypes(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "extensions":
+			out.Values[i] = ec._WorkflowMetadata_extensions(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
