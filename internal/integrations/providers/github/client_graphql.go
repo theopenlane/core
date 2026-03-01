@@ -38,13 +38,13 @@ func (t githubHeaderTransport) RoundTrip(req *http.Request) (*http.Response, err
 
 // buildGitHubGraphQLClient returns a pooled client builder for the GitHub GraphQL API.
 func buildGitHubGraphQLClient() types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
+	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
 		token, err := auth.OAuthTokenFromPayload(payload)
 		if err != nil {
-			return nil, err
+			return types.EmptyClientInstance(), err
 		}
 
-		return newGitHubGraphQLClient(token), nil
+		return types.NewClientInstance(newGitHubGraphQLClient(token)), nil
 	}
 }
 
@@ -60,9 +60,9 @@ func newGitHubGraphQLClient(token string) *githubv4.Client {
 	return githubv4.NewClient(httpClient)
 }
 
-// githubGraphQLClientFromAny attempts to unwrap a GraphQL client from an arbitrary value.
-func githubGraphQLClientFromAny(value any) *githubv4.Client {
-	client, ok := value.(*githubv4.Client)
+// githubGraphQLClientFromClient attempts to unwrap a GraphQL client from a wrapped client value.
+func githubGraphQLClientFromClient(value types.ClientInstance) *githubv4.Client {
+	client, ok := types.ClientInstanceAs[*githubv4.Client](value)
 	if !ok {
 		return nil
 	}

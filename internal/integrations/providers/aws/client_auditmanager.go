@@ -18,7 +18,11 @@ func awsAuditManagerClientDescriptors() []types.ClientDescriptor {
 }
 
 // pooledAuditManagerClient builds the AWS Audit Manager client for pooling, discarding metadata.
-func pooledAuditManagerClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
+func pooledAuditManagerClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
 	client, _, err := buildAuditManagerClient(ctx, payload)
-	return client, err
+	if err != nil {
+		return types.EmptyClientInstance(), err
+	}
+
+	return types.NewClientInstance(client), nil
 }

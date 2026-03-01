@@ -14,6 +14,18 @@ const (
 	azureEntraTenantOp types.OperationName = "directory.inspect"
 )
 
+type azureEntraHealthDetails struct {
+	ID          string `json:"id"`
+	TenantID    string `json:"tenantId"`
+	DisplayName string `json:"displayName"`
+}
+
+type azureEntraTenantDetails struct {
+	ID              string      `json:"id"`
+	DisplayName     string      `json:"displayName"`
+	VerifiedDomains interface{} `json:"verifiedDomains"`
+}
+
 // azureOperations returns the Azure Entra ID operations supported by this provider.
 func azureOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -41,15 +53,11 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 	}
 
 	summary := fmt.Sprintf("Tenant %s reachable", org.DisplayName)
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: summary,
-		Details: map[string]any{
-			"id":          org.ID,
-			"tenantId":    org.TenantID,
-			"displayName": org.DisplayName,
-		},
-	}, nil
+	return operations.OperationSuccess(summary, azureEntraHealthDetails{
+		ID:          org.ID,
+		TenantID:    org.TenantID,
+		DisplayName: org.DisplayName,
+	}), nil
 }
 
 // runAzureEntraTenantInspect collects tenant metadata from Microsoft Graph
@@ -64,17 +72,11 @@ func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput)
 		return operations.OperationFailure("Graph organization lookup failed", err, nil)
 	}
 
-	details := map[string]any{
-		"id":              org.ID,
-		"displayName":     org.DisplayName,
-		"verifiedDomains": org.VerifiedDomains,
-	}
-
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected metadata for tenant %s", org.DisplayName),
-		Details: details,
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected metadata for tenant %s", org.DisplayName), azureEntraTenantDetails{
+		ID:              org.ID,
+		DisplayName:     org.DisplayName,
+		VerifiedDomains: org.VerifiedDomains,
+	}), nil
 }
 
 type graphOrganization struct {

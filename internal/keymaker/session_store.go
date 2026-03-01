@@ -1,7 +1,6 @@
 package keymaker
 
 import (
-	"strings"
 	"sync"
 	"time"
 
@@ -56,7 +55,7 @@ func NewMemorySessionStore() *MemorySessionStore {
 
 // Save records the provided activation session
 func (m *MemorySessionStore) Save(session ActivationSession) error {
-	if strings.TrimSpace(session.State) == "" {
+	if session.State == "" {
 		return integrations.ErrStateRequired
 	}
 
@@ -75,7 +74,7 @@ func (m *MemorySessionStore) Save(session ActivationSession) error {
 
 // Take retrieves and deletes the session associated with the given state
 func (m *MemorySessionStore) Take(state string) (ActivationSession, error) {
-	if strings.TrimSpace(state) == "" {
+	if state == "" {
 		return ActivationSession{}, integrations.ErrStateRequired
 	}
 

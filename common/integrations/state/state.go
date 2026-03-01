@@ -1,33 +1,78 @@
 package state
 
-import "time"
+import (
+	"encoding/json"
+	"reflect"
+
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/mapx"
+)
 
 // IntegrationProviderState stores provider-specific integration state captured during auth/config
 type IntegrationProviderState struct {
-	// GitHub contains the GitHub integration state
-	GitHub *GitHubState `json:"github,omitempty"`
-	// Slack contains the Slack integration state
-	Slack *SlackState `json:"slack,omitempty"`
+	// Providers contains provider-specific state by provider key
+	Providers map[string]json.RawMessage `json:"providers,omitempty"`
 }
 
-// GitHubState captures GitHub App installation details for an integration
-type GitHubState struct {
-	// AppID is the GitHub App ID
-	AppID string `json:"appId,omitempty"`
-	// InstallationID is the GitHub App installation ID
-	InstallationID string `json:"installationId,omitempty"`
-	// WebhookVerifiedAt is the timestamp of the most recent verified webhook from GitHub
-	WebhookVerifiedAt *time.Time `json:"webhookVerifiedAt,omitempty"`
+// ProviderData returns a cloned provider state map for a provider key
+func (s IntegrationProviderState) ProviderData(provider string) map[string]any {
+	data, err := s.ProviderDataMap(provider)
+	if err != nil {
+		return nil
+	}
+
+	return data
 }
 
-// SlackState captures Slack workspace details for an integration
-type SlackState struct {
-	// AppID is the Slack App ID
-	AppID string `json:"appId,omitempty"`
-	// TeamID is the Slack workspace team ID
-	TeamID string `json:"teamId,omitempty"`
-	// TeamName is the Slack workspace team name
-	TeamName string `json:"teamName,omitempty"`
-	// BotUserID is the Slack bot user ID
-	BotUserID string `json:"botUserId,omitempty"`
+// ProviderDataMap returns a cloned provider state map for a provider key
+func (s IntegrationProviderState) ProviderDataMap(provider string) (map[string]any, error) {
+	if provider == "" || len(s.Providers) == 0 {
+		return nil, nil
+	}
+
+	raw := s.Providers[provider]
+	if len(raw) == 0 {
+		return nil, nil
+	}
+
+	var decoded map[string]any
+	if err := jsonx.RoundTrip(raw, &decoded); err != nil {
+		return nil, ErrProviderStateDecode
+	}
+
+	return mapx.DeepCloneMapAny(decoded), nil
+}
+
+// MergeProviderData deep-merges provider state and reports whether state changed
+func (s *IntegrationProviderState) MergeProviderData(provider string, patch map[string]any) (bool, error) {
+	if s == nil || provider == "" || patch == nil {
+		return false, nil
+	}
+
+	if len(patch) == 0 {
+		return false, nil
+	}
+
+	if s.Providers == nil {
+		s.Providers = map[string]json.RawMessage{}
+	}
+
+	current, err := s.ProviderDataMap(provider)
+	if err != nil {
+		return false, err
+	}
+
+	next := mapx.DeepMergeMapAny(current, mapx.DeepCloneMapAny(patch))
+	if reflect.DeepEqual(current, next) {
+		return false, nil
+	}
+
+	encoded, err := json.Marshal(next)
+	if err != nil {
+		return false, ErrProviderStatePatchEncode
+	}
+
+	s.Providers[provider] = encoded
+
+	return true, nil
 }

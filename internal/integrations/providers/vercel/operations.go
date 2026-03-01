@@ -23,16 +23,32 @@ type vercelUserResponse struct {
 	} `json:"user"`
 }
 
+type vercelHealthDetails struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+type vercelProjectSample struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Framework string `json:"framework"`
+}
+
+type vercelProjectsDetails struct {
+	Projects []vercelProjectSample `json:"projects"`
+}
+
 // vercelOperations returns the Vercel operations supported by this provider.
 func vercelOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(vercelHealthOp, "Call Vercel /v2/user to verify token and account.", ClientVercelAPI,
 			operations.HealthCheckRunner(operations.TokenTypeAPI, "https://api.vercel.com/v2/user", "Vercel user lookup failed",
-				func(resp vercelUserResponse) (string, map[string]any) {
-					return fmt.Sprintf("Vercel token valid for %s", resp.User.Email), map[string]any{
-						"id":    resp.User.ID,
-						"name":  resp.User.Name,
-						"email": resp.User.Email,
+				func(resp vercelUserResponse) (string, any) {
+					return fmt.Sprintf("Vercel token valid for %s", resp.User.Email), vercelHealthDetails{
+						ID:    resp.User.ID,
+						Name:  resp.User.Name,
+						Email: resp.User.Email,
 					}
 				})),
 		{
@@ -73,18 +89,14 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 		return operations.OperationFailure("Vercel projects fetch failed", err, nil)
 	}
 
-	samples := make([]map[string]any, 0, len(resp.Projects))
+	samples := make([]vercelProjectSample, 0, len(resp.Projects))
 	for _, project := range resp.Projects {
-		samples = append(samples, map[string]any{
-			"id":        project.ID,
-			"name":      project.Name,
-			"framework": project.Framework,
+		samples = append(samples, vercelProjectSample{
+			ID:        project.ID,
+			Name:      project.Name,
+			Framework: project.Framework,
 		})
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Fetched %d Vercel projects", len(samples)),
-		Details: map[string]any{"projects": samples},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Fetched %d Vercel projects", len(samples)), vercelProjectsDetails{Projects: samples}), nil
 }

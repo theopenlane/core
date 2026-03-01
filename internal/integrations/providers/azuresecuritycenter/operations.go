@@ -17,6 +17,22 @@ const (
 	azureSecurityPricing types.OperationName = "security.pricing_overview"
 )
 
+type azureSecurityHealthDetails struct {
+	Count int `json:"count"`
+}
+
+type azureSecurityPricingSample struct {
+	Name      string `json:"name"`
+	Tier      string `json:"tier"`
+	SubPlan   string `json:"subPlan"`
+	FreeTrial string `json:"freeTrial"`
+}
+
+type azureSecurityPricingDetails struct {
+	Count   int                        `json:"count"`
+	Samples []azureSecurityPricingSample `json:"samples"`
+}
+
 // azureSecurityOperations registers the Defender for Cloud operations.
 func azureSecurityOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -48,13 +64,9 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Retrieved %d pricing entries", len(resp.Value)),
-		Details: map[string]any{
-			"count": len(resp.Value),
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Retrieved %d pricing entries", len(resp.Value)), azureSecurityHealthDetails{
+		Count: len(resp.Value),
+	}), nil
 }
 
 // runAzureSecurityPricing collects Defender pricing metadata.
@@ -74,23 +86,19 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
 
-	samples := lo.Map(resp.Value[:min(len(resp.Value), operations.DefaultSampleSize)], func(item defenderPricing, _ int) map[string]any {
-		return map[string]any{
-			"name":      item.Name,
-			"tier":      item.Properties.PricingTier,
-			"subPlan":   item.Properties.SubPlan,
-			"freeTrial": item.Properties.FreeTrialRemainingTime,
+	samples := lo.Map(resp.Value[:min(len(resp.Value), operations.DefaultSampleSize)], func(item defenderPricing, _ int) azureSecurityPricingSample {
+		return azureSecurityPricingSample{
+			Name:      item.Name,
+			Tier:      item.Properties.PricingTier,
+			SubPlan:   item.Properties.SubPlan,
+			FreeTrial: item.Properties.FreeTrialRemainingTime,
 		}
 	})
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Collected %d Defender pricing records", len(resp.Value)),
-		Details: map[string]any{
-			"count":   len(resp.Value),
-			"samples": samples,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d Defender pricing records", len(resp.Value)), azureSecurityPricingDetails{
+		Count:   len(resp.Value),
+		Samples: samples,
+	}), nil
 }
 
 type defenderPricingResponse struct {

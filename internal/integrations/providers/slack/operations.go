@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -16,7 +14,6 @@ import (
 const (
 	slackOperationHealth      types.OperationName = "health.default"
 	slackOperationTeam        types.OperationName = "team.inspect"
-	slackOperationMessagePost types.OperationName = "message.post"
 	slackOperationMessageSend types.OperationName = "message.send"
 )
 
@@ -27,37 +24,14 @@ type slackMessageOperationConfig struct {
 	Text string `json:"text,omitempty" jsonschema:"description=Message text (required unless blocks are supplied)."`
 	// Blocks carries optional Block Kit payloads
 	Blocks []map[string]any `json:"blocks,omitempty" jsonschema:"description=Optional Slack Block Kit payload."`
-	// Attachments carries optional legacy attachments
-	Attachments []map[string]any `json:"attachments,omitempty" jsonschema:"description=Optional legacy attachments payload."`
+	// Attachments carries optional attachments payloads
+	Attachments []map[string]any `json:"attachments,omitempty" jsonschema:"description=Optional attachments payload."`
 	// ThreadTS identifies the thread timestamp for replies
 	ThreadTS string `json:"thread_ts,omitempty" jsonschema:"description=Optional thread timestamp to reply within an existing thread."`
 	// UnfurlLinks controls link unfurling in messages
 	UnfurlLinks *bool `json:"unfurl_links,omitempty" jsonschema:"description=Whether to unfurl links in the message."`
 	// UnfurlMedia controls media unfurling in messages
 	UnfurlMedia *bool `json:"unfurl_media,omitempty" jsonschema:"description=Whether to unfurl media in the message."`
-}
-
-type slackMessageConfig struct {
-	// Channel selects the Slack channel
-	Channel types.TrimmedString `json:"channel"`
-	// ChannelID is an alias for Channel
-	ChannelID types.TrimmedString `json:"channel_id"`
-	// Text is the message text input
-	Text types.TrimmedString `json:"text"`
-	// Message is an alternate message text input
-	Message types.TrimmedString `json:"message"`
-	// Body is an alternate message body input
-	Body types.TrimmedString `json:"body"`
-	// Blocks carries Block Kit payloads
-	Blocks any `json:"blocks"`
-	// Attachments carries legacy attachment payloads
-	Attachments any `json:"attachments"`
-	// ThreadTS identifies the thread timestamp for replies
-	ThreadTS types.TrimmedString `json:"thread_ts"`
-	// UnfurlLinks controls link unfurling
-	UnfurlLinks *bool `json:"unfurl_links"`
-	// UnfurlMedia controls media unfurling
-	UnfurlMedia *bool `json:"unfurl_media"`
 }
 
 var slackMessageConfigSchema = operations.SchemaFrom[slackMessageOperationConfig]()
@@ -72,14 +46,6 @@ func slackOperations() []types.OperationDescriptor {
 			Description: "Collect workspace metadata via team.info for posture analysis.",
 			Client:      ClientSlackAPI,
 			Run:         runSlackTeamOperation,
-		},
-		{
-			Name:         slackOperationMessagePost,
-			Kind:         types.OperationKindNotify,
-			Description:  "Send a Slack message via chat.postMessage.",
-			Client:       ClientSlackAPI,
-			Run:          runSlackMessagePostOperation,
-			ConfigSchema: slackMessageConfigSchema,
 		},
 		{
 			Name:         slackOperationMessageSend,
@@ -128,6 +94,28 @@ type slackTeamInfo struct {
 	EmailDomain string `json:"email_domain"`
 }
 
+type slackHealthDetails struct {
+	Team string `json:"team"`
+	URL  string `json:"url"`
+	User string `json:"user"`
+}
+
+type slackTeamDetails struct {
+	TeamID      string `json:"teamId"`
+	Name        string `json:"name"`
+	Domain      string `json:"domain"`
+	EmailDomain string `json:"emailDomain"`
+}
+
+type slackMessageDetails struct {
+	Channel string `json:"channel"`
+	TS      string `json:"ts"`
+}
+
+type slackAPIErrorDetails struct {
+	Error string `json:"error,omitempty"`
+}
+
 // runSlackHealthOperation verifies the Slack OAuth token via auth.test
 func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
@@ -141,20 +129,16 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 	}
 
 	if !resp.OK {
-		return operations.OperationFailure("Slack auth.test returned error", ErrSlackAPIError, map[string]any{
-			"error": resp.Error,
+		return operations.OperationFailure("Slack auth.test returned error", ErrSlackAPIError, slackAPIErrorDetails{
+			Error: resp.Error,
 		})
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Slack token valid for workspace %s", resp.Team),
-		Details: map[string]any{
-			"team": resp.Team,
-			"url":  resp.URL,
-			"user": resp.User,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Slack token valid for workspace %s", resp.Team), slackHealthDetails{
+		Team: resp.Team,
+		URL:  resp.URL,
+		User: resp.User,
+	}), nil
 }
 
 // runSlackTeamOperation fetches workspace metadata for posture analysis
@@ -170,22 +154,18 @@ func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (typ
 	}
 
 	if !resp.OK {
-		return operations.OperationFailure("Slack team.info returned error", ErrSlackAPIError, map[string]any{
-			"error": resp.Error,
+		return operations.OperationFailure("Slack team.info returned error", ErrSlackAPIError, slackAPIErrorDetails{
+			Error: resp.Error,
 		})
 	}
 
 	team := resp.Team
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Workspace %s (%s) settings retrieved", team.Name, team.ID),
-		Details: map[string]any{
-			"teamId":      team.ID,
-			"name":        team.Name,
-			"domain":      team.Domain,
-			"emailDomain": team.EmailDomain,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Workspace %s (%s) settings retrieved", team.Name, team.ID), slackTeamDetails{
+		TeamID:      team.ID,
+		Name:        team.Name,
+		Domain:      team.Domain,
+		EmailDomain: team.EmailDomain,
+	}), nil
 }
 
 type slackMessageResponse struct {
@@ -206,12 +186,12 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, err
 	}
 
-	cfg, err := operations.Decode[slackMessageConfig](input.Config)
+	cfg, err := operations.Decode[slackMessageOperationConfig](input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	channel := lo.CoalesceOrEmpty(cfg.Channel, cfg.ChannelID).String()
+	channel := cfg.Channel
 	if channel == "" {
 		return types.OperationResult{}, ErrSlackChannelMissing
 	}
@@ -220,19 +200,19 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		"channel": channel,
 	}
 
-	text := lo.CoalesceOrEmpty(cfg.Text, cfg.Message, cfg.Body).String()
+	text := cfg.Text
 	if text != "" {
 		payload["text"] = text
 	}
 
-	if cfg.Blocks != nil {
+	if len(cfg.Blocks) > 0 {
 		payload["blocks"] = cfg.Blocks
 	}
-	if cfg.Attachments != nil {
+	if len(cfg.Attachments) > 0 {
 		payload["attachments"] = cfg.Attachments
 	}
 	if cfg.ThreadTS != "" {
-		payload["thread_ts"] = cfg.ThreadTS.String()
+		payload["thread_ts"] = cfg.ThreadTS
 	}
 	if cfg.UnfurlLinks != nil {
 		payload["unfurl_links"] = cfg.UnfurlLinks
@@ -256,19 +236,15 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 	}
 
 	if !resp.OK {
-		return operations.OperationFailure("Slack chat.postMessage returned error", ErrSlackAPIError, map[string]any{
-			"error": resp.Error,
+		return operations.OperationFailure("Slack chat.postMessage returned error", ErrSlackAPIError, slackAPIErrorDetails{
+			Error: resp.Error,
 		})
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Slack message sent to %s", resp.Channel),
-		Details: map[string]any{
-			"channel": resp.Channel,
-			"ts":      resp.TS,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Slack message sent to %s", resp.Channel), slackMessageDetails{
+		Channel: resp.Channel,
+		TS:      resp.TS,
+	}), nil
 }
 
 // slackAPIGet performs a GET request to the Slack API and decodes the JSON response

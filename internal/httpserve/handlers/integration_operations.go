@@ -2,9 +2,8 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
-	"fmt"
-	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -16,7 +15,40 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+// integrationOperationQueueDetails captures queue response details for integration operation requests
+type integrationOperationQueueDetails struct {
+	// RunID is the queued integration run identifier
+	RunID string `json:"run_id"`
+	// EventID is the emitted event identifier
+	EventID string `json:"event_id"`
+	// Status is the queued integration run status
+	Status string `json:"status"`
+}
+
+// integrationOperationQueueDetailsDoc converts queue details into a JSON object document.
+func integrationOperationQueueDetailsDoc(details integrationOperationQueueDetails) (json.RawMessage, error) {
+	var raw json.RawMessage
+	if err := jsonx.RoundTrip(details, &raw); err != nil {
+		return nil, err
+	}
+	if len(raw) == 0 {
+		return nil, nil
+	}
+
+	return raw, nil
+}
+
+// copyRawJSON clones a raw JSON document to avoid accidental aliasing.
+func copyRawJSON(raw json.RawMessage) json.RawMessage {
+	if len(raw) == 0 {
+		return nil
+	}
+
+	return append(json.RawMessage(nil), raw...)
+}
 
 // RunIntegrationOperation queues provider operations for async execution.
 // Health checks are executed inline to return immediate validation status to callers.
@@ -37,7 +69,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	operationName := types.OperationName(strings.TrimSpace(req.Body.Operation))
+	operationName := types.OperationName(req.Body.Operation)
 	if operationName == "" {
 		return h.BadRequest(ctx, rout.MissingField("operation"), openapiCtx)
 	}
@@ -50,6 +82,8 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	queueCtx := context.WithoutCancel(requestCtx)
 
+	configDoc := copyRawJSON(req.Body.Config)
+
 	if operationName == defaultHealthOperation {
 		if h.IntegrationOperations == nil {
 			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
@@ -59,14 +93,11 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			OrgID:    caller.OrganizationID,
 			Provider: providerType,
 			Name:     operationName,
-			Config:   req.Body.Config,
+			Config:   configDoc,
 			Force:    req.Body.Force,
 		})
 		if err != nil {
-			if errors.Is(err, keystore.ErrOperationNotRegistered) {
-				return h.BadRequest(ctx, err, openapiCtx)
-			}
-			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+			return h.BadRequest(ctx, err, openapiCtx)
 		}
 
 		out := openapi.IntegrationOperationResponse{
@@ -75,22 +106,18 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			Operation: string(operationName),
 			Status:    string(result.Status),
 			Summary:   result.Summary,
-			Details:   result.Details,
+			Details:   copyRawJSON(result.Details),
 		}
 
 		if out.Status == "" {
 			out.Status = string(types.OperationStatusUnknown)
 		}
-		if strings.TrimSpace(out.Summary) == "" {
+		if out.Summary == "" {
 			out.Summary = "Health check completed"
 		}
 
 		if result.Status != types.OperationStatusOK {
-			healthErr := ErrProviderHealthCheckFailed
-			if strings.TrimSpace(result.Summary) != "" {
-				healthErr = fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, result.Summary)
-			}
-			return h.BadRequest(ctx, wrapIntegrationError("validate", healthErr), openapiCtx)
+			return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
 		}
 
 		return h.Success(ctx, out)
@@ -100,7 +127,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		OrgID:     caller.OrganizationID,
 		Provider:  providerType,
 		Operation: operationName,
-		Config:    req.Body.Config,
+		Config:    configDoc,
 		Force:     req.Body.Force,
 		RunType:   enums.IntegrationRunTypeManual,
 	})
@@ -111,17 +138,22 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
+	queueDetails, err := integrationOperationQueueDetailsDoc(integrationOperationQueueDetails{
+		RunID:   result.RunID,
+		EventID: result.EventID,
+		Status:  result.Status.String(),
+	})
+	if err != nil {
+		return h.InternalServerError(ctx, err, openapiCtx)
+	}
+
 	out := openapi.IntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
 		Provider:  string(providerType),
 		Operation: string(operationName),
 		Status:    "queued",
 		Summary:   "Integration operation queued",
-		Details: map[string]any{
-			"run_id":   result.RunID,
-			"event_id": result.EventID,
-			"status":   result.Status.String(),
-		},
+		Details:   queueDetails,
 	}
 
 	return h.Success(ctx, out)

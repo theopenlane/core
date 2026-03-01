@@ -69,10 +69,10 @@ type OperationInput struct {
 	Provider ProviderType
 	// Credential contains the credential payload for authentication
 	Credential CredentialPayload
-	// Client is the provider-specific client instance
-	Client any
-	// Config contains operation-specific configuration
-	Config map[string]any
+	// Client is the provider-specific client instance wrapper
+	Client ClientInstance
+	// Config contains operation-specific configuration as a JSON object document
+	Config json.RawMessage
 }
 
 // OperationResult reports the outcome of an operation handler
@@ -81,8 +81,8 @@ type OperationResult struct {
 	Status OperationStatus
 	// Summary provides a human-readable summary of the result
 	Summary string
-	// Details contains structured result data
-	Details map[string]any
+	// Details contains structured result data as a JSON object document
+	Details json.RawMessage
 }
 
 // AlertEnvelope wraps an alert payload emitted by integration webhooks.
@@ -110,8 +110,8 @@ type OperationRequest struct {
 	Provider ProviderType
 	// Name identifies which operation to execute
 	Name OperationName
-	// Config contains operation-specific configuration
-	Config map[string]any
+	// Config contains operation-specific configuration as a JSON object document
+	Config json.RawMessage
 	// Force bypasses cached credentials and forces a credential refresh
 	Force bool
 	// ClientForce forces creation of a new client instance bypassing the client pool cache

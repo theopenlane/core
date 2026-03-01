@@ -18,7 +18,11 @@ func awsSecurityHubClientDescriptors() []types.ClientDescriptor {
 }
 
 // pooledSecurityHubClient builds the AWS Security Hub client for pooling, discarding metadata.
-func pooledSecurityHubClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
+func pooledSecurityHubClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
 	client, _, err := buildSecurityHubClient(ctx, payload)
-	return client, err
+	if err != nil {
+		return types.EmptyClientInstance(), err
+	}
+
+	return types.NewClientInstance(client), nil
 }

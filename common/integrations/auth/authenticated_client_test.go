@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 func TestNewAuthenticatedClient_ClonesHeadersAndKeepsToken(t *testing.T) {
@@ -75,12 +77,12 @@ func TestGetJSONWithClient_FallsBackToBearer(t *testing.T) {
 	}
 }
 
-func TestAuthenticatedClientFromAny(t *testing.T) {
+func TestAuthenticatedClientFromClient(t *testing.T) {
 	client := &AuthenticatedClient{BearerToken: "token"}
-	if AuthenticatedClientFromAny(client) == nil {
+	if AuthenticatedClientFromClient(types.NewClientInstance(client)) == nil {
 		t.Fatalf("expected client to be unwrapped")
 	}
-	if AuthenticatedClientFromAny("not a client") != nil {
+	if AuthenticatedClientFromClient(types.NewClientInstance("not a client")) != nil {
 		t.Fatalf("expected nil for non-client")
 	}
 }

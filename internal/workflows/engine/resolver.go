@@ -170,7 +170,7 @@ func (e *WorkflowEngine) getObjectGroups(ctx context.Context, obj *workflows.Obj
 }
 
 // loadObjectNode resolves and caches the workflow object node
-func (e *WorkflowEngine) loadObjectNode(ctx context.Context, obj *workflows.Object) (any, error) {
+func (e *WorkflowEngine) loadObjectNode(ctx context.Context, obj *workflows.Object) (generated.Noder, error) {
 	if obj.Node != nil {
 		return obj.Node, nil
 	}

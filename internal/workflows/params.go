@@ -1,6 +1,10 @@
 package workflows
 
-import "github.com/theopenlane/core/common/enums"
+import (
+	"encoding/json"
+
+	"github.com/theopenlane/core/common/enums"
+)
 
 // TargetedActionParams captures workflow action params that target recipients
 type TargetedActionParams struct {
@@ -30,7 +34,9 @@ type ApprovalActionParams struct {
 
 // NotificationActionParams defines params for NOTIFICATION actions
 type NotificationActionParams struct {
-	// TargetedActionParams identifies the notification recipients
+	// TargetedActionParams identifies notification message targets.
+	// USER/GROUP/ROLE/RESOLVER targets produce user-directed notifications.
+	// CHANNEL targets produce external channel-directed notifications.
 	TargetedActionParams
 	// Channels selects notification delivery channels
 	Channels []enums.Channel `json:"channels"`
@@ -72,14 +78,22 @@ type WebhookActionParams struct {
 
 // IntegrationActionParams defines params for INTEGRATION actions
 type IntegrationActionParams struct {
-	// Integration is the integration identifier for the operation
-	Integration string `json:"integration"`
+	// IntegrationID is the explicit integration identifier for the operation
+	IntegrationID string `json:"integration_id,omitempty"`
 	// Provider overrides the integration identifier when set
 	Provider string `json:"provider"`
-	// Operation is the integration operation name
-	Operation string `json:"operation"`
-	// Config holds the integration-specific configuration payload
-	Config map[string]any `json:"config"`
+	// OperationName identifies the explicit integration operation name
+	OperationName string `json:"operation_name,omitempty"`
+	// OperationKind identifies the integration operation kind when operation name is omitted
+	OperationKind string `json:"operation_kind,omitempty"`
+	// Config holds the integration-specific configuration payload as a JSON object document
+	Config json.RawMessage `json:"config,omitempty"`
+	// ScopeExpression is an optional CEL expression gate for this integration action
+	ScopeExpression string `json:"scope_expression,omitempty"`
+	// ScopePayload is optional payload data exposed to scope expression evaluation as a JSON object document
+	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
+	// ScopeResource is optional resource identity data exposed to scope expression evaluation
+	ScopeResource string `json:"scope_resource,omitempty"`
 	// TimeoutMS overrides the operation timeout in milliseconds
 	TimeoutMS int `json:"timeout_ms"`
 	// Retries overrides the retry count when non-zero

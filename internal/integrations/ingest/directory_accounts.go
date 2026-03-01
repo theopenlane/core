@@ -3,6 +3,7 @@ package ingest
 import (
 	"context"
 
+	integrationstate "github.com/theopenlane/core/common/integrations/state"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -26,7 +27,7 @@ type DirectoryAccountIngestRequest struct {
 	// IntegrationConfig supplies integration-level configuration for mapping
 	IntegrationConfig openapi.IntegrationConfig
 	// ProviderState carries provider-specific state for mapping
-	ProviderState any
+	ProviderState integrationstate.IntegrationProviderState
 	// OperationConfig supplies operation-level configuration for mapping
 	OperationConfig map[string]any
 	// Envelopes holds account payloads to ingest

@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -31,27 +29,6 @@ type teamsMessageOperationConfig struct {
 	Subject string `json:"subject,omitempty" jsonschema:"description=Optional message subject."`
 }
 
-type teamsMessageConfig struct {
-	// TeamID identifies the Team to post into
-	TeamID types.TrimmedString `json:"team_id"`
-	// Team is an alias for TeamID
-	Team types.TrimmedString `json:"team"`
-	// ChannelID identifies the channel within the team
-	ChannelID types.TrimmedString `json:"channel_id"`
-	// Channel is an alias for ChannelID
-	Channel types.TrimmedString `json:"channel"`
-	// Body is the message body content
-	Body types.TrimmedString `json:"body"`
-	// Text is an alias for Body
-	Text types.TrimmedString `json:"text"`
-	// Message is an alias for Body
-	Message types.TrimmedString `json:"message"`
-	// Subject is an optional message subject
-	Subject types.TrimmedString `json:"subject"`
-	// BodyFormat is the message format (text or html)
-	BodyFormat types.LowerString `json:"body_format"`
-}
-
 var teamsMessageConfigSchema = operations.SchemaFrom[teamsMessageOperationConfig]()
 
 // teamsOperations returns the Microsoft Teams operations supported by this provider
@@ -59,10 +36,10 @@ func teamsOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI,
 			operations.HealthCheckRunner(operations.TokenTypeOAuth, "https://graph.microsoft.com/v1.0/me", "Graph /me failed",
-				func(profile teamsProfileResponse) (string, map[string]any) {
-					return fmt.Sprintf("Graph token valid for %s", profile.DisplayName), map[string]any{
-						"id":   profile.ID,
-						"mail": profile.Mail,
+				func(profile teamsProfileResponse) (string, any) {
+					return fmt.Sprintf("Graph token valid for %s", profile.DisplayName), teamsHealthDetails{
+						ID:   profile.ID,
+						Mail: profile.Mail,
 					}
 				})),
 		{
@@ -92,6 +69,26 @@ type teamsProfileResponse struct {
 	Mail string `json:"mail"`
 }
 
+type teamsHealthDetails struct {
+	ID   string `json:"id"`
+	Mail string `json:"mail"`
+}
+
+type teamsSampleEntry struct {
+	ID          string `json:"id"`
+	DisplayName string `json:"displayName"`
+}
+
+type teamsSampleDetails struct {
+	Teams []teamsSampleEntry `json:"teams"`
+}
+
+type teamsMessageSendDetails struct {
+	TeamID    string `json:"teamId"`
+	ChannelID string `json:"channelId"`
+	MessageID string `json:"messageId"`
+}
+
 // runTeamsSample collects a sample of joined Teams for the authenticated user
 func runTeamsSample(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
@@ -115,19 +112,15 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 		return operations.OperationFailure("Graph joinedTeams failed", err, nil)
 	}
 
-	samples := make([]map[string]any, 0, len(resp.Value))
+	samples := make([]teamsSampleEntry, 0, len(resp.Value))
 	for _, team := range resp.Value {
-		samples = append(samples, map[string]any{
-			"id":          team.ID,
-			"displayName": team.DisplayName,
+		samples = append(samples, teamsSampleEntry{
+			ID:          team.ID,
+			DisplayName: team.DisplayName,
 		})
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Retrieved %d joined teams", len(samples)),
-		Details: map[string]any{"teams": samples},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Retrieved %d joined teams", len(samples)), teamsSampleDetails{Teams: samples}), nil
 }
 
 // runTeamsMessageSendOperation posts a message to a Teams channel
@@ -137,23 +130,26 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, err
 	}
 
-	cfg, err := operations.Decode[teamsMessageConfig](input.Config)
+	cfg, err := operations.Decode[teamsMessageOperationConfig](input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	teamID := lo.CoalesceOrEmpty(cfg.TeamID, cfg.Team).String()
-	channelID := lo.CoalesceOrEmpty(cfg.ChannelID, cfg.Channel).String()
+	teamID := cfg.TeamID
+	channelID := cfg.ChannelID
 	if teamID == "" || channelID == "" {
 		return types.OperationResult{}, ErrTeamsChannelMissing
 	}
 
-	body := lo.CoalesceOrEmpty(cfg.Body, cfg.Text, cfg.Message).String()
+	body := cfg.Body
 	if body == "" {
 		return types.OperationResult{}, ErrTeamsMessageEmpty
 	}
 
-	contentType := lo.CoalesceOrEmpty(cfg.BodyFormat, "text").String()
+	contentType := cfg.BodyFormat
+	if contentType == "" {
+		contentType = "text"
+	}
 	if contentType != "text" && contentType != "html" {
 		return types.OperationResult{}, ErrTeamsMessageFormatInvalid
 	}
@@ -165,9 +161,8 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		},
 	}
 
-	subject := cfg.Subject.String()
-	if subject != "" {
-		payload["subject"] = subject
+	if cfg.Subject != "" {
+		payload["subject"] = cfg.Subject
 	}
 
 	endpoint := fmt.Sprintf("https://graph.microsoft.com/v1.0/teams/%s/channels/%s/messages", url.PathEscape(teamID), url.PathEscape(channelID))
@@ -178,13 +173,9 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		return operations.OperationFailure("Graph channel message failed", err, nil)
 	}
 
-	return types.OperationResult{
-		Status:  types.OperationStatusOK,
-		Summary: fmt.Sprintf("Teams message sent to %s", channelID),
-		Details: map[string]any{
-			"teamId":    teamID,
-			"channelId": channelID,
-			"messageId": resp.ID,
-		},
-	}, nil
+	return operations.OperationSuccess(fmt.Sprintf("Teams message sent to %s", channelID), teamsMessageSendDetails{
+		TeamID:    teamID,
+		ChannelID: channelID,
+		MessageID: resp.ID,
+	}), nil
 }

@@ -253,6 +253,7 @@ integrationproviders:
             authUrl: ""
             clientId: ""
             clientSecret: ""
+            redirectUri: ""
             scopes: null
             tokenUrl: ""
 jobqueue:
