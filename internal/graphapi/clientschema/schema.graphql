@@ -26771,13 +26771,6 @@ enum ExportExportMode @goModel(model: "github.com/theopenlane/core/common/enums.
 	FOLDER
 }
 """
-ExportExportMode is enum for the field mode
-"""
-enum ExportExportMode @goModel(model: "github.com/theopenlane/core/common/enums.ExportMode") {
-	FLAT
-	FOLDER
-}
-"""
 ExportExportStatus is enum for the field status
 """
 enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ExportStatus") {
