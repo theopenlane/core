@@ -98,7 +98,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.25.0
 	github.com/theopenlane/newman v0.2.2
-	github.com/theopenlane/riverboat v0.8.8
+	github.com/theopenlane/riverboat v0.9.6
 	github.com/theopenlane/utils v0.7.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.2
@@ -123,7 +123,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.6 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
@@ -135,7 +135,7 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/image v0.35.0 // indirect
+	golang.org/x/image v0.36.0 // indirect
 	golang.org/x/term v0.40.0 // indirect
 )
 
@@ -268,7 +268,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.22.4 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.4 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.1.28 // indirect
+	github.com/go-webauthn/x v0.2.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/cel-go v0.27.0
