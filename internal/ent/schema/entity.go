@@ -310,6 +310,7 @@ func (e Entity) Edges() []ent.Edge {
 			ref:        "employer",
 		}),
 		defaultEdgeFromWithPagination(e, IdentityHolder{}),
+		defaultEdgeFromWithPagination(e, Control{}),
 		defaultEdgeFromWithPagination(e, Platform{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: e,

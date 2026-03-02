@@ -200,6 +200,16 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -428,6 +438,16 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -656,6 +676,16 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":
@@ -884,6 +914,16 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_assets(ctx, field)
 			case "scans":
 				return ec.fieldContext_Control_scans(ctx, field)
+			case "entities":
+				return ec.fieldContext_Control_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Control_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Control_campaigns(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Control_remediations(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Control_reviews(ctx, field)
 			case "findings":
 				return ec.fieldContext_Control_findings(ctx, field)
 			case "controlImplementations":

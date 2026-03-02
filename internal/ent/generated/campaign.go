@@ -148,13 +148,15 @@ type CampaignEdges struct {
 	Groups []*Group `json:"groups,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -165,6 +167,7 @@ type CampaignEdges struct {
 	namedUsers               map[string][]*User
 	namedGroups              map[string][]*Group
 	namedIdentityHolders     map[string][]*IdentityHolder
+	namedControls            map[string][]*Control
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 }
 
@@ -337,10 +340,19 @@ func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[17] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -731,6 +743,11 @@ func (_m *Campaign) QueryIdentityHolders() *IdentityHolderQuery {
 	return NewCampaignClient(_m.config).QueryIdentityHolders(_m)
 }
 
+// QueryControls queries the "controls" edge of the Campaign entity.
+func (_m *Campaign) QueryControls() *ControlQuery {
+	return NewCampaignClient(_m.config).QueryControls(_m)
+}
+
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Campaign entity.
 func (_m *Campaign) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewCampaignClient(_m.config).QueryWorkflowObjectRefs(_m)
@@ -1110,6 +1127,30 @@ func (_m *Campaign) appendNamedIdentityHolders(name string, edges ...*IdentityHo
 		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
 	} else {
 		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControls[name] = []*Control{}
+	} else {
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 

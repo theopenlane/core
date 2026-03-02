@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -889,6 +890,21 @@ func (_u *CampaignUpdate) AddIdentityHolders(v ...*IdentityHolder) *CampaignUpda
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *CampaignUpdate) AddControlIDs(ids ...string) *CampaignUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *CampaignUpdate) AddControls(v ...*Control) *CampaignUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *CampaignUpdate) AddWorkflowObjectRefIDs(ids ...string) *CampaignUpdate {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -1138,6 +1154,27 @@ func (_u *CampaignUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *CampaignU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *CampaignUpdate) ClearControls() *CampaignUpdate {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *CampaignUpdate) RemoveControlIDs(ids ...string) *CampaignUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *CampaignUpdate) RemoveControls(v ...*Control) *CampaignUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -2078,6 +2115,54 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.WorkflowObjectRefsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2993,6 +3078,21 @@ func (_u *CampaignUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *CampaignU
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *CampaignUpdateOne) AddControlIDs(ids ...string) *CampaignUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *CampaignUpdateOne) AddControls(v ...*Control) *CampaignUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *CampaignUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *CampaignUpdateOne {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -3242,6 +3342,27 @@ func (_u *CampaignUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *Campai
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *CampaignUpdateOne) ClearControls() *CampaignUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *CampaignUpdateOne) RemoveControlIDs(ids ...string) *CampaignUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *CampaignUpdateOne) RemoveControls(v ...*Control) *CampaignUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -4207,6 +4328,54 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   campaign.ControlsTable,
+			Columns: campaign.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlCampaigns
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

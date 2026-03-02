@@ -2578,6 +2578,7 @@ type Campaign struct {
 	Users               *UserConnection               `json:"users"`
 	Groups              *GroupConnection              `json:"groups"`
 	IdentityHolders     *IdentityHolderConnection     `json:"identityHolders"`
+	Controls            *ControlConnection            `json:"controls"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	// Indicates if this campaign has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
@@ -3473,6 +3474,9 @@ type CampaignWhereInput struct {
 	// identity_holders edge predicates
 	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
 	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -3958,6 +3962,11 @@ type Control struct {
 	Platforms              *PlatformConnection              `json:"platforms"`
 	Assets                 *AssetConnection                 `json:"assets"`
 	Scans                  *ScanConnection                  `json:"scans"`
+	Entities               *EntityConnection                `json:"entities"`
+	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
+	Campaigns              *CampaignConnection              `json:"campaigns"`
+	Remediations           *RemediationConnection           `json:"remediations"`
+	Reviews                *ReviewConnection                `json:"reviews"`
 	Findings               *FindingConnection               `json:"findings"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
@@ -5433,6 +5442,21 @@ type ControlWhereInput struct {
 	// scans edge predicates
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
+	// entities edge predicates
+	HasEntities     *bool               `json:"hasEntities,omitempty"`
+	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+	// identity_holders edge predicates
+	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
+	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// campaigns edge predicates
+	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
+	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
 	// findings edge predicates
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
@@ -5776,6 +5800,7 @@ type CreateCampaignInput struct {
 	UserIDs               []string       `json:"userIDs,omitempty"`
 	GroupIDs              []string       `json:"groupIDs,omitempty"`
 	IdentityHolderIDs     []string       `json:"identityHolderIDs,omitempty"`
+	ControlIDs            []string       `json:"controlIDs,omitempty"`
 	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
 }
 
@@ -5963,6 +5988,11 @@ type CreateControlInput struct {
 	PlatformIDs              []string                            `json:"platformIDs,omitempty"`
 	AssetIDs                 []string                            `json:"assetIDs,omitempty"`
 	ScanIDs                  []string                            `json:"scanIDs,omitempty"`
+	EntityIDs                []string                            `json:"entityIDs,omitempty"`
+	IdentityHolderIDs        []string                            `json:"identityHolderIDs,omitempty"`
+	CampaignIDs              []string                            `json:"campaignIDs,omitempty"`
+	RemediationIDs           []string                            `json:"remediationIDs,omitempty"`
+	ReviewIDs                []string                            `json:"reviewIDs,omitempty"`
 	FindingIDs               []string                            `json:"findingIDs,omitempty"`
 	ControlImplementationIDs []string                            `json:"controlImplementationIDs,omitempty"`
 	SubcontrolIDs            []string                            `json:"subcontrolIDs,omitempty"`
@@ -6493,6 +6523,7 @@ type CreateEntityInput struct {
 	AuthMethodIDs                       []string         `json:"authMethodIDs,omitempty"`
 	EmployerIdentityHolderIDs           []string         `json:"employerIdentityHolderIDs,omitempty"`
 	IdentityHolderIDs                   []string         `json:"identityHolderIDs,omitempty"`
+	ControlIDs                          []string         `json:"controlIDs,omitempty"`
 	PlatformIDs                         []string         `json:"platformIDs,omitempty"`
 	OutOfScopePlatformIDs               []string         `json:"outOfScopePlatformIDs,omitempty"`
 	SourcePlatformIDs                   []string         `json:"sourcePlatformIDs,omitempty"`
@@ -7004,6 +7035,7 @@ type CreateIdentityHolderInput struct {
 	AssetIDs              []string       `json:"assetIDs,omitempty"`
 	EntityIDs             []string       `json:"entityIDs,omitempty"`
 	DirectoryAccountIDs   []string       `json:"directoryAccountIDs,omitempty"`
+	ControlIDs            []string       `json:"controlIDs,omitempty"`
 	PlatformIDs           []string       `json:"platformIDs,omitempty"`
 	CampaignIDs           []string       `json:"campaignIDs,omitempty"`
 	TaskIDs               []string       `json:"taskIDs,omitempty"`
@@ -13292,6 +13324,7 @@ type Entity struct {
 	AuthMethods                       *CustomTypeEnumConnection     `json:"authMethods"`
 	EmployerIdentityHolders           *IdentityHolderConnection     `json:"employerIdentityHolders"`
 	IdentityHolders                   *IdentityHolderConnection     `json:"identityHolders"`
+	Controls                          *ControlConnection            `json:"controls"`
 	Platforms                         *PlatformConnection           `json:"platforms"`
 	OutOfScopePlatforms               *PlatformConnection           `json:"outOfScopePlatforms"`
 	SourcePlatforms                   *PlatformConnection           `json:"sourcePlatforms"`
@@ -14345,6 +14378,9 @@ type EntityWhereInput struct {
 	// identity_holders edge predicates
 	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
 	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
@@ -18388,6 +18424,7 @@ type IdentityHolder struct {
 	Assets              *AssetConnection              `json:"assets"`
 	Entities            *EntityConnection             `json:"entities"`
 	DirectoryAccounts   *DirectoryAccountConnection   `json:"directoryAccounts"`
+	Controls            *ControlConnection            `json:"controls"`
 	Platforms           *PlatformConnection           `json:"platforms"`
 	Campaigns           *CampaignConnection           `json:"campaigns"`
 	Tasks               *TaskConnection               `json:"tasks"`
@@ -18963,6 +19000,9 @@ type IdentityHolderWhereInput struct {
 	// directory_accounts edge predicates
 	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
 	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// platforms edge predicates
 	HasPlatforms     *bool                 `json:"hasPlatforms,omitempty"`
 	HasPlatformsWith []*PlatformWhereInput `json:"hasPlatformsWith,omitempty"`
@@ -37551,6 +37591,9 @@ type UpdateCampaignInput struct {
 	AddIdentityHolderIDs        []string       `json:"addIdentityHolderIDs,omitempty"`
 	RemoveIdentityHolderIDs     []string       `json:"removeIdentityHolderIDs,omitempty"`
 	ClearIdentityHolders        *bool          `json:"clearIdentityHolders,omitempty"`
+	AddControlIDs               []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs            []string       `json:"removeControlIDs,omitempty"`
+	ClearControls               *bool          `json:"clearControls,omitempty"`
 	AddWorkflowObjectRefIDs     []string       `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs  []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs     *bool          `json:"clearWorkflowObjectRefs,omitempty"`
@@ -37860,6 +37903,21 @@ type UpdateControlInput struct {
 	AddScanIDs                     []string                            `json:"addScanIDs,omitempty"`
 	RemoveScanIDs                  []string                            `json:"removeScanIDs,omitempty"`
 	ClearScans                     *bool                               `json:"clearScans,omitempty"`
+	AddEntityIDs                   []string                            `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs                []string                            `json:"removeEntityIDs,omitempty"`
+	ClearEntities                  *bool                               `json:"clearEntities,omitempty"`
+	AddIdentityHolderIDs           []string                            `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs        []string                            `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders           *bool                               `json:"clearIdentityHolders,omitempty"`
+	AddCampaignIDs                 []string                            `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs              []string                            `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns                 *bool                               `json:"clearCampaigns,omitempty"`
+	AddRemediationIDs              []string                            `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs           []string                            `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations              *bool                               `json:"clearRemediations,omitempty"`
+	AddReviewIDs                   []string                            `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs                []string                            `json:"removeReviewIDs,omitempty"`
+	ClearReviews                   *bool                               `json:"clearReviews,omitempty"`
 	AddFindingIDs                  []string                            `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs               []string                            `json:"removeFindingIDs,omitempty"`
 	ClearFindings                  *bool                               `json:"clearFindings,omitempty"`
@@ -38673,6 +38731,9 @@ type UpdateEntityInput struct {
 	AddIdentityHolderIDs                   []string         `json:"addIdentityHolderIDs,omitempty"`
 	RemoveIdentityHolderIDs                []string         `json:"removeIdentityHolderIDs,omitempty"`
 	ClearIdentityHolders                   *bool            `json:"clearIdentityHolders,omitempty"`
+	AddControlIDs                          []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs                       []string         `json:"removeControlIDs,omitempty"`
+	ClearControls                          *bool            `json:"clearControls,omitempty"`
 	AddPlatformIDs                         []string         `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs                      []string         `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms                         *bool            `json:"clearPlatforms,omitempty"`
@@ -39564,6 +39625,9 @@ type UpdateIdentityHolderInput struct {
 	AddDirectoryAccountIDs      []string       `json:"addDirectoryAccountIDs,omitempty"`
 	RemoveDirectoryAccountIDs   []string       `json:"removeDirectoryAccountIDs,omitempty"`
 	ClearDirectoryAccounts      *bool          `json:"clearDirectoryAccounts,omitempty"`
+	AddControlIDs               []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs            []string       `json:"removeControlIDs,omitempty"`
+	ClearControls               *bool          `json:"clearControls,omitempty"`
 	AddPlatformIDs              []string       `json:"addPlatformIDs,omitempty"`
 	RemovePlatformIDs           []string       `json:"removePlatformIDs,omitempty"`
 	ClearPlatforms              *bool          `json:"clearPlatforms,omitempty"`

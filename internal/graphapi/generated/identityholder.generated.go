@@ -152,6 +152,8 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
+			case "controls":
+				return ec.fieldContext_IdentityHolder_controls(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
@@ -336,6 +338,8 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identit
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
+			case "controls":
+				return ec.fieldContext_IdentityHolder_controls(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
@@ -520,6 +524,8 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
+			case "controls":
+				return ec.fieldContext_IdentityHolder_controls(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
@@ -704,6 +710,8 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_entities(ctx, field)
 			case "directoryAccounts":
 				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
+			case "controls":
+				return ec.fieldContext_IdentityHolder_controls(ctx, field)
 			case "platforms":
 				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 			case "campaigns":
