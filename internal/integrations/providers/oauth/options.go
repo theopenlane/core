@@ -1,7 +1,8 @@
 package oauth
 
 import (
-	"sort"
+	"maps"
+	"slices"
 	"strings"
 
 	"golang.org/x/oauth2"
@@ -28,14 +29,8 @@ func mapAuthCodeOptions[T ~func() []oauth2.AuthCodeOption](params map[string]str
 		return nil
 	}
 
-	keys := make([]string, 0, len(params))
-	for key := range params {
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-
-	options := make([]T, 0, len(keys))
-	for _, key := range keys {
+	options := make([]T, 0, len(params))
+	for _, key := range slices.Sorted(maps.Keys(params)) {
 		options = append(options, asAuthCodeOption[T](oauth2.SetAuthURLParam(key, params[key])))
 	}
 

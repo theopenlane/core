@@ -128,7 +128,7 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	// correlated object rather than using the admin's org from context
 	persistCaller, persistOk := auth.CallerFromContext(ctx)
 	if !persistOk || persistCaller == nil {
-		return "", ErrMissingOrganizationID
+		return "", auth.ErrNoAuthUser
 	}
 
 	if !persistCaller.Has(auth.CapSystemAdmin) {

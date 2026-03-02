@@ -114,7 +114,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
-		if err := setOrganizationForUploads(ctx, op.Variables, inputKey); err != nil {
+		ctx, err = setOrganizationForUploads(ctx, op.Variables, inputKey)
+		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context for uploads")
 
 			return nil, err
@@ -1270,22 +1271,22 @@ func ConvertToObject[J any](obj any) (*J, error) {
 
 // setOrganizationForUploads ensures an organization is present in the auth context
 // we want this for token-authenticated requests where the active org is not pre-selected (e.g., PATs)
-func setOrganizationForUploads(ctx context.Context, variables map[string]any, inputKey string) error {
+func setOrganizationForUploads(ctx context.Context, variables map[string]any, inputKey string) (context.Context, error) {
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
-		return nil
+		return ctx, nil
 	}
 
 	ownerID, err := getOwnerIDFromVariables(variables, inputKey)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
-	_, err = SetOrganizationInAuthContext(ctx, ownerID)
+	ctx, err = SetOrganizationInAuthContext(ctx, ownerID)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrNoOrganizationID, err)
+		return ctx, fmt.Errorf("%w: %w", ErrNoOrganizationID, err)
 	}
 
-	return nil
+	return ctx, nil
 }
 
 // getOwnerIDFromVariables attempts to extract an owner/organization ID from the GraphQL variables map

@@ -663,14 +663,14 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := auth.WithCaller(context.Background(), tt.caller)
 
-			err := setOrganizationForUploads(ctx, tt.variables, tt.inputKey)
+			gotCtx, err := setOrganizationForUploads(ctx, tt.variables, tt.inputKey)
 			if tt.expectedErr != nil {
 				assert.ErrorIs(t, err, tt.expectedErr)
 				return
 			}
 
 			assert.NilError(t, err)
-			helpersTestCaller, helpersTestCallerOk := auth.CallerFromContext(ctx)
+			helpersTestCaller, helpersTestCallerOk := auth.CallerFromContext(gotCtx)
 			assert.Check(t, helpersTestCallerOk)
 			assert.Check(t, is.Equal(tt.expectedOrg, helpersTestCaller.OrganizationID))
 		})

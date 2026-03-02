@@ -56,7 +56,7 @@ func AddFilePermissions(ctx context.Context) (context.Context, error) {
 			if f.FieldName == avatarFileKey {
 				permCaller, permOk := auth.CallerFromContext(ctx)
 				if !permOk || permCaller == nil {
-					return ctx, ErrMissingOrganizationID
+					return ctx, auth.ErrNoAuthUser
 				}
 
 				orgID, orgOk := permCaller.ActiveOrg()

@@ -16,17 +16,17 @@ func TrustCenterScopePredicate() func(*sql.Selector) {
 		ctx := s.Context()
 
 		caller, ok := auth.CallerFromContext(ctx)
-		if ok && caller != nil && caller.Has(auth.CapSystemAdmin) {
+		if !ok || caller == nil {
+			logx.FromContext(ctx).Warn().Msg("could not fetch caller when scoping trustcenter")
+			return
+		}
+
+		if caller.Has(auth.CapSystemAdmin) {
 			return
 		}
 
 		if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
 			s.Where(sql.EQ(s.C("trust_center_id"), tcID))
-			return
-		}
-
-		if !ok || caller == nil {
-			logx.FromContext(ctx).Warn().Msg("could not fetch caller when scoping trustcenter")
 			return
 		}
 

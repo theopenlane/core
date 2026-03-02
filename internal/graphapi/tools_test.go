@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"runtime/debug"
 	"testing"
 	"time"
 
@@ -451,7 +450,6 @@ func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 func requireNoError(t *testing.T, err error) {
 	t.Helper()
 	if err != nil {
-		debug.PrintStack()
 		log.Error().Err(err).Msg("fatal error during test setup or teardown")
 
 		os.Exit(1)

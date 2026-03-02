@@ -88,17 +88,17 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query) error 
 	}
 
 	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.Has(auth.CapSystemAdmin) {
-		return nil
-	}
-
-	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" && caller != nil && caller.OrganizationID != "" {
-		q.WhereP(sql.FieldEQ("trust_center_id", tcID))
-		return nil
-	}
-
 	if !ok || caller == nil {
 		return auth.ErrNoAuthUser
+	}
+
+	if caller.Has(auth.CapSystemAdmin) {
+		return nil
+	}
+
+	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
+		q.WhereP(sql.FieldEQ("trust_center_id", tcID))
+		return nil
 	}
 
 	orgIDs := caller.OrgIDs()

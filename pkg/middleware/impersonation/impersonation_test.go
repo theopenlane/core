@@ -68,8 +68,8 @@ func TestMiddlewareProcessNoToken(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.True(t, nextCalled)
-	_, ok := auth.CallerFromContext(c.Request().Context())
-	assert.False(t, ok)
+	caller, ok := auth.CallerFromContext(c.Request().Context())
+	assert.False(t, ok && caller != nil && caller.IsImpersonated())
 }
 
 func TestMiddlewareProcessInvalidToken(t *testing.T) {
@@ -222,6 +222,20 @@ func TestRequireImpersonationScope(t *testing.T) {
 				})
 			},
 			expectedStatus: http.StatusForbidden,
+		},
+		{
+			name:          "wildcard scope allows all",
+			requiredScope: "admin:write",
+			setupContext: func() context.Context {
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					SubjectID: "user123",
+					Impersonation: &auth.ImpersonationContext{
+						Scopes:    []string{"*"},
+						ExpiresAt: time.Now().Add(time.Hour),
+					},
+				})
+			},
+			expectedStatus: http.StatusOK,
 		},
 	}
 
