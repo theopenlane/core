@@ -275,7 +275,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		return IntegrationQueueResult{}, ErrIntegrationScopeConditionFalse
 	}
 
-	if operationName == types.OperationVulnerabilitiesCollect {
+	if _, ensurePayloads, ok := ingest.BindingForOperation(operationName); ok && ensurePayloads {
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
@@ -454,8 +454,10 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		return err
 	}
 
+	ingestFn, ensurePayloads, hasIngest := ingest.BindingForOperation(operationName)
+
 	operationConfig := mapx.DeepCloneMapAny(run.OperationConfig)
-	if operationName == types.OperationVulnerabilitiesCollect {
+	if ensurePayloads {
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
@@ -493,64 +495,28 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 
 	metricsDoc := buildOperationMetrics(result)
 
-	if runStatus == enums.IntegrationRunStatusSuccess && operationName == types.OperationVulnerabilitiesCollect {
+	if runStatus == enums.IntegrationRunStatusSuccess && hasIngest && ingestFn != nil {
 		var ingestErr error
-		var ingestResult ingest.VulnerabilityIngestResult
+		var ingestResult ingest.IngestResult
 
-		if ingest.SupportsVulnerabilityIngest(provider, integrationRecord.Config) {
-			envelopes, err := extractAlertEnvelopes(result.Details)
-			if err != nil {
-				ingestErr = err
-			} else {
-				ingestResult, ingestErr = ingest.VulnerabilityAlerts(operationCtx, ingest.VulnerabilityIngestRequest{
-					OrgID:             run.OwnerID,
-					IntegrationID:     integrationRecord.ID,
-					Provider:          provider,
-					Operation:         operationName,
-					IntegrationConfig: integrationRecord.Config,
-					ProviderState:     integrationRecord.ProviderState,
-					OperationConfig:   operationConfig,
-					Envelopes:         envelopes,
-					DB:                e.client,
-				})
-			}
+		envelopes, err := extractAlertEnvelopes(result.Details)
+		if err != nil {
+			ingestErr = err
 		} else {
-			ingestErr = ingest.ErrMappingNotFound
+			ingestResult, ingestErr = ingestFn(operationCtx, ingest.IngestRequest{
+				OrgID:             run.OwnerID,
+				IntegrationID:     integrationRecord.ID,
+				Provider:          provider,
+				Operation:         operationName,
+				IntegrationConfig: integrationRecord.Config,
+				ProviderState:     integrationRecord.ProviderState,
+				OperationConfig:   operationConfig,
+				Envelopes:         envelopes,
+				DB:                e.client,
+			})
 		}
 
-		metricsDoc = appendVulnerabilityIngestMetrics(metricsDoc, ingestResult)
-		if ingestErr != nil {
-			runStatus = enums.IntegrationRunStatusFailed
-			errorText = ingestErr.Error()
-		}
-	}
-
-	if runStatus == enums.IntegrationRunStatusSuccess && operationName == types.OperationDirectorySync {
-		var ingestErr error
-		var ingestResult ingest.DirectoryAccountIngestResult
-
-		if ingest.SupportsDirectoryAccountIngest(provider, integrationRecord.Config) {
-			envelopes, err := extractAlertEnvelopes(result.Details)
-			if err != nil {
-				ingestErr = err
-			} else {
-				ingestResult, ingestErr = ingest.DirectoryAccounts(operationCtx, ingest.DirectoryAccountIngestRequest{
-					OrgID:             run.OwnerID,
-					IntegrationID:     integrationRecord.ID,
-					Provider:          provider,
-					Operation:         operationName,
-					IntegrationConfig: integrationRecord.Config,
-					ProviderState:     integrationRecord.ProviderState,
-					OperationConfig:   operationConfig,
-					Envelopes:         envelopes,
-					DB:                e.client,
-				})
-			}
-		} else {
-			ingestErr = ingest.ErrMappingNotFound
-		}
-
-		metricsDoc = appendDirectoryAccountIngestMetrics(metricsDoc, ingestResult)
+		metricsDoc = appendIngestMetrics(metricsDoc, ingestResult)
 		if ingestErr != nil {
 			runStatus = enums.IntegrationRunStatusFailed
 			errorText = ingestErr.Error()
@@ -750,26 +716,6 @@ func encodeIntegrationRunOperationDetails(details json.RawMessage) json.RawMessa
 	return append(json.RawMessage(nil), details...)
 }
 
-// encodeIntegrationRunVulnerabilitySummary encodes vulnerability ingest summaries for metrics payloads
-func encodeIntegrationRunVulnerabilitySummary(summary ingest.VulnerabilityIngestSummary) json.RawMessage {
-	raw, err := json.Marshal(summary)
-	if err != nil {
-		return nil
-	}
-
-	return raw
-}
-
-// encodeIntegrationRunDirectorySummary encodes directory account ingest summaries for metrics payloads
-func encodeIntegrationRunDirectorySummary(summary ingest.DirectoryAccountIngestSummary) json.RawMessage {
-	raw, err := json.Marshal(summary)
-	if err != nil {
-		return nil
-	}
-
-	return raw
-}
-
 // buildOperationMetrics builds a metrics document for operation output
 func buildOperationMetrics(result types.OperationResult) integrationRunMetrics {
 	return integrationRunMetrics{
@@ -791,22 +737,16 @@ func encodeIntegrationRunMetrics(metrics integrationRunMetrics) map[string]any {
 	return metricsMap
 }
 
-// appendIntegrationIngestMetrics attaches ingest summary and errors to integration run metrics
-func appendIntegrationIngestMetrics(metrics integrationRunMetrics, summary json.RawMessage, ingestErrors []string) integrationRunMetrics {
-	metrics.IngestSummary = summary
-	if len(ingestErrors) > 0 {
-		metrics.IngestErrors = append([]string(nil), ingestErrors...)
+// appendIngestMetrics attaches a unified ingest result to integration run metrics
+func appendIngestMetrics(metrics integrationRunMetrics, result ingest.IngestResult) integrationRunMetrics {
+	raw, err := json.Marshal(result.Summary)
+	if err == nil {
+		metrics.IngestSummary = raw
+	}
+
+	if len(result.Errors) > 0 {
+		metrics.IngestErrors = append([]string(nil), result.Errors...)
 	}
 
 	return metrics
-}
-
-// appendVulnerabilityIngestMetrics attaches vulnerability ingest results to metrics
-func appendVulnerabilityIngestMetrics(metrics integrationRunMetrics, result ingest.VulnerabilityIngestResult) integrationRunMetrics {
-	return appendIntegrationIngestMetrics(metrics, encodeIntegrationRunVulnerabilitySummary(result.Summary), result.Errors)
-}
-
-// appendDirectoryAccountIngestMetrics attaches directory account ingest results to metrics
-func appendDirectoryAccountIngestMetrics(metrics integrationRunMetrics, result ingest.DirectoryAccountIngestResult) integrationRunMetrics {
-	return appendIntegrationIngestMetrics(metrics, encodeIntegrationRunDirectorySummary(result.Summary), result.Errors)
 }

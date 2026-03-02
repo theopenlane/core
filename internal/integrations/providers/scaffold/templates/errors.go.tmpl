@@ -1,0 +1,12 @@
+package {{.Provider}}
+
+import "errors"
+
+// ErrClientBuild is returned when the {{.ProviderPascal}} client cannot be constructed
+var ErrClientBuild = errors.New("{{.Provider}}: client build failed")
+
+// ErrHealthCheck is returned when the {{.ProviderPascal}} health check fails
+var ErrHealthCheck = errors.New("{{.Provider}}: health check failed")
+
+// ErrBeginAuthUnsupported is returned when BeginAuth is called on a metadata-driven provider
+var ErrBeginAuthUnsupported = errors.New("{{.Provider}}: BeginAuth is not supported; configure credentials via metadata form")

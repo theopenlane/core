@@ -1,0 +1,42 @@
+package {{.Provider}}
+
+import (
+	"context"
+
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/operations"
+	"github.com/theopenlane/core/common/integrations/types"
+)
+
+// {{.Provider}}Operations returns the operation descriptors for the {{.ProviderPascal}} provider
+func {{.Provider}}Operations() []types.OperationDescriptor {
+	return []types.OperationDescriptor{
+		{
+			Name:         "health.default",
+			Kind:         types.OperationKindHealth,
+			Description:  "{{.ProviderPascal}} connection health check",
+			Client:       ClientDefault,
+			Run:          run{{.ProviderPascal}}HealthOperation,
+			ConfigSchema: operations.SchemaFrom[struct{}](),
+			OutputSchema: operations.SchemaFrom[struct{}](),
+		},
+	}
+}
+
+func run{{.ProviderPascal}}HealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client, ok := types.ClientInstanceAs[*auth.AuthenticatedClient](input.Client)
+	if !ok {
+		return types.OperationResult{Status: types.OperationStatusFailed}, ErrHealthCheck
+	}
+
+	// replace with a real health check endpoint call, e.g.:
+	// if _, err := client.Get(ctx, "https://api.example.com/v1/me"); err != nil {
+	//     return types.OperationResult{Status: types.OperationStatusFailed}, ErrHealthCheck
+	// }
+	_ = client
+
+	return types.OperationResult{
+		Status:  types.OperationStatusOK,
+		Summary: "{{.ProviderPascal}} connection verified",
+	}, nil
+}

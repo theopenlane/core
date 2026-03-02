@@ -14,6 +14,7 @@ import (
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/pkg/celx"
 )
 
@@ -31,16 +32,16 @@ const (
 )
 
 const (
-	mappingVarPayload           = "payload"
-	mappingVarResource          = "resource"
-	mappingVarAlertType         = "alert_type"
-	mappingVarProvider          = "provider"
-	mappingVarOperation         = "operation"
-	mappingVarOrgID             = "org_id"
-	mappingVarIntegrationID     = "integration_id"
-	mappingVarConfig            = "config"
-	mappingVarIntegrationConfig = "integration_config"
-	mappingVarProviderState     = "provider_state"
+	mappingVarPayload           = integrationscope.VariablePayload
+	mappingVarResource          = integrationscope.VariableResource
+	mappingVarAlertType         = integrationscope.VariableAlertType
+	mappingVarProvider          = integrationscope.VariableProvider
+	mappingVarOperation         = integrationscope.VariableOperation
+	mappingVarOrgID             = integrationscope.VariableOrgID
+	mappingVarIntegrationID     = integrationscope.VariableIntegrationID
+	mappingVarConfig            = integrationscope.VariableConfig
+	mappingVarIntegrationConfig = integrationscope.VariableIntegrationConfig
+	mappingVarProviderState     = integrationscope.VariableProviderState
 )
 
 var defaultCELTimeout = 100 * time.Millisecond

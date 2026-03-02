@@ -25,6 +25,8 @@ const (
 	VariableOrgID = "org_id"
 	// VariableIntegrationID identifies the installed integration id
 	VariableIntegrationID = "integration_id"
+	// VariableAlertType identifies the alert type variable used in ingest mapping expressions
+	VariableAlertType = "alert_type"
 )
 
 const (
