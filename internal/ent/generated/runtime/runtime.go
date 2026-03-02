@@ -2380,6 +2380,8 @@ func init() {
 	entity.Hooks[15] = entityMixinHooks13[0]
 
 	entity.Hooks[16] = entityHooks[0]
+
+	entity.Hooks[17] = entityHooks[1]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
@@ -3338,6 +3340,7 @@ func init() {
 	identityholderMixinHooks8 := identityholderMixin[8].Hooks()
 	identityholderMixinHooks9 := identityholderMixin[9].Hooks()
 	identityholderMixinHooks10 := identityholderMixin[10].Hooks()
+	identityholderHooks := schema.IdentityHolder{}.Hooks()
 
 	identityholder.Hooks[1] = identityholderMixinHooks0[0]
 
@@ -3362,6 +3365,8 @@ func init() {
 	identityholder.Hooks[11] = identityholderMixinHooks9[0]
 
 	identityholder.Hooks[12] = identityholderMixinHooks10[0]
+
+	identityholder.Hooks[13] = identityholderHooks[0]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]

@@ -127,6 +127,8 @@ type FileEdges struct {
 	Platform []*Platform `json:"platform,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// IdentityHolder holds the value of the identity_holder edge.
+	IdentityHolder []*IdentityHolder `json:"identity_holder,omitempty"`
 	// Scan holds the value of the scan edge.
 	Scan []*Scan `json:"scan,omitempty"`
 	// Events holds the value of the events edge.
@@ -143,9 +145,9 @@ type FileEdges struct {
 	OriginalTrustCenterDoc []*TrustCenterDoc `json:"original_trust_center_doc,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedOrganization           map[string][]*Organization
 	namedGroups                 map[string][]*Group
@@ -157,6 +159,7 @@ type FileEdges struct {
 	namedProgram                map[string][]*Program
 	namedPlatform               map[string][]*Platform
 	namedEvidence               map[string][]*Evidence
+	namedIdentityHolder         map[string][]*IdentityHolder
 	namedScan                   map[string][]*Scan
 	namedEvents                 map[string][]*Event
 	namedIntegrations           map[string][]*Integration
@@ -278,10 +281,19 @@ func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
 	return nil, &NotLoadedError{edge: "evidence"}
 }
 
+// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) IdentityHolderOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[12] {
+		return e.IdentityHolder, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holder"}
+}
+
 // ScanOrErr returns the Scan value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ScanOrErr() ([]*Scan, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Scan, nil
 	}
 	return nil, &NotLoadedError{edge: "scan"}
@@ -290,7 +302,7 @@ func (e FileEdges) ScanOrErr() ([]*Scan, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -299,7 +311,7 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -308,7 +320,7 @@ func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
 // SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Secrets, nil
 	}
 	return nil, &NotLoadedError{edge: "secrets"}
@@ -317,7 +329,7 @@ func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
 // TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.TrustCenterEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_entities"}
@@ -326,7 +338,7 @@ func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 // TrustCenterDocOrErr returns the TrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.TrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_doc"}
@@ -335,7 +347,7 @@ func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 // OriginalTrustCenterDocOrErr returns the OriginalTrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.OriginalTrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
@@ -710,6 +722,11 @@ func (_m *File) QueryPlatform() *PlatformQuery {
 // QueryEvidence queries the "evidence" edge of the File entity.
 func (_m *File) QueryEvidence() *EvidenceQuery {
 	return NewFileClient(_m.config).QueryEvidence(_m)
+}
+
+// QueryIdentityHolder queries the "identity_holder" edge of the File entity.
+func (_m *File) QueryIdentityHolder() *IdentityHolderQuery {
+	return NewFileClient(_m.config).QueryIdentityHolder(_m)
 }
 
 // QueryScan queries the "scan" edge of the File entity.
@@ -1112,6 +1129,30 @@ func (_m *File) appendNamedEvidence(name string, edges ...*Evidence) {
 		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
 		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedIdentityHolder returns the IdentityHolder named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedIdentityHolder(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolder == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolder[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedIdentityHolder(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolder == nil {
+		_m.Edges.namedIdentityHolder = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolder[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolder[name] = append(_m.Edges.namedIdentityHolder[name], edges...)
 	}
 }
 

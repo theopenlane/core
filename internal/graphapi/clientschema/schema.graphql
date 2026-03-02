@@ -12258,6 +12258,7 @@ input CreateFileInput {
 	programIDs: [ID!]
 	platformIDs: [ID!]
 	evidenceIDs: [ID!]
+	identityHolderIDs: [ID!]
 	scanIDs: [ID!]
 	eventIDs: [ID!]
 	integrationIDs: [ID!]
@@ -12802,6 +12803,7 @@ input CreateIdentityHolderInput {
 	platformIDs: [ID!]
 	campaignIDs: [ID!]
 	taskIDs: [ID!]
+	fileIDs: [ID!]
 	findingIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 	accessPlatformIDs: [ID!]
@@ -27182,6 +27184,7 @@ type File implements Node {
 	program: [Program!]
 	platform: [Platform!]
 	evidence: [Evidence!]
+	identityHolder: [IdentityHolder!]
 	scan: [Scan!]
 	events(
 		"""
@@ -27897,6 +27900,11 @@ input FileWhereInput {
 	"""
 	hasEvidence: Boolean
 	hasEvidenceWith: [EvidenceWhereInput!]
+	"""
+	identity_holder edge predicates
+	"""
+	hasIdentityHolder: Boolean
+	hasIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	scan edge predicates
 	"""
@@ -33856,6 +33864,37 @@ type IdentityHolder implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
+	files(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
+		Filtering options for Files returned from the connection.
+		"""
+		where: FileWhereInput
+	): FileConnection!
 	findings(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -34712,6 +34751,11 @@ input IdentityHolderWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
+	"""
+	files edge predicates
+	"""
+	hasFiles: Boolean
+	hasFilesWith: [FileWhereInput!]
 	"""
 	findings edge predicates
 	"""
@@ -41738,7 +41782,7 @@ type Mutation {
 		entity type name allows the name of the entity type to be passed in over an id
 		"""
 		entityTypeName: String
-	): EntityCreatePayload!
+	entityFiles: [Upload!]): EntityCreatePayload!
 	"""
 	Create multiple new entities
 	"""
@@ -41780,7 +41824,7 @@ type Mutation {
 		New values for the entity
 		"""
 		input: UpdateEntityInput!
-	): EntityUpdatePayload!
+	entityFiles: [Upload!]): EntityUpdatePayload!
 	"""
 	Delete an existing entity
 	"""
@@ -42599,7 +42643,7 @@ type Mutation {
 		values of the identityHolder
 		"""
 		input: CreateIdentityHolderInput!
-	): IdentityHolderCreatePayload!
+	identityHolderFiles: [Upload!]): IdentityHolderCreatePayload!
 	"""
 	Create multiple new identityHolders
 	"""
@@ -42631,7 +42675,7 @@ type Mutation {
 		New values for the identityHolder
 		"""
 		input: UpdateIdentityHolderInput!
-	): IdentityHolderUpdatePayload!
+	identityHolderFiles: [Upload!]): IdentityHolderUpdatePayload!
 	"""
 	Delete an existing identityHolder
 	"""
@@ -83523,6 +83567,9 @@ input UpdateFileInput {
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
+	addIdentityHolderIDs: [ID!]
+	removeIdentityHolderIDs: [ID!]
+	clearIdentityHolder: Boolean
 	addScanIDs: [ID!]
 	removeScanIDs: [ID!]
 	clearScan: Boolean
@@ -84330,6 +84377,9 @@ input UpdateIdentityHolderInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	addFileIDs: [ID!]
+	removeFileIDs: [ID!]
+	clearFiles: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean

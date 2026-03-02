@@ -103,6 +103,8 @@ const (
 	EdgePlatform = "platform"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
+	// EdgeIdentityHolder holds the string denoting the identity_holder edge name in mutations.
+	EdgeIdentityHolder = "identity_holder"
 	// EdgeScan holds the string denoting the scan edge name in mutations.
 	EdgeScan = "scan"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -183,6 +185,11 @@ const (
 	// EvidenceInverseTable is the table name for the Evidence entity.
 	// It exists in this package in order to avoid circular dependency with the "evidence" package.
 	EvidenceInverseTable = "evidences"
+	// IdentityHolderTable is the table that holds the identity_holder relation/edge. The primary key declared below.
+	IdentityHolderTable = "identity_holder_files"
+	// IdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHolderInverseTable = "identity_holders"
 	// ScanTable is the table that holds the scan relation/edge. The primary key declared below.
 	ScanTable = "scan_files"
 	// ScanInverseTable is the table name for the Scan entity.
@@ -308,6 +315,9 @@ var (
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"evidence_id", "file_id"}
+	// IdentityHolderPrimaryKey and IdentityHolderColumn2 are the table columns denoting the
+	// primary key for the identity_holder relation (M2M).
+	IdentityHolderPrimaryKey = []string{"identity_holder_id", "file_id"}
 	// ScanPrimaryKey and ScanColumn2 are the table columns denoting the
 	// primary key for the scan relation (M2M).
 	ScanPrimaryKey = []string{"scan_id", "file_id"}
@@ -668,6 +678,20 @@ func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByIdentityHolderCount orders the results by identity_holder count.
+func ByIdentityHolderCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHolderStep(), opts...)
+	}
+}
+
+// ByIdentityHolder orders the results by identity_holder terms.
+func ByIdentityHolder(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHolderStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByScanCount orders the results by scan count.
 func ByScanCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -847,6 +871,13 @@ func newEvidenceStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EvidenceInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EvidenceTable, EvidencePrimaryKey...),
+	)
+}
+func newIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IdentityHolderTable, IdentityHolderPrimaryKey...),
 	)
 }
 func newScanStep() *sqlgraph.Step {

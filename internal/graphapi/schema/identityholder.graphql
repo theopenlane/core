@@ -46,6 +46,7 @@ extend type Mutation{
         values of the identityHolder
         """
         input: CreateIdentityHolderInput!
+        identityHolderFiles: [Upload!]
     ): IdentityHolderCreatePayload!
     """
     Create multiple new identityHolders
@@ -77,6 +78,7 @@ extend type Mutation{
         New values for the identityHolder
         """
         input: UpdateIdentityHolderInput!
+        identityHolderFiles: [Upload!]
     ): IdentityHolderUpdatePayload!
     """
     Delete an existing identityHolder

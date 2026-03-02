@@ -107,6 +107,7 @@ type SchemaConfig struct {
 	IdentityHolderAssets               string // IdentityHolder-assets->Asset table.
 	IdentityHolderEntities             string // IdentityHolder-entities->Entity table.
 	IdentityHolderTasks                string // IdentityHolder-tasks->Task table.
+	IdentityHolderFiles                string // IdentityHolder-files->File table.
 	ImpersonationEvent                 string // ImpersonationEvent table.
 	Integration                        string // Integration table.
 	IntegrationSecrets                 string // Integration-secrets->Hush table.

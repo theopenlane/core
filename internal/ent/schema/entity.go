@@ -351,6 +351,7 @@ func (Entity) Indexes() []ent.Index {
 func (Entity) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEntityCreate(),
+		hooks.HookEntityFiles(),
 	}
 }
 
