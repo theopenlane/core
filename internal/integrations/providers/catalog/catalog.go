@@ -3,7 +3,10 @@ package catalog
 import (
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/aws"
+	"github.com/theopenlane/core/internal/integrations/providers/azureentraid"
+	"github.com/theopenlane/core/internal/integrations/providers/azuresecuritycenter"
 	"github.com/theopenlane/core/internal/integrations/providers/buildkite"
+	"github.com/theopenlane/core/internal/integrations/providers/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/providers/gcpscc"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/providers/googleworkspace"
@@ -18,7 +21,10 @@ import (
 func Builders() []providers.Builder {
 	return []providers.Builder{
 		aws.Builder(),
+		azureentraid.Builder(),
+		azuresecuritycenter.Builder(),
 		buildkite.Builder(),
+		cloudflare.Builder(),
 		gcpscc.Builder(),
 		github.Builder(),
 		github.AppBuilder(),

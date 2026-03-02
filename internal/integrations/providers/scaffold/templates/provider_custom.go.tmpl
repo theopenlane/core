@@ -1,0 +1,49 @@
+package {{.Provider}}
+
+import (
+	"context"
+
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/providers"
+)
+
+// Type{{.ProviderPascal}} identifies the {{.ProviderPascal}} provider
+const Type{{.ProviderPascal}} = types.ProviderType("{{.Provider}}")
+
+// Builder returns the {{.ProviderPascal}} provider builder
+func Builder() providers.Builder {
+	return providers.BuilderFunc{
+		ProviderType: Type{{.ProviderPascal}},
+		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+			return newProvider(spec), nil
+		},
+	}
+}
+
+type provider struct {
+	providers.BaseProvider
+	spec config.ProviderSpec
+}
+
+func newProvider(spec config.ProviderSpec) *provider {
+	caps := types.ProviderCapabilities{
+		SupportsClientPooling: true,
+		SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+	}
+
+	return &provider{
+		BaseProvider: providers.NewBaseProvider(Type{{.ProviderPascal}}, caps, {{.Provider}}Operations(), {{.Provider}}ClientDescriptors()),
+		spec:         spec,
+	}
+}
+
+// BeginAuth is not supported for {{.ProviderPascal}}; credentials are supplied via metadata form
+func (p *provider) BeginAuth(_ context.Context, _ types.AuthContext) (types.AuthSession, error) {
+	return nil, ErrBeginAuthUnsupported
+}
+
+// Mint validates and repackages the stored credential for {{.ProviderPascal}}
+func (p *provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+	return subject.Credential, nil
+}
