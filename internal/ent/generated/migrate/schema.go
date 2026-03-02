@@ -10121,6 +10121,31 @@ var (
 			},
 		},
 	}
+	// IdentityHolderFilesColumns holds the columns for the "identity_holder_files" table.
+	IdentityHolderFilesColumns = []*schema.Column{
+		{Name: "identity_holder_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// IdentityHolderFilesTable holds the schema information for the "identity_holder_files" table.
+	IdentityHolderFilesTable = &schema.Table{
+		Name:       "identity_holder_files",
+		Columns:    IdentityHolderFilesColumns,
+		PrimaryKey: []*schema.Column{IdentityHolderFilesColumns[0], IdentityHolderFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "identity_holder_files_identity_holder_id",
+				Columns:    []*schema.Column{IdentityHolderFilesColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "identity_holder_files_file_id",
+				Columns:    []*schema.Column{IdentityHolderFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// IntegrationSecretsColumns holds the columns for the "integration_secrets" table.
 	IntegrationSecretsColumns = []*schema.Column{
 		{Name: "integration_id", Type: field.TypeString},
@@ -12813,6 +12838,7 @@ var (
 		IdentityHolderAssetsTable,
 		IdentityHolderEntitiesTable,
 		IdentityHolderTasksTable,
+		IdentityHolderFilesTable,
 		IntegrationSecretsTable,
 		IntegrationEventsTable,
 		IntegrationFindingsTable,
@@ -13584,6 +13610,8 @@ func init() {
 	IdentityHolderEntitiesTable.ForeignKeys[1].RefTable = EntitiesTable
 	IdentityHolderTasksTable.ForeignKeys[0].RefTable = IdentityHoldersTable
 	IdentityHolderTasksTable.ForeignKeys[1].RefTable = TasksTable
+	IdentityHolderFilesTable.ForeignKeys[0].RefTable = IdentityHoldersTable
+	IdentityHolderFilesTable.ForeignKeys[1].RefTable = FilesTable
 	IntegrationSecretsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	IntegrationEventsTable.ForeignKeys[0].RefTable = IntegrationsTable

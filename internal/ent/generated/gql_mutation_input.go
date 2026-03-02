@@ -8677,6 +8677,7 @@ type CreateFileInput struct {
 	ProgramIDs                []string
 	PlatformIDs               []string
 	EvidenceIDs               []string
+	IdentityHolderIDs         []string
 	ScanIDs                   []string
 	EventIDs                  []string
 	IntegrationIDs            []string
@@ -8783,6 +8784,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
 	}
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
@@ -8891,6 +8895,9 @@ type UpdateFileInput struct {
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
 	RemoveEvidenceIDs               []string
+	ClearIdentityHolder             bool
+	AddIdentityHolderIDs            []string
+	RemoveIdentityHolderIDs         []string
 	ClearScan                       bool
 	AddScanIDs                      []string
 	RemoveScanIDs                   []string
@@ -9143,6 +9150,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEvidenceIDs; len(v) > 0 {
 		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearIdentityHolder {
+		m.ClearIdentityHolder()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
 	}
 	if i.ClearScan {
 		m.ClearScan()
@@ -11555,6 +11571,7 @@ type CreateIdentityHolderInput struct {
 	PlatformIDs            []string
 	CampaignIDs            []string
 	TaskIDs                []string
+	FileIDs                []string
 	FindingIDs             []string
 	WorkflowObjectRefIDs   []string
 	AccessPlatformIDs      []string
@@ -11679,6 +11696,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
 	}
@@ -11787,6 +11807,9 @@ type UpdateIdentityHolderInput struct {
 	ClearTasks                  bool
 	AddTaskIDs                  []string
 	RemoveTaskIDs               []string
+	ClearFiles                  bool
+	AddFileIDs                  []string
+	RemoveFileIDs               []string
 	ClearFindings               bool
 	AddFindingIDs               []string
 	RemoveFindingIDs            []string
@@ -12059,6 +12082,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 	if i.ClearFindings {
 		m.ClearFindings()

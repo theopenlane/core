@@ -126,6 +126,8 @@ const (
 	EdgeCampaigns = "campaigns"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
 	// EdgeFindings holds the string denoting the findings edge name in mutations.
 	EdgeFindings = "findings"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
@@ -248,6 +250,11 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "identity_holder_files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
 	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
 	FindingsTable = "finding_identity_holders"
 	// FindingsInverseTable is the table name for the Finding entity.
@@ -339,6 +346,9 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"identity_holder_id", "task_id"}
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"identity_holder_id", "file_id"}
 	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
 	// primary key for the findings relation (M2M).
 	FindingsPrimaryKey = []string{"finding_id", "identity_holder_id"}
@@ -360,7 +370,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -805,6 +815,20 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByFindingsCount orders the results by findings count.
 func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -977,6 +1001,13 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
 func newFindingsStep() *sqlgraph.Step {

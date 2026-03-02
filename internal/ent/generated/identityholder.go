@@ -141,6 +141,8 @@ type IdentityHolderEdges struct {
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// Findings holds the value of the findings edge.
 	Findings []*Finding `json:"findings,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
@@ -151,9 +153,9 @@ type IdentityHolderEdges struct {
 	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [22]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [23]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -167,6 +169,7 @@ type IdentityHolderEdges struct {
 	namedPlatforms           map[string][]*Platform
 	namedCampaigns           map[string][]*Campaign
 	namedTasks               map[string][]*Task
+	namedFiles               map[string][]*File
 	namedFindings            map[string][]*Finding
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 	namedAccessPlatforms     map[string][]*Platform
@@ -346,10 +349,19 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[18] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -358,7 +370,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -367,7 +379,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -378,7 +390,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[21] {
+	} else if e.loadedTypes[22] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -743,6 +755,11 @@ func (_m *IdentityHolder) QueryCampaigns() *CampaignQuery {
 // QueryTasks queries the "tasks" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryTasks() *TaskQuery {
 	return NewIdentityHolderClient(_m.config).QueryTasks(_m)
+}
+
+// QueryFiles queries the "files" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryFiles() *FileQuery {
+	return NewIdentityHolderClient(_m.config).QueryFiles(_m)
 }
 
 // QueryFindings queries the "findings" edge of the IdentityHolder entity.
@@ -1188,6 +1205,30 @@ func (_m *IdentityHolder) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 

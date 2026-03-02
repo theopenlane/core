@@ -2065,6 +2065,7 @@ type ComplexityRoot struct {
 		Evidence               func(childComplexity int) int
 		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                     func(childComplexity int) int
+		IdentityHolder         func(childComplexity int) int
 		Integrations           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes          func(childComplexity int) int
 		LastAccessedAt         func(childComplexity int) int
@@ -2584,6 +2585,7 @@ type ComplexityRoot struct {
 		EnvironmentName         func(childComplexity int) int
 		ExternalReferenceID     func(childComplexity int) int
 		ExternalUserID          func(childComplexity int) int
+		Files                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		FullName                func(childComplexity int) int
 		HasPendingWorkflow      func(childComplexity int) int
@@ -3374,7 +3376,7 @@ type ComplexityRoot struct {
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEmailBranding                  func(childComplexity int, input generated.CreateEmailBrandingInput) int
 		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
-		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string) int
+		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload) int
 		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -3388,7 +3390,7 @@ type ComplexityRoot struct {
 		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
 		CreateGroupWithMembers               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
 		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
-		CreateIdentityHolder                 func(childComplexity int, input generated.CreateIdentityHolderInput) int
+		CreateIdentityHolder                 func(childComplexity int, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
 		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) int
@@ -3710,7 +3712,7 @@ type ComplexityRoot struct {
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
 		UpdateEmailBranding                  func(childComplexity int, id string, input generated.UpdateEmailBrandingInput) int
 		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
-		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
+		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
@@ -3722,7 +3724,7 @@ type ComplexityRoot struct {
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateIdentityHolder                 func(childComplexity int, id string, input generated.UpdateIdentityHolderInput) int
+		UpdateIdentityHolder                 func(childComplexity int, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) int
 		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
@@ -17122,6 +17124,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.File.ID(childComplexity), true
 
+	case "File.identityHolder":
+		if e.ComplexityRoot.File.IdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.IdentityHolder(childComplexity), true
+
 	case "File.integrations":
 		if e.ComplexityRoot.File.Integrations == nil {
 			break
@@ -19982,6 +19991,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.ExternalUserID(childComplexity), true
+
+	case "IdentityHolder.files":
+		if e.ComplexityRoot.IdentityHolder.Files == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IdentityHolder.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "IdentityHolder.findings":
 		if e.ComplexityRoot.IdentityHolder.Findings == nil {
@@ -24876,7 +24897,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string)), true
+		return e.ComplexityRoot.Mutation.CreateEntity(childComplexity, args["input"].(generated.CreateEntityInput), args["entityTypeName"].(*string), args["entityFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createEntityType":
 		if e.ComplexityRoot.Mutation.CreateEntityType == nil {
@@ -25044,7 +25065,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateIdentityHolder(childComplexity, args["input"].(generated.CreateIdentityHolderInput)), true
+		return e.ComplexityRoot.Mutation.CreateIdentityHolder(childComplexity, args["input"].(generated.CreateIdentityHolderInput), args["identityHolderFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createInternalPolicy":
 		if e.ComplexityRoot.Mutation.CreateInternalPolicy == nil {
@@ -28903,7 +28924,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateEntityInput)), true
+		return e.ComplexityRoot.Mutation.UpdateEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateEntityInput), args["entityFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateEntityType":
 		if e.ComplexityRoot.Mutation.UpdateEntityType == nil {
@@ -29047,7 +29068,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateIdentityHolder(childComplexity, args["id"].(string), args["input"].(generated.UpdateIdentityHolderInput)), true
+		return e.ComplexityRoot.Mutation.UpdateIdentityHolder(childComplexity, args["id"].(string), args["input"].(generated.UpdateIdentityHolderInput), args["identityHolderFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateInternalPolicy":
 		if e.ComplexityRoot.Mutation.UpdateInternalPolicy == nil {
@@ -64764,6 +64785,7 @@ input CreateFileInput {
   programIDs: [ID!]
   platformIDs: [ID!]
   evidenceIDs: [ID!]
+  identityHolderIDs: [ID!]
   scanIDs: [ID!]
   eventIDs: [ID!]
   integrationIDs: [ID!]
@@ -65298,6 +65320,7 @@ input CreateIdentityHolderInput {
   platformIDs: [ID!]
   campaignIDs: [ID!]
   taskIDs: [ID!]
+  fileIDs: [ID!]
   findingIDs: [ID!]
   workflowObjectRefIDs: [ID!]
   accessPlatformIDs: [ID!]
@@ -78725,6 +78748,7 @@ type File implements Node {
   program: [Program!]
   platform: [Platform!]
   evidence: [Evidence!]
+  identityHolder: [IdentityHolder!]
   scan: [Scan!]
   events(
     """
@@ -79429,6 +79453,11 @@ input FileWhereInput {
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
   """
   scan edge predicates
   """
@@ -84912,6 +84941,37 @@ type IdentityHolder implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
   findings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85694,6 +85754,11 @@ input IdentityHolderWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
   """
   findings edge predicates
   """
@@ -123729,6 +123794,9 @@ input UpdateFileInput {
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolder: Boolean
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScan: Boolean
@@ -124528,6 +124596,9 @@ input UpdateIdentityHolderInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
@@ -135162,6 +135233,7 @@ extend type Mutation{
         entity type name allows the name of the entity type to be passed in over an id
         """
         entityTypeName: String
+        entityFiles: [Upload!]
     ): EntityCreatePayload!
     """
     Create multiple new entities
@@ -135201,6 +135273,7 @@ extend type Mutation{
         New values for the entity
         """
         input: UpdateEntityInput!
+        entityFiles: [Upload!]
     ): EntityUpdatePayload!
     """
     Delete an existing entity
@@ -137113,6 +137186,7 @@ extend type Mutation{
         values of the identityHolder
         """
         input: CreateIdentityHolderInput!
+        identityHolderFiles: [Upload!]
     ): IdentityHolderCreatePayload!
     """
     Create multiple new identityHolders
@@ -137144,6 +137218,7 @@ extend type Mutation{
         New values for the identityHolder
         """
         input: UpdateIdentityHolderInput!
+        identityHolderFiles: [Upload!]
     ): IdentityHolderUpdatePayload!
     """
     Delete an existing identityHolder

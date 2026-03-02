@@ -2575,6 +2575,35 @@ func HasEvidenceWith(preds ...predicate.Evidence) predicate.File {
 	})
 }
 
+// HasIdentityHolder applies the HasEdge predicate on the "identity_holder" edge.
+func HasIdentityHolder() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, IdentityHolderTable, IdentityHolderPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHolderWith applies the HasEdge predicate on the "identity_holder" edge with a given conditions (other predicates).
+func HasIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newIdentityHolderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasScan applies the HasEdge predicate on the "scan" edge.
 func HasScan() predicate.File {
 	return predicate.File(func(s *sql.Selector) {

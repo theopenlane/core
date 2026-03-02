@@ -168,10 +168,10 @@ type MutationResolver interface {
 	UpdateEmailTemplate(ctx context.Context, id string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateUpdatePayload, error)
 	DeleteEmailTemplate(ctx context.Context, id string) (*model.EmailTemplateDeletePayload, error)
 	DeleteBulkEmailTemplate(ctx context.Context, ids []string) (*model.EmailTemplateBulkDeletePayload, error)
-	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string) (*model.EntityCreatePayload, error)
+	CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload) (*model.EntityCreatePayload, error)
 	CreateBulkEntity(ctx context.Context, input []*generated.CreateEntityInput, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string) (*model.EntityBulkCreatePayload, error)
-	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error)
+	UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload) (*model.EntityUpdatePayload, error)
 	DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error)
 	DeleteBulkEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error)
 	UpdateBulkEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error)
@@ -249,10 +249,10 @@ type MutationResolver interface {
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
 	DeleteBulkHush(ctx context.Context, ids []string) (*model.HushBulkDeletePayload, error)
 	UpdateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkUpdatePayload, error)
-	CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput) (*model.IdentityHolderCreatePayload, error)
+	CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderCreatePayload, error)
 	CreateBulkIdentityHolder(ctx context.Context, input []*generated.CreateIdentityHolderInput) (*model.IdentityHolderBulkCreatePayload, error)
 	CreateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkCreatePayload, error)
-	UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderUpdatePayload, error)
+	UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderUpdatePayload, error)
 	DeleteIdentityHolder(ctx context.Context, id string) (*model.IdentityHolderDeletePayload, error)
 	DeleteBulkIdentityHolder(ctx context.Context, ids []string) (*model.IdentityHolderBulkDeletePayload, error)
 	UpdateBulkIdentityHolder(ctx context.Context, ids []string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderBulkUpdatePayload, error)
@@ -2466,6 +2466,11 @@ func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["entityTypeName"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "entityFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["entityFiles"] = arg2
 	return args, nil
 }
 
@@ -2634,6 +2639,11 @@ func (ec *executionContext) field_Mutation_createIdentityHolder_args(ctx context
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "identityHolderFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["identityHolderFiles"] = arg1
 	return args, nil
 }
 
@@ -6666,6 +6676,11 @@ func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "entityFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["entityFiles"] = arg2
 	return args, nil
 }
 
@@ -6857,6 +6872,11 @@ func (ec *executionContext) field_Mutation_updateIdentityHolder_args(ctx context
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "identityHolderFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["identityHolderFiles"] = arg2
 	return args, nil
 }
 
@@ -15468,7 +15488,7 @@ func (ec *executionContext) _Mutation_createEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string))
+			return ec.Resolvers.Mutation().CreateEntity(ctx, fc.Args["input"].(generated.CreateEntityInput), fc.Args["entityTypeName"].(*string), fc.Args["entityFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityCreatePayload,
@@ -15603,7 +15623,7 @@ func (ec *executionContext) _Mutation_updateEntity(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput))
+			return ec.Resolvers.Mutation().UpdateEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEntityInput), fc.Args["entityFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEntityUpdatePayload,
@@ -19145,7 +19165,7 @@ func (ec *executionContext) _Mutation_createIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_createIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateIdentityHolder(ctx, fc.Args["input"].(generated.CreateIdentityHolderInput))
+			return ec.Resolvers.Mutation().CreateIdentityHolder(ctx, fc.Args["input"].(generated.CreateIdentityHolderInput), fc.Args["identityHolderFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNIdentityHolderCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderCreatePayload,
@@ -19280,7 +19300,7 @@ func (ec *executionContext) _Mutation_updateIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_updateIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateIdentityHolder(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIdentityHolderInput))
+			return ec.Resolvers.Mutation().UpdateIdentityHolder(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIdentityHolderInput), fc.Args["identityHolderFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNIdentityHolderUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderUpdatePayload,

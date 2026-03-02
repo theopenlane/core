@@ -40,7 +40,7 @@ func (r *identityHolderResolver) WorkflowTimeline(ctx context.Context, obj *gene
 }
 
 // CreateIdentityHolder is the resolver for the createIdentityHolder field.
-func (r *mutationResolver) CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput) (*model.IdentityHolderCreatePayload, error) {
+func (r *mutationResolver) CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
@@ -113,7 +113,7 @@ func (r *mutationResolver) CreateBulkCSVIdentityHolder(ctx context.Context, inpu
 }
 
 // UpdateIdentityHolder is the resolver for the updateIdentityHolder field.
-func (r *mutationResolver) UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderUpdatePayload, error) {
+func (r *mutationResolver) UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).IdentityHolder.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})

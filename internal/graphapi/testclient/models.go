@@ -6660,6 +6660,7 @@ type CreateFileInput struct {
 	ProgramIDs                []string   `json:"programIDs,omitempty"`
 	PlatformIDs               []string   `json:"platformIDs,omitempty"`
 	EvidenceIDs               []string   `json:"evidenceIDs,omitempty"`
+	IdentityHolderIDs         []string   `json:"identityHolderIDs,omitempty"`
 	ScanIDs                   []string   `json:"scanIDs,omitempty"`
 	EventIDs                  []string   `json:"eventIDs,omitempty"`
 	IntegrationIDs            []string   `json:"integrationIDs,omitempty"`
@@ -7006,6 +7007,7 @@ type CreateIdentityHolderInput struct {
 	PlatformIDs           []string       `json:"platformIDs,omitempty"`
 	CampaignIDs           []string       `json:"campaignIDs,omitempty"`
 	TaskIDs               []string       `json:"taskIDs,omitempty"`
+	FileIDs               []string       `json:"fileIDs,omitempty"`
 	FindingIDs            []string       `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
 	AccessPlatformIDs     []string       `json:"accessPlatformIDs,omitempty"`
@@ -15413,6 +15415,7 @@ type File struct {
 	Program                []*Program                   `json:"program,omitempty"`
 	Platform               []*Platform                  `json:"platform,omitempty"`
 	Evidence               []*Evidence                  `json:"evidence,omitempty"`
+	IdentityHolder         []*IdentityHolder            `json:"identityHolder,omitempty"`
 	Scan                   []*Scan                      `json:"scan,omitempty"`
 	Events                 *EventConnection             `json:"events"`
 	Integrations           *IntegrationConnection       `json:"integrations"`
@@ -15901,6 +15904,9 @@ type FileWhereInput struct {
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
+	// identity_holder edge predicates
+	HasIdentityHolder     *bool                       `json:"hasIdentityHolder,omitempty"`
+	HasIdentityHolderWith []*IdentityHolderWhereInput `json:"hasIdentityHolderWith,omitempty"`
 	// scan edge predicates
 	HasScan     *bool             `json:"hasScan,omitempty"`
 	HasScanWith []*ScanWhereInput `json:"hasScanWith,omitempty"`
@@ -18385,6 +18391,7 @@ type IdentityHolder struct {
 	Platforms           *PlatformConnection           `json:"platforms"`
 	Campaigns           *CampaignConnection           `json:"campaigns"`
 	Tasks               *TaskConnection               `json:"tasks"`
+	Files               *FileConnection               `json:"files"`
 	Findings            *FindingConnection            `json:"findings"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	AccessPlatforms     *PlatformConnection           `json:"accessPlatforms"`
@@ -18965,6 +18972,9 @@ type IdentityHolderWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// findings edge predicates
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
@@ -38950,6 +38960,9 @@ type UpdateFileInput struct {
 	AddEvidenceIDs                  []string   `json:"addEvidenceIDs,omitempty"`
 	RemoveEvidenceIDs               []string   `json:"removeEvidenceIDs,omitempty"`
 	ClearEvidence                   *bool      `json:"clearEvidence,omitempty"`
+	AddIdentityHolderIDs            []string   `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs         []string   `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolder             *bool      `json:"clearIdentityHolder,omitempty"`
 	AddScanIDs                      []string   `json:"addScanIDs,omitempty"`
 	RemoveScanIDs                   []string   `json:"removeScanIDs,omitempty"`
 	ClearScan                       *bool      `json:"clearScan,omitempty"`
@@ -39560,6 +39573,9 @@ type UpdateIdentityHolderInput struct {
 	AddTaskIDs                  []string       `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs               []string       `json:"removeTaskIDs,omitempty"`
 	ClearTasks                  *bool          `json:"clearTasks,omitempty"`
+	AddFileIDs                  []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs               []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles                  *bool          `json:"clearFiles,omitempty"`
 	AddFindingIDs               []string       `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs            []string       `json:"removeFindingIDs,omitempty"`
 	ClearFindings               *bool          `json:"clearFindings,omitempty"`

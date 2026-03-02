@@ -23,6 +23,7 @@ extend type Mutation{
         entity type name allows the name of the entity type to be passed in over an id
         """
         entityTypeName: String
+        entityFiles: [Upload!]
     ): EntityCreatePayload!
     """
     Create multiple new entities
@@ -62,6 +63,7 @@ extend type Mutation{
         New values for the entity
         """
         input: UpdateEntityInput!
+        entityFiles: [Upload!]
     ): EntityUpdatePayload!
     """
     Delete an existing entity

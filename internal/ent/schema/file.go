@@ -115,6 +115,7 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Program{}),
 		defaultEdgeFrom(f, Platform{}),
 		defaultEdgeFrom(f, Evidence{}),
+		defaultEdgeFrom(f, IdentityHolder{}),
 		defaultEdgeFrom(f, Scan{}),
 		defaultEdgeToWithPagination(f, Event{}),
 		defaultEdgeToWithPagination(f, Integration{}),
@@ -143,7 +144,7 @@ func (f File) Mixin() []ent.Mixin {
 				withParents(
 					Organization{}, Program{}, Platform{}, Scan{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
-					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}), // used to create parent tuples for the file
+					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
 			),

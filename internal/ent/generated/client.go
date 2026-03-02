@@ -10774,6 +10774,25 @@ func (c *FileClient) QueryEvidence(_m *File) *EvidenceQuery {
 	return query
 }
 
+// QueryIdentityHolder queries the identity_holder edge of a File.
+func (c *FileClient) QueryIdentityHolder(_m *File) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.IdentityHolderTable, file.IdentityHolderPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryScan queries the scan edge of a File.
 func (c *FileClient) QueryScan(_m *File) *ScanQuery {
 	query := (&ScanClient{config: c.config}).Query()
@@ -13975,6 +13994,25 @@ func (c *IdentityHolderClient) QueryTasks(_m *IdentityHolder) *TaskQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.IdentityHolderTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryFiles(_m *IdentityHolder) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.FilesTable, identityholder.FilesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

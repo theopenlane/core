@@ -41,8 +41,10 @@ var validMimeTypes = map[string][]string{
 	"actionPlanFile":     importSchemaMimeTypes,
 	"trustCenterDocFile": {"application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 	"documentDataFile":   {"application/pdf"},
-	"templateFiles":      sharedMimeTypes,
-	"watermarkFile":      {"image/jpeg", "image/png"},
+	"templateFiles":          sharedMimeTypes,
+	"watermarkFile":          {"image/jpeg", "image/png"},
+	"identityHolderFiles":    sharedMimeTypes,
+	"entityFiles":            sharedMimeTypes,
 }
 
 // MimeTypeValidator returns a storage.ValidationFunc enforcing the configured mime-type set per form field.

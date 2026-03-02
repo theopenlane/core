@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -611,6 +612,21 @@ func (_c *FileCreate) AddEvidence(v ...*Evidence) *FileCreate {
 	return _c.AddEvidenceIDs(ids...)
 }
 
+// AddIdentityHolderIDs adds the "identity_holder" edge to the IdentityHolder entity by IDs.
+func (_c *FileCreate) AddIdentityHolderIDs(ids ...string) *FileCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolder adds the "identity_holder" edges to the IdentityHolder entity.
+func (_c *FileCreate) AddIdentityHolder(v ...*IdentityHolder) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
+}
+
 // AddScanIDs adds the "scan" edge to the Scan entity by IDs.
 func (_c *FileCreate) AddScanIDs(ids ...string) *FileCreate {
 	_c.mutation.AddScanIDs(ids...)
@@ -1163,6 +1179,23 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
