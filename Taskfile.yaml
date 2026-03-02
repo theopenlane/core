@@ -467,6 +467,13 @@ tasks:
       - task: go:lint
       - task: go:test
 
+  new-provider:
+    desc: Scaffold a new integration provider package
+    vars:
+      AUTH: '{{.AUTH | default "oauth"}}'
+    cmds:
+      - go run ./internal/integrations/providers/scaffold -name {{.NAME}} -auth {{.AUTH}}
+
   # dev tasks
   run-dev:
     dotenv: ["{{.ENV}}/.env-dev"]

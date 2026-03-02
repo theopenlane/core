@@ -1,0 +1,19 @@
+package {{.Provider}}
+
+import (
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/providers/oauth"
+)
+
+// Type{{.ProviderPascal}} identifies the {{.ProviderPascal}} provider
+const Type{{.ProviderPascal}} = types.ProviderType("{{.Provider}}")
+
+// Builder returns the {{.ProviderPascal}} provider builder
+func Builder() providers.Builder {
+	return oauth.Builder(
+		Type{{.ProviderPascal}},
+		oauth.WithOperations({{.Provider}}Operations()),
+		oauth.WithClientDescriptors({{.Provider}}ClientDescriptors()),
+	)
+}

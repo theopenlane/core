@@ -1,0 +1,34 @@
+package {{.Provider}}
+
+import (
+	"context"
+
+	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/common/integrations/types"
+)
+
+const (
+	// ClientDefault is the name of the default {{.ProviderPascal}} HTTP client
+	ClientDefault types.ClientName = "default"
+)
+
+// {{.Provider}}ClientDescriptors returns the client descriptors for the {{.ProviderPascal}} provider
+func {{.Provider}}ClientDescriptors() []types.ClientDescriptor {
+	return []types.ClientDescriptor{
+		{
+			Provider:    Type{{.ProviderPascal}},
+			Name:        ClientDefault,
+			Description: "{{.ProviderPascal}} REST API client",
+			Build:       build{{.ProviderPascal}}Client,
+		},
+	}
+}
+
+func build{{.ProviderPascal}}Client(_ context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
+	token, err := auth.OAuthTokenFromPayload(payload)
+	if err != nil {
+		return types.ClientInstance{}, ErrClientBuild
+	}
+
+	return types.NewClientInstance(&auth.AuthenticatedClient{BearerToken: token}), nil
+}
