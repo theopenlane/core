@@ -16103,6 +16103,20 @@ type FindingBulkCreatePayload struct {
 	Findings []*Finding `json:"findings,omitempty"`
 }
 
+// Return response for deleteBulkFinding mutation
+type FindingBulkDeletePayload struct {
+	// Deleted finding IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkFinding mutation
+type FindingBulkUpdatePayload struct {
+	// Updated findings
+	Findings []*Finding `json:"findings,omitempty"`
+	// IDs of the updated findings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type FindingConnection struct {
 	// A list of edges.
@@ -27949,6 +27963,20 @@ func (Remediation) IsNode() {}
 type RemediationBulkCreatePayload struct {
 	// Created remediations
 	Remediations []*Remediation `json:"remediations,omitempty"`
+}
+
+// Return response for deleteBulkRemediation mutation
+type RemediationBulkDeletePayload struct {
+	// Deleted remediation IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkRemediation mutation
+type RemediationBulkUpdatePayload struct {
+	// Updated remediations
+	Remediations []*Remediation `json:"remediations,omitempty"`
+	// IDs of the updated remediations
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -43746,6 +43774,20 @@ func (Vulnerability) IsNode() {}
 type VulnerabilityBulkCreatePayload struct {
 	// Created vulnerabilitys
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+}
+
+// Return response for deleteBulkVulnerability mutation
+type VulnerabilityBulkDeletePayload struct {
+	// Deleted vulnerability IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVulnerability mutation
+type VulnerabilityBulkUpdatePayload struct {
+	// Updated vulnerabilities
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// IDs of the updated vulnerabilities
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

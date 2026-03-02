@@ -2209,6 +2209,15 @@ type ComplexityRoot struct {
 		Findings func(childComplexity int) int
 	}
 
+	FindingBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	FindingBulkUpdatePayload struct {
+		Findings   func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	FindingConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3478,6 +3487,7 @@ type ComplexityRoot struct {
 		DeleteBulkEvent                      func(childComplexity int, ids []string) int
 		DeleteBulkEvidence                   func(childComplexity int, ids []string) int
 		DeleteBulkExport                     func(childComplexity int, ids []string) int
+		DeleteBulkFinding                    func(childComplexity int, ids []string) int
 		DeleteBulkGroup                      func(childComplexity int, ids []string) int
 		DeleteBulkGroupMembership            func(childComplexity int, ids []string) int
 		DeleteBulkGroupSetting               func(childComplexity int, ids []string) int
@@ -3496,6 +3506,7 @@ type ComplexityRoot struct {
 		DeleteBulkProcedure                  func(childComplexity int, ids []string) int
 		DeleteBulkProgram                    func(childComplexity int, ids []string) int
 		DeleteBulkProgramMembership          func(childComplexity int, ids []string) int
+		DeleteBulkRemediation                func(childComplexity int, ids []string) int
 		DeleteBulkRisk                       func(childComplexity int, ids []string) int
 		DeleteBulkScan                       func(childComplexity int, ids []string) int
 		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
@@ -3510,6 +3521,7 @@ type ComplexityRoot struct {
 		DeleteBulkTrustCenterNDARequest      func(childComplexity int, ids []string) int
 		DeleteBulkTrustCenterSubprocessor    func(childComplexity int, ids []string) int
 		DeleteBulkUserSetting                func(childComplexity int, ids []string) int
+		DeleteBulkVulnerability              func(childComplexity int, ids []string) int
 		DeleteCampaign                       func(childComplexity int, id string) int
 		DeleteCampaignTarget                 func(childComplexity int, id string) int
 		DeleteContact                        func(childComplexity int, id string) int
@@ -3627,6 +3639,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEvidence                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVFinding                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
@@ -3645,6 +3658,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
@@ -3658,6 +3672,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVTrustCenterFaq          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
 		UpdateBulkControl                    func(childComplexity int, ids []string, input generated.UpdateControlInput) int
 		UpdateBulkControlImplementation      func(childComplexity int, ids []string, input generated.UpdateControlImplementationInput) int
@@ -3671,6 +3686,7 @@ type ComplexityRoot struct {
 		UpdateBulkEntityType                 func(childComplexity int, ids []string, input generated.UpdateEntityTypeInput) int
 		UpdateBulkEvent                      func(childComplexity int, ids []string, input generated.UpdateEventInput) int
 		UpdateBulkEvidence                   func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
+		UpdateBulkFinding                    func(childComplexity int, ids []string, input generated.UpdateFindingInput) int
 		UpdateBulkGroup                      func(childComplexity int, ids []string, input generated.UpdateGroupInput) int
 		UpdateBulkGroupMembership            func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
 		UpdateBulkGroupSetting               func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
@@ -3689,6 +3705,7 @@ type ComplexityRoot struct {
 		UpdateBulkProcedure                  func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
 		UpdateBulkProgram                    func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
 		UpdateBulkProgramMembership          func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
+		UpdateBulkRemediation                func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
 		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
@@ -3702,6 +3719,7 @@ type ComplexityRoot struct {
 		UpdateBulkTrustCenterFaq             func(childComplexity int, ids []string, input generated.UpdateTrustCenterFAQInput) int
 		UpdateBulkTrustCenterSubprocessor    func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateBulkUserSetting                func(childComplexity int, ids []string, input generated.UpdateUserSettingInput) int
+		UpdateBulkVulnerability              func(childComplexity int, ids []string, input generated.UpdateVulnerabilityInput) int
 		UpdateCampaign                       func(childComplexity int, id string, input generated.UpdateCampaignInput) int
 		UpdateCampaignTarget                 func(childComplexity int, id string, input generated.UpdateCampaignTargetInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
@@ -5122,6 +5140,15 @@ type ComplexityRoot struct {
 
 	RemediationBulkCreatePayload struct {
 		Remediations func(childComplexity int) int
+	}
+
+	RemediationBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	RemediationBulkUpdatePayload struct {
+		Remediations func(childComplexity int) int
+		UpdatedIDs   func(childComplexity int) int
 	}
 
 	RemediationConnection struct {
@@ -6859,6 +6886,15 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityBulkCreatePayload struct {
+		Vulnerabilities func(childComplexity int) int
+	}
+
+	VulnerabilityBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	VulnerabilityBulkUpdatePayload struct {
+		UpdatedIDs      func(childComplexity int) int
 		Vulnerabilities func(childComplexity int) int
 	}
 
@@ -18181,6 +18217,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.FindingBulkCreatePayload.Findings(childComplexity), true
 
+	case "FindingBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.FindingBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "FindingBulkUpdatePayload.findings":
+		if e.ComplexityRoot.FindingBulkUpdatePayload.Findings == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingBulkUpdatePayload.Findings(childComplexity), true
+
+	case "FindingBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.FindingBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "FindingConnection.edges":
 		if e.ComplexityRoot.FindingConnection.Edges == nil {
 			break
@@ -26119,6 +26176,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.DeleteBulkExport(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkFinding":
+		if e.ComplexityRoot.Mutation.DeleteBulkFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkFinding(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkGroup":
 		if e.ComplexityRoot.Mutation.DeleteBulkGroup == nil {
 			break
@@ -26335,6 +26404,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.DeleteBulkProgramMembership(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkRemediation":
+		if e.ComplexityRoot.Mutation.DeleteBulkRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkRemediation(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkRisk":
 		if e.ComplexityRoot.Mutation.DeleteBulkRisk == nil {
 			break
@@ -26502,6 +26583,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkUserSetting(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkVulnerability":
+		if e.ComplexityRoot.Mutation.DeleteBulkVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkVulnerability(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteCampaign":
 		if e.ComplexityRoot.Mutation.DeleteCampaign == nil {
@@ -27902,6 +27995,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVEvidence(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVFinding":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVFinding(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVGroup":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVGroup == nil {
 			break
@@ -28118,6 +28223,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVProgramMembership(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVRemediation":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVRemediation(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVRisk":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVRisk == nil {
 			break
@@ -28274,6 +28391,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVUserSetting(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVVulnerability":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVVulnerability(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkContact":
 		if e.ComplexityRoot.Mutation.UpdateBulkContact == nil {
 			break
@@ -28429,6 +28558,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkEvidence(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEvidenceInput)), true
+
+	case "Mutation.updateBulkFinding":
+		if e.ComplexityRoot.Mutation.UpdateBulkFinding == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkFinding_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkFinding(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateFindingInput)), true
 
 	case "Mutation.updateBulkGroup":
 		if e.ComplexityRoot.Mutation.UpdateBulkGroup == nil {
@@ -28646,6 +28787,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkProgramMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateProgramMembershipInput)), true
 
+	case "Mutation.updateBulkRemediation":
+		if e.ComplexityRoot.Mutation.UpdateBulkRemediation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkRemediation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkRemediation(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRemediationInput)), true
+
 	case "Mutation.updateBulkRisk":
 		if e.ComplexityRoot.Mutation.UpdateBulkRisk == nil {
 			break
@@ -28801,6 +28954,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkUserSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateUserSettingInput)), true
+
+	case "Mutation.updateBulkVulnerability":
+		if e.ComplexityRoot.Mutation.UpdateBulkVulnerability == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkVulnerability_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkVulnerability(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateVulnerabilityInput)), true
 
 	case "Mutation.updateCampaign":
 		if e.ComplexityRoot.Mutation.UpdateCampaign == nil {
@@ -38976,6 +39141,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RemediationBulkCreatePayload.Remediations(childComplexity), true
 
+	case "RemediationBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.RemediationBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "RemediationBulkUpdatePayload.remediations":
+		if e.ComplexityRoot.RemediationBulkUpdatePayload.Remediations == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationBulkUpdatePayload.Remediations(childComplexity), true
+
+	case "RemediationBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.RemediationBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "RemediationConnection.edges":
 		if e.ComplexityRoot.RemediationConnection.Edges == nil {
 			break
@@ -47417,6 +47603,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityBulkCreatePayload.Vulnerabilities(childComplexity), true
+
+	case "VulnerabilityBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.VulnerabilityBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "VulnerabilityBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.VulnerabilityBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "VulnerabilityBulkUpdatePayload.vulnerabilities":
+		if e.ComplexityRoot.VulnerabilityBulkUpdatePayload.Vulnerabilities == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityBulkUpdatePayload.Vulnerabilities(childComplexity), true
 
 	case "VulnerabilityConnection.edges":
 		if e.ComplexityRoot.VulnerabilityConnection.Edges == nil {
@@ -136530,6 +136737,37 @@ extend type Mutation{
         """
         id: ID!
     ): FindingDeletePayload!
+    """
+    Update multiple existing findings
+    """
+    updateBulkFinding(
+        """
+        IDs of the findings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the findings with
+        """
+        input: UpdateFindingInput!
+    ): FindingBulkUpdatePayload!
+    """
+    Update multiple existing findings via file upload
+    """
+    updateBulkCSVFinding(
+        """
+        csv file containing values of the finding, must include ID column
+        """
+        input: Upload!
+    ): FindingBulkUpdatePayload!
+    """
+    Delete multiple findings
+    """
+    deleteBulkFinding(
+        """
+        IDs of the findings to delete
+        """
+        ids: [ID!]!
+    ): FindingBulkDeletePayload!
 }
 
 """
@@ -136570,6 +136808,30 @@ type FindingBulkCreatePayload {
     Created findings
     """
     findings: [Finding!]
+}
+
+"""
+Return response for updateBulkFinding mutation
+"""
+type FindingBulkUpdatePayload {
+    """
+    Updated findings
+    """
+    findings: [Finding!]
+    """
+    IDs of the updated findings
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkFinding mutation
+"""
+type FindingBulkDeletePayload {
+    """
+    Deleted finding IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/findingcontrol.graphql", Input: `extend type Query {
     """
@@ -141125,6 +141387,37 @@ extend type Mutation{
         """
         id: ID!
     ): RemediationDeletePayload!
+    """
+    Update multiple existing remediations
+    """
+    updateBulkRemediation(
+        """
+        IDs of the remediations to update
+        """
+        ids: [ID!]!
+        """
+        values to update the remediations with
+        """
+        input: UpdateRemediationInput!
+    ): RemediationBulkUpdatePayload!
+    """
+    Update multiple existing remediations via file upload
+    """
+    updateBulkCSVRemediation(
+        """
+        csv file containing values of the remediation, must include ID column
+        """
+        input: Upload!
+    ): RemediationBulkUpdatePayload!
+    """
+    Delete multiple remediations
+    """
+    deleteBulkRemediation(
+        """
+        IDs of the remediations to delete
+        """
+        ids: [ID!]!
+    ): RemediationBulkDeletePayload!
 }
 
 """
@@ -141165,6 +141458,30 @@ type RemediationBulkCreatePayload {
     Created remediations
     """
     remediations: [Remediation!]
+}
+
+"""
+Return response for updateBulkRemediation mutation
+"""
+type RemediationBulkUpdatePayload {
+    """
+    Updated remediations
+    """
+    remediations: [Remediation!]
+    """
+    IDs of the updated remediations
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkRemediation mutation
+"""
+type RemediationBulkDeletePayload {
+    """
+    Deleted remediation IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """
@@ -145899,6 +146216,37 @@ extend type Mutation{
         """
         id: ID!
     ): VulnerabilityDeletePayload!
+    """
+    Update multiple existing vulnerabilities
+    """
+    updateBulkVulnerability(
+        """
+        IDs of the vulnerabilities to update
+        """
+        ids: [ID!]!
+        """
+        values to update the vulnerabilities with
+        """
+        input: UpdateVulnerabilityInput!
+    ): VulnerabilityBulkUpdatePayload!
+    """
+    Update multiple existing vulnerabilities via file upload
+    """
+    updateBulkCSVVulnerability(
+        """
+        csv file containing values of the vulnerability, must include ID column
+        """
+        input: Upload!
+    ): VulnerabilityBulkUpdatePayload!
+    """
+    Delete multiple vulnerabilities
+    """
+    deleteBulkVulnerability(
+        """
+        IDs of the vulnerabilities to delete
+        """
+        ids: [ID!]!
+    ): VulnerabilityBulkDeletePayload!
 }
 
 """
@@ -145939,6 +146287,30 @@ type VulnerabilityBulkCreatePayload {
     Created vulnerabilitys
     """
     vulnerabilities: [Vulnerability!]
+}
+
+"""
+Return response for updateBulkVulnerability mutation
+"""
+type VulnerabilityBulkUpdatePayload {
+    """
+    Updated vulnerabilities
+    """
+    vulnerabilities: [Vulnerability!]
+    """
+    IDs of the updated vulnerabilities
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkVulnerability mutation
+"""
+type VulnerabilityBulkDeletePayload {
+    """
+    Deleted vulnerability IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/vulnerability_extended.graphql", Input: `extend type Mutation{
     """

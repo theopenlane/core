@@ -29095,6 +29095,28 @@ type FindingBulkCreatePayload {
 	findings: [Finding!]
 }
 """
+Return response for deleteBulkFinding mutation
+"""
+type FindingBulkDeletePayload {
+	"""
+	Deleted finding IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkFinding mutation
+"""
+type FindingBulkUpdatePayload {
+	"""
+	Updated findings
+	"""
+	findings: [Finding!]
+	"""
+	IDs of the updated findings
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type FindingConnection {
@@ -42514,6 +42536,38 @@ type Mutation {
 		id: ID!
 	): FindingDeletePayload!
 	"""
+	Update multiple existing findings
+	"""
+	updateBulkFinding(
+		"""
+		IDs of the findings to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the findings with
+		"""
+		input: UpdateFindingInput!
+	): FindingBulkUpdatePayload!
+	"""
+	Update multiple existing findings via file upload
+	"""
+	updateBulkCSVFinding(
+		"""
+		csv file containing values of the finding, must include ID column
+		"""
+		input: Upload!
+	): FindingBulkUpdatePayload!
+	"""
+	Delete multiple findings
+	"""
+	deleteBulkFinding(
+		"""
+		IDs of the findings to delete
+		"""
+		ids: [ID!]!
+	): FindingBulkDeletePayload!
+	"""
 	Create a new findingControl
 	"""
 	createFindingControl(
@@ -44668,6 +44722,38 @@ type Mutation {
 		id: ID!
 	): RemediationDeletePayload!
 	"""
+	Update multiple existing remediations
+	"""
+	updateBulkRemediation(
+		"""
+		IDs of the remediations to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the remediations with
+		"""
+		input: UpdateRemediationInput!
+	): RemediationBulkUpdatePayload!
+	"""
+	Update multiple existing remediations via file upload
+	"""
+	updateBulkCSVRemediation(
+		"""
+		csv file containing values of the remediation, must include ID column
+		"""
+		input: Upload!
+	): RemediationBulkUpdatePayload!
+	"""
+	Delete multiple remediations
+	"""
+	deleteBulkRemediation(
+		"""
+		IDs of the remediations to delete
+		"""
+		ids: [ID!]!
+	): RemediationBulkDeletePayload!
+	"""
 	Create a new review
 	"""
 	createReview(
@@ -46370,6 +46456,38 @@ type Mutation {
 		"""
 		id: ID!
 	): VulnerabilityDeletePayload!
+	"""
+	Update multiple existing vulnerabilities
+	"""
+	updateBulkVulnerability(
+		"""
+		IDs of the vulnerabilities to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the vulnerabilities with
+		"""
+		input: UpdateVulnerabilityInput!
+	): VulnerabilityBulkUpdatePayload!
+	"""
+	Update multiple existing vulnerabilities via file upload
+	"""
+	updateBulkCSVVulnerability(
+		"""
+		csv file containing values of the vulnerability, must include ID column
+		"""
+		input: Upload!
+	): VulnerabilityBulkUpdatePayload!
+	"""
+	Delete multiple vulnerabilities
+	"""
+	deleteBulkVulnerability(
+		"""
+		IDs of the vulnerabilities to delete
+		"""
+		ids: [ID!]!
+	): VulnerabilityBulkDeletePayload!
 	"""
 	Resolve a vulnerability and optionally capture a review record.
 	"""
@@ -65384,6 +65502,28 @@ type RemediationBulkCreatePayload {
 	Created remediations
 	"""
 	remediations: [Remediation!]
+}
+"""
+Return response for deleteBulkRemediation mutation
+"""
+type RemediationBulkDeletePayload {
+	"""
+	Deleted remediation IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkRemediation mutation
+"""
+type RemediationBulkUpdatePayload {
+	"""
+	Updated remediations
+	"""
+	remediations: [Remediation!]
+	"""
+	IDs of the updated remediations
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -91390,6 +91530,28 @@ type VulnerabilityBulkCreatePayload {
 	Created vulnerabilitys
 	"""
 	vulnerabilities: [Vulnerability!]
+}
+"""
+Return response for deleteBulkVulnerability mutation
+"""
+type VulnerabilityBulkDeletePayload {
+	"""
+	Deleted vulnerability IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkVulnerability mutation
+"""
+type VulnerabilityBulkUpdatePayload {
+	"""
+	Updated vulnerabilities
+	"""
+	vulnerabilities: [Vulnerability!]
+	"""
+	IDs of the updated vulnerabilities
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
