@@ -135,6 +135,8 @@ type IdentityHolderEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// DirectoryAccounts holds the value of the directory_accounts edge.
 	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
@@ -153,9 +155,9 @@ type IdentityHolderEdges struct {
 	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [24]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -166,6 +168,7 @@ type IdentityHolderEdges struct {
 	namedAssets              map[string][]*Asset
 	namedEntities            map[string][]*Entity
 	namedDirectoryAccounts   map[string][]*DirectoryAccount
+	namedControls            map[string][]*Control
 	namedPlatforms           map[string][]*Platform
 	namedCampaigns           map[string][]*Campaign
 	namedTasks               map[string][]*Task
@@ -322,10 +325,19 @@ func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, erro
 	return nil, &NotLoadedError{edge: "directory_accounts"}
 }
 
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[15] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -334,7 +346,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -343,7 +355,7 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -352,7 +364,7 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -361,7 +373,7 @@ func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -370,7 +382,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -379,7 +391,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -390,7 +402,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[22] {
+	} else if e.loadedTypes[23] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -740,6 +752,11 @@ func (_m *IdentityHolder) QueryEntities() *EntityQuery {
 // QueryDirectoryAccounts queries the "directory_accounts" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryDirectoryAccounts() *DirectoryAccountQuery {
 	return NewIdentityHolderClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
+// QueryControls queries the "controls" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryControls() *ControlQuery {
+	return NewIdentityHolderClient(_m.config).QueryControls(_m)
 }
 
 // QueryPlatforms queries the "platforms" edge of the IdentityHolder entity.
@@ -1133,6 +1150,30 @@ func (_m *IdentityHolder) appendNamedDirectoryAccounts(name string, edges ...*Di
 		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
 	} else {
 		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControls[name] = []*Control{}
+	} else {
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
 	}
 }
 

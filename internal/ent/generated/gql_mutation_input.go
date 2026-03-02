@@ -1892,6 +1892,7 @@ type CreateCampaignInput struct {
 	UserIDs                []string
 	GroupIDs               []string
 	IdentityHolderIDs      []string
+	ControlIDs             []string
 	WorkflowObjectRefIDs   []string
 }
 
@@ -2018,6 +2019,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.IdentityHolderIDs; len(v) > 0 {
 		m.AddIdentityHolderIDs(v...)
 	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -2116,6 +2120,9 @@ type UpdateCampaignInput struct {
 	ClearIdentityHolders        bool
 	AddIdentityHolderIDs        []string
 	RemoveIdentityHolderIDs     []string
+	ClearControls               bool
+	AddControlIDs               []string
+	RemoveControlIDs            []string
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string
 	RemoveWorkflowObjectRefIDs  []string
@@ -2377,6 +2384,15 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
 		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -2837,6 +2853,11 @@ type CreateControlInput struct {
 	PlatformIDs                []string
 	AssetIDs                   []string
 	ScanIDs                    []string
+	EntityIDs                  []string
+	IdentityHolderIDs          []string
+	CampaignIDs                []string
+	RemediationIDs             []string
+	ReviewIDs                  []string
 	FindingIDs                 []string
 	ControlImplementationIDs   []string
 	SubcontrolIDs              []string
@@ -3018,6 +3039,21 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.IdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.ReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
 	}
@@ -3182,6 +3218,21 @@ type UpdateControlInput struct {
 	ClearScans                      bool
 	AddScanIDs                      []string
 	RemoveScanIDs                   []string
+	ClearEntities                   bool
+	AddEntityIDs                    []string
+	RemoveEntityIDs                 []string
+	ClearIdentityHolders            bool
+	AddIdentityHolderIDs            []string
+	RemoveIdentityHolderIDs         []string
+	ClearCampaigns                  bool
+	AddCampaignIDs                  []string
+	RemoveCampaignIDs               []string
+	ClearRemediations               bool
+	AddRemediationIDs               []string
+	RemoveRemediationIDs            []string
+	ClearReviews                    bool
+	AddReviewIDs                    []string
+	RemoveReviewIDs                 []string
 	ClearFindings                   bool
 	AddFindingIDs                   []string
 	RemoveFindingIDs                []string
@@ -3617,6 +3668,51 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveScanIDs; len(v) > 0 {
 		m.RemoveScanIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearIdentityHolders {
+		m.ClearIdentityHolders()
+	}
+	if v := i.AddIdentityHolderIDs; len(v) > 0 {
+		m.AddIdentityHolderIDs(v...)
+	}
+	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
+		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+	if i.ClearRemediations {
+		m.ClearRemediations()
+	}
+	if v := i.AddRemediationIDs; len(v) > 0 {
+		m.AddRemediationIDs(v...)
+	}
+	if v := i.RemoveRemediationIDs; len(v) > 0 {
+		m.RemoveRemediationIDs(v...)
+	}
+	if i.ClearReviews {
+		m.ClearReviews()
+	}
+	if v := i.AddReviewIDs; len(v) > 0 {
+		m.AddReviewIDs(v...)
+	}
+	if v := i.RemoveReviewIDs; len(v) > 0 {
+		m.RemoveReviewIDs(v...)
 	}
 	if i.ClearFindings {
 		m.ClearFindings()
@@ -6856,6 +6952,7 @@ type CreateEntityInput struct {
 	AuthMethodIDs                         []string
 	EmployerIdentityHolderIDs             []string
 	IdentityHolderIDs                     []string
+	ControlIDs                            []string
 	PlatformIDs                           []string
 	OutOfScopePlatformIDs                 []string
 	SourcePlatformIDs                     []string
@@ -7065,6 +7162,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.IdentityHolderIDs; len(v) > 0 {
 		m.AddIdentityHolderIDs(v...)
 	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -7240,6 +7340,9 @@ type UpdateEntityInput struct {
 	ClearIdentityHolders                       bool
 	AddIdentityHolderIDs                       []string
 	RemoveIdentityHolderIDs                    []string
+	ClearControls                              bool
+	AddControlIDs                              []string
+	RemoveControlIDs                           []string
 	ClearPlatforms                             bool
 	AddPlatformIDs                             []string
 	RemovePlatformIDs                          []string
@@ -7713,6 +7816,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
 		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
 	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()
@@ -11568,6 +11680,7 @@ type CreateIdentityHolderInput struct {
 	AssetIDs               []string
 	EntityIDs              []string
 	DirectoryAccountIDs    []string
+	ControlIDs             []string
 	PlatformIDs            []string
 	CampaignIDs            []string
 	TaskIDs                []string
@@ -11687,6 +11800,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.DirectoryAccountIDs; len(v) > 0 {
 		m.AddDirectoryAccountIDs(v...)
 	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
 	if v := i.PlatformIDs; len(v) > 0 {
 		m.AddPlatformIDs(v...)
 	}
@@ -11798,6 +11914,9 @@ type UpdateIdentityHolderInput struct {
 	ClearDirectoryAccounts      bool
 	AddDirectoryAccountIDs      []string
 	RemoveDirectoryAccountIDs   []string
+	ClearControls               bool
+	AddControlIDs               []string
+	RemoveControlIDs            []string
 	ClearPlatforms              bool
 	AddPlatformIDs              []string
 	RemovePlatformIDs           []string
@@ -12055,6 +12174,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
 		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
 	}
 	if i.ClearPlatforms {
 		m.ClearPlatforms()

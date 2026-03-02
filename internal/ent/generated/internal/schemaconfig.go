@@ -39,6 +39,9 @@ type SchemaConfig struct {
 	ControlEditors                     string // Control-editors->Group table.
 	ControlAssets                      string // Control-assets->Asset table.
 	ControlScans                       string // Control-scans->Scan table.
+	ControlEntities                    string // Control-entities->Entity table.
+	ControlIdentityHolders             string // Control-identity_holders->IdentityHolder table.
+	ControlCampaigns                   string // Control-campaigns->Campaign table.
 	ControlControlImplementations      string // Control-control_implementations->ControlImplementation table.
 	ControlImplementation              string // ControlImplementation table.
 	ControlImplementationBlockedGroups string // ControlImplementation-blocked_groups->Group table.
@@ -214,8 +217,10 @@ type SchemaConfig struct {
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
+	RemediationControls                string // Remediation-controls->Control table.
 	Review                             string // Review table.
 	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
+	ReviewControls                     string // Review-controls->Control table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.

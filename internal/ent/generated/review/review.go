@@ -198,13 +198,11 @@ const (
 	RemediationsInverseTable = "remediations"
 	// RemediationsColumn is the table column denoting the remediations relation/edge.
 	RemediationsColumn = "review_remediations"
-	// ControlsTable is the table that holds the controls relation/edge.
-	ControlsTable = "controls"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "review_controls"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// ControlsColumn is the table column denoting the controls relation/edge.
-	ControlsColumn = "review_controls"
 	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
 	SubcontrolsTable = "subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
@@ -323,6 +321,9 @@ var (
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"review_id", "action_plan_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"review_id", "control_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -873,7 +874,7 @@ func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
 	)
 }
 func newSubcontrolsStep() *sqlgraph.Step {

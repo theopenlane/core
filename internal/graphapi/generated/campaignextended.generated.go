@@ -162,6 +162,8 @@ func (ec *executionContext) fieldContext_CampaignCreateWithTargetsPayload_campai
 				return ec.fieldContext_Campaign_groups(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Campaign_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Campaign_controls(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
@@ -398,6 +400,8 @@ func (ec *executionContext) fieldContext_CampaignLaunchPayload_campaign(_ contex
 				return ec.fieldContext_Campaign_groups(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Campaign_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Campaign_controls(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":
@@ -607,6 +611,8 @@ func (ec *executionContext) fieldContext_CampaignTestEmailPayload_campaign(_ con
 				return ec.fieldContext_Campaign_groups(ctx, field)
 			case "identityHolders":
 				return ec.fieldContext_Campaign_identityHolders(ctx, field)
+			case "controls":
+				return ec.fieldContext_Campaign_controls(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
 			case "hasPendingWorkflow":

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -58,6 +59,7 @@ type IdentityHolderQuery struct {
 	withAssets                   *AssetQuery
 	withEntities                 *EntityQuery
 	withDirectoryAccounts        *DirectoryAccountQuery
+	withControls                 *ControlQuery
 	withPlatforms                *PlatformQuery
 	withCampaigns                *CampaignQuery
 	withTasks                    *TaskQuery
@@ -77,6 +79,7 @@ type IdentityHolderQuery struct {
 	withNamedAssets              map[string]*AssetQuery
 	withNamedEntities            map[string]*EntityQuery
 	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
+	withNamedControls            map[string]*ControlQuery
 	withNamedPlatforms           map[string]*PlatformQuery
 	withNamedCampaigns           map[string]*CampaignQuery
 	withNamedTasks               map[string]*TaskQuery
@@ -495,6 +498,31 @@ func (_q *IdentityHolderQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 	return query
 }
 
+// QueryControls chains the current query on the "controls" edge.
+func (_q *IdentityHolderQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.ControlsTable, identityholder.ControlsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlIdentityHolders
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatforms chains the current query on the "platforms" edge.
 func (_q *IdentityHolderQuery) QueryPlatforms() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -902,6 +930,7 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withAssets:              _q.withAssets.Clone(),
 		withEntities:            _q.withEntities.Clone(),
 		withDirectoryAccounts:   _q.withDirectoryAccounts.Clone(),
+		withControls:            _q.withControls.Clone(),
 		withPlatforms:           _q.withPlatforms.Clone(),
 		withCampaigns:           _q.withCampaigns.Clone(),
 		withTasks:               _q.withTasks.Clone(),
@@ -1082,6 +1111,17 @@ func (_q *IdentityHolderQuery) WithDirectoryAccounts(opts ...func(*DirectoryAcco
 	return _q
 }
 
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithControls(opts ...func(*ControlQuery)) *IdentityHolderQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControls = query
+	return _q
+}
+
 // WithPlatforms tells the query-builder to eager-load the nodes that are connected to
 // the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithPlatforms(opts ...func(*PlatformQuery)) *IdentityHolderQuery {
@@ -1254,7 +1294,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1270,6 +1310,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withAssets != nil,
 			_q.withEntities != nil,
 			_q.withDirectoryAccounts != nil,
+			_q.withControls != nil,
 			_q.withPlatforms != nil,
 			_q.withCampaigns != nil,
 			_q.withTasks != nil,
@@ -1406,6 +1447,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.Controls = []*Control{} },
+			func(n *IdentityHolder, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatforms; query != nil {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *IdentityHolder) { n.Edges.Platforms = []*Platform{} },
@@ -1523,6 +1571,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedDirectoryAccounts(name) },
 			func(n *IdentityHolder, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedControls(name) },
+			func(n *IdentityHolder, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2158,6 +2213,68 @@ func (_q *IdentityHolderQuery) loadDirectoryAccounts(ctx context.Context, query 
 			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (_q *IdentityHolderQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Control)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IdentityHolder)
+	nids := make(map[string]map[*IdentityHolder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(identityholder.ControlsTable)
+		joinT.Schema(_q.schemaConfig.ControlIdentityHolders)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(identityholder.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(identityholder.ControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(identityholder.ControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IdentityHolder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -2805,6 +2922,20 @@ func (_q *IdentityHolderQuery) WithNamedDirectoryAccounts(name string, opts ...f
 		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
 	}
 	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *IdentityHolderQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
+	}
+	_q.withNamedControls[name] = query
 	return _q
 }
 

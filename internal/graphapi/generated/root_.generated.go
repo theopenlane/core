@@ -474,6 +474,7 @@ type ComplexityRoot struct {
 		CampaignType            func(childComplexity int) int
 		CompletedAt             func(childComplexity int) int
 		Contacts                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Description             func(childComplexity int) int
@@ -695,6 +696,7 @@ type ComplexityRoot struct {
 		Assets                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AuditorReferenceID         func(childComplexity int) int
 		BlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Campaigns                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		Category                   func(childComplexity int) int
 		CategoryID                 func(childComplexity int) int
 		Comments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
@@ -716,6 +718,7 @@ type ComplexityRoot struct {
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment                func(childComplexity int) int
 		EnvironmentID              func(childComplexity int) int
 		EnvironmentName            func(childComplexity int) int
@@ -727,6 +730,7 @@ type ComplexityRoot struct {
 		HasPendingWorkflow         func(childComplexity int) int
 		HasWorkflowHistory         func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		IdentityHolders            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		ImplementationStatus       func(childComplexity int) int
@@ -745,8 +749,10 @@ type ComplexityRoot struct {
 		ReferenceFrameworkRevision func(childComplexity int) int
 		ReferenceID                func(childComplexity int) int
 		References                 func(childComplexity int) int
+		Remediations               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		ResponsibleParty           func(childComplexity int) int
 		ResponsiblePartyID         func(childComplexity int) int
+		Reviews                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
@@ -1690,6 +1696,7 @@ type ComplexityRoot struct {
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
 		ContractStartDate                     func(childComplexity int) int
+		Controls                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
 		Description                           func(childComplexity int) int
@@ -2569,6 +2576,7 @@ type ComplexityRoot struct {
 		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Department              func(childComplexity int) int
@@ -9386,6 +9394,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Campaign.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 
+	case "Campaign.controls":
+		if e.ComplexityRoot.Campaign.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Campaign.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
 	case "Campaign.createdAt":
 		if e.ComplexityRoot.Campaign.CreatedAt == nil {
 			break
@@ -10467,6 +10487,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Control.campaigns":
+		if e.ComplexityRoot.Control.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Control_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Control.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
 	case "Control.category":
 		if e.ComplexityRoot.Control.Category == nil {
 			break
@@ -10644,6 +10676,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Control.entities":
+		if e.ComplexityRoot.Control.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Control_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Control.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
 	case "Control.environment":
 		if e.ComplexityRoot.Control.Environment == nil {
 			break
@@ -10730,6 +10774,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.ID(childComplexity), true
+
+	case "Control.identityHolders":
+		if e.ComplexityRoot.Control.IdentityHolders == nil {
+			break
+		}
+
+		args, err := ec.field_Control_identityHolders_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Control.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
 
 	case "Control.implementationDescription":
 		if e.ComplexityRoot.Control.ImplementationDescription == nil {
@@ -10882,6 +10938,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Control.References(childComplexity), true
 
+	case "Control.remediations":
+		if e.ComplexityRoot.Control.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Control_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Control.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
 	case "Control.responsibleParty":
 		if e.ComplexityRoot.Control.ResponsibleParty == nil {
 			break
@@ -10895,6 +10963,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.ResponsiblePartyID(childComplexity), true
+
+	case "Control.reviews":
+		if e.ComplexityRoot.Control.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Control_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Control.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
 
 	case "Control.risks":
 		if e.ComplexityRoot.Control.Risks == nil {
@@ -15212,6 +15292,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.ContractStartDate(childComplexity), true
+
+	case "Entity.controls":
+		if e.ComplexityRoot.Entity.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Entity.createdAt":
 		if e.ComplexityRoot.Entity.CreatedAt == nil {
@@ -19864,6 +19956,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+
+	case "IdentityHolder.controls":
+		if e.ComplexityRoot.IdentityHolder.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IdentityHolder.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "IdentityHolder.createdAt":
 		if e.ComplexityRoot.IdentityHolder.CreatedAt == nil {
@@ -58019,6 +58123,37 @@ type Campaign implements Node {
     """
     where: IdentityHolderWhereInput
   ): IdentityHolderConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -59162,6 +59297,11 @@ input CampaignWhereInput {
   """
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -60350,6 +60490,161 @@ type Control implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  identityHolders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IdentityHolders returned from the connection.
+    """
+    orderBy: [IdentityHolderOrder!]
+
+    """
+    Filtering options for IdentityHolders returned from the connection.
+    """
+    where: IdentityHolderWhereInput
+  ): IdentityHolderConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
   findings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62774,6 +63069,31 @@ input ControlWhereInput {
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
   """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  identity_holders edge predicates
+  """
+  hasIdentityHolders: Boolean
+  hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
   findings edge predicates
   """
   hasFindings: Boolean
@@ -63350,6 +63670,7 @@ input CreateCampaignInput {
   userIDs: [ID!]
   groupIDs: [ID!]
   identityHolderIDs: [ID!]
+  controlIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -63649,6 +63970,11 @@ input CreateControlInput {
   platformIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  entityIDs: [ID!]
+  identityHolderIDs: [ID!]
+  campaignIDs: [ID!]
+  remediationIDs: [ID!]
+  reviewIDs: [ID!]
   findingIDs: [ID!]
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
@@ -64524,6 +64850,7 @@ input CreateEntityInput {
   authMethodIDs: [ID!]
   employerIdentityHolderIDs: [ID!]
   identityHolderIDs: [ID!]
+  controlIDs: [ID!]
   platformIDs: [ID!]
   outOfScopePlatformIDs: [ID!]
   sourcePlatformIDs: [ID!]
@@ -65317,6 +65644,7 @@ input CreateIdentityHolderInput {
   assetIDs: [ID!]
   entityIDs: [ID!]
   directoryAccountIDs: [ID!]
+  controlIDs: [ID!]
   platformIDs: [ID!]
   campaignIDs: [ID!]
   taskIDs: [ID!]
@@ -75224,6 +75552,37 @@ type Entity implements Node {
     """
     where: IdentityHolderWhereInput
   ): IdentityHolderConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -76609,6 +76968,11 @@ input EntityWhereInput {
   """
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
   """
   platforms edge predicates
   """
@@ -84848,6 +85212,37 @@ type IdentityHolder implements Node {
     """
     where: DirectoryAccountWhereInput
   ): DirectoryAccountConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
   platforms(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85739,6 +86134,11 @@ input IdentityHolderWhereInput {
   """
   hasDirectoryAccounts: Boolean
   hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
   """
   platforms edge predicates
   """
@@ -121863,6 +122263,9 @@ input UpdateCampaignInput {
   addIdentityHolderIDs: [ID!]
   removeIdentityHolderIDs: [ID!]
   clearIdentityHolders: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -122290,6 +122693,21 @@ input UpdateControlInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addIdentityHolderIDs: [ID!]
+  removeIdentityHolderIDs: [ID!]
+  clearIdentityHolders: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
@@ -123421,6 +123839,9 @@ input UpdateEntityInput {
   addIdentityHolderIDs: [ID!]
   removeIdentityHolderIDs: [ID!]
   clearIdentityHolders: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean
@@ -124587,6 +125008,9 @@ input UpdateIdentityHolderInput {
   addDirectoryAccountIDs: [ID!]
   removeDirectoryAccountIDs: [ID!]
   clearDirectoryAccounts: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
   addPlatformIDs: [ID!]
   removePlatformIDs: [ID!]
   clearPlatforms: Boolean

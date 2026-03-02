@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -1120,6 +1121,21 @@ func (_c *EntityCreate) AddIdentityHolders(v ...*IdentityHolder) *EntityCreate {
 	return _c.AddIdentityHolderIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_c *EntityCreate) AddControlIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_c *EntityCreate) AddControls(v ...*Control) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_c *EntityCreate) AddPlatformIDs(ids ...string) *EntityCreate {
 	_c.mutation.AddPlatformIDs(ids...)
@@ -2004,6 +2020,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.IdentityHolderEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ControlsTable,
+			Columns: entity.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ControlEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
