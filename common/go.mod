@@ -21,7 +21,7 @@ require (
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.11.6
+	github.com/theopenlane/core v1.11.7
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.22.6
 	github.com/theopenlane/httpsling v0.3.0
