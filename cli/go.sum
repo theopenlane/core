@@ -214,8 +214,8 @@ github.com/theopenlane/go-client v0.8.5 h1:U14+tvR7BqrmGoUyf1uXEoJR+ixcW1XoGTYJq
 github.com/theopenlane/go-client v0.8.5/go.mod h1:jx0AuE1ePg/PPraMRHCnUwMGU8NFmD0hv6xLht5D7A4=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.25.0 h1:wcjyR+whLWO6nQWP3jTJ2XR/lH+wY13q8Jl16YJowr8=
-github.com/theopenlane/iam v0.25.0/go.mod h1:eXxlQGjTxRySRxlezxZq0kr84rEFHbyFIYOon8FYI8Y=
+github.com/theopenlane/iam v0.26.0 h1:rSZXGUa1Wa0dHYDsluXVw2HVxYdZp+1HE+E5zM8mLSM=
+github.com/theopenlane/iam v0.26.0/go.mod h1:7vdhKQc60CQXLFUT0u/+KZ81lsyeATh7UW3jSBDcuAA=
 github.com/theopenlane/utils v0.7.0 h1:tSN9PBC8Ywn2As3TDW/1TAfWsVsodrccec40oAhiZgo=
 github.com/theopenlane/utils v0.7.0/go.mod h1:7U9CDoVzCAFWw/JygR5ZhCKGwhHBnuJpK3Jgh1m59+w=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
