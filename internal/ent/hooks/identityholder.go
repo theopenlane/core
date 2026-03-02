@@ -18,31 +18,15 @@ func HookIdentityHolderFiles() ent.Hook {
 			if len(fileIDs) > 0 {
 				var err error
 
-				ctx, err = checkIdentityHolderFiles(ctx, m)
+				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "identityHolderFiles")
 				if err != nil {
 					return nil, err
 				}
+
+				m.AddFileIDs(fileIDs...)
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-func checkIdentityHolderFiles(ctx context.Context, m *generated.IdentityHolderMutation) (context.Context, error) {
-	key := "identityHolderFiles"
-
-	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
-	if len(files) == 0 {
-		return ctx, nil
-	}
-
-	fileIDs := make([]string, len(files))
-	for i, f := range files {
-		fileIDs[i] = f.ID
-	}
-
-	m.AddFileIDs(fileIDs...)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }

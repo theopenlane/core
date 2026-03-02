@@ -22,33 +22,17 @@ func HookEntityFiles() ent.Hook {
 			if len(fileIDs) > 0 {
 				var err error
 
-				ctx, err = checkEntityFiles(ctx, m)
+				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "entityFiles")
 				if err != nil {
 					return nil, err
 				}
+
+				m.AddFileIDs(fileIDs...)
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-func checkEntityFiles(ctx context.Context, m *generated.EntityMutation) (context.Context, error) {
-	key := "entityFiles"
-
-	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
-	if len(files) == 0 {
-		return ctx, nil
-	}
-
-	fileIDs := make([]string, len(files))
-	for i, f := range files {
-		fileIDs[i] = f.ID
-	}
-
-	m.AddFileIDs(fileIDs...)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }
 
 // HookEntityCreate runs on entity mutations to set default values that are not provided
