@@ -103,7 +103,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the narrative when a program is associated to the narrative
 			newObjectOwnedMixin[generated.Narrative](n,
-				withParents(Organization{}, Program{}),
+				withParents(Program{}),
 				withOrganizationOwner(false),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
