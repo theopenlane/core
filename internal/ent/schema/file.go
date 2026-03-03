@@ -142,9 +142,10 @@ func (f File) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
+					// used to create parent tuples for the file, ensure these are added tot he fga model as well
 					Organization{}, Program{}, Platform{}, Scan{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
-					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}), // used to create parent tuples for the file
+					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}, Contact{}),
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
 			),
