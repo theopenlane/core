@@ -143,8 +143,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 }
 
 // orgHookCreateServiceOnlyFunc is a HookFunc that sets the owner on create mutations
-// and creates a parent relation tuple (not editor). This is for system-driven objects
-// where only services should be able to create/edit/delete, but users can view through org membership.
+// but does not add the organization as an editor, because for service-only objects, org membership should grant view access but not edit access
 var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -164,27 +163,7 @@ var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				return nil, err
 			}
 
-			retVal, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			// add organization owner parent relation to the object (not editor)
-			// this allows users to view through org membership
-			id, err := hooks.GetObjectIDFromEntValue(retVal)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to get object id from ent value")
-
-				return nil, err
-			}
-
-			if err := addOrganizationOwnerParentRelation(ctx, m, id); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to add organization owner parent relation")
-
-				return nil, err
-			}
-
-			return retVal, err
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
 }
