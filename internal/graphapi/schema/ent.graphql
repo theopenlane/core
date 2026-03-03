@@ -12729,6 +12729,7 @@ input CreateOnboardingInput {
   details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
   """
   compliance: Map
+  demoRequested: Boolean
   organizationID: ID
 }
 """
@@ -39881,6 +39882,7 @@ type Onboarding implements Node {
   details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
   """
   compliance: Map
+  demoRequested: Boolean
   organization: Organization
 }
 """
@@ -39938,6 +39940,13 @@ input OnboardingWhereInput {
   companyNameHasSuffix: String
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  demo_requested field predicates
+  """
+  demoRequested: Boolean
+  demoRequestedNEQ: Boolean
+  demoRequestedIsNil: Boolean
+  demoRequestedNotNil: Boolean
   """
   organization edge predicates
   """

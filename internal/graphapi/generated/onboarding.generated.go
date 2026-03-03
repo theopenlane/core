@@ -65,6 +65,8 @@ func (ec *executionContext) fieldContext_OnboardingCreatePayload_onboarding(_ co
 				return ec.fieldContext_Onboarding_userDetails(ctx, field)
 			case "compliance":
 				return ec.fieldContext_Onboarding_compliance(ctx, field)
+			case "demoRequested":
+				return ec.fieldContext_Onboarding_demoRequested(ctx, field)
 			case "organization":
 				return ec.fieldContext_Onboarding_organization(ctx, field)
 			}

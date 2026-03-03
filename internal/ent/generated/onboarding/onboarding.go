@@ -29,6 +29,8 @@ const (
 	FieldUserDetails = "user_details"
 	// FieldCompliance holds the string denoting the compliance field in the database.
 	FieldCompliance = "compliance"
+	// FieldDemoRequested holds the string denoting the demo_requested field in the database.
+	FieldDemoRequested = "demo_requested"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// Table holds the table name of the onboarding in the database.
@@ -53,6 +55,7 @@ var Columns = []string{
 	FieldCompanyDetails,
 	FieldUserDetails,
 	FieldCompliance,
+	FieldDemoRequested,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -76,6 +79,8 @@ var (
 	Policy       ent.Policy
 	// OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
 	OrganizationIDValidator func(string) error
+	// DefaultDemoRequested holds the default value on creation for the "demo_requested" field.
+	DefaultDemoRequested bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -106,6 +111,11 @@ func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
 // ByCompanyName orders the results by the company_name field.
 func ByCompanyName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompanyName, opts...).ToFunc()
+}
+
+// ByDemoRequested orders the results by the demo_requested field.
+func ByDemoRequested(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDemoRequested, opts...).ToFunc()
 }
 
 // ByOrganizationField orders the results by organization field.

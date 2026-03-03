@@ -140,6 +140,26 @@ func (_u *OnboardingUpdate) ClearCompliance() *OnboardingUpdate {
 	return _u
 }
 
+// SetDemoRequested sets the "demo_requested" field.
+func (_u *OnboardingUpdate) SetDemoRequested(v bool) *OnboardingUpdate {
+	_u.mutation.SetDemoRequested(v)
+	return _u
+}
+
+// SetNillableDemoRequested sets the "demo_requested" field if the given value is not nil.
+func (_u *OnboardingUpdate) SetNillableDemoRequested(v *bool) *OnboardingUpdate {
+	if v != nil {
+		_u.SetDemoRequested(*v)
+	}
+	return _u
+}
+
+// ClearDemoRequested clears the value of the "demo_requested" field.
+func (_u *OnboardingUpdate) ClearDemoRequested() *OnboardingUpdate {
+	_u.mutation.ClearDemoRequested()
+	return _u
+}
+
 // Mutation returns the OnboardingMutation object of the builder.
 func (_u *OnboardingUpdate) Mutation() *OnboardingMutation {
 	return _u.mutation
@@ -230,6 +250,12 @@ func (_u *OnboardingUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.ComplianceCleared() {
 		_spec.ClearField(onboarding.FieldCompliance, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.DemoRequested(); ok {
+		_spec.SetField(onboarding.FieldDemoRequested, field.TypeBool, value)
+	}
+	if _u.mutation.DemoRequestedCleared() {
+		_spec.ClearField(onboarding.FieldDemoRequested, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.Onboarding
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -363,6 +389,26 @@ func (_u *OnboardingUpdateOne) ClearCompliance() *OnboardingUpdateOne {
 	return _u
 }
 
+// SetDemoRequested sets the "demo_requested" field.
+func (_u *OnboardingUpdateOne) SetDemoRequested(v bool) *OnboardingUpdateOne {
+	_u.mutation.SetDemoRequested(v)
+	return _u
+}
+
+// SetNillableDemoRequested sets the "demo_requested" field if the given value is not nil.
+func (_u *OnboardingUpdateOne) SetNillableDemoRequested(v *bool) *OnboardingUpdateOne {
+	if v != nil {
+		_u.SetDemoRequested(*v)
+	}
+	return _u
+}
+
+// ClearDemoRequested clears the value of the "demo_requested" field.
+func (_u *OnboardingUpdateOne) ClearDemoRequested() *OnboardingUpdateOne {
+	_u.mutation.ClearDemoRequested()
+	return _u
+}
+
 // Mutation returns the OnboardingMutation object of the builder.
 func (_u *OnboardingUpdateOne) Mutation() *OnboardingMutation {
 	return _u.mutation
@@ -483,6 +529,12 @@ func (_u *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding, 
 	}
 	if _u.mutation.ComplianceCleared() {
 		_spec.ClearField(onboarding.FieldCompliance, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.DemoRequested(); ok {
+		_spec.SetField(onboarding.FieldDemoRequested, field.TypeBool, value)
+	}
+	if _u.mutation.DemoRequestedCleared() {
+		_spec.ClearField(onboarding.FieldDemoRequested, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.Onboarding
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

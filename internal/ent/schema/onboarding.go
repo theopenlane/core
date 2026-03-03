@@ -66,6 +66,9 @@ func (Onboarding) Fields() []ent.Field {
 		field.JSON("compliance", map[string]any{}).
 			Comment("details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc").
 			Optional(),
+		field.Bool("demo_requested").
+			Default(false).
+			Optional(),
 	}
 }
 

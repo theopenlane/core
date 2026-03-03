@@ -4099,6 +4099,7 @@ type ComplexityRoot struct {
 		CompanyDetails func(childComplexity int) int
 		CompanyName    func(childComplexity int) int
 		Compliance     func(childComplexity int) int
+		DemoRequested  func(childComplexity int) int
 		Domains        func(childComplexity int) int
 		ID             func(childComplexity int) int
 		Organization   func(childComplexity int) int
@@ -31363,6 +31364,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Onboarding.Compliance(childComplexity), true
+
+	case "Onboarding.demoRequested":
+		if e.ComplexityRoot.Onboarding.DemoRequested == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Onboarding.DemoRequested(childComplexity), true
 
 	case "Onboarding.domains":
 		if e.ComplexityRoot.Onboarding.Domains == nil {
@@ -66537,6 +66545,7 @@ input CreateOnboardingInput {
   details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
   """
   compliance: Map
+  demoRequested: Boolean
   organizationID: ID
 }
 """
@@ -93689,6 +93698,7 @@ type Onboarding implements Node {
   details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
   """
   compliance: Map
+  demoRequested: Boolean
   organization: Organization
 }
 """
@@ -93746,6 +93756,13 @@ input OnboardingWhereInput {
   companyNameHasSuffix: String
   companyNameEqualFold: String
   companyNameContainsFold: String
+  """
+  demo_requested field predicates
+  """
+  demoRequested: Boolean
+  demoRequestedNEQ: Boolean
+  demoRequestedIsNil: Boolean
+  demoRequestedNotNil: Boolean
   """
   organization edge predicates
   """

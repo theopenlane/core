@@ -87,6 +87,11 @@ func CompanyName(v string) predicate.Onboarding {
 	return predicate.Onboarding(sql.FieldEQ(FieldCompanyName, v))
 }
 
+// DemoRequested applies equality check predicate on the "demo_requested" field. It's identical to DemoRequestedEQ.
+func DemoRequested(v bool) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEQ(FieldDemoRequested, v))
+}
+
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
 func DeletedAtEQ(v time.Time) predicate.Onboarding {
 	return predicate.Onboarding(sql.FieldEQ(FieldDeletedAt, v))
@@ -390,6 +395,26 @@ func ComplianceIsNil() predicate.Onboarding {
 // ComplianceNotNil applies the NotNil predicate on the "compliance" field.
 func ComplianceNotNil() predicate.Onboarding {
 	return predicate.Onboarding(sql.FieldNotNull(FieldCompliance))
+}
+
+// DemoRequestedEQ applies the EQ predicate on the "demo_requested" field.
+func DemoRequestedEQ(v bool) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldEQ(FieldDemoRequested, v))
+}
+
+// DemoRequestedNEQ applies the NEQ predicate on the "demo_requested" field.
+func DemoRequestedNEQ(v bool) predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNEQ(FieldDemoRequested, v))
+}
+
+// DemoRequestedIsNil applies the IsNil predicate on the "demo_requested" field.
+func DemoRequestedIsNil() predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldIsNull(FieldDemoRequested))
+}
+
+// DemoRequestedNotNil applies the NotNil predicate on the "demo_requested" field.
+func DemoRequestedNotNil() predicate.Onboarding {
+	return predicate.Onboarding(sql.FieldNotNull(FieldDemoRequested))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.
