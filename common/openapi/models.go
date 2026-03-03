@@ -1696,7 +1696,6 @@ type SSOCallbackRequest struct {
 // Validate ensures the required fields are set on the SSOCallbackRequest
 func (r *SSOCallbackRequest) Validate() error {
 	r.Code = strings.TrimSpace(r.Code)
-	r.State = strings.TrimSpace(r.State)
 	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
 
 	switch {
@@ -1729,7 +1728,6 @@ type SSOTokenCallbackRequest struct {
 // Validate ensures required fields are set on the SSOTokenCallbackRequest
 func (r *SSOTokenCallbackRequest) Validate() error {
 	r.Code = strings.TrimSpace(r.Code)
-	r.State = strings.TrimSpace(r.State)
 
 	switch {
 	case r.Code == "":
@@ -2153,8 +2151,6 @@ type IntegrationToken struct {
 	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)"`
 	// AccessToken is the accessToken value.
 	AccessToken string `json:"accessToken" description:"OAuth access token"`
-	// RefreshToken is the refreshToken value.
-	RefreshToken string `json:"refreshToken,omitempty" description:"OAuth refresh token"`
 	// ExpiresAt is the expiresAt value.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty" description:"Token expiration time"`
 	// ProviderUserID is the providerUserId value.
@@ -2199,8 +2195,7 @@ func (r *IntegrationTokenResponse) ExampleResponse() any {
 		Reply:    rout.Reply{Success: true},
 		Provider: "github",
 		Token: &IntegrationToken{
-			AccessToken:  "ghr_example_token",
-			RefreshToken: "ghr_example_refresh_token",
+			AccessToken: "ghr_example_token",
 		},
 		ExpiresAt: &expiresAt,
 	}
@@ -2401,7 +2396,6 @@ type OAuthCallbackRequest struct {
 func (r *OAuthCallbackRequest) Validate() error {
 	r.Provider = strings.TrimSpace(strings.ToLower(r.Provider))
 	r.Code = strings.TrimSpace(r.Code)
-	r.State = strings.TrimSpace(r.State)
 
 	switch {
 	case r.Code == "":
@@ -2542,7 +2536,6 @@ type GitHubAppInstallCallbackRequest struct {
 func (r *GitHubAppInstallCallbackRequest) Validate() error {
 	r.InstallationID = strings.TrimSpace(r.InstallationID)
 	r.SetupAction = strings.TrimSpace(r.SetupAction)
-	r.State = strings.TrimSpace(r.State)
 
 	switch {
 	case r.InstallationID == "":

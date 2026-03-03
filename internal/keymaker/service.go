@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"maps"
-	"strings"
 	"time"
 
 	"github.com/theopenlane/core/common/integrations/types"
@@ -160,7 +159,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		return BeginResponse{}, fmt.Errorf("keymaker: begin auth: %w", err)
 	}
 
-	state := strings.TrimSpace(session.State())
+	state := session.State()
 	if state == "" {
 		return BeginResponse{}, integrations.ErrStateRequired
 	}
@@ -192,10 +191,10 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 
 // CompleteAuthorization finalizes an OAuth/OIDC transaction and persists the resulting credential
 func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest) (CompleteResult, error) {
-	if strings.TrimSpace(req.State) == "" {
+	if req.State == "" {
 		return CompleteResult{}, integrations.ErrStateRequired
 	}
-	if strings.TrimSpace(req.Code) == "" {
+	if req.Code == "" {
 		return CompleteResult{}, integrations.ErrAuthorizationCodeRequired
 	}
 

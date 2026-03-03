@@ -2,23 +2,19 @@ package handlers
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/url"
 
-	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -27,9 +23,7 @@ import (
 
 // GitHub App cookie names used during install callbacks
 const (
-	githubAppStateCookieName  = "githubapp_state"
-	githubAppOrgIDCookieName  = "githubapp_org_id"
-	githubAppUserIDCookieName = "githubapp_user_id"
+	githubAppStateCookieName = "githubapp_state"
 )
 
 // IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration
@@ -48,14 +42,12 @@ type IntegrationGitHubAppConfig struct {
 	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
 }
 
-// githubAppCredentialPayload captures persisted credential attributes for GitHub App integrations
-type githubAppCredentialPayload struct {
+// githubAppInstallationPayload captures GitHub App installation attributes persisted on the integration.
+type githubAppInstallationPayload struct {
 	// AppID is the GitHub App identifier
 	AppID string `json:"appId"`
 	// InstallationID is the installed GitHub App installation identifier
 	InstallationID string `json:"installationId"`
-	// PrivateKey is the PEM key used to mint app tokens
-	PrivateKey string `json:"privateKey"`
 }
 
 // githubAppProviderStatePatch captures provider state fields persisted on the integration record
@@ -94,6 +86,7 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	state, err := h.generateOAuthState(caller.OrganizationID, string(github.TypeGitHubApp))
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Msg("error generating github app state")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
@@ -103,10 +96,8 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	}
 
 	cfg := h.getOauthCookieConfig()
-	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
-		githubAppStateCookieName:  state,
-		githubAppOrgIDCookieName:  caller.OrganizationID,
-		githubAppUserIDCookieName: caller.SubjectID,
+	h.setOAuthCookies(ctx, cfg, map[string]string{
+		githubAppStateCookieName: state,
 	})
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
@@ -119,7 +110,7 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	return h.Success(ctx, out, openapiCtx)
 }
 
-// GitHubAppInstallCallback finalizes GitHub App installation and stores credentials
+// GitHubAppInstallCallback validates callback context and binds installation metadata to the integration.
 func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapiCtx.Operation, openapi.ExampleGitHubAppInstallCallbackRequest, openapi.ExampleGitHubAppInstallCallbackResponse, openapiCtx.Registry)
 	if err != nil {
@@ -140,25 +131,16 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	req := ctx.Request()
 	reqCtx := ctx.Request().Context()
 
+	user, err := auth.GetAuthenticatedUserFromContext(reqCtx)
+	if err != nil {
+		return h.Unauthorized(ctx, err, openapiCtx)
+	}
+
 	stateCookie, err := sessions.GetCookie(req, githubAppStateCookieName)
 	if err != nil || stateCookie.Value == "" || stateCookie.Value != in.State {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("github app state cookie mismatch")
 
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
-	}
-
-	orgCookie, err := sessions.GetCookie(req, githubAppOrgIDCookieName)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get githubapp_org_id cookie")
-
-		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
-	}
-
-	userCookie, err := sessions.GetCookie(req, githubAppUserIDCookieName)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get githubapp_user_id cookie")
-
-		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}
 
 	orgID, provider, err := parseStatePayload(in.State)
@@ -172,68 +154,28 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if orgCookie.Value != orgID {
-		logx.FromContext(reqCtx).Error().Str("cookieOrgID", orgCookie.Value).Str("stateOrgID", orgID).Msg("github app organization cookie mismatch")
+	if user.OrganizationID != orgID {
+		logx.FromContext(reqCtx).Error().Str("state_org_id", orgID).Str("user_org_id", user.OrganizationID).Msg("github app callback organization mismatch")
 
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
-	if userCookie.Value == "" {
-		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
-	}
+	installationPayload := githubAppInstallationPayload{AppID: h.IntegrationGitHubApp.AppID, InstallationID: in.InstallationID}
 
-	// Mirror integration_flow behavior: use cookie/state context to set the authenticated user.
-	ctx.SetRequest(ctx.Request().WithContext(auth.WithCaller(ctx.Request().Context(), &auth.Caller{
-		SubjectID:          userCookie.Value,
-		OrganizationID:     orgID,
-		OrganizationIDs:    []string{orgID},
-		AuthenticationType: auth.JWTAuthentication,
-	})))
-	reqCtx = ctx.Request().Context()
-
-	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-
-	credentialPayload := githubAppCredentialPayload{
-		AppID:          h.IntegrationGitHubApp.AppID,
-		InstallationID: in.InstallationID,
-		PrivateKey:     h.IntegrationGitHubApp.PrivateKey,
-	}
-	credentialAttrs, err := jsonx.ToMap(credentialPayload)
+	integrationRecord, err := h.IntegrationStore.EnsureIntegration(reqCtx, orgID, github.TypeGitHubApp)
 	if err != nil {
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	integrationRecord, err := h.IntegrationStore.EnsureIntegration(systemCtx, orgID, github.TypeGitHubApp)
-	if err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure github app integration")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to ensure github app integration")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.persistCredentialConfiguration(systemCtx, orgID, github.TypeGitHubApp, credentialAttrs); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to persist github app credentials")
+	if err := h.updateGitHubAppIntegrationMetadata(reqCtx, integrationRecord, installationPayload); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to update github app integration metadata")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.updateGitHubAppIntegrationMetadata(systemCtx, orgID, credentialPayload); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to update github app integration metadata")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	if err := h.runIntegrationHealthCheck(systemCtx, orgID, github.TypeGitHubApp); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("github app health check failed")
-		switch {
-		case errors.Is(err, errIntegrationOperationsNotConfigured),
-			errors.Is(err, errIntegrationRegistryNotConfigured):
-			return h.InternalServerError(ctx, err, openapiCtx)
-		default:
-			return h.BadRequest(ctx, err, openapiCtx)
-		}
-	}
-
-	h.queueGitHubVulnerabilityBackfill(systemCtx, orgID, integrationRecord.ID)
+	h.queueGitHubVulnerabilityBackfill(reqCtx, orgID, integrationRecord.ID)
 
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
@@ -287,13 +229,13 @@ func (h *Handler) githubAppInstallURL(state string) (string, error) {
 	return u.String(), nil
 }
 
-// updateGitHubAppIntegrationMetadata stores the GitHub App installation metadata on the integration record
-func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID string, payload githubAppCredentialPayload) error {
+// updateGitHubAppIntegrationMetadata merges GitHub App installation metadata into provider state.
+func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integrationRecord *ent.Integration, payload githubAppInstallationPayload) error {
 	if h.DBClient == nil {
 		return errDBClientNotConfigured
 	}
 
-	if payload.AppID == "" || payload.InstallationID == "" {
+	if integrationRecord == nil || integrationRecord.ID == "" || payload.AppID == "" || payload.InstallationID == "" {
 		return ErrInvalidStateFormat
 	}
 
@@ -305,17 +247,13 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, orgID 
 		return ErrInvalidStateFormat
 	}
 
-	statePayload := state.IntegrationProviderState{}
-	if _, err := statePayload.MergeProviderData(string(github.TypeGitHubApp), statePatch); err != nil {
+	nextState := integrationRecord.ProviderState
+	if _, err := nextState.MergeProviderData(string(github.TypeGitHubApp), statePatch); err != nil {
 		return ErrInvalidStateFormat
 	}
 
-	return h.DBClient.Integration.Update().
-		Where(
-			integration.OwnerIDEQ(orgID),
-			integration.KindEQ(string(github.TypeGitHubApp)),
-		).
-		SetProviderState(statePayload).
+	return h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
+		SetProviderState(nextState).
 		Exec(ctx)
 }
 
@@ -328,6 +266,7 @@ func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID str
 	org, err := h.DBClient.Organization.Query().Where(organization.ID(orgID)).Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("organization_id", orgID).Msg("failed to resolve openlane organization name")
+
 		return orgID
 	}
 
@@ -342,31 +281,6 @@ func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID str
 	return orgID
 }
 
-const defaultHealthOperation types.OperationName = "health.default"
-
-// runIntegrationHealthCheck performs a health check operation for the given provider if supported
-func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, provider types.ProviderType) error {
-	if !h.providerHasHealthOperation(provider) {
-		return nil
-	}
-
-	result, err := h.IntegrationOperations.Run(ctx, types.OperationRequest{
-		OrgID:    orgID,
-		Provider: provider,
-		Name:     defaultHealthOperation,
-		Force:    true,
-	})
-	if err != nil {
-		return err
-	}
-
-	if result.Status != types.OperationStatusOK {
-		return ErrProviderHealthCheckFailed
-	}
-
-	return nil
-}
-
 // queueGitHubVulnerabilityBackfill schedules an initial vulnerability collection run after app installation
 func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, integrationID string) {
 	if orgID == "" || integrationID == "" {
@@ -375,10 +289,12 @@ func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, i
 
 	if h.WorkflowEngine == nil {
 		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: workflow engine not configured")
+
 		return
 	}
 	if h.Gala == nil {
 		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: gala runtime not configured")
+
 		return
 	}
 
@@ -393,20 +309,4 @@ func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, i
 	}); err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Str("integration_id", integrationID).Msg("failed to queue github vulnerability backfill operation")
 	}
-}
-
-// providerHasHealthOperation checks if the provider has a health check operation defined
-func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
-	return h.providerHasOperation(provider, defaultHealthOperation)
-}
-
-// providerHasOperation checks whether a provider publishes a specific operation descriptor
-func (h *Handler) providerHasOperation(provider types.ProviderType, operation types.OperationName) bool {
-	if h.IntegrationRegistry == nil {
-		return false
-	}
-
-	return lo.ContainsBy(h.IntegrationRegistry.OperationDescriptors(provider), func(descriptor types.OperationDescriptor) bool {
-		return descriptor.Name == operation
-	})
 }

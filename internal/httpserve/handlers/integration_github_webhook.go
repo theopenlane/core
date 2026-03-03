@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -82,6 +83,8 @@ type githubWebhookPersistedNotification struct {
 }
 
 var (
+	errGitHubAppIntegrationAmbiguous = errors.New("multiple github app integrations found for installation")
+
 	githubAppWebhookReceivedCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "openlane_githubapp_webhook_received_total",
@@ -247,6 +250,8 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 
 	integrationRecord, err := h.findGitHubAppIntegrationByInstallationID(req.Context(), installationID)
 	if err != nil {
+		logx.FromContext(req.Context()).Error().Err(err).Str("installation_id", installationID).Msg("failed to resolve github app integration by installation id")
+
 		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "integration_lookup_failed")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -506,7 +511,7 @@ func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, 
 	record, err := query.Only(ctx)
 	if err != nil {
 		if ent.IsNotSingular(err) {
-			return query.First(ctx)
+			return nil, errGitHubAppIntegrationAmbiguous
 		}
 
 		if ent.IsNotFound(err) {

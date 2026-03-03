@@ -32,6 +32,8 @@ var (
 	ErrAuthorizationStateNotFound = errors.New("integrations: authorization state not found")
 	// ErrAuthorizationStateExpired indicates the stored session has expired.
 	ErrAuthorizationStateExpired = errors.New("integrations: authorization state expired")
+	// ErrAuthorizationStateStoreFull indicates the in-memory authorization state store is at capacity.
+	ErrAuthorizationStateStoreFull = errors.New("integrations: authorization state store full")
 	// ErrAuthSessionInvalid indicates the stored auth session reference is invalid.
 	ErrAuthSessionInvalid = errors.New("integrations: auth session invalid")
 )

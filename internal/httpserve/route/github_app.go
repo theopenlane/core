@@ -32,8 +32,8 @@ func registerGitHubAppCallbackHandler(router *Router) error {
 		Description: "Handle GitHub App installation callback",
 		Tags:        []string{"integrations"},
 		OperationID: "GitHubAppInstallCallback",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.GitHubAppInstallCallback,
 	}
 

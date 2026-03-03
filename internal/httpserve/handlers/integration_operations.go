@@ -18,6 +18,8 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+const defaultHealthOperation types.OperationName = "health.default"
+
 // integrationOperationQueueDetails captures queue response details for integration operation requests
 type integrationOperationQueueDetails struct {
 	// RunID is the queued integration run identifier

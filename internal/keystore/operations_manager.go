@@ -215,13 +215,16 @@ func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req typ
 // resolveCredential retrieves or refreshes the credential based on the request flags
 func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (types.CredentialPayload, error) {
 	if req.IntegrationID != "" {
-		if source, ok := m.source.(IntegrationCredentialSource); ok {
-			if req.Force {
-				return source.MintForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
-			}
-
-			return source.GetForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+		source, ok := m.source.(IntegrationCredentialSource)
+		if !ok {
+			return types.CredentialPayload{}, ErrIntegrationScopedSourceRequired
 		}
+
+		if req.Force {
+			return source.MintForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+		}
+
+		return source.GetForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
 	}
 
 	if req.Force {

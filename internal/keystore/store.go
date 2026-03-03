@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"context"
+	"errors"
 	"maps"
 	"time"
 
@@ -57,8 +58,6 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 		return types.CredentialPayload{}, err
 	}
 
-	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
-
 	return s.saveCredentialForIntegrationRecord(systemCtx, orgID, payload, integrationRecord)
 }
 
@@ -78,8 +77,6 @@ func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, 
 		logx.FromContext(systemCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to load integration record for credential save")
 		return types.CredentialPayload{}, err
 	}
-
-	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
 
 	return s.saveCredentialForIntegrationRecord(systemCtx, orgID, payload, integrationRecord)
 }
@@ -117,28 +114,40 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 		return types.CredentialPayload{}, err
 	}
 
-	return s.loadCredentialFromIntegrationRecord(ctx, provider, integrationRecord)
+	return s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
 }
 
 // LoadCredentialForIntegration retrieves the credential payload for a specific integration record.
 func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
-	integrationRecord, err := s.db.Integration.Query().
-		Where(
-			integration.IDEQ(integrationID),
-			integration.OwnerIDEQ(orgID),
-			integration.KindEQ(string(provider)),
-		).
-		WithSecrets().
-		Only(ctx)
+	integrationRecord, err := s.integrationRecordWithSecrets(ctx, orgID, provider, integrationID)
 	if err != nil {
-		if ent.IsNotFound(err) {
-			return types.CredentialPayload{}, ErrCredentialNotFound
-		}
-
 		return types.CredentialPayload{}, err
 	}
 
-	return s.loadCredentialFromIntegrationRecord(ctx, provider, integrationRecord)
+	return s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
+}
+
+func (s *Store) loadCredentialSubjectForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool, error) {
+	integrationRecord, err := s.integrationRecordWithSecrets(ctx, orgID, provider, integrationID)
+	if err != nil {
+		return types.CredentialPayload{}, false, err
+	}
+
+	payload, err := s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
+	if err == nil {
+		return payload, true, nil
+	}
+	if !errors.Is(err, ErrCredentialNotFound) {
+		return types.CredentialPayload{}, false, err
+	}
+
+	providerState := integrationRecord.ProviderState
+
+	return types.CredentialPayload{
+		Provider:      provider,
+		Kind:          types.CredentialKindMetadata,
+		ProviderState: &providerState,
+	}, false, nil
 }
 
 // DeleteIntegration removes the integration and associated secrets for the given org
@@ -274,7 +283,7 @@ func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID st
 	return payload, nil
 }
 
-func (s *Store) loadCredentialFromIntegrationRecord(ctx context.Context, provider types.ProviderType, integrationRecord *ent.Integration) (types.CredentialPayload, error) {
+func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType, integrationRecord *ent.Integration) (types.CredentialPayload, error) {
 	if integrationRecord == nil {
 		return types.CredentialPayload{}, ErrCredentialNotFound
 	}
@@ -286,8 +295,6 @@ func (s *Store) loadCredentialFromIntegrationRecord(ctx context.Context, provide
 		}
 
 		envelope := secret.CredentialSet
-
-		s.updateIntegrationProviderState(ctx, integrationRecord, provider, envelope.ProviderData)
 
 		payload, err := credentialSetToPayload(provider, envelope)
 		if err != nil {
@@ -302,27 +309,24 @@ func (s *Store) loadCredentialFromIntegrationRecord(ctx context.Context, provide
 	return types.CredentialPayload{}, ErrCredentialNotFound
 }
 
-func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {
-	if record == nil || provider == types.ProviderUnknown || len(data) == 0 {
-		return
-	}
-
-	next := record.ProviderState
-	changed, err := next.MergeProviderData(string(provider), data)
+func (s *Store) integrationRecordWithSecrets(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (*ent.Integration, error) {
+	integrationRecord, err := s.db.Integration.Query().
+		Where(
+			integration.IDEQ(integrationID),
+			integration.OwnerIDEQ(orgID),
+			integration.KindEQ(string(provider)),
+		).
+		WithSecrets().
+		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to merge integration provider state")
-		return
-	}
-	if !changed {
-		return
+		if ent.IsNotFound(err) {
+			return nil, ErrCredentialNotFound
+		}
+
+		return nil, err
 	}
 
-	if err := s.db.Integration.UpdateOneID(record.ID).SetProviderState(next).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to update integration provider state")
-		return
-	}
-
-	record.ProviderState = next
+	return integrationRecord, nil
 }
 
 // payloadToCredentialSet converts a CredentialPayload into a storable CredentialSet

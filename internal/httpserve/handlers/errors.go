@@ -15,6 +15,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 )
 
@@ -223,8 +224,12 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusInternalServerError)
 
+	if err != nil && ctx != nil && ctx.Request() != nil {
+		logx.FromContext(ctx.Request().Context()).Error().Err(err).Msg("handler internal server error")
+	}
+
 	// Create error response
-	errorResponse := rout.ErrorResponse(err)
+	errorResponse := rout.ErrorResponse(safeInternalError(err))
 
 	// Automatically register response schema if OpenAPI context is provided
 	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
@@ -240,6 +245,37 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 	}
 
 	return ctx.JSON(http.StatusInternalServerError, errorResponse)
+}
+
+func safeInternalError(err error) error {
+	if err == nil {
+		return ErrProcessingRequest
+	}
+
+	if isWhitelistedInternalError(err) {
+		return err
+	}
+
+	return ErrProcessingRequest
+}
+
+func isWhitelistedInternalError(err error) bool {
+	switch err {
+	case ErrProcessingRequest,
+		ErrUnableToVerifyEmail,
+		ErrUnableToRegisterJobRunner,
+		ErrObjectStoreUnavailable,
+		ErrFailedToExtractSessionID,
+		errIntegrationStoreNotConfigured,
+		errIntegrationRegistryNotConfigured,
+		errIntegrationOperationsNotConfigured,
+		errIntegrationWorkflowEngineNotConfigured,
+		errActivationNotConfigured,
+		errDBClientNotConfigured:
+		return true
+	default:
+		return false
+	}
 }
 
 // Unauthorized returns a 401 Unauthorized response with the error message.
