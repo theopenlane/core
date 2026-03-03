@@ -60,6 +60,37 @@ extend type Mutation{
         """
         id: ID!
     ): RemediationDeletePayload!
+    """
+    Update multiple existing remediations
+    """
+    updateBulkRemediation(
+        """
+        IDs of the remediations to update
+        """
+        ids: [ID!]!
+        """
+        values to update the remediations with
+        """
+        input: UpdateRemediationInput!
+    ): RemediationBulkUpdatePayload!
+    """
+    Update multiple existing remediations via file upload
+    """
+    updateBulkCSVRemediation(
+        """
+        csv file containing values of the remediation, must include ID column
+        """
+        input: Upload!
+    ): RemediationBulkUpdatePayload!
+    """
+    Delete multiple remediations
+    """
+    deleteBulkRemediation(
+        """
+        IDs of the remediations to delete
+        """
+        ids: [ID!]!
+    ): RemediationBulkDeletePayload!
 }
 
 """
@@ -100,4 +131,28 @@ type RemediationBulkCreatePayload {
     Created remediations
     """
     remediations: [Remediation!]
+}
+
+"""
+Return response for updateBulkRemediation mutation
+"""
+type RemediationBulkUpdatePayload {
+    """
+    Updated remediations
+    """
+    remediations: [Remediation!]
+    """
+    IDs of the updated remediations
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkRemediation mutation
+"""
+type RemediationBulkDeletePayload {
+    """
+    Deleted remediation IDs
+    """
+    deletedIDs: [ID!]!
 }
