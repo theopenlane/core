@@ -960,6 +960,8 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hushhistory"})
 	}
 
+	redactHushHistoryConnection(res)
+
 	return res, err
 }
 

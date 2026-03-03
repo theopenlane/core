@@ -11,6 +11,7 @@ import (
 	coreconfig "github.com/theopenlane/core/config"
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 )
 
 func TestWithGeneratedKeys(t *testing.T) {
@@ -128,5 +129,42 @@ func TestWithAuth_IntegrationProviderOverridesApplied(t *testing.T) {
 	}
 	if spec.OAuth.ClientID != "override-client-id" {
 		t.Fatalf("expected github oauth client id override to be applied, got %q", spec.OAuth.ClientID)
+	}
+}
+
+func TestWithAuth_GitHubAppRuntimeConfigApplied(t *testing.T) {
+	t.Parallel()
+
+	so := &ServerOptions{
+		Config: serverconfig.Config{
+			Settings: coreconfig.Config{
+				IntegrationGitHubApp: handlers.IntegrationGitHubAppConfig{
+					Enabled:    true,
+					AppSlug:    "openlane",
+					AppID:      "12345",
+					PrivateKey: "-----BEGIN PRIVATE KEY-----\\nabc\\n-----END PRIVATE KEY-----",
+				},
+			},
+			SessionConfig: &sessions.SessionConfig{},
+		},
+	}
+
+	WithAuth().apply(so)
+
+	spec, ok := so.Config.Handler.IntegrationRegistry.Config(githubprovider.TypeGitHubApp)
+	if !ok {
+		t.Fatalf("expected github app provider spec to exist")
+	}
+	if spec.GitHubApp == nil {
+		t.Fatalf("expected github app config to exist")
+	}
+	if spec.GitHubApp.AppSlug != "openlane" {
+		t.Fatalf("expected app slug override, got %q", spec.GitHubApp.AppSlug)
+	}
+	if spec.GitHubApp.AppID != "12345" {
+		t.Fatalf("expected runtime app id, got %q", spec.GitHubApp.AppID)
+	}
+	if spec.GitHubApp.PrivateKey != "-----BEGIN PRIVATE KEY-----\\nabc\\n-----END PRIVATE KEY-----" {
+		t.Fatalf("expected runtime private key override")
 	}
 }

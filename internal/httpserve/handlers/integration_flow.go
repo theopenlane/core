@@ -85,6 +85,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	})
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to begin OAuth flow")
+
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
@@ -124,24 +125,28 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("payload_state", in.State).Msg("oauth state cookie not found")
+		logx.FromContext(reqCtx).Error().Err(err).Str("state_fingerprint", stateFingerprint(in.State)).Msg("oauth state cookie not found")
+
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
 	if stateCookie.Value == "" || stateCookie.Value != in.State {
-		logx.FromContext(reqCtx).Error().Str("payload_state", in.State).Str("cookie_state", stateCookie.Value).Msg("oauth state cookie mismatch")
+		logx.FromContext(reqCtx).Error().Str("state_fingerprint", stateFingerprint(in.State)).Bool("cookie_state_present", stateCookie.Value != "").Msg("oauth state cookie mismatch")
+
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
 	orgCookie, err := sessions.GetCookie(ctx.Request(), oauthOrgIDCookieName)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_org_id cookie")
+
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
 	}
 
 	userCookie, err := sessions.GetCookie(ctx.Request(), oauthUserIDCookieName)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_user_id cookie")
+
 		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}
 
@@ -174,6 +179,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 			return h.BadRequest(ctx, err, openapiCtx)
 		default:
 			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to complete oauth callback")
+
 			return h.InternalServerError(ctx, err, openapiCtx)
 		}
 	}
@@ -334,7 +340,6 @@ func integrationTokenFromPayload(provider string, payload types.CredentialPayloa
 	return &openapi.IntegrationToken{
 		Provider:         provider,
 		AccessToken:      token.AccessToken,
-		RefreshToken:     token.RefreshToken,
 		ExpiresAt:        expiresAt,
 		ProviderUserID:   "",
 		ProviderUsername: "",

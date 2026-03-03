@@ -8,6 +8,8 @@ import (
 	"github.com/theopenlane/core/internal/integrations"
 )
 
+const defaultMemorySessionStoreMaxEntries = 4096
+
 // ActivationSession captures the temporary state required to complete an OAuth flow
 type ActivationSession struct {
 	// State is the unique CSRF token identifying this authorization session
@@ -44,12 +46,18 @@ type MemorySessionStore struct {
 	mu sync.Mutex
 	// sessions indexes activation sessions by their state token
 	sessions map[string]ActivationSession
+	// maxEntries bounds in-memory session growth under abandoned callback flows
+	maxEntries int
+	// now provides the current timestamp, overridable in tests
+	now func() time.Time
 }
 
 // NewMemorySessionStore returns an in-memory session store
 func NewMemorySessionStore() *MemorySessionStore {
 	return &MemorySessionStore{
-		sessions: map[string]ActivationSession{},
+		sessions:   map[string]ActivationSession{},
+		maxEntries: defaultMemorySessionStoreMaxEntries,
+		now:        time.Now,
 	}
 }
 
@@ -64,10 +72,24 @@ func (m *MemorySessionStore) Save(session ActivationSession) error {
 	}
 
 	clone := session
+	now := m.now()
+	if clone.CreatedAt.IsZero() {
+		clone.CreatedAt = now
+	}
+	if clone.ExpiresAt.IsZero() {
+		clone.ExpiresAt = clone.CreatedAt.Add(defaultSessionTTL)
+	}
+	state := clone.State
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	m.sessions[session.State] = clone
+	m.purgeExpiredLocked(now)
+	if _, exists := m.sessions[state]; !exists && len(m.sessions) >= m.maxEntries {
+		return integrations.ErrAuthorizationStateStoreFull
+	}
+
+	clone.State = state
+	m.sessions[state] = clone
 
 	return nil
 }
@@ -81,12 +103,29 @@ func (m *MemorySessionStore) Take(state string) (ActivationSession, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
+	now := m.now()
 	session, ok := m.sessions[state]
 	if !ok {
+		m.purgeExpiredLocked(now)
 		return ActivationSession{}, integrations.ErrAuthorizationStateNotFound
 	}
 
+	if !session.ExpiresAt.IsZero() && now.After(session.ExpiresAt) {
+		delete(m.sessions, state)
+		m.purgeExpiredLocked(now)
+		return ActivationSession{}, integrations.ErrAuthorizationStateExpired
+	}
+
 	delete(m.sessions, state)
+	m.purgeExpiredLocked(now)
 
 	return session, nil
+}
+
+func (m *MemorySessionStore) purgeExpiredLocked(now time.Time) {
+	for key, session := range m.sessions {
+		if !session.ExpiresAt.IsZero() && !session.ExpiresAt.After(now) {
+			delete(m.sessions, key)
+		}
+	}
 }

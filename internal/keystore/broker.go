@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"context"
+	"errors"
 	"sync"
 	"time"
 
@@ -11,6 +12,10 @@ import (
 
 // cacheSkew defines how far before token expiry the cache entry should be invalidated
 const cacheSkew = 30 * time.Second
+
+const defaultBrokerCacheMaxEntries = 4096
+
+const providerGitHubApp = types.ProviderType("githubapp")
 
 // Broker exchanges persisted credentials for short-lived tokens via registered providers
 type Broker struct {
@@ -23,6 +28,8 @@ type Broker struct {
 	mu sync.RWMutex
 	// cache stores recently used credentials to avoid database roundtrips
 	cache map[cacheKey]cachedCredential
+	// maxCacheEntries bounds the number of in-memory cached credential entries
+	maxCacheEntries int
 
 	// now returns the current time, overridable for testing
 	now func() time.Time
@@ -49,10 +56,11 @@ type cachedCredential struct {
 // NewBroker constructs a broker backed by the supplied store and provider registry
 func NewBroker(store *Store, reg *registry.Registry) *Broker {
 	return &Broker{
-		store:    store,
-		registry: reg,
-		cache:    make(map[cacheKey]cachedCredential),
-		now:      time.Now,
+		store:           store,
+		registry:        reg,
+		cache:           make(map[cacheKey]cachedCredential),
+		maxCacheEntries: defaultBrokerCacheMaxEntries,
+		now:             time.Now,
 	}
 }
 
@@ -78,8 +86,16 @@ func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider t
 		return payload, nil
 	}
 
+	if provider == providerGitHubApp {
+		return b.MintForIntegration(ctx, orgID, provider, integrationID)
+	}
+
 	payload, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
 	if err != nil {
+		if provider == providerGitHubApp && errors.Is(err, ErrCredentialNotFound) {
+			return b.MintForIntegration(ctx, orgID, provider, integrationID)
+		}
+
 		return types.CredentialPayload{}, err
 	}
 
@@ -132,7 +148,7 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 		return types.CredentialPayload{}, err
 	}
 
-	stored, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
+	stored, persistedCredential, err := b.loadIntegrationSubject(ctx, orgID, provider, integrationID)
 	if err != nil {
 		return types.CredentialPayload{}, err
 	}
@@ -153,6 +169,16 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 		minted.Provider = provider
 	}
 
+	if minted.ProviderState == nil && stored.ProviderState != nil {
+		minted.ProviderState = stored.ProviderState
+	}
+
+	if provider == providerGitHubApp || !persistedCredential {
+		b.setCached(orgID, provider, integrationID, minted)
+
+		return minted, nil
+	}
+
 	persisted, err := b.store.SaveCredentialForIntegration(ctx, orgID, integrationID, minted)
 	if err != nil {
 		return types.CredentialPayload{}, err
@@ -161,6 +187,18 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 	b.setCached(orgID, provider, integrationID, persisted)
 
 	return persisted, nil
+}
+
+func (b *Broker) loadIntegrationSubject(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool, error) {
+	stored, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
+	if err == nil {
+		return stored, true, nil
+	}
+	if provider != providerGitHubApp || !errors.Is(err, ErrCredentialNotFound) {
+		return types.CredentialPayload{}, false, err
+	}
+
+	return b.store.loadCredentialSubjectForIntegration(ctx, orgID, provider, integrationID)
 }
 
 // lookupProvider retrieves the provider instance from the registry
@@ -179,15 +217,14 @@ func (b *Broker) lookupProvider(provider types.ProviderType) (types.Provider, er
 
 // getCached retrieves a cached credential if it exists and is not expired
 func (b *Broker) getCached(orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool) {
-	b.mu.RLock()
-	defer b.mu.RUnlock()
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	now := b.now()
+	b.purgeExpiredLocked(now)
 
 	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}]
 	if !ok {
-		return types.CredentialPayload{}, false
-	}
-
-	if entry.expires.Before(b.now()) {
 		return types.CredentialPayload{}, false
 	}
 
@@ -199,11 +236,46 @@ func (b *Broker) setCached(orgID string, provider types.ProviderType, integratio
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
-	expiry := cacheExpiry(payload, b.now)
+	now := b.now()
+	b.purgeExpiredLocked(now)
 
-	b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}] = cachedCredential{
+	key := cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}
+	if _, exists := b.cache[key]; !exists && len(b.cache) >= b.maxCacheEntries {
+		b.evictOldestLocked()
+	}
+
+	expiry := cacheExpiry(payload, b.now)
+	b.cache[key] = cachedCredential{
 		payload: payload,
 		expires: expiry,
+	}
+}
+
+func (b *Broker) purgeExpiredLocked(now time.Time) {
+	for key, entry := range b.cache {
+		if !entry.expires.After(now) {
+			delete(b.cache, key)
+		}
+	}
+}
+
+func (b *Broker) evictOldestLocked() {
+	var (
+		oldestKey    cacheKey
+		oldestExpiry time.Time
+		found        bool
+	)
+
+	for key, entry := range b.cache {
+		if !found || entry.expires.Before(oldestExpiry) {
+			oldestKey = key
+			oldestExpiry = entry.expires
+			found = true
+		}
+	}
+
+	if found {
+		delete(b.cache, oldestKey)
 	}
 }
 
