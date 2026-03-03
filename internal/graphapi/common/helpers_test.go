@@ -755,9 +755,9 @@ func TestInsensitiveHeaders(t *testing.T) {
 	}
 
 	tests := []struct {
-		name    string
-		header  string
-		wantURL string
+		name     string
+		header   string
+		wantURL  string
 		wantName string
 	}{
 		{
