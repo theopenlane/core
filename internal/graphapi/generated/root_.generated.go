@@ -7054,6 +7054,7 @@ type ComplexityRoot struct {
 
 	WorkflowDefinition struct {
 		Active                func(childComplexity int) int
+		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CooldownSeconds       func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -7061,6 +7062,7 @@ type ComplexityRoot struct {
 		Description           func(childComplexity int) int
 		DisplayID             func(childComplexity int) int
 		Draft                 func(childComplexity int) int
+		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EmailTemplates        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
@@ -7080,6 +7082,7 @@ type ComplexityRoot struct {
 		TrackedFields         func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
+		Viewers               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowKind          func(childComplexity int) int
 	}
 
@@ -48275,6 +48278,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.WorkflowDefinition.Active(childComplexity), true
 
+	case "WorkflowDefinition.blockedGroups":
+		if e.ComplexityRoot.WorkflowDefinition.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.WorkflowDefinition.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "WorkflowDefinition.cooldownSeconds":
 		if e.ComplexityRoot.WorkflowDefinition.CooldownSeconds == nil {
 			break
@@ -48323,6 +48338,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowDefinition.Draft(childComplexity), true
+
+	case "WorkflowDefinition.editors":
+		if e.ComplexityRoot.WorkflowDefinition.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.WorkflowDefinition.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "WorkflowDefinition.emailTemplates":
 		if e.ComplexityRoot.WorkflowDefinition.EmailTemplates == nil {
@@ -48476,6 +48503,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkflowDefinition.UpdatedBy(childComplexity), true
+
+	case "WorkflowDefinition.viewers":
+		if e.ComplexityRoot.WorkflowDefinition.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.WorkflowDefinition.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "WorkflowDefinition.workflowKind":
 		if e.ComplexityRoot.WorkflowDefinition.WorkflowKind == nil {
@@ -68893,6 +68932,9 @@ input CreateWorkflowDefinitionInput {
   """
   trackedFields: [String!]
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   tagDefinitionIDs: [ID!]
   groupIDs: [ID!]
   notificationTemplateIDs: [ID!]
@@ -129516,6 +129558,15 @@ input UpdateWorkflowDefinitionInput {
   trackedFields: [String!]
   appendTrackedFields: [String!]
   clearTrackedFields: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addTagDefinitionIDs: [ID!]
   removeTagDefinitionIDs: [ID!]
   clearTagDefinitions: Boolean
@@ -133603,6 +133654,99 @@ type WorkflowDefinition implements Node {
   """
   trackedFields: [String!]
   owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   tagDefinitions(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -134050,6 +134194,21 @@ input WorkflowDefinitionWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   tag_definitions edge predicates
   """
