@@ -1,7 +1,8 @@
 package handlers_test
 
 import (
-	"encoding/base64"
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 
@@ -10,6 +11,7 @@ import (
 
 	integrationconfig "github.com/theopenlane/core/common/integrations/config"
 	"github.com/theopenlane/core/common/integrations/types"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/integrations/activation"
@@ -17,16 +19,21 @@ import (
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/httpsling"
 )
 
 // GitHub App install callback test path.
 const (
+	githubAppInstallPath  = "/v1/integrations/github/app/install"
 	githubAppCallbackPath = "/v1/integrations/github/app/callback"
 )
 
 // TestGitHubAppInstallCallback_RedirectsWhenConfigured verifies the GitHub App callback redirects when configured.
 func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigured() {
 	t := suite.T()
+
+	installOp := suite.createImpersonationOperation("StartGitHubAppInstall", "Start GitHub App install flow")
+	suite.registerRouteOnce(http.MethodPost, githubAppInstallPath, installOp, suite.h.StartGitHubAppInstallation)
 
 	callbackOp := suite.createImpersonationOperation("HandleGitHubAppInstallCallback", "Handle GitHub App install callback")
 	suite.registerRouteOnce(http.MethodGet, githubAppCallbackPath, callbackOp, suite.h.GitHubAppInstallCallback)
@@ -73,19 +80,26 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	randomPart := base64.URLEncoding.EncodeToString([]byte("random-bytes"))
-	rawState := user.OrganizationID + ":" + string(github.TypeGitHubApp) + ":" + randomPart
-	state := base64.URLEncoding.EncodeToString([]byte(rawState))
+	installReq := httptest.NewRequest(http.MethodPost, githubAppInstallPath, bytes.NewReader([]byte(`{}`)))
+	installReq.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	installRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(installRec, installReq.WithContext(user.UserCtx))
+	require.Equal(t, http.StatusOK, installRec.Code)
+
+	var installResp openapi.GitHubAppInstallResponse
+	require.NoError(t, json.Unmarshal(installRec.Body.Bytes(), &installResp))
+	require.NotEmpty(t, installResp.State)
+
+	cookies := cookieMap(installRec.Result().Cookies())
+	require.Contains(t, cookies, "githubapp_state")
 
 	callbackReq := httptest.NewRequest(http.MethodGet, githubAppCallbackPath, nil)
 	query := callbackReq.URL.Query()
 	query.Set("installation_id", "12345678")
-	query.Set("state", state)
+	query.Set("state", installResp.State)
 	callbackReq.URL.RawQuery = query.Encode()
 
-	callbackReq.AddCookie(&http.Cookie{Name: "githubapp_state", Value: state})
-	callbackReq.AddCookie(&http.Cookie{Name: "githubapp_org_id", Value: user.OrganizationID})
-	callbackReq.AddCookie(&http.Cookie{Name: "githubapp_user_id", Value: user.ID})
+	callbackReq.AddCookie(cookies["githubapp_state"])
 
 	callbackRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))

@@ -215,6 +215,10 @@ type GitHubAppSpec struct {
 	TokenTTL time.Duration `json:"tokenTtl,omitempty"`
 	// AppSlug optionally exposes the configured app slug for UI metadata
 	AppSlug string `json:"appSlug,omitempty"`
+	// AppID carries the runtime GitHub App ID used for signing JWTs; this field is never serialized.
+	AppID string `json:"-"`
+	// PrivateKey carries the runtime GitHub App private key used for signing JWTs; this field is never serialized.
+	PrivateKey string `json:"-" sensitive:"true"`
 }
 
 // AWSFederationSpec captures AssumeRoleWithWebIdentity defaults

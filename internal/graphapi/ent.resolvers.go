@@ -1190,6 +1190,8 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
 
+	redactHushConnection(res)
+
 	return res, err
 }
 

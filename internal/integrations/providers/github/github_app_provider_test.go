@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 )
@@ -38,6 +39,30 @@ func TestGitHubAppCredentialsFromPayload(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "123", appID)
 	require.Equal(t, "456", installationID)
+	require.Equal(t, "line1\nline2", privateKey)
+}
+
+func TestResolveMintInputsUsesProviderRuntimeConfigAndProviderState(t *testing.T) {
+	providerState := state.IntegrationProviderState{}
+	_, err := providerState.MergeProviderData(string(TypeGitHubApp), map[string]any{
+		"installationId": "789",
+	})
+	require.NoError(t, err)
+
+	provider := &appProvider{
+		provider:   TypeGitHubApp,
+		appID:      "123",
+		privateKey: "line1\nline2",
+	}
+
+	appID, installationID, privateKey, err := provider.resolveMintInputs(types.CredentialPayload{
+		Provider:      TypeGitHubApp,
+		ProviderState: &providerState,
+		Data:          models.CredentialSet{ProviderData: map[string]any{}},
+	})
+	require.NoError(t, err)
+	require.Equal(t, "123", appID)
+	require.Equal(t, "789", installationID)
 	require.Equal(t, "line1\nline2", privateKey)
 }
 

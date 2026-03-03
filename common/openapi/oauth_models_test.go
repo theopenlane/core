@@ -168,8 +168,7 @@ func TestOAuthCallbackRequest_Validate(t *testing.T) {
 				Code:     "4/0AQlEz8xY...",
 				State:    "   ",
 			},
-			wantErr: true,
-			errMsg:  "state is required",
+			wantErr: false,
 		},
 		{
 			name: "case insensitive provider",

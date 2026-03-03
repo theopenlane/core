@@ -30,12 +30,14 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	integrationconfig "github.com/theopenlane/core/common/integrations/config"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/graphapi"
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
@@ -198,6 +200,14 @@ func WithAuth() ServerOption {
 			if err != nil {
 				log.Panic().Err(err).Msg("failed to build integration provider registry")
 			}
+			if s.Config.Settings.IntegrationGitHubApp.Enabled {
+				if err := applyGitHubAppRuntimeConfig(context.Background(), integrationRegistry,
+					s.Config.Settings.IntegrationGitHubApp.AppSlug,
+					s.Config.Settings.IntegrationGitHubApp.AppID,
+					s.Config.Settings.IntegrationGitHubApp.PrivateKey); err != nil {
+					log.Panic().Err(err).Msg("failed to apply github app runtime config")
+				}
+			}
 
 			s.Config.Handler.IntegrationRegistry = integrationRegistry
 		}
@@ -242,6 +252,23 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 	}
 
 	return opts
+}
+
+func applyGitHubAppRuntimeConfig(ctx context.Context, integrationRegistry *registry.Registry, appSlug, appID, privateKey string) error {
+	spec, ok := integrationRegistry.Config(githubprovider.TypeGitHubApp)
+	if !ok {
+		return errors.New("github app provider config not found")
+	}
+	if spec.GitHubApp == nil {
+		spec.GitHubApp = &integrationconfig.GitHubAppSpec{}
+	}
+	if appSlug != "" {
+		spec.GitHubApp.AppSlug = appSlug
+	}
+	spec.GitHubApp.AppID = appID
+	spec.GitHubApp.PrivateKey = privateKey
+
+	return integrationRegistry.UpsertProvider(ctx, spec, githubprovider.AppBuilder())
 }
 
 // WithReadyChecks adds readiness checks to the server
