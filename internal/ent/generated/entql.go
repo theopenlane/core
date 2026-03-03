@@ -2072,6 +2072,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			onboarding.FieldCompanyDetails: {Type: field.TypeJSON, Column: onboarding.FieldCompanyDetails},
 			onboarding.FieldUserDetails:    {Type: field.TypeJSON, Column: onboarding.FieldUserDetails},
 			onboarding.FieldCompliance:     {Type: field.TypeJSON, Column: onboarding.FieldCompliance},
+			onboarding.FieldDemoRequested:  {Type: field.TypeBool, Column: onboarding.FieldDemoRequested},
 		},
 	}
 	graph.Nodes[56] = &sqlgraph.Node{
@@ -32425,6 +32426,11 @@ func (f *OnboardingFilter) WhereUserDetails(p entql.BytesP) {
 // WhereCompliance applies the entql json.RawMessage predicate on the compliance field.
 func (f *OnboardingFilter) WhereCompliance(p entql.BytesP) {
 	f.Where(p.Field(onboarding.FieldCompliance))
+}
+
+// WhereDemoRequested applies the entql bool predicate on the demo_requested field.
+func (f *OnboardingFilter) WhereDemoRequested(p entql.BoolP) {
+	f.Where(p.Field(onboarding.FieldDemoRequested))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.

@@ -7463,6 +7463,7 @@ type CreateOnboardingInput struct {
 	UserDetails map[string]any `json:"userDetails,omitempty"`
 	// details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
 	Compliance     map[string]any `json:"compliance,omitempty"`
+	DemoRequested  *bool          `json:"demoRequested,omitempty"`
 	OrganizationID *string        `json:"organizationID,omitempty"`
 }
 
@@ -23647,8 +23648,9 @@ type Onboarding struct {
 	// details given about the user during the onboarding process, including things such as name, job title, department, etc
 	UserDetails map[string]any `json:"userDetails,omitempty"`
 	// details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
-	Compliance   map[string]any `json:"compliance,omitempty"`
-	Organization *Organization  `json:"organization,omitempty"`
+	Compliance    map[string]any `json:"compliance,omitempty"`
+	DemoRequested *bool          `json:"demoRequested,omitempty"`
+	Organization  *Organization  `json:"organization,omitempty"`
 }
 
 func (Onboarding) IsNode() {}
@@ -23706,6 +23708,11 @@ type OnboardingWhereInput struct {
 	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
 	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
 	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
+	// demo_requested field predicates
+	DemoRequested       *bool `json:"demoRequested,omitempty"`
+	DemoRequestedNeq    *bool `json:"demoRequestedNEQ,omitempty"`
+	DemoRequestedIsNil  *bool `json:"demoRequestedIsNil,omitempty"`
+	DemoRequestedNotNil *bool `json:"demoRequestedNotNil,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`

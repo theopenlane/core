@@ -4883,6 +4883,10 @@ func init() {
 	onboardingDescOrganizationID := onboardingFields[0].Descriptor()
 	// onboarding.OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
 	onboarding.OrganizationIDValidator = onboardingDescOrganizationID.Validators[0].(func(string) error)
+	// onboardingDescDemoRequested is the schema descriptor for demo_requested field.
+	onboardingDescDemoRequested := onboardingFields[6].Descriptor()
+	// onboarding.DefaultDemoRequested holds the default value on creation for the demo_requested field.
+	onboarding.DefaultDemoRequested = onboardingDescDemoRequested.Default.(bool)
 	// onboardingDescID is the schema descriptor for id field.
 	onboardingDescID := onboardingMixinFields0[0].Descriptor()
 	// onboarding.DefaultID holds the default value on creation for the id field.

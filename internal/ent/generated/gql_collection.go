@@ -41788,6 +41788,11 @@ func (_q *OnboardingQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, onboarding.FieldCompliance)
 				fieldSeen[onboarding.FieldCompliance] = struct{}{}
 			}
+		case "demoRequested":
+			if _, ok := fieldSeen[onboarding.FieldDemoRequested]; !ok {
+				selectedFields = append(selectedFields, onboarding.FieldDemoRequested)
+				fieldSeen[onboarding.FieldDemoRequested] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

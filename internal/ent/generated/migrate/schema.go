@@ -4794,6 +4794,7 @@ var (
 		{Name: "company_details", Type: field.TypeJSON, Nullable: true},
 		{Name: "user_details", Type: field.TypeJSON, Nullable: true},
 		{Name: "compliance", Type: field.TypeJSON, Nullable: true},
+		{Name: "demo_requested", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
 	}
 	// OnboardingsTable holds the schema information for the "onboardings" table.
@@ -4804,7 +4805,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "onboardings_organizations_organization",
-				Columns:    []*schema.Column{OnboardingsColumns[8]},
+				Columns:    []*schema.Column{OnboardingsColumns[9]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

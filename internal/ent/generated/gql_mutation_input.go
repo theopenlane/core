@@ -15046,6 +15046,7 @@ type CreateOnboardingInput struct {
 	CompanyDetails map[string]interface{}
 	UserDetails    map[string]interface{}
 	Compliance     map[string]interface{}
+	DemoRequested  *bool
 	OrganizationID *string
 }
 
@@ -15063,6 +15064,9 @@ func (i *CreateOnboardingInput) Mutate(m *OnboardingMutation) {
 	}
 	if v := i.Compliance; v != nil {
 		m.SetCompliance(v)
+	}
+	if v := i.DemoRequested; v != nil {
+		m.SetDemoRequested(*v)
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
