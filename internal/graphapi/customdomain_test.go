@@ -195,6 +195,17 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "domain",
+			request: testclient.CreateCustomDomainInput{
+				CnameRecord:      "etc-inc.",
+				MappableDomainID: mappableDomain.ID,
+				OwnerID:          lo.ToPtr(testUser1.OrganizationID),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			// expectedErr: "invalid or unparsable field: url",
+		},
+		{
 			name: "invalid domain",
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "!invalid-domain",

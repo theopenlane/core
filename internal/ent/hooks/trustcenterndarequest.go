@@ -286,7 +286,9 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 	})
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple}); err != nil {
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuple for deleted NDA request")
+
+		return ErrInternalServerError
 	}
 
 	return nil

@@ -155,6 +155,7 @@ func (t Task) Mixin() []ent.Mixin {
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
+				// ensure these are added to the fga model so that permissions can be set properly
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{},
 					Program{}, Risk{}, Asset{}, Platform{}, IdentityHolder{}, Scan{}, ActionPlan{}, Task{}),
 				withOrganizationOwner(true),

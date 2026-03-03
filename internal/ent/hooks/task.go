@@ -176,7 +176,9 @@ func updateTaskTuples(ctx context.Context, m *generated.TaskMutation, newUser, r
 
 	// add the new assignee and remove the old assignee
 	if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, deleteTuples); err != nil {
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to update task relationship tuples")
+
+		return ErrInternalServerError
 	}
 
 	logx.FromContext(ctx).Debug().Str("task_id", taskID).Str(relation, newUser).Msg("added tuple")

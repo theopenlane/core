@@ -196,7 +196,9 @@ func HookTrustCenter() ent.Hook {
 			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuples, nil); err != nil {
-				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create file access permissions")
+
+				return nil, ErrInternalServerError
 			}
 
 			if trustCenter.CustomDomainID != nil {

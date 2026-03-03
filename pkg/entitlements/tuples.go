@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -24,9 +25,13 @@ var baseTupleRequest = fgax.TupleRequest{
 func DeleteModuleTuple(ctx context.Context, authz *fgax.Client, orgID, moduleName string) error {
 	deleteTuple := getFeatureTupleKey(orgID, moduleName)
 
-	_, err := authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple})
+	if _, err := authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete feature tuple")
 
-	return err
+		return ErrInternalServerError
+	}
+
+	return nil
 }
 
 // CreateFeatureTuples writes default feature tuples to FGA and inserts them into
@@ -39,7 +44,9 @@ func CreateFeatureTuples(ctx context.Context, authz *fgax.Client, orgID string, 
 	}
 
 	if _, err := authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create feature tuples")
+
+		return ErrInternalServerError
 	}
 
 	return nil
@@ -101,7 +108,11 @@ func SyncTuples(ctx context.Context, client *fgax.Client, subjectID, subjectType
 		return nil
 	}
 
-	_, err := client.WriteTupleKeys(ctx, adds, dels)
+	if _, err := client.WriteTupleKeys(ctx, adds, dels); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to sync tuples")
 
-	return err
+		return ErrInternalServerError
+	}
+
+	return nil
 }

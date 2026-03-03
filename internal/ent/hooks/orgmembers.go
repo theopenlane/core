@@ -199,7 +199,7 @@ func HookOrgMembersDelete() ent.Hook {
 
 				if _, err := m.Client().Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tuple}); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Interface("delete_tuple", tuple).Msg("failed to delete relationship tuple")
-					return nil, err
+					return nil, ErrInternalServerError
 				}
 			}
 

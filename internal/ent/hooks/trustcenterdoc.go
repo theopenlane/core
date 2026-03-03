@@ -120,7 +120,9 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if len(tuples) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for trust center doc visibility")
+
+					return nil, ErrInternalServerError
 				}
 			}
 
@@ -240,7 +242,9 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 				if len(tuples) > 0 {
 					if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-						return nil, err
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for trust center doc visibility")
+
+						return nil, ErrInternalServerError
 					}
 				}
 			}
@@ -338,7 +342,8 @@ func updateTrustCenterDocVisibility(ctx context.Context, m *generated.TrustCente
 	if len(writes) > 0 || len(deletes) > 0 {
 		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to update file access permissions")
-			return err
+
+			return ErrInternalServerError
 		}
 	}
 	return nil

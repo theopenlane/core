@@ -74,7 +74,9 @@ func hookOrgOwnedTuples(includeAdminRelation bool) ent.Hook {
 			// write the tuples to the authz service
 			if len(addTuples) != 0 {
 				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, nil); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+
+					return nil, ErrInternalServerError
 				}
 			}
 

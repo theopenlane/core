@@ -243,7 +243,9 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 	t := fgax.GetTupleKey(tr)
 
 	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create organization owner editor relationship tuple")
+
+		return ErrInternalServerError
 	}
 
 	return nil
@@ -271,7 +273,9 @@ func addOrganizationOwnerParentRelation(ctx context.Context, m ent.Mutation, id 
 	t := fgax.GetTupleKey(tr)
 
 	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create organization owner parent relationship tuple")
+
+		return ErrInternalServerError
 	}
 
 	return nil
