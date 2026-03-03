@@ -4,7 +4,7 @@ go 1.25.7
 
 require (
 	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
-	github.com/aws/aws-sdk-go-v2 v1.41.2
+	github.com/aws/aws-sdk-go-v2 v1.41.3
 	github.com/aws/aws-sdk-go-v2/config v1.32.10
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.10
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.7
@@ -21,12 +21,12 @@ require (
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.11.6
+	github.com/theopenlane/core v1.11.11
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.22.6
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.7.0
-	github.com/zitadel/oidc/v3 v3.45.4
+	github.com/zitadel/oidc/v3 v3.45.5
 	golang.org/x/oauth2 v0.35.0
 	gotest.tools/v3 v3.5.2
 )
@@ -48,7 +48,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.6 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.30.11 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.15 // indirect
-	github.com/aws/smithy-go v1.24.1 // indirect
+	github.com/aws/smithy-go v1.24.2 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
