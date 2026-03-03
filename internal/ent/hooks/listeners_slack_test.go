@@ -27,7 +27,7 @@ func TestRegisterGalaSlackListeners(t *testing.T) {
 
 	ids, err := RegisterGalaSlackListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, 2)
+	require.Len(t, ids, 3)
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeSubscriber), ent.OpCreate.String()))
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeUser), ent.OpCreate.String()))
 	require.False(t, registry.InterestedIn(gala.TopicName(entgen.TypeSubscriber), ent.OpUpdate.String()))
