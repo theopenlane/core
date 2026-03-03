@@ -189,6 +189,8 @@ func UnmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 		return r
 	})
 
+	gocsv.SetHeaderNormalizer(strings.ToLower)
+
 	processed := preprocessCSVListCells[T](stream)
 	if err := gocsv.UnmarshalBytes(processed, &data); err != nil {
 		return nil, wrapCSVUnmarshalError(err, processed)

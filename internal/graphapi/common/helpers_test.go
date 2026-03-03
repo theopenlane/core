@@ -746,6 +746,61 @@ func TestUnmarshalBulkDataInvalidJSONMap(t *testing.T) {
 	assert.Check(t, strings.Contains(err.Error(), "list or object values must be valid JSON"))
 }
 
+func TestInsensitiveHeaders(t *testing.T) {
+	t.Parallel()
+
+	type csvRow struct {
+		StatusPageURL string `csv:"StatusPageURL"`
+		DisplayName   string `csv:"DisplayName"`
+	}
+
+	tests := []struct {
+		name    string
+		header  string
+		wantURL string
+		wantName string
+	}{
+		{
+			name:     "mixed case URL acronym",
+			header:   "StatusPageUrl,DisplayName",
+			wantURL:  "https://theopenlane.io",
+			wantName: "Marketing site",
+		},
+		{
+			name:     "all lowercase",
+			header:   "statuspageurl,displayname",
+			wantURL:  "https://theopenlane.io",
+			wantName: "Marketing site",
+		},
+		{
+			name:     "all uppercase",
+			header:   "STATUSPAGEURL,DISPLAYNAME",
+			wantURL:  "https://theopenlane.io",
+			wantName: "Marketing site",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			csvData := tc.header + "\nhttps://theopenlane.io,Marketing site\n"
+			upload := graphql.Upload{
+				File:        strings.NewReader(csvData),
+				Filename:    "case.csv",
+				Size:        int64(len(csvData)),
+				ContentType: "text/csv",
+			}
+
+			rows, err := UnmarshalBulkData[csvRow](upload)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(rows, 1))
+			assert.Check(t, is.Equal(tc.wantURL, rows[0].StatusPageURL))
+			assert.Check(t, is.Equal(tc.wantName, rows[0].DisplayName))
+		})
+	}
+}
+
 // TestGetOrgOwnerFromInputWrapped verifies wrapped Input owner extraction.
 func TestGetOrgOwnerFromInputWrapped(t *testing.T) {
 	t.Parallel()
