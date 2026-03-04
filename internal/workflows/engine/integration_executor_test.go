@@ -62,9 +62,14 @@ func TestIntegrationRunOperationKind(t *testing.T) {
 }
 
 func TestEvaluateIntegrationScope(t *testing.T) {
+	evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+	if err != nil {
+		t.Fatalf("failed to create scope evaluator: %v", err)
+	}
+
 	integrationRecord := &ent.Integration{ID: "int_123"}
 
-	allowed, err := evaluateIntegrationScope(context.Background(), IntegrationQueueRequest{
+	allowed, err := evaluateIntegrationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
 		ScopeExpression: "provider == 'githubapp'",
 	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
@@ -75,7 +80,7 @@ func TestEvaluateIntegrationScope(t *testing.T) {
 		t.Fatalf("expected scope condition to allow execution")
 	}
 
-	allowed, err = evaluateIntegrationScope(context.Background(), IntegrationQueueRequest{
+	allowed, err = evaluateIntegrationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
 		ScopeExpression: "provider == 'slack'",
 	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
@@ -86,7 +91,7 @@ func TestEvaluateIntegrationScope(t *testing.T) {
 		t.Fatalf("expected scope condition to reject execution")
 	}
 
-	_, err = evaluateIntegrationScope(context.Background(), IntegrationQueueRequest{
+	_, err = evaluateIntegrationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
 		ScopeExpression: "provider =",
 	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)

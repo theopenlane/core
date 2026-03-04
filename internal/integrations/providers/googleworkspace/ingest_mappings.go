@@ -1,13 +1,45 @@
-package ingest
+package googleworkspace
 
 import (
+	"strconv"
+	"strings"
+
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
-	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	googleworkspaceprovider "github.com/theopenlane/core/internal/integrations/providers/googleworkspace"
 )
 
-var normalizedDirectoryAccountSchema = normalizeMappingKey(mappingSchemaDirectoryAccount)
+type celMapEntry struct {
+	key  string
+	expr string
+}
+
+// celMapExpr renders CEL map entries into a CEL object literal string.
+func celMapExpr(entries []celMapEntry) string {
+	if len(entries) == 0 {
+		return "{}"
+	}
+
+	var b strings.Builder
+
+	b.WriteString("{\n")
+
+	for i, entry := range entries {
+		b.WriteString("  ")
+		b.WriteString(strconv.Quote(entry.key))
+		b.WriteString(": ")
+		b.WriteString(entry.expr)
+
+		if i < len(entries)-1 {
+			b.WriteString(",")
+		}
+
+		b.WriteString("\n")
+	}
+
+	b.WriteString("}")
+
+	return b.String()
+}
 
 var mapExprGoogleWorkspaceDirectoryAccount = celMapExpr([]celMapEntry{
 	{
@@ -80,19 +112,12 @@ var mapExprGoogleWorkspaceDirectoryAccount = celMapExpr([]celMapEntry{
 	},
 })
 
-var googleWorkspaceDirectoryAccountMapping = openapi.IntegrationMappingOverride{
-	FilterExpr: `payload.id != "" || payload.primaryEmail != ""`,
-	MapExpr:    mapExprGoogleWorkspaceDirectoryAccount,
-}
-
-// directoryAccountMappingSpec selects built-in directory account mappings for supported providers
-func directoryAccountMappingSpec(provider integrationtypes.ProviderType, variant string) (openapi.IntegrationMappingOverride, bool) {
-	_ = variant
-
-	switch provider {
-	case googleworkspaceprovider.TypeGoogleWorkspace:
-		return googleWorkspaceDirectoryAccountMapping, true
-	default:
-		return openapi.IntegrationMappingOverride{}, false
+// googleWorkspaceDirectoryAccountMappings returns the built-in directory account mapping specs for Google Workspace.
+func googleWorkspaceDirectoryAccountMappings() map[string]integrationtypes.MappingSpec {
+	return map[string]integrationtypes.MappingSpec{
+		"": {
+			FilterExpr: `payload.id != "" || payload.primaryEmail != ""`,
+			MapExpr:    mapExprGoogleWorkspaceDirectoryAccount,
+		},
 	}
 }

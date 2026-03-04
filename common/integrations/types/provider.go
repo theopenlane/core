@@ -3,6 +3,7 @@ package types
 
 import (
 	"context"
+	"encoding/json"
 )
 
 // ProviderType is a strongly typed identifier for an integration provider
@@ -46,6 +47,11 @@ type ProviderCapabilities struct {
 	SupportsClientPooling bool
 	// SupportsMetadataForm indicates there is a credentials schema for declarative handlers
 	SupportsMetadataForm bool
+	// EnvironmentCredentials indicates the provider derives credentials from installation
+	// context (e.g. app keys, workload identity) rather than persisted per-user OAuth tokens.
+	// Providers with this capability always mint rather than loading from the credential store,
+	// and minted tokens are never written back to the store.
+	EnvironmentCredentials bool
 }
 
 // ProviderConfig mirrors the declarative provider specification (JSON/YAML) used by HTTP handlers to render forms
@@ -86,7 +92,7 @@ type Provider interface {
 type ClientName string
 
 // ClientBuilderFunc constructs provider-specific clients using persisted credentials and optional config
-type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config map[string]any) (ClientInstance, error)
+type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config json.RawMessage) (ClientInstance, error)
 
 // ClientDescriptor describes a provider-managed client that can be pooled/reused downstream
 type ClientDescriptor struct {
@@ -118,7 +124,7 @@ type ClientRequest struct {
 	// Client identifies which client type to build
 	Client ClientName
 	// Config contains client-specific configuration
-	Config map[string]any
+	Config json.RawMessage
 	// Force bypasses cached client instances
 	Force bool
 }

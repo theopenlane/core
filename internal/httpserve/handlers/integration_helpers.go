@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/keystore"
 )
 
 // statePayloadParts is the number of parts in an encoded OAuth state payload.
@@ -56,6 +57,26 @@ var (
 	// ErrProviderHealthCheckFailed indicates the provider health check failed
 	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
+
+// integrationHTTPStatus maps known integration errors to HTTP status codes.
+// Returns http.StatusInternalServerError for unrecognized errors.
+func integrationHTTPStatus(err error) int {
+	switch {
+	case errors.Is(err, ErrIntegrationNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, ErrInvalidState),
+		errors.Is(err, ErrInvalidStateFormat),
+		errors.Is(err, ErrMissingCode),
+		errors.Is(err, ErrUnsupportedAuthType),
+		errors.Is(err, ErrExchangeAuthCode),
+		errors.Is(err, ErrValidateToken),
+		errors.Is(err, keystore.ErrOperationNotRegistered),
+		errors.Is(err, keystore.ErrCredentialNotFound):
+		return http.StatusBadRequest
+	default:
+		return http.StatusInternalServerError
+	}
+}
 
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.
 func buildStatePayload(orgID, provider string, randomBytes []byte) string {

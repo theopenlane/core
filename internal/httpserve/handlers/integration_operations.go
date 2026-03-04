@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	"net/http"
 
 	echo "github.com/theopenlane/echox"
 
@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -134,10 +133,12 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		RunType:   enums.IntegrationRunTypeManual,
 	})
 	if err != nil {
-		if errors.Is(err, keystore.ErrOperationNotRegistered) {
+		switch integrationHTTPStatus(err) {
+		case http.StatusBadRequest:
 			return h.BadRequest(ctx, err, openapiCtx)
+		default:
+			return h.InternalServerError(ctx, err, openapiCtx)
 		}
-		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
 	queueDetails, err := integrationOperationQueueDetailsDoc(integrationOperationQueueDetails{

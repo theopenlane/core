@@ -9,6 +9,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// azureEntraRestClient is the package-level REST client for Microsoft Graph API requests.
+var azureEntraRestClient = auth.RESTClient{BaseURL: "https://graph.microsoft.com/v1.0/"}
+
 const (
 	azureEntraHealthOp types.OperationName = "health.default"
 	azureEntraTenantOp types.OperationName = "directory.inspect"
@@ -97,9 +100,8 @@ type graphOrganizationResponse struct {
 
 // fetchOrganization retrieves the first organization entry from Microsoft Graph.
 func fetchOrganization(ctx context.Context, token string, client *auth.AuthenticatedClient) (graphOrganization, error) {
-	endpoint := "https://graph.microsoft.com/v1.0/organization?$select=id,displayName,tenantId,verifiedDomains&$top=1"
 	var resp graphOrganizationResponse
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+	if err := azureEntraRestClient.GetJSON(ctx, client, token, "organization?$select=id,displayName,tenantId,verifiedDomains&$top=1", nil, &resp); err != nil {
 		return graphOrganization{}, err
 	}
 

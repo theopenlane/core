@@ -75,18 +75,8 @@ func HealthOperation(name types.OperationName, description string, client types.
 // DefaultSampleSize is the standard number of sample items returned in operation results
 const DefaultSampleSize = 5
 
-// TokenType indicates whether to use OAuth or API token extraction
-type TokenType int
-
-const (
-	// TokenTypeOAuth extracts OAuth access tokens
-	TokenTypeOAuth TokenType = iota
-	// TokenTypeAPI extracts API tokens
-	TokenTypeAPI
-)
-
 // HealthCheckRunner creates a health check operation function using the common pattern.
-func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg string, resultFn func(T) (string, any)) types.OperationFunc {
+func HealthCheckRunner[T any](extractor auth.TokenExtractor, endpoint string, failureMsg string, resultFn func(T) (string, any)) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 		extract, err := tokenExtractor(tokenType)
 		if err != nil {
@@ -97,6 +87,8 @@ func HealthCheckRunner[T any](tokenType TokenType, endpoint string, failureMsg s
 		if err != nil {
 			return types.OperationResult{}, err
 		}
+
+		client := auth.AuthenticatedClientFromClient(input.Client)
 
 		var resp T
 		if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {

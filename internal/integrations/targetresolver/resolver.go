@@ -165,6 +165,20 @@ func (r *Resolver) resolveByIntegrationID(ctx context.Context, criteria ResolveC
 	return resolvedProvider, record, nil
 }
 
+// ResolveOperation resolves a single operation descriptor for a known provider without a database
+// lookup. Use this when the integration record is already in hand (e.g. after EnsureIntegration)
+// to avoid a redundant round-trip.
+func (r *Resolver) ResolveOperation(provider types.ProviderType, criteria ResolveCriteria) (types.OperationDescriptor, error) {
+	if provider == types.ProviderUnknown {
+		return types.OperationDescriptor{}, ErrResolverProviderRequired
+	}
+	if !criteria.OperationName.IsPresent() && !criteria.OperationKind.IsPresent() {
+		return types.OperationDescriptor{}, ErrResolverOperationCriteriaRequired
+	}
+
+	return r.resolveOperationDescriptor(provider, criteria)
+}
+
 // resolveOperationDescriptor resolves one operation descriptor from provider and operation criteria
 func (r *Resolver) resolveOperationDescriptor(provider types.ProviderType, criteria ResolveCriteria) (types.OperationDescriptor, error) {
 	descriptors := r.registry.OperationDescriptors(provider)

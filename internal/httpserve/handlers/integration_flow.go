@@ -75,7 +75,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	scopes := mergeScopes(spec, in.Scopes)
+	scopes := config.MergeRequestedScopes(spec, in.Scopes)
 
 	begin, err := h.IntegrationActivation.BeginOAuth(userCtx, activation.BeginOAuthRequest{
 		OrgID:    caller.OrganizationID,
@@ -223,32 +223,6 @@ func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
 }
 
-func mergeScopes(spec config.ProviderSpec, requested []string) []string {
-	values := map[string]struct{}{}
-	add := func(scopes []string) {
-		for _, scope := range scopes {
-			if trimmed := strings.TrimSpace(scope); trimmed != "" {
-				lower := strings.ToLower(trimmed)
-				if _, ok := values[lower]; !ok {
-					values[lower] = struct{}{}
-				}
-			}
-		}
-	}
-
-	if spec.OAuth != nil {
-		add(spec.OAuth.Scopes)
-	}
-
-	add(requested)
-
-	if len(values) == 0 {
-		return nil
-	}
-
-	return lo.Keys(values)
-}
-
 func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) string {
 	if strings.TrimSpace(baseURL) == "" {
 		return ""
@@ -305,9 +279,9 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 
 	tokenData, err := h.RefreshIntegrationToken(userCtx, refreshCaller.OrganizationID, in.Provider)
 	if err != nil {
-		switch {
-		case errors.Is(err, keystore.ErrCredentialNotFound):
-			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", in.Provider, ErrIntegrationNotFound)))
+		switch integrationHTTPStatus(err) {
+		case http.StatusBadRequest:
+			return h.BadRequest(ctx, err, openapiCtx)
 		default:
 			return h.InternalServerError(ctx, wrapTokenError("refresh", in.Provider, err), openapiCtx)
 		}

@@ -33,10 +33,6 @@ var (
 	ErrInstallationTokenEmpty = errors.New("github: installation token empty")
 	// ErrWebhookSecretMissing indicates the GitHub App webhook secret is missing
 	ErrWebhookSecretMissing = errors.New("github: webhook secret missing")
-	// ErrAppPrivateKeyParse indicates the GitHub App private key could not be parsed
-	ErrAppPrivateKeyParse = errors.New("github: app private key parse failed")
-	// ErrAppJWTSign indicates signing the GitHub App JWT failed
-	ErrAppJWTSign = errors.New("github: app jwt sign failed")
 	// ErrProviderNotInitialized indicates the provider instance is nil
 	ErrProviderNotInitialized = errors.New("github: provider not initialized")
 	// ErrOrganizationRequired indicates an organization login is required for organization-scoped operations.

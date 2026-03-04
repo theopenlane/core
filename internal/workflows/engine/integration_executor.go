@@ -6,6 +6,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -107,38 +108,55 @@ type IntegrationQueueResult struct {
 }
 
 // integrationActionRuntimeParams defines the integration action params used at runtime.
-// Config/scope payload stay as raw JSON until execution boundaries to avoid early map assertions.
+// Embeds IntegrationActionParams so the JSON schema type and the execution type stay in sync.
 type integrationActionRuntimeParams struct {
-	// IntegrationID is the explicit integration identifier for the operation
-	IntegrationID string `json:"integration_id,omitempty"`
-	// Provider overrides the integration identifier when set
-	Provider string `json:"provider"`
-	// OperationName identifies the explicit integration operation name
-	OperationName string `json:"operation_name,omitempty"`
-	// OperationKind identifies the integration operation kind when operation name is omitted
-	OperationKind string `json:"operation_kind,omitempty"`
-	// Config holds the integration-specific configuration payload
-	Config json.RawMessage `json:"config,omitempty"`
-	// ScopeExpression is an optional CEL expression gate for this integration action
-	ScopeExpression string `json:"scope_expression,omitempty"`
-	// ScopePayload is optional payload data exposed to scope expression evaluation
-	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
-	// ScopeResource is optional resource identity data exposed to scope expression evaluation
-	ScopeResource string `json:"scope_resource,omitempty"`
-	// TimeoutMS overrides the operation timeout in milliseconds
-	TimeoutMS int `json:"timeout_ms"`
-	// Retries overrides the retry count when non-zero
-	Retries int `json:"retries"`
-	// Force requests a refresh for the provider
-	Force bool `json:"force_refresh"`
-	// ClientForce requests a client-side refresh for the provider
-	ClientForce bool `json:"client_force"`
+	workflows.IntegrationActionParams
+}
+
+// integrationOpContext captures common integration operation log fields.
+type integrationOpContext struct {
+	provider      string
+	operation     string
+	operationKind string
+	integrationID string
+}
+
+// MarshalZerologObject implements zerolog.LogObjectMarshaler for integrationOpContext.
+func (c integrationOpContext) MarshalZerologObject(e *zerolog.Event) {
+	e.Str("provider", c.provider).Str("operation", c.operation).Str("operation_kind", c.operationKind)
+	if c.integrationID != "" {
+		e.Str("integration_id", c.integrationID)
+	}
+}
+
+// logIntegrationScopeSkipped logs a debug event when an integration action is skipped by scope evaluation.
+func logIntegrationScopeSkipped(ctx context.Context, provider, operation, operationKind, integrationID, scopeExpression string) {
+	logx.FromContext(ctx).Debug().EmbedObject(integrationOpContext{provider: provider, operation: operation, operationKind: operationKind, integrationID: integrationID}).Str("scope_expression", scopeExpression).Msg("integration action skipped by scope condition")
 }
 
 // SetIntegrationDeps attaches integration dependencies and registers listeners when possible
 func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 	if deps.Registry != nil {
 		e.integrationRegistry = deps.Registry
+
+		source, err := targetresolver.NewEntSource(e.client)
+		if err != nil {
+			return err
+		}
+
+		resolver, err := targetresolver.NewResolver(source, deps.Registry)
+		if err != nil {
+			return err
+		}
+
+		e.integrationResolver = resolver
+
+		evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+		if err != nil {
+			return err
+		}
+
+		e.scopeEvaluator = evaluator
 	}
 	if deps.Store != nil {
 		e.integrationStore = deps.Store
@@ -201,6 +219,16 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		return IntegrationQueueResult{}, ErrIntegrationRegistryRequired
 	}
 
+	criteria := targetresolver.ResolveCriteria{OwnerID: orgID}
+	if operationName != "" {
+		criteria.OperationName = mo.Some(operationName)
+	}
+	if operationKind != "" {
+		criteria.OperationKind = mo.Some(operationKind)
+	}
+
+	var integrationRecord *ent.Integration
+
 	if integrationID == "" {
 		if provider == types.ProviderUnknown {
 			return IntegrationQueueResult{}, ErrIntegrationProviderRequired
@@ -209,47 +237,35 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 			return IntegrationQueueResult{}, ErrIntegrationStoreRequired
 		}
 
-		integrationRecord, err := e.integrationStore.EnsureIntegration(allowCtx, orgID, provider)
+		ensuredRecord, err := e.integrationStore.EnsureIntegration(allowCtx, orgID, provider)
 		if err != nil {
 			return IntegrationQueueResult{}, err
 		}
 
-		integrationID = integrationRecord.ID
-	}
+		operationDescriptor, err := e.integrationResolver.ResolveOperation(provider, criteria)
+		if err != nil {
+			return IntegrationQueueResult{}, err
+		}
 
-	source, err := targetresolver.NewEntSource(e.client)
-	if err != nil {
-		return IntegrationQueueResult{}, err
-	}
-
-	resolver, err := targetresolver.NewResolver(source, e.integrationRegistry)
-	if err != nil {
-		return IntegrationQueueResult{}, err
-	}
-
-	criteria := targetresolver.ResolveCriteria{OwnerID: orgID}
-	if integrationID != "" {
+		integrationRecord = ensuredRecord
+		operationName = operationDescriptor.Name
+		operationKind = operationDescriptor.Kind
+	} else {
 		criteria.IntegrationID = mo.Some(integrationID)
-	}
-	if provider != types.ProviderUnknown {
-		criteria.Provider = mo.Some(provider)
-	}
-	if operationName != "" {
-		criteria.OperationName = mo.Some(operationName)
-	}
-	if operationKind != "" {
-		criteria.OperationKind = mo.Some(operationKind)
-	}
+		if provider != types.ProviderUnknown {
+			criteria.Provider = mo.Some(provider)
+		}
 
-	resolution, err := resolver.Resolve(allowCtx, criteria)
-	if err != nil {
-		return IntegrationQueueResult{}, err
-	}
+		resolution, err := e.integrationResolver.Resolve(allowCtx, criteria)
+		if err != nil {
+			return IntegrationQueueResult{}, err
+		}
 
-	integrationRecord := resolution.Integration
-	provider = resolution.Provider
-	operationName = resolution.Operation.Name
-	operationKind = resolution.Operation.Kind
+		integrationRecord = resolution.Integration
+		provider = resolution.Provider
+		operationName = resolution.Operation.Name
+		operationKind = resolution.Operation.Kind
+	}
 
 	operationConfig, err := decodeJSONObjectDocument(req.Config)
 	if err != nil {
@@ -267,7 +283,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		return IntegrationQueueResult{}, err
 	}
 
-	scopeAllowed, err := evaluateIntegrationScope(allowCtx, req, integrationRecord, resolution.Provider, operationName, operationConfig, scopePayload)
+	scopeAllowed, err := evaluateIntegrationScope(allowCtx, e.scopeEvaluator, req, integrationRecord, provider, operationName, operationConfig, scopePayload)
 	if err != nil {
 		return IntegrationQueueResult{}, err
 	}
@@ -303,7 +319,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	payload := integrations.IntegrationOperationRequestedPayload{
 		RunID:         runRecord.ID,
 		OrgID:         orgID,
-		Provider:      string(resolution.Provider),
+		Provider:      string(provider),
 		Operation:     string(operationName),
 		OperationKind: operationKind,
 		RunType:       runType,
@@ -394,6 +410,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 	})
 	if err != nil {
 		if errors.Is(err, ErrIntegrationScopeConditionFalse) {
+			logIntegrationScopeSkipped(ctx, params.Provider, string(operationName), string(operationKind), params.IntegrationID, params.ScopeExpression)
 			return nil
 		}
 		return err
@@ -552,14 +569,9 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 }
 
 // evaluateIntegrationScope evaluates optional scope expressions before queueing integration runs
-func evaluateIntegrationScope(ctx context.Context, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig map[string]any, scopePayload map[string]any) (bool, error) {
-	if req.ScopeExpression == "" {
+func evaluateIntegrationScope(ctx context.Context, evaluator integrationscope.ConditionEvaluator, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig map[string]any, scopePayload map[string]any) (bool, error) {
+	if evaluator == nil || req.ScopeExpression == "" {
 		return true, nil
-	}
-
-	evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
-	if err != nil {
-		return false, err
 	}
 
 	integrationConfig, err := jsonx.ToMap(integrationRecord.Config)

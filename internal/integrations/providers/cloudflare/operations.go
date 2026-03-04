@@ -2,6 +2,11 @@ package cloudflare
 
 import (
 	"context"
+	"fmt"
+
+	cf "github.com/cloudflare/cloudflare-go/v6"
+	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/user"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -13,31 +18,8 @@ const (
 )
 
 type cloudflareHealthDetails struct {
-	IssuedOn  string `json:"issuedOn,omitempty"`
+	Status    string `json:"status,omitempty"`
 	ExpiresOn string `json:"expiresOn,omitempty"`
-}
-
-type cloudflareAPIError struct {
-	// Message is the error message returned by the API
-	Message string `json:"message"`
-}
-
-type cloudflareTokenVerificationResponse struct {
-	// Success indicates whether the API call succeeded
-	Success bool `json:"success"`
-	// Result holds token metadata returned by the API
-	Result struct {
-		// IssuedOn is the token issued timestamp
-		IssuedOn string `json:"issued_on"`
-		// ExpiresOn is the token expiration timestamp
-		ExpiresOn string `json:"expires_on"`
-	} `json:"result"`
-	// Errors lists any API errors returned by the verification call
-	Errors []cloudflareAPIError `json:"errors"`
-}
-
-type cloudflareVerificationFailureDetails struct {
-	Errors []cloudflareAPIError `json:"errors,omitempty"`
 }
 
 // cloudflareOperations returns Cloudflare operation descriptors
@@ -47,6 +29,20 @@ func cloudflareOperations() []types.OperationDescriptor {
 	}
 }
 
+// resolveCloudflareClient returns a pooled Cloudflare client or builds one from the credential payload.
+func resolveCloudflareClient(input types.OperationInput) (*cf.Client, error) {
+	if c, ok := types.ClientInstanceAs[*cf.Client](input.Client); ok {
+		return c, nil
+	}
+
+	token, err := auth.APITokenFromPayload(input.Credential)
+	if err != nil {
+		return nil, err
+	}
+
+	return cf.NewClient(option.WithAPIToken(token)), nil
+}
+
 // runCloudflareHealth validates Cloudflare credentials via token verification
 func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.APITokenFromPayload)
@@ -54,24 +50,24 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 		return types.OperationResult{}, err
 	}
 
-	var resp cloudflareTokenVerificationResponse
-
-	headers := map[string]string{
-		"Content-Type": "application/json",
-	}
-	endpoint := "https://api.cloudflare.com/client/v4/user/tokens/verify"
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, headers, &resp); err != nil {
+	res, err := client.User.Tokens.Verify(ctx)
+	if err != nil {
 		return operations.OperationFailure("Cloudflare token verification failed", err, nil)
 	}
 
-	if !resp.Success {
-		return operations.OperationFailure("Cloudflare token verification returned errors", ErrTokenVerificationFailed, cloudflareVerificationFailureDetails{
-			Errors: resp.Errors,
+	if res.Status != user.TokenVerifyResponseStatusActive {
+		return operations.OperationFailure("Cloudflare token is not active", ErrTokenVerificationFailed, cloudflareHealthDetails{
+			Status: string(res.Status),
 		})
 	}
 
-	return operations.OperationSuccess("Cloudflare token verified", cloudflareHealthDetails{
-		IssuedOn:  resp.Result.IssuedOn,
-		ExpiresOn: resp.Result.ExpiresOn,
-	}), nil
+	details := cloudflareHealthDetails{
+		Status: string(res.Status),
+	}
+
+	if !res.ExpiresOn.IsZero() {
+		details.ExpiresOn = res.ExpiresOn.String()
+	}
+
+	return operations.OperationSuccess(fmt.Sprintf("Cloudflare token verified, status: %s", res.Status), details), nil
 }

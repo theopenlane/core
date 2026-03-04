@@ -71,9 +71,10 @@ func AppBuilder() providers.Builder {
 				requester:  httpsling.MustNew(httpsling.Client(httpclient.Timeout(defaultHTTPTimeout))),
 				clients:    clients,
 				caps: types.ProviderCapabilities{
-					SupportsRefreshTokens: true,
-					SupportsClientPooling: len(clients) > 0,
-					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+					SupportsRefreshTokens:  true,
+					SupportsClientPooling:  len(clients) > 0,
+					SupportsMetadataForm:   len(spec.CredentialsSchema) > 0,
+					EnvironmentCredentials: true,
 				},
 			}
 			provider.operations = operations.SanitizeOperationDescriptors(TypeGitHubApp, githubAppOperations(baseURL))
@@ -144,6 +145,11 @@ func (p *appProvider) BeginAuth(context.Context, types.AuthContext) (types.AuthS
 	return nil, ErrBeginAuthNotSupported
 }
 
+// DefaultVulnerabilityMappings returns the built-in vulnerability mapping specs for GitHub App providers.
+func (p *appProvider) DefaultVulnerabilityMappings() map[string]types.MappingSpec {
+	return githubVulnerabilityMappings()
+}
+
 // Mint exchanges GitHub App credentials for an installation access token.
 func (p *appProvider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
 	appID, installationID, privateKey, err := p.resolveMintInputs(subject.Credential)
@@ -205,7 +211,7 @@ func githubAppCredentialsFromPayload(payload types.CredentialPayload) (string, s
 		return "", "", "", ErrAppIDMissing
 	}
 
-	installationID, err := githubAppInstallationIDFromCredential(payload)
+	installationID, err := resolveInstallationID(decoded, payload)
 	if err != nil {
 		return "", "", "", err
 	}
@@ -246,11 +252,9 @@ func githubAppProviderDataFromPayload(payload types.CredentialPayload) (githubAp
 	return decoded, nil
 }
 
-func githubAppInstallationIDFromCredential(payload types.CredentialPayload) (string, error) {
-	decoded, err := githubAppProviderDataFromPayload(payload)
-	if err != nil {
-		return "", err
-	}
+// resolveInstallationID returns the installation ID from the already-decoded provider data,
+// falling back to the provider state when the credential payload does not carry it directly.
+func resolveInstallationID(decoded githubAppProviderData, payload types.CredentialPayload) (string, error) {
 	if decoded.InstallationID != "" {
 		return decoded.InstallationID.String(), nil
 	}
@@ -268,6 +272,7 @@ func githubAppInstallationIDFromCredential(payload types.CredentialPayload) (str
 	if err := auth.DecodeProviderData(stateProviderData, &stateDecoded); err != nil {
 		return "", err
 	}
+
 	if stateDecoded.InstallationID == "" {
 		return "", ErrInstallationIDMissing
 	}
@@ -275,12 +280,17 @@ func githubAppInstallationIDFromCredential(payload types.CredentialPayload) (str
 	return stateDecoded.InstallationID.String(), nil
 }
 
-// normalizePrivateKey converts escaped newlines to PEM newlines.
-func normalizePrivateKey(value string) string {
-	if value == "" {
-		return ""
+func githubAppInstallationIDFromCredential(payload types.CredentialPayload) (string, error) {
+	decoded, err := githubAppProviderDataFromPayload(payload)
+	if err != nil {
+		return "", err
 	}
 
+	return resolveInstallationID(decoded, payload)
+}
+
+// normalizePrivateKey converts escaped newlines to PEM newlines.
+func normalizePrivateKey(value string) string {
 	if strings.Contains(value, "\\n") && !strings.Contains(value, "\n") {
 		return strings.ReplaceAll(value, "\\n", "\n")
 	}
@@ -349,13 +359,8 @@ func (p *appProvider) requestInstallationToken(ctx context.Context, installation
 
 	endpoint := fmt.Sprintf("%s/app/installations/%s/access_tokens", strings.TrimRight(p.baseURL, "/"), installationID)
 
-	requester := p.requester
-	if requester == nil {
-		requester = httpsling.MustNew(httpsling.Client(httpclient.Timeout(defaultHTTPTimeout)))
-	}
-
 	var resp githubAppTokenResponse
-	httpResp, err := requester.ReceiveWithContext(
+	httpResp, err := p.requester.ReceiveWithContext(
 		ctx,
 		&resp,
 		httpsling.Post(endpoint),

@@ -43,7 +43,7 @@ type vercelProjectsDetails struct {
 func vercelOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(vercelHealthOp, "Call Vercel /v2/user to verify token and account.", ClientVercelAPI,
-			operations.HealthCheckRunner(operations.TokenTypeAPI, "https://api.vercel.com/v2/user", "Vercel user lookup failed",
+			operations.HealthCheckRunner(auth.APITokenFromPayload, "https://api.vercel.com/v2/user", "Vercel user lookup failed",
 				func(resp vercelUserResponse) (string, any) {
 					return fmt.Sprintf("Vercel token valid for %s", resp.User.Email), vercelHealthDetails{
 						ID:    resp.User.ID,
@@ -84,7 +84,6 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 	}
 
 	endpoint := "https://api.vercel.com/v4/projects?" + params.Encode()
-
 	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
 		return operations.OperationFailure("Vercel projects fetch failed", err, nil)
 	}
