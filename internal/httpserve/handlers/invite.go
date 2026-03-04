@@ -58,12 +58,14 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	reqCtx := ctx.Request().Context()
 
 	// get the authenticated user from the context
-	userID, err := auth.GetSubjectIDFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
+	inviteCaller, inviteOk := auth.CallerFromContext(reqCtx)
+	if !inviteOk || inviteCaller == nil || inviteCaller.SubjectID == "" {
+		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
+
+	userID := inviteCaller.SubjectID
 
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
@@ -133,18 +135,19 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 		return nil, nil, nil, err
 	}
 
-	// check if we already have an authenticated user in the context (from registration flow)
-	au, err := auth.GetAuthenticatedUserFromContext(ctxWithToken)
-	if err != nil {
-		return nil, nil, nil, err
+	// check if we already have an authenticated caller in the context (from registration flow)
+	inviteCaller, inviteCallerOk := auth.CallerFromContext(ctxWithToken)
+	if !inviteCallerOk || inviteCaller == nil {
+		return nil, nil, nil, auth.ErrNoAuthUser
 	}
 
-	// update the authenticated user context with the organization ID
-	// since the hook requires the org id
-	au.OrganizationID = invitedUser.OwnerID
-	au.OrganizationIDs = []string{invitedUser.OwnerID}
+	// update the caller context with the organization ID since the hook requires the org id;
+	// copy the caller to avoid mutating the shared context value
+	updatedCaller := *inviteCaller
+	updatedCaller.OrganizationID = invitedUser.OwnerID
+	updatedCaller.OrganizationIDs = []string{invitedUser.OwnerID}
 
-	ctxWithToken = auth.WithAuthenticatedUser(ctxWithToken, au)
+	ctxWithToken = auth.WithCaller(ctxWithToken, &updatedCaller)
 
 	// add email to the invite
 	inv.Email = invitedUser.Recipient

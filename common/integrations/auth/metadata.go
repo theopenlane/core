@@ -22,6 +22,15 @@ func ExtractMetadata[T any](payload types.CredentialPayload) (T, error) {
 	return result, nil
 }
 
+// CloneMetadata creates a shallow copy of provider metadata, returning an empty map if nil.
+func CloneMetadata(data map[string]any) map[string]any {
+	if data == nil {
+		return map[string]any{}
+	}
+
+	return maps.Clone(data)
+}
+
 // PersistMetadata merges the JSON-tagged fields of meta into a clone of base.
 // Fields tagged with omitempty are excluded when zero-valued.
 func PersistMetadata[T any](base map[string]any, meta T) (map[string]any, error) {
@@ -30,10 +39,7 @@ func PersistMetadata[T any](base map[string]any, meta T) (map[string]any, error)
 		return nil, err
 	}
 
-	out := maps.Clone(base)
-	if out == nil {
-		out = map[string]any{}
-	}
+	out := CloneMetadata(base)
 
 	maps.Copy(out, overlay)
 

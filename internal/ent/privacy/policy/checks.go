@@ -82,7 +82,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 // CheckOrgReadAccess checks if the requestor has access to read the organization
 func CheckOrgReadAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
-		if _, hasAnon := auth.AnonymousTrustCenterUserFromContext(ctx); hasAnon {
+		if _, hasAnon := auth.ActiveTrustCenterIDKey.Get(ctx); hasAnon {
 			return privacy.Deny
 		}
 		// check if the user has access to view the organization
@@ -130,10 +130,11 @@ func CheckOrgAccess() privacy.MutationRule {
 // DenyQueryIfNotAuthenticated denies a query if the user is not authenticated
 func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		if res, err := auth.GetAuthenticatedUserFromContext(ctx); err != nil || res == nil {
-			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			logx.FromContext(ctx).Info().Msg("unable to get authenticated user context")
 
-			return err
+			return auth.ErrNoAuthUser
 		}
 
 		return nil
@@ -143,10 +144,11 @@ func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 // DenyMutationIfNotAuthenticated denies a mutation if the user is not authenticated
 func DenyMutationIfNotAuthenticated() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
-		if res, err := auth.GetAuthenticatedUserFromContext(ctx); err != nil || res == nil {
-			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			logx.FromContext(ctx).Info().Msg("unable to get authenticated user context")
 
-			return err
+			return auth.ErrNoAuthUser
 		}
 
 		return nil
@@ -176,11 +178,11 @@ func CheckEdgesForRemovedAccess(ctx context.Context, m ent.Mutation, edges []str
 
 // checkEdgesEditAccess takes a list of edges and looks for the permissions edges to confirm the user has edit access
 func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, added bool) error {
-	actor, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get user id from context")
+	actor, ok := auth.CallerFromContext(ctx)
+	if !ok || actor == nil || actor.IsAnonymous() {
+		logx.FromContext(ctx).Error().Msg("unable to get caller from context")
 
-		return err
+		return auth.ErrNoAuthUser
 	}
 
 	for _, edge := range edges {
@@ -204,8 +206,8 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 		}
 
 		for _, id := range ids {
-			idStr, ok := id.(string)
-			if !ok {
+			idStr, idOk := id.(string)
+			if !idOk {
 				logx.FromContext(ctx).Warn().Interface("id", id).Msg("id is not a string, unable to check access")
 
 				continue
@@ -221,11 +223,11 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			// the object is in the organization and that the user has edit access
 			// to the organization
 			if edgeMap.ObjectType == organization.Label {
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
-				if err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization id from context")
+				orgID := actor.OrganizationID
+				if orgID == "" {
+					logx.FromContext(ctx).Error().Msg("unable to get organization id from context")
 
-					return err
+					return auth.ErrNoAuthUser
 				}
 
 				if err := ensureObjectInOrganization(ctx, m, edge, idStr, orgID); err != nil {
@@ -242,7 +244,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				ObjectID:    idStr,
 				ObjectType:  fgax.Kind(edgeMap.ObjectType),
 				SubjectID:   actor.SubjectID,
-				SubjectType: auth.GetAuthzSubjectType(ctx),
+				SubjectType: actor.SubjectType(),
 				Context:     utils.NewOrganizationContextKey(actor.SubjectEmail),
 			}
 

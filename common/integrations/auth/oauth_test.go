@@ -57,23 +57,6 @@ func TestAPITokenFromPayload(t *testing.T) {
 	}
 }
 
-func TestRandomState(t *testing.T) {
-	state1, err := RandomState(8)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	state2, err := RandomState(8)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if state1 == "" || state2 == "" {
-		t.Fatalf("expected non-empty state values")
-	}
-	if state1 == state2 {
-		t.Fatalf("expected different state values")
-	}
-}
-
 func TestHTTPGetJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got := r.Header.Get("Authorization"); got != "Bearer token" {

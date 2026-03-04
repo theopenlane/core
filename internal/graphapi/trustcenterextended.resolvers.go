@@ -18,7 +18,8 @@ import (
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.
 func (r *createTrustCenterInputResolver) CreateTrustCenterSetting(ctx context.Context, obj *generated.CreateTrustCenterInput, data *generated.CreateTrustCenterSettingInput) error {
-	if err := common.SetOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, obj.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.ErrPermissionDenied

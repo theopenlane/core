@@ -18,30 +18,24 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
 func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error) {
-	if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
-		if input.TrustCenterID == nil || *input.TrustCenterID != anon.TrustCenterID {
+	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+		if input.TrustCenterID == nil || *input.TrustCenterID != tcID {
 			return nil, rout.ErrPermissionDenied
 		}
 
-		ctx = contextx.With(
-			privacy.DecisionContext(
-				auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
-					SubjectID:          anon.SubjectID,
-					SubjectName:        anon.SubjectName,
-					SubjectEmail:       anon.SubjectEmail,
-					OrganizationID:     anon.OrganizationID,
-					OrganizationIDs:    []string{anon.OrganizationID},
-					AuthenticationType: anon.AuthenticationType,
-				}),
-				privacy.Allow,
-			),
-			auth.TrustCenterNDAContextKey{OrgID: anon.OrganizationID},
+		caller, callerOk := auth.CallerFromContext(ctx)
+		if !callerOk || caller == nil {
+			return nil, rout.ErrPermissionDenied
+		}
+
+		ctx = auth.WithCaller(
+			privacy.DecisionContext(ctx, privacy.Allow),
+			caller,
 		)
 	}
 
@@ -178,8 +172,8 @@ func (r *mutationResolver) DeleteBulkTrustCenterNDARequest(ctx context.Context, 
 // RequestNewTrustCenterToken is the resolver for the requestNewTrustCenterToken field.
 func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email string) (*model.TrustCenterAccessTokenPayload, error) {
 	// check if the nda for the user and trust center combination is signed
-	anonReq, ok := auth.AnonymousTrustCenterUserFromContext(ctx)
-	if !ok {
+	tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx)
+	if !ok || tcID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
 
@@ -187,7 +181,7 @@ func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email
 	existing, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(
 		trustcenterndarequest.And(
 			trustcenterndarequest.Email(email),
-			trustcenterndarequest.TrustCenterIDEQ(anonReq.TrustCenterID),
+			trustcenterndarequest.TrustCenterIDEQ(tcID),
 		),
 	).Only(allowCtx)
 	if err == nil {
@@ -196,7 +190,7 @@ func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email
 			Email:         email,
 			FirstName:     existing.FirstName,
 			LastName:      existing.LastName,
-			TrustCenterID: &anonReq.TrustCenterID,
+			TrustCenterID: &tcID,
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to create trust center nda request for existing nda, this may cause the user to not receive a notification email with their new token")
 

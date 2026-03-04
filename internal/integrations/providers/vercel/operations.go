@@ -47,7 +47,7 @@ func vercelOperations() []types.OperationDescriptor {
 
 // runVercelProjects returns a sample of projects for drift detection.
 func runVercelProjects(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.APITokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

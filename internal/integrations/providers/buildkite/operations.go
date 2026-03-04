@@ -57,7 +57,7 @@ func buildkiteOperations() []types.OperationDescriptor {
 
 // runBuildkiteOrganizationsOperation collects Buildkite org metadata for reporting.
 func runBuildkiteOrganizationsOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndAPIToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.APITokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

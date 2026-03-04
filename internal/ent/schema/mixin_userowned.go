@@ -160,10 +160,12 @@ func (userOwned UserOwnedMixin) Hooks() []ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				userID, err := auth.GetSubjectIDFromContext(ctx)
-				if err != nil {
-					return nil, fmt.Errorf("failed to get user id from context: %w", err)
+				caller, ok := auth.CallerFromContext(ctx)
+				if !ok || caller == nil || caller.SubjectID == "" {
+					return nil, fmt.Errorf("failed to get user id from context: %w", auth.ErrNoAuthUser)
 				}
+
+				userID := caller.SubjectID
 
 				// set owner on create mutation
 				if m.Op() == ent.OpCreate {
@@ -206,8 +208,8 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 				return nil
 			}
 
-			userID, err := auth.GetSubjectIDFromContext(ctx)
-			if err != nil {
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil || caller.SubjectID == "" {
 				ctxQuery := ent.QueryFromContext(ctx)
 
 				// Skip the interceptor if the query is for a single entity
@@ -216,8 +218,10 @@ func (userOwned UserOwnedMixin) Interceptors() []ent.Interceptor {
 					return nil
 				}
 
-				return err
+				return auth.ErrNoAuthUser
 			}
+
+			userID := caller.SubjectID
 
 			// sets the owner id on the query for the current user
 			userOwned.P(q, userID)

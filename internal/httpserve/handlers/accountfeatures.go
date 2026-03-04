@@ -28,17 +28,19 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	reqCtx := ctx.Request().Context()
 
-	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
+		logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	in.ID, err = h.getOrganizationID(in.ID, au)
+	orgID, err := h.getOrganizationID(in.ID, caller)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapi)
 	}
+
+	in.ID = orgID
 
 	var features []string
 
@@ -64,11 +66,13 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 	}, openapi)
 }
 
-// getOrganizationID returns the organization ID to use for the request based on the input and authenticated user
-func (h *Handler) getOrganizationID(id string, au *auth.AuthenticatedUser) (string, error) {
+// getOrganizationID returns the organization ID to use for the request based on the input and caller
+func (h *Handler) getOrganizationID(id string, caller *auth.Caller) (string, error) {
+	orgIDs := caller.OrgIDs()
+
 	// if an ID is provided, check if the authenticated user has access to it
 	if id != "" {
-		if !lo.Contains(au.OrganizationIDs, id) {
+		if !lo.Contains(orgIDs, id) {
 			return "", ErrInvalidInput
 		}
 
@@ -76,13 +80,13 @@ func (h *Handler) getOrganizationID(id string, au *auth.AuthenticatedUser) (stri
 	}
 
 	// if no ID is provided, default to the authenticated organization
-	if au.OrganizationID != "" {
-		return au.OrganizationID, nil
+	if caller.OrganizationID != "" {
+		return caller.OrganizationID, nil
 	}
 
 	// if it is still empty, and the personal access token only has one organization use that
-	if len(au.OrganizationIDs) == 1 {
-		return au.OrganizationIDs[0], nil
+	if len(orgIDs) == 1 {
+		return orgIDs[0], nil
 	}
 
 	return "", nil

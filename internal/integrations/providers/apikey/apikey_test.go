@@ -43,6 +43,36 @@ func TestProviderMint(t *testing.T) {
 	require.Equal(t, map[string]any{"apiToken": "secret-token", "alias": "test"}, payload.Data.ProviderData)
 }
 
+func TestProviderMint_NormalizesExistingTokenWithoutMetadata(t *testing.T) {
+	spec := config.ProviderSpec{
+		Name:              "test_apikey",
+		AuthType:          types.AuthKindAPIKey,
+		CredentialsSchema: map[string]any{"type": "object"},
+	}
+
+	builder := Builder(types.ProviderType(spec.Name))
+	provider, err := builder.Build(context.Background(), spec)
+	require.NoError(t, err)
+
+	apiProvider, ok := provider.(*Provider)
+	require.True(t, ok)
+
+	payload, err := apiProvider.Mint(context.Background(), types.CredentialSubject{
+		Provider: types.ProviderType(spec.Name),
+		Credential: types.CredentialPayload{
+			Provider: types.ProviderType(spec.Name),
+			Kind:     types.CredentialKindMetadata,
+			Data: models.CredentialSet{
+				APIToken: "secret-token",
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Equal(t, types.CredentialKindAPIKey, payload.Kind)
+	require.Equal(t, "secret-token", payload.Data.APIToken)
+	require.Equal(t, map[string]any{"apiToken": "secret-token"}, payload.Data.ProviderData)
+}
+
 // mustBuildPayload builds a credential payload for provider metadata tests
 func mustBuildPayload(t *testing.T, provider string, providerData map[string]any) types.CredentialPayload {
 	t.Helper()

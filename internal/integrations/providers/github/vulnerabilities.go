@@ -53,7 +53,7 @@ type githubVulnerabilityConfig struct {
 
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

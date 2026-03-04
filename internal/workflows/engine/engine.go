@@ -120,7 +120,10 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 
 	defSnapshot := e.serializeDefinition(def)
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx)
+	userID := ""
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+		userID = caller.SubjectID
+	}
 	contextData := buildTriggerContext(def.ID, obj, input, userID)
 
 	// Wrap instance + object ref creation in transaction to prevent stranded instances
@@ -156,7 +159,10 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 		})
 	}
 
-	userID, _ := auth.GetSubjectIDFromContext(ctx)
+	userID := ""
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+		userID = caller.SubjectID
+	}
 	contextData := applyTriggerContext(instance.Context, def.ID, obj, input, userID)
 
 	allowCtx := workflows.AllowContext(ctx)
@@ -402,9 +408,9 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return scope.Fail(fmt.Errorf("failed to get subject ID from context: %w", err), nil)
+	userID, userErr := auth.GetSubjectIDFromContext(ctx)
+	if userErr != nil {
+		return scope.Fail(fmt.Errorf("failed to get subject ID from context: %w", userErr), nil)
 	}
 
 	payload := gala.WorkflowAssignmentCompletedPayload{

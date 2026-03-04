@@ -12,5 +12,5 @@ const (
 
 // buildkiteClientDescriptors returns the client descriptors published by Buildkite.
 func buildkiteClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeBuildkite, ClientBuildkiteAPI, "Buildkite REST API client", auth.APITokenClientBuilder(nil))
+	return auth.DefaultClientDescriptors(TypeBuildkite, ClientBuildkiteAPI, "Buildkite REST API client", auth.TokenClientBuilder(auth.APITokenFromPayload, nil))
 }

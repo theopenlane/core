@@ -54,8 +54,8 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 // AuthenticateSkipperFuncForImpersonation determines whether Authenticate middleware should be skipped
 // based on the presence of impersonation token
 var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
-	_, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
-	return ok
+	caller, ok := auth.CallerFromContext(c.Request().Context())
+	return ok && caller != nil && caller.IsImpersonated()
 }
 
 // AuthenticateSkipperFuncForWebsockets determines whether Authenticate middleware should be skipped for websocket upgrades
@@ -100,8 +100,8 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			}
 
 			var (
-				au *auth.AuthenticatedUser
-				id string
+				caller *auth.Caller
+				id     string
 			)
 
 			reqCtx := logx.SeedContext(c.Request().Context())
@@ -110,13 +110,13 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			switch getTokenType(bearerToken) {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
-				au, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
+				caller, id, err = checkToken(reqCtx, conf, bearerToken, auth.GetOrganizationContextHeader(c))
 				if err != nil {
 					return unauthorized(c, err, conf, validator)
 				}
 
 				// Record authentication metric based on token type
-				switch au.AuthenticationType {
+				switch caller.AuthenticationType {
 				case auth.PATAuthentication:
 					metrics.RecordAuthentication(metrics.AuthTypePAT)
 				case auth.APITokenAuthentication:
@@ -135,23 +135,14 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					}
 
 					switch strings.HasPrefix(claims.UserID, "anon_questionnaire") {
-
 					case true:
-						an, err := createAnonymousQuestionnaireFromClaims(claims, auth.JWTAuthentication)
-						if err != nil {
-							return unauthorized(c, err, conf, validator)
-						}
-
-						auth.SetAnonymousQuestionnaireUserContext(c, an)
-
+						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
+						c.SetRequest(c.Request().WithContext(ctx))
 					default:
-
-						an, err := createAnonymousTrustCenterUserFromClaims(claims, auth.JWTAuthentication)
-						if err != nil {
-							return unauthorized(c, err, conf, validator)
-						}
-
-						auth.SetAnonymousTrustCenterUserContext(c, an)
+						ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+						ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
+						c.SetRequest(c.Request().WithContext(ctx))
 					}
 
 					// Record anonymous JWT authentication
@@ -161,18 +152,19 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				}
 
 				// Add claims to context for use in downstream processing and continue handlers
-				au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
+				caller, err = createCallerFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 				if err != nil {
 					return unauthorized(c, err, conf, validator)
 				}
 
-				auth.SetRefreshToken(c, bearerToken)
+				ctx := auth.WithRefreshToken(c.Request().Context(), bearerToken)
+				c.SetRequest(c.Request().WithContext(ctx))
 
 				// Record regular JWT authentication
 				metrics.RecordAuthentication(metrics.AuthTypeJWT)
 			}
 
-			auth.SetAuthenticatedUserContext(c, au)
+			c.SetRequest(c.Request().WithContext(auth.WithCaller(c.Request().Context(), caller)))
 
 			if conf.RedisClient != nil {
 				permissioncache.SetCacheContext(c, conf.RedisClient)
@@ -180,11 +172,11 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			// add the user and org ID to the logger context
 			requestLogger.UpdateContext(func(c zerolog.Context) zerolog.Context {
-				return c.Str("user_id", au.SubjectID).
-					Strs("org_id", au.OrganizationIDs)
+				return c.Str("user_id", caller.SubjectID).
+					Strs("org_id", caller.OrganizationIDs)
 			})
 
-			if err := updateLastUsedFunc(c.Request().Context(), conf.DBClient, au, id); err != nil {
+			if err := updateLastUsedFunc(c.Request().Context(), conf.DBClient, caller, id); err != nil {
 				return unauthorized(c, err, conf, validator)
 			}
 
@@ -193,8 +185,8 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 	}
 }
 
-// AuthenticateTransport authenticates a websocket transport init payload and returns the authenticated user
-func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayload, authOptions *Options) (*auth.AuthenticatedUser, error) {
+// AuthenticateTransport authenticates a websocket transport init payload and returns the authenticated caller
+func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayload, authOptions *Options) (*auth.Caller, error) {
 	bearerToken, err := auth.GetBearerTokenFromWebsocketRequest(initPayload)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get bearer token from websocket init payload")
@@ -214,7 +206,7 @@ func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayloa
 		return nil, ErrUnableToAuthenticateTransport
 	}
 
-	return createAuthenticatedUserFromClaims(ctx, authOptions.DBClient, claims, auth.JWTAuthentication)
+	return createCallerFromClaims(ctx, authOptions.DBClient, claims, auth.JWTAuthentication)
 }
 
 // getTokenType returns the authentication type based on the bearer token
@@ -231,13 +223,22 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 	return auth.JWTAuthentication
 }
 
+func withOrgFilterBypass(ctx context.Context) context.Context {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		caller = &auth.Caller{}
+	}
+
+	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapBypassOrgFilter))
+}
+
 // updateLastUsed updates the last used time for the token depending on the authentication type
-func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.AuthenticatedUser, tokenID string) error {
+func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Caller, tokenID string) error {
 	logger := logx.FromContext(ctx)
-	switch au.AuthenticationType {
+	switch caller.AuthenticationType {
 	case auth.PATAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		allowCtx := withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
 		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for personal access token")
 
@@ -245,7 +246,7 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.Authenti
 		}
 	case auth.APITokenAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+		allowCtx := withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
 		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for API token")
 
@@ -295,8 +296,8 @@ func Reauthenticate(conf *Options, validator tokens.Validator) func(c echo.Conte
 	}
 }
 
-// createAuthenticatedUserFromClaims creates an authenticated user from the claims provided
-func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AuthenticatedUser, error) {
+// createCallerFromClaims creates a Caller directly from the JWT claims provided
+func createCallerFromClaims(ctx context.Context, dbClient *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.Caller, error) {
 	// get the user ID from the claims
 	user, err := dbClient.User.Get(ctx, claims.UserID)
 	if err != nil {
@@ -308,72 +309,49 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 		return nil, err
 	}
 
-	au := &auth.AuthenticatedUser{
+	caller := &auth.Caller{
 		SubjectID:          user.ID,
 		SubjectName:        getSubjectName(user),
 		SubjectEmail:       user.Email,
 		OrganizationID:     claims.OrgID,
 		OrganizationIDs:    []string{claims.OrgID},
 		AuthenticationType: authType,
-		IsSystemAdmin:      systemAdmin,
+		Capabilities:       capabilitiesFor(systemAdmin),
 	}
 
 	role := getOrgRoleFunc(ctx, dbClient, user.ID, claims.OrgID)
 	if role != nil {
-		au.OrganizationRole = *role
+		caller.OrganizationRole = *role
 	}
 
-	return au, nil
-}
-
-func createAnonymousQuestionnaireFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousQuestionnaireUser, error) {
-	return &auth.AnonymousQuestionnaireUser{
-		SubjectID:          claims.UserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     claims.OrgID,
-		AuthenticationType: authType,
-		SubjectEmail:       claims.Email,
-		AssessmentID:       claims.AssessmentID,
-	}, nil
-}
-
-func createAnonymousTrustCenterUserFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousTrustCenterUser, error) {
-	return &auth.AnonymousTrustCenterUser{
-		SubjectID:          claims.UserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     claims.OrgID,
-		AuthenticationType: authType,
-		TrustCenterID:      claims.TrustCenterID,
-		SubjectEmail:       claims.Email,
-		OrganizationRole:   auth.AnonymousRole,
-	}, nil
+	return caller, nil
 }
 
 // checkToken checks the bearer authorization token against the database to see if the provided
 // token is an active personal access token or api token.
-// If the token is valid, the authenticated user is returned
-func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
+// If the token is valid, the caller is returned
+func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string) (*auth.Caller, string, error) {
 	// allow check to bypass privacy rules
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
 
 	// check if the token is a personal access token
-	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)
+	caller, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)
 	if err == nil {
-		return au, id, nil
+		return caller, id, nil
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, conf.DBClient, token)
+	caller, id, err = isValidAPIToken(ctx, conf.DBClient, token)
 	if err == nil {
-		return au, id, nil
+		return caller, id, nil
 	}
 
 	return nil, "", err
 }
 
-// isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
+// isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the caller
 func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
-	token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
+	token, orgFromHeader string) (*auth.Caller, string, error) {
 	pat, err := fetchPATFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
@@ -419,32 +397,33 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		return nil, "", err
 	}
 
-	var role *auth.OrganizationRoleType
-	if len(orgIDs) == 1 {
-		role = getOrgRoleFunc(ctx, dbClient, pat.OwnerID, orgIDs[0])
-	}
-
-	authUser := &auth.AuthenticatedUser{
+	caller := &auth.Caller{
 		SubjectID:          pat.OwnerID,
 		SubjectName:        getSubjectName(pat.Edges.Owner),
 		SubjectEmail:       pat.Edges.Owner.Email,
 		OrganizationIDs:    orgIDs,
 		AuthenticationType: auth.PATAuthentication,
-		IsSystemAdmin:      systemAdmin,
+		Capabilities:       capabilitiesFor(systemAdmin),
+	}
+
+	var role *auth.OrganizationRoleType
+	if len(orgIDs) == 1 {
+		role = getOrgRoleFunc(ctx, dbClient, pat.OwnerID, orgIDs[0])
 	}
 
 	if role != nil {
-		authUser.OrganizationRole = *role
+		caller.OrganizationRole = *role
 	}
 
 	if slices.Contains(orgIDs, orgFromHeader) {
-		authUser.OrganizationID = orgFromHeader
+		caller.OrganizationID = orgFromHeader
 	}
 
-	return authUser, pat.ID, nil
+	return caller, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+// isValidAPIToken checks if the provided token is a valid API token and returns the caller
+func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.Caller, string, error) {
 	t, err := fetchAPITokenFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
@@ -471,15 +450,23 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 		return nil, "", err
 	}
 
-	return &auth.AuthenticatedUser{
+	return &auth.Caller{
 		SubjectID:          t.ID,
 		SubjectName:        fmt.Sprintf("service: %s", t.Name),
 		SubjectEmail:       "", // no email for service accounts
 		OrganizationID:     t.OwnerID,
 		OrganizationIDs:    []string{t.OwnerID},
 		AuthenticationType: auth.APITokenAuthentication,
-		IsSystemAdmin:      systemAdmin,
+		Capabilities:       capabilitiesFor(systemAdmin),
 	}, t.ID, nil
+}
+
+func capabilitiesFor(isAdmin bool) auth.Capability {
+	if isAdmin {
+		return auth.CapSystemAdmin
+	}
+
+	return 0
 }
 
 // isSystemAdmin checks fga to see if the user is a system admin
@@ -631,9 +618,9 @@ func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID stri
 		return false, err
 	}
 
-	ctx = models.WithSSOAuthorizations(ctx, &pat.SSOAuthorizations)
+	ctx = models.SSOAuthorizationsContextKey.Set(ctx, &pat.SSOAuthorizations)
 
-	auths, ok := models.SSOAuthorizationsFromContext(ctx)
+	auths, ok := models.SSOAuthorizationsContextKey.Get(ctx)
 	if !ok || auths == nil {
 		return false, nil
 	}

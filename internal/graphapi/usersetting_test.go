@@ -126,7 +126,9 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 	patClient := suite.setupPatClient(owner, t)
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(owner.UserCtx, t)
-	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnly.ID}).MustNew(owner.UserCtx, t)
+	// create membership for viewOnly in the new org (not owner's org, where viewOnly is already a member)
+	orgCtx := auth.NewTestContextWithOrgID(owner.ID, org.ID, auth.WithOrganizationRole(auth.OwnerRole))
+	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnly.ID}).MustNew(orgCtx, t)
 
 	otherUser := suite.userBuilder(context.Background(), t)
 	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(otherUser.UserCtx, t)
