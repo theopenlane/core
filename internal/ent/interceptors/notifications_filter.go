@@ -5,6 +5,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -20,6 +21,8 @@ func NotificationQueryFilter() generated.Interceptor {
 		// Get user info from context
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
+			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing notifications")
+
 			return auth.ErrNoAuthUser
 		}
 

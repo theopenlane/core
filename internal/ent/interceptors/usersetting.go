@@ -31,7 +31,8 @@ func InterceptorUserSetting() ent.Interceptor {
 
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
-			return auth.ErrNoAuthUser
+			// this happens when this is before authentication, e.g. on login and we are pulling the user settings
+			return nil
 		}
 
 		switch qCtx.Type {

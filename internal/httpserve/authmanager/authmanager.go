@@ -269,7 +269,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil {
-		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context")
+		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while creating auth session")
 
 		return "", auth.ErrNoAuthUser
 	}

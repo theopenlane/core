@@ -15,16 +15,16 @@ import (
 
 // updateUserAuthSession updates the user session with the new org ID
 // and sets updated auth cookies
-func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID string) error {
+func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID string) (context.Context, error) {
 	if am == nil {
 		logx.FromContext(ctx).Error().Msg("auth manager is nil, unable to update user auth session")
 
-		return ErrInternalServerError
+		return ctx, ErrInternalServerError
 	}
 
 	sessionCaller, ok := auth.CallerFromContext(ctx)
 	if !ok || sessionCaller == nil {
-		return auth.ErrNoAuthUser
+		return ctx, auth.ErrNoAuthUser
 	}
 
 	user, err := generated.FromContext(ctx).User.
@@ -33,19 +33,19 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 		Where(user.ID(sessionCaller.SubjectID)).
 		Only(ctx)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
 	ec, err := echocontext.EchoContextFromContext(ctx)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
 	// generate a new auth session with the new org ID
 	// this will also set the session cookie
 	out, err := am.GenerateUserAuthSessionWithOrg(ctx, ec.Response().Writer, user, newOrgID)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
 	// add the organization ID to the authenticated user context
@@ -53,7 +53,7 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 
 	ctx, err = auth.SetOrganizationIDInAuthContext(ctx, newOrgID)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
 	// set the auth cookies
@@ -63,5 +63,5 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	ctx = auth.WithAccessToken(ctx, out.AccessToken)
 	ctx = auth.WithRefreshToken(ctx, out.RefreshToken)
 
-	return err
+	return ctx, nil
 }

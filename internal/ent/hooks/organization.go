@@ -129,7 +129,8 @@ func HookOrganization() ent.Hook {
 				// and sessions are already set
 				if !orgCreated.PersonalOrg {
 					am := authmanager.New(m.Client())
-					if err := updateUserAuthSession(ctx, am, orgCreated.ID); err != nil {
+					ctx, err = updateUserAuthSession(ctx, am, orgCreated.ID)
+					if err != nil {
 						return v, err
 					}
 
@@ -142,7 +143,10 @@ func HookOrganization() ent.Hook {
 						}
 					}
 
-					if err := postOrganizationCreation(ctx, orgCreated, m); err != nil {
+					ctx, err = postOrganizationCreation(ctx, orgCreated, m)
+					if err != nil {
+						logx.FromContext(ctx).Error().Err(err).Msg("error in post organization creation steps")
+
 						return v, err
 					}
 				}
@@ -202,7 +206,8 @@ func HookOrganizationDelete() ent.Hook {
 			// if the deleted org was the current org, update the session cookie
 			am := authmanager.New(m.Client())
 
-			if err := updateUserAuthSession(ctx, am, newOrgID); err != nil {
+			ctx, err = updateUserAuthSession(ctx, am, newOrgID)
+			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to update user auth session on organization delete")
 
 				return v, nil
@@ -320,33 +325,33 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 }
 
 // postOrganizationCreation runs after an organization is created to perform additional setup
-func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) (context.Context, error) {
 	// capture the original org id, ignore error as this will not be set in all cases
 	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) //nolint:errcheck
 
 	// set the new org id in the auth context to process the rest of the post creation steps
 	ctx, err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID)
 	if err != nil {
-		return err
+		return ctx, err
 	}
 
 	// create default entity types, if configured
 	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
-		return err
+		return ctx, err
 	}
 
 	// create generated groups
 	if err := generateOrganizationGroups(ctx, m, orgCreated.ID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating generated groups")
 
-		return err
+		return ctx, err
 	}
 
 	// create subscriptions if the entitlement manager is enabled
 	if m.EntitlementManager.Config.IsEnabled() {
 		orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
 		if err != nil {
-			return err
+			return ctx, err
 		}
 
 		opts := []reconciler.OrgModuleOption{reconciler.WithTrial()}
@@ -356,18 +361,19 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 		_, err = reconciler.CreateDefaultOrgModulesProductsPrices(ctx, m.Client(), orgSubs, orgCreated.ID, opts...)
 		if err != nil {
-			return err
+			return ctx, err
 		}
 	}
 
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
-		if ctx, err = auth.SetOrganizationIDInAuthContext(ctx, originalOrg); err != nil {
-			return err
+		ctx, err = auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
+		if err != nil {
+			return ctx, err
 		}
 	}
 
-	return nil
+	return ctx, nil
 }
 
 // validateOrgDeletion ensures the organization can be deleted

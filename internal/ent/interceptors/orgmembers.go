@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // TraverseOrgMembers is middleware to change the Org Members query
@@ -30,6 +31,7 @@ func TraverseOrgMembers() ent.Interceptor {
 
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
+			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing org members")
 			return auth.ErrNoAuthUser
 		}
 

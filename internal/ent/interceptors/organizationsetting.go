@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // InterceptorOrganizationSetting is middleware to change the org setting query
@@ -28,6 +29,7 @@ func InterceptorOrganizationSetting() ent.Interceptor {
 
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
+			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing organization settings")
 			return auth.ErrNoAuthUser
 		}
 

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // InterceptorGroupSetting is middleware to change the GroupSetting query
@@ -32,6 +33,8 @@ func InterceptorGroupSetting() ent.Interceptor {
 
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
+			logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while traversing group settings")
+
 			return auth.ErrNoAuthUser
 		}
 
