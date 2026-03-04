@@ -81,8 +81,9 @@ func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 
 	var email string
 
-	if au, err := auth.GetAuthenticatedUserFromContext(ctx.Context); err == nil && au != nil {
-		email = au.SubjectEmail
+	caller, ok := auth.CallerFromContext(ctx.Context)
+	if ok && caller != nil {
+		email = caller.SubjectEmail
 	}
 
 	tmpl, err := loadSlackTemplate(ctx.Context, "", slacktemplates.DemoRequestName)
