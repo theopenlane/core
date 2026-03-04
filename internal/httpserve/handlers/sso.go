@@ -32,6 +32,7 @@ import (
 const (
 	authenticatedUserSSOCookieName  = "user_sso"
 	authenticatedUserSSOCookieValue = "1"
+	stateLength                     = 16
 )
 
 var ssoNonceContextKey = contextx.NewKey[nonce]()
@@ -436,11 +437,11 @@ func (h *Handler) generateSSOAuthURL(ctx echo.Context, orgID string) (string, er
 	cfg := *h.SessionConfig.CookieConfig
 
 	// set the org ID as a cookie for the OIDC flow
-	state, err := auth.GenerateOAuthState(16)
+	state, err := auth.GenerateOAuthState(stateLength)
 	if err != nil {
 		return "", err
 	}
-	nonce, err := auth.GenerateOAuthState(16)
+	nonce, err := auth.GenerateOAuthState(stateLength)
 	if err != nil {
 		return "", err
 	}

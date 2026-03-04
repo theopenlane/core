@@ -31,6 +31,7 @@ var (
 	oauthStateCookieName  = "oauth_state"
 	oauthOrgIDCookieName  = "oauth_org_id"
 	oauthUserIDCookieName = "oauth_user_id"
+	stateLength           = 16
 )
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration.
@@ -202,7 +203,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 // generateOAuthState creates a secure state parameter containing org ID and provider.
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
-	randomPart, err := auth.GenerateOAuthState(16)
+	randomPart, err := auth.GenerateOAuthState(stateLength)
 	if err != nil {
 		return "", err
 	}
