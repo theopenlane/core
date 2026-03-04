@@ -226,18 +226,20 @@ func (b *Broker) lookupProvider(provider types.ProviderType) (types.Provider, er
 }
 
 // getCached retrieves a cached credential if it exists and is not expired.
-// Uses a read lock so concurrent reads do not block each other; expired-entry
-// cleanup is deferred to the write path in setCached.
+// Expired entries are purged opportunistically on read to prevent stale buildup.
 func (b *Broker) getCached(orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool) {
-	b.mu.RLock()
-	defer b.mu.RUnlock()
+	b.mu.Lock()
+	defer b.mu.Unlock()
+
+	now := b.now()
+	b.purgeExpiredLocked(now)
 
 	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}]
 	if !ok {
 		return types.CredentialPayload{}, false
 	}
 
-	if !entry.expires.After(b.now()) {
+	if !entry.expires.After(now) {
 		return types.CredentialPayload{}, false
 	}
 
