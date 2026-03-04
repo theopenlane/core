@@ -75,7 +75,7 @@ func HookCreateAPIToken() ent.Hook {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-					return nil, err
+					return nil, ErrInternalServerError
 				}
 			}
 
@@ -117,7 +117,7 @@ func HookUpdateAPIToken() ent.Hook {
 				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-					return nil, err
+					return nil, ErrInternalServerError
 				}
 			}
 

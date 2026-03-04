@@ -27595,6 +27595,9 @@ type CreateWorkflowDefinitionInput struct {
 	DefinitionJSON          *models.WorkflowDefinitionDocument
 	TrackedFields           []string
 	OwnerID                 *string
+	BlockedGroupIDs         []string
+	EditorIDs               []string
+	ViewerIDs               []string
 	TagDefinitionIDs        []string
 	GroupIDs                []string
 	NotificationTemplateIDs []string
@@ -27645,6 +27648,15 @@ func (i *CreateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.TagDefinitionIDs; len(v) > 0 {
 		m.AddTagDefinitionIDs(v...)
 	}
@@ -27691,6 +27703,15 @@ type UpdateWorkflowDefinitionInput struct {
 	ClearTrackedFields            bool
 	TrackedFields                 []string
 	AppendTrackedFields           []string
+	ClearBlockedGroups            bool
+	AddBlockedGroupIDs            []string
+	RemoveBlockedGroupIDs         []string
+	ClearEditors                  bool
+	AddEditorIDs                  []string
+	RemoveEditorIDs               []string
+	ClearViewers                  bool
+	AddViewerIDs                  []string
+	RemoveViewerIDs               []string
 	ClearTagDefinitions           bool
 	AddTagDefinitionIDs           []string
 	RemoveTagDefinitionIDs        []string
@@ -27778,6 +27799,33 @@ func (i *UpdateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	}
 	if i.AppendTrackedFields != nil {
 		m.AppendTrackedFields(i.TrackedFields)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearTagDefinitions {
 		m.ClearTagDefinitions()

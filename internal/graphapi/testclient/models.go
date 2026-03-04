@@ -9002,6 +9002,9 @@ type CreateWorkflowDefinitionInput struct {
 	// Cached list of fields that should trigger workflow evaluation
 	TrackedFields           []string `json:"trackedFields,omitempty"`
 	OwnerID                 *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs         []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs               []string `json:"editorIDs,omitempty"`
+	ViewerIDs               []string `json:"viewerIDs,omitempty"`
 	TagDefinitionIDs        []string `json:"tagDefinitionIDs,omitempty"`
 	GroupIDs                []string `json:"groupIDs,omitempty"`
 	NotificationTemplateIDs []string `json:"notificationTemplateIDs,omitempty"`
@@ -42893,6 +42896,15 @@ type UpdateWorkflowDefinitionInput struct {
 	TrackedFields                 []string `json:"trackedFields,omitempty"`
 	AppendTrackedFields           []string `json:"appendTrackedFields,omitempty"`
 	ClearTrackedFields            *bool    `json:"clearTrackedFields,omitempty"`
+	AddBlockedGroupIDs            []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs         []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups            *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                  []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs               []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors                  *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs                  []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs               []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers                  *bool    `json:"clearViewers,omitempty"`
 	AddTagDefinitionIDs           []string `json:"addTagDefinitionIDs,omitempty"`
 	RemoveTagDefinitionIDs        []string `json:"removeTagDefinitionIDs,omitempty"`
 	ClearTagDefinitions           *bool    `json:"clearTagDefinitions,omitempty"`
@@ -45229,6 +45241,9 @@ type WorkflowDefinition struct {
 	// Cached list of fields that should trigger workflow evaluation
 	TrackedFields         []string                        `json:"trackedFields,omitempty"`
 	Owner                 *Organization                   `json:"owner,omitempty"`
+	BlockedGroups         *GroupConnection                `json:"blockedGroups"`
+	Editors               *GroupConnection                `json:"editors"`
+	Viewers               *GroupConnection                `json:"viewers"`
 	TagDefinitions        *TagDefinitionConnection        `json:"tagDefinitions"`
 	Groups                *GroupConnection                `json:"groups"`
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
@@ -45515,6 +45530,15 @@ type WorkflowDefinitionWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// tag_definitions edge predicates
 	HasTagDefinitions     *bool                      `json:"hasTagDefinitions,omitempty"`
 	HasTagDefinitionsWith []*TagDefinitionWhereInput `json:"hasTagDefinitionsWith,omitempty"`

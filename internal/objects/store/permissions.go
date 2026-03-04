@@ -20,6 +20,8 @@ var (
 	ErrMissingParent = errors.New("parent id or type is missing")
 	// ErrMissingOrganizationID is returned when organization ID cannot be determined for file upload
 	ErrMissingOrganizationID = errors.New("organization ID is required for file upload")
+	// ErrInternalServerError is returned when an error occurs that should not be exposed to the user and is not the user's fault, such as an error writing to the database or authz system
+	ErrInternalServerError = errors.New("internal server error")
 )
 
 // AddFilePermissions writes authorization tuples for uploaded files and removes them from the request context.
@@ -82,7 +84,7 @@ func AddFilePermissions(ctx context.Context) (context.Context, error) {
 			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to write tuple keys")
 
-				return ctx, err
+				return ctx, ErrInternalServerError
 			}
 
 			logx.FromContext(ctx).Debug().Interface("req", req).Msg("added file permissions")

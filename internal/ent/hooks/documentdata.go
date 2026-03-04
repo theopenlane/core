@@ -120,7 +120,9 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			})
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create nda_signed relationship tuple")
+
+				return nil, ErrInternalServerError
 			}
 
 			ndaRequestID, err := m.Client().TrustCenterNDARequest.Query().Where(

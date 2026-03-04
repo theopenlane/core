@@ -603,7 +603,7 @@ type entity
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [user, service, organization]
+    define parent: [user, service, organization, trust_center_entity]
 # assets are always assigned to an organization and permissions are inherited from the organization
 # individual users or groups can also be given permission to an asset
 type asset
@@ -679,7 +679,7 @@ type task
     define assignee: [user]
     define assigner: [user]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, risk,task]
+    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, risk, task, asset, platform, identity_holder, scan, action_plan]
     define viewer: can_view from parent
     define editor: [organization#owner] or can_edit from parent
 # notes are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
@@ -709,7 +709,7 @@ type evidence
     define can_edit: [user, service] or can_delete or ((can_edit from parent or editor) but not blocked)
     define can_delete: [user, service] or ((can_delete from parent or editor) but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, task]
+    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, task, platform, scan]
     define viewer: [group#member] or editor
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
@@ -939,7 +939,7 @@ type assessment_response
     define can_view: [user] or response_owner or admin_viewer or viewer
     define can_delete: admin_viewer
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, assessment, campaign]
+    define parent: [user, service, organization, assessment, campaign, identity_holder, entity]
     # the user who filled out the assessment response - they can view their own response
     define response_owner: [user]
     # org admins and owners can view all responses for oversight/management
@@ -948,6 +948,7 @@ type assessment_response
     define editor: [organization#owner] or can_edit from parent
     define viewer: [organization#owner] or editor or can_view from parent
 
+# workflow definitions can be created by org admins or users in groups with create access
 type workflow_definition
   relations
     define can_view: [user, service] or can_edit or (viewer but not blocked)
@@ -956,21 +957,19 @@ type workflow_definition
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization]
     define admin: [user, service] or can_delete from parent
-    define viewer: [group#member] or editor or can_view from parent
+    define viewer: [group#member] or editor 
     define editor: [group#member, organization#owner] or can_edit from parent
     define blocked: [user, group#member]
 
 # workflow_instance and related types are system-driven
-# users can view through org membership but only services can create/edit/delete
-# user is included in parent to allow hooks to write tuples but does not grant access
-# since user type has no can_view relation for the viewer inheritance to use
+# users can view through parent object relations but only services can create/edit/delete
 type workflow_instance
   relations
     define can_view: [service] or (viewer but not blocked)
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_definition, control, internal_policy, evidence]
+    define parent: [user, service, control, internal_policy, evidence, subcontrol, action_plan, procedure, campaign, campaign_target, identity_holder, platform, workflow_definition]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 
@@ -980,7 +979,7 @@ type workflow_assignment
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_instance]
+    define parent: [user, service, workflow_instance]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 
@@ -990,7 +989,7 @@ type workflow_object_ref
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_instance, control, internal_policy, evidence, subcontrol, action_plan, procedure, campaign, campaign_target, directory_account, directory_group, directory_membership, identity_holder, platform]
+    define parent: [user, service, workflow_instance, control, internal_policy, evidence, subcontrol, action_plan, procedure, campaign, campaign_target, directory_account, directory_group, directory_membership, identity_holder, platform]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 
@@ -1000,7 +999,7 @@ type workflow_assignment_target
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_assignment]
+    define parent: [user, service, workflow_assignment]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 
@@ -1010,7 +1009,7 @@ type workflow_event
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_instance]
+    define parent: [user, service, workflow_instance]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 
@@ -1020,7 +1019,7 @@ type workflow_proposal
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, workflow_object_ref]
+    define parent: [user, service, workflow_object_ref]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 
@@ -1055,7 +1054,7 @@ type remediation
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [user, service, organization, finding, vulnerability]
+    define parent: [user, service, organization, action_plan, program, control, subcontrol, risk, finding, vulnerability, asset, entity, task]
 
 type scan
   relations
@@ -1089,6 +1088,17 @@ type identity_holder
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
     define parent: [user, service, organization, platform]
+
+type system_detail
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, platform, program]
 
 
 ## Conditions

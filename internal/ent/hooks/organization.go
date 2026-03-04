@@ -529,7 +529,7 @@ func createParentOrgTuple(ctx context.Context, m *generated.OrganizationMutation
 	}, nil); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
-		return err
+		return ErrInternalServerError
 	}
 
 	return nil

@@ -2892,6 +2892,9 @@ var (
 		{Name: "vulnerability_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_editors", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_viewers", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_editors", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_viewers", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_groups", Type: field.TypeString, Nullable: true},
 	}
 	// GroupsTable holds the schema information for the "groups" table.
@@ -3291,8 +3294,26 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_groups",
+				Symbol:     "groups_workflow_definitions_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[87]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_editors",
+				Columns:    []*schema.Column{GroupsColumns[88]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_viewers",
+				Columns:    []*schema.Column{GroupsColumns[89]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_groups",
+				Columns:    []*schema.Column{GroupsColumns[90]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -13285,6 +13306,9 @@ func init() {
 	GroupsTable.ForeignKeys[63].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[64].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[65].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[66].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[67].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[68].RefTable = WorkflowDefinitionsTable
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable

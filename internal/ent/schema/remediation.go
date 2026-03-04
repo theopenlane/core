@@ -177,6 +177,7 @@ func (r Remediation) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Remediation](r,
 				withParents(
+					Organization{},
 					ActionPlan{},
 					Program{},
 					Control{},

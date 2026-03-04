@@ -89,6 +89,12 @@ type WorkflowDefinition struct {
 type WorkflowDefinitionEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// Tags this workflow targets for scoping
 	TagDefinitions []*TagDefinition `json:"tag_definitions,omitempty"`
 	// Groups this workflow targets for scoping
@@ -101,10 +107,13 @@ type WorkflowDefinitionEdges struct {
 	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [8]map[string]int
 
+	namedBlockedGroups         map[string][]*Group
+	namedEditors               map[string][]*Group
+	namedViewers               map[string][]*Group
 	namedTagDefinitions        map[string][]*TagDefinition
 	namedGroups                map[string][]*Group
 	namedWorkflowInstances     map[string][]*WorkflowInstance
@@ -123,10 +132,37 @@ func (e WorkflowDefinitionEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e WorkflowDefinitionEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e WorkflowDefinitionEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e WorkflowDefinitionEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // TagDefinitionsOrErr returns the TagDefinitions value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) TagDefinitionsOrErr() ([]*TagDefinition, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[4] {
 		return e.TagDefinitions, nil
 	}
 	return nil, &NotLoadedError{edge: "tag_definitions"}
@@ -135,7 +171,7 @@ func (e WorkflowDefinitionEdges) TagDefinitionsOrErr() ([]*TagDefinition, error)
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -144,7 +180,7 @@ func (e WorkflowDefinitionEdges) GroupsOrErr() ([]*Group, error) {
 // WorkflowInstancesOrErr returns the WorkflowInstances value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[6] {
 		return e.WorkflowInstances, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_instances"}
@@ -153,7 +189,7 @@ func (e WorkflowDefinitionEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, 
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[7] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -162,7 +198,7 @@ func (e WorkflowDefinitionEdges) NotificationTemplatesOrErr() ([]*NotificationTe
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowDefinitionEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[8] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -413,6 +449,21 @@ func (_m *WorkflowDefinition) QueryOwner() *OrganizationQuery {
 	return NewWorkflowDefinitionClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the WorkflowDefinition entity.
+func (_m *WorkflowDefinition) QueryBlockedGroups() *GroupQuery {
+	return NewWorkflowDefinitionClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the WorkflowDefinition entity.
+func (_m *WorkflowDefinition) QueryEditors() *GroupQuery {
+	return NewWorkflowDefinitionClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the WorkflowDefinition entity.
+func (_m *WorkflowDefinition) QueryViewers() *GroupQuery {
+	return NewWorkflowDefinitionClient(_m.config).QueryViewers(_m)
+}
+
 // QueryTagDefinitions queries the "tag_definitions" edge of the WorkflowDefinition entity.
 func (_m *WorkflowDefinition) QueryTagDefinitions() *TagDefinitionQuery {
 	return NewWorkflowDefinitionClient(_m.config).QueryTagDefinitions(_m)
@@ -555,6 +606,78 @@ func (_m *WorkflowDefinition) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.TrackedFields))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *WorkflowDefinition) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *WorkflowDefinition) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *WorkflowDefinition) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *WorkflowDefinition) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *WorkflowDefinition) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *WorkflowDefinition) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedTagDefinitions returns the TagDefinitions named value or an error if the edge was not

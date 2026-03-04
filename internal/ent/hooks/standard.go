@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -207,7 +208,9 @@ func HookStandardPublicAccessTuples() ent.Hook {
 
 			if len(writes) > 0 || len(deletes) > 0 {
 				if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
-					return retVal, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to update relationship tuples for standard public access transition")
+
+					return retVal, ErrInternalServerError
 				}
 			}
 

@@ -34418,6 +34418,63 @@ func (c *WorkflowDefinitionClient) QueryOwner(_m *WorkflowDefinition) *Organizat
 	return query
 }
 
+// QueryBlockedGroups queries the blocked_groups edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryBlockedGroups(_m *WorkflowDefinition) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.BlockedGroupsTable, workflowdefinition.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryEditors(_m *WorkflowDefinition) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.EditorsTable, workflowdefinition.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryViewers(_m *WorkflowDefinition) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.ViewersTable, workflowdefinition.ViewersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTagDefinitions queries the tag_definitions edge of a WorkflowDefinition.
 func (c *WorkflowDefinitionClient) QueryTagDefinitions(_m *WorkflowDefinition) *TagDefinitionQuery {
 	query := (&TagDefinitionClient{config: c.config}).Query()

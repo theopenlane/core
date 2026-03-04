@@ -73,7 +73,9 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUse
 			// write the tuples to the authz service
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
 				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+
+					return nil, ErrInternalServerError
 				}
 
 				if len(addTuples) != 0 {
@@ -120,7 +122,9 @@ func HookGroupPermissionsTuples() ent.Hook {
 			// write the tuples to the authz service
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
 				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+
+					return nil, ErrInternalServerError
 				}
 
 				logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")
@@ -169,7 +173,9 @@ func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.H
 			// were already checked by the global edge permissions hook
 			if len(addTuples) != 0 || len(removeTuples) != 0 {
 				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+
+					return nil, ErrInternalServerError
 				}
 
 				logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added tuples")

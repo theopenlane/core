@@ -179,7 +179,9 @@ func HookUserPermissions() ent.Hook {
 			}
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for user self permissions")
+
+				return nil, ErrInternalServerError
 			}
 
 			return v, err
