@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/theopenlane/core/common/integrations/types"
@@ -119,6 +121,17 @@ func decodeURLBase64(value string) ([]byte, error) {
 	}
 
 	return base64.RawURLEncoding.DecodeString(value)
+}
+
+// stateFingerprint returns a non-reversible short fingerprint for state logging.
+func stateFingerprint(state string) string {
+	if state == "" {
+		return ""
+	}
+
+	sum := sha256.Sum256([]byte(state))
+
+	return base64.RawURLEncoding.EncodeToString(sum[:8])
 }
 
 // OAuth error helpers reused across handlers to preserve consistent messaging.

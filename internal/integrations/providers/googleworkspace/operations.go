@@ -6,12 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"golang.org/x/oauth2"
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/googleapi"
-	"google.golang.org/api/option"
 
-	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
@@ -76,9 +73,33 @@ func googleWorkspaceOperations() []types.OperationDescriptor {
 	}
 }
 
-// runGoogleWorkspaceUsers returns a small sample of directory users for posture checks.
-func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+// runGoogleWorkspaceHealth verifies Admin SDK reachability with a small users.list probe.
+func runGoogleWorkspaceHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	svc, err := resolveGoogleWorkspaceClient(ctx, input)
+	if err != nil {
+		return types.OperationResult{}, err
+	}
+
+	resp, err := svc.Users.List().
+		Customer("my_customer").
+		MaxResults(googleWorkspaceHealthMaxResults).
+		Projection("basic").
+		ViewType("admin_view").
+		Fields(googleapi.Field("users(id),nextPageToken")).
+		Do()
+	if err != nil {
+		return operations.OperationFailure("Google Workspace health check failed", err, nil)
+	}
+
+	return operations.OperationSuccess(
+		fmt.Sprintf("Google Workspace directory API reachable (%d sample users)", len(resp.Users)),
+		googleWorkspaceHealthDetails{UserCount: len(resp.Users)},
+	), nil
+}
+
+// runGoogleWorkspaceDirectorySync collects directory users and emits directory account envelopes.
+func runGoogleWorkspaceDirectorySync(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	svc, err := resolveGoogleWorkspaceClient(ctx, input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

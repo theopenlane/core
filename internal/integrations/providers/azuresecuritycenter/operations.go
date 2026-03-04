@@ -78,7 +78,7 @@ func resolveAzureSecurityClient(_ context.Context, input types.OperationInput) (
 
 // runAzureSecurityHealth verifies access by fetching Defender pricing data.
 func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	apc, err := resolveAzureSecurityClient(ctx, input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -95,7 +95,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 
 // runAzureSecurityPricing collects Defender pricing metadata.
 func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	apc, err := resolveAzureSecurityClient(ctx, input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
