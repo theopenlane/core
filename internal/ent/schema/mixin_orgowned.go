@@ -230,36 +230,6 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 	return nil
 }
 
-// addOrganizationOwnerParentRelation adds the organization as a parent to the object
-// This is used for service-only objects where users can view through org membership
-// but cannot edit (unlike addOrganizationOwnerEditorRelation which grants editor access)
-func addOrganizationOwnerParentRelation(ctx context.Context, m ent.Mutation, id string) (err error) {
-	var orgID string
-
-	orgID, err = auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return fmt.Errorf("failed to get organization id from context: %w", err)
-	}
-
-	tr := fgax.TupleRequest{
-		SubjectType: generated.TypeOrganization,
-		SubjectID:   orgID,
-		ObjectID:    id,
-		ObjectType:  hooks.GetObjectTypeFromEntMutation(m),
-		Relation:    fgax.ParentRelation,
-	}
-
-	t := fgax.GetTupleKey(tr)
-
-	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{t}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create organization owner parent relationship tuple")
-
-		return ErrInternalServerError
-	}
-
-	return nil
-}
-
 // defaultOrgInterceptorFunc is the default interceptor function for the organization owned mixin
 // this applies a filter on organization ID for any request to a schema that applies the org
 // owned mixin
