@@ -22,11 +22,11 @@ require (
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/alitto/pond/v2 v2.6.2
 	github.com/aws/aws-sdk-go-v2 v1.41.3
-	github.com/aws/aws-sdk-go-v2/config v1.32.10
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.10
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.4
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.6
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.2
+	github.com/aws/aws-sdk-go-v2/config v1.32.11
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.11
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.5
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.7
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.3
 	github.com/brianvoe/gofakeit/v7 v7.14.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.8.0
@@ -120,7 +120,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.8.0 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.0.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.0.7 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
@@ -158,19 +158,19 @@ require (
 	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.5 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.18 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.6 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.19 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.19 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.19 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.18 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.10 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.18 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.18 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.30.11 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.15 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.41.7
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.5 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.19 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.11 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.19 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.19 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.30.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.16 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.41.8
 	github.com/aws/smithy-go v1.24.2 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
@@ -251,7 +251,7 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.10
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.0
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.1
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
