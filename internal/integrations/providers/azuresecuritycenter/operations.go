@@ -3,8 +3,8 @@ package azuresecuritycenter
 import (
 	"context"
 	"fmt"
-	"net/url"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/auth"
@@ -29,7 +29,7 @@ type azureSecurityPricingSample struct {
 }
 
 type azureSecurityPricingDetails struct {
-	Count   int                        `json:"count"`
+	Count   int                          `json:"count"`
 	Samples []azureSecurityPricingSample `json:"samples"`
 }
 
@@ -47,6 +47,35 @@ func azureSecurityOperations() []types.OperationDescriptor {
 	}
 }
 
+// resolveAzureSecurityClient returns a pooled Azure pricings client or builds one from the credential payload.
+func resolveAzureSecurityClient(_ context.Context, input types.OperationInput) (*azurePricingsClient, error) {
+	if c, ok := types.ClientInstanceAs[*azurePricingsClient](input.Client); ok {
+		return c, nil
+	}
+
+	token, err := auth.OAuthTokenFromPayload(input.Credential)
+	if err != nil {
+		return nil, err
+	}
+
+	subscriptionID, _ := input.Credential.Data.ProviderData["subscriptionId"].(string)
+	if subscriptionID == "" {
+		return nil, ErrSubscriptionIDMissing
+	}
+
+	cred := staticAzureCredential{token: token}
+
+	client, err := armsecurity.NewPricingsClient(cred, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return &azurePricingsClient{
+		client: client,
+		scope:  fmt.Sprintf("%s%s", azureSubscriptionScopePrefix, subscriptionID),
+	}, nil
+}
+
 // runAzureSecurityHealth verifies access by fetching Defender pricing data.
 func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
@@ -54,12 +83,7 @@ func runAzureSecurityHealth(ctx context.Context, input types.OperationInput) (ty
 		return types.OperationResult{}, err
 	}
 
-	subscriptionID, err := subscriptionIDFromPayload(input.Credential)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
+	resp, err := apc.client.List(ctx, apc.scope, nil)
 	if err != nil {
 		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
@@ -76,69 +100,30 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 		return types.OperationResult{}, err
 	}
 
-	subscriptionID, err := subscriptionIDFromPayload(input.Credential)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	resp, err := listSecurityPricings(ctx, token, subscriptionID, client)
+	resp, err := apc.client.List(ctx, apc.scope, nil)
 	if err != nil {
 		return operations.OperationFailure("Azure Security Center pricing fetch failed", err, nil)
 	}
 
-	samples := lo.Map(resp.Value[:min(len(resp.Value), operations.DefaultSampleSize)], func(item defenderPricing, _ int) azureSecurityPricingSample {
-		return azureSecurityPricingSample{
-			Name:      item.Name,
-			Tier:      item.Properties.PricingTier,
-			SubPlan:   item.Properties.SubPlan,
-			FreeTrial: item.Properties.FreeTrialRemainingTime,
+	samples := lo.Map(resp.Value[:min(len(resp.Value), operations.DefaultSampleSize)], func(item *armsecurity.Pricing, _ int) azureSecurityPricingSample {
+		sample := azureSecurityPricingSample{
+			Name: lo.FromPtrOr(item.Name, ""),
 		}
+
+		if item.Properties != nil {
+			if item.Properties.PricingTier != nil {
+				sample.Tier = string(*item.Properties.PricingTier)
+			}
+
+			sample.SubPlan = lo.FromPtrOr(item.Properties.SubPlan, "")
+			sample.FreeTrial = lo.FromPtrOr(item.Properties.FreeTrialRemainingTime, "")
+		}
+
+		return sample
 	})
 
 	return operations.OperationSuccess(fmt.Sprintf("Collected %d Defender pricing records", len(resp.Value)), azureSecurityPricingDetails{
 		Count:   len(resp.Value),
 		Samples: samples,
 	}), nil
-}
-
-type defenderPricingResponse struct {
-	// Value holds pricing entries returned by the API
-	Value []defenderPricing `json:"value"`
-}
-
-type defenderPricing struct {
-	// Name is the pricing resource name
-	Name string `json:"name"`
-	// Properties holds pricing details for the resource
-	Properties defenderPricingDetails `json:"properties"`
-}
-
-type defenderPricingDetails struct {
-	// PricingTier is the Defender pricing tier
-	PricingTier string `json:"pricingTier"`
-	// SubPlan is the Defender sub-plan identifier
-	SubPlan string `json:"subPlan"`
-	// FreeTrialRemainingTime reports remaining free trial duration
-	FreeTrialRemainingTime string `json:"freeTrialRemainingTime"`
-}
-
-// listSecurityPricings queries Defender pricing data for a subscription.
-func listSecurityPricings(ctx context.Context, token string, subscriptionID string, client *auth.AuthenticatedClient) (defenderPricingResponse, error) {
-	endpoint := fmt.Sprintf("https://management.azure.com/subscriptions/%s/providers/Microsoft.Security/pricings?api-version=2024-01-01", url.PathEscape(subscriptionID))
-	var resp defenderPricingResponse
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-		return defenderPricingResponse{}, err
-	}
-
-	return resp, nil
-}
-
-// subscriptionIDFromPayload extracts the subscription ID from provider metadata.
-func subscriptionIDFromPayload(payload types.CredentialPayload) (string, error) {
-	subscriptionID, _ := payload.Data.ProviderData["subscriptionId"].(string)
-	if subscriptionID == "" {
-		return "", ErrSubscriptionIDMissing
-	}
-
-	return subscriptionID, nil
 }

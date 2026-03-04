@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -10,6 +11,10 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/types"
 )
+
+type fakeClient struct {
+	Token string
+}
 
 type fakeCredentialSource struct {
 	payload     types.CredentialPayload
@@ -40,30 +45,18 @@ func (f *fakeCredentialSource) Mint(context.Context, string, types.ProviderType)
 	return cloneCredentialPayload(f.payload), nil
 }
 
-type fakeClient struct {
-	Token string
-	Note  string
-}
-
-type fakeConfig struct {
-	Note string
-}
-
 type trackingBuilder struct {
 	provider types.ProviderType
 	builds   int
 }
 
-func (b *trackingBuilder) Build(_ context.Context, payload types.CredentialPayload, cfg fakeConfig) (*fakeClient, error) {
+func (b *trackingBuilder) Build(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (*fakeClient, error) {
 	b.builds++
 	token := ""
 	if payload.Token != nil {
 		token = payload.Token.AccessToken
 	}
-	return &fakeClient{
-		Token: token,
-		Note:  cfg.Note,
-	}, nil
+	return &fakeClient{Token: token}, nil
 }
 
 func (b *trackingBuilder) ProviderType() types.ProviderType {
@@ -82,12 +75,12 @@ func TestClientPoolCachesClients(t *testing.T) {
 	require.NoError(t, err)
 
 	ctx := context.Background()
-	client, err := pool.Get(ctx, "org-1", WithClientConfig(fakeConfig{Note: "first"}))
+	client, err := pool.Get(ctx, "org-1")
 	require.NoError(t, err)
 	require.Equal(t, "token-one", client.Token)
 	require.Equal(t, 1, builder.builds)
 
-	client, err = pool.Get(ctx, "org-1", WithClientConfig(fakeConfig{Note: "ignored"}))
+	client, err = pool.Get(ctx, "org-1")
 	require.NoError(t, err)
 	require.Equal(t, "token-one", client.Token)
 	require.Equal(t, 1, builder.builds, "second call should reuse cached client")
@@ -134,7 +127,7 @@ func TestClientPoolForceRefresh(t *testing.T) {
 	pool, err := NewClientPool(source, builder)
 	require.NoError(t, err)
 
-	client, err := pool.Get(context.Background(), "org-1", WithClientForceRefresh[fakeConfig]())
+	client, err := pool.Get(context.Background(), "org-1", WithClientForceRefresh())
 	require.NoError(t, err)
 	require.Equal(t, "token-next", client.Token)
 	require.Equal(t, 1, source.mintCalls)

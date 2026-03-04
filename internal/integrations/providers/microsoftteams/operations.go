@@ -10,6 +10,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/types"
 )
 
+// teamsRestClient is the package-level REST client for Microsoft Graph API requests.
+var teamsRestClient = auth.RESTClient{BaseURL: "https://graph.microsoft.com/v1.0/"}
+
 const (
 	teamsHealthOp      types.OperationName = "health.default"
 	teamsChannelsOp    types.OperationName = "teams.sample"
@@ -35,7 +38,7 @@ var teamsMessageConfigSchema = operations.SchemaFrom[teamsMessageOperationConfig
 func teamsOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		operations.HealthOperation(teamsHealthOp, "Call Graph /me to verify Teams access.", ClientMicrosoftTeamsAPI,
-			operations.HealthCheckRunner(operations.TokenTypeOAuth, "https://graph.microsoft.com/v1.0/me", "Graph /me failed",
+			operations.HealthCheckRunner(auth.OAuthTokenFromPayload, "https://graph.microsoft.com/v1.0/me", "Graph /me failed",
 				func(profile teamsProfileResponse) (string, any) {
 					return fmt.Sprintf("Graph token valid for %s", profile.DisplayName), teamsHealthDetails{
 						ID:   profile.ID,
@@ -106,9 +109,7 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 		} `json:"value"`
 	}
 
-	endpoint := "https://graph.microsoft.com/v1.0/me/joinedTeams?$top=5"
-
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+	if err := teamsRestClient.GetJSON(ctx, client, token, "me/joinedTeams?$top=5", nil, &resp); err != nil {
 		return operations.OperationFailure("Graph joinedTeams failed", err, nil)
 	}
 
@@ -165,11 +166,11 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		payload["subject"] = cfg.Subject
 	}
 
-	endpoint := fmt.Sprintf("https://graph.microsoft.com/v1.0/teams/%s/channels/%s/messages", url.PathEscape(teamID), url.PathEscape(channelID))
+	path := fmt.Sprintf("teams/%s/channels/%s/messages", url.PathEscape(teamID), url.PathEscape(channelID))
 	var resp struct {
 		ID string `json:"id"`
 	}
-	if err := auth.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
+	if err := teamsRestClient.PostJSON(ctx, token, path, payload, &resp); err != nil {
 		return operations.OperationFailure("Graph channel message failed", err, nil)
 	}
 

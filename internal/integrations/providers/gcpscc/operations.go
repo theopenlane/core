@@ -152,7 +152,7 @@ func runSecurityCenterHealthOperation(ctx context.Context, input types.Operation
 	}
 
 	client, ok := types.ClientInstanceAs[*cloudscc.Client](input.Client)
-	if !ok || client == nil {
+	if !ok {
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
@@ -198,7 +198,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	}
 
 	client, ok := types.ClientInstanceAs[*cloudscc.Client](input.Client)
-	if !ok || client == nil {
+	if !ok {
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
@@ -326,7 +326,7 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 	}
 
 	client, ok := types.ClientInstanceAs[*cloudscc.Client](input.Client)
-	if !ok || client == nil {
+	if !ok {
 		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 

@@ -278,12 +278,15 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 	clientDescriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
+		Build: func(_ context.Context, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
 			if payload.Data.APIToken == "" {
 				t.Fatalf("expected credential payload")
 			}
-			builderRegion = config["region"]
-			config["region"] = "builder-mutated"
+			decoded := map[string]any{}
+			if len(config) > 0 {
+				_ = json.Unmarshal(config, &decoded)
+			}
+			builderRegion = decoded["region"]
 			return types.NewClientInstance(&pooledClient{id: payload.Data.APIToken}), nil
 		},
 	}
@@ -458,59 +461,4 @@ func TestOperationManagerRunWithPayloadValidatesRequest(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestOperationManagerRunWithIntegrationIDRequiresIntegrationAwareSource(t *testing.T) {
-	t.Parallel()
-
-	provider := types.ProviderType("acme")
-	source := &plainCredentialSource{
-		payload: types.CredentialPayload{
-			Provider: provider,
-			Kind:     types.CredentialKindAPIKey,
-			Data:     models.CredentialSet{APIToken: "token"},
-		},
-	}
-
-	descriptor := types.OperationDescriptor{
-		Provider: provider,
-		Name:     types.OperationName("health"),
-		Run: func(context.Context, types.OperationInput) (types.OperationResult, error) {
-			return types.OperationResult{Status: types.OperationStatusOK}, nil
-		},
-	}
-
-	manager, err := NewOperationManager(source, []types.OperationDescriptor{descriptor})
-	if err != nil {
-		t.Fatalf("NewOperationManager() error = %v", err)
-	}
-
-	_, err = manager.Run(context.Background(), types.OperationRequest{
-		OrgID:         "org-1",
-		Provider:      provider,
-		Name:          descriptor.Name,
-		IntegrationID: "int-1",
-	})
-	if !errors.Is(err, ErrIntegrationScopedSourceRequired) {
-		t.Fatalf("expected ErrIntegrationScopedSourceRequired, got %v", err)
-	}
-}
-
-type plainCredentialSource struct {
-	payload types.CredentialPayload
-	err     error
-}
-
-func (s *plainCredentialSource) Get(context.Context, string, types.ProviderType) (types.CredentialPayload, error) {
-	if s.err != nil {
-		return types.CredentialPayload{}, s.err
-	}
-	return s.payload, nil
-}
-
-func (s *plainCredentialSource) Mint(context.Context, string, types.ProviderType) (types.CredentialPayload, error) {
-	if s.err != nil {
-		return types.CredentialPayload{}, s.err
-	}
-	return s.payload, nil
 }

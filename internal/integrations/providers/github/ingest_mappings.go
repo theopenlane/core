@@ -1,4 +1,4 @@
-package ingest
+package github
 
 import (
 	"strconv"
@@ -6,9 +6,7 @@ import (
 
 	"github.com/theopenlane/core/common/integrations/operations"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
-	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 )
 
 type celMapEntry struct {
@@ -16,29 +14,35 @@ type celMapEntry struct {
 	expr string
 }
 
-// celMapExpr renders CEL map entries into a CEL object literal string
+// celMapExpr renders CEL map entries into a CEL object literal string.
 func celMapExpr(entries []celMapEntry) string {
 	if len(entries) == 0 {
 		return "{}"
 	}
 
 	var b strings.Builder
+
 	b.WriteString("{\n")
+
 	for i, entry := range entries {
 		b.WriteString("  ")
 		b.WriteString(strconv.Quote(entry.key))
 		b.WriteString(": ")
 		b.WriteString(entry.expr)
+
 		if i < len(entries)-1 {
 			b.WriteString(",")
 		}
+
 		b.WriteString("\n")
 	}
+
 	b.WriteString("}")
+
 	return b.String()
 }
 
-// githubBaseEntries returns CEL map entries common to all GitHub alert types
+// githubBaseEntries returns CEL map entries common to all GitHub alert types.
 func githubBaseEntries(category, externalIDExpr string) []celMapEntry {
 	return []celMapEntry{
 		{key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, expr: externalIDExpr},
@@ -54,10 +58,11 @@ func githubBaseEntries(category, externalIDExpr string) []celMapEntry {
 	}
 }
 
-// buildGitHubMappingExpr constructs a CEL mapping expression with base fields and type-specific entries
+// buildGitHubMappingExpr constructs a CEL mapping expression with base fields and type-specific entries.
 func buildGitHubMappingExpr(category, externalIDExpr string, extras []celMapEntry) string {
 	entries := githubBaseEntries(category, externalIDExpr)
 	entries = append(entries, extras...)
+
 	return celMapExpr(entries)
 }
 
@@ -91,65 +96,20 @@ var (
 	)
 )
 
-var normalizedVulnerabilitySchema = normalizeMappingKey(mappingSchemaVulnerability)
-
-var githubVulnerabilityMappings = map[string]openapi.IntegrationMappingOverride{
-	operations.GitHubAlertTypeDependabot: {
-		FilterExpr: "true",
-		MapExpr:    mapExprGitHubDependabot,
-	},
-	operations.GitHubAlertTypeCodeScanning: {
-		FilterExpr: "true",
-		MapExpr:    mapExprGitHubCodeScanning,
-	},
-	operations.GitHubAlertTypeSecretScanning: {
-		FilterExpr: "true",
-		MapExpr:    mapExprGitHubSecretScanning,
-	},
-}
-
-// defaultMappingSpec returns built-in mappings for supported providers
-func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
-	switch normalizeMappingKey(schemaName) {
-	case normalizedVulnerabilitySchema:
-		switch provider {
-		case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
-			return githubMappingSpec(variant)
-		default:
-			return openapi.IntegrationMappingOverride{}, false
-		}
-	case normalizedDirectoryAccountSchema:
-		return directoryAccountMappingSpec(provider, variant)
-	default:
-		return openapi.IntegrationMappingOverride{}, false
+// githubVulnerabilityMappings returns the built-in vulnerability mapping specs for GitHub providers.
+func githubVulnerabilityMappings() map[string]integrationtypes.MappingSpec {
+	return map[string]integrationtypes.MappingSpec{
+		operations.GitHubAlertTypeDependabot: {
+			FilterExpr: "true",
+			MapExpr:    mapExprGitHubDependabot,
+		},
+		operations.GitHubAlertTypeCodeScanning: {
+			FilterExpr: "true",
+			MapExpr:    mapExprGitHubCodeScanning,
+		},
+		operations.GitHubAlertTypeSecretScanning: {
+			FilterExpr: "true",
+			MapExpr:    mapExprGitHubSecretScanning,
+		},
 	}
-}
-
-// supportsDefaultMapping reports whether built-in mappings exist for a schema
-func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName string) bool {
-	switch normalizeMappingKey(schemaName) {
-	case normalizedVulnerabilitySchema:
-		switch provider {
-		case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
-			return true
-		default:
-			return false
-		}
-	case normalizedDirectoryAccountSchema:
-		_, ok := directoryAccountMappingSpec(provider, "")
-		return ok
-	default:
-		return false
-	}
-}
-
-// githubMappingSpec selects the GitHub mapping for a specific alert type
-func githubMappingSpec(alertType string) (openapi.IntegrationMappingOverride, bool) {
-	alertType = operations.NormalizeGitHubAlertType(alertType)
-	spec, ok := githubVulnerabilityMappings[alertType]
-	if !ok {
-		return openapi.IntegrationMappingOverride{}, false
-	}
-
-	return spec, true
 }

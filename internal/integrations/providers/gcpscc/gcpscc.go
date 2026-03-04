@@ -271,7 +271,7 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 }
 
 // buildSecurityCenterClient builds the SCC client using stored credentials
-func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
+func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
 	meta, err := metadataFromPayload(payload)
 	if err != nil {
 		return types.EmptyClientInstance(), err

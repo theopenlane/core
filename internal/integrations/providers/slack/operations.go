@@ -2,9 +2,9 @@ package slack
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"net/url"
+
+	slackgo "github.com/slack-go/slack"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -58,42 +58,6 @@ func slackOperations() []types.OperationDescriptor {
 	}
 }
 
-// slackAuthTestResponse represents the response from Slack auth.test
-type slackAuthTestResponse struct {
-	// OK indicates whether the request succeeded
-	OK bool `json:"ok"`
-	// URL is the workspace URL
-	URL string `json:"url"`
-	// Team is the workspace name
-	Team string `json:"team"`
-	// User is the user name associated with the token
-	User string `json:"user"`
-	// Error contains the error message when ok is false
-	Error string `json:"error"`
-}
-
-// slackTeamInfoResponse represents the response from Slack team.info
-type slackTeamInfoResponse struct {
-	// OK indicates whether the request succeeded
-	OK bool `json:"ok"`
-	// Team holds the workspace details
-	Team slackTeamInfo `json:"team"`
-	// Error contains the error message when ok is false
-	Error string `json:"error"`
-}
-
-// slackTeamInfo represents Slack workspace information
-type slackTeamInfo struct {
-	// ID is the workspace identifier
-	ID string `json:"id"`
-	// Name is the workspace name
-	Name string `json:"name"`
-	// Domain is the workspace domain
-	Domain string `json:"domain"`
-	// EmailDomain is the workspace email domain
-	EmailDomain string `json:"email_domain"`
-}
-
 type slackHealthDetails struct {
 	Team string `json:"team"`
 	URL  string `json:"url"`
@@ -112,8 +76,18 @@ type slackMessageDetails struct {
 	TS      string `json:"ts"`
 }
 
-type slackAPIErrorDetails struct {
-	Error string `json:"error,omitempty"`
+// resolveSlackClient returns a pooled Slack client or builds one from the credential payload.
+func resolveSlackClient(input types.OperationInput) (*slackgo.Client, error) {
+	if c, ok := types.ClientInstanceAs[*slackgo.Client](input.Client); ok {
+		return c, nil
+	}
+
+	token, err := auth.OAuthTokenFromPayload(input.Credential)
+	if err != nil {
+		return nil, err
+	}
+
+	return slackgo.New(token), nil
 }
 
 // runSlackHealthOperation verifies the Slack OAuth token via auth.test
@@ -123,15 +97,9 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 		return types.OperationResult{}, err
 	}
 
-	var resp slackAuthTestResponse
-	if err := slackAPIGet(ctx, client, token, "auth.test", nil, &resp); err != nil {
+	resp, err := client.AuthTestContext(ctx)
+	if err != nil {
 		return operations.OperationFailure("Slack auth.test failed", err, nil)
-	}
-
-	if !resp.OK {
-		return operations.OperationFailure("Slack auth.test returned error", ErrSlackAPIError, slackAPIErrorDetails{
-			Error: resp.Error,
-		})
 	}
 
 	return operations.OperationSuccess(fmt.Sprintf("Slack token valid for workspace %s", resp.Team), slackHealthDetails{
@@ -148,35 +116,17 @@ func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (typ
 		return types.OperationResult{}, err
 	}
 
-	var resp slackTeamInfoResponse
-	if err := slackAPIGet(ctx, client, token, "team.info", nil, &resp); err != nil {
+	team, err := client.GetTeamInfoContext(ctx)
+	if err != nil {
 		return operations.OperationFailure("Slack team.info failed", err, nil)
 	}
 
-	if !resp.OK {
-		return operations.OperationFailure("Slack team.info returned error", ErrSlackAPIError, slackAPIErrorDetails{
-			Error: resp.Error,
-		})
-	}
-
-	team := resp.Team
 	return operations.OperationSuccess(fmt.Sprintf("Workspace %s (%s) settings retrieved", team.Name, team.ID), slackTeamDetails{
 		TeamID:      team.ID,
 		Name:        team.Name,
 		Domain:      team.Domain,
 		EmailDomain: team.EmailDomain,
 	}), nil
-}
-
-type slackMessageResponse struct {
-	// OK indicates whether the message was posted
-	OK bool `json:"ok"`
-	// Channel is the channel identifier where the message was posted
-	Channel string `json:"channel"`
-	// TS is the message timestamp
-	TS string `json:"ts"`
-	// Error contains the error message when ok is false
-	Error string `json:"error"`
 }
 
 // runSlackMessagePostOperation sends a message to a Slack channel or user
@@ -196,72 +146,37 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, ErrSlackChannelMissing
 	}
 
-	payload := map[string]any{
-		"channel": channel,
+	hasText := cfg.Text != ""
+	hasBlocks := len(cfg.Blocks) > 0
+	hasAttachments := len(cfg.Attachments) > 0
+
+	if !hasText && !hasBlocks && !hasAttachments {
+		return types.OperationResult{}, ErrSlackMessageEmpty
 	}
 
-	text := cfg.Text
-	if text != "" {
-		payload["text"] = text
+	opts := []slackgo.MsgOption{
+		slackgo.MsgOptionAsUser(true),
 	}
 
-	if len(cfg.Blocks) > 0 {
-		payload["blocks"] = cfg.Blocks
+	if hasText {
+		opts = append(opts, slackgo.MsgOptionText(cfg.Text, false))
 	}
-	if len(cfg.Attachments) > 0 {
-		payload["attachments"] = cfg.Attachments
-	}
+
 	if cfg.ThreadTS != "" {
-		payload["thread_ts"] = cfg.ThreadTS
-	}
-	if cfg.UnfurlLinks != nil {
-		payload["unfurl_links"] = cfg.UnfurlLinks
-	}
-	if cfg.UnfurlMedia != nil {
-		payload["unfurl_media"] = cfg.UnfurlMedia
+		opts = append(opts, slackgo.MsgOptionTS(cfg.ThreadTS))
 	}
 
-	if _, ok := payload["text"]; !ok {
-		if _, hasBlocks := payload["blocks"]; !hasBlocks {
-			if _, hasAttachments := payload["attachments"]; !hasAttachments {
-				return types.OperationResult{}, ErrSlackMessageEmpty
-			}
-		}
+	if cfg.UnfurlLinks != nil && !*cfg.UnfurlLinks {
+		opts = append(opts, slackgo.MsgOptionDisableLinkUnfurl())
 	}
 
-	var resp slackMessageResponse
-	endpoint := "https://slack.com/api/chat.postMessage"
-	if err := auth.HTTPPostJSON(ctx, nil, endpoint, token, nil, payload, &resp); err != nil {
+	respChannel, ts, err := client.PostMessageContext(ctx, channel, opts...)
+	if err != nil {
 		return operations.OperationFailure("Slack chat.postMessage failed", err, nil)
 	}
 
-	if !resp.OK {
-		return operations.OperationFailure("Slack chat.postMessage returned error", ErrSlackAPIError, slackAPIErrorDetails{
-			Error: resp.Error,
-		})
-	}
-
-	return operations.OperationSuccess(fmt.Sprintf("Slack message sent to %s", resp.Channel), slackMessageDetails{
-		Channel: resp.Channel,
-		TS:      resp.TS,
+	return operations.OperationSuccess(fmt.Sprintf("Slack message sent to %s", respChannel), slackMessageDetails{
+		Channel: respChannel,
+		TS:      ts,
 	}), nil
-}
-
-// slackAPIGet performs a GET request to the Slack API and decodes the JSON response
-func slackAPIGet(ctx context.Context, client *auth.AuthenticatedClient, token, method string, params url.Values, out any) error {
-	endpoint := "https://slack.com/api/" + method
-	if params != nil {
-		if query := params.Encode(); query != "" {
-			endpoint += "?" + query
-		}
-	}
-
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, out); err != nil {
-		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return ErrAPIRequest
-		}
-		return err
-	}
-
-	return nil
 }

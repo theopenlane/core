@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -31,23 +32,23 @@ type CredentialSource interface {
 }
 
 // ClientBuilder constructs provider SDK clients from credential payloads
-type ClientBuilder[T any, Config any] interface {
+type ClientBuilder[T any] interface {
 	// Build constructs a new client instance using the supplied credential payload and configuration
-	Build(ctx context.Context, payload types.CredentialPayload, config Config) (T, error)
+	Build(ctx context.Context, payload types.CredentialPayload, config json.RawMessage) (T, error)
 	// ProviderType returns the provider identifier handled by this builder
 	ProviderType() types.ProviderType
 }
 
 // ClientBuilderFunc adapts a function to the ClientBuilder interface
-type ClientBuilderFunc[T any, Config any] struct {
+type ClientBuilderFunc[T any] struct {
 	// Provider identifies which provider this builder handles
 	Provider types.ProviderType
 	// BuildFn is the function that constructs the client
-	BuildFn func(context.Context, types.CredentialPayload, Config) (T, error)
+	BuildFn func(context.Context, types.CredentialPayload, json.RawMessage) (T, error)
 }
 
 // Build constructs the client using the configured function
-func (f ClientBuilderFunc[T, Config]) Build(ctx context.Context, payload types.CredentialPayload, config Config) (T, error) {
+func (f ClientBuilderFunc[T]) Build(ctx context.Context, payload types.CredentialPayload, config json.RawMessage) (T, error) {
 	var zero T
 	if f.BuildFn == nil {
 		return zero, ErrClientBuilderRequired
@@ -57,47 +58,47 @@ func (f ClientBuilderFunc[T, Config]) Build(ctx context.Context, payload types.C
 }
 
 // ProviderType returns the provider identifier for the builder
-func (f ClientBuilderFunc[T, Config]) ProviderType() types.ProviderType {
+func (f ClientBuilderFunc[T]) ProviderType() types.ProviderType {
 	return f.Provider
 }
 
 // ClientPool orchestrates credential retrieval and client caching for a specific provider type
-type ClientPool[T any, Config any] struct {
+type ClientPool[T any] struct {
 	// source provides credential retrieval and refresh capabilities
 	source CredentialSource
 	// provider identifies which provider this pool serves
 	provider types.ProviderType
 	// builder constructs new client instances
-	builder eddy.Builder[T, types.CredentialPayload, Config]
+	builder eddy.Builder[T, types.CredentialPayload, json.RawMessage]
 	// service manages the underlying client cache
-	service *eddy.ClientService[T, types.CredentialPayload, Config]
+	service *eddy.ClientService[T, types.CredentialPayload, json.RawMessage]
 	// now returns the current time, overridable for testing
 	now func() time.Time
 }
 
 // ClientPoolOption customizes client pool construction
-type ClientPoolOption[T any, Config any] func(*ClientPool[T, Config], *clientPoolSettings[Config])
+type ClientPoolOption[T any] func(*ClientPool[T], *clientPoolSettings)
 
 // clientPoolSettings configures client pool behavior
-type clientPoolSettings[Config any] struct {
+type clientPoolSettings struct {
 	// ttl specifies how long clients remain cached
 	ttl time.Duration
 	// configClone creates copies of configuration objects
-	configClone func(Config) Config
+	configClone func(json.RawMessage) json.RawMessage
 }
 
 // WithClientPoolTTL overrides the default client cache TTL
-func WithClientPoolTTL[T any, Config any](ttl time.Duration) ClientPoolOption[T, Config] {
-	return func(_ *ClientPool[T, Config], settings *clientPoolSettings[Config]) {
+func WithClientPoolTTL[T any](ttl time.Duration) ClientPoolOption[T] {
+	return func(_ *ClientPool[T], settings *clientPoolSettings) {
 		if ttl > 0 {
 			settings.ttl = ttl
 		}
 	}
 }
 
-// WithClientConfigClone configures how per-request config structs are cloned before invoking the builder
-func WithClientConfigClone[T any, Config any](clone func(Config) Config) ClientPoolOption[T, Config] {
-	return func(_ *ClientPool[T, Config], settings *clientPoolSettings[Config]) {
+// WithClientConfigClone configures how per-request config is cloned before invoking the builder
+func WithClientConfigClone[T any](clone func(json.RawMessage) json.RawMessage) ClientPoolOption[T] {
+	return func(_ *ClientPool[T], settings *clientPoolSettings) {
 		if clone != nil {
 			settings.configClone = clone
 		}
@@ -105,7 +106,7 @@ func WithClientConfigClone[T any, Config any](clone func(Config) Config) ClientP
 }
 
 // NewClientPool builds a client pool that reuses provider SDK clients using eddy's caching primitives
-func NewClientPool[T any, Config any](source CredentialSource, builder ClientBuilder[T, Config], opts ...ClientPoolOption[T, Config]) (*ClientPool[T, Config], error) {
+func NewClientPool[T any](source CredentialSource, builder ClientBuilder[T], opts ...ClientPoolOption[T]) (*ClientPool[T], error) {
 	if source == nil {
 		return nil, ErrBrokerRequired
 	}
@@ -118,17 +119,17 @@ func NewClientPool[T any, Config any](source CredentialSource, builder ClientBui
 		return nil, ErrProviderRequired
 	}
 
-	settings := &clientPoolSettings[Config]{
+	settings := &clientPoolSettings{
 		ttl: defaultClientPoolTTL,
-		configClone: func(cfg Config) Config {
-			return cfg
+		configClone: func(cfg json.RawMessage) json.RawMessage {
+			return append(json.RawMessage(nil), cfg...)
 		},
 	}
 
-	pool := &ClientPool[T, Config]{
+	pool := &ClientPool[T]{
 		source:   source,
 		provider: provider,
-		builder:  clientBuilderAdapter[T, Config]{builder: builder},
+		builder:  clientBuilderAdapter[T]{builder: builder},
 		now:      time.Now,
 	}
 
@@ -141,15 +142,15 @@ func NewClientPool[T any, Config any](source CredentialSource, builder ClientBui
 	eddyPool := eddy.NewClientPool[T](settings.ttl)
 	pool.service = eddy.NewClientService(
 		eddyPool,
-		eddy.WithConfigClone[T, types.CredentialPayload, Config](settings.configClone),
-		eddy.WithOutputClone[T, types.CredentialPayload, Config](cloneCredentialPayload),
+		eddy.WithConfigClone[T, types.CredentialPayload, json.RawMessage](settings.configClone),
+		eddy.WithOutputClone[T, types.CredentialPayload, json.RawMessage](cloneCredentialPayload),
 	)
 
 	return pool, nil
 }
 
 // Provider returns the provider type handled by this pool
-func (p *ClientPool[T, Config]) Provider() types.ProviderType {
+func (p *ClientPool[T]) Provider() types.ProviderType {
 	if p == nil {
 		return types.ProviderUnknown
 	}
@@ -158,40 +159,40 @@ func (p *ClientPool[T, Config]) Provider() types.ProviderType {
 }
 
 // ClientRequestOption customizes Get requests
-type ClientRequestOption[Config any] func(*clientRequest[Config])
+type ClientRequestOption func(*clientRequest)
 
 // WithClientConfig supplies provider-specific builder configuration
-func WithClientConfig[Config any](config Config) ClientRequestOption[Config] {
-	return func(req *clientRequest[Config]) {
+func WithClientConfig(config json.RawMessage) ClientRequestOption {
+	return func(req *clientRequest) {
 		req.config = config
 	}
 }
 
 // WithClientForceRefresh bypasses cached credentials and forces a mint operation
-func WithClientForceRefresh[Config any]() ClientRequestOption[Config] {
-	return func(req *clientRequest[Config]) {
+func WithClientForceRefresh() ClientRequestOption {
+	return func(req *clientRequest) {
 		req.forceRefresh = true
 	}
 }
 
 // clientRequest captures the parameters for a single client retrieval
-type clientRequest[Config any] struct {
+type clientRequest struct {
 	// orgID identifies the organization requesting the client
 	orgID string
 	// config provides provider-specific configuration
-	config Config
+	config json.RawMessage
 	// forceRefresh bypasses caches and forces credential refresh
 	forceRefresh bool
 }
 
 // Get returns a provider-specific client for the supplied organization, reusing cached instances when possible
-func (p *ClientPool[T, Config]) Get(ctx context.Context, orgID string, opts ...ClientRequestOption[Config]) (T, error) {
+func (p *ClientPool[T]) Get(ctx context.Context, orgID string, opts ...ClientRequestOption) (T, error) {
 	var zero T
 	if p == nil {
 		return zero, ErrClientUnavailable
 	}
 
-	req := clientRequest[Config]{
+	req := clientRequest{
 		orgID: strings.TrimSpace(orgID),
 	}
 	for _, opt := range opts {
@@ -225,7 +226,7 @@ func (p *ClientPool[T, Config]) Get(ctx context.Context, orgID string, opts ...C
 }
 
 // resolveCredential retrieves or refreshes the credential for the given request
-func (p *ClientPool[T, Config]) resolveCredential(ctx context.Context, req clientRequest[Config]) (types.CredentialPayload, error) {
+func (p *ClientPool[T]) resolveCredential(ctx context.Context, req clientRequest) (types.CredentialPayload, error) {
 	if req.forceRefresh {
 		return p.refreshCredential(ctx, req.orgID, types.CredentialPayload{})
 	}
@@ -246,7 +247,7 @@ func (p *ClientPool[T, Config]) resolveCredential(ctx context.Context, req clien
 }
 
 // refreshCredential obtains a fresh credential and evicts stale cache entries
-func (p *ClientPool[T, Config]) refreshCredential(ctx context.Context, orgID string, previous types.CredentialPayload) (types.CredentialPayload, error) {
+func (p *ClientPool[T]) refreshCredential(ctx context.Context, orgID string, previous types.CredentialPayload) (types.CredentialPayload, error) {
 	if previous.Provider != types.ProviderUnknown {
 		p.evict(orgID, credentialVersion(previous))
 	}
@@ -260,7 +261,7 @@ func (p *ClientPool[T, Config]) refreshCredential(ctx context.Context, orgID str
 }
 
 // evict removes a client from the cache by org and credential version
-func (p *ClientPool[T, Config]) evict(orgID, version string) {
+func (p *ClientPool[T]) evict(orgID, version string) {
 	if orgID == "" {
 		return
 	}
@@ -302,18 +303,18 @@ func (k clientCacheKey) String() string {
 }
 
 // clientBuilderAdapter adapts ClientBuilder to eddy's Builder interface
-type clientBuilderAdapter[T any, Config any] struct {
+type clientBuilderAdapter[T any] struct {
 	// builder is the underlying client builder
-	builder ClientBuilder[T, Config]
+	builder ClientBuilder[T]
 }
 
 // Build constructs a client using the adapted builder
-func (a clientBuilderAdapter[T, Config]) Build(ctx context.Context, payload types.CredentialPayload, config Config) (T, error) {
+func (a clientBuilderAdapter[T]) Build(ctx context.Context, payload types.CredentialPayload, config json.RawMessage) (T, error) {
 	return a.builder.Build(ctx, payload, config)
 }
 
 // ProviderType returns the provider identifier as a string
-func (a clientBuilderAdapter[T, Config]) ProviderType() string {
+func (a clientBuilderAdapter[T]) ProviderType() string {
 	return string(a.builder.ProviderType())
 }
 

@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/shurcooL/githubv4"
@@ -38,7 +39,7 @@ func (t githubHeaderTransport) RoundTrip(req *http.Request) (*http.Response, err
 
 // buildGitHubGraphQLClient returns a pooled client builder for the GitHub GraphQL API.
 func buildGitHubGraphQLClient() types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
+	return func(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
 		token, err := auth.OAuthTokenFromPayload(payload)
 		if err != nil {
 			return types.EmptyClientInstance(), err

@@ -25,11 +25,11 @@ const (
 type Provider struct {
 	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
-	spec         config.ProviderSpec
-	oauthConfig  *oauth2.Config
-	relyingParty rp.RelyingParty
-	authParams   map[string]string
-	tokenParams  map[string]string
+	spec                 config.ProviderSpec
+	oauthConfig          *oauth2.Config
+	relyingParty         rp.RelyingParty
+	authParams           map[string]string
+	tokenParams          map[string]string
 	credentialSetBuilder CredentialSetBuilder
 }
 

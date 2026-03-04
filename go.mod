@@ -19,6 +19,8 @@ require (
 	entgo.io/ent v0.14.6
 	github.com/99designs/gqlgen v0.17.89
 	github.com/AfterShip/email-verifier v1.4.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.18.1
+	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity v0.14.0
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/alitto/pond/v2 v2.7.0
 	github.com/aws/aws-sdk-go-v2 v1.41.5
@@ -70,6 +72,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/nyaruka/phonenumbers v1.7.0
 	github.com/oklog/ulid/v2 v2.1.1
+	github.com/okta/okta-sdk-golang/v5 v5.0.6
 	github.com/openfga/go-sdk v0.7.5
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
@@ -84,6 +87,7 @@ require (
 	github.com/samber/do/v2 v2.0.0
 	github.com/samber/lo v1.53.0
 	github.com/shurcooL/githubv4 v0.0.0-20260209031235-2402fdf4a9ed
+	github.com/slack-go/slack v0.17.3
 	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
@@ -119,6 +123,7 @@ require (
 
 require (
 	cloud.google.com/go/longrunning v0.8.0 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.1 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.9 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
@@ -131,7 +136,6 @@ require (
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
-	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect

@@ -5,6 +5,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
@@ -95,6 +96,19 @@ func WithIntegrationOperations() ServerOption {
 				log.Panic().Err(err).Msg("failed to configure integration dependencies on workflow engine")
 			}
 		}
+	})
+}
+
+// WithIngestMappingIndex wires the integration registry as the ingest mapping index.
+// It must be called after the registry is fully built so provider mappings are available.
+func WithIngestMappingIndex() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
+		if !ok || reg == nil {
+			return
+		}
+
+		ingest.SetMappingIndex(reg)
 	})
 }
 

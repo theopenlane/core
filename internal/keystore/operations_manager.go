@@ -3,19 +3,15 @@ package keystore
 import (
 	"context"
 	"encoding/json"
-	"maps"
 	"sync"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // OperationManager executes provider-published operations using stored credentials and optional client pools
 type OperationManager struct {
 	// source provides credential retrieval and refresh capabilities
-	source CredentialSource
+	source IntegrationCredentialSource
 	// clients provides access to pooled provider clients
 	clients *ClientPoolManager
 	// mu protects concurrent access to the descriptors map
@@ -44,7 +40,7 @@ func WithOperationClients(clients *ClientPoolManager) OperationManagerOption {
 }
 
 // NewOperationManager builds an OperationManager from the supplied credential source and descriptors
-func NewOperationManager(source CredentialSource, descriptors []types.OperationDescriptor, opts ...OperationManagerOption) (*OperationManager, error) {
+func NewOperationManager(source IntegrationCredentialSource, descriptors []types.OperationDescriptor, opts ...OperationManagerOption) (*OperationManager, error) {
 	if source == nil {
 		return nil, ErrBrokerRequired
 	}
@@ -114,12 +110,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		return types.OperationResult{}, err
 	}
 
-	operationConfig, err := decodeOperationRequestConfig(req)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	client, err := m.resolveClient(ctx, req, descriptor, payload, operationConfig)
+	client, err := m.resolveClient(ctx, req, descriptor, payload, req.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -169,12 +160,7 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 		return types.OperationResult{}, ErrOperationNotRegistered
 	}
 
-	operationConfig, err := decodeOperationRequestConfig(req)
-	if err != nil {
-		return types.OperationResult{}, err
-	}
-
-	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload, operationConfig)
+	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload, req.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -200,7 +186,7 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 }
 
 // resolveClientFromPayload builds a client from the provided payload when the operation requires one
-func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
+func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
 		return types.EmptyClientInstance(), nil
 	}
@@ -209,22 +195,17 @@ func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req typ
 		return types.EmptyClientInstance(), ErrOperationClientManagerRequired
 	}
 
-	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, payload, maps.Clone(config))
+	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, payload, append(json.RawMessage(nil), config...))
 }
 
 // resolveCredential retrieves or refreshes the credential based on the request flags
 func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (types.CredentialPayload, error) {
 	if req.IntegrationID != "" {
-		source, ok := m.source.(IntegrationCredentialSource)
-		if !ok {
-			return types.CredentialPayload{}, ErrIntegrationScopedSourceRequired
-		}
-
 		if req.Force {
-			return source.MintForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+			return m.source.MintForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
 		}
 
-		return source.GetForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+		return m.source.GetForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
 	}
 
 	if req.Force {
@@ -235,7 +216,7 @@ func (m *OperationManager) resolveCredential(ctx context.Context, req types.Oper
 }
 
 // resolveClient retrieves a client instance if the operation requires one
-func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
+func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
 		return types.EmptyClientInstance(), nil
 	}
@@ -248,32 +229,15 @@ func (m *OperationManager) resolveClient(ctx context.Context, req types.Operatio
 		return types.EmptyClientInstance(), ErrOperationClientManagerRequired
 	}
 
-	opts := []ClientRequestOption[map[string]any]{}
+	opts := []ClientRequestOption{}
 	if len(config) > 0 {
-		opts = append(opts, WithClientConfig(maps.Clone(config)))
+		opts = append(opts, WithClientConfig(append(json.RawMessage(nil), config...)))
 	}
 	if req.ClientForce {
-		opts = append(opts, WithClientForceRefresh[map[string]any]())
+		opts = append(opts, WithClientForceRefresh())
 	}
 
 	return m.clients.Get(ctx, req.OrgID, req.Provider, descriptor.Client, opts...)
-}
-
-func decodeOperationRequestConfig(req types.OperationRequest) (map[string]any, error) {
-	if len(req.Config) == 0 {
-		return nil, nil
-	}
-
-	config, err := jsonx.ToMap(req.Config)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(config) == 0 {
-		return nil, nil
-	}
-
-	return config, nil
 }
 
 // Descriptors returns a copy of all registered operations keyed by provider
@@ -281,18 +245,7 @@ func (m *OperationManager) Descriptors() map[types.ProviderType][]types.Operatio
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	grouped := map[types.ProviderType][]types.OperationDescriptor{}
-	for key, descriptor := range m.descriptors {
-		grouped[key.provider] = append(grouped[key.provider], descriptor)
-	}
-
-	for provider, descriptors := range grouped {
-		copied := make([]types.OperationDescriptor, len(descriptors))
-		copy(copied, descriptors)
-		grouped[provider] = copied
-	}
-
-	return grouped
+	return groupDescriptors(m.descriptors, func(k operationKey) types.ProviderType { return k.provider })
 }
 
 // operationKey uniquely identifies an operation by provider and name
@@ -323,9 +276,5 @@ func operationDescriptorKey(descriptor types.OperationDescriptor) (operationKey,
 
 // FlattenOperationDescriptors converts a map of provider operations into a single slice for manager construction
 func FlattenOperationDescriptors(entries map[types.ProviderType][]types.OperationDescriptor) []types.OperationDescriptor {
-	if len(entries) == 0 {
-		return nil
-	}
-
-	return lo.Flatten(lo.Values(entries))
+	return flattenDescriptors(entries)
 }

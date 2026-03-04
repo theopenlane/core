@@ -2,9 +2,10 @@ package okta
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"strings"
+
+	okta "github.com/okta/okta-sdk-golang/v5/okta"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -14,17 +15,26 @@ import (
 const (
 	oktaHealthOp   types.OperationName = "health.default"
 	oktaPoliciesOp types.OperationName = "policies.collect"
+
+	oktaSignOnPolicyType = "OKTA_SIGN_ON"
 )
 
+type oktaPolicySample struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Status string `json:"status"`
+	Type   string `json:"type"`
+}
+
 type oktaPoliciesDetails struct {
-	Count   int               `json:"count"`
-	Samples []map[string]any `json:"samples"`
+	Count   int                `json:"count"`
+	Samples []oktaPolicySample `json:"samples"`
 }
 
 // oktaOperations returns the Okta operations supported by this provider.
 func oktaOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(oktaHealthOp, "Call Okta org endpoint to verify API token.", ClientOktaAPI, runOktaHealth),
+		operations.HealthOperation(oktaHealthOp, "Call Okta user API to verify API token.", ClientOktaAPI, runOktaHealth),
 		{
 			Name:        oktaPoliciesOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -35,70 +45,82 @@ func oktaOperations() []types.OperationDescriptor {
 	}
 }
 
-// runOktaHealth verifies the Okta API token by fetching the org information
-func runOktaHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := auth.AuthenticatedClientFromClient(input.Client)
-	baseURL, apiToken, err := oktaCredentials(input)
+// resolveOktaClient returns a pooled Okta client or builds one from the credential payload.
+func resolveOktaClient(input types.OperationInput) (*okta.APIClient, error) {
+	if c, ok := types.ClientInstanceAs[*okta.APIClient](input.Client); ok {
+		return c, nil
+	}
+
+	apiToken, err := auth.APITokenFromPayload(input.Credential)
 	if err != nil {
-		return types.OperationResult{}, err
+		return nil, err
 	}
 
-	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/org"
-	var resp map[string]any
-	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
-		return operations.OperationFailure("Okta org lookup failed", err, nil)
+	orgURL, _ := input.Credential.Data.ProviderData["orgUrl"].(string)
+	if orgURL == "" {
+		return nil, ErrCredentialsMissing
 	}
 
-	summary := fmt.Sprintf("Okta org %s reachable", baseURL)
-	return operations.OperationSuccess(summary, resp), nil
+	cfg, err := okta.NewConfiguration(
+		okta.WithOrgUrl(orgURL),
+		okta.WithToken(apiToken),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return okta.NewAPIClient(cfg), nil
 }
 
-// runOktaPolicies collects a sample of Okta sign-on policies for reporting
-func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client := auth.AuthenticatedClientFromClient(input.Client)
-	baseURL, apiToken, err := oktaCredentials(input)
+// runOktaHealth verifies the Okta API token by fetching the current user.
+func runOktaHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client, err := resolveOktaClient(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	endpoint := strings.TrimRight(baseURL, "/") + "/api/v1/policies?type=SIGN_ON"
-	var resp []map[string]any
-	if err := oktaGET(ctx, client, endpoint, apiToken, &resp); err != nil {
-		return operations.OperationFailure("Okta policies fetch failed", err, nil)
+	user, _, err := client.UserAPI.GetUser(ctx, "me").Execute()
+	if err != nil {
+		return operations.OperationFailure("Okta user lookup failed", err, nil)
 	}
 
-	samples := resp[:min(len(resp), operations.DefaultSampleSize)]
+	profile := user.GetProfile()
+	login := profile.GetLogin()
 
-	return operations.OperationSuccess(fmt.Sprintf("Collected %d sign-on policies", len(resp)), oktaPoliciesDetails{
-		Count:   len(resp),
-		Samples: samples,
+	return operations.OperationSuccess(fmt.Sprintf("Okta token valid for %s", login), map[string]any{
+		"id":    user.GetId(),
+		"login": login,
+		"email": profile.GetEmail(),
 	}), nil
 }
 
-// oktaCredentials extracts the Okta base URL and API token from the credential payload
-func oktaCredentials(input types.OperationInput) (string, string, error) {
-	data := input.Credential.Data
-	baseURL, _ := data.ProviderData["orgUrl"].(string)
-	apiToken := data.APIToken
-	if baseURL == "" || apiToken == "" {
-		return "", "", ErrCredentialsMissing
+// runOktaPolicies collects a sample of Okta sign-on policies for reporting.
+func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+	client, err := resolveOktaClient(input)
+	if err != nil {
+		return types.OperationResult{}, err
 	}
 
-	return baseURL, apiToken, nil
-}
-
-// oktaGET performs a GET request to the Okta API and decodes the JSON response
-func oktaGET(ctx context.Context, client *auth.AuthenticatedClient, endpoint, apiToken string, out any) error {
-	headers := map[string]string{
-		"Authorization": "SSWS " + apiToken,
+	policies, _, err := client.PolicyAPI.ListPolicies(ctx).Type_(oktaSignOnPolicyType).Execute()
+	if err != nil {
+		return operations.OperationFailure("Okta policies fetch failed", err, nil)
 	}
 
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, "", headers, out); err != nil {
-		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return ErrAPIRequest
+	samples := lo.Map(policies[:min(len(policies), operations.DefaultSampleSize)], func(item okta.ListPolicies200ResponseInner, _ int) oktaPolicySample {
+		if p := item.OktaSignOnPolicy; p != nil {
+			return oktaPolicySample{
+				ID:     p.GetId(),
+				Name:   p.GetName(),
+				Status: p.GetStatus(),
+				Type:   p.GetType(),
+			}
 		}
-		return err
-	}
 
-	return nil
+		return oktaPolicySample{}
+	})
+
+	return operations.OperationSuccess(fmt.Sprintf("Collected %d sign-on policies", len(policies)), oktaPoliciesDetails{
+		Count:   len(policies),
+		Samples: samples,
+	}), nil
 }

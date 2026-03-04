@@ -10,12 +10,13 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
+// ensure Broker satisfies IntegrationCredentialSource at compile time
+var _ IntegrationCredentialSource = (*Broker)(nil)
+
 // cacheSkew defines how far before token expiry the cache entry should be invalidated
 const cacheSkew = 30 * time.Second
 
 const defaultBrokerCacheMaxEntries = 4096
-
-const providerGitHubApp = types.ProviderType("githubapp")
 
 // Broker exchanges persisted credentials for short-lived tokens via registered providers
 type Broker struct {
@@ -86,16 +87,17 @@ func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider t
 		return payload, nil
 	}
 
-	if provider == providerGitHubApp {
+	providerInstance, err := b.lookupProvider(provider)
+	if err != nil {
+		return types.CredentialPayload{}, err
+	}
+
+	if providerInstance.Capabilities().EnvironmentCredentials {
 		return b.MintForIntegration(ctx, orgID, provider, integrationID)
 	}
 
 	payload, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
 	if err != nil {
-		if provider == providerGitHubApp && errors.Is(err, ErrCredentialNotFound) {
-			return b.MintForIntegration(ctx, orgID, provider, integrationID)
-		}
-
 		return types.CredentialPayload{}, err
 	}
 
@@ -173,7 +175,7 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 		minted.ProviderState = stored.ProviderState
 	}
 
-	if provider == providerGitHubApp || !persistedCredential {
+	if providerInstance.Capabilities().EnvironmentCredentials || !persistedCredential {
 		b.setCached(orgID, provider, integrationID, minted)
 
 		return minted, nil
@@ -194,7 +196,15 @@ func (b *Broker) loadIntegrationSubject(ctx context.Context, orgID string, provi
 	if err == nil {
 		return stored, true, nil
 	}
-	if provider != providerGitHubApp || !errors.Is(err, ErrCredentialNotFound) {
+
+	if !errors.Is(err, ErrCredentialNotFound) {
+		return types.CredentialPayload{}, false, err
+	}
+
+	// Credential not found — check if provider uses environment-level credentials
+	// and fall back to loading the integration subject for minting
+	providerInstance, lookupErr := b.lookupProvider(provider)
+	if lookupErr != nil || !providerInstance.Capabilities().EnvironmentCredentials {
 		return types.CredentialPayload{}, false, err
 	}
 
@@ -215,16 +225,19 @@ func (b *Broker) lookupProvider(provider types.ProviderType) (types.Provider, er
 	return instance, nil
 }
 
-// getCached retrieves a cached credential if it exists and is not expired
+// getCached retrieves a cached credential if it exists and is not expired.
+// Uses a read lock so concurrent reads do not block each other; expired-entry
+// cleanup is deferred to the write path in setCached.
 func (b *Broker) getCached(orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool) {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
-	now := b.now()
-	b.purgeExpiredLocked(now)
+	b.mu.RLock()
+	defer b.mu.RUnlock()
 
 	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}]
 	if !ok {
+		return types.CredentialPayload{}, false
+	}
+
+	if !entry.expires.After(b.now()) {
 		return types.CredentialPayload{}, false
 	}
 

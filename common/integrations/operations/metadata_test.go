@@ -2,6 +2,7 @@ package operations
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/theopenlane/core/common/integrations/types"
@@ -30,7 +31,7 @@ func TestSanitizeOperationDescriptors(t *testing.T) {
 
 func TestSanitizeClientDescriptors(t *testing.T) {
 	provider := types.ProviderType("test")
-	build := func(context.Context, types.CredentialPayload, map[string]any) (types.ClientInstance, error) {
+	build := func(context.Context, types.CredentialPayload, json.RawMessage) (types.ClientInstance, error) {
 		return types.EmptyClientInstance(), nil
 	}
 

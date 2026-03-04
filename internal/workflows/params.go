@@ -94,10 +94,6 @@ type IntegrationActionParams struct {
 	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
 	// ScopeResource is optional resource identity data exposed to scope expression evaluation
 	ScopeResource string `json:"scope_resource,omitempty"`
-	// TimeoutMS overrides the operation timeout in milliseconds
-	TimeoutMS int `json:"timeout_ms"`
-	// Retries overrides the retry count when non-zero
-	Retries int `json:"retries"`
 	// Force requests a refresh for the provider
 	Force bool `json:"force_refresh"`
 	// ClientForce requests a client-side refresh for the provider
