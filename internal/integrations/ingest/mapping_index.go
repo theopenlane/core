@@ -1,14 +1,15 @@
 package ingest
 
 import (
+	"github.com/samber/lo"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 )
 
-var (
-	normalizedVulnerabilitySchema    = normalizeMappingKey(mappingSchemaVulnerability)
-	normalizedDirectoryAccountSchema = normalizeMappingKey(mappingSchemaDirectoryAccount)
-)
+var normalizedGeneratedMappingSchemas = lo.SliceToMap(lo.Keys(integrationgenerated.IntegrationMappingSchemas), func(schemaName string) (string, integrationtypes.MappingSchema) {
+	return normalizeMappingKey(schemaName), integrationtypes.MappingSchema(schemaName)
+})
 
 // mappingIndexSource is the package-level MappingIndex used to resolve provider default mappings.
 // It is set at server startup via SetMappingIndex.
@@ -26,24 +27,17 @@ func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName strin
 		return openapi.IntegrationMappingOverride{}, false
 	}
 
-	switch normalizeMappingKey(schemaName) {
-	case normalizedVulnerabilitySchema:
-		spec, ok := mappingIndexSource.DefaultVulnerabilityMapping(provider, variant)
-		if !ok {
-			return openapi.IntegrationMappingOverride{}, false
-		}
-
-		return openapi.IntegrationMappingOverride{FilterExpr: spec.FilterExpr, MapExpr: spec.MapExpr}, true
-	case normalizedDirectoryAccountSchema:
-		spec, ok := mappingIndexSource.DefaultDirectoryAccountMapping(provider, variant)
-		if !ok {
-			return openapi.IntegrationMappingOverride{}, false
-		}
-
-		return openapi.IntegrationMappingOverride{FilterExpr: spec.FilterExpr, MapExpr: spec.MapExpr}, true
-	default:
+	schema, ok := schemaNameToMappingSchema(schemaName)
+	if !ok {
 		return openapi.IntegrationMappingOverride{}, false
 	}
+
+	spec, ok := mappingIndexSource.DefaultMapping(provider, schema, variant)
+	if !ok {
+		return openapi.IntegrationMappingOverride{}, false
+	}
+
+	return openapi.IntegrationMappingOverride{FilterExpr: spec.FilterExpr, MapExpr: spec.MapExpr}, true
 }
 
 // supportsDefaultMapping reports whether the provider has built-in mappings registered for the given schema.
@@ -52,12 +46,16 @@ func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName s
 		return false
 	}
 
-	switch normalizeMappingKey(schemaName) {
-	case normalizedVulnerabilitySchema:
-		return mappingIndexSource.SupportsVulnerabilityIngest(provider)
-	case normalizedDirectoryAccountSchema:
-		return mappingIndexSource.SupportsDirectoryAccountIngest(provider)
-	default:
+	schema, ok := schemaNameToMappingSchema(schemaName)
+	if !ok {
 		return false
 	}
+
+	return mappingIndexSource.SupportsIngest(provider, schema)
+}
+
+func schemaNameToMappingSchema(schemaName string) (integrationtypes.MappingSchema, bool) {
+	schema, ok := normalizedGeneratedMappingSchemas[normalizeMappingKey(schemaName)]
+
+	return schema, ok
 }

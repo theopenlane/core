@@ -1,25 +1,47 @@
 # Integrations Ingest
 
-This package is a provider-agnostic ingestion pipeline using the CEL expression library rather than intermediary structs or taking the upstream data types and loading directly into our data types. It converts provider alert payloads into normalized `Vulnerability` records using declarative mapping rules, rather than hard-coding provider-specific transforms in each integration.
+This package materializes integration operation envelopes into normalized database objects using schema-driven CEL mappings.
 
-**Why This Approach?**
-1. Decouples provider operations from persistence logic. Providers only emit alert envelopes; ingestion owns normalization and storage.
-1. Enables customization without code changes. Mappings and overrides live in integration config so teams can tune field mapping or filtering per provider, alert type, or environment.
-1. Scales to new providers. Adding a provider becomes “produce alert envelopes + ship default mappings,” not “write a new persistence pipeline.” (ideally...)
-1. Enforces consistent validation. A single schema-driven validation step ensures required fields are present before persistence.
+## Current Model
 
-**Data Flow**
-1. Provider operation collects raw alerts and wraps them in `types.AlertEnvelope` (alert type, resource, payload)
-1. Ingest builds a mapping context with integration config, provider state, and operation inputs
-1. CEL filter expressions decide whether each envelope should be ingested
-1. CEL map expressions produce a normalized output map
-1. Output is validated against the schema and persisted via upsert
+1. Operations declare ingest contracts in `types.OperationDescriptor.Ingest`.
+2. Workflow execution routes each contract schema to an ingest handler.
+3. Webhook ingest emits schema-scoped Gala topics generated from ent mapping schemas.
+4. Handlers resolve mapping specs from:
+- Integration mapping overrides.
+- Provider default mappings (from registry mapping catalog).
+5. CEL filter/map expressions are evaluated with standard mapping vars.
+6. Mapped output is validated against schema metadata, then persisted.
 
-**Key Concepts**
-- `AlertEnvelope`: provider-agnostic wrapper for alert payloads and metadata
-- Mapping schemas: canonical field sets defined in `integrationgenerated.IntegrationMappingSchemas`
-- Mapping overrides: per-integration overrides that select a mapping by provider, schema, and alert type
-- Default mappings: built-in mappings (for example GitHub) in `defaults_github.go`
-- Retention policy: governs whether raw payloads are stored (intent would be to store via object storage provider)
+## Handler Routing
 
-This structure keeps ingestion consistent, testable, and configurable while avoiding one-off provider logic scattered across integrations. Hopefully.
+Schema handlers are registered in `dispatch.go`:
+- `MappingSchemaVulnerability` -> vulnerability ingest handler
+- `MappingSchemaDirectoryAccount` -> directory account ingest handler
+
+Webhook listeners are registered per schema topic using generated contracts from `internal/ent/integrationgenerated`.
+
+## Operation Output
+
+Supported operation detail formats:
+
+1. Single-schema legacy output:
+```json
+{"alerts": [...]}
+```
+
+2. Multi-schema output:
+```json
+{
+  "ingest_batches": [
+    {"schema": "Vulnerability", "envelopes": [...]},
+    {"schema": "DirectoryAccount", "envelopes": [...]}
+  ]
+}
+```
+
+## Provider Mappings
+
+Providers publish default mappings by implementing `types.MappingProvider` and returning `[]types.MappingRegistration`.
+
+For broader integration implementation steps, see `internal/integrations/README.md`.

@@ -61,6 +61,12 @@ func awsSecurityHubOperations() []types.OperationDescriptor {
 			Client:       ClientAWSSecurityHub,
 			Run:          runAWSSecurityHubFindings,
 			ConfigSchema: securityHubFindingsSchema,
+			Ingest: []types.IngestContract{
+				{
+					Schema:         types.MappingSchemaVulnerability,
+					EnsurePayloads: true,
+				},
+			},
 		},
 	}
 }

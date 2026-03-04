@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -97,5 +98,106 @@ func TestEvaluateIntegrationScope(t *testing.T) {
 	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
 	if !errors.Is(err, integrationscope.ErrScopeCompilationFailed) {
 		t.Fatalf("expected ErrScopeCompilationFailed, got %v", err)
+	}
+}
+
+func TestShouldEnsurePayloads(t *testing.T) {
+	if shouldEnsurePayloads(nil) {
+		t.Fatalf("expected false when no contracts are present")
+	}
+
+	if shouldEnsurePayloads([]types.IngestContract{
+		{Schema: types.MappingSchemaVulnerability},
+		{Schema: types.MappingSchemaDirectoryAccount},
+	}) {
+		t.Fatalf("expected false when contracts do not require payloads")
+	}
+
+	if !shouldEnsurePayloads([]types.IngestContract{
+		{Schema: types.MappingSchemaVulnerability, EnsurePayloads: true},
+	}) {
+		t.Fatalf("expected true when any contract requires payloads")
+	}
+}
+
+func TestExtractIngestBatchesLegacyAlerts(t *testing.T) {
+	details := map[string]any{
+		"alerts": []map[string]any{
+			{
+				"alertType": "dependabot",
+				"resource":  "repo",
+				"payload": map[string]any{
+					"id": 1,
+				},
+			},
+		},
+	}
+
+	raw, err := json.Marshal(details)
+	if err != nil {
+		t.Fatalf("marshal details: %v", err)
+	}
+
+	batches, err := extractIngestBatches(raw, []types.IngestContract{
+		{Schema: types.MappingSchemaVulnerability},
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(batches) != 1 {
+		t.Fatalf("expected one ingest batch, got %d", len(batches))
+	}
+	if batches[0].Schema != types.MappingSchemaVulnerability {
+		t.Fatalf("expected vulnerability schema, got %q", batches[0].Schema)
+	}
+	if len(batches[0].Envelopes) != 1 {
+		t.Fatalf("expected one envelope, got %d", len(batches[0].Envelopes))
+	}
+}
+
+func TestExtractIngestBatchesStructured(t *testing.T) {
+	details := map[string]any{
+		"ingest_batches": []map[string]any{
+			{
+				"schema": "Vulnerability",
+				"envelopes": []map[string]any{
+					{
+						"alertType": "dependabot",
+						"resource":  "repo",
+						"payload": map[string]any{
+							"id": 1,
+						},
+					},
+				},
+			},
+			{
+				"schema": "DirectoryAccount",
+				"envelopes": []map[string]any{
+					{
+						"alertType": "directory_account",
+						"resource":  "user@example.com",
+						"payload": map[string]any{
+							"id": "u_1",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	raw, err := json.Marshal(details)
+	if err != nil {
+		t.Fatalf("marshal details: %v", err)
+	}
+
+	batches, err := extractIngestBatches(raw, []types.IngestContract{
+		{Schema: types.MappingSchemaVulnerability},
+		{Schema: types.MappingSchemaDirectoryAccount},
+	})
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if len(batches) != 2 {
+		t.Fatalf("expected two ingest batches, got %d", len(batches))
 	}
 }

@@ -289,6 +289,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithIntegrationBroker(),
 		serveropts.WithIntegrationClients(),
 		serveropts.WithIntegrationOperations(),
+		serveropts.WithIngestMappingIndex(),
 		serveropts.WithIntegrationActivation(),
 	)
 

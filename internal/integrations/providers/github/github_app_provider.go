@@ -145,9 +145,9 @@ func (p *appProvider) BeginAuth(context.Context, types.AuthContext) (types.AuthS
 	return nil, ErrBeginAuthNotSupported
 }
 
-// DefaultVulnerabilityMappings returns the built-in vulnerability mapping specs for GitHub App providers.
-func (p *appProvider) DefaultVulnerabilityMappings() map[string]types.MappingSpec {
-	return githubVulnerabilityMappings()
+// DefaultMappings returns the built-in ingest mapping registrations for GitHub App providers.
+func (p *appProvider) DefaultMappings() []types.MappingRegistration {
+	return githubDefaultMappings()
 }
 
 // Mint exchanges GitHub App credentials for an installation access token.

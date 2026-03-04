@@ -382,3 +382,5 @@ require (
 	google.golang.org/grpc v1.79.2 // indirect
 	google.golang.org/protobuf v1.36.11
 )
+
+replace github.com/theopenlane/entx => ../entx
