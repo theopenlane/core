@@ -59,6 +59,17 @@ type OperationDescriptor struct {
 	ConfigSchema map[string]any
 	// OutputSchema defines the JSON schema for operation output
 	OutputSchema map[string]any
+	// Ingest declares one or more optional ingest contracts emitted by this operation.
+	// Each contract maps operation output envelopes to a normalized ingest schema.
+	Ingest []IngestContract
+}
+
+// IngestContract declares one ingest target schema emitted by an operation.
+type IngestContract struct {
+	// Schema identifies the normalized ingest schema (for example Vulnerability).
+	Schema MappingSchema
+	// EnsurePayloads forces include_payloads=true prior to operation execution.
+	EnsurePayloads bool
 }
 
 // OperationInput carries the runtime information supplied to operation handlers

@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/integrations/operations"
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -112,4 +114,15 @@ func githubVulnerabilityMappings() map[string]integrationtypes.MappingSpec {
 			MapExpr:    mapExprGitHubSecretScanning,
 		},
 	}
+}
+
+// githubDefaultMappings returns all built-in ingest mappings published by GitHub providers.
+func githubDefaultMappings() []integrationtypes.MappingRegistration {
+	return lo.MapToSlice(githubVulnerabilityMappings(), func(variant string, spec integrationtypes.MappingSpec) integrationtypes.MappingRegistration {
+		return integrationtypes.MappingRegistration{
+			Schema:  integrationtypes.MappingSchemaVulnerability,
+			Variant: variant,
+			Spec:    spec,
+		}
+	})
 }

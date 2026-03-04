@@ -17,7 +17,15 @@ func TestSanitizeOperationDescriptors(t *testing.T) {
 	descriptors := []types.OperationDescriptor{
 		{Name: "", Run: run},
 		{Name: "missing-run"},
-		{Name: "ok", Run: run, Provider: types.ProviderUnknown},
+		{
+			Name:     "ok",
+			Run:      run,
+			Provider: types.ProviderUnknown,
+			Ingest: []types.IngestContract{
+				{Schema: "   "},
+				{Schema: types.MappingSchemaVulnerability, EnsurePayloads: true},
+			},
+		},
 	}
 
 	out := SanitizeOperationDescriptors(provider, descriptors)
@@ -26,6 +34,12 @@ func TestSanitizeOperationDescriptors(t *testing.T) {
 	}
 	if out[0].Provider != provider {
 		t.Fatalf("expected provider to be set")
+	}
+	if len(out[0].Ingest) != 1 {
+		t.Fatalf("expected one ingest contract, got %d", len(out[0].Ingest))
+	}
+	if out[0].Ingest[0].Schema != types.MappingSchemaVulnerability {
+		t.Fatalf("expected normalized ingest schema")
 	}
 }
 

@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -228,6 +230,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	var integrationRecord *ent.Integration
+	var operationDescriptor types.OperationDescriptor
 
 	if integrationID == "" {
 		if provider == types.ProviderUnknown {
@@ -242,12 +245,13 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 			return IntegrationQueueResult{}, err
 		}
 
-		operationDescriptor, err := e.integrationResolver.ResolveOperation(provider, criteria)
+		resolvedOperation, err := e.integrationResolver.ResolveOperation(provider, criteria)
 		if err != nil {
 			return IntegrationQueueResult{}, err
 		}
 
 		integrationRecord = ensuredRecord
+		operationDescriptor = resolvedOperation
 		operationName = operationDescriptor.Name
 		operationKind = operationDescriptor.Kind
 	} else {
@@ -263,6 +267,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 
 		integrationRecord = resolution.Integration
 		provider = resolution.Provider
+		operationDescriptor = resolution.Operation
 		operationName = resolution.Operation.Name
 		operationKind = resolution.Operation.Kind
 	}
@@ -291,7 +296,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		return IntegrationQueueResult{}, ErrIntegrationScopeConditionFalse
 	}
 
-	if _, ensurePayloads, ok := ingest.BindingForOperation(operationName); ok && ensurePayloads {
+	if shouldEnsurePayloads(operationDescriptor.Ingest) {
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
@@ -460,6 +465,13 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		return ErrIntegrationOperationNameRequired
 	}
 
+	operationDescriptor, err := e.integrationResolver.ResolveOperation(provider, targetresolver.ResolveCriteria{
+		OperationName: mo.Some(operationName),
+	})
+	if err != nil {
+		return err
+	}
+
 	startedAt := time.Now()
 	update := e.client.IntegrationRun.UpdateOneID(run.ID).
 		SetStatus(enums.IntegrationRunStatusRunning).
@@ -471,10 +483,10 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		return err
 	}
 
-	ingestFn, ensurePayloads, hasIngest := ingest.BindingForOperation(operationName)
+	ingestContracts := operationDescriptor.Ingest
 
 	operationConfig := mapx.DeepCloneMapAny(run.OperationConfig)
-	if ensurePayloads {
+	if shouldEnsurePayloads(ingestContracts) {
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
@@ -512,31 +524,39 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 
 	metricsDoc := buildOperationMetrics(result)
 
-	if runStatus == enums.IntegrationRunStatusSuccess && hasIngest && ingestFn != nil {
-		var ingestErr error
-		var ingestResult ingest.IngestResult
-
-		envelopes, err := extractAlertEnvelopes(result.Details)
+	if runStatus == enums.IntegrationRunStatusSuccess && len(ingestContracts) > 0 {
+		ingestBatches, err := extractIngestBatches(result.Details, ingestContracts)
 		if err != nil {
-			ingestErr = err
-		} else {
-			ingestResult, ingestErr = ingestFn(operationCtx, ingest.IngestRequest{
-				OrgID:             run.OwnerID,
-				IntegrationID:     integrationRecord.ID,
-				Provider:          provider,
-				Operation:         operationName,
-				IntegrationConfig: integrationRecord.Config,
-				ProviderState:     integrationRecord.ProviderState,
-				OperationConfig:   operationConfig,
-				Envelopes:         envelopes,
-				DB:                e.client,
-			})
-		}
-
-		metricsDoc = appendIngestMetrics(metricsDoc, ingestResult)
-		if ingestErr != nil {
 			runStatus = enums.IntegrationRunStatusFailed
-			errorText = ingestErr.Error()
+			errorText = err.Error()
+		} else {
+			for _, batch := range ingestBatches {
+				ingestFn, ok := ingest.HandlerForSchema(batch.Schema)
+				if !ok || ingestFn == nil {
+					runStatus = enums.IntegrationRunStatusFailed
+					errorText = fmt.Errorf("%w: schema=%s", ErrIntegrationAlertPayloadsMissing, batch.Schema).Error()
+					break
+				}
+
+				ingestResult, ingestErr := ingestFn(operationCtx, ingest.IngestRequest{
+					OrgID:             run.OwnerID,
+					IntegrationID:     integrationRecord.ID,
+					Provider:          provider,
+					Operation:         operationName,
+					IntegrationConfig: integrationRecord.Config,
+					ProviderState:     integrationRecord.ProviderState,
+					OperationConfig:   operationConfig,
+					Envelopes:         batch.Envelopes,
+					DB:                e.client,
+				})
+
+				metricsDoc = appendIngestMetrics(metricsDoc, batch.Schema, ingestResult)
+				if ingestErr != nil {
+					runStatus = enums.IntegrationRunStatusFailed
+					errorText = ingestErr.Error()
+					break
+				}
+			}
 		}
 	}
 
@@ -670,25 +690,68 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 	}
 }
 
-// extractAlertEnvelopes pulls alert envelopes from operation details
-func extractAlertEnvelopes(details json.RawMessage) ([]types.AlertEnvelope, error) {
+type ingestBatch struct {
+	Schema    types.MappingSchema   `json:"schema"`
+	Envelopes []types.AlertEnvelope `json:"envelopes"`
+}
+
+// shouldEnsurePayloads reports whether any ingest contract requires include_payloads=true.
+func shouldEnsurePayloads(contracts []types.IngestContract) bool {
+	return lo.SomeBy(contracts, func(contract types.IngestContract) bool { return contract.EnsurePayloads })
+}
+
+// extractIngestBatches pulls ingest envelope batches from operation details.
+func extractIngestBatches(details json.RawMessage, contracts []types.IngestContract) ([]ingestBatch, error) {
 	if len(details) == 0 {
 		return nil, ErrIntegrationAlertPayloadsMissing
 	}
 
 	var payload struct {
-		Alerts json.RawMessage `json:"alerts"`
+		IngestBatches []ingestBatch   `json:"ingest_batches"`
+		Alerts        json.RawMessage `json:"alerts"`
 	}
 	if err := jsonx.RoundTrip(details, &payload); err != nil {
 		return nil, err
 	}
-	if len(payload.Alerts) == 0 {
+
+	contractIndex := lo.SliceToMap(contracts, func(contract types.IngestContract) (types.MappingSchema, struct{}) {
+		return types.NormalizeMappingSchema(contract.Schema), struct{}{}
+	})
+
+	if len(payload.IngestBatches) > 0 {
+		out := make([]ingestBatch, 0, len(payload.IngestBatches))
+		for _, batch := range payload.IngestBatches {
+			schema := types.NormalizeMappingSchema(batch.Schema)
+			if schema == "" {
+				return nil, fmt.Errorf("%w: empty ingest schema", ErrIntegrationAlertPayloadsMissing)
+			}
+			if _, ok := contractIndex[schema]; !ok {
+				return nil, fmt.Errorf("%w: undeclared ingest schema=%s", ErrIntegrationAlertPayloadsMissing, schema)
+			}
+
+			out = append(out, ingestBatch{
+				Schema:    schema,
+				Envelopes: batch.Envelopes,
+			})
+		}
+
+		return out, nil
+	}
+
+	if len(payload.Alerts) == 0 || len(contracts) == 0 {
 		return nil, ErrIntegrationAlertPayloadsMissing
+	}
+
+	if len(contracts) != 1 {
+		return nil, fmt.Errorf("%w: %d contracts require ingest_batches output", ErrIntegrationAlertPayloadsMissing, len(contracts))
 	}
 
 	var envelopes []types.AlertEnvelope
 	if err := jsonx.RoundTrip(payload.Alerts, &envelopes); err == nil {
-		return envelopes, nil
+		return []ingestBatch{{
+			Schema:    types.NormalizeMappingSchema(contracts[0].Schema),
+			Envelopes: envelopes,
+		}}, nil
 	}
 
 	var envelope types.AlertEnvelope
@@ -696,7 +759,10 @@ func extractAlertEnvelopes(details json.RawMessage) ([]types.AlertEnvelope, erro
 		return nil, err
 	}
 
-	return []types.AlertEnvelope{envelope}, nil
+	return []ingestBatch{{
+		Schema:    types.NormalizeMappingSchema(contracts[0].Schema),
+		Envelopes: []types.AlertEnvelope{envelope},
+	}}, nil
 }
 
 // integrationRunOperationMetrics captures operation execution metrics
@@ -713,10 +779,10 @@ type integrationRunOperationMetrics struct {
 type integrationRunMetrics struct {
 	// Operation captures operation execution metrics
 	Operation integrationRunOperationMetrics `json:"operation"`
-	// IngestSummary captures ingest summary metrics
-	IngestSummary json.RawMessage `json:"ingest_summary,omitempty"`
-	// IngestErrors captures ingest error metrics
-	IngestErrors []string `json:"ingest_errors,omitempty"`
+	// IngestSummaries captures ingest summary metrics keyed by schema.
+	IngestSummaries map[string]json.RawMessage `json:"ingest_summaries,omitempty"`
+	// IngestErrors captures ingest error metrics keyed by schema.
+	IngestErrors map[string][]string `json:"ingest_errors,omitempty"`
 }
 
 // encodeIntegrationRunOperationDetails normalizes operation details for metrics payloads
@@ -749,15 +815,26 @@ func encodeIntegrationRunMetrics(metrics integrationRunMetrics) map[string]any {
 	return metricsMap
 }
 
-// appendIngestMetrics attaches a unified ingest result to integration run metrics
-func appendIngestMetrics(metrics integrationRunMetrics, result ingest.IngestResult) integrationRunMetrics {
+// appendIngestMetrics attaches ingest results for one schema to integration run metrics.
+func appendIngestMetrics(metrics integrationRunMetrics, schema types.MappingSchema, result ingest.IngestResult) integrationRunMetrics {
+	normalizedSchema := types.NormalizeMappingSchema(schema)
+	if normalizedSchema == "" {
+		return metrics
+	}
+
 	raw, err := json.Marshal(result.Summary)
 	if err == nil {
-		metrics.IngestSummary = raw
+		if metrics.IngestSummaries == nil {
+			metrics.IngestSummaries = map[string]json.RawMessage{}
+		}
+		metrics.IngestSummaries[string(normalizedSchema)] = raw
 	}
 
 	if len(result.Errors) > 0 {
-		metrics.IngestErrors = append([]string(nil), result.Errors...)
+		if metrics.IngestErrors == nil {
+			metrics.IngestErrors = map[string][]string{}
+		}
+		metrics.IngestErrors[string(normalizedSchema)] = append([]string(nil), result.Errors...)
 	}
 
 	return metrics

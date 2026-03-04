@@ -16,12 +16,11 @@ import (
 
 // Registry exposes loaded provider configs and runtime providers to callers
 type Registry struct {
-	configs                  map[types.ProviderType]config.ProviderSpec
-	providers                map[types.ProviderType]providers.Provider
-	clients                  map[types.ProviderType][]types.ClientDescriptor
-	operations               map[types.ProviderType][]types.OperationDescriptor
-	vulnerabilityMappings    map[types.ProviderType]map[string]types.MappingSpec
-	directoryAccountMappings map[types.ProviderType]map[string]types.MappingSpec
+	configs        map[types.ProviderType]config.ProviderSpec
+	providers      map[types.ProviderType]providers.Provider
+	clients        map[types.ProviderType][]types.ClientDescriptor
+	operations     map[types.ProviderType][]types.OperationDescriptor
+	mappingCatalog *types.MappingCatalog
 }
 
 // NewRegistry loads embedded provider specs and builds the registry using the catalog builders
@@ -39,12 +38,11 @@ func NewRegistry(ctx context.Context, overrides map[string]config.ProviderSpec) 
 	builders := catalog.Builders()
 
 	instance := &Registry{
-		configs:                  make(map[types.ProviderType]config.ProviderSpec, len(specs)),
-		providers:                map[types.ProviderType]providers.Provider{},
-		clients:                  map[types.ProviderType][]types.ClientDescriptor{},
-		operations:               map[types.ProviderType][]types.OperationDescriptor{},
-		vulnerabilityMappings:    map[types.ProviderType]map[string]types.MappingSpec{},
-		directoryAccountMappings: map[types.ProviderType]map[string]types.MappingSpec{},
+		configs:        make(map[types.ProviderType]config.ProviderSpec, len(specs)),
+		providers:      map[types.ProviderType]providers.Provider{},
+		clients:        map[types.ProviderType][]types.ClientDescriptor{},
+		operations:     map[types.ProviderType][]types.OperationDescriptor{},
+		mappingCatalog: types.NewMappingCatalog(),
 	}
 
 	maps.Copy(instance.configs, specs)
@@ -90,16 +88,8 @@ func NewRegistry(ctx context.Context, overrides map[string]config.ProviderSpec) 
 			}
 		}
 
-		if vulnProvider, ok := provider.(types.VulnerabilityMappingProvider); ok {
-			if mappings := vulnProvider.DefaultVulnerabilityMappings(); len(mappings) > 0 {
-				instance.vulnerabilityMappings[providerType] = mappings
-			}
-		}
-
-		if dirProvider, ok := provider.(types.DirectoryAccountMappingProvider); ok {
-			if mappings := dirProvider.DefaultDirectoryAccountMappings(); len(mappings) > 0 {
-				instance.directoryAccountMappings[providerType] = mappings
-			}
+		if mappingProvider, ok := provider.(types.MappingProvider); ok {
+			instance.mappingCatalog.RegisterProvider(providerType, mappingProvider.DefaultMappings())
 		}
 	}
 
@@ -245,73 +235,26 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 		delete(r.operations, providerType)
 	}
 
-	if vulnProvider, ok := provider.(types.VulnerabilityMappingProvider); ok {
-		if mappings := vulnProvider.DefaultVulnerabilityMappings(); len(mappings) > 0 {
-			r.vulnerabilityMappings[providerType] = mappings
-		} else {
-			delete(r.vulnerabilityMappings, providerType)
+	r.mappingCatalog = types.NewMappingCatalog()
+	for providerType, value := range r.providers {
+		mappingProvider, ok := value.(types.MappingProvider)
+		if !ok {
+			continue
 		}
-	} else {
-		delete(r.vulnerabilityMappings, providerType)
-	}
 
-	if dirProvider, ok := provider.(types.DirectoryAccountMappingProvider); ok {
-		if mappings := dirProvider.DefaultDirectoryAccountMappings(); len(mappings) > 0 {
-			r.directoryAccountMappings[providerType] = mappings
-		} else {
-			delete(r.directoryAccountMappings, providerType)
-		}
-	} else {
-		delete(r.directoryAccountMappings, providerType)
+		r.mappingCatalog.RegisterProvider(providerType, mappingProvider.DefaultMappings())
 	}
 
 	return nil
 }
 
-// SupportsVulnerabilityIngest reports whether the provider has any registered vulnerability mappings.
-func (r *Registry) SupportsVulnerabilityIngest(provider types.ProviderType) bool {
-	return len(r.vulnerabilityMappings[provider]) > 0
+// SupportsIngest reports whether a provider has any registered mappings for the schema.
+func (r *Registry) SupportsIngest(provider types.ProviderType, schema types.MappingSchema) bool {
+	return r.mappingCatalog.Supports(provider, schema)
 }
 
-// DefaultVulnerabilityMapping returns the mapping spec for a provider and alert variant.
+// DefaultMapping returns the mapping spec for a provider, schema, and variant.
 // It checks for an exact variant match first, then falls back to the empty-variant default.
-func (r *Registry) DefaultVulnerabilityMapping(provider types.ProviderType, variant string) (types.MappingSpec, bool) {
-	mappings, ok := r.vulnerabilityMappings[provider]
-	if !ok {
-		return types.MappingSpec{}, false
-	}
-
-	if variant != "" {
-		if spec, ok := mappings[variant]; ok {
-			return spec, true
-		}
-	}
-
-	spec, ok := mappings[""]
-
-	return spec, ok
-}
-
-// SupportsDirectoryAccountIngest reports whether the provider has any registered directory account mappings.
-func (r *Registry) SupportsDirectoryAccountIngest(provider types.ProviderType) bool {
-	return len(r.directoryAccountMappings[provider]) > 0
-}
-
-// DefaultDirectoryAccountMapping returns the mapping spec for a provider and variant.
-// It checks for an exact variant match first, then falls back to the empty-variant default.
-func (r *Registry) DefaultDirectoryAccountMapping(provider types.ProviderType, variant string) (types.MappingSpec, bool) {
-	mappings, ok := r.directoryAccountMappings[provider]
-	if !ok {
-		return types.MappingSpec{}, false
-	}
-
-	if variant != "" {
-		if spec, ok := mappings[variant]; ok {
-			return spec, true
-		}
-	}
-
-	spec, ok := mappings[""]
-
-	return spec, ok
+func (r *Registry) DefaultMapping(provider types.ProviderType, schema types.MappingSchema, variant string) (types.MappingSpec, bool) {
+	return r.mappingCatalog.Resolve(provider, schema, variant)
 }

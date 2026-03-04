@@ -32,13 +32,18 @@ func sanitizeDescriptors[T any](provider types.ProviderType, descriptors []T, is
 
 // SanitizeOperationDescriptors filters and cleans a slice of OperationDescriptor
 func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
-	return sanitizeDescriptors(
+	sanitized := sanitizeDescriptors(
 		provider,
 		descriptors,
 		func(d types.OperationDescriptor) bool { return d.Run != nil && d.Name != "" },
 		func(d types.OperationDescriptor) types.ProviderType { return d.Provider },
 		func(d *types.OperationDescriptor, p types.ProviderType) { d.Provider = p },
 	)
+
+	return lo.Map(sanitized, func(descriptor types.OperationDescriptor, _ int) types.OperationDescriptor {
+		descriptor.Ingest = sanitizeIngestContracts(descriptor.Ingest)
+		return descriptor
+	})
 }
 
 // SanitizeClientDescriptors filters out invalid client descriptors and assigns provider type
@@ -50,4 +55,12 @@ func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.
 		func(d types.ClientDescriptor) types.ProviderType { return d.Provider },
 		func(d *types.ClientDescriptor, p types.ProviderType) { d.Provider = p },
 	)
+}
+
+func sanitizeIngestContracts(contracts []types.IngestContract) []types.IngestContract {
+	return lo.FilterMap(contracts, func(contract types.IngestContract, _ int) (types.IngestContract, bool) {
+		contract.Schema = types.NormalizeMappingSchema(contract.Schema)
+
+		return contract, contract.Schema != ""
+	})
 }

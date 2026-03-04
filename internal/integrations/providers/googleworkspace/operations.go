@@ -67,6 +67,11 @@ func googleWorkspaceOperations() []types.OperationDescriptor {
 			Description: "Collect Google Workspace directory users and emit directory account envelopes",
 			Client:      ClientGoogleWorkspaceAPI,
 			Run:         runGoogleWorkspaceDirectorySync,
+			Ingest: []types.IngestContract{
+				{
+					Schema: types.MappingSchemaDirectoryAccount,
+				},
+			},
 		},
 	}
 }
