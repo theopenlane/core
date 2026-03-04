@@ -31,7 +31,6 @@ var (
 	oauthStateCookieName  = "oauth_state"
 	oauthOrgIDCookieName  = "oauth_org_id"
 	oauthUserIDCookieName = "oauth_user_id"
-	stateLength           = 16
 )
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration.
