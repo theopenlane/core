@@ -263,6 +263,7 @@ require (
 require (
 	github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.10
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.1
+	github.com/buildkite/go-buildkite/v3 v3.13.0
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect

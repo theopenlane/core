@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/common/integrations/types"
 )
@@ -26,9 +27,12 @@ func DefaultClientDescriptors(provider types.ProviderType, name types.ClientName
 
 // TokenClientBuilder returns a ClientBuilderFunc that extracts a token and creates an AuthenticatedClient.
 func TokenClientBuilder(extract TokenExtractor, headers map[string]string) types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ map[string]any) (any, error) {
+	return func(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
 		token, err := extract(payload)
+		if err != nil {
+			return types.EmptyClientInstance(), err
+		}
 
-		return NewAuthenticatedClient(token, headers), err
+		return types.NewClientInstance(NewAuthenticatedClient(token, headers)), nil
 	}
 }

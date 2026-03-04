@@ -78,17 +78,10 @@ const DefaultSampleSize = 5
 // HealthCheckRunner creates a health check operation function using the common pattern.
 func HealthCheckRunner[T any](extractor auth.TokenExtractor, endpoint string, failureMsg string, resultFn func(T) (string, any)) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		extract, err := tokenExtractor(tokenType)
-		if err != nil {
-			return types.OperationResult{}, ErrUnsupportedTokenType
-		}
-
-		client, token, err := auth.ClientAndToken(input, extract)
+		client, token, err := auth.ClientAndToken(input, extractor)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
-
-		client := auth.AuthenticatedClientFromClient(input.Client)
 
 		var resp T
 		if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
@@ -98,16 +91,5 @@ func HealthCheckRunner[T any](extractor auth.TokenExtractor, endpoint string, fa
 		summary, details := resultFn(resp)
 
 		return OperationSuccess(summary, details), nil
-	}
-}
-
-func tokenExtractor(tokenType TokenType) (auth.TokenExtractor, error) {
-	switch tokenType {
-	case TokenTypeOAuth:
-		return auth.OAuthTokenFromPayload, nil
-	case TokenTypeAPI:
-		return auth.APITokenFromPayload, nil
-	default:
-		return nil, ErrUnsupportedTokenType
 	}
 }

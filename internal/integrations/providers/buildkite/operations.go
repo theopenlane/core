@@ -93,7 +93,7 @@ func runBuildkiteHealth(_ context.Context, input types.OperationInput) (types.Op
 
 // runBuildkiteOrganizationsOperation collects Buildkite org metadata for reporting.
 func runBuildkiteOrganizationsOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.APITokenFromPayload)
+	client, err := resolveBuildkiteClient(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

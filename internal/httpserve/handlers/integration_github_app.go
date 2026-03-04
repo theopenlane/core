@@ -23,7 +23,9 @@ import (
 
 // GitHub App cookie names used during install callbacks
 const (
-	githubAppStateCookieName = "githubapp_state"
+	githubAppStateCookieName  = "githubapp_state"
+	githubAppOrgIDCookieName  = "githubapp_org_id"
+	githubAppUserIDCookieName = "githubapp_user_id"
 )
 
 // IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration
@@ -96,8 +98,10 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	}
 
 	cfg := h.getOauthCookieConfig()
-	h.setOAuthCookies(ctx, cfg, map[string]string{
-		githubAppStateCookieName: state,
+	sessions.SetCookies(ctx.Response().Writer, cfg, map[string]string{
+		githubAppStateCookieName:  state,
+		githubAppOrgIDCookieName:  caller.OrganizationID,
+		githubAppUserIDCookieName: caller.SubjectID,
 	})
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
@@ -131,9 +135,9 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	req := ctx.Request()
 	reqCtx := ctx.Request().Context()
 
-	user, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err, openapiCtx)
+	caller, callerOk := auth.CallerFromContext(reqCtx)
+	if !callerOk || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
 	stateCookie, err := sessions.GetCookie(req, githubAppStateCookieName)
@@ -154,10 +158,37 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if user.OrganizationID != orgID {
-		logx.FromContext(reqCtx).Error().Str("state_org_id", orgID).Str("user_org_id", user.OrganizationID).Msg("github app callback organization mismatch")
+	orgCookie, err := sessions.GetCookie(req, githubAppOrgIDCookieName)
+	if err != nil || orgCookie.Value == "" {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("github app org cookie missing")
+
+		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
+	}
+
+	userCookie, err := sessions.GetCookie(req, githubAppUserIDCookieName)
+	if err != nil || userCookie.Value == "" {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("github app user cookie missing")
+
+		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
+	}
+
+	if caller.OrganizationID != orgCookie.Value || caller.OrganizationID != orgID {
+		logx.FromContext(reqCtx).Error().
+			Str("state_org_id", orgID).
+			Str("cookie_org_id", orgCookie.Value).
+			Str("caller_org_id", caller.OrganizationID).
+			Msg("github app callback organization mismatch")
 
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
+	}
+
+	if caller.SubjectID != userCookie.Value {
+		logx.FromContext(reqCtx).Error().
+			Str("cookie_user_id", userCookie.Value).
+			Str("caller_user_id", caller.SubjectID).
+			Msg("github app callback user mismatch")
+
+		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
 	installationPayload := githubAppInstallationPayload{AppID: h.IntegrationGitHubApp.AppID, InstallationID: in.InstallationID}

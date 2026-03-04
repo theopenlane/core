@@ -64,7 +64,7 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 // SaveCredentialForIntegration upserts credentials for a specific integration record.
 func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	systemCtx = contextx.With(systemCtx, auth.KeyStoreContextKey{})
+	systemCtx = auth.WithCaller(systemCtx, auth.NewKeystoreCaller())
 
 	integrationRecord, err := s.db.Integration.Query().
 		Where(
