@@ -87,6 +87,12 @@ func githubOperations() []types.OperationDescriptor {
 			Client:       ClientGitHubAPI,
 			Run:          runGitHubVulnerabilityOperation,
 			ConfigSchema: githubVulnerabilityConfigSchema,
+			Ingest: []types.IngestContract{
+				{
+					Schema:         types.MappingSchemaVulnerability,
+					EnsurePayloads: true,
+				},
+			},
 		},
 	}
 }
@@ -108,6 +114,12 @@ func githubAppOperations(baseURL string) []types.OperationDescriptor {
 			Client:       ClientGitHubAPI,
 			Run:          runGitHubVulnerabilityOperation,
 			ConfigSchema: githubVulnerabilityConfigSchema,
+			Ingest: []types.IngestContract{
+				{
+					Schema:         types.MappingSchemaVulnerability,
+					EnsurePayloads: true,
+				},
+			},
 		},
 	}
 }

@@ -12,14 +12,14 @@ import (
 // TypeGitHub identifies the GitHub provider
 const TypeGitHub = types.ProviderType("github")
 
-// oauthProvider wraps oauth.Provider and implements VulnerabilityMappingProvider.
+// oauthProvider wraps oauth.Provider and implements MappingProvider.
 type oauthProvider struct {
 	*oauth.Provider
 }
 
-// DefaultVulnerabilityMappings returns the built-in vulnerability mapping specs for the GitHub provider.
-func (p *oauthProvider) DefaultVulnerabilityMappings() map[string]types.MappingSpec {
-	return githubVulnerabilityMappings()
+// DefaultMappings returns the built-in ingest mapping registrations for GitHub providers.
+func (p *oauthProvider) DefaultMappings() []types.MappingRegistration {
+	return githubDefaultMappings()
 }
 
 // Builder returns the GitHub provider builder.

@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/samber/lo"
+
 	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 )
@@ -120,4 +122,15 @@ func googleWorkspaceDirectoryAccountMappings() map[string]integrationtypes.Mappi
 			MapExpr:    mapExprGoogleWorkspaceDirectoryAccount,
 		},
 	}
+}
+
+// googleWorkspaceDefaultMappings returns all built-in ingest mappings for Google Workspace.
+func googleWorkspaceDefaultMappings() []integrationtypes.MappingRegistration {
+	return lo.MapToSlice(googleWorkspaceDirectoryAccountMappings(), func(variant string, spec integrationtypes.MappingSpec) integrationtypes.MappingRegistration {
+		return integrationtypes.MappingRegistration{
+			Schema:  integrationtypes.MappingSchemaDirectoryAccount,
+			Variant: variant,
+			Spec:    spec,
+		}
+	})
 }

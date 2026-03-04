@@ -16,34 +16,29 @@ type stubMappingIndex struct {
 	dirAccProviders map[integrationtypes.ProviderType]map[string]integrationtypes.MappingSpec
 }
 
-func (s *stubMappingIndex) SupportsVulnerabilityIngest(provider integrationtypes.ProviderType) bool {
-	return len(s.vulnProviders[provider]) > 0
+func (s *stubMappingIndex) SupportsIngest(provider integrationtypes.ProviderType, schema integrationtypes.MappingSchema) bool {
+	switch schema {
+	case integrationtypes.MappingSchemaVulnerability:
+		return len(s.vulnProviders[provider]) > 0
+	case integrationtypes.MappingSchemaDirectoryAccount:
+		return len(s.dirAccProviders[provider]) > 0
+	default:
+		return false
+	}
 }
 
-func (s *stubMappingIndex) DefaultVulnerabilityMapping(provider integrationtypes.ProviderType, variant string) (integrationtypes.MappingSpec, bool) {
-	mappings, ok := s.vulnProviders[provider]
-	if !ok {
+func (s *stubMappingIndex) DefaultMapping(provider integrationtypes.ProviderType, schema integrationtypes.MappingSchema, variant string) (integrationtypes.MappingSpec, bool) {
+	var mappings map[string]integrationtypes.MappingSpec
+	switch schema {
+	case integrationtypes.MappingSchemaVulnerability:
+		mappings = s.vulnProviders[provider]
+	case integrationtypes.MappingSchemaDirectoryAccount:
+		mappings = s.dirAccProviders[provider]
+	default:
 		return integrationtypes.MappingSpec{}, false
 	}
 
-	if variant != "" {
-		if spec, ok := mappings[variant]; ok {
-			return spec, true
-		}
-	}
-
-	spec, ok := mappings[""]
-
-	return spec, ok
-}
-
-func (s *stubMappingIndex) SupportsDirectoryAccountIngest(provider integrationtypes.ProviderType) bool {
-	return len(s.dirAccProviders[provider]) > 0
-}
-
-func (s *stubMappingIndex) DefaultDirectoryAccountMapping(provider integrationtypes.ProviderType, variant string) (integrationtypes.MappingSpec, bool) {
-	mappings, ok := s.dirAccProviders[provider]
-	if !ok {
+	if len(mappings) == 0 {
 		return integrationtypes.MappingSpec{}, false
 	}
 

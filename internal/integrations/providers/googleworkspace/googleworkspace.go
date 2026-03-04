@@ -12,14 +12,14 @@ import (
 // TypeGoogleWorkspace identifies the Google Workspace provider
 const TypeGoogleWorkspace = types.ProviderType("googleworkspace")
 
-// oauthProvider wraps oauth.Provider and implements DirectoryAccountMappingProvider.
+// oauthProvider wraps oauth.Provider and implements MappingProvider.
 type oauthProvider struct {
 	*oauth.Provider
 }
 
-// DefaultDirectoryAccountMappings returns the built-in directory account mapping specs for Google Workspace.
-func (p *oauthProvider) DefaultDirectoryAccountMappings() map[string]types.MappingSpec {
-	return googleWorkspaceDirectoryAccountMappings()
+// DefaultMappings returns the built-in ingest mapping registrations for Google Workspace.
+func (p *oauthProvider) DefaultMappings() []types.MappingRegistration {
+	return googleWorkspaceDefaultMappings()
 }
 
 // Builder returns the Google Workspace provider builder.

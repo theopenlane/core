@@ -313,13 +313,19 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	if h.Gala != nil {
-		receipt := h.Gala.EmitWithHeaders(req.Context(), ingest.IntegrationIngestRequestedTopic.Name, ingest.RequestedPayload{
-			IntegrationID: integrationRecord.ID,
-			Schema:        integrationgenerated.IntegrationMappingSchemaVulnerability,
-			Envelopes:     alerts,
-		}, gala.Headers{})
-		if receipt.Err != nil {
-			logx.FromContext(req.Context()).Warn().Err(receipt.Err).Msg("failed to emit integration ingest event")
+		topic, ok := ingest.IngestRequestedTopicForSchema(integrationgenerated.IntegrationMappingSchemaVulnerability)
+		if !ok {
+			logx.FromContext(req.Context()).Warn().Msg("failed to resolve ingest topic for schema")
+		} else {
+			receipt := h.Gala.EmitWithHeaders(req.Context(), topic.Name, ingest.RequestedPayload{
+				IntegrationID: integrationRecord.ID,
+				Schema:        integrationgenerated.IntegrationMappingSchemaVulnerability,
+				Operation:     string(types.OperationVulnerabilitiesCollect),
+				Envelopes:     alerts,
+			}, gala.Headers{})
+			if receipt.Err != nil {
+				logx.FromContext(req.Context()).Warn().Err(receipt.Err).Msg("failed to emit integration ingest event")
+			}
 		}
 	}
 
