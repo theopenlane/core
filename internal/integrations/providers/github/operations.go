@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/samber/lo"
@@ -14,6 +13,9 @@ import (
 	"github.com/theopenlane/core/common/integrations/operations"
 	"github.com/theopenlane/core/common/integrations/types"
 )
+
+// githubRestClient is the package-level REST client for GitHub API requests.
+var githubRestClient = auth.RESTClient{BaseURL: githubAPIBaseURL, DefaultHeaders: githubClientHeaders}
 
 const (
 	githubOperationHealth      types.OperationName = "health.default"
@@ -264,21 +266,22 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}), nil
 }
 
-// fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support
+// fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support.
 func fetchGitHubResource(ctx context.Context, client *auth.AuthenticatedClient, token, path string, params url.Values, out any) error {
-	return fetchGitHubResourceWithBaseURL(ctx, client, token, githubAPIBaseURL, path, params, out)
-}
-
-// fetchGitHubResourceWithBaseURL retrieves GitHub REST API resources using a custom base URL
-func fetchGitHubResourceWithBaseURL(ctx context.Context, client *auth.AuthenticatedClient, token, baseURL, path string, params url.Values, out any) error {
-	endpoint := strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(path, "/")
-	if params != nil {
-		if encoded := params.Encode(); encoded != "" {
-			endpoint += "?" + encoded
+	if err := githubRestClient.GetJSON(ctx, client, token, path, params, out); err != nil {
+		if errors.Is(err, auth.ErrHTTPRequestFailed) {
+			return ErrAPIRequest
 		}
+		return err
 	}
 
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, githubClientHeaders, out); err != nil {
+	return nil
+}
+
+// fetchGitHubResourceWithBaseURL retrieves GitHub REST API resources using a custom base URL.
+func fetchGitHubResourceWithBaseURL(ctx context.Context, client *auth.AuthenticatedClient, token, baseURL, path string, params url.Values, out any) error {
+	rc := auth.RESTClient{BaseURL: baseURL, DefaultHeaders: githubClientHeaders}
+	if err := rc.GetJSON(ctx, client, token, path, params, out); err != nil {
 		if errors.Is(err, auth.ErrHTTPRequestFailed) {
 			return ErrAPIRequest
 		}

@@ -2,6 +2,7 @@ package keystore
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"sync/atomic"
 	"testing"
@@ -32,13 +33,10 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
+		Build: func(_ context.Context, cred types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
 			buildCount.Add(1)
 			if cred.Data.AccessKeyID == "" {
 				t.Fatalf("expected credential payload in builder")
-			}
-			if config != nil {
-				config["region"] = "builder"
 			}
 			return types.NewClientInstance(&pooledClient{id: cred.Data.AccessKeyID}), nil
 		},
@@ -68,17 +66,13 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 		t.Fatalf("expected pooled client to be reused")
 	}
 
-	reqConfig := map[string]any{"region": "us-west-2"}
+	reqConfig, _ := json.Marshal(map[string]any{"region": "us-west-2"})
 	if _, err := manager.Get(ctx, "org-2", provider, descriptor.Name, WithClientConfig(reqConfig)); err != nil {
 		t.Fatalf("manager.Get() with config error = %v", err)
 	}
 
 	if buildCount.Load() != 2 {
 		t.Fatalf("expected builder to run for new org, ran %d times", buildCount.Load())
-	}
-
-	if got := reqConfig["region"]; got != "us-west-2" {
-		t.Fatalf("expected caller config to remain unchanged, got %v", got)
 	}
 
 	if _, err := manager.Get(ctx, "org-1", provider, types.ClientName("missing")); !errors.Is(err, ErrClientNotRegistered) {
@@ -112,7 +106,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing provider",
 			descriptor: types.ClientDescriptor{
 				Name: types.ClientName("rest"),
-				Build: func(context.Context, types.CredentialPayload, map[string]any) (types.ClientInstance, error) {
+				Build: func(context.Context, types.CredentialPayload, json.RawMessage) (types.ClientInstance, error) {
 					return types.EmptyClientInstance(), nil
 				},
 			},
@@ -122,7 +116,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing name",
 			descriptor: types.ClientDescriptor{
 				Provider: provider,
-				Build: func(context.Context, types.CredentialPayload, map[string]any) (types.ClientInstance, error) {
+				Build: func(context.Context, types.CredentialPayload, json.RawMessage) (types.ClientInstance, error) {
 					return types.EmptyClientInstance(), nil
 				},
 			},
@@ -162,11 +156,11 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	}
 
 	var captured types.CredentialPayload
-	var capturedConfig map[string]any
+	var capturedConfig json.RawMessage
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred types.CredentialPayload, config map[string]any) (types.ClientInstance, error) {
+		Build: func(_ context.Context, cred types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
 			captured = cred
 			capturedConfig = config
 			return types.NewClientInstance(&pooledClient{id: cred.Data.APIToken}), nil
@@ -178,7 +172,7 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 		t.Fatalf("NewClientPoolManager() error = %v", err)
 	}
 
-	reqConfig := map[string]any{"region": "eu-west-1"}
+	reqConfig, _ := json.Marshal(map[string]any{"region": "eu-west-1"})
 	result, err := manager.BuildFromPayload(context.Background(), provider, descriptor.Name, payload, reqConfig)
 	if err != nil {
 		t.Fatalf("BuildFromPayload() error = %v", err)
@@ -194,11 +188,22 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	if captured.Data.APIToken != payload.Data.APIToken {
 		t.Fatalf("expected builder to receive provided payload, got %s", captured.Data.APIToken)
 	}
-	if capturedConfig["region"] != "eu-west-1" {
-		t.Fatalf("expected config to be passed to builder, got %v", capturedConfig["region"])
+
+	var decodedConfig map[string]any
+	if err := json.Unmarshal(capturedConfig, &decodedConfig); err != nil {
+		t.Fatalf("expected decodable config, got %v", err)
 	}
-	if reqConfig["region"] != "eu-west-1" {
-		t.Fatalf("expected caller config to remain unchanged, got %v", reqConfig["region"])
+	if decodedConfig["region"] != "eu-west-1" {
+		t.Fatalf("expected config to be passed to builder, got %v", decodedConfig["region"])
+	}
+
+	// Verify original config is not mutated by builder (it's a separate copy)
+	var origDecoded map[string]any
+	if err := json.Unmarshal(reqConfig, &origDecoded); err != nil {
+		t.Fatalf("expected original config to remain decodable, got %v", err)
+	}
+	if origDecoded["region"] != "eu-west-1" {
+		t.Fatalf("expected caller config to remain unchanged, got %v", origDecoded["region"])
 	}
 
 	_, err = manager.BuildFromPayload(context.Background(), provider, types.ClientName("missing"), payload, nil)

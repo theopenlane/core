@@ -90,84 +90,93 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	recordStateFilter := cfg.RecordState.String()
 	workflowFilter := cfg.WorkflowStatus.String()
 
-	var (
-		envelopes []types.AlertEnvelope
-		total     int
-		nextToken *string
-		filters   = securityHubFiltersFromMetadata(meta)
-	)
+	filters := securityHubFiltersFromMetadata(meta)
 
-	for {
+	fetch := func(ctx context.Context, pageToken string) (operations.PageResult[securityhubtypes.AwsSecurityFinding], error) {
+		var nextToken *string
+		if pageToken != "" {
+			nextToken = &pageToken
+		}
+
 		resp, err := client.GetFindings(ctx, &securityhub.GetFindingsInput{
 			MaxResults: awssdk.Int32(int32(min(pageSize, math.MaxInt32))), //nolint:gosec // bounds checked via min
 			NextToken:  nextToken,
 			Filters:    filters,
 		})
 		if err != nil {
-			return operations.OperationFailure("AWS Security Hub findings fetch failed", err, securityHubFailureDetails{
-				Region: meta.Region,
-			})
+			return operations.PageResult[securityhubtypes.AwsSecurityFinding]{}, err
 		}
 
-		for _, finding := range resp.Findings {
-			if maxFindings > 0 && total >= maxFindings {
-				break
-			}
-
-			severityLabel := ""
-			if finding.Severity != nil {
-				severityLabel = strings.ToLower(string(finding.Severity.Label))
-			}
-
-			recordState := string(finding.RecordState)
-			workflowStatus := ""
-			if finding.Workflow != nil {
-				workflowStatus = string(finding.Workflow.Status)
-			}
-
-			if severityFilter != "" && severityLabel != severityFilter {
-				continue
-			}
-
-			if recordStateFilter != "" && recordState != recordStateFilter {
-				continue
-			}
-
-			if workflowFilter != "" && workflowStatus != workflowFilter {
-				continue
-			}
-
-			payload, err := json.Marshal(finding)
-			if err != nil {
-				return operations.OperationFailure("AWS Security Hub finding serialization failed", err, securityHubFailureDetails{
-					Region: meta.Region,
-				})
-			}
-
-			resourceID := ""
-			for _, resource := range finding.Resources {
-				if resource.Id == nil || *resource.Id == "" {
-					continue
-				}
-				resourceID = *resource.Id
-				break
-			}
-			envelopes = append(envelopes, types.AlertEnvelope{
-				AlertType: awsSecurityHubAlertTypeFinding,
-				Resource:  resourceID,
-				Payload:   payload,
-			})
-			total++
+		result := operations.PageResult[securityhubtypes.AwsSecurityFinding]{Items: resp.Findings}
+		if resp.NextToken != nil && *resp.NextToken != "" {
+			result.NextToken = *resp.NextToken
 		}
 
+		return result, nil
+	}
+
+	allFindings, err := operations.CollectAll(ctx, fetch, 0)
+	if err != nil {
+		return operations.OperationFailure("AWS Security Hub findings fetch failed", err, securityHubFailureDetails{
+			Region: meta.Region,
+		})
+	}
+
+	var (
+		envelopes []types.AlertEnvelope
+		total     int
+	)
+
+	for _, finding := range allFindings {
 		if maxFindings > 0 && total >= maxFindings {
 			break
 		}
 
-		if resp.NextToken == nil || *resp.NextToken == "" {
+		severityLabel := ""
+		if finding.Severity != nil {
+			severityLabel = strings.ToLower(string(finding.Severity.Label))
+		}
+
+		recordState := string(finding.RecordState)
+		workflowStatus := ""
+		if finding.Workflow != nil {
+			workflowStatus = string(finding.Workflow.Status)
+		}
+
+		if severityFilter != "" && severityLabel != severityFilter {
+			continue
+		}
+
+		if recordStateFilter != "" && recordState != recordStateFilter {
+			continue
+		}
+
+		if workflowFilter != "" && workflowStatus != workflowFilter {
+			continue
+		}
+
+		payload, err := json.Marshal(finding)
+		if err != nil {
+			return operations.OperationFailure("AWS Security Hub finding serialization failed", err, securityHubFailureDetails{
+				Region: meta.Region,
+			})
+		}
+
+		resourceID := ""
+		for _, resource := range finding.Resources {
+			if resource.Id == nil || *resource.Id == "" {
+				continue
+			}
+			resourceID = *resource.Id
 			break
 		}
-		nextToken = resp.NextToken
+
+		envelopes = append(envelopes, types.AlertEnvelope{
+			AlertType: awsSecurityHubAlertTypeFinding,
+			Resource:  resourceID,
+			Payload:   payload,
+		})
+		total++
 	}
 
 	details := securityHubFindingsDetails{

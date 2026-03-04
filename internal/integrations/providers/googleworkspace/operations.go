@@ -4,8 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"time"
+
+	"golang.org/x/oauth2"
+	admin "google.golang.org/api/admin/directory/v1"
+	"google.golang.org/api/googleapi"
+	"google.golang.org/api/option"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/operations"
@@ -16,28 +20,11 @@ const (
 	googleWorkspaceHealthOp           types.OperationName = "health.default"
 	googleWorkspaceDirectorySyncOp    types.OperationName = types.OperationDirectorySync
 	googleWorkspaceDirectoryAlertType string              = "directory_account"
+	googleWorkspaceDirectoryFields    string              = "nextPageToken,users(id,primaryEmail,name/fullName,name/givenName,name/familyName,thumbnailPhotoUrl,organizations/title,organizations/department,orgUnitPath,suspended,archived,isEnforcedIn2Sv,isEnrolledIn2Sv,lastLoginTime)"
 
-	googleWorkspaceDirectoryUsersEndpoint string = "https://admin.googleapis.com/admin/directory/v1/users"
-	googleWorkspaceDirectoryFields        string = "nextPageToken,users(id,primaryEmail,name/fullName,name/givenName,name/familyName,thumbnailPhotoUrl,organizations/title,organizations/department,orgUnitPath,suspended,archived,isEnforcedIn2Sv,isEnrolledIn2Sv,lastLoginTime)"
-
-	googleWorkspaceDirectoryDefaultPageSize = 200
+	googleWorkspaceDirectoryDefaultPageSize = int64(200)
+	googleWorkspaceHealthMaxResults         = int64(1)
 )
-
-type googleUserinfoResponse struct {
-	// Sub is the subject identifier for the user
-	Sub string `json:"sub"`
-	// Email is the primary email address
-	Email string `json:"email"`
-	// Name is the display name for the user
-	Name string `json:"name"`
-}
-
-type googleWorkspaceDirectoryUsersResponse struct {
-	// Users is the page of returned directory users
-	Users []map[string]any `json:"users"`
-	// NextPageToken is the pagination token for the next page
-	NextPageToken string `json:"nextPageToken"`
-}
 
 type googleWorkspaceDirectoryConfig struct {
 	// Customer overrides the default customer selector.
@@ -46,18 +33,12 @@ type googleWorkspaceDirectoryConfig struct {
 	Domain string `json:"domain"`
 	// Query applies an Admin SDK user query filter.
 	Query string `json:"query"`
-	// OrgUnitPath filters results by org unit path.
-	OrgUnitPath string `json:"orgUnitPath"`
 }
 
-// googleWorkspaceHealthDetails captures Google userinfo health payload details
+// googleWorkspaceHealthDetails captures health check details from the Admin SDK users list call
 type googleWorkspaceHealthDetails struct {
-	// Sub is the subject identifier for the user
-	Sub string `json:"sub,omitempty"`
-	// Email is the primary email address
-	Email string `json:"email,omitempty"`
-	// Name is the display name for the user
-	Name string `json:"name,omitempty"`
+	// UserCount is the number of users returned by the health probe
+	UserCount int `json:"userCount"`
 }
 
 // googleWorkspaceDirectorySyncDetails captures directory sync operation details
@@ -70,18 +51,16 @@ type googleWorkspaceDirectorySyncDetails struct {
 	Alerts []types.AlertEnvelope `json:"alerts"`
 }
 
+// googleWorkspaceUserPayload wraps an Admin SDK user with an observed timestamp for envelope encoding.
+type googleWorkspaceUserPayload struct {
+	*admin.User
+	ObservedAt string `json:"observedAt"`
+}
+
 // googleWorkspaceOperations returns the Google Workspace operations supported by this provider
 func googleWorkspaceOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(googleWorkspaceHealthOp, "Call Google OAuth userinfo to verify the workspace token", ClientGoogleWorkspaceAPI,
-			operations.HealthCheckRunner(operations.TokenTypeOAuth, "https://www.googleapis.com/oauth2/v3/userinfo", "Google userinfo failed",
-				func(resp googleUserinfoResponse) (string, any) {
-					return fmt.Sprintf("Google token valid for %s", resp.Email), googleWorkspaceHealthDetails{
-						Sub:   resp.Sub,
-						Email: resp.Email,
-						Name:  resp.Name,
-					}
-				})),
+		operations.HealthOperation(googleWorkspaceHealthOp, "Call Google Admin SDK users.list to verify the workspace token", ClientGoogleWorkspaceAPI, runGoogleWorkspaceHealth),
 		{
 			Name:        googleWorkspaceDirectorySyncOp,
 			Kind:        types.OperationKindCollectFindings,
@@ -99,87 +78,81 @@ func runGoogleWorkspaceUsers(ctx context.Context, input types.OperationInput) (t
 		return types.OperationResult{}, err
 	}
 
-	params := url.Values{}
-	params.Set("customer", "my_customer")
-	params.Set("maxResults", fmt.Sprintf("%d", googleWorkspaceDirectoryDefaultPageSize))
-	params.Set("projection", "full")
-	params.Set("viewType", "admin_view")
-	params.Set("fields", googleWorkspaceDirectoryFields)
-
 	config, err := operations.Decode[googleWorkspaceDirectoryConfig](input.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
+
+	customer := "my_customer"
 	if config.Customer != "" {
-		params.Set("customer", config.Customer)
+		customer = config.Customer
 	}
-	if config.Domain != "" {
-		params.Del("customer")
-		params.Set("domain", config.Domain)
-	}
-	if config.Query != "" {
-		params.Set("query", config.Query)
-	}
-	if config.OrgUnitPath != "" {
-		params.Set("orgUnitPath", config.OrgUnitPath)
-	}
-	observedAt := time.Now().UTC().Format(time.RFC3339)
-	envelopes := make([]types.AlertEnvelope, 0)
-	totalUsers := 0
-	pageToken := ""
 
-	for {
-		if pageToken == "" {
-			params.Del("pageToken")
+	fetch := func(ctx context.Context, pageToken string) (operations.PageResult[*admin.User], error) {
+		call := svc.Users.List().
+			MaxResults(googleWorkspaceDirectoryDefaultPageSize).
+			Projection("full").
+			ViewType("admin_view").
+			Fields(googleapi.Field(googleWorkspaceDirectoryFields))
+
+		if config.Domain != "" {
+			call = call.Domain(config.Domain)
 		} else {
-			params.Set("pageToken", pageToken)
+			call = call.Customer(customer)
 		}
 
-		endpoint := googleWorkspaceDirectoryUsersEndpoint + "?" + params.Encode()
-
-		var resp googleWorkspaceDirectoryUsersResponse
-		if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
-			return operations.OperationFailure("Directory users fetch failed", err, nil)
+		if config.Query != "" {
+			call = call.Query(config.Query)
 		}
 
-		for _, user := range resp.Users {
-			user["observedAt"] = observedAt
-
-			payload, err := json.Marshal(user)
-			if err != nil {
-				return operations.OperationFailure("Directory user payload encoding failed", err, nil)
-			}
-
-			envelopes = append(envelopes, types.AlertEnvelope{
-				AlertType: googleWorkspaceDirectoryAlertType,
-				Resource:  googleWorkspaceDirectoryResource(user),
-				Payload:   payload,
-			})
-			totalUsers++
+		if pageToken != "" {
+			call = call.PageToken(pageToken)
 		}
 
-		if resp.NextPageToken == "" {
-			break
+		resp, err := call.Do()
+		if err != nil {
+			return operations.PageResult[*admin.User]{}, err
 		}
 
-		pageToken = resp.NextPageToken
+		return operations.PageResult[*admin.User]{
+			Items:     resp.Users,
+			NextToken: resp.NextPageToken,
+		}, nil
+	}
+
+	allUsers, err := operations.CollectAll(ctx, fetch, 0)
+	if err != nil {
+		return operations.OperationFailure("Directory users fetch failed", err, nil)
+	}
+
+	observedAt := time.Now().UTC().Format(time.RFC3339)
+	envelopes := make([]types.AlertEnvelope, 0, len(allUsers))
+
+	for _, u := range allUsers {
+		payload, err := json.Marshal(googleWorkspaceUserPayload{User: u, ObservedAt: observedAt})
+		if err != nil {
+			return operations.OperationFailure("Directory user payload encoding failed", err, nil)
+		}
+
+		envelopes = append(envelopes, types.AlertEnvelope{
+			AlertType: googleWorkspaceDirectoryAlertType,
+			Resource:  googleWorkspaceDirectoryResource(u),
+			Payload:   payload,
+		})
 	}
 
 	return operations.OperationSuccess(fmt.Sprintf("Collected %d directory accounts", len(envelopes)), googleWorkspaceDirectorySyncDetails{
-		UsersTotal:  totalUsers,
+		UsersTotal:  len(allUsers),
 		AlertsTotal: len(envelopes),
 		Alerts:      envelopes,
 	}), nil
 }
 
 // googleWorkspaceDirectoryResource selects the envelope resource identity for a user
-func googleWorkspaceDirectoryResource(user map[string]any) string {
-	if primaryEmail, ok := user["primaryEmail"].(string); ok {
-		return primaryEmail
-	}
-	if id, ok := user["id"].(string); ok {
-		return id
+func googleWorkspaceDirectoryResource(u *admin.User) string {
+	if u.PrimaryEmail != "" {
+		return u.PrimaryEmail
 	}
 
-	return ""
+	return u.Id
 }

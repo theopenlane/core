@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/common/integrations/auth"
 	"github.com/theopenlane/core/common/integrations/types"
@@ -18,7 +19,7 @@ func awsSecurityHubClientDescriptors() []types.ClientDescriptor {
 }
 
 // pooledSecurityHubClient builds the AWS Security Hub client for pooling, discarding metadata.
-func pooledSecurityHubClient(ctx context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
+func pooledSecurityHubClient(ctx context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
 	client, _, err := buildSecurityHubClient(ctx, payload)
 	if err != nil {
 		return types.EmptyClientInstance(), err
