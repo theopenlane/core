@@ -188,9 +188,7 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 
 			return nil, err
 		}
-	}
 
-	if newTarget != "" {
 		targetOrgID = newTarget
 	}
 
