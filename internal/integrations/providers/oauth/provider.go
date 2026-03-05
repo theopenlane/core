@@ -9,12 +9,12 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	integrationauth "github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	integrationauth "github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 	iamauth "github.com/theopenlane/iam/auth"
 )
 
@@ -43,7 +43,7 @@ type CredentialSetBuilder func(token *oauth2.Token) models.CredentialSet
 // WithClientDescriptors registers client descriptors for pooling.
 func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
 	return func(p *Provider) {
-		p.Clients = operations.SanitizeClientDescriptors(p.Type(), descriptors)
+		p.Clients = providerkit.SanitizeClientDescriptors(p.Type(), descriptors)
 	}
 }
 
@@ -165,6 +165,6 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 // WithOperations configures provider-managed operations.
 func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	return func(p *Provider) {
-		p.Ops = operations.SanitizeOperationDescriptors(p.Type(), descriptors)
+		p.Ops = providerkit.SanitizeOperationDescriptors(p.Type(), descriptors)
 	}
 }

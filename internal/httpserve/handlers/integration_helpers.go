@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 )
 
@@ -22,6 +22,7 @@ var (
 	errIntegrationRegistryNotConfigured       = errors.New("integration registry not configured")
 	errIntegrationOperationsNotConfigured     = errors.New("integration operations manager not configured")
 	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
+	errKeymakerNotConfigured                  = errors.New("integration keymaker not configured")
 	errActivationNotConfigured                = errors.New("integration activation service not configured")
 	// errDBClientNotConfigured indicates the database client is missing.
 	errDBClientNotConfigured = errors.New("database client not configured")

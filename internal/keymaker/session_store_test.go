@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestMemorySessionStoreSaveAndTake(t *testing.T) {

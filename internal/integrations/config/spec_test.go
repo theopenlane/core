@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestProviderSpecProviderType(t *testing.T) {

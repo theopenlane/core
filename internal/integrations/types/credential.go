@@ -10,8 +10,8 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/theopenlane/core/common/helpers"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/state"
 )
 
 // CredentialKind distinguishes the various credential payloads managed by the broker

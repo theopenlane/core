@@ -15,4 +15,12 @@ var (
 	ErrProviderNil = errors.New("integrations/registry: provider is nil")
 	// ErrProviderNotFound indicates the requested provider is not registered
 	ErrProviderNotFound = errors.New("integrations/registry: provider not found")
+	// ErrOperationCriteriaRequired indicates operation name or kind is required
+	ErrOperationCriteriaRequired = errors.New("integrations/registry: operation criteria required")
+	// ErrOperationNotRegistered indicates no matching operation descriptor exists for the provider
+	ErrOperationNotRegistered = errors.New("integrations/registry: operation not registered")
+	// ErrOperationKindMismatch indicates operation name and kind constraints conflict
+	ErrOperationKindMismatch = errors.New("integrations/registry: operation kind mismatch")
+	// ErrOperationDescriptorAmbiguous indicates operation selection matched multiple descriptors
+	ErrOperationDescriptorAmbiguous = errors.New("integrations/registry: operation descriptor ambiguous")
 )

@@ -4,21 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/url"
 	"time"
 
+	gh "github.com/google/go-github/v83/github"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// githubRestClient is the package-level REST client for GitHub API requests.
-var githubRestClient = auth.RESTClient{BaseURL: githubAPIBaseURL, DefaultHeaders: githubClientHeaders}
-
 const (
-	githubOperationHealth      types.OperationName = "health.default"
+	githubOperationHealth      types.OperationName = types.OperationHealthDefault
 	githubOperationRepos       types.OperationName = "repos.collect_metadata"
 	githubOperationOrgRepos    types.OperationName = "repos.collect_org_metadata"
 	githubOperationVulnCollect types.OperationName = types.OperationVulnerabilitiesCollect
@@ -28,7 +24,7 @@ const (
 
 	defaultAlertState = "open"
 	githubAPIVersion  = "2022-11-28"
-	githubAPIBaseURL  = "https://api.github.com/"
+	githubAPIBaseURL  = "https://api.github.com"
 )
 
 type githubRepoOperationConfig struct {
@@ -136,37 +132,6 @@ func githubOrganizationRepoOperationDescriptor() types.OperationDescriptor {
 	}
 }
 
-type githubUserResponse struct {
-	// Login is the GitHub username
-	Login string `json:"login"`
-	// ID is the GitHub user identifier
-	ID int64 `json:"id"`
-	// Name is the display name for the user
-	Name string `json:"name"`
-}
-
-type githubRepoResponse struct {
-	// Name is the repository name
-	Name string `json:"name"`
-	// FullName is the owner/name identifier
-	FullName string `json:"full_name"`
-	// Owner describes the repository owner
-	Owner githubRepoOwner `json:"owner"`
-	// Private reports whether the repository is private
-	Private bool `json:"private"`
-	// UpdatedAt is the last update timestamp
-	UpdatedAt time.Time `json:"updated_at"`
-	// HTMLURL is the web URL for the repository
-	HTMLURL string `json:"html_url"`
-}
-
-type githubRepoOwner struct {
-	// Login is the owner login name
-	Login string `json:"login"`
-	// ID is the owner identifier
-	ID int64 `json:"id"`
-}
-
 type githubHealthDetails struct {
 	Login string `json:"login"`
 	ID    int64  `json:"id"`
@@ -189,51 +154,47 @@ type githubRepoCollectionDetails struct {
 	Samples []githubRepoSample `json:"samples"`
 }
 
-// githubAppInstallationReposResponse models the installation repositories response
-type githubAppInstallationReposResponse struct {
-	// TotalCount is the total number of repositories
-	TotalCount int `json:"total_count"`
-	// Repositories lists repositories visible to the installation
-	Repositories []githubRepoResponse `json:"repositories"`
-}
-
 // runGitHubHealthOperation validates GitHub OAuth credentials
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := githubRESTClientForOperation(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	var user githubUserResponse
-	if err := fetchGitHubResource(ctx, client, token, "user", nil, &user); err != nil {
-		return operations.OperationFailure("GitHub user lookup failed", err, nil)
+	user, _, err := client.Users.Get(ctx, "")
+	if err != nil {
+		return operations.OperationFailure("GitHub user lookup failed", normalizeGitHubAPIError(err), nil)
 	}
 
+	login := user.GetLogin()
 	details := githubHealthDetails{
-		Login: user.Login,
-		ID:    user.ID,
-		Name:  user.Name,
+		Login: login,
+		ID:    user.GetID(),
+		Name:  user.GetName(),
 	}
 
-	return operations.OperationSuccess(fmt.Sprintf("GitHub token valid for %s", user.Login), details), nil
+	return operations.OperationSuccess(fmt.Sprintf("GitHub token valid for %s", login), details), nil
 }
 
 // runGitHubAppHealthOperation validates GitHub App installation tokens
 func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+		client, err := githubRESTClientForOperationWithBaseURL(input, baseURL)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
 
-		var resp githubAppInstallationReposResponse
-		if err := fetchGitHubResourceWithBaseURL(ctx, client, token, baseURL, "installation/repositories", nil, &resp); err != nil {
-			return operations.OperationFailure("GitHub App installation lookup failed", err, nil)
+		repositories, _, err := client.Apps.ListRepos(ctx, &gh.ListOptions{Page: 1, PerPage: 1})
+		if err != nil {
+			return operations.OperationFailure("GitHub App installation lookup failed", normalizeGitHubAPIError(err), nil)
 		}
 
-		count := resp.TotalCount
-		if count == 0 && len(resp.Repositories) > 0 {
-			count = len(resp.Repositories)
+		count := 0
+		if repositories != nil {
+			count = repositories.GetTotalCount()
+			if count == 0 {
+				count = len(repositories.Repositories)
+			}
 		}
 
 		return operations.OperationSuccess(fmt.Sprintf("GitHub App token valid for %d repositories", count), githubAppHealthDetails{Count: count}), nil
@@ -242,7 +203,7 @@ func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 
 // runGitHubRepoOperation lists repositories for the authenticated account
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := githubRESTClientForOperation(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -257,18 +218,22 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		Visibility: repoConfig.Visibility,
 	}
 
-	var repos []githubRepoResponse
-	repos, err = listGitHubReposForProvider(ctx, client, token, input.Provider, config)
+	repos, err := listGitHubReposForProvider(ctx, client, input.Provider, config)
 	if err != nil {
 		return operations.OperationFailure("GitHub repository collection failed", err, nil)
 	}
 
-	samples := lo.Map(repos[:min(len(repos), operations.DefaultSampleSize)], func(repo githubRepoResponse, _ int) githubRepoSample {
+	sampleSize := min(len(repos), operations.DefaultSampleSize)
+	samples := lo.Map(repos[:sampleSize], func(repo *gh.Repository, _ int) githubRepoSample {
+		if repo == nil {
+			return githubRepoSample{}
+		}
+
 		return githubRepoSample{
-			Name:      repo.Name,
-			Private:   repo.Private,
-			UpdatedAt: repo.UpdatedAt,
-			URL:       repo.HTMLURL,
+			Name:      repo.GetName(),
+			Private:   repo.GetPrivate(),
+			UpdatedAt: repo.GetUpdatedAt().Time,
+			URL:       repo.GetHTMLURL(),
 		}
 	})
 
@@ -278,29 +243,28 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}), nil
 }
 
-// fetchGitHubResource retrieves GitHub REST API resources with optional pooled client support.
-func fetchGitHubResource(ctx context.Context, client *auth.AuthenticatedClient, token, path string, params url.Values, out any) error {
-	if err := githubRestClient.GetJSON(ctx, client, token, path, params, out); err != nil {
-		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return ErrAPIRequest
-		}
-		return err
+// normalizeGitHubAPIError maps GitHub SDK HTTP errors to provider-level API errors.
+func normalizeGitHubAPIError(err error) error {
+	if err == nil {
+		return nil
 	}
 
-	return nil
-}
-
-// fetchGitHubResourceWithBaseURL retrieves GitHub REST API resources using a custom base URL.
-func fetchGitHubResourceWithBaseURL(ctx context.Context, client *auth.AuthenticatedClient, token, baseURL, path string, params url.Values, out any) error {
-	rc := auth.RESTClient{BaseURL: baseURL, DefaultHeaders: githubClientHeaders}
-	if err := rc.GetJSON(ctx, client, token, path, params, out); err != nil {
-		if errors.Is(err, auth.ErrHTTPRequestFailed) {
-			return ErrAPIRequest
-		}
-		return err
+	var apiErr *gh.ErrorResponse
+	if errors.As(err, &apiErr) {
+		return ErrAPIRequest
 	}
 
-	return nil
+	var rateErr *gh.RateLimitError
+	if errors.As(err, &rateErr) {
+		return ErrAPIRequest
+	}
+
+	var abuseErr *gh.AbuseRateLimitError
+	if errors.As(err, &abuseErr) {
+		return ErrAPIRequest
+	}
+
+	return err
 }
 
 // clampPerPage bounds the per-page value for GitHub API requests

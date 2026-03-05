@@ -23,6 +23,8 @@ const (
 )
 
 const (
+	// OperationHealthDefault identifies the default provider health check operation.
+	OperationHealthDefault OperationName = "health.default"
 	// OperationVulnerabilitiesCollect identifies the vulnerabilities collection operation.
 	OperationVulnerabilitiesCollect OperationName = "vulnerabilities.collect"
 	// OperationDirectorySync identifies the directory synchronization operation.

@@ -5,12 +5,13 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // ProviderOption customizes AWS STS providers.
@@ -44,29 +45,19 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 		}
 	}
 
-	return providers.BuilderFunc{
-		ProviderType: provider,
-		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			if spec.AuthType != "" && spec.AuthType != types.AuthKindAWSFederation {
-				return nil, ErrAuthTypeMismatch
-			}
+	return providerkit.Builder(provider, func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+		if err := providerkit.ValidateAuthType(spec, types.AuthKindAWSFederation, ErrAuthTypeMismatch); err != nil {
+			return nil, err
+		}
 
-			clients := operations.SanitizeClientDescriptors(provider, cfg.clients)
-
-			return &Provider{
-				BaseProvider: providers.NewBaseProvider(
-					provider,
-					types.ProviderCapabilities{
-						SupportsRefreshTokens: false,
-						SupportsClientPooling: len(clients) > 0,
-						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-					},
-					operations.SanitizeOperationDescriptors(provider, cfg.operations),
-					clients,
-				),
-			}, nil
-		},
-	}
+		return &Provider{
+			BaseProvider: providerkit.NewBaseProvider(provider, spec, providerkit.BaseProviderConfig{
+				SupportsRefreshTokens: false,
+				Operations:            cfg.operations,
+				Clients:               cfg.clients,
+			}),
+		}, nil
+	})
 }
 
 // Provider persists AWS STS metadata and exposes it via CredentialSet.
@@ -158,14 +149,14 @@ func awsSTSMetadataFromMap(meta map[string]any) (awsSTSMetadata, error) {
 func (m *awsSTSMetadata) applyDefaults() {
 	m.Region = lo.CoalesceOrEmpty(m.Region, m.HomeRegion)
 	m.HomeRegion = lo.CoalesceOrEmpty(m.HomeRegion, m.Region)
-	m.AccountScope = lo.CoalesceOrEmpty(m.AccountScope, types.LowerString(auth.AWSAccountScopeAll))
+	m.AccountScope = lo.CoalesceOrEmpty(m.AccountScope, types.LowerString(awskit.AWSAccountScopeAll))
 
 	m.AccountIDs = types.NormalizeStringSlice(m.AccountIDs)
 	m.LinkedRegions = types.NormalizeStringSlice(m.LinkedRegions)
 }
 
-func (m awsSTSMetadata) credentials() auth.AWSCredentials {
-	return auth.AWSCredentials{
+func (m awsSTSMetadata) credentials() awskit.AWSCredentials {
+	return awskit.AWSCredentials{
 		AccessKeyID:     m.AccessKeyID.String(),
 		SecretAccessKey: m.SecretAccessKey.String(),
 		SessionToken:    m.SessionToken.String(),

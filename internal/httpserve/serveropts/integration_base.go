@@ -4,134 +4,38 @@ import (
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
-// WithIntegrationStore wires the integration persistence layer into the handlers
-func WithIntegrationStore(dbClient *ent.Client) ServerOption {
+// WithIntegrationRuntime wires the full integration runtime dependency graph:
+// Registry -> Store -> Broker -> Clients -> Operations -> Activation -> Ingest.
+func WithIntegrationRuntime(dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if dbClient == nil {
 			return
 		}
 
-		s.Config.Handler.IntegrationStore = keystore.NewStore(dbClient)
-	})
-}
-
-// WithIntegrationBroker attaches a keystore broker that exchanges credentials for access tokens
-func WithIntegrationBroker() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		store := s.Config.Handler.IntegrationStore
-		if store == nil {
-			return
-		}
-
 		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
 		if !ok || reg == nil {
 			return
 		}
 
-		s.Config.Handler.IntegrationBroker = keystore.NewBroker(store, reg)
-	})
-}
-
-// WithIntegrationClients wires the client pool manager used by operations and handlers
-func WithIntegrationClients() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		broker := s.Config.Handler.IntegrationBroker
-		if broker == nil {
-			return
-		}
-
-		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
-		if !ok || reg == nil {
-			return
-		}
-
-		manager, err := keystore.NewClientPoolManager(broker, keystore.FlattenDescriptors(reg.ClientDescriptorCatalog()))
+		integrationDeps, err := integrationruntime.New(integrationruntime.Config{
+			Registry:       reg,
+			DB:             dbClient,
+			WorkflowEngine: s.Config.Handler.WorkflowEngine,
+		})
 		if err != nil {
-			log.Panic().Err(err).Msg("failed to initialize integration client pools")
+			log.Panic().Err(err).Msg("failed to initialize integration runtime")
 		}
 
-		s.Config.Handler.IntegrationClients = manager
-	})
-}
-
-// WithIntegrationOperations wires the operation manager that executes provider logic
-func WithIntegrationOperations() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		broker := s.Config.Handler.IntegrationBroker
-		if broker == nil {
-			return
-		}
-
-		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
-		if !ok || reg == nil {
-			return
-		}
-
-		opts := []keystore.OperationManagerOption{}
-		if s.Config.Handler.IntegrationClients != nil {
-			opts = append(opts, keystore.WithOperationClients(s.Config.Handler.IntegrationClients))
-		}
-
-		manager, err := keystore.NewOperationManager(broker, keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog()), opts...)
-		if err != nil {
-			log.Panic().Err(err).Msg("failed to initialize integration operations manager")
-		}
-
-		s.Config.Handler.IntegrationOperations = manager
-
-		if wf := s.Config.Handler.WorkflowEngine; wf != nil {
-			if err := wf.SetIntegrationDeps(engine.IntegrationDeps{
-				Registry:   s.Config.Handler.IntegrationRegistry,
-				Store:      s.Config.Handler.IntegrationStore,
-				Operations: manager,
-			}); err != nil {
-				log.Panic().Err(err).Msg("failed to configure integration dependencies on workflow engine")
-			}
-		}
-	})
-}
-
-// WithIngestMappingIndex wires the integration registry as the ingest mapping index.
-// It must be called after the registry is fully built so provider mappings are available.
-func WithIngestMappingIndex() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
-		if !ok || reg == nil {
-			return
-		}
-
-		ingest.SetMappingIndex(reg)
-	})
-}
-
-// WithIntegrationActivation wires the activation service used by integration flows.
-func WithIntegrationActivation() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		store := s.Config.Handler.IntegrationStore
-		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
-		if store == nil || !ok || reg == nil {
-			return
-		}
-
-		sessions := keymaker.NewMemorySessionStore()
-		svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-		if err != nil {
-			log.Panic().Err(err).Msg("failed to initialize keymaker service")
-		}
-
-		activationSvc, err := activation.NewService(svc, store, s.Config.Handler.IntegrationOperations, reg)
-		if err != nil {
-			log.Panic().Err(err).Msg("failed to initialize integration activation service")
-		}
-
-		s.Config.Handler.IntegrationActivation = activationSvc
+		s.Config.Handler.IntegrationStore = integrationDeps.Store
+		s.Config.Handler.IntegrationBroker = integrationDeps.Broker
+		s.Config.Handler.IntegrationClients = integrationDeps.Clients
+		s.Config.Handler.IntegrationOperations = integrationDeps.Operations
+		s.Config.Handler.IntegrationKeymaker = integrationDeps.Keymaker
+		s.Config.Handler.IntegrationActivation = integrationDeps.Activation
+		s.Config.Handler.IntegrationIngest = integrationDeps.Ingest
 	})
 }

@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/theopenlane/core/common/integrations/types"
+import "github.com/theopenlane/core/internal/integrations/types"
 
 // TokenExtractor extracts a token string from a credential payload.
 type TokenExtractor func(types.CredentialPayload) (string, error)

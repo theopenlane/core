@@ -12,9 +12,9 @@ import (
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -205,19 +205,19 @@ func newSecurityHubClient(cfg awssdk.Config) *securityhub.Client {
 }
 
 // resolveSecurityHubClient returns a pooled client when supplied or builds one on demand.
-func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (*securityhub.Client, auth.AWSMetadata, error) {
+func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (*securityhub.Client, awskit.AWSMetadata, error) {
 	return resolveAWSClient(ctx, input, newSecurityHubClient)
 }
 
 // buildSecurityHubClient builds a Security Hub client from stored credentials.
-func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload) (*securityhub.Client, auth.AWSMetadata, error) {
+func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload) (*securityhub.Client, awskit.AWSMetadata, error) {
 	return buildAWSClient(ctx, payload, newSecurityHubClient)
 }
 
-func securityHubFiltersFromMetadata(meta auth.AWSMetadata) *securityhubtypes.AwsSecurityFindingFilters {
+func securityHubFiltersFromMetadata(meta awskit.AWSMetadata) *securityhubtypes.AwsSecurityFindingFilters {
 	var filters securityhubtypes.AwsSecurityFindingFilters
 
-	if meta.AccountScope == auth.AWSAccountScopeSpecific {
+	if meta.AccountScope == awskit.AWSAccountScopeSpecific {
 		filters.AwsAccountId = toSecurityHubStringFilters(meta.AccountIDs)
 	}
 

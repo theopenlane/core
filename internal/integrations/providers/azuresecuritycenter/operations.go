@@ -7,13 +7,13 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
-	azureSecurityHealth  types.OperationName = "health.default"
+	azureSecurityHealth  types.OperationName = types.OperationHealthDefault
 	azureSecurityPricing types.OperationName = "security.pricing_overview"
 )
 

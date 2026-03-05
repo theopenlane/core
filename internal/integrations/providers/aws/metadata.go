@@ -1,28 +1,28 @@
 package aws
 
 import (
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const awsDefaultSession = "openlane-aws"
 
 // awsMetadataFromPayload extracts and validates AWS metadata from a credential payload
-func awsMetadataFromPayload(payload types.CredentialPayload, defaultSessionName string) (auth.AWSMetadata, error) {
+func awsMetadataFromPayload(payload types.CredentialPayload, defaultSessionName string) (awskit.AWSMetadata, error) {
 	meta := payload.Data.ProviderData
 	if len(meta) == 0 {
-		return auth.AWSMetadata{}, ErrMetadataMissing
+		return awskit.AWSMetadata{}, ErrMetadataMissing
 	}
 
-	parsed, err := auth.AWSMetadataFromProviderData(meta, defaultSessionName)
+	parsed, err := awskit.AWSMetadataFromProviderData(meta, defaultSessionName)
 	if err != nil {
-		return auth.AWSMetadata{}, err
+		return awskit.AWSMetadata{}, err
 	}
 	if parsed.RoleARN == "" {
-		return auth.AWSMetadata{}, ErrRoleARNMissing
+		return awskit.AWSMetadata{}, ErrRoleARNMissing
 	}
 	if parsed.Region == "" {
-		return auth.AWSMetadata{}, ErrRegionMissing
+		return awskit.AWSMetadata{}, ErrRegionMissing
 	}
 
 	return parsed, nil

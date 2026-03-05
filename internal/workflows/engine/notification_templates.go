@@ -12,14 +12,14 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	teamsprovider "github.com/theopenlane/core/internal/integrations/providers/microsoftteams"
 	slackprovider "github.com/theopenlane/core/internal/integrations/providers/slack"
 	"github.com/theopenlane/core/internal/integrations/targetresolver"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -397,16 +397,14 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 		return notificationExecutionTarget{}, err
 	}
 
-	resolver, err := targetresolver.NewResolver(source, e.integrationRegistry)
+	resolver, err := targetresolver.NewResolver(source)
 	if err != nil {
 		return notificationExecutionTarget{}, err
 	}
 
 	criteria := targetresolver.ResolveCriteria{
-		OwnerID:       ownerID,
-		Provider:      mo.Some(provider),
-		OperationName: mo.Some(operationName),
-		OperationKind: mo.Some(types.OperationKindNotify),
+		OwnerID:  ownerID,
+		Provider: mo.Some(provider),
 	}
 
 	if template != nil && template.IntegrationID != "" {
@@ -418,10 +416,15 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 		return notificationExecutionTarget{}, err
 	}
 
+	operation, err := e.integrationRegistry.ResolveOperation(provider, operationName, types.OperationKindNotify)
+	if err != nil {
+		return notificationExecutionTarget{}, err
+	}
+
 	return notificationExecutionTarget{
 		Integration: result.Integration,
 		Provider:    result.Provider,
-		Operation:   result.Operation,
+		Operation:   operation,
 	}, nil
 }
 

@@ -3,17 +3,15 @@ package oauth
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Builder returns a providers.Builder that constructs OAuth providers for the given provider type
 func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Builder {
-	return providers.BuilderFunc{
-		ProviderType: provider,
-		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			return New(spec, opts...)
-		},
-	}
+	return providerkit.Builder(provider, func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+		return New(spec, opts...)
+	})
 }

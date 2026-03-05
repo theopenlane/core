@@ -7,12 +7,12 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 )
@@ -22,6 +22,7 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 
 	originalRegistry := suite.h.IntegrationRegistry
 	originalActivation := suite.h.IntegrationActivation
+	originalKeymaker := suite.h.IntegrationKeymaker
 
 	ctx := context.Background()
 	reg, err := registry.NewRegistry(ctx, nil)
@@ -42,18 +43,20 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 
 	store := keystore.NewStore(suite.db)
 	sessions := keymaker.NewMemorySessionStore()
-	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
 	require.NoError(t, err)
+	suite.h.IntegrationKeymaker = keymakerSvc
 
 	mockOps := &mockOperationRunner{}
 	mockMinter := &mockPayloadMinter{}
-	activationSvc, err := activation.NewService(svc, store, mockOps, mockMinter)
+	activationSvc, err := activation.NewService(store, mockOps, mockMinter)
 	require.NoError(t, err)
 	suite.h.IntegrationActivation = activationSvc
 
 	return func() {
 		suite.h.IntegrationRegistry = originalRegistry
 		suite.h.IntegrationActivation = originalActivation
+		suite.h.IntegrationKeymaker = originalKeymaker
 	}
 }
 

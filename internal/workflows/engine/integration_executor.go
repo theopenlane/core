@@ -12,16 +12,16 @@ import (
 	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/ingest"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/internal/integrations/targetresolver"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -32,7 +32,7 @@ import (
 
 // IntegrationRegistry exposes provider operation descriptors to the engine
 type IntegrationRegistry interface {
-	OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor
+	ResolveOperation(provider types.ProviderType, operationName types.OperationName, operationKind types.OperationKind) (types.OperationDescriptor, error)
 }
 
 // IntegrationStore ensures integration records exist for providers
@@ -53,6 +53,8 @@ type IntegrationDeps struct {
 	Store IntegrationStore
 	// Operations executes provider operations through keystore
 	Operations IntegrationOperations
+	// MappingIndex resolves provider default mappings during ingest.
+	MappingIndex types.MappingIndex
 }
 
 // IntegrationWorkflowMeta ties an integration run back to a workflow action
@@ -146,7 +148,7 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 			return err
 		}
 
-		resolver, err := targetresolver.NewResolver(source, deps.Registry)
+		resolver, err := targetresolver.NewResolver(source)
 		if err != nil {
 			return err
 		}
@@ -159,6 +161,9 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 		}
 
 		e.scopeEvaluator = evaluator
+	}
+	if deps.MappingIndex != nil {
+		e.integrationMappingIndex = deps.MappingIndex
 	}
 	if deps.Store != nil {
 		e.integrationStore = deps.Store
@@ -222,12 +227,6 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	criteria := targetresolver.ResolveCriteria{OwnerID: orgID}
-	if operationName != "" {
-		criteria.OperationName = mo.Some(operationName)
-	}
-	if operationKind != "" {
-		criteria.OperationKind = mo.Some(operationKind)
-	}
 
 	var integrationRecord *ent.Integration
 	var operationDescriptor types.OperationDescriptor
@@ -245,7 +244,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 			return IntegrationQueueResult{}, err
 		}
 
-		resolvedOperation, err := e.integrationResolver.ResolveOperation(provider, criteria)
+		resolvedOperation, err := e.integrationRegistry.ResolveOperation(provider, operationName, operationKind)
 		if err != nil {
 			return IntegrationQueueResult{}, err
 		}
@@ -267,9 +266,12 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 
 		integrationRecord = resolution.Integration
 		provider = resolution.Provider
-		operationDescriptor = resolution.Operation
-		operationName = resolution.Operation.Name
-		operationKind = resolution.Operation.Kind
+		operationDescriptor, err = e.integrationRegistry.ResolveOperation(provider, operationName, operationKind)
+		if err != nil {
+			return IntegrationQueueResult{}, err
+		}
+		operationName = operationDescriptor.Name
+		operationKind = operationDescriptor.Kind
 	}
 
 	operationConfig, err := decodeJSONObjectDocument(req.Config)
@@ -465,9 +467,11 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		return ErrIntegrationOperationNameRequired
 	}
 
-	operationDescriptor, err := e.integrationResolver.ResolveOperation(provider, targetresolver.ResolveCriteria{
-		OperationName: mo.Some(operationName),
-	})
+	if e.integrationRegistry == nil {
+		return ErrIntegrationRegistryRequired
+	}
+
+	operationDescriptor, err := e.integrationRegistry.ResolveOperation(provider, operationName, "")
 	if err != nil {
 		return err
 	}
@@ -546,6 +550,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 					IntegrationConfig: integrationRecord.Config,
 					ProviderState:     integrationRecord.ProviderState,
 					OperationConfig:   operationConfig,
+					MappingIndex:      e.integrationMappingIndex,
 					Envelopes:         batch.Envelopes,
 					DB:                e.client,
 				})

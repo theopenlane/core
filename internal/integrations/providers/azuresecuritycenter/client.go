@@ -7,8 +7,9 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -26,7 +27,7 @@ type azurePricingsClient struct {
 
 // azureSecurityCenterClientDescriptors returns the client descriptors published by Defender for Cloud.
 func azureSecurityCenterClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeAzureSecurityCenter, ClientAzureSecurityCenterAPI, "Azure management API client for Defender for Cloud", buildAzureSecurityClient)
+	return providerkit.DefaultClientDescriptors(TypeAzureSecurityCenter, ClientAzureSecurityCenterAPI, "Azure management API client for Defender for Cloud", buildAzureSecurityClient)
 }
 
 // buildAzureSecurityClient constructs an Azure Security Center client from credential payload.

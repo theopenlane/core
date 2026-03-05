@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"{{.Module}}/common/integrations/config"
+	"{{.Module}}/internal/integrations/config"
 	"{{.Module}}/internal/integrations/providers/{{.Provider}}"
 )
 
@@ -24,7 +24,7 @@ func TestBuilderBuild(t *testing.T) {
 
 	spec, ok := specs[{{.Provider}}.Type{{.ProviderPascal}}]
 	if !ok {
-		t.Skipf("no spec found for provider %q; add common/integrations/config/providers/{{.Provider}}.json", {{.Provider}}.Type{{.ProviderPascal}})
+		t.Skipf("no spec found for provider %q; add internal/integrations/config/providers/{{.Provider}}.json", {{.Provider}}.Type{{.ProviderPascal}})
 	}
 
 	builder := {{.Provider}}.Builder()

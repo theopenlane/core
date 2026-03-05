@@ -4,6 +4,8 @@ import (
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
+
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 )
 
 // DecodeProviderData decodes provider metadata into the target struct without failing on unknown keys.
@@ -15,21 +17,18 @@ func DecodeProviderData(config map[string]any, target any) error {
 		return nil
 	}
 
-	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+	mapDecoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
 		Result:           target,
 		TagName:          "json",
 		WeaklyTypedInput: true,
 		MatchName:        matchProviderKey,
-		DecodeHook: mapstructure.ComposeDecodeHookFunc(
-			mapstructure.StringToTimeDurationHookFunc(),
-			mapstructure.TextUnmarshallerHookFunc(),
-		),
+		DecodeHook:       integrationconfig.DefaultMapstructureDecodeHook(),
 	})
 	if err != nil {
 		return err
 	}
 
-	return decoder.Decode(config)
+	return mapDecoder.Decode(config)
 }
 
 // matchProviderKey compares map keys to struct fields after normalization

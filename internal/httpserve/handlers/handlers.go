@@ -20,13 +20,15 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/ingest"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -128,6 +130,10 @@ type Handler struct {
 	Gala *gala.Gala
 	// IntegrationActivation orchestrates integration activation flows
 	IntegrationActivation *activation.Service
+	// IntegrationKeymaker manages OAuth/OIDC begin and callback completion flows.
+	IntegrationKeymaker *keymaker.Service
+	// IntegrationIngest wires ingest runtime dependencies.
+	IntegrationIngest *ingest.Runtime
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
 	// CampaignWebhook contains the configuration for campaign-related email webhooks

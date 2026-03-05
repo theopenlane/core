@@ -2,28 +2,19 @@ package ingest
 
 import (
 	"github.com/samber/lo"
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
+
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
-var normalizedGeneratedMappingSchemas = lo.SliceToMap(lo.Keys(integrationgenerated.IntegrationMappingSchemas), func(schemaName string) (string, integrationtypes.MappingSchema) {
-	return normalizeMappingKey(schemaName), integrationtypes.MappingSchema(schemaName)
+var generatedMappingSchemas = lo.SliceToMap(lo.Keys(integrationgenerated.IntegrationMappingSchemas), func(schemaName string) (string, integrationtypes.MappingSchema) {
+	return schemaName, integrationtypes.MappingSchema(schemaName)
 })
 
-// mappingIndexSource is the package-level MappingIndex used to resolve provider default mappings.
-// It is set at server startup via SetMappingIndex.
-var mappingIndexSource integrationtypes.MappingIndex
-
-// SetMappingIndex registers the MappingIndex used to resolve provider-registered default mappings.
-// It must be called before any ingest functions that rely on default mappings are invoked.
-func SetMappingIndex(index integrationtypes.MappingIndex) {
-	mappingIndexSource = index
-}
-
 // defaultMappingSpec resolves the built-in mapping override for a provider, schema, and variant.
-func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
-	if mappingIndexSource == nil {
+func defaultMappingSpec(mappingIndex integrationtypes.MappingIndex, provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
+	if mappingIndex == nil {
 		return openapi.IntegrationMappingOverride{}, false
 	}
 
@@ -32,7 +23,7 @@ func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName strin
 		return openapi.IntegrationMappingOverride{}, false
 	}
 
-	spec, ok := mappingIndexSource.DefaultMapping(provider, schema, variant)
+	spec, ok := mappingIndex.DefaultMapping(provider, schema, variant)
 	if !ok {
 		return openapi.IntegrationMappingOverride{}, false
 	}
@@ -41,8 +32,8 @@ func defaultMappingSpec(provider integrationtypes.ProviderType, schemaName strin
 }
 
 // supportsDefaultMapping reports whether the provider has built-in mappings registered for the given schema.
-func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName string) bool {
-	if mappingIndexSource == nil {
+func supportsDefaultMapping(mappingIndex integrationtypes.MappingIndex, provider integrationtypes.ProviderType, schemaName string) bool {
+	if mappingIndex == nil {
 		return false
 	}
 
@@ -51,11 +42,23 @@ func supportsDefaultMapping(provider integrationtypes.ProviderType, schemaName s
 		return false
 	}
 
-	return mappingIndexSource.SupportsIngest(provider, schema)
+	return mappingIndex.SupportsIngest(provider, schema)
 }
 
+// supportsSchemaIngest reports whether ingest mappings are available for one provider/schema
+// from either provider defaults or integration mapping overrides.
+func supportsSchemaIngest(mappingIndex integrationtypes.MappingIndex, provider integrationtypes.ProviderType, integrationConfig openapi.IntegrationConfig, schema integrationtypes.MappingSchema) bool {
+	schemaName := string(integrationtypes.NormalizeMappingSchema(schema))
+	if supportsDefaultMapping(mappingIndex, provider, schemaName) {
+		return true
+	}
+
+	return newMappingOverrideIndex(integrationConfig).HasAny(provider, schemaName)
+}
+
+// schemaNameToMappingSchema resolves a generated schema name to the shared mapping schema type.
 func schemaNameToMappingSchema(schemaName string) (integrationtypes.MappingSchema, bool) {
-	schema, ok := normalizedGeneratedMappingSchemas[normalizeMappingKey(schemaName)]
+	schema, ok := generatedMappingSchemas[schemaName]
 
 	return schema, ok
 }

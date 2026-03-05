@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestService_BeginAndComplete(t *testing.T) {

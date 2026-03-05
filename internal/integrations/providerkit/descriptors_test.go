@@ -1,11 +1,11 @@
-package operations
+package providerkit
 
 import (
 	"context"
 	"encoding/json"
 	"testing"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestSanitizeOperationDescriptors(t *testing.T) {

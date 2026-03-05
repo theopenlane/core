@@ -7,13 +7,12 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
-	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -40,13 +39,13 @@ var requestedSchemaContracts = lo.Reduce(lo.Entries(integrationgenerated.Integra
 	entry lo.Entry[string, integrationgenerated.IntegrationIngestSchema],
 	_ int,
 ) map[string]requestedSchemaContract {
-	normalizedSchema := normalizeMappingKey(entry.Key)
-	if normalizedSchema == "" {
+	schemaName := entry.Key
+	if schemaName == "" {
 		return acc
 	}
 
 	contract := entry.Value
-	acc[normalizedSchema] = requestedSchemaContract{
+	acc[schemaName] = requestedSchemaContract{
 		Schema:   types.MappingSchema(entry.Key),
 		Topic:    gala.TopicName(contract.Topic),
 		Listener: contract.Listener,
@@ -62,7 +61,7 @@ var defaultIngestOperationBySchema = map[types.MappingSchema]types.OperationName
 
 // IngestRequestedTopicForSchema resolves the schema-scoped ingest topic.
 func IngestRequestedTopicForSchema(schema string) (gala.Topic[RequestedPayload], bool) {
-	contract, ok := requestedSchemaContracts[normalizeMappingKey(schema)]
+	contract, ok := requestedSchemaContracts[schema]
 	if !ok {
 		return gala.Topic[RequestedPayload]{}, false
 	}
@@ -71,7 +70,7 @@ func IngestRequestedTopicForSchema(schema string) (gala.Topic[RequestedPayload],
 }
 
 // RegisterIngestListeners registers ingest listeners on the supplied Gala registry.
-func RegisterIngestListeners(registry *gala.Registry, db *ent.Client) ([]gala.ListenerID, error) {
+func RegisterIngestListeners(registry *gala.Registry, db *ent.Client, mappingIndex types.MappingIndex) ([]gala.ListenerID, error) {
 	if registry == nil {
 		return nil, ErrIngestEmitterRequired
 	}
@@ -89,7 +88,7 @@ func RegisterIngestListeners(registry *gala.Registry, db *ent.Client) ([]gala.Li
 			Topic: gala.Topic[RequestedPayload]{Name: contract.Topic},
 			Name:  contract.Listener,
 			Handle: func(ctx gala.HandlerContext, payload RequestedPayload) error {
-				return handleIngestRequested(ctx.Context, db, payload)
+				return handleIngestRequested(ctx.Context, db, payload, mappingIndex)
 			},
 		}
 	})
@@ -98,7 +97,7 @@ func RegisterIngestListeners(registry *gala.Registry, db *ent.Client) ([]gala.Li
 }
 
 // handleIngestRequested executes ingest materialization for a requested schema payload batch.
-func handleIngestRequested(ctx context.Context, db *ent.Client, payload RequestedPayload) error {
+func handleIngestRequested(ctx context.Context, db *ent.Client, payload RequestedPayload, mappingIndex types.MappingIndex) error {
 	if len(payload.Envelopes) == 0 {
 		return nil
 	}
@@ -125,7 +124,7 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 	if provider == types.ProviderUnknown {
 		return ErrIngestProviderUnknown
 	}
-	if !supportsSchemaIngest(provider, integrationRecord.Config, schema) {
+	if !supportsSchemaIngest(mappingIndex, provider, integrationRecord.Config, schema) {
 		return ErrMappingNotFound
 	}
 
@@ -151,6 +150,7 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 		IntegrationConfig: integrationRecord.Config,
 		ProviderState:     integrationRecord.ProviderState,
 		OperationConfig:   operationConfig,
+		MappingIndex:      mappingIndex,
 		Envelopes:         payload.Envelopes,
 		DB:                db,
 	})
@@ -158,18 +158,11 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 	return err
 }
 
+// operationNameForRequestedPayload resolves the effective operation name for an ingest payload.
 func operationNameForRequestedPayload(payload RequestedPayload, schema types.MappingSchema) types.OperationName {
 	if payload.Operation != "" {
 		return types.OperationName(payload.Operation)
 	}
 
 	return defaultIngestOperationBySchema[schema]
-}
-
-func supportsSchemaIngest(provider types.ProviderType, integrationConfig openapi.IntegrationConfig, schema types.MappingSchema) bool {
-	if supportsDefaultMapping(provider, string(schema)) {
-		return true
-	}
-
-	return newMappingOverrideIndex(integrationConfig).HasAny(provider, string(schema))
 }

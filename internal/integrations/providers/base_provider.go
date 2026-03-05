@@ -1,6 +1,6 @@
 package providers
 
-import "github.com/theopenlane/core/common/integrations/types"
+import "github.com/theopenlane/core/internal/integrations/types"
 
 // BaseProvider stores shared provider metadata
 type BaseProvider struct {

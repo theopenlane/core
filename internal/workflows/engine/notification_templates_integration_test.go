@@ -9,10 +9,12 @@ import (
 	"github.com/oklog/ulid/v2"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	teamsprovider "github.com/theopenlane/core/internal/integrations/providers/microsoftteams"
+	slackprovider "github.com/theopenlane/core/internal/integrations/providers/slack"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -27,27 +29,30 @@ type integrationOpsSpy struct {
 // notificationIntegrationRegistryStub provides notification operation descriptors for test providers
 type notificationIntegrationRegistryStub struct{}
 
-// OperationDescriptors returns provider operation descriptors for notification tests
-func (notificationIntegrationRegistryStub) OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor {
+// ResolveOperation returns notification operation descriptors for test providers.
+func (notificationIntegrationRegistryStub) ResolveOperation(provider types.ProviderType, operationName types.OperationName, operationKind types.OperationKind) (types.OperationDescriptor, error) {
+	if operationName != "" && operationName != types.OperationName("message.send") {
+		return types.OperationDescriptor{}, engine.ErrIntegrationOperationCriteriaRequired
+	}
+	if operationKind != "" && operationKind != types.OperationKindNotify {
+		return types.OperationDescriptor{}, engine.ErrIntegrationOperationCriteriaRequired
+	}
+
 	switch provider {
-	case "slack":
-		return []types.OperationDescriptor{
-			{
-				Provider: "slack",
-				Name:     types.OperationName("message.send"),
-				Kind:     types.OperationKindNotify,
-			},
-		}
-	case "microsoftteams":
-		return []types.OperationDescriptor{
-			{
-				Provider: "microsoftteams",
-				Name:     types.OperationName("message.send"),
-				Kind:     types.OperationKindNotify,
-			},
-		}
+	case slackprovider.TypeSlack:
+		return types.OperationDescriptor{
+			Provider: slackprovider.TypeSlack,
+			Name:     types.OperationName("message.send"),
+			Kind:     types.OperationKindNotify,
+		}, nil
+	case teamsprovider.TypeMicrosoftTeams:
+		return types.OperationDescriptor{
+			Provider: teamsprovider.TypeMicrosoftTeams,
+			Name:     types.OperationName("message.send"),
+			Kind:     types.OperationKindNotify,
+		}, nil
 	default:
-		return nil
+		return types.OperationDescriptor{}, engine.ErrIntegrationProviderRequired
 	}
 }
 
@@ -75,7 +80,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 	integrationRecord, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Slack").
-		SetKind("slack").
+		SetKind(string(slackprovider.TypeSlack)).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
@@ -153,7 +158,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 	call := opsSpy.calls[0]
 	s.Equal(orgID, call.OrgID)
 	s.Equal(integrationRecord.ID, call.IntegrationID)
-	s.Equal(types.ProviderType("slack"), call.Provider)
+	s.Equal(slackprovider.TypeSlack, call.Provider)
 	s.Equal(types.OperationName("message.send"), call.Name)
 	config, err := jsonx.ToMap(call.Config)
 	s.Require().NoError(err)
@@ -179,7 +184,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 	integrationRecord, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Slack").
-		SetKind("slack").
+		SetKind(string(slackprovider.TypeSlack)).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
@@ -279,7 +284,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 	call := opsSpy.calls[0]
 	s.Equal(orgID, call.OrgID)
 	s.Equal(integrationRecord.ID, call.IntegrationID)
-	s.Equal(types.ProviderType("slack"), call.Provider)
+	s.Equal(slackprovider.TypeSlack, call.Provider)
 	s.Equal(types.OperationName("message.send"), call.Name)
 	config, err := jsonx.ToMap(call.Config)
 	s.Require().NoError(err)

@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"context"
+	"net/mail"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -71,6 +72,9 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	}
 
 	email := gofakeit.Email()
+	if addr, parseErr := mail.ParseAddress(email); parseErr == nil && addr != nil && addr.Address != "" {
+		email = addr.Address
+	}
 	if input != nil && input.email != "" {
 		email = input.email
 	}

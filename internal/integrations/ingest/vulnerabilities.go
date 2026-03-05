@@ -6,115 +6,28 @@ import (
 
 	"github.com/samber/lo"
 
-	integrationstate "github.com/theopenlane/core/common/integrations/state"
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// VulnerabilityIngestRequest defines the inputs required for vulnerability ingestion
-// It expects alert envelopes produced by integration operations
-type VulnerabilityIngestRequest struct {
-	// OrgID identifies the organization that owns the vulnerabilities
-	OrgID string
-	// IntegrationID identifies the integration record
-	IntegrationID string
-	// Provider identifies the integration provider
-	Provider integrationtypes.ProviderType
-	// Operation identifies the operation that produced the alerts
-	Operation integrationtypes.OperationName
-	// IntegrationConfig supplies integration-level configuration for mapping
-	IntegrationConfig openapi.IntegrationConfig
-	// ProviderState carries provider-specific state for mapping
-	ProviderState integrationstate.IntegrationProviderState
-	// OperationConfig supplies operation-level configuration for mapping
-	OperationConfig map[string]any
-	// Envelopes holds the alert payloads to ingest
-	Envelopes []integrationtypes.AlertEnvelope
-	// DB provides access to the persistence layer
-	DB *generated.Client
-}
-
-// Validate checks that required fields are present
-func (r *VulnerabilityIngestRequest) Validate() error {
-	if r.OrgID == "" {
-		return ErrIngestOrgIDRequired
-	}
-	if r.IntegrationID == "" {
-		return ErrIngestIntegrationRequired
-	}
-	if r.DB == nil {
-		return ErrDBClientRequired
-	}
-
-	return nil
-}
-
-// VulnerabilityIngestSummary reports mapping and persistence stats
-type VulnerabilityIngestSummary struct {
-	// Total counts total alerts processed
-	Total int
-	// Mapped counts alerts that produced mapped output
-	Mapped int
-	// Persisted counts alerts that were persisted
-	Persisted int
-	// Skipped counts alerts filtered out by mapping
-	Skipped int
-	// Failed counts alerts that failed mapping or persistence
-	Failed int
-	// Created counts new vulnerabilities created
-	Created int
-	// Updated counts existing vulnerabilities updated
-	Updated int
-}
-
-// VulnerabilityIngestResult captures the results of an ingestion run
-type VulnerabilityIngestResult struct {
-	// Summary aggregates ingestion totals
-	Summary VulnerabilityIngestSummary
-	// Errors captures per-alert error messages
-	Errors []string
-}
-
 type vulnerabilityIngestContext struct {
-	mapper               *MappingEvaluator
-	schema               integrationgenerated.IntegrationMappingSchema
-	overrideIndex        mappingOverrideIndex
-	integrationConfigMap map[string]any
-	providerStateMap     map[string]any
-	storeRaw             bool
+	schemaIngestContext
+	storeRaw bool
 }
 
 // SupportsVulnerabilityIngest reports whether default or configured mappings exist
-func SupportsVulnerabilityIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig) bool {
-	if supportsDefaultMapping(provider, mappingSchemaVulnerability) {
-		return true
-	}
-
-	return newMappingOverrideIndex(config).HasAny(provider, mappingSchemaVulnerability)
+func SupportsVulnerabilityIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig, mappingIndex integrationtypes.MappingIndex) bool {
+	return supportsSchemaIngest(mappingIndex, provider, config, mappingSchemaVulnerability)
 }
 
 // newVulnerabilityIngestContext prepares shared state for ingest runs
-func newVulnerabilityIngestContext(req VulnerabilityIngestRequest) (vulnerabilityIngestContext, error) {
-	mapper, err := NewMappingEvaluator()
-	if err != nil {
-		return vulnerabilityIngestContext{}, err
-	}
-
-	schema, ok := integrationgenerated.IntegrationMappingSchemas[mappingSchemaVulnerability]
-	if !ok {
-		return vulnerabilityIngestContext{}, ErrMappingSchemaNotFound
-	}
-
-	integrationConfigMap, err := jsonx.ToMap(req.IntegrationConfig)
-	if err != nil {
-		return vulnerabilityIngestContext{}, err
-	}
-	providerStateMap, err := jsonx.ToMap(req.ProviderState)
+func newVulnerabilityIngestContext(req IngestRequest) (vulnerabilityIngestContext, error) {
+	ingestCtx, err := newSchemaIngestContext(req.IntegrationConfig, req.ProviderState, req.MappingIndex, mappingSchemaVulnerability)
 	if err != nil {
 		return vulnerabilityIngestContext{}, err
 	}
@@ -125,67 +38,28 @@ func newVulnerabilityIngestContext(req VulnerabilityIngestRequest) (vulnerabilit
 	}
 
 	return vulnerabilityIngestContext{
-		mapper:               mapper,
-		schema:               schema,
-		overrideIndex:        newMappingOverrideIndex(req.IntegrationConfig),
-		integrationConfigMap: integrationConfigMap,
-		providerStateMap:     providerStateMap,
-		storeRaw:             storeRaw,
+		schemaIngestContext: ingestCtx,
+		storeRaw:            storeRaw,
 	}, nil
 }
 
 // mapEnvelopeToVulnerability applies mapping rules to a single alert envelope
-func (c *vulnerabilityIngestContext) mapEnvelopeToVulnerability(ctx context.Context, req VulnerabilityIngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
-	payloadMap, err := decodeAlertPayload(envelope.Payload)
-	if err != nil {
-		return nil, false, err
-	}
-
-	spec, ok := resolveMappingSpecWithIndex(c.overrideIndex, req.Provider, mappingSchemaVulnerability, envelope.AlertType)
-	if !ok {
-		return nil, false, ErrMappingNotFound
-	}
-
-	vars := MappingVars{
-		Payload:           payloadMap,
-		Resource:          envelope.Resource,
-		AlertType:         envelope.AlertType,
-		Provider:          req.Provider,
-		Operation:         req.Operation,
-		OrgID:             req.OrgID,
-		IntegrationID:     req.IntegrationID,
-		Config:            req.OperationConfig,
-		IntegrationConfig: c.integrationConfigMap,
-		ProviderState:     c.providerStateMap,
-	}.Map()
-
-	allowed, err := c.mapper.EvaluateFilter(ctx, spec.FilterExpr, vars)
-	if err != nil {
-		return nil, false, err
-	}
-	if !allowed {
-		return nil, false, nil
-	}
-
-	mapped, err := c.mapper.EvaluateMap(ctx, spec.MapExpr, vars)
-	if err != nil {
-		return nil, false, err
-	}
-
-	mapped = filterMappingOutput(c.schema, mapped)
-	if err := validateMappingOutput(c.schema, mapped); err != nil {
-		return nil, false, err
-	}
-
-	return mapped, true, nil
+func (c *vulnerabilityIngestContext) mapEnvelopeToVulnerability(ctx context.Context, req IngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
+	return mapIngestEnvelope(ctx, c.schemaIngestContext, envelopeMappingRequest{
+		Provider:        req.Provider,
+		Operation:       req.Operation,
+		OrgID:           req.OrgID,
+		IntegrationID:   req.IntegrationID,
+		OperationConfig: req.OperationConfig,
+	}, mappingSchemaVulnerability, envelope)
 }
 
 // VulnerabilityAlerts maps provider alerts into vulnerability inputs and persists them
-func VulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestRequest) (VulnerabilityIngestResult, error) {
-	result := VulnerabilityIngestResult{}
+func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, error) {
+	result := IngestResult{}
 
-	if req.DB == nil {
-		return result, ErrDBClientRequired
+	if err := req.Validate(); err != nil {
+		return result, err
 	}
 
 	ingestCtx, err := newVulnerabilityIngestContext(req)
@@ -193,18 +67,13 @@ func VulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestRequest) (V
 		return result, err
 	}
 
-	for _, envelope := range req.Envelopes {
-		result.Summary.Total++
-
+	summary, errors := processIngestEnvelopes(req.Envelopes, func(envelope integrationtypes.AlertEnvelope) (bool, bool, error) {
 		mapped, allowed, err := ingestCtx.mapEnvelopeToVulnerability(ctx, req, envelope)
 		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
+			return false, false, err
 		}
 		if !allowed {
-			result.Summary.Skipped++
-			continue
+			return false, false, nil
 		}
 
 		if !ingestCtx.storeRaw {
@@ -213,9 +82,7 @@ func VulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestRequest) (V
 
 		input, err := decodeVulnerabilityInput(mapped)
 		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
+			return false, false, err
 		}
 
 		if req.OrgID != "" && (input.OwnerID == nil || *input.OwnerID == "") {
@@ -228,19 +95,14 @@ func VulnerabilityAlerts(ctx context.Context, req VulnerabilityIngestRequest) (V
 
 		created, err := upsertVulnerability(ctx, req.DB, req.OrgID, req.IntegrationID, input)
 		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
+			return false, false, err
 		}
 
-		result.Summary.Mapped++
-		result.Summary.Persisted++
-		if created {
-			result.Summary.Created++
-		} else {
-			result.Summary.Updated++
-		}
-	}
+		return true, created, nil
+	})
+
+	result.Summary = summary
+	result.Errors = errors
 
 	return result, nil
 }

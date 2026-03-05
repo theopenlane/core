@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/utils/envparse"
 
 	"github.com/theopenlane/core/config"
-	integrationconfig "github.com/theopenlane/core/common/integrations/config"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 

@@ -3,31 +3,31 @@ package keystore
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // credentialSourceStub implements CredentialSource for tests
 type credentialSourceStub struct { //nolint:unused
-	getPayload  types.CredentialPayload
-	mintPayload types.CredentialPayload
-	getErr      error
-	mintErr     error
+	getPayload                types.CredentialPayload
+	mintPayload               types.CredentialPayload
+	getErr                    error
+	mintErr                   error
 	getForIntegrationPayload  types.CredentialPayload
 	mintForIntegrationPayload types.CredentialPayload
 	getForIntegrationErr      error
 	mintForIntegrationErr     error
 
-	getCount  int
-	mintCount int
+	getCount                int
+	mintCount               int
 	getForIntegrationCount  int
 	mintForIntegrationCount int
 
-	lastGetOrgID     string
-	lastGetProvider  types.ProviderType
-	lastMintOrgID    string
-	lastMintProvider types.ProviderType
-	lastGetIntegrationID     string
-	lastMintIntegrationID    string
+	lastGetOrgID          string
+	lastGetProvider       types.ProviderType
+	lastMintOrgID         string
+	lastMintProvider      types.ProviderType
+	lastGetIntegrationID  string
+	lastMintIntegrationID string
 }
 
 func (s *credentialSourceStub) Get(_ context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) { //nolint:unused

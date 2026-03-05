@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 
 // awsSecurityHubClientDescriptors returns the AWS Security Hub client descriptors for pooling.
 func awsSecurityHubClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeAWS, ClientAWSSecurityHub, "AWS Security Hub client", pooledSecurityHubClient)
+	return providerkit.DefaultClientDescriptors(TypeAWS, ClientAWSSecurityHub, "AWS Security Hub client", pooledSecurityHubClient)
 }
 
 // pooledSecurityHubClient builds the AWS Security Hub client for pooling, discarding metadata.
