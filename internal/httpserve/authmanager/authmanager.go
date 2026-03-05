@@ -269,8 +269,8 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil {
-		logx.FromContext(ctx).Error().Msg("unable to get authenticated user context while creating auth session")
-
+		// don't log here, the caller is already logging this when it is actually an issue, otherwise it is expected
+		// because it is happening during the login flow
 		return "", auth.ErrNoAuthUser
 	}
 
@@ -289,7 +289,7 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 
 	allow, err := a.db.Authz.CheckOrgReadAccess(ctx, req)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to check access")
+		logx.FromContext(ctx).Error().Err(err).Str("user_id", caller.SubjectID).Str("org_id", orgID).Msg("unable to check org read access")
 
 		return "", err
 	}
@@ -303,12 +303,10 @@ func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID stri
 	// to authenticate
 	newOrgID, err := a.updateDefaultOrg(ctx, user, orgID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to update default org")
+		logx.FromContext(ctx).Error().Err(err).Str("user_id", user.ID).Str("org_id", orgID).Msg("unable to update default org")
 
 		return "", err
 	}
-
-	logx.FromContext(ctx).Error().Str("user_id", user.ID).Str("attempted_org_id", orgID).Str("new_org_id", newOrgID).Msg("user does not have access to the requested organization, switching to new default organization")
 
 	return newOrgID, generated.ErrPermissionDenied
 }

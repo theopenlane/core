@@ -458,5 +458,11 @@ func TestLogImpersonationAccess(t *testing.T) {
 		UserID:         "user-456",
 	}
 
-	middleware.logImpersonationAccess(claims, nil)
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodGet, "/test", nil)
+	req = req.WithContext(context.Background())
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	middleware.logImpersonationAccess(claims, c)
 }

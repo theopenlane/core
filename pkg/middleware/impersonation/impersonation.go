@@ -1,10 +1,11 @@
 package impersonation
 
 import (
+	"context"
 	"net/http"
 	"slices"
 
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -36,7 +37,7 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		// Validate the impersonation token
 		claims, err := m.tokenManager.ValidateImpersonationToken(ctx, tokenString)
 		if err != nil {
-			log.Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
+			logx.FromContext(ctx).Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
 
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid impersonation token")
 		}
@@ -44,7 +45,7 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		// Create the impersonated caller context
 		impersonatedCaller, err := m.createImpersonatedCaller(claims)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to create impersonated user context")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create impersonated user context")
 
 			return echo.NewHTTPError(http.StatusInternalServerError, "failed to process impersonation")
 		}
@@ -89,8 +90,13 @@ func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims
 }
 
 // logImpersonationAccess logs when an impersonation token is used
-func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, _ echo.Context) {
-	log.Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
+func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, c echo.Context) {
+	ctx := context.Background()
+	if c != nil {
+		ctx = c.Request().Context()
+	}
+
+	logx.FromContext(ctx).Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
 }
 
 // RequireImpersonationScope creates middleware that requires specific impersonation scopes
@@ -107,6 +113,10 @@ func RequireImpersonationScope(requiredScope string) echo.MiddlewareFunc {
 
 			// Check if the impersonation has the required scope
 			if !caller.CanPerformAction(requiredScope) {
+				logx.FromContext(ctx).Info().
+					Str("user_id", caller.SubjectID).
+					Str("missing_scope", requiredScope).
+					Msg("impersonated user missing required scope for this action")
 				return echo.NewHTTPError(http.StatusForbidden, "impersonation scope insufficient for this action")
 			}
 
@@ -123,6 +133,7 @@ func BlockImpersonation() echo.MiddlewareFunc {
 
 			caller, ok := auth.CallerFromContext(ctx)
 			if ok && caller != nil && caller.IsImpersonated() {
+				logx.FromContext(ctx).Info().Str("user_id", caller.SubjectID).Msg("impersonated user attempted to access blocked endpoint")
 				return echo.NewHTTPError(http.StatusForbidden, "action not allowed during impersonation session")
 			}
 
@@ -192,7 +203,7 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 			c.SetRequest(c.Request().WithContext(ctx))
 
 			// Log the system admin user context switch
-			log.Info().Str("admin", caller.SubjectID).Str("user", targetUserID).Msg("system admin user context")
+			logx.FromContext(ctx).Info().Str("admin", caller.SubjectID).Str("user", targetUserID).Msg("system admin user context")
 
 			return next(c)
 		}
