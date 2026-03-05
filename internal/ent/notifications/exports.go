@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -236,10 +238,13 @@ func addExportNotification(ctx context.Context, client *generated.Client, input 
 		ObjectType:       input.exportType.String(),
 	}
 
+	// set org so the org-owned hook can resolve the owner
+	notifCtx := auth.WithCaller(allowCtx, &auth.Caller{OrganizationID: input.ownerID})
+
 	if _, err := client.Notification.Create().
 		SetInput(*notifInput).
 		SetUserID(input.requestorID).
-		Save(allowCtx); err != nil {
+		Save(notifCtx); err != nil {
 		return fmt.Errorf("failed to create export notification: %w", err)
 	}
 
