@@ -40,3 +40,6 @@ var ErrExternalIDRequired = errors.New("ingest: external id required")
 
 // ErrIngestOrgIDRequired is returned when the organization id is missing
 var ErrIngestOrgIDRequired = errors.New("ingest: org id required")
+
+// ErrIngestOperationRequired is returned when the operation name is missing
+var ErrIngestOperationRequired = errors.New("ingest: operation required")

@@ -24,10 +24,11 @@ func (c RESTClient) GetJSON(ctx context.Context, client *AuthenticatedClient, to
 }
 
 // PostJSON assembles an endpoint URL from the base URL and path, then performs an
-// authenticated JSON POST request using the bearer token.
-func (c RESTClient) PostJSON(ctx context.Context, token, path string, body, out any) error {
+// authenticated JSON POST request. When client is non-nil it is used for the request;
+// otherwise the bearer token and default headers are used.
+func (c RESTClient) PostJSON(ctx context.Context, client *AuthenticatedClient, token, path string, body, out any) error {
 	endpoint := buildEndpointURL(c.BaseURL, path, nil)
-	return HTTPPostJSON(ctx, nil, endpoint, token, c.DefaultHeaders, body, out)
+	return PostJSONWithClient(ctx, client, endpoint, token, c.DefaultHeaders, body, out)
 }
 
 // buildEndpointURL constructs a full URL by joining baseURL and path with a single slash
