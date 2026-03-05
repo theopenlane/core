@@ -15,7 +15,7 @@ import (
 // and provider type inside IngestRequest determine which mapping schema is applied
 type IngestFunc func(ctx context.Context, req IngestRequest) (IngestResult, error)
 
-// IngestRequest is the unified request type passed to all IngestFunc implementations.
+// IngestRequest is the unified request type passed to all IngestFunc implementations
 type IngestRequest struct {
 	// OrgID identifies the organization that owns the ingested records
 	OrgID string
