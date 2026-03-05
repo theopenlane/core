@@ -270,7 +270,7 @@ func isWhitelistedInternalError(err error) bool {
 		errIntegrationRegistryNotConfigured,
 		errIntegrationOperationsNotConfigured,
 		errIntegrationWorkflowEngineNotConfigured,
-		errActivationNotConfigured,
+		errKeymakerNotConfigured,
 		errDBClientNotConfigured:
 		return true
 	default:

@@ -7,9 +7,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -21,7 +19,9 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 	t.Helper()
 
 	originalRegistry := suite.h.IntegrationRegistry
-	originalActivation := suite.h.IntegrationActivation
+	originalStore := suite.h.IntegrationStore
+	originalBroker := suite.h.IntegrationBroker
+	originalOperations := suite.h.IntegrationOperations
 	originalKeymaker := suite.h.IntegrationKeymaker
 
 	ctx := context.Background()
@@ -42,44 +42,27 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 	suite.h.IntegrationRegistry = reg
 
 	store := keystore.NewStore(suite.db)
+	suite.h.IntegrationStore = store
+	broker := keystore.NewBroker(store, reg)
+	suite.h.IntegrationBroker = broker
+
+	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
+	opManager, err := keystore.NewOperationManager(broker, opDescriptors)
+	require.NoError(t, err)
+	suite.h.IntegrationOperations = opManager
+
 	sessions := keymaker.NewMemorySessionStore()
 	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
 	require.NoError(t, err)
 	suite.h.IntegrationKeymaker = keymakerSvc
 
-	mockOps := &mockOperationRunner{}
-	mockMinter := &mockPayloadMinter{}
-	activationSvc, err := activation.NewService(store, mockOps, mockMinter)
-	require.NoError(t, err)
-	suite.h.IntegrationActivation = activationSvc
-
 	return func() {
 		suite.h.IntegrationRegistry = originalRegistry
-		suite.h.IntegrationActivation = originalActivation
+		suite.h.IntegrationStore = originalStore
+		suite.h.IntegrationBroker = originalBroker
+		suite.h.IntegrationOperations = originalOperations
 		suite.h.IntegrationKeymaker = originalKeymaker
 	}
-}
-
-// mockOperationRunner implements activation.OperationRunner for tests
-type mockOperationRunner struct{}
-
-func (m *mockOperationRunner) Run(_ context.Context, _ types.OperationRequest) (types.OperationResult, error) {
-	return operations.OperationSuccess("mock health check passed", struct {
-		Mock bool `json:"mock"`
-	}{Mock: true}), nil
-}
-
-func (m *mockOperationRunner) RunWithPayload(_ context.Context, _ types.OperationRequest, _ types.CredentialPayload) (types.OperationResult, error) {
-	return operations.OperationSuccess("mock health check passed", struct {
-		Mock bool `json:"mock"`
-	}{Mock: true}), nil
-}
-
-// mockPayloadMinter implements activation.PayloadMinter for tests
-type mockPayloadMinter struct{}
-
-func (m *mockPayloadMinter) MintPayload(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	return subject.Credential, nil
 }
 
 type testProvider struct {
@@ -96,6 +79,22 @@ func (p *testProvider) BeginAuth(context.Context, types.AuthContext) (types.Auth
 
 func (p *testProvider) Mint(context.Context, types.CredentialSubject) (types.CredentialPayload, error) {
 	return types.CredentialPayload{}, nil
+}
+
+func (p *testProvider) Operations() []types.OperationDescriptor {
+	return []types.OperationDescriptor{
+		{
+			Provider: p.providerType,
+			Name:     types.OperationHealthDefault,
+			Kind:     types.OperationKindScanSettings,
+			Run: func(context.Context, types.OperationInput) (types.OperationResult, error) {
+				return types.OperationResult{
+					Status:  types.OperationStatusOK,
+					Summary: "ok",
+				}, nil
+			},
+		},
+	}
 }
 
 func gcpSCCSpec() config.ProviderSpec {

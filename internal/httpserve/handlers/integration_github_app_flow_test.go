@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -12,7 +13,6 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/integrations/activation"
 	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -62,15 +62,6 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	suite.h.IntegrationOperations = ops
 	defer func() {
 		suite.h.IntegrationOperations = originalOps
-	}()
-
-	originalActivation := suite.h.IntegrationActivation
-	store := keystore.NewStore(suite.db)
-	activationSvc, err := activation.NewService(store, &mockOperationRunner{}, &mockPayloadMinter{})
-	require.NoError(t, err)
-	suite.h.IntegrationActivation = activationSvc
-	defer func() {
-		suite.h.IntegrationActivation = originalActivation
 	}()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -144,4 +135,13 @@ func (r noHealthIntegrationRegistry) OperationDescriptors(provider types.Provide
 		return nil
 	}
 	return r.base.OperationDescriptors(provider)
+}
+
+// MintPayload forwards minting requests to the wrapped registry.
+func (r noHealthIntegrationRegistry) MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+	if r.base == nil {
+		return types.CredentialPayload{}, nil
+	}
+
+	return r.base.MintPayload(ctx, subject)
 }

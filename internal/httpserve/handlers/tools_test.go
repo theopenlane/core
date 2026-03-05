@@ -41,7 +41,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -435,10 +434,6 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
 	assert.NoError(suite.T(), err)
 	suite.h.IntegrationKeymaker = keymakerSvc
-
-	activationSvc, err := activation.NewService(store, suite.h.IntegrationOperations, reg)
-	assert.NoError(suite.T(), err)
-	suite.h.IntegrationActivation = activationSvc
 }
 
 type testOAuthProvider struct {
