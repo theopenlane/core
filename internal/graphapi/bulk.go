@@ -5873,6 +5873,88 @@ func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*genera
 	}, nil
 }
 
+// bulkUpdateReview updates multiple Review entities
+func (r *mutationResolver) bulkUpdateReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Review, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each review individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for review")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Review.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", id).Msg("failed to get review in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", id).Msg("failed to update review in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.ReviewBulkUpdatePayload{
+		Reviews:    results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVReview updates multiple Review entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVReview(ctx context.Context, inputs []*csvgenerated.ReviewCSVUpdateInput) (*model.ReviewBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Review, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each review individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for review")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Review.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", input.ID).Msg("failed to get review in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", input.ID).Msg("failed to update review in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.ReviewBulkUpdatePayload{
+		Reviews:    results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
 // bulkCreateRisk uses the CreateBulk function to create multiple Risk entities
 func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generated.CreateRiskInput) (*model.RiskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

@@ -121,6 +121,35 @@ func (r *mutationResolver) DeleteReview(ctx context.Context, id string) (*model.
 	}, nil
 }
 
+// UpdateBulkReview is the resolver for the updateBulkReview field.
+func (r *mutationResolver) UpdateBulkReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateReview(ctx, ids, input)
+}
+
+// UpdateBulkCSVReview is the resolver for the updateBulkCSVReview field.
+func (r *mutationResolver) UpdateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ReviewCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Review", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVReview(ctx, data)
+}
+
 // Review is the resolver for the review field.
 func (r *queryResolver) Review(ctx context.Context, id string) (*generated.Review, error) {
 	query, err := withTransactionalMutation(ctx).Review.Query().Where(review.ID(id)).CollectFields(ctx)

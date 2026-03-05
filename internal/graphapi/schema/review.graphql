@@ -60,6 +60,28 @@ extend type Mutation{
         """
         id: ID!
     ): ReviewDeletePayload!
+    """
+    Update multiple existing reviews
+    """
+    updateBulkReview(
+        """
+        IDs of the reviews to update
+        """
+        ids: [ID!]!
+        """
+        values to update the reviews with
+        """
+        input: UpdateReviewInput!
+    ): ReviewBulkUpdatePayload!
+    """
+    Update multiple existing reviews via file upload
+    """
+    updateBulkCSVReview(
+        """
+        csv file containing values of the review, must include ID column
+        """
+        input: Upload!
+    ): ReviewBulkUpdatePayload!
 }
 
 """
@@ -100,4 +122,18 @@ type ReviewBulkCreatePayload {
     Created reviews
     """
     reviews: [Review!]
+}
+
+"""
+Return response for updateBulkReview mutation
+"""
+type ReviewBulkUpdatePayload {
+    """
+    Updated reviews
+    """
+    reviews: [Review!]
+    """
+    IDs of the updated reviews
+    """
+    updatedIDs: [ID!]
 }
