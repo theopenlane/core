@@ -2,9 +2,8 @@ package runtime
 
 import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -28,8 +27,7 @@ type Runtime struct {
 	Clients    *keystore.ClientPoolManager
 	Operations *keystore.OperationManager
 	Keymaker   *keymaker.Service
-	Activation *activation.Service
-	Ingest     *ingest.Runtime
+	Mapping    types.MappingIndex
 }
 
 // New constructs the integrations runtime in dependency order and wires workflow deps when provided.
@@ -64,19 +62,12 @@ func New(cfg Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	activationSvc, err := activation.NewService(store, operations, cfg.Registry)
-	if err != nil {
-		return nil, err
-	}
-
-	ingestRuntime := ingest.NewRuntime(cfg.Registry)
-
 	if cfg.WorkflowEngine != nil {
 		if err := cfg.WorkflowEngine.SetIntegrationDeps(engine.IntegrationDeps{
 			Registry:     cfg.Registry,
 			Store:        store,
 			Operations:   operations,
-			MappingIndex: ingestRuntime.MappingIndex(),
+			MappingIndex: cfg.Registry,
 		}); err != nil {
 			return nil, err
 		}
@@ -89,7 +80,6 @@ func New(cfg Config) (*Runtime, error) {
 		Clients:    clients,
 		Operations: operations,
 		Keymaker:   keymakerSvc,
-		Activation: activationSvc,
-		Ingest:     ingestRuntime,
+		Mapping:    cfg.Registry,
 	}, nil
 }
