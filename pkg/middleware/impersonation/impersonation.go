@@ -1,6 +1,7 @@
 package impersonation
 
 import (
+	"context"
 	"net/http"
 	"slices"
 
@@ -90,7 +91,12 @@ func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims
 
 // logImpersonationAccess logs when an impersonation token is used
 func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, c echo.Context) {
-	logx.FromContext(c.Request().Context()).Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
+	ctx := context.Background()
+	if c != nil {
+		ctx = c.Request().Context()
+	}
+
+	logx.FromContext(ctx).Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
 }
 
 // RequireImpersonationScope creates middleware that requires specific impersonation scopes
