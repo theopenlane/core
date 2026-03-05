@@ -333,6 +333,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			asset.FieldPurchaseDate:                {Type: field.TypeTime, Column: asset.FieldPurchaseDate},
 			asset.FieldCpe:                         {Type: field.TypeString, Column: asset.FieldCpe},
 			asset.FieldCategories:                  {Type: field.TypeJSON, Column: asset.FieldCategories},
+			asset.FieldIntegrationID:               {Type: field.TypeString, Column: asset.FieldIntegrationID},
+			asset.FieldObservedAt:                  {Type: field.TypeTime, Column: asset.FieldObservedAt},
 		},
 	}
 	graph.Nodes[5] = &sqlgraph.Node{
@@ -429,21 +431,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Contact",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			contact.FieldCreatedAt:   {Type: field.TypeTime, Column: contact.FieldCreatedAt},
-			contact.FieldUpdatedAt:   {Type: field.TypeTime, Column: contact.FieldUpdatedAt},
-			contact.FieldCreatedBy:   {Type: field.TypeString, Column: contact.FieldCreatedBy},
-			contact.FieldUpdatedBy:   {Type: field.TypeString, Column: contact.FieldUpdatedBy},
-			contact.FieldDeletedAt:   {Type: field.TypeTime, Column: contact.FieldDeletedAt},
-			contact.FieldDeletedBy:   {Type: field.TypeString, Column: contact.FieldDeletedBy},
-			contact.FieldTags:        {Type: field.TypeJSON, Column: contact.FieldTags},
-			contact.FieldOwnerID:     {Type: field.TypeString, Column: contact.FieldOwnerID},
-			contact.FieldFullName:    {Type: field.TypeString, Column: contact.FieldFullName},
-			contact.FieldTitle:       {Type: field.TypeString, Column: contact.FieldTitle},
-			contact.FieldCompany:     {Type: field.TypeString, Column: contact.FieldCompany},
-			contact.FieldEmail:       {Type: field.TypeString, Column: contact.FieldEmail},
-			contact.FieldPhoneNumber: {Type: field.TypeString, Column: contact.FieldPhoneNumber},
-			contact.FieldAddress:     {Type: field.TypeString, Column: contact.FieldAddress},
-			contact.FieldStatus:      {Type: field.TypeEnum, Column: contact.FieldStatus},
+			contact.FieldCreatedAt:     {Type: field.TypeTime, Column: contact.FieldCreatedAt},
+			contact.FieldUpdatedAt:     {Type: field.TypeTime, Column: contact.FieldUpdatedAt},
+			contact.FieldCreatedBy:     {Type: field.TypeString, Column: contact.FieldCreatedBy},
+			contact.FieldUpdatedBy:     {Type: field.TypeString, Column: contact.FieldUpdatedBy},
+			contact.FieldDeletedAt:     {Type: field.TypeTime, Column: contact.FieldDeletedAt},
+			contact.FieldDeletedBy:     {Type: field.TypeString, Column: contact.FieldDeletedBy},
+			contact.FieldTags:          {Type: field.TypeJSON, Column: contact.FieldTags},
+			contact.FieldOwnerID:       {Type: field.TypeString, Column: contact.FieldOwnerID},
+			contact.FieldFullName:      {Type: field.TypeString, Column: contact.FieldFullName},
+			contact.FieldTitle:         {Type: field.TypeString, Column: contact.FieldTitle},
+			contact.FieldCompany:       {Type: field.TypeString, Column: contact.FieldCompany},
+			contact.FieldEmail:         {Type: field.TypeString, Column: contact.FieldEmail},
+			contact.FieldPhoneNumber:   {Type: field.TypeString, Column: contact.FieldPhoneNumber},
+			contact.FieldAddress:       {Type: field.TypeString, Column: contact.FieldAddress},
+			contact.FieldStatus:        {Type: field.TypeEnum, Column: contact.FieldStatus},
+			contact.FieldExternalID:    {Type: field.TypeString, Column: contact.FieldExternalID},
+			contact.FieldIntegrationID: {Type: field.TypeString, Column: contact.FieldIntegrationID},
+			contact.FieldObservedAt:    {Type: field.TypeTime, Column: contact.FieldObservedAt},
 		},
 	}
 	graph.Nodes[8] = &sqlgraph.Node{
@@ -1038,6 +1043,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldNextReviewAt:                          {Type: field.TypeTime, Column: entity.FieldNextReviewAt},
 			entity.FieldContractRenewalAt:                     {Type: field.TypeTime, Column: entity.FieldContractRenewalAt},
 			entity.FieldVendorMetadata:                        {Type: field.TypeJSON, Column: entity.FieldVendorMetadata},
+			entity.FieldExternalID:                            {Type: field.TypeString, Column: entity.FieldExternalID},
+			entity.FieldObservedAt:                            {Type: field.TypeTime, Column: entity.FieldObservedAt},
 		},
 	}
 	graph.Nodes[24] = &sqlgraph.Node{
@@ -2638,6 +2645,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldEnvironmentID:     {Type: field.TypeString, Column: risk.FieldEnvironmentID},
 			risk.FieldScopeName:         {Type: field.TypeString, Column: risk.FieldScopeName},
 			risk.FieldScopeID:           {Type: field.TypeString, Column: risk.FieldScopeID},
+			risk.FieldExternalID:        {Type: field.TypeString, Column: risk.FieldExternalID},
+			risk.FieldIntegrationID:     {Type: field.TypeString, Column: risk.FieldIntegrationID},
+			risk.FieldObservedAt:        {Type: field.TypeTime, Column: risk.FieldObservedAt},
 			risk.FieldExternalUUID:      {Type: field.TypeString, Column: risk.FieldExternalUUID},
 			risk.FieldName:              {Type: field.TypeString, Column: risk.FieldName},
 			risk.FieldStatus:            {Type: field.TypeEnum, Column: risk.FieldStatus},
@@ -18170,6 +18180,16 @@ func (f *AssetFilter) WhereCategories(p entql.BytesP) {
 	f.Where(p.Field(asset.FieldCategories))
 }
 
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *AssetFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(asset.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *AssetFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(asset.FieldObservedAt))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *AssetFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -19320,6 +19340,21 @@ func (f *ContactFilter) WhereAddress(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ContactFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(contact.FieldStatus))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *ContactFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(contact.FieldExternalID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *ContactFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(contact.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *ContactFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(contact.FieldObservedAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -23906,6 +23941,16 @@ func (f *EntityFilter) WhereContractRenewalAt(p entql.TimeP) {
 // WhereVendorMetadata applies the entql json.RawMessage predicate on the vendor_metadata field.
 func (f *EntityFilter) WhereVendorMetadata(p entql.BytesP) {
 	f.Where(p.Field(entity.FieldVendorMetadata))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *EntityFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldExternalID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *EntityFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(entity.FieldObservedAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -38602,6 +38647,21 @@ func (f *RiskFilter) WhereScopeName(p entql.StringP) {
 // WhereScopeID applies the entql string predicate on the scope_id field.
 func (f *RiskFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(risk.FieldScopeID))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *RiskFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldExternalID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *RiskFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *RiskFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldObservedAt))
 }
 
 // WhereExternalUUID applies the entql string predicate on the external_uuid field.

@@ -5,6 +5,7 @@ import (
 	"context"
 	"slices"
 
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -28,12 +29,14 @@ type RequestedPayload struct {
 	Envelopes []types.AlertEnvelope `json:"envelopes"`
 }
 
+// requestedSchemaContract pairs a mapping schema with its Gala topic and listener name
 type requestedSchemaContract struct {
 	Schema   types.MappingSchema
 	Topic    gala.TopicName
 	Listener string
 }
 
+// requestedSchemaContracts maps schema names to their generated ingest topic contracts, built at init time
 var requestedSchemaContracts = lo.Reduce(lo.Entries(integrationgenerated.IntegrationIngestSchemas), func(
 	acc map[string]requestedSchemaContract,
 	entry lo.Entry[string, integrationgenerated.IntegrationIngestSchema],
@@ -54,12 +57,8 @@ var requestedSchemaContracts = lo.Reduce(lo.Entries(integrationgenerated.Integra
 	return acc
 }, map[string]requestedSchemaContract{})
 
-var defaultIngestOperationBySchema = map[types.MappingSchema]types.OperationName{
-	types.MappingSchemaVulnerability:    types.OperationVulnerabilitiesCollect,
-	types.MappingSchemaDirectoryAccount: types.OperationDirectorySync,
-}
 
-// IngestRequestedTopicForSchema resolves the schema-scoped ingest topic.
+// IngestRequestedTopicForSchema resolves the schema-scoped ingest topic
 func IngestRequestedTopicForSchema(schema string) (gala.Topic[RequestedPayload], bool) {
 	contract, ok := requestedSchemaContracts[schema]
 	if !ok {
@@ -69,7 +68,7 @@ func IngestRequestedTopicForSchema(schema string) (gala.Topic[RequestedPayload],
 	return gala.Topic[RequestedPayload]{Name: contract.Topic}, true
 }
 
-// RegisterIngestListeners registers ingest listeners on the supplied Gala registry.
+// RegisterIngestListeners registers ingest listeners on the supplied Gala registry
 func RegisterIngestListeners(registry *gala.Registry, db *ent.Client, mappingIndex types.MappingIndex) ([]gala.ListenerID, error) {
 	if registry == nil {
 		return nil, ErrIngestEmitterRequired
@@ -112,6 +111,8 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 		return ErrIngestSchemaUnsupported
 	}
 
+	// privacy.Allow is required here because ingest is a system-level operation executed from a
+	// background Gala listener that carries no user authentication context
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	integrationRecord, err := db.Integration.Query().
 		Where(integration.IDEQ(integrationID)).
@@ -142,7 +143,7 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 		}
 	}
 
-	_, err = ingestHandler(allowCtx, IngestRequest{
+	result, err := ingestHandler(allowCtx, IngestRequest{
 		OrgID:             integrationRecord.OwnerID,
 		IntegrationID:     integrationRecord.ID,
 		Provider:          provider,
@@ -154,8 +155,13 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 		Envelopes:         payload.Envelopes,
 		DB:                db,
 	})
+	if err != nil {
+		return err
+	}
 
-	return err
+	log.Ctx(allowCtx).Debug().Str("integration_id", integrationID).Str("schema", payload.Schema).Int("total", result.Summary.Total).Int("created", result.Summary.Created).Int("updated", result.Summary.Updated).Int("skipped", result.Summary.Skipped).Int("failed", result.Summary.Failed).Msg("ingest handler completed")
+
+	return nil
 }
 
 // operationNameForRequestedPayload resolves the effective operation name for an ingest payload.
@@ -164,5 +170,10 @@ func operationNameForRequestedPayload(payload RequestedPayload, schema types.Map
 		return types.OperationName(payload.Operation)
 	}
 
-	return defaultIngestOperationBySchema[schema]
+	contract, ok := integrationgenerated.IntegrationIngestSchemas[string(schema)]
+	if !ok {
+		return ""
+	}
+
+	return types.OperationName(contract.DefaultOperation)
 }

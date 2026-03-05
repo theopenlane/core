@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -65,7 +66,7 @@ func DirectoryAccounts(ctx context.Context, req IngestRequest) (IngestResult, er
 			return false, false, nil
 		}
 
-		input, err := decodeDirectoryAccountInput(mapped)
+		input, err := integrationgenerated.DecodeInput[generated.CreateDirectoryAccountInput](mapped)
 		if err != nil {
 			return false, false, err
 		}
@@ -82,16 +83,6 @@ func DirectoryAccounts(ctx context.Context, req IngestRequest) (IngestResult, er
 	result.Errors = errors
 
 	return result, nil
-}
-
-// decodeDirectoryAccountInput converts mapped fields into a create input
-func decodeDirectoryAccountInput(data map[string]any) (generated.CreateDirectoryAccountInput, error) {
-	var input generated.CreateDirectoryAccountInput
-	if err := jsonx.RoundTrip(data, &input); err != nil {
-		return input, err
-	}
-
-	return input, nil
 }
 
 // decodeDirectoryAccountUpdateInput converts create input values into an update-safe mutation input

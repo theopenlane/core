@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// ResolveOperation resolves one provider operation descriptor by name and/or kind.
+// ResolveOperation resolves one provider operation descriptor by name and/or kind
 func (r *Registry) ResolveOperation(provider types.ProviderType, operationName types.OperationName, operationKind types.OperationKind) (types.OperationDescriptor, error) {
 	if provider == types.ProviderUnknown {
 		return types.OperationDescriptor{}, ErrProviderTypeRequired

@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// Resolver resolves installed integrations from explicit criteria.
+// Resolver resolves installed integrations from explicit criteria
 type Resolver struct {
 	source IntegrationSource
 }
@@ -18,7 +18,7 @@ type EntSource struct {
 	client *entgen.Client
 }
 
-// NewResolver constructs a target resolver with required dependencies.
+// NewResolver constructs a target resolver with required dependencies
 func NewResolver(source IntegrationSource) (*Resolver, error) {
 	if source == nil {
 		return nil, ErrResolverSourceRequired
@@ -67,7 +67,7 @@ func (s *EntSource) IntegrationsByProvider(ctx context.Context, ownerID string, 
 		All(ctx)
 }
 
-// Resolve resolves an installed integration from explicit criteria.
+// Resolve resolves an installed integration from explicit criteria
 func (r *Resolver) Resolve(ctx context.Context, criteria ResolveCriteria) (ResolveResult, error) {
 	if err := validateResolveCriteria(criteria); err != nil {
 		return ResolveResult{}, err

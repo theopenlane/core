@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 )
 
-// Decode decodes a config document into a new instance of T.
+// Decode decodes a config document into a new instance of T
 func Decode[T any](config json.RawMessage) (T, error) {
 	var result T
 	if err := DecodeConfig(config, &result); err != nil {
@@ -14,7 +14,7 @@ func Decode[T any](config json.RawMessage) (T, error) {
 	return result, nil
 }
 
-// DecodeConfig decodes a config document into a target struct, respecting defaults on the target.
+// DecodeConfig decodes a config document into a target struct, respecting defaults on the target
 func DecodeConfig(config json.RawMessage, target any) error {
 	if target == nil {
 		return ErrDecodeConfigTargetNil

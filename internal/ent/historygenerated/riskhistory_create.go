@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -276,6 +277,48 @@ func (_c *RiskHistoryCreate) SetScopeID(v string) *RiskHistoryCreate {
 func (_c *RiskHistoryCreate) SetNillableScopeID(v *string) *RiskHistoryCreate {
 	if v != nil {
 		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *RiskHistoryCreate) SetExternalID(v string) *RiskHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableExternalID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_c *RiskHistoryCreate) SetIntegrationID(v string) *RiskHistoryCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableIntegrationID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *RiskHistoryCreate) SetObservedAt(v models.DateTime) *RiskHistoryCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableObservedAt(v *models.DateTime) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
 	}
 	return _c
 }
@@ -691,6 +734,18 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(riskhistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(riskhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.IntegrationID(); ok {
+		_spec.SetField(riskhistory.FieldIntegrationID, field.TypeString, value)
+		_node.IntegrationID = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(riskhistory.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	if value, ok := _c.mutation.ExternalUUID(); ok {
 		_spec.SetField(riskhistory.FieldExternalUUID, field.TypeString, value)

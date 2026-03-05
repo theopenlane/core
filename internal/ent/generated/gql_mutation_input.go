@@ -1203,6 +1203,8 @@ type CreateAssetInput struct {
 	PurchaseDate                *models.DateTime
 	Cpe                         *string
 	Categories                  []string
+	IntegrationID               *string
+	ObservedAt                  *models.DateTime
 	OwnerID                     *string
 	BlockedGroupIDs             []string
 	EditorIDs                   []string
@@ -1311,6 +1313,12 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.Categories; v != nil {
 		m.SetCategories(v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1446,6 +1454,10 @@ type UpdateAssetInput struct {
 	ClearCategories                  bool
 	Categories                       []string
 	AppendCategories                 []string
+	ClearIntegrationID               bool
+	IntegrationID                    *string
+	ClearObservedAt                  bool
+	ObservedAt                       *models.DateTime
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string
 	RemoveBlockedGroupIDs            []string
@@ -1669,6 +1681,18 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if i.AppendCategories != nil {
 		m.AppendCategories(i.Categories)
+	}
+	if i.ClearIntegrationID {
+		m.ClearIntegrationID()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -2597,6 +2621,9 @@ type CreateContactInput struct {
 	PhoneNumber       *string
 	Address           *string
 	Status            *enums.UserStatus
+	ExternalID        *string
+	IntegrationID     *string
+	ObservedAt        *models.DateTime
 	OwnerID           *string
 	EntityIDs         []string
 	CampaignIDs       []string
@@ -2629,6 +2656,15 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2671,6 +2707,12 @@ type UpdateContactInput struct {
 	ClearAddress            bool
 	Address                 *string
 	Status                  *enums.UserStatus
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearIntegrationID      bool
+	IntegrationID           *string
+	ClearObservedAt         bool
+	ObservedAt              *models.DateTime
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearEntities           bool
@@ -2736,6 +2778,24 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearIntegrationID {
+		m.ClearIntegrationID()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -6926,6 +6986,8 @@ type CreateEntityInput struct {
 	NextReviewAt                          *models.DateTime
 	ContractRenewalAt                     *models.DateTime
 	VendorMetadata                        map[string]interface{}
+	ExternalID                            *string
+	ObservedAt                            *models.DateTime
 	OwnerID                               *string
 	BlockedGroupIDs                       []string
 	EditorIDs                             []string
@@ -7083,6 +7145,12 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.VendorMetadata; v != nil {
 		m.SetVendorMetadata(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -7274,6 +7342,10 @@ type UpdateEntityInput struct {
 	ContractRenewalAt                          *models.DateTime
 	ClearVendorMetadata                        bool
 	VendorMetadata                             map[string]interface{}
+	ClearExternalID                            bool
+	ExternalID                                 *string
+	ClearObservedAt                            bool
+	ObservedAt                                 *models.DateTime
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string
 	RemoveBlockedGroupIDs                      []string
@@ -7618,6 +7690,18 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.VendorMetadata; v != nil {
 		m.SetVendorMetadata(v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -20690,6 +20774,9 @@ type CreateRiskInput struct {
 	RiskCategoryName  *string
 	EnvironmentName   *string
 	ScopeName         *string
+	ExternalID        *string
+	IntegrationID     *string
+	ObservedAt        *models.DateTime
 	ExternalUUID      *string
 	Name              string
 	Status            *enums.RiskStatus
@@ -20743,6 +20830,15 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
@@ -20868,6 +20964,12 @@ type UpdateRiskInput struct {
 	EnvironmentName         *string
 	ClearScopeName          bool
 	ScopeName               *string
+	ClearExternalID         bool
+	ExternalID              *string
+	ClearIntegrationID      bool
+	IntegrationID           *string
+	ClearObservedAt         bool
+	ObservedAt              *models.DateTime
 	ClearExternalUUID       bool
 	ExternalUUID            *string
 	Name                    *string
@@ -20990,6 +21092,24 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearIntegrationID {
+		m.ClearIntegrationID()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
+	if i.ClearObservedAt {
+		m.ClearObservedAt()
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
 	}
 	if i.ClearExternalUUID {
 		m.ClearExternalUUID()

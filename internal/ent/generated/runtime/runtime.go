@@ -6234,7 +6234,7 @@ func init() {
 	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescName is the schema descriptor for name field.
-	riskDescName := riskFields[1].Descriptor()
+	riskDescName := riskFields[4].Descriptor()
 	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	risk.NameValidator = riskDescName.Validators[0].(func(string) error)
 	// riskDescID is the schema descriptor for id field.

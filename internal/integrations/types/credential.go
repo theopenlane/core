@@ -46,10 +46,10 @@ type CredentialPayload struct {
 	Data models.CredentialSet `json:"credential"`
 }
 
-// CredentialOption mutates the payload being built.
+// CredentialOption mutates the payload being built
 type CredentialOption func(*CredentialPayload)
 
-// BuildCredentialPayload applies the provided options and enforces invariants.
+// BuildCredentialPayload applies the provided options and enforces invariants
 func BuildCredentialPayload(provider ProviderType, opts ...CredentialOption) (CredentialPayload, error) {
 	payload := CredentialPayload{
 		Provider: provider,
@@ -77,7 +77,7 @@ func BuildCredentialPayload(provider ProviderType, opts ...CredentialOption) (Cr
 	return payload, nil
 }
 
-// CredentialBuilder offers a fluent API around BuildCredentialPayload.
+// CredentialBuilder offers a fluent API around BuildCredentialPayload
 type CredentialBuilder struct {
 	// provider is the provider used for the payload
 	provider ProviderType
@@ -85,38 +85,38 @@ type CredentialBuilder struct {
 	options []CredentialOption
 }
 
-// NewCredentialBuilder initializes a builder for the given provider.
+// NewCredentialBuilder initializes a builder for the given provider
 func NewCredentialBuilder(provider ProviderType) *CredentialBuilder {
 	return &CredentialBuilder{provider: provider}
 }
 
-// With appends options to the builder.
+// With appends options to the builder
 func (b *CredentialBuilder) With(opts ...CredentialOption) *CredentialBuilder {
 	b.options = append(b.options, opts...)
 
 	return b
 }
 
-// Build returns the final payload.
+// Build returns the final payload
 func (b *CredentialBuilder) Build() (CredentialPayload, error) {
 	return BuildCredentialPayload(b.provider, b.options...)
 }
 
-// WithCredentialKind overrides the automatically inferred kind.
+// WithCredentialKind overrides the automatically inferred kind
 func WithCredentialKind(kind CredentialKind) CredentialOption {
 	return func(payload *CredentialPayload) {
 		payload.Kind = kind
 	}
 }
 
-// WithCredentialSet sets the stored credential data directly.
+// WithCredentialSet sets the stored credential data directly
 func WithCredentialSet(set models.CredentialSet) CredentialOption {
 	return func(payload *CredentialPayload) {
 		payload.Data = set
 	}
 }
 
-// WithCredential allows providers to encode their specific credential structs via encoder.
+// WithCredential allows providers to encode their specific credential structs via encoder
 func WithCredential[T any](value T, encoder func(T) models.CredentialSet) CredentialOption {
 	return func(payload *CredentialPayload) {
 		if encoder == nil {
@@ -127,21 +127,21 @@ func WithCredential[T any](value T, encoder func(T) models.CredentialSet) Creden
 	}
 }
 
-// WithOAuthToken embeds the upstream oauth2.Token.
+// WithOAuthToken embeds the upstream oauth2.Token
 func WithOAuthToken(token *oauth2.Token) CredentialOption {
 	return func(payload *CredentialPayload) {
 		payload.Token = helpers.CloneOAuthToken(token)
 	}
 }
 
-// WithOIDCClaims embeds the upstream OIDC claims struct.
+// WithOIDCClaims embeds the upstream OIDC claims struct
 func WithOIDCClaims(claims *oidc.IDTokenClaims) CredentialOption {
 	return func(payload *CredentialPayload) {
 		payload.Claims = helpers.CloneOIDCClaims(claims)
 	}
 }
 
-// MergeScopes merges scopes from an oauth2.Token into a plain slice (helpful for persistence).
+// MergeScopes merges scopes from an oauth2.Token into a plain slice (helpful for persistence)
 func MergeScopes(dest []string, source ...string) []string {
 	filtered := lo.Map(source, func(item string, _ int) string {
 		return strings.TrimSpace(item)

@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// DefaultClientDescriptor returns a descriptor with a default object config schema.
+// DefaultClientDescriptor returns a descriptor with a default object config schema
 func DefaultClientDescriptor(provider types.ProviderType, name types.ClientName, description string, build types.ClientBuilderFunc) types.ClientDescriptor {
 	return types.ClientDescriptor{
 		Provider:     provider,
@@ -21,14 +21,14 @@ func DefaultClientDescriptor(provider types.ProviderType, name types.ClientName,
 	}
 }
 
-// DefaultClientDescriptors returns a single-descriptor slice with a default object config schema.
+// DefaultClientDescriptors returns a single-descriptor slice with a default object config schema
 func DefaultClientDescriptors(provider types.ProviderType, name types.ClientName, description string, build types.ClientBuilderFunc) []types.ClientDescriptor {
 	return []types.ClientDescriptor{
 		DefaultClientDescriptor(provider, name, description, build),
 	}
 }
 
-// TokenClientBuilder returns a ClientBuilderFunc that extracts a token and creates an authenticated HTTP client.
+// TokenClientBuilder returns a ClientBuilderFunc that extracts a token and creates an authenticated HTTP client
 func TokenClientBuilder(extract func(types.CredentialPayload) (string, error), headers map[string]string) types.ClientBuilderFunc {
 	return func(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
 		token, err := extract(payload)
@@ -40,7 +40,7 @@ func TokenClientBuilder(extract func(types.CredentialPayload) (string, error), h
 	}
 }
 
-// SanitizeOperationDescriptors filters and cleans a slice of operation descriptors.
+// SanitizeOperationDescriptors filters and cleans a slice of operation descriptors
 func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
 	sanitized := sanitizeDescriptors(
 		provider,
@@ -56,7 +56,7 @@ func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []typ
 	})
 }
 
-// SanitizeClientDescriptors filters out invalid client descriptors and assigns provider type.
+// SanitizeClientDescriptors filters out invalid client descriptors and assigns provider type
 func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.ClientDescriptor) []types.ClientDescriptor {
 	return sanitizeDescriptors(
 		provider,
@@ -67,6 +67,7 @@ func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.
 	)
 }
 
+// sanitizeDescriptors filters descriptors by validity and stamps provider onto entries missing it
 func sanitizeDescriptors[T any](provider types.ProviderType, descriptors []T, isValid func(T) bool, getProvider func(T) types.ProviderType, setProvider func(*T, types.ProviderType)) []T {
 	if len(descriptors) == 0 {
 		return nil

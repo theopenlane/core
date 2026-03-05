@@ -300,6 +300,7 @@ func adminSearchAssets(ctx context.Context, query string, after *entgql.Cursor[s
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(categories)::text LIKE $35", likeQuery)) // search by Categories
 				},
+				asset.IntegrationIDContainsFold(query), // search by IntegrationID
 			),
 		)
 
@@ -422,13 +423,15 @@ func adminSearchContacts(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				contact.OwnerIDContainsFold(query),     // search by OwnerID
-				contact.FullNameContainsFold(query),    // search by FullName
-				contact.TitleContainsFold(query),       // search by Title
-				contact.CompanyContainsFold(query),     // search by Company
-				contact.EmailContainsFold(query),       // search by Email
-				contact.PhoneNumberContainsFold(query), // search by PhoneNumber
-				contact.AddressContainsFold(query),     // search by Address
+				contact.OwnerIDContainsFold(query),       // search by OwnerID
+				contact.FullNameContainsFold(query),      // search by FullName
+				contact.TitleContainsFold(query),         // search by Title
+				contact.CompanyContainsFold(query),       // search by Company
+				contact.EmailContainsFold(query),         // search by Email
+				contact.PhoneNumberContainsFold(query),   // search by PhoneNumber
+				contact.AddressContainsFold(query),       // search by Address
+				contact.ExternalIDContainsFold(query),    // search by ExternalID
+				contact.IntegrationIDContainsFold(query), // search by IntegrationID
 			),
 		)
 
@@ -800,6 +803,7 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $36", likeQuery)) // search by VendorMetadata
 				},
+				entity.ExternalIDContainsFold(query), // search by ExternalID
 			),
 		)
 
@@ -1776,22 +1780,24 @@ func adminSearchRisks(ctx context.Context, query string, after *entgql.Cursor[st
 				risk.EnvironmentIDContainsFold(query),    // search by EnvironmentID
 				risk.ScopeNameContainsFold(query),        // search by ScopeName
 				risk.ScopeIDContainsFold(query),          // search by ScopeID
+				risk.ExternalIDContainsFold(query),       // search by ExternalID
+				risk.IntegrationIDContainsFold(query),    // search by IntegrationID
 				risk.ExternalUUIDContainsFold(query),     // search by ExternalUUID
 				risk.NameContainsFold(query),             // search by Name
 				risk.MitigationContainsFold(query),       // search by Mitigation
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(mitigation_json)::text LIKE $16", likeQuery)) // search by MitigationJSON
+					s.Where(sql.ExprP("(mitigation_json)::text LIKE $18", likeQuery)) // search by MitigationJSON
 				},
 				risk.DetailsContainsFold(query), // search by Details
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(details_json)::text LIKE $18", likeQuery)) // search by DetailsJSON
+					s.Where(sql.ExprP("(details_json)::text LIKE $20", likeQuery)) // search by DetailsJSON
 				},
 				risk.BusinessCostsContainsFold(query), // search by BusinessCosts
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(business_costs_json)::text LIKE $20", likeQuery)) // search by BusinessCostsJSON
+					s.Where(sql.ExprP("(business_costs_json)::text LIKE $22", likeQuery)) // search by BusinessCostsJSON
 				},
 				risk.StakeholderIDContainsFold(query), // search by StakeholderID
 				risk.DelegateIDContainsFold(query),    // search by DelegateID

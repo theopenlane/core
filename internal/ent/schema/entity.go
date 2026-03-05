@@ -262,6 +262,20 @@ func (Entity) Fields() []ent.Field {
 		field.JSON("vendor_metadata", map[string]any{}).
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
 			Optional(),
+		field.String("external_id").
+			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
+			Optional().
+			Annotations(
+				entgql.OrderField("external_id"),
+			),
+		field.Time("observed_at").
+			Comment("time when this entity was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 	}
 }
 
@@ -371,6 +385,10 @@ func (e Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
+		entx.IntegrationMappingSchema().
+			Exclude("entity_type_id", "linked_asset_ids").
+			UpsertKeys("external_id", "name").
+			DefaultOperation("entities.collect"),
 	}
 }
 

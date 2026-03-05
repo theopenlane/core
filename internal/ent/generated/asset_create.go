@@ -665,6 +665,34 @@ func (_c *AssetCreate) SetCategories(v []string) *AssetCreate {
 	return _c
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_c *AssetCreate) SetIntegrationID(v string) *AssetCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableIntegrationID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *AssetCreate) SetObservedAt(v models.DateTime) *AssetCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableObservedAt(v *models.DateTime) *AssetCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *AssetCreate) SetID(v string) *AssetCreate {
 	_c.mutation.SetID(v)
@@ -1196,6 +1224,14 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 		_node.Categories = value
+	}
+	if value, ok := _c.mutation.IntegrationID(); ok {
+		_spec.SetField(asset.FieldIntegrationID, field.TypeString, value)
+		_node.IntegrationID = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(asset.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

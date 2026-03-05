@@ -390,6 +390,7 @@ type ComplexityRoot struct {
 		ID                          func(childComplexity int) int
 		Identifier                  func(childComplexity int) int
 		IdentityHolders             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		IntegrationID               func(childComplexity int) int
 		InternalNotes               func(childComplexity int) int
 		InternalOwner               func(childComplexity int) int
 		InternalOwnerGroup          func(childComplexity int) int
@@ -397,6 +398,7 @@ type ComplexityRoot struct {
 		InternalOwnerUser           func(childComplexity int) int
 		InternalOwnerUserID         func(childComplexity int) int
 		Name                        func(childComplexity int) int
+		ObservedAt                  func(childComplexity int) int
 		OutOfScopePlatforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Owner                       func(childComplexity int) int
 		OwnerID                     func(childComplexity int) int
@@ -638,9 +640,12 @@ type ComplexityRoot struct {
 		CreatedBy       func(childComplexity int) int
 		Email           func(childComplexity int) int
 		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ExternalID      func(childComplexity int) int
 		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		FullName        func(childComplexity int) int
 		ID              func(childComplexity int) int
+		IntegrationID   func(childComplexity int) int
+		ObservedAt      func(childComplexity int) int
 		Owner           func(childComplexity int) int
 		OwnerID         func(childComplexity int) int
 		PhoneNumber     func(childComplexity int) int
@@ -1719,6 +1724,7 @@ type ComplexityRoot struct {
 		Environment                           func(childComplexity int) int
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
+		ExternalID                            func(childComplexity int) int
 		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		HasSoc2                               func(childComplexity int) int
 		ID                                    func(childComplexity int) int
@@ -1738,6 +1744,7 @@ type ComplexityRoot struct {
 		Name                                  func(childComplexity int) int
 		NextReviewAt                          func(childComplexity int) int
 		Notes                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		ObservedAt                            func(childComplexity int) int
 		OutOfScopePlatforms                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Owner                                 func(childComplexity int) int
 		OwnerID                               func(childComplexity int) int
@@ -5279,14 +5286,17 @@ type ComplexityRoot struct {
 		Environment       func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
+		ExternalID        func(childComplexity int) int
 		ExternalUUID      func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
+		IntegrationID     func(childComplexity int) int
 		InternalPolicies  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Likelihood        func(childComplexity int) int
 		Mitigation        func(childComplexity int) int
 		MitigationJSON    func(childComplexity int) int
 		Name              func(childComplexity int) int
+		ObservedAt        func(childComplexity int) int
 		Owner             func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Platforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
@@ -9017,6 +9027,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Asset.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
 
+	case "Asset.integrationID":
+		if e.ComplexityRoot.Asset.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Asset.IntegrationID(childComplexity), true
+
 	case "Asset.internalNotes":
 		if e.ComplexityRoot.Asset.InternalNotes == nil {
 			break
@@ -9065,6 +9082,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Asset.Name(childComplexity), true
+
+	case "Asset.observedAt":
+		if e.ComplexityRoot.Asset.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Asset.ObservedAt(childComplexity), true
 
 	case "Asset.outOfScopePlatforms":
 		if e.ComplexityRoot.Asset.OutOfScopePlatforms == nil {
@@ -10291,6 +10315,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Contact.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 
+	case "Contact.externalID":
+		if e.ComplexityRoot.Contact.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Contact.ExternalID(childComplexity), true
+
 	case "Contact.files":
 		if e.ComplexityRoot.Contact.Files == nil {
 			break
@@ -10316,6 +10347,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Contact.ID(childComplexity), true
+
+	case "Contact.integrationID":
+		if e.ComplexityRoot.Contact.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Contact.IntegrationID(childComplexity), true
+
+	case "Contact.observedAt":
+		if e.ComplexityRoot.Contact.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Contact.ObservedAt(childComplexity), true
 
 	case "Contact.owner":
 		if e.ComplexityRoot.Contact.Owner == nil {
@@ -15515,6 +15560,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Entity.EnvironmentName(childComplexity), true
 
+	case "Entity.externalID":
+		if e.ComplexityRoot.Entity.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.ExternalID(childComplexity), true
+
 	case "Entity.files":
 		if e.ComplexityRoot.Entity.Files == nil {
 			break
@@ -15667,6 +15719,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Entity.observedAt":
+		if e.ComplexityRoot.Entity.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.ObservedAt(childComplexity), true
 
 	case "Entity.outOfScopePlatforms":
 		if e.ComplexityRoot.Entity.OutOfScopePlatforms == nil {
@@ -39929,6 +39988,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Risk.EnvironmentName(childComplexity), true
 
+	case "Risk.externalID":
+		if e.ComplexityRoot.Risk.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.ExternalID(childComplexity), true
+
 	case "Risk.externalUUID":
 		if e.ComplexityRoot.Risk.ExternalUUID == nil {
 			break
@@ -39949,6 +40015,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.Impact(childComplexity), true
+
+	case "Risk.integrationID":
+		if e.ComplexityRoot.Risk.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.IntegrationID(childComplexity), true
 
 	case "Risk.internalPolicies":
 		if e.ComplexityRoot.Risk.InternalPolicies == nil {
@@ -39989,6 +40062,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.Name(childComplexity), true
+
+	case "Risk.observedAt":
+		if e.ComplexityRoot.Risk.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.ObservedAt(childComplexity), true
 
 	case "Risk.owner":
 		if e.ComplexityRoot.Risk.Owner == nil {
@@ -56691,6 +56771,14 @@ type Asset implements Node {
   the categories of the asset, e.g. web server, database, etc
   """
   categories: [String!]
+  """
+  integration that discovered this asset, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this asset was last observed by the source integration
+  """
+  observedAt: DateTime
   owner: Organization
   blockedGroups(
     """
@@ -57115,6 +57203,7 @@ enum AssetOrderField {
   cost_center
   estimated_monthly_cost
   purchase_date
+  observed_at
 }
 """
 AssetSourceType is enum for the field source_type
@@ -57836,6 +57925,37 @@ input AssetWhereInput {
   purchaseDateLTE: DateTime
   purchaseDateIsNil: Boolean
   purchaseDateNotNil: Boolean
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -59616,6 +59736,18 @@ type Contact implements Node {
   status of the contact
   """
   status: ContactUserStatus!
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that sourced this contact, when populated via integration ingest
+  """
+  integrationID: String
+  """
+  time when this contact was last observed by the source integration
+  """
+  observedAt: DateTime
   owner: Organization
   entities(
     """
@@ -59796,6 +59928,8 @@ enum ContactOrderField {
   company
   email
   STATUS
+  external_id
+  observed_at
 }
 """
 ContactUserStatus is enum for the field status
@@ -60023,6 +60157,55 @@ input ContactWhereInput {
   statusNEQ: ContactUserStatus
   statusIn: [ContactUserStatus!]
   statusNotIn: [ContactUserStatus!]
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -63790,6 +63973,14 @@ input CreateAssetInput {
   the categories of the asset, e.g. web server, database, etc
   """
   categories: [String!]
+  """
+  integration that discovered this asset, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this asset was last observed by the source integration
+  """
+  observedAt: DateTime
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -64012,6 +64203,18 @@ input CreateContactInput {
   status of the contact
   """
   status: ContactUserStatus
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that sourced this contact, when populated via integration ingest
+  """
+  integrationID: String
+  """
+  time when this contact was last observed by the source integration
+  """
+  observedAt: DateTime
   ownerID: ID
   entityIDs: [ID!]
   campaignIDs: [ID!]
@@ -65086,6 +65289,14 @@ input CreateEntityInput {
   vendor metadata such as additional enrichment info, company size, public, etc.
   """
   vendorMetadata: Map
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  time when this entity was last observed by the source integration
+  """
+  observedAt: DateTime
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -67518,6 +67729,18 @@ input CreateRiskInput {
   the scope of the risk
   """
   scopeName: String
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that surfaced this risk, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this risk was last observed by the source integration
+  """
+  observedAt: DateTime
   """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
@@ -75312,6 +75535,14 @@ type Entity implements Node {
   vendor metadata such as additional enrichment info, company size, public, etc.
   """
   vendorMetadata: Map
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  time when this entity was last observed by the source integration
+  """
+  observedAt: DateTime
   owner: Organization
   blockedGroups(
     """
@@ -76043,6 +76274,8 @@ enum EntityOrderField {
   REVIEW_FREQUENCY
   next_review_at
   contract_renewal_at
+  external_id
+  observed_at
 }
 type EntityType implements Node {
   id: ID!
@@ -77104,6 +77337,37 @@ input EntityWhereInput {
   contractRenewalAtLTE: DateTime
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -109371,6 +109635,18 @@ type Risk implements Node {
   """
   scopeID: ID
   """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that surfaced this risk, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this risk was last observed by the source integration
+  """
+  observedAt: DateTime
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -109985,6 +110261,8 @@ Properties by which Risk connections can be ordered.
 enum RiskOrderField {
   created_at
   updated_at
+  external_id
+  observed_at
   name
   STATUS
   IMPACT
@@ -110284,6 +110562,55 @@ input RiskWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
   """
   external_uuid field predicates
   """
@@ -122319,6 +122646,16 @@ input UpdateAssetInput {
   categories: [String!]
   appendCategories: [String!]
   clearCategories: Boolean
+  """
+  integration that discovered this asset, when sourced via integration ingest
+  """
+  integrationID: String
+  clearIntegrationID: Boolean
+  """
+  time when this asset was last observed by the source integration
+  """
+  observedAt: DateTime
+  clearObservedAt: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -122638,6 +122975,21 @@ input UpdateContactInput {
   status of the contact
   """
   status: ContactUserStatus
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
+  integration that sourced this contact, when populated via integration ingest
+  """
+  integrationID: String
+  clearIntegrationID: Boolean
+  """
+  time when this contact was last observed by the source integration
+  """
+  observedAt: DateTime
+  clearObservedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEntityIDs: [ID!]
@@ -124047,6 +124399,16 @@ input UpdateEntityInput {
   """
   vendorMetadata: Map
   clearVendorMetadata: Boolean
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
+  time when this entity was last observed by the source integration
+  """
+  observedAt: DateTime
+  clearObservedAt: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -127582,6 +127944,21 @@ input UpdateRiskInput {
   """
   scopeName: String
   clearScopeName: Boolean
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  clearExternalID: Boolean
+  """
+  integration that surfaced this risk, when sourced via integration ingest
+  """
+  integrationID: String
+  clearIntegrationID: Boolean
+  """
+  time when this risk was last observed by the source integration
+  """
+  observedAt: DateTime
+  clearObservedAt: Boolean
   """
   stable external UUID for deterministic OSCAL export and round-tripping
   """

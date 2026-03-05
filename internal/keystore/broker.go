@@ -16,6 +16,10 @@ var _ IntegrationCredentialSource = (*Broker)(nil)
 // cacheSkew defines how far before token expiry the cache entry should be invalidated
 const cacheSkew = 30 * time.Second
 
+// nonExpiringCredentialTTL is the cache duration for credentials that carry no token expiry,
+// such as API keys and service account metadata; long enough to avoid frequent DB reads
+const nonExpiringCredentialTTL = 5 * time.Minute
+
 const defaultBrokerCacheMaxEntries = 4096
 
 // Broker exchanges persisted credentials for short-lived tokens via registered providers
@@ -81,7 +85,7 @@ func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderT
 	return payload, nil
 }
 
-// GetForIntegration returns credentials scoped to a specific integration record.
+// GetForIntegration returns credentials scoped to a specific integration record
 func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
 	if payload, ok := b.getCached(orgID, provider, integrationID); ok {
 		return payload, nil
@@ -143,7 +147,7 @@ func (b *Broker) Mint(ctx context.Context, orgID string, provider types.Provider
 	return persisted, nil
 }
 
-// MintForIntegration refreshes and persists credentials scoped to a specific integration record.
+// MintForIntegration refreshes and persists credentials scoped to a specific integration record
 func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
 	providerInstance, err := b.lookupProvider(provider)
 	if err != nil {
@@ -191,6 +195,10 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 	return persisted, nil
 }
 
+// loadIntegrationSubject loads the persisted credential for a specific integration record.
+// Returns the payload, a boolean indicating whether a persisted credential was found, and any error.
+// When the credential is not found and the provider uses environment credentials, falls back to
+// loading the integration subject record for minting
 func (b *Broker) loadIntegrationSubject(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool, error) {
 	stored, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
 	if err == nil {
@@ -225,21 +233,19 @@ func (b *Broker) lookupProvider(provider types.ProviderType) (types.Provider, er
 	return instance, nil
 }
 
-// getCached retrieves a cached credential if it exists and is not expired.
-// Expired entries are purged opportunistically on read to prevent stale buildup.
+// getCached retrieves a cached credential if it exists and has not expired.
+// Uses a read lock so concurrent credential lookups do not serialize.
+// Expired entries are not returned but are not actively purged here; purge happens on write
 func (b *Broker) getCached(orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool) {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
-	now := b.now()
-	b.purgeExpiredLocked(now)
+	b.mu.RLock()
+	defer b.mu.RUnlock()
 
 	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider, integrationID: integrationID}]
 	if !ok {
 		return types.CredentialPayload{}, false
 	}
 
-	if !entry.expires.After(now) {
+	if !entry.expires.After(b.now()) {
 		return types.CredentialPayload{}, false
 	}
 
@@ -294,7 +300,10 @@ func (b *Broker) evictOldestLocked() {
 	}
 }
 
-// cacheExpiry determines the cache expiry time based on the payload's token expiry
+// cacheExpiry determines the cache expiry time based on the payload's token expiry.
+// For credentials with a token expiry, the entry expires slightly before the token does (cacheSkew).
+// For credentials without an expiry (API keys, service account metadata), a longer TTL is used
+// to avoid frequent database reads
 func cacheExpiry(payload types.CredentialPayload, now func() time.Time) time.Time {
 	if payload.Token != nil && !payload.Token.Expiry.IsZero() {
 		expires := payload.Token.Expiry.Add(-cacheSkew)
@@ -303,5 +312,5 @@ func cacheExpiry(payload types.CredentialPayload, now func() time.Time) time.Tim
 		}
 	}
 
-	return now().Add(cacheSkew)
+	return now().Add(nonExpiringCredentialTTL)
 }

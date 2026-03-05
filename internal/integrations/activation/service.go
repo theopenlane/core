@@ -28,7 +28,7 @@ type PayloadMinter interface {
 	MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error)
 }
 
-// Service coordinates non-OAuth provider configuration and health validation.
+// Service coordinates non-OAuth provider configuration and health validation
 type Service struct {
 	// store persists credential payloads after successful configuration.
 	store CredentialWriter
@@ -38,7 +38,7 @@ type Service struct {
 	minter PayloadMinter
 }
 
-// NewService constructs an activation service from the supplied dependencies.
+// NewService constructs an activation service from the supplied dependencies
 func NewService(store CredentialWriter, operations OperationRunner, minter PayloadMinter) (*Service, error) {
 	if store == nil {
 		return nil, ErrStoreRequired

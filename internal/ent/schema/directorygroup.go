@@ -222,5 +222,8 @@ func (g DirectoryGroup) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.IntegrationMappingSchema().
+			UpsertKeys("external_id", "integration_id").
+			DefaultOperation("directory.sync"),
 	}
 }
