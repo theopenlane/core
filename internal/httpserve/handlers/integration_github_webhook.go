@@ -248,7 +248,12 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
 	}
 
-	integrationRecord, err := h.findGitHubAppIntegrationByInstallationID(req.Context(), installationID)
+	// GitHub webhooks arrive without user authentication, so the raw request context has no
+	// org identity. A privacy-allow context is required to query across organizations by
+	// installation ID.
+	allowCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
+
+	integrationRecord, err := h.findGitHubAppIntegrationByInstallationID(allowCtx, installationID)
 	if err != nil {
 		logx.FromContext(req.Context()).Error().Err(err).Str("installation_id", installationID).Msg("failed to resolve github app integration by installation id")
 
@@ -263,7 +268,6 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
 	}
 
-	allowCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
 	if deliveryID := req.Header.Get(githubWebhookDeliveryHeader); deliveryID != "" {
 		exists, err := h.checkForEventID(allowCtx, deliveryID)
 		if err != nil {
