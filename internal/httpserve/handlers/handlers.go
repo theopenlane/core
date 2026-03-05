@@ -165,12 +165,11 @@ type CloudflareConfig struct {
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
 // during a login or verification process
 func setAuthenticatedContext(ctx context.Context, user *ent.User) context.Context {
-	ctx = auth.WithCaller(ctx, &auth.Caller{
-		SubjectID:    user.ID,
-		SubjectEmail: user.Email,
+	return auth.WithCaller(ctx, &auth.Caller{
+		SubjectID:          user.ID,
+		SubjectEmail:       user.Email,
+		AuthenticationType: auth.JWTAuthentication,
 	})
-
-	return ctx
 }
 
 // BindAndValidate binds the context payload into T and runs Validate if present.

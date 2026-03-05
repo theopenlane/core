@@ -1097,7 +1097,9 @@ func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) (cont
 		return ctx, nil
 	}
 
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
+	caller, ok := auth.CallerFromContext(ctx)
+	if ok && caller != nil && caller.OrganizationID != "" &&
+		(inputOrgID == nil || *inputOrgID == "" || caller.OrganizationID == *inputOrgID) {
 		return ctx, nil
 	}
 
@@ -1115,13 +1117,15 @@ func SetOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input [
 		return ctx, nil
 	}
 
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" {
-		return ctx, nil
-	}
-
 	ownerID, err := GetBulkUploadOwnerInput(input)
 	if err != nil {
 		return ctx, err
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if ok && caller != nil && caller.OrganizationID != "" &&
+		(ownerID == nil || *ownerID == "" || caller.OrganizationID == *ownerID) {
+		return ctx, nil
 	}
 
 	return auth.ResolveOrganizationForContext(ctx, ownerID)

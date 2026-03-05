@@ -376,8 +376,10 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		}
 	}
 
+	userCtx := setAuthenticatedContext(reqCtx, entUser)
+
 	// create claims for verified user
-	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
+	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 		metrics.RecordLogin(false)
@@ -386,7 +388,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	// set the last seen for the user
-	if err := h.updateUserLastSeen(reqCtx, userID, enums.AuthProviderCredentials); err != nil {
+	if err := h.updateUserLastSeen(userCtx, userID, enums.AuthProviderCredentials); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
 		metrics.RecordLogin(false)
 

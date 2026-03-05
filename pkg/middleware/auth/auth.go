@@ -134,16 +134,18 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
 
-					switch strings.HasPrefix(claims.UserID, "anon_questionnaire") {
-					case true:
-						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+					ctx := c.Request().Context()
+
+					if strings.HasPrefix(claims.UserID, "anon_questionnaire") {
+						caller = auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email)
 						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
-						c.SetRequest(c.Request().WithContext(ctx))
-					default:
-						ctx := auth.WithCaller(c.Request().Context(), auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
+					} else {
+						caller = auth.NewTrustCenterCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email)
 						ctx = auth.ActiveTrustCenterIDKey.Set(ctx, claims.TrustCenterID)
-						c.SetRequest(c.Request().WithContext(ctx))
 					}
+
+					caller.AuthenticationType = auth.JWTAuthentication
+					c.SetRequest(c.Request().WithContext(auth.WithCaller(ctx, caller)))
 
 					// Record anonymous JWT authentication
 					metrics.RecordAuthentication(metrics.AuthTypeJWTAnonymous)
