@@ -463,7 +463,7 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 
 func capabilitiesFor(isAdmin bool) auth.Capability {
 	if isAdmin {
-		return auth.CapSystemAdmin
+		return auth.CapSystemAdmin | auth.CapBypassOrgFilter
 	}
 
 	return 0
