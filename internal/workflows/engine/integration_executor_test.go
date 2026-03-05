@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/types"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestIntegrationOperationContextWithoutTimeout(t *testing.T) {

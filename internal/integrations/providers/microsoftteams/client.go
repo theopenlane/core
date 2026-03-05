@@ -1,8 +1,9 @@
 package microsoftteams
 
 import (
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -12,5 +13,5 @@ const (
 
 // teamsClientDescriptors returns the client descriptors published by Microsoft Teams.
 func teamsClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeMicrosoftTeams, ClientMicrosoftTeamsAPI, "Microsoft Graph API client", auth.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
+	return providerkit.DefaultClientDescriptors(TypeMicrosoftTeams, ClientMicrosoftTeamsAPI, "Microsoft Graph API client", providerkit.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
 }

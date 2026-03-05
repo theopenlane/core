@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 
 // awsAuditManagerClientDescriptors returns the AWS Audit Manager client descriptors for pooling.
 func awsAuditManagerClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeAWS, ClientAWSAuditManager, "AWS Audit Manager client", pooledAuditManagerClient)
+	return providerkit.DefaultClientDescriptors(TypeAWS, ClientAWSAuditManager, "AWS Audit Manager client", pooledAuditManagerClient)
 }
 
 // pooledAuditManagerClient builds the AWS Audit Manager client for pooling, discarding metadata.

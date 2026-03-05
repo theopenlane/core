@@ -6,8 +6,9 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 
 // slackClientDescriptors returns the client descriptors published by Slack.
 func slackClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeSlack, ClientSlackAPI, "Slack Web API client", buildSlackClient)
+	return providerkit.DefaultClientDescriptors(TypeSlack, ClientSlackAPI, "Slack Web API client", buildSlackClient)
 }
 
 // buildSlackClient constructs a Slack SDK client from credential payload.

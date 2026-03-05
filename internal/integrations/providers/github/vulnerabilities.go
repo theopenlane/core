@@ -4,14 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strings"
 
 	gh "github.com/google/go-github/v83/github"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -19,13 +17,6 @@ const (
 	githubAlertTypeCodeScanning   = "code_scanning"
 	githubAlertTypeSecretScanning = "secret_scanning"
 )
-
-type githubInstallationRepositoriesResponse struct {
-	// TotalCount is the number of repositories returned by GitHub
-	TotalCount int `json:"total_count"`
-	// Repositories lists the repositories in the response
-	Repositories []githubRepoResponse `json:"repositories"`
-}
 
 type githubVulnerabilityConfig struct {
 	// RepositorySelector controls which repositories to scan
@@ -64,7 +55,7 @@ type githubRepositoryFailureDetails struct {
 
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := githubRESTClientForOperation(input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -78,7 +69,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 
 	repoNames := config.List()
 	if len(repoNames) == 0 {
-		repos, err := listGitHubReposForProvider(ctx, client, token, input.Provider, config)
+		repos, err := listGitHubReposForProvider(ctx, client, input.Provider, config)
 		if err != nil {
 			return operations.OperationFailure("GitHub repository listing failed", err, nil)
 		}
@@ -104,7 +95,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 
 	for _, repo := range repoNames {
 		if alertTypeRequested(alertTypes, githubAlertTypeDependabot) {
-			batch, err := listDependabotAlerts(ctx, client, token, repo, config)
+			batch, err := listDependabotAlerts(ctx, client, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, githubRepositoryFailureDetails{
 					Repository: repo,
@@ -116,7 +107,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		}
 
 		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
-			batch, err := listCodeScanningAlerts(ctx, client, token, repo, config)
+			batch, err := listCodeScanningAlerts(ctx, client, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub code scanning alert collection failed", err, githubRepositoryFailureDetails{
 					Repository: repo,
@@ -128,7 +119,7 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		}
 
 		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
-			batch, err := listSecretScanningAlerts(ctx, client, token, repo, config)
+			batch, err := listSecretScanningAlerts(ctx, client, repo, config)
 			if err != nil {
 				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, githubRepositoryFailureDetails{
 					Repository: repo,
@@ -153,27 +144,30 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 }
 
 // listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens
-func listGitHubReposForProvider(ctx context.Context, client *auth.AuthenticatedClient, token string, provider types.ProviderType, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
+func listGitHubReposForProvider(ctx context.Context, client *gh.Client, provider types.ProviderType, config githubVulnerabilityConfig) ([]*gh.Repository, error) {
 	if provider == TypeGitHubApp {
-		return listGitHubInstallationRepos(ctx, client, token, config)
+		return listGitHubInstallationRepos(ctx, client, config)
 	}
 
-	return listGitHubRepos(ctx, client, token, config)
+	return listGitHubRepos(ctx, client, config)
 }
 
 // listGitHubInstallationRepos lists repositories visible to a GitHub App installation
-func listGitHubInstallationRepos(ctx context.Context, client *auth.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
+func listGitHubInstallationRepos(ctx context.Context, client *gh.Client, config githubVulnerabilityConfig) ([]*gh.Repository, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	out := make([]githubRepoResponse, 0)
-	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
-		params := gitHubPageParams(page, perPage)
-		var batch githubInstallationRepositoriesResponse
-		if err := fetchGitHubResource(ctx, client, token, "installation/repositories", params, &batch); err != nil {
-			return nil, err
+	out := make([]*gh.Repository, 0)
+
+	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]*gh.Repository, *gh.Response, error) {
+		response, httpResponse, err := client.Apps.ListRepos(ctx, &gh.ListOptions{Page: page, PerPage: perPage})
+		if err != nil {
+			return nil, nil, normalizeGitHubAPIError(err)
+		}
+		if response == nil {
+			return nil, httpResponse, nil
 		}
 
-		return batch.Repositories, nil
-	}, func(batch []githubRepoResponse) error {
+		return response.Repositories, httpResponse, nil
+	}, func(batch []*gh.Repository) error {
 		out = append(out, batch...)
 		return nil
 	})
@@ -185,27 +179,29 @@ func listGitHubInstallationRepos(ctx context.Context, client *auth.Authenticated
 }
 
 // listGitHubRepos lists repositories accessible to the OAuth token
-func listGitHubRepos(ctx context.Context, client *auth.AuthenticatedClient, token string, config githubVulnerabilityConfig) ([]githubRepoResponse, error) {
+func listGitHubRepos(ctx context.Context, client *gh.Client, config githubVulnerabilityConfig) ([]*gh.Repository, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
-	out := make([]githubRepoResponse, 0)
-	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]githubRepoResponse, error) {
-		params := gitHubPageParams(page, perPage)
+	out := make([]*gh.Repository, 0)
+
+	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]*gh.Repository, *gh.Response, error) {
+		opts := &gh.RepositoryListByAuthenticatedUserOptions{
+			ListOptions: gh.ListOptions{Page: page, PerPage: perPage},
+		}
 		if visibility := config.Visibility.String(); visibility != "" {
-			params.Set("visibility", visibility)
+			opts.Visibility = visibility
 		}
 		if affiliation := config.Affiliation.String(); affiliation != "" {
-			params.Set("affiliation", affiliation)
+			opts.Affiliation = affiliation
 		}
 
-		var batch []githubRepoResponse
-		if err := fetchGitHubResource(ctx, client, token, "user/repos", params, &batch); err != nil {
-			return nil, err
+		batch, response, err := client.Repositories.ListByAuthenticatedUser(ctx, opts)
+		if err != nil {
+			return nil, nil, normalizeGitHubAPIError(err)
 		}
 
-		return batch, nil
-	}, func(batch []githubRepoResponse) error {
+		return batch, response, nil
+	}, func(batch []*gh.Repository) error {
 		out = append(out, batch...)
-
 		return nil
 	})
 	if err != nil {
@@ -216,58 +212,39 @@ func listGitHubRepos(ctx context.Context, client *auth.AuthenticatedClient, toke
 }
 
 // listDependabotAlerts fetches Dependabot alerts for a repository
-func listDependabotAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
-	path := fmt.Sprintf("repos/%s/dependabot/alerts", repo)
-	return listGitHubAlerts[*gh.DependabotAlert](ctx, client, token, path, config, func(params url.Values) {
-		if severity := config.Severity.String(); severity != "" {
-			params.Set("severity", severity)
-		}
+func listDependabotAlerts(ctx context.Context, client *gh.Client, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+	owner, repository, err := splitGitHubRepository(repo)
+	if err != nil {
+		return nil, err
+	}
 
-		if ecosystem := config.Ecosystem.String(); ecosystem != "" {
-			params.Set("ecosystem", ecosystem)
-		}
-	})
-}
-
-// listCodeScanningAlerts fetches code scanning alerts for a repository
-func listCodeScanningAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
-	path := fmt.Sprintf("repos/%s/code-scanning/alerts", repo)
-
-	return listGitHubAlerts[*gh.Alert](ctx, client, token, path, config, nil)
-}
-
-// listSecretScanningAlerts fetches secret scanning alerts for a repository
-func listSecretScanningAlerts(ctx context.Context, client *auth.AuthenticatedClient, token, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
-	path := fmt.Sprintf("repos/%s/secret-scanning/alerts", repo)
-
-	return listGitHubAlerts[*gh.SecretScanningAlert](ctx, client, token, path, config, nil)
-}
-
-// listGitHubAlerts fetches and marshals GitHub alert payloads with pagination
-func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClient, token, path string, config githubVulnerabilityConfig, decorate func(url.Values)) ([]json.RawMessage, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	state := lo.CoalesceOrEmpty(config.AlertState.String(), defaultAlertState)
 	out := make([]json.RawMessage, 0)
 
-	err := collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]T, error) {
-		params := gitHubPageParams(page, perPage)
+	err = collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]*gh.DependabotAlert, *gh.Response, error) {
+		opts := &gh.ListAlertsOptions{
+			ListOptions: gh.ListOptions{Page: page, PerPage: perPage},
+		}
 		if state != "" {
-			params.Set("state", state)
+			opts.State = lo.ToPtr(state)
+		}
+		if severity := config.Severity.String(); severity != "" {
+			opts.Severity = lo.ToPtr(severity)
+		}
+		if ecosystem := config.Ecosystem.String(); ecosystem != "" {
+			opts.Ecosystem = lo.ToPtr(ecosystem)
 		}
 
-		if decorate != nil {
-			decorate(params)
+		batch, response, err := client.Dependabot.ListRepoAlerts(ctx, owner, repository, opts)
+		if err != nil {
+			return nil, nil, normalizeGitHubAPIError(err)
 		}
 
-		var batch []T
-		if err := fetchGitHubResource(ctx, client, token, path, params, &batch); err != nil {
-			return nil, err
-		}
-
-		return batch, nil
-	}, func(batch []T) error {
+		return batch, response, nil
+	}, func(batch []*gh.DependabotAlert) error {
 		for _, alert := range batch {
-			if lo.IsNil(alert) {
+			if alert == nil {
 				continue
 			}
 
@@ -278,6 +255,7 @@ func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClie
 
 			out = append(out, payload)
 		}
+
 		return nil
 	})
 	if err != nil {
@@ -287,15 +265,117 @@ func listGitHubAlerts[T any](ctx context.Context, client *auth.AuthenticatedClie
 	return out, nil
 }
 
-// collectGitHubPaged iterates through paged GitHub API responses
-func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page, perPage int) ([]T, error), handle func([]T) error) error {
+// listCodeScanningAlerts fetches code scanning alerts for a repository
+func listCodeScanningAlerts(ctx context.Context, client *gh.Client, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+	owner, repository, err := splitGitHubRepository(repo)
+	if err != nil {
+		return nil, err
+	}
+
+	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
+	state := lo.CoalesceOrEmpty(config.AlertState.String(), defaultAlertState)
+	out := make([]json.RawMessage, 0)
+
+	err = collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]*gh.Alert, *gh.Response, error) {
+		opts := &gh.AlertListOptions{
+			State:       state,
+			ListOptions: gh.ListOptions{Page: page, PerPage: perPage},
+		}
+
+		batch, response, err := client.CodeScanning.ListAlertsForRepo(ctx, owner, repository, opts)
+		if err != nil {
+			return nil, nil, normalizeGitHubAPIError(err)
+		}
+
+		return batch, response, nil
+	}, func(batch []*gh.Alert) error {
+		for _, alert := range batch {
+			if alert == nil {
+				continue
+			}
+
+			payload, err := json.Marshal(alert)
+			if err != nil {
+				return err
+			}
+
+			out = append(out, payload)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// listSecretScanningAlerts fetches secret scanning alerts for a repository
+func listSecretScanningAlerts(ctx context.Context, client *gh.Client, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
+	owner, repository, err := splitGitHubRepository(repo)
+	if err != nil {
+		return nil, err
+	}
+
+	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
+	state := lo.CoalesceOrEmpty(config.AlertState.String(), defaultAlertState)
+	out := make([]json.RawMessage, 0)
+
+	err = collectGitHubPaged(ctx, perPage, func(page, perPage int) ([]*gh.SecretScanningAlert, *gh.Response, error) {
+		opts := &gh.SecretScanningAlertListOptions{
+			State:       state,
+			ListOptions: gh.ListOptions{Page: page, PerPage: perPage},
+		}
+
+		batch, response, err := client.SecretScanning.ListAlertsForRepo(ctx, owner, repository, opts)
+		if err != nil {
+			return nil, nil, normalizeGitHubAPIError(err)
+		}
+
+		return batch, response, nil
+	}, func(batch []*gh.SecretScanningAlert) error {
+		for _, alert := range batch {
+			if alert == nil {
+				continue
+			}
+
+			payload, err := json.Marshal(alert)
+			if err != nil {
+				return err
+			}
+
+			out = append(out, payload)
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// splitGitHubRepository parses owner/repo repository names.
+func splitGitHubRepository(value string) (string, string, error) {
+	parts := strings.SplitN(strings.TrimSpace(value), "/", 2)
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+		return "", "", fmt.Errorf("%w: %q", ErrRepositoryInvalid, value)
+	}
+
+	return parts[0], parts[1], nil
+}
+
+// collectGitHubPaged iterates through paged GitHub API responses.
+func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page, perPage int) ([]T, *gh.Response, error), handle func([]T) error) error {
 	page := 1
 	for {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
 
-		batch, err := fetch(page, perPage)
+		batch, response, err := fetch(page, perPage)
 		if err != nil {
 			return err
 		}
@@ -304,21 +384,12 @@ func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page
 			return err
 		}
 
-		if len(batch) < perPage {
+		if response == nil || response.NextPage == 0 {
 			return nil
 		}
 
-		page++
+		page = response.NextPage
 	}
-}
-
-// gitHubPageParams builds query parameters for paged GitHub API requests
-func gitHubPageParams(page, perPage int) url.Values {
-	params := url.Values{}
-	params.Set("per_page", fmt.Sprintf("%d", perPage))
-	params.Set("page", fmt.Sprintf("%d", page))
-
-	return params
 }
 
 // appendAlertEnvelopes wraps payloads into alert envelopes
@@ -329,9 +400,25 @@ func appendAlertEnvelopes(envelopes []types.AlertEnvelope, alertType, resource s
 }
 
 // repoNamesFromResponses builds full repo names from API responses
-func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []string {
-	return lo.FilterMap(repos, func(repo githubRepoResponse, _ int) (string, bool) {
-		full := lo.CoalesceOrEmpty(repo.FullName, lo.Ternary(repo.Owner.Login != "", repo.Owner.Login+"/"+repo.Name, ""))
+func repoNamesFromResponses(repos []*gh.Repository, ownerFilter string) []string {
+	return lo.FilterMap(repos, func(repo *gh.Repository, _ int) (string, bool) {
+		if repo == nil {
+			return "", false
+		}
+
+		full := strings.TrimSpace(repo.GetFullName())
+		if full == "" {
+			owner := ""
+			if ownerUser := repo.GetOwner(); ownerUser != nil {
+				owner = strings.TrimSpace(ownerUser.GetLogin())
+			}
+
+			name := strings.TrimSpace(repo.GetName())
+			if owner != "" && name != "" {
+				full = owner + "/" + name
+			}
+		}
+
 		if full == "" {
 			return "", false
 		}
@@ -339,7 +426,12 @@ func repoNamesFromResponses(repos []githubRepoResponse, ownerFilter string) []st
 			return full, true
 		}
 
-		return full, strings.HasPrefix(full, ownerFilter+"/") || strings.EqualFold(repo.Owner.Login, ownerFilter)
+		repoOwner := ""
+		if ownerUser := repo.GetOwner(); ownerUser != nil {
+			repoOwner = ownerUser.GetLogin()
+		}
+
+		return full, strings.HasPrefix(full, ownerFilter+"/") || strings.EqualFold(repoOwner, ownerFilter)
 	})
 }
 

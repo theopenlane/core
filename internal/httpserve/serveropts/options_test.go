@@ -6,12 +6,12 @@ import (
 
 	"github.com/theopenlane/iam/sessions"
 
-	integrationconfig "github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	coreconfig "github.com/theopenlane/core/config"
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestWithGeneratedKeys(t *testing.T) {

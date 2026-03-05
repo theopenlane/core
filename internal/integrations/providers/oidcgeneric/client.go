@@ -1,8 +1,9 @@
 package oidcgeneric
 
 import (
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -12,5 +13,5 @@ const (
 
 // oidcClientDescriptors returns the client descriptors published by the generic OIDC provider.
 func oidcClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeOIDCGeneric, ClientOIDCAPI, "OIDC userinfo HTTP client", auth.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
+	return providerkit.DefaultClientDescriptors(TypeOIDCGeneric, ClientOIDCAPI, "OIDC userinfo HTTP client", providerkit.TokenClientBuilder(auth.OAuthTokenFromPayload, nil))
 }

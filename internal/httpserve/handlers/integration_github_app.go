@@ -11,11 +11,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -158,35 +158,20 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	orgCookie, err := sessions.GetCookie(req, githubAppOrgIDCookieName)
-	if err != nil || orgCookie.Value == "" {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("github app org cookie missing")
-
-		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
-	}
-
-	userCookie, err := sessions.GetCookie(req, githubAppUserIDCookieName)
-	if err != nil || userCookie.Value == "" {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("github app user cookie missing")
-
-		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
-	}
-
-	if caller.OrganizationID != orgCookie.Value || caller.OrganizationID != orgID {
-		logx.FromContext(reqCtx).Error().
-			Str("state_org_id", orgID).
-			Str("cookie_org_id", orgCookie.Value).
-			Str("caller_org_id", caller.OrganizationID).
-			Msg("github app callback organization mismatch")
+	if caller.OrganizationID != orgID {
+		logx.FromContext(reqCtx).Error().Str("state_org_id", orgID).Str("caller_org_id", caller.OrganizationID).Msg("github app callback organization mismatch")
 
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
-	if caller.SubjectID != userCookie.Value {
-		logx.FromContext(reqCtx).Error().
-			Str("cookie_user_id", userCookie.Value).
-			Str("caller_user_id", caller.SubjectID).
-			Msg("github app callback user mismatch")
+	if orgCookie, orgErr := sessions.GetCookie(req, githubAppOrgIDCookieName); orgErr == nil && orgCookie.Value != "" && caller.OrganizationID != orgCookie.Value {
+		logx.FromContext(reqCtx).Error().Str("cookie_org_id", orgCookie.Value).Str("caller_org_id", caller.OrganizationID).Msg("github app callback org cookie mismatch")
+
+		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
+	}
+
+	if userCookie, userErr := sessions.GetCookie(req, githubAppUserIDCookieName); userErr == nil && userCookie.Value != "" && caller.SubjectID != userCookie.Value {
+		logx.FromContext(reqCtx).Error().Str("cookie_user_id", userCookie.Value).Str("caller_user_id", caller.SubjectID).Msg("github app callback user cookie mismatch")
 
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}

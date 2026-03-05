@@ -1,9 +1,9 @@
 package cloudflare
 
 import (
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/apikey"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TypeCloudflare identifies the Cloudflare provider

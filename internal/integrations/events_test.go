@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestNewIntegrationOperationEnvelopeDefaults(t *testing.T) {

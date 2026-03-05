@@ -17,11 +17,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/state"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/state"
+	"github.com/theopenlane/core/internal/integrations/types"
 
 	"github.com/theopenlane/utils/passwd"
 )

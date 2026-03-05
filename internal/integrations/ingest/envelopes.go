@@ -1,7 +1,7 @@
 package ingest
 
 import (
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 

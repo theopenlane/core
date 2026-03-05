@@ -19,7 +19,7 @@ require (
 	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
 	github.com/99designs/gqlgen v0.17.87
 	github.com/AfterShip/email-verifier v1.4.1
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.18.1
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity v0.14.0
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/alitto/pond/v2 v2.6.2
@@ -123,7 +123,7 @@ require (
 
 require (
 	cloud.google.com/go/longrunning v0.8.0 // indirect
-	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.1 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.2 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.7 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect

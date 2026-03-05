@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	googleworkspaceprovider "github.com/theopenlane/core/internal/integrations/providers/googleworkspace"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 // stubMappingIndex is a minimal MappingIndex for use in tests.
@@ -62,17 +62,12 @@ func TestSupportsDirectoryAccountIngestGoogleWorkspace(t *testing.T) {
 			},
 		},
 	}
-	SetMappingIndex(index)
-	t.Cleanup(func() { SetMappingIndex(nil) })
 
-	require.True(t, SupportsDirectoryAccountIngest(googleworkspaceprovider.TypeGoogleWorkspace, openapi.IntegrationConfig{}))
+	require.True(t, SupportsDirectoryAccountIngest(googleworkspaceprovider.TypeGoogleWorkspace, openapi.IntegrationConfig{}, index))
 }
 
 // TestSupportsDirectoryAccountIngestOverride verifies directory account overrides enable ingest for custom providers
 func TestSupportsDirectoryAccountIngestOverride(t *testing.T) {
-	SetMappingIndex(nil)
-	t.Cleanup(func() { SetMappingIndex(nil) })
-
 	config := openapi.IntegrationConfig{
 		MappingOverrides: map[string]openapi.IntegrationMappingOverride{
 			"DirectoryAccount": {
@@ -82,5 +77,5 @@ func TestSupportsDirectoryAccountIngestOverride(t *testing.T) {
 		},
 	}
 
-	require.True(t, SupportsDirectoryAccountIngest("custom", config))
+	require.True(t, SupportsDirectoryAccountIngest("custom", config, nil))
 }

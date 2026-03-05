@@ -37,4 +37,6 @@ var (
 	ErrProviderNotInitialized = errors.New("github: provider not initialized")
 	// ErrOrganizationRequired indicates an organization login is required for organization-scoped operations.
 	ErrOrganizationRequired = errors.New("github: organization required")
+	// ErrRepositoryInvalid indicates a repository identifier is not in owner/repo format.
+	ErrRepositoryInvalid = errors.New("github: repository identifier must be owner/repo")
 )

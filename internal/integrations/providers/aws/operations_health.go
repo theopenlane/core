@@ -7,12 +7,12 @@ import (
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-const awsHealthDefault types.OperationName = "health.default"
+const awsHealthDefault types.OperationName = types.OperationHealthDefault
 
 type awsHealthDetails struct {
 	Region    string `json:"region,omitempty"`
@@ -34,7 +34,7 @@ func runAWSHealth(ctx context.Context, input types.OperationInput) (types.Operat
 		return types.OperationResult{}, err
 	}
 
-	cfg, err := auth.BuildAWSConfig(ctx, meta.Region, auth.AWSCredentialsFromPayload(input.Credential), auth.AWSAssumeRole{
+	cfg, err := awskit.BuildAWSConfig(ctx, meta.Region, awskit.AWSCredentialsFromPayload(input.Credential), awskit.AWSAssumeRole{
 		RoleARN:         meta.RoleARN,
 		ExternalID:      meta.ExternalID,
 		SessionName:     meta.SessionName,

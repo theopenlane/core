@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/common/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/operations"
 )
 
 func TestCollectAll_SinglePage(t *testing.T) {
@@ -23,9 +23,9 @@ func TestCollectAll_SinglePage(t *testing.T) {
 
 func TestCollectAll_MultiplePages(t *testing.T) {
 	pages := map[string]operations.PageResult[int]{
-		"":       {Items: []int{1, 2}, NextToken: "page2"},
-		"page2":  {Items: []int{3, 4}, NextToken: "page3"},
-		"page3":  {Items: []int{5, 6}},
+		"":      {Items: []int{1, 2}, NextToken: "page2"},
+		"page2": {Items: []int{3, 4}, NextToken: "page3"},
+		"page3": {Items: []int{5, 6}},
 	}
 
 	fetch := func(_ context.Context, token string) (operations.PageResult[int], error) {

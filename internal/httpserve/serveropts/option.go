@@ -30,13 +30,13 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	integrationconfig "github.com/theopenlane/core/common/integrations/config"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/graphapi"
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"

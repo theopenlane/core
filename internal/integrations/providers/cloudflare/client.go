@@ -7,8 +7,9 @@ import (
 	cf "github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -18,7 +19,7 @@ const (
 
 // cloudflareClientDescriptors returns the client descriptors published by Cloudflare.
 func cloudflareClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", buildCloudflareClient)
+	return providerkit.DefaultClientDescriptors(TypeCloudflare, ClientCloudflareAPI, "Cloudflare REST API client", buildCloudflareClient)
 }
 
 // buildCloudflareClient constructs a Cloudflare SDK client from credential payload.

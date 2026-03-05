@@ -5,33 +5,19 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 )
 
 func TestNewServiceValidatesDependencies(t *testing.T) {
 	t.Parallel()
 
-	resolver := &fakeProviderResolver{provider: &fakeProvider{providerType: types.ProviderType("acme")}}
-	sessions := keymaker.NewMemorySessionStore()
-
-	km, err := keymaker.NewService(resolver, &fakeCredentialWriter{}, sessions, keymaker.ServiceOptions{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
-
-	_, err = NewService(km, nil, &fakeOperationRunner{}, &fakePayloadMinter{})
+	_, err := NewService(nil, &fakeOperationRunner{}, &fakePayloadMinter{})
 	if !errors.Is(err, ErrStoreRequired) {
 		t.Fatalf("expected ErrStoreRequired, got %v", err)
 	}
 
-	_, err = NewService(nil, &fakeCredentialWriter{}, &fakeOperationRunner{}, &fakePayloadMinter{})
-	if !errors.Is(err, ErrKeymakerRequired) {
-		t.Fatalf("expected ErrKeymakerRequired, got %v", err)
-	}
-
-	_, err = NewService(km, &fakeCredentialWriter{}, &fakeOperationRunner{}, nil)
+	_, err = NewService(&fakeCredentialWriter{}, &fakeOperationRunner{}, nil)
 	if !errors.Is(err, ErrMinterRequired) {
 		t.Fatalf("expected ErrMinterRequired, got %v", err)
 	}
@@ -47,7 +33,7 @@ func TestConfigureSkipsPersistOnHealthFailure(t *testing.T) {
 	runner := &fakeOperationRunner{status: types.OperationStatusFailed}
 	minter := &fakePayloadMinter{}
 
-	svc := mustNewService(t, writer, runner, minter, provider)
+	svc := mustNewService(t, writer, runner, minter)
 
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
@@ -73,7 +59,7 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	runner := &fakeOperationRunner{status: types.OperationStatusOK}
 	minter := &fakePayloadMinter{}
 
-	svc := mustNewService(t, writer, runner, minter, provider)
+	svc := mustNewService(t, writer, runner, minter)
 
 	result, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
@@ -105,7 +91,7 @@ func TestConfigureNoValidateSkipsHealthCheck(t *testing.T) {
 	runner := &fakeOperationRunner{runCalled: false}
 	minter := &fakePayloadMinter{}
 
-	svc := mustNewService(t, writer, runner, minter, provider)
+	svc := mustNewService(t, writer, runner, minter)
 
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
@@ -134,7 +120,7 @@ func TestConfigureMintReceivesBuiltPayload(t *testing.T) {
 	runner := &fakeOperationRunner{status: types.OperationStatusOK}
 	minter := &fakePayloadMinter{}
 
-	svc := mustNewService(t, writer, runner, minter, provider)
+	svc := mustNewService(t, writer, runner, minter)
 
 	providerData := map[string]any{"serviceAccountKey": "test-key"}
 	_, err := svc.Configure(ctx, ConfigureRequest{
@@ -166,7 +152,7 @@ func TestConfigureOperationsRequiredWhenValidating(t *testing.T) {
 	writer := &fakeCredentialWriter{}
 	minter := &fakePayloadMinter{}
 
-	svc := mustNewService(t, writer, nil, minter, provider)
+	svc := mustNewService(t, writer, nil, minter)
 
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
@@ -188,7 +174,7 @@ func TestConfigureRequiresOrgID(t *testing.T) {
 	ctx := context.Background()
 	provider := types.ProviderType("acme")
 
-	svc := mustNewService(t, &fakeCredentialWriter{}, &fakeOperationRunner{}, &fakePayloadMinter{}, provider)
+	svc := mustNewService(t, &fakeCredentialWriter{}, &fakeOperationRunner{}, &fakePayloadMinter{})
 
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		Provider: provider,
@@ -203,9 +189,8 @@ func TestConfigureRequiresProvider(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
-	provider := types.ProviderType("acme")
 
-	svc := mustNewService(t, &fakeCredentialWriter{}, &fakeOperationRunner{}, &fakePayloadMinter{}, provider)
+	svc := mustNewService(t, &fakeCredentialWriter{}, &fakeOperationRunner{}, &fakePayloadMinter{})
 
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:    "org-1",
@@ -217,18 +202,10 @@ func TestConfigureRequiresProvider(t *testing.T) {
 }
 
 // mustNewService constructs a Service for tests, panicking on error
-func mustNewService(t *testing.T, writer CredentialWriter, runner OperationRunner, minter PayloadMinter, providerType types.ProviderType) *Service {
+func mustNewService(t *testing.T, writer CredentialWriter, runner OperationRunner, minter PayloadMinter) *Service {
 	t.Helper()
 
-	resolver := &fakeProviderResolver{provider: &fakeProvider{providerType: providerType}}
-	sessions := keymaker.NewMemorySessionStore()
-
-	km, err := keymaker.NewService(resolver, writer, sessions, keymaker.ServiceOptions{})
-	if err != nil {
-		t.Fatalf("keymaker.NewService error: %v", err)
-	}
-
-	svc, err := NewService(km, writer, runner, minter)
+	svc, err := NewService(writer, runner, minter)
 	if err != nil {
 		t.Fatalf("activation.NewService error: %v", err)
 	}
@@ -286,35 +263,4 @@ func (f *fakePayloadMinter) MintPayload(_ context.Context, subject types.Credent
 		return types.CredentialPayload{}, f.mintErr
 	}
 	return subject.Credential, nil
-}
-
-// fakeProvider satisfies types.Provider for test keymaker construction
-type fakeProvider struct {
-	providerType types.ProviderType
-}
-
-func (p *fakeProvider) Type() types.ProviderType { return p.providerType }
-
-func (p *fakeProvider) Capabilities() types.ProviderCapabilities {
-	return types.ProviderCapabilities{}
-}
-
-func (p *fakeProvider) BeginAuth(_ context.Context, _ types.AuthContext) (types.AuthSession, error) {
-	return nil, errors.New("not implemented")
-}
-
-func (p *fakeProvider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	return subject.Credential, nil
-}
-
-// fakeProviderResolver satisfies keymaker.ProviderResolver
-type fakeProviderResolver struct {
-	provider types.Provider
-}
-
-func (r *fakeProviderResolver) Provider(_ types.ProviderType) (types.Provider, bool) {
-	if r.provider == nil {
-		return nil, false
-	}
-	return r.provider, true
 }

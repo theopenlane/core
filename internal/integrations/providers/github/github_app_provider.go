@@ -14,12 +14,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 )
@@ -33,9 +33,8 @@ var _ types.ClientProvider = (*appProvider)(nil)
 
 // Default GitHub App API configuration values.
 const (
-	defaultGitHubAPIBaseURL = "https://api.github.com"
-	defaultJWTExpiry        = 9 * time.Minute
-	defaultHTTPTimeout      = 10 * time.Second
+	defaultJWTExpiry   = 9 * time.Minute
+	defaultHTTPTimeout = 10 * time.Second
 )
 
 // AppBuilder returns the GitHub App provider builder.
@@ -47,7 +46,7 @@ func AppBuilder() providers.Builder {
 				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, TypeGitHubApp, types.AuthKindGitHubApp, spec.AuthType)
 			}
 
-			baseURL := strings.TrimRight(defaultGitHubAPIBaseURL, "/")
+			baseURL := strings.TrimRight(githubAPIBaseURL, "/")
 			appID := ""
 			privateKey := ""
 			var tokenTTL time.Duration
@@ -60,7 +59,7 @@ func AppBuilder() providers.Builder {
 				privateKey = normalizePrivateKey(spec.GitHubApp.PrivateKey)
 			}
 
-			clients := operations.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptors(TypeGitHubApp))
+			clients := providerkit.SanitizeClientDescriptors(TypeGitHubApp, githubClientDescriptorsWithBaseURL(TypeGitHubApp, baseURL))
 
 			provider := &appProvider{
 				provider:   TypeGitHubApp,
@@ -77,7 +76,7 @@ func AppBuilder() providers.Builder {
 					EnvironmentCredentials: true,
 				},
 			}
-			provider.operations = operations.SanitizeOperationDescriptors(TypeGitHubApp, githubAppOperations(baseURL))
+			provider.operations = providerkit.SanitizeOperationDescriptors(TypeGitHubApp, githubAppOperations(baseURL))
 
 			return provider, nil
 		},

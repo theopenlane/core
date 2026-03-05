@@ -1,9 +1,9 @@
 package slack
 
 import (
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/oauth"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TypeSlack identifies the Slack provider

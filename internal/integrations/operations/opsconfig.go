@@ -3,7 +3,7 @@ package operations
 import (
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Pagination captures common paging controls

@@ -1,6 +1,7 @@
 package jsonx
 
 import (
+	"bytes"
 	"encoding/json"
 )
 
@@ -42,4 +43,30 @@ func ToMap(value any) (map[string]any, error) {
 	}
 
 	return mapped, nil
+}
+
+// CloneRawMessage copies a raw JSON document to avoid accidental aliasing.
+func CloneRawMessage(raw json.RawMessage) json.RawMessage {
+	if len(raw) == 0 {
+		return nil
+	}
+
+	return append(json.RawMessage(nil), raw...)
+}
+
+// ToRawMessage converts an arbitrary value into a raw JSON document.
+func ToRawMessage(value any) (json.RawMessage, error) {
+	if value == nil {
+		return nil, nil
+	}
+
+	var raw json.RawMessage
+	if err := RoundTrip(value, &raw); err != nil {
+		return nil, err
+	}
+	if len(raw) == 0 || bytes.Equal(raw, []byte("null")) {
+		return nil, nil
+	}
+
+	return raw, nil
 }

@@ -7,13 +7,13 @@ import (
 	okta "github.com/okta/okta-sdk-golang/v5/okta"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
-	oktaHealthOp   types.OperationName = "health.default"
+	oktaHealthOp   types.OperationName = types.OperationHealthDefault
 	oktaPoliciesOp types.OperationName = "policies.collect"
 
 	oktaSignOnPolicyType = "OKTA_SIGN_ON"

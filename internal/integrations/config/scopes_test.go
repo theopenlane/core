@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/config"
 )
 
 func TestMergeRequestedScopes_NilOAuth(t *testing.T) {

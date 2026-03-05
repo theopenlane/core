@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
-	vercelHealthOp   types.OperationName = "health.default"
+	vercelHealthOp   types.OperationName = types.OperationHealthDefault
 	vercelProjectsOp types.OperationName = "projects.sample"
 )
 

@@ -3,7 +3,7 @@ package keystore
 import (
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // groupDescriptors groups a keyed descriptor map by provider using a key extraction function.

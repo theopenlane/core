@@ -6,8 +6,9 @@ import (
 
 	okta "github.com/okta/okta-sdk-golang/v5/okta"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 
 // oktaClientDescriptors returns the client descriptors published by Okta.
 func oktaClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeOkta, ClientOktaAPI, "Okta API client", buildOktaClient)
+	return providerkit.DefaultClientDescriptors(TypeOkta, ClientOktaAPI, "Okta API client", buildOktaClient)
 }
 
 // buildOktaClient constructs an Okta SDK API client from credential payload.

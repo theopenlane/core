@@ -6,10 +6,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // ProviderSpec mirrors the declarative provider definition files rendered in the UI
@@ -112,13 +111,15 @@ func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]Provide
 			continue
 		}
 
-		overrideMap, err := jsonx.ToMap(override)
+		nextMap, err := JSONValue(currentMap, override, MapOptions{
+			PruneZero: true,
+			DeepMerge: true,
+		})
 		if err != nil {
-			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize override provider spec for merge")
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to merge provider spec override")
 			continue
 		}
 
-		nextMap := mapx.DeepMergeMapAny(currentMap, mapx.PruneMapZeroAny(overrideMap))
 		var next ProviderSpec
 		if err := jsonx.RoundTrip(nextMap, &next); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to apply provider spec override")

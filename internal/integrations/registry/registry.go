@@ -6,11 +6,11 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -20,7 +20,7 @@ type Registry struct {
 	providers      map[types.ProviderType]providers.Provider
 	clients        map[types.ProviderType][]types.ClientDescriptor
 	operations     map[types.ProviderType][]types.OperationDescriptor
-	mappingCatalog *types.MappingCatalog
+	mappingCatalog *mappingCatalog
 }
 
 // NewRegistry loads embedded provider specs and builds the registry using the catalog builders
@@ -42,7 +42,7 @@ func NewRegistry(ctx context.Context, overrides map[string]config.ProviderSpec) 
 		providers:      map[types.ProviderType]providers.Provider{},
 		clients:        map[types.ProviderType][]types.ClientDescriptor{},
 		operations:     map[types.ProviderType][]types.OperationDescriptor{},
-		mappingCatalog: types.NewMappingCatalog(),
+		mappingCatalog: newMappingCatalog(),
 	}
 
 	maps.Copy(instance.configs, specs)
@@ -60,40 +60,68 @@ func NewRegistry(ctx context.Context, overrides map[string]config.ProviderSpec) 
 		provider, err := builder.Build(ctx, spec)
 		if err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", string(providerType)).Msg("provider build failed, marking inactive")
-			spec.Active = lo.ToPtr(false)
-			instance.configs[providerType] = spec
+			instance.markProviderInactive(providerType, spec)
 
 			continue
 		}
 
 		if provider == nil {
 			logx.FromContext(ctx).Warn().Str("provider", string(providerType)).Msg("provider build returned nil, marking inactive")
-			spec.Active = lo.ToPtr(false)
-			instance.configs[providerType] = spec
+			instance.markProviderInactive(providerType, spec)
 
 			continue
 		}
 
-		instance.providers[providerType] = provider
-
-		if clientProvider, ok := provider.(types.ClientProvider); ok {
-			if descriptors := operations.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
-				instance.clients[providerType] = descriptors
-			}
-		}
-
-		if operationProvider, ok := provider.(types.OperationProvider); ok {
-			if ops := operations.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
-				instance.operations[providerType] = ops
-			}
-		}
-
-		if mappingProvider, ok := provider.(types.MappingProvider); ok {
-			instance.mappingCatalog.RegisterProvider(providerType, mappingProvider.DefaultMappings())
-		}
+		instance.applyProviderArtifacts(providerType, provider)
 	}
+	instance.rebuildMappingCatalog()
 
 	return instance, nil
+}
+
+// markProviderInactive updates one provider spec to inactive in the registry config map.
+func (r *Registry) markProviderInactive(providerType types.ProviderType, spec config.ProviderSpec) {
+	spec.Active = lo.ToPtr(false)
+	r.configs[providerType] = spec
+}
+
+// applyProviderArtifacts stores one provider instance and refreshes derived client and operation descriptors.
+func (r *Registry) applyProviderArtifacts(providerType types.ProviderType, provider providers.Provider) {
+	r.providers[providerType] = provider
+
+	if clientProvider, ok := provider.(types.ClientProvider); ok {
+		if descriptors := providerkit.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+			r.clients[providerType] = descriptors
+		} else {
+			delete(r.clients, providerType)
+		}
+	} else {
+		delete(r.clients, providerType)
+	}
+
+	if operationProvider, ok := provider.(types.OperationProvider); ok {
+		if descriptors := providerkit.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(descriptors) > 0 {
+			r.operations[providerType] = descriptors
+		} else {
+			delete(r.operations, providerType)
+		}
+	} else {
+		delete(r.operations, providerType)
+	}
+}
+
+// rebuildMappingCatalog reconstructs provider default mapping registrations from the current provider map.
+func (r *Registry) rebuildMappingCatalog() {
+	r.mappingCatalog = newMappingCatalog()
+
+	for providerType, provider := range r.providers {
+		mappingProvider, ok := provider.(types.MappingProvider)
+		if !ok {
+			continue
+		}
+
+		r.mappingCatalog.registerProvider(providerType, mappingProvider.DefaultMappings())
+	}
 }
 
 // Provider returns a registered provider instance
@@ -213,48 +241,19 @@ func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec,
 		return ErrProviderNil
 	}
 
-	r.providers[providerType] = provider
-
-	if clientProvider, ok := provider.(types.ClientProvider); ok {
-		if descriptors := operations.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
-			r.clients[providerType] = descriptors
-		} else {
-			delete(r.clients, providerType)
-		}
-	} else {
-		delete(r.clients, providerType)
-	}
-
-	if operationProvider, ok := provider.(types.OperationProvider); ok {
-		if ops := operations.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
-			r.operations[providerType] = ops
-		} else {
-			delete(r.operations, providerType)
-		}
-	} else {
-		delete(r.operations, providerType)
-	}
-
-	r.mappingCatalog = types.NewMappingCatalog()
-	for providerType, value := range r.providers {
-		mappingProvider, ok := value.(types.MappingProvider)
-		if !ok {
-			continue
-		}
-
-		r.mappingCatalog.RegisterProvider(providerType, mappingProvider.DefaultMappings())
-	}
+	r.applyProviderArtifacts(providerType, provider)
+	r.rebuildMappingCatalog()
 
 	return nil
 }
 
 // SupportsIngest reports whether a provider has any registered mappings for the schema.
 func (r *Registry) SupportsIngest(provider types.ProviderType, schema types.MappingSchema) bool {
-	return r.mappingCatalog.Supports(provider, schema)
+	return r.mappingCatalog.supports(provider, schema)
 }
 
 // DefaultMapping returns the mapping spec for a provider, schema, and variant.
 // It checks for an exact variant match first, then falls back to the empty-variant default.
 func (r *Registry) DefaultMapping(provider types.ProviderType, schema types.MappingSchema, variant string) (types.MappingSpec, bool) {
-	return r.mappingCatalog.Resolve(provider, schema, variant)
+	return r.mappingCatalog.resolve(provider, schema, variant)
 }

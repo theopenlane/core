@@ -15,7 +15,7 @@ func TestOperationTemplateFor(t *testing.T) {
 		OperationTemplates: map[string]openapi.IntegrationOperationTemplate{
 			"op": {
 				Config:         map[string]any{"a": 1},
-				AllowOverrides: []string{"b"},
+				AllowOverrides: []string{" b ", "b"},
 			},
 		},
 	}
@@ -29,6 +29,9 @@ func TestOperationTemplateFor(t *testing.T) {
 	}
 	if _, ok := template.AllowedOverrides["b"]; !ok {
 		t.Fatalf("expected override to be allowed")
+	}
+	if _, ok := template.AllowedOverrides[" b "]; !ok {
+		t.Fatalf("expected strict override key to be preserved")
 	}
 }
 

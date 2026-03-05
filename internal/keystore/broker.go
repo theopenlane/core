@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // ensure Broker satisfies IntegrationCredentialSource at compile time

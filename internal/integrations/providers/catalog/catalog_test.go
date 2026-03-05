@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TestCatalogCompleteness asserts that every visible provider spec has a corresponding builder

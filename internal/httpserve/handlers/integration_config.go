@@ -10,11 +10,11 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	intauth "github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	intauth "github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )

@@ -6,8 +6,8 @@ import (
 
 	"github.com/samber/lo"
 
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 type celMapEntry struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -45,19 +45,10 @@ func OperationSuccess(summary string, details any) types.OperationResult {
 }
 
 func encodeOperationDetails(details any) json.RawMessage {
-	if details == nil {
+	raw, err := jsonx.ToRawMessage(details)
+	if err != nil {
 		return nil
 	}
-
-	var raw json.RawMessage
-	if err := jsonx.RoundTrip(details, &raw); err != nil {
-		return nil
-	}
-
-	if len(raw) == 0 || string(raw) == "null" {
-		return nil
-	}
-
 	return raw
 }
 

@@ -33,8 +33,6 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -44,8 +42,10 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
@@ -432,10 +432,11 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	suite.h.IntegrationOperations = manager
 
 	sessions := keymaker.NewMemorySessionStore()
-	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
 	assert.NoError(suite.T(), err)
+	suite.h.IntegrationKeymaker = keymakerSvc
 
-	activationSvc, err := activation.NewService(svc, store, suite.h.IntegrationOperations, reg)
+	activationSvc, err := activation.NewService(store, suite.h.IntegrationOperations, reg)
 	assert.NoError(suite.T(), err)
 	suite.h.IntegrationActivation = activationSvc
 }
