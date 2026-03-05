@@ -9,10 +9,10 @@ import (
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
-// IngestFunc materializes operation result envelopes into the database.
-// Implementations receive a unified IngestRequest and return an IngestResult.
-// The function signature is stable across ingest categories; the operation name
-// and provider type inside IngestRequest determine which mapping schema is applied.
+// IngestFunc materializes operation result envelopes into the database;
+// implementations receive a unified IngestRequest and return an IngestResult.
+// The function signature is stable across ingest categories — the operation name
+// and provider type inside IngestRequest determine which mapping schema is applied
 type IngestFunc func(ctx context.Context, req IngestRequest) (IngestResult, error)
 
 // IngestRequest is the unified request type passed to all IngestFunc implementations.
@@ -39,7 +39,7 @@ type IngestRequest struct {
 	DB *generated.Client
 }
 
-// Validate checks that required fields are present.
+// Validate checks that required fields are present
 func (r *IngestRequest) Validate() error {
 	if r.OrgID == "" {
 		return ErrIngestOrgIDRequired

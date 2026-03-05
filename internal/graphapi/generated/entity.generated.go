@@ -168,6 +168,10 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -406,6 +410,10 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -644,6 +652,10 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -882,6 +894,10 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":

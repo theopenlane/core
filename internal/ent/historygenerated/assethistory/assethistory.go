@@ -120,6 +120,10 @@ const (
 	FieldCpe = "cpe"
 	// FieldCategories holds the string denoting the categories field in the database.
 	FieldCategories = "categories"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// Table holds the table name of the assethistory in the database.
 	Table = "asset_history"
 )
@@ -177,6 +181,8 @@ var Columns = []string{
 	FieldPurchaseDate,
 	FieldCpe,
 	FieldCategories,
+	FieldIntegrationID,
+	FieldObservedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -496,6 +502,16 @@ func ByPurchaseDate(opts ...sql.OrderTermOption) OrderOption {
 // ByCpe orders the results by the cpe field.
 func ByCpe(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCpe, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
 var (

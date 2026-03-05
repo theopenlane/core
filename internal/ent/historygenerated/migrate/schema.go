@@ -210,6 +210,8 @@ var (
 		{Name: "purchase_date", Type: field.TypeTime, Nullable: true},
 		{Name: "cpe", Type: field.TypeString, Nullable: true},
 		{Name: "categories", Type: field.TypeJSON, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// AssetHistoryTable holds the schema information for the "asset_history" table.
 	AssetHistoryTable = &schema.Table{
@@ -342,6 +344,9 @@ var (
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// ContactHistoryTable holds the schema information for the "contact_history" table.
 	ContactHistoryTable = &schema.Table{
@@ -943,6 +948,8 @@ var (
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
 		{Name: "vendor_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// EntityHistoryTable holds the schema information for the "entity_history" table.
 	EntityHistoryTable = &schema.Table{
@@ -2257,6 +2264,9 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},

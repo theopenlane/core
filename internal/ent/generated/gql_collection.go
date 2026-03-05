@@ -4528,6 +4528,16 @@ func (_q *AssetQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, asset.FieldCategories)
 				fieldSeen[asset.FieldCategories] = struct{}{}
 			}
+		case "integrationID":
+			if _, ok := fieldSeen[asset.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, asset.FieldIntegrationID)
+				fieldSeen[asset.FieldIntegrationID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[asset.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, asset.FieldObservedAt)
+				fieldSeen[asset.FieldObservedAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -6805,6 +6815,21 @@ func (_q *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[contact.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, contact.FieldStatus)
 				fieldSeen[contact.FieldStatus] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[contact.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldExternalID)
+				fieldSeen[contact.FieldExternalID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[contact.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, contact.FieldIntegrationID)
+				fieldSeen[contact.FieldIntegrationID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[contact.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, contact.FieldObservedAt)
+				fieldSeen[contact.FieldObservedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -19985,6 +20010,16 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[entity.FieldVendorMetadata]; !ok {
 				selectedFields = append(selectedFields, entity.FieldVendorMetadata)
 				fieldSeen[entity.FieldVendorMetadata] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[entity.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldExternalID)
+				fieldSeen[entity.FieldExternalID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[entity.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, entity.FieldObservedAt)
+				fieldSeen[entity.FieldObservedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -63904,6 +63939,21 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[risk.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldScopeID)
 				fieldSeen[risk.FieldScopeID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[risk.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldExternalID)
+				fieldSeen[risk.FieldExternalID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[risk.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldIntegrationID)
+				fieldSeen[risk.FieldIntegrationID] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[risk.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, risk.FieldObservedAt)
+				fieldSeen[risk.FieldObservedAt] = struct{}{}
 			}
 		case "externalUUID":
 			if _, ok := fieldSeen[risk.FieldExternalUUID]; !ok {

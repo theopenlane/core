@@ -191,5 +191,8 @@ func (DirectoryMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
 		entx.Exportable{},
+		entx.IntegrationMappingSchema().
+			UpsertKeys("directory_account_id", "directory_group_id", "directory_sync_run_id").
+			DefaultOperation("directory.sync"),
 	}
 }

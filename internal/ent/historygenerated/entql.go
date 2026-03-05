@@ -286,6 +286,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assethistory.FieldPurchaseDate:                {Type: field.TypeTime, Column: assethistory.FieldPurchaseDate},
 			assethistory.FieldCpe:                         {Type: field.TypeString, Column: assethistory.FieldCpe},
 			assethistory.FieldCategories:                  {Type: field.TypeJSON, Column: assethistory.FieldCategories},
+			assethistory.FieldIntegrationID:               {Type: field.TypeString, Column: assethistory.FieldIntegrationID},
+			assethistory.FieldObservedAt:                  {Type: field.TypeTime, Column: assethistory.FieldObservedAt},
 		},
 	}
 	graph.Nodes[4] = &sqlgraph.Node{
@@ -388,24 +390,27 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ContactHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			contacthistory.FieldHistoryTime: {Type: field.TypeTime, Column: contacthistory.FieldHistoryTime},
-			contacthistory.FieldRef:         {Type: field.TypeString, Column: contacthistory.FieldRef},
-			contacthistory.FieldOperation:   {Type: field.TypeEnum, Column: contacthistory.FieldOperation},
-			contacthistory.FieldCreatedAt:   {Type: field.TypeTime, Column: contacthistory.FieldCreatedAt},
-			contacthistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: contacthistory.FieldUpdatedAt},
-			contacthistory.FieldCreatedBy:   {Type: field.TypeString, Column: contacthistory.FieldCreatedBy},
-			contacthistory.FieldUpdatedBy:   {Type: field.TypeString, Column: contacthistory.FieldUpdatedBy},
-			contacthistory.FieldDeletedAt:   {Type: field.TypeTime, Column: contacthistory.FieldDeletedAt},
-			contacthistory.FieldDeletedBy:   {Type: field.TypeString, Column: contacthistory.FieldDeletedBy},
-			contacthistory.FieldTags:        {Type: field.TypeJSON, Column: contacthistory.FieldTags},
-			contacthistory.FieldOwnerID:     {Type: field.TypeString, Column: contacthistory.FieldOwnerID},
-			contacthistory.FieldFullName:    {Type: field.TypeString, Column: contacthistory.FieldFullName},
-			contacthistory.FieldTitle:       {Type: field.TypeString, Column: contacthistory.FieldTitle},
-			contacthistory.FieldCompany:     {Type: field.TypeString, Column: contacthistory.FieldCompany},
-			contacthistory.FieldEmail:       {Type: field.TypeString, Column: contacthistory.FieldEmail},
-			contacthistory.FieldPhoneNumber: {Type: field.TypeString, Column: contacthistory.FieldPhoneNumber},
-			contacthistory.FieldAddress:     {Type: field.TypeString, Column: contacthistory.FieldAddress},
-			contacthistory.FieldStatus:      {Type: field.TypeEnum, Column: contacthistory.FieldStatus},
+			contacthistory.FieldHistoryTime:   {Type: field.TypeTime, Column: contacthistory.FieldHistoryTime},
+			contacthistory.FieldRef:           {Type: field.TypeString, Column: contacthistory.FieldRef},
+			contacthistory.FieldOperation:     {Type: field.TypeEnum, Column: contacthistory.FieldOperation},
+			contacthistory.FieldCreatedAt:     {Type: field.TypeTime, Column: contacthistory.FieldCreatedAt},
+			contacthistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: contacthistory.FieldUpdatedAt},
+			contacthistory.FieldCreatedBy:     {Type: field.TypeString, Column: contacthistory.FieldCreatedBy},
+			contacthistory.FieldUpdatedBy:     {Type: field.TypeString, Column: contacthistory.FieldUpdatedBy},
+			contacthistory.FieldDeletedAt:     {Type: field.TypeTime, Column: contacthistory.FieldDeletedAt},
+			contacthistory.FieldDeletedBy:     {Type: field.TypeString, Column: contacthistory.FieldDeletedBy},
+			contacthistory.FieldTags:          {Type: field.TypeJSON, Column: contacthistory.FieldTags},
+			contacthistory.FieldOwnerID:       {Type: field.TypeString, Column: contacthistory.FieldOwnerID},
+			contacthistory.FieldFullName:      {Type: field.TypeString, Column: contacthistory.FieldFullName},
+			contacthistory.FieldTitle:         {Type: field.TypeString, Column: contacthistory.FieldTitle},
+			contacthistory.FieldCompany:       {Type: field.TypeString, Column: contacthistory.FieldCompany},
+			contacthistory.FieldEmail:         {Type: field.TypeString, Column: contacthistory.FieldEmail},
+			contacthistory.FieldPhoneNumber:   {Type: field.TypeString, Column: contacthistory.FieldPhoneNumber},
+			contacthistory.FieldAddress:       {Type: field.TypeString, Column: contacthistory.FieldAddress},
+			contacthistory.FieldStatus:        {Type: field.TypeEnum, Column: contacthistory.FieldStatus},
+			contacthistory.FieldExternalID:    {Type: field.TypeString, Column: contacthistory.FieldExternalID},
+			contacthistory.FieldIntegrationID: {Type: field.TypeString, Column: contacthistory.FieldIntegrationID},
+			contacthistory.FieldObservedAt:    {Type: field.TypeTime, Column: contacthistory.FieldObservedAt},
 		},
 	}
 	graph.Nodes[7] = &sqlgraph.Node{
@@ -955,6 +960,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldNextReviewAt:                          {Type: field.TypeTime, Column: entityhistory.FieldNextReviewAt},
 			entityhistory.FieldContractRenewalAt:                     {Type: field.TypeTime, Column: entityhistory.FieldContractRenewalAt},
 			entityhistory.FieldVendorMetadata:                        {Type: field.TypeJSON, Column: entityhistory.FieldVendorMetadata},
+			entityhistory.FieldExternalID:                            {Type: field.TypeString, Column: entityhistory.FieldExternalID},
+			entityhistory.FieldObservedAt:                            {Type: field.TypeTime, Column: entityhistory.FieldObservedAt},
 		},
 	}
 	graph.Nodes[20] = &sqlgraph.Node{
@@ -2149,6 +2156,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldEnvironmentID:     {Type: field.TypeString, Column: riskhistory.FieldEnvironmentID},
 			riskhistory.FieldScopeName:         {Type: field.TypeString, Column: riskhistory.FieldScopeName},
 			riskhistory.FieldScopeID:           {Type: field.TypeString, Column: riskhistory.FieldScopeID},
+			riskhistory.FieldExternalID:        {Type: field.TypeString, Column: riskhistory.FieldExternalID},
+			riskhistory.FieldIntegrationID:     {Type: field.TypeString, Column: riskhistory.FieldIntegrationID},
+			riskhistory.FieldObservedAt:        {Type: field.TypeTime, Column: riskhistory.FieldObservedAt},
 			riskhistory.FieldExternalUUID:      {Type: field.TypeString, Column: riskhistory.FieldExternalUUID},
 			riskhistory.FieldName:              {Type: field.TypeString, Column: riskhistory.FieldName},
 			riskhistory.FieldStatus:            {Type: field.TypeEnum, Column: riskhistory.FieldStatus},
@@ -4031,6 +4041,16 @@ func (f *AssetHistoryFilter) WhereCategories(p entql.BytesP) {
 	f.Where(p.Field(assethistory.FieldCategories))
 }
 
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *AssetHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(assethistory.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *AssetHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(assethistory.FieldObservedAt))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *CampaignHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -4554,6 +4574,21 @@ func (f *ContactHistoryFilter) WhereAddress(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ContactHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(contacthistory.FieldStatus))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *ContactHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldExternalID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *ContactHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(contacthistory.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *ContactHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(contacthistory.FieldObservedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -6974,6 +7009,16 @@ func (f *EntityHistoryFilter) WhereContractRenewalAt(p entql.TimeP) {
 // WhereVendorMetadata applies the entql json.RawMessage predicate on the vendor_metadata field.
 func (f *EntityHistoryFilter) WhereVendorMetadata(p entql.BytesP) {
 	f.Where(p.Field(entityhistory.FieldVendorMetadata))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *EntityHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldExternalID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *EntityHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(entityhistory.FieldObservedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12194,6 +12239,21 @@ func (f *RiskHistoryFilter) WhereScopeName(p entql.StringP) {
 // WhereScopeID applies the entql string predicate on the scope_id field.
 func (f *RiskHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldScopeID))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *RiskHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldExternalID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *RiskHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldIntegrationID))
+}
+
+// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
+func (f *RiskHistoryFilter) WhereObservedAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldObservedAt))
 }
 
 // WhereExternalUUID applies the entql string predicate on the external_uuid field.

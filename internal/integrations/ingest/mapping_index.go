@@ -12,7 +12,7 @@ var generatedMappingSchemas = lo.SliceToMap(lo.Keys(integrationgenerated.Integra
 	return schemaName, integrationtypes.MappingSchema(schemaName)
 })
 
-// defaultMappingSpec resolves the built-in mapping override for a provider, schema, and variant.
+// defaultMappingSpec resolves the built-in mapping override for a provider, schema, and variant
 func defaultMappingSpec(mappingIndex integrationtypes.MappingIndex, provider integrationtypes.ProviderType, schemaName string, variant string) (openapi.IntegrationMappingOverride, bool) {
 	if mappingIndex == nil {
 		return openapi.IntegrationMappingOverride{}, false
