@@ -27,6 +27,38 @@ type ResolveCriteria struct {
 	Provider mo.Option[types.ProviderType]
 }
 
+// CriteriaByID builds a ResolveCriteria that resolves by explicit integration ID.
+// Returns an error when ownerID or integrationID are empty.
+func CriteriaByID(ownerID, integrationID string) (ResolveCriteria, error) {
+	if ownerID == "" {
+		return ResolveCriteria{}, ErrResolverOwnerIDRequired
+	}
+	if integrationID == "" {
+		return ResolveCriteria{}, ErrResolverIntegrationIDRequired
+	}
+
+	return ResolveCriteria{
+		OwnerID:       ownerID,
+		IntegrationID: mo.Some(integrationID),
+	}, nil
+}
+
+// CriteriaByProvider builds a ResolveCriteria that resolves by provider kind.
+// Returns an error when ownerID is empty or provider is unknown.
+func CriteriaByProvider(ownerID string, provider types.ProviderType) (ResolveCriteria, error) {
+	if ownerID == "" {
+		return ResolveCriteria{}, ErrResolverOwnerIDRequired
+	}
+	if provider == types.ProviderUnknown {
+		return ResolveCriteria{}, ErrResolverProviderRequired
+	}
+
+	return ResolveCriteria{
+		OwnerID:  ownerID,
+		Provider: mo.Some(provider),
+	}, nil
+}
+
 // ResolveResult captures the final integration selected for execution.
 type ResolveResult struct {
 	// Integration is the selected installed integration

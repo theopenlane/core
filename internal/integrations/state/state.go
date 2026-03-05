@@ -14,16 +14,6 @@ type IntegrationProviderState struct {
 	Providers map[string]json.RawMessage `json:"providers,omitempty"`
 }
 
-// ProviderData returns a cloned provider state map for a provider key
-func (s IntegrationProviderState) ProviderData(provider string) map[string]any {
-	data, err := s.ProviderDataMap(provider)
-	if err != nil {
-		return nil
-	}
-
-	return data
-}
-
 // ProviderDataMap returns a cloned provider state map for a provider key
 func (s IntegrationProviderState) ProviderDataMap(provider string) (map[string]any, error) {
 	if provider == "" || len(s.Providers) == 0 {

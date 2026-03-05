@@ -170,7 +170,7 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 	var resp struct {
 		ID string `json:"id"`
 	}
-	if err := teamsRestClient.PostJSON(ctx, token, path, payload, &resp); err != nil {
+	if err := teamsRestClient.PostJSON(ctx, nil, token, path, payload, &resp); err != nil {
 		return operations.OperationFailure("Graph channel message failed", err, nil)
 	}
 
