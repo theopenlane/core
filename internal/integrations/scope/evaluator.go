@@ -67,14 +67,18 @@ func (e *Evaluator) Validate(expression string) error {
 	return nil
 }
 
-// EvaluateCondition evaluates a bool condition expression against variables
+// EvaluateCondition evaluates a bool condition expression against variables.
+// The underlying celx.Evaluator caches compiled programs, so repeated calls
+// for the same expression do not recompile. A compilation check is performed
+// first to return ErrScopeCompilationFailed for syntax or type errors distinct
+// from runtime evaluation failures.
 func (e *Evaluator) EvaluateCondition(ctx context.Context, expression string, vars map[string]any) (bool, error) {
 	if expression == "" {
 		return e.emptyExpressionResult, nil
 	}
 
-	if err := e.Validate(expression); err != nil {
-		return false, err
+	if _, issues := e.evaluator.Compile(expression); issues != nil && issues.Err() != nil {
+		return false, ErrScopeCompilationFailed
 	}
 
 	value, err := e.evaluateRaw(ctx, expression, vars)

@@ -9,11 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// BuildCredentialPayload constructs a credential payload from variadic credential options.
-func BuildCredentialPayload(provider types.ProviderType, opts ...types.CredentialOption) (types.CredentialPayload, error) {
-	return types.NewCredentialBuilder(provider).With(opts...).Build()
-}
-
 // BuildOAuthCredentialPayload builds a normalized OAuth credential payload.
 func BuildOAuthCredentialPayload(provider types.ProviderType, token *oauth2.Token, claims *oidc.IDTokenClaims, opts ...types.CredentialOption) (types.CredentialPayload, error) {
 	options := []types.CredentialOption{
@@ -26,7 +21,7 @@ func BuildOAuthCredentialPayload(provider types.ProviderType, token *oauth2.Toke
 	}
 	options = append(options, opts...)
 
-	return BuildCredentialPayload(provider, options...)
+	return types.NewCredentialBuilder(provider).With(options...).Build()
 }
 
 // BuildAPITokenCredentialPayload builds a normalized API token credential payload.
@@ -40,5 +35,5 @@ func BuildAPITokenCredentialPayload(provider types.ProviderType, token string, p
 	}
 	options = append(options, opts...)
 
-	return BuildCredentialPayload(provider, options...)
+	return types.NewCredentialBuilder(provider).With(options...).Build()
 }

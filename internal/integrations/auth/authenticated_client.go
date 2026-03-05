@@ -37,6 +37,20 @@ func GetJSONWithClient(ctx context.Context, client *AuthenticatedClient, endpoin
 	return HTTPGetJSON(ctx, nil, endpoint, bearer, headers, out)
 }
 
+// PostJSON issues a POST request using the stored credentials and decodes the JSON response
+func (c *AuthenticatedClient) PostJSON(ctx context.Context, endpoint string, body, out any) error {
+	return HTTPPostJSON(ctx, nil, endpoint, c.BearerToken, c.Headers, body, out)
+}
+
+// PostJSONWithClient uses the authenticated client when available, otherwise falls back to HTTPPostJSON
+func PostJSONWithClient(ctx context.Context, client *AuthenticatedClient, endpoint string, bearer string, headers map[string]string, body, out any) error {
+	if client != nil {
+		return client.PostJSON(ctx, endpoint, body, out)
+	}
+
+	return HTTPPostJSON(ctx, nil, endpoint, bearer, headers, body, out)
+}
+
 // AuthenticatedClientFromClient attempts to unwrap an AuthenticatedClient from a wrapped client value
 func AuthenticatedClientFromClient(value types.ClientInstance) *AuthenticatedClient {
 	client, ok := types.ClientInstanceAs[*AuthenticatedClient](value)

@@ -17,7 +17,10 @@ func TestProviderDataReturnsDeepClone(t *testing.T) {
 		t.Fatalf("expected merge to change state")
 	}
 
-	out := s.ProviderData("githubapp")
+	out, err := s.ProviderDataMap("githubapp")
+	if err != nil {
+		t.Fatalf("expected provider data: %v", err)
+	}
 	if out == nil {
 		t.Fatalf("expected provider data")
 	}

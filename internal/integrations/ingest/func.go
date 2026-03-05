@@ -47,6 +47,12 @@ func (r *IngestRequest) Validate() error {
 	if r.IntegrationID == "" {
 		return ErrIngestIntegrationRequired
 	}
+	if r.Provider == integrationtypes.ProviderUnknown {
+		return ErrIngestProviderUnknown
+	}
+	if r.Operation == "" {
+		return ErrIngestOperationRequired
+	}
 	if r.DB == nil {
 		return ErrDBClientRequired
 	}
