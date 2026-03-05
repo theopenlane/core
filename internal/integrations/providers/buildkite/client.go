@@ -6,8 +6,9 @@ import (
 
 	buildkitego "github.com/buildkite/go-buildkite/v3/buildkite"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 
 // buildkiteClientDescriptors returns the client descriptors published by Buildkite.
 func buildkiteClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeBuildkite, ClientBuildkiteAPI, "Buildkite REST API client", buildBuildkiteClient)
+	return providerkit.DefaultClientDescriptors(TypeBuildkite, ClientBuildkiteAPI, "Buildkite REST API client", buildBuildkiteClient)
 }
 
 // buildBuildkiteClient constructs a Buildkite SDK client from credential payload.

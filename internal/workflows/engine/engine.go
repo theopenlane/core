@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/internal/integrations/targetresolver"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
@@ -30,12 +31,14 @@ type WorkflowEngine struct {
 	client *generated.Client
 	// gala is the runtime used for workflow and integration event dispatch.
 	gala *gala.Gala
-	// integrationRegistry provides provider operation descriptors (optional)
+	// integrationRegistry resolves provider operations (optional)
 	integrationRegistry IntegrationRegistry
 	// integrationStore ensures integration records exist
 	integrationStore IntegrationStore
 	// integrationOperations executes integration operations
 	integrationOperations IntegrationOperations
+	// integrationMappingIndex resolves provider default ingest mappings.
+	integrationMappingIndex types.MappingIndex
 	// integrationListenersRegistered tracks whether integration listeners are registered.
 	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing
@@ -50,7 +53,7 @@ type WorkflowEngine struct {
 	proposalManager *ProposalManager
 	// scopeEvaluator evaluates CEL scope conditions for integration actions; initialized by SetIntegrationDeps
 	scopeEvaluator integrationscope.ConditionEvaluator
-	// integrationResolver resolves integration targets and operation descriptors; initialized by SetIntegrationDeps
+	// integrationResolver resolves integration targets; initialized by SetIntegrationDeps
 	integrationResolver *targetresolver.Resolver
 }
 

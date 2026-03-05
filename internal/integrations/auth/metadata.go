@@ -3,8 +3,8 @@ package auth
 import (
 	"maps"
 
-	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // ExtractMetadata decodes provider metadata from a credential payload into the target type.
@@ -34,14 +34,5 @@ func CloneMetadata(data map[string]any) map[string]any {
 // PersistMetadata merges the JSON-tagged fields of meta into a clone of base.
 // Fields tagged with omitempty are excluded when zero-valued.
 func PersistMetadata[T any](base map[string]any, meta T) (map[string]any, error) {
-	overlay, err := jsonx.ToMap(meta)
-	if err != nil {
-		return nil, err
-	}
-
-	out := CloneMetadata(base)
-
-	maps.Copy(out, overlay)
-
-	return out, nil
+	return integrationconfig.JSONValue(base, meta, integrationconfig.MapOptions{})
 }

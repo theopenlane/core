@@ -14,13 +14,13 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Operation names published by the GCP SCC provider.
 const (
-	OperationHealthDefault   types.OperationName = "health.default"
+	OperationHealthDefault   types.OperationName = types.OperationHealthDefault
 	OperationCollectFindings types.OperationName = "findings.collect"
 	OperationScanSettings    types.OperationName = "settings.scan"
 

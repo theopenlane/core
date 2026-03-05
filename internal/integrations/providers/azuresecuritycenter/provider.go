@@ -7,12 +7,12 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -37,8 +37,8 @@ func newProvider(spec config.ProviderSpec) *Provider {
 				SupportsClientPooling: true,
 				SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 			},
-			operations.SanitizeOperationDescriptors(TypeAzureSecurityCenter, azureSecurityOperations()),
-			operations.SanitizeClientDescriptors(TypeAzureSecurityCenter, azureSecurityCenterClientDescriptors()),
+			providerkit.SanitizeOperationDescriptors(TypeAzureSecurityCenter, azureSecurityOperations()),
+			providerkit.SanitizeClientDescriptors(TypeAzureSecurityCenter, azureSecurityCenterClientDescriptors()),
 		),
 		tokenEndpoint: defaultAzureTokenEndpoint,
 	}

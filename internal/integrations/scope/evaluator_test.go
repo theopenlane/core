@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 // newTestEvaluator creates a scope evaluator configured for tests

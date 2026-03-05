@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
@@ -11,13 +10,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
-
-const defaultHealthOperation types.OperationName = "health.default"
 
 // integrationOperationQueueDetails captures queue response details for integration operation requests
 type integrationOperationQueueDetails struct {
@@ -27,28 +24,6 @@ type integrationOperationQueueDetails struct {
 	EventID string `json:"event_id"`
 	// Status is the queued integration run status
 	Status string `json:"status"`
-}
-
-// integrationOperationQueueDetailsDoc converts queue details into a JSON object document.
-func integrationOperationQueueDetailsDoc(details integrationOperationQueueDetails) (json.RawMessage, error) {
-	var raw json.RawMessage
-	if err := jsonx.RoundTrip(details, &raw); err != nil {
-		return nil, err
-	}
-	if len(raw) == 0 {
-		return nil, nil
-	}
-
-	return raw, nil
-}
-
-// copyRawJSON clones a raw JSON document to avoid accidental aliasing.
-func copyRawJSON(raw json.RawMessage) json.RawMessage {
-	if len(raw) == 0 {
-		return nil
-	}
-
-	return append(json.RawMessage(nil), raw...)
 }
 
 // RunIntegrationOperation queues provider operations for async execution.
@@ -76,16 +51,16 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 
 	if h.WorkflowEngine == nil {
-		if operationName != defaultHealthOperation {
+		if operationName != types.OperationHealthDefault {
 			return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
 		}
 	}
 
 	queueCtx := context.WithoutCancel(requestCtx)
 
-	configDoc := copyRawJSON(req.Body.Config)
+	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
-	if operationName == defaultHealthOperation {
+	if operationName == types.OperationHealthDefault {
 		if h.IntegrationOperations == nil {
 			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
 		}
@@ -107,7 +82,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			Operation: string(operationName),
 			Status:    string(result.Status),
 			Summary:   result.Summary,
-			Details:   copyRawJSON(result.Details),
+			Details:   jsonx.CloneRawMessage(result.Details),
 		}
 
 		if out.Status == "" {
@@ -141,7 +116,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		}
 	}
 
-	queueDetails, err := integrationOperationQueueDetailsDoc(integrationOperationQueueDetails{
+	queueDetails, err := jsonx.ToRawMessage(integrationOperationQueueDetails{
 		RunID:   result.RunID,
 		EventID: result.EventID,
 		Status:  result.Status.String(),

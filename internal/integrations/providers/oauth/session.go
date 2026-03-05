@@ -6,9 +6,9 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	integrationauth "github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	integrationauth "github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // Session implements types.AuthSession for OAuth flows

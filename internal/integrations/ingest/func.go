@@ -3,10 +3,10 @@ package ingest
 import (
 	"context"
 
-	integrationstate "github.com/theopenlane/core/common/integrations/state"
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
+	integrationstate "github.com/theopenlane/core/internal/integrations/state"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 // IngestFunc materializes operation result envelopes into the database.
@@ -16,8 +16,6 @@ import (
 type IngestFunc func(ctx context.Context, req IngestRequest) (IngestResult, error)
 
 // IngestRequest is the unified request type passed to all IngestFunc implementations.
-// Its fields mirror VulnerabilityIngestRequest and DirectoryAccountIngestRequest so
-// adapters can project into those concrete types without loss.
 type IngestRequest struct {
 	// OrgID identifies the organization that owns the ingested records
 	OrgID string
@@ -33,10 +31,27 @@ type IngestRequest struct {
 	ProviderState integrationstate.IntegrationProviderState
 	// OperationConfig supplies operation-level configuration for mapping
 	OperationConfig map[string]any
+	// MappingIndex resolves provider-registered default mappings.
+	MappingIndex integrationtypes.MappingIndex
 	// Envelopes holds the alert payloads to ingest
 	Envelopes []integrationtypes.AlertEnvelope
 	// DB provides access to the persistence layer
 	DB *generated.Client
+}
+
+// Validate checks that required fields are present.
+func (r *IngestRequest) Validate() error {
+	if r.OrgID == "" {
+		return ErrIngestOrgIDRequired
+	}
+	if r.IntegrationID == "" {
+		return ErrIngestIntegrationRequired
+	}
+	if r.DB == nil {
+		return ErrDBClientRequired
+	}
+
+	return nil
 }
 
 // IngestSummary reports mapping and persistence statistics for a single ingest run

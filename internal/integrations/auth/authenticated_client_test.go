@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestNewAuthenticatedClient_ClonesHeadersAndKeepsToken(t *testing.T) {

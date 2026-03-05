@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // azureEntraRestClient is the package-level REST client for Microsoft Graph API requests.
 var azureEntraRestClient = auth.RESTClient{BaseURL: "https://graph.microsoft.com/v1.0/"}
 
 const (
-	azureEntraHealthOp types.OperationName = "health.default"
+	azureEntraHealthOp types.OperationName = types.OperationHealthDefault
 	azureEntraTenantOp types.OperationName = "directory.inspect"
 )
 

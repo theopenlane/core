@@ -4,8 +4,8 @@ import (
 	"sort"
 
 	"github.com/theopenlane/core/common/enums"
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )

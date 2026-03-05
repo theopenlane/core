@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // teamsRestClient is the package-level REST client for Microsoft Graph API requests.
 var teamsRestClient = auth.RESTClient{BaseURL: "https://graph.microsoft.com/v1.0/"}
 
 const (
-	teamsHealthOp      types.OperationName = "health.default"
+	teamsHealthOp      types.OperationName = types.OperationHealthDefault
 	teamsChannelsOp    types.OperationName = "teams.sample"
 	teamsMessageSendOp types.OperationName = "message.send"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"maps"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // AuthenticatedClient wraps a bearer token and headers for simple HTTP JSON calls

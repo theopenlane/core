@@ -1,9 +1,9 @@
 package vercel
 
 import (
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/apikey"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TypeVercel identifies the Vercel provider

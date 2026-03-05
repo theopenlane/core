@@ -6,13 +6,13 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
-	slackOperationHealth      types.OperationName = "health.default"
+	slackOperationHealth      types.OperationName = types.OperationHealthDefault
 	slackOperationTeam        types.OperationName = "team.inspect"
 	slackOperationMessageSend types.OperationName = "message.send"
 )

@@ -6,15 +6,15 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // oidcOperations returns OIDC operation descriptors
 func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(types.OperationName("health.default"), "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
+		operations.HealthOperation(types.OperationHealthDefault, "Call the configured userinfo endpoint (when available) to validate the OIDC token.", ClientOIDCAPI, runOIDCHealth(userInfoURL)),
 		{
 			Name:        types.OperationName("claims.inspect"),
 			Kind:        types.OperationKindScanSettings,

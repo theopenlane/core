@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const defaultMemorySessionStoreMaxEntries = 4096

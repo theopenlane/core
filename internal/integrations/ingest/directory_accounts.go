@@ -3,176 +3,49 @@ package ingest
 import (
 	"context"
 
-	integrationstate "github.com/theopenlane/core/common/integrations/state"
-	integrationtypes "github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// DirectoryAccountIngestRequest defines the inputs required for directory account ingestion
-// It expects alert envelopes produced by integration operations
-type DirectoryAccountIngestRequest struct {
-	// OrgID identifies the organization that owns the directory accounts
-	OrgID string
-	// IntegrationID identifies the integration record
-	IntegrationID string
-	// Provider identifies the integration provider
-	Provider integrationtypes.ProviderType
-	// Operation identifies the operation that produced the envelopes
-	Operation integrationtypes.OperationName
-	// IntegrationConfig supplies integration-level configuration for mapping
-	IntegrationConfig openapi.IntegrationConfig
-	// ProviderState carries provider-specific state for mapping
-	ProviderState integrationstate.IntegrationProviderState
-	// OperationConfig supplies operation-level configuration for mapping
-	OperationConfig map[string]any
-	// Envelopes holds account payloads to ingest
-	Envelopes []integrationtypes.AlertEnvelope
-	// DB provides access to the persistence layer
-	DB *generated.Client
-}
-
-// Validate checks that required fields are present
-func (r *DirectoryAccountIngestRequest) Validate() error {
-	if r.OrgID == "" {
-		return ErrIngestOrgIDRequired
-	}
-	if r.IntegrationID == "" {
-		return ErrIngestIntegrationRequired
-	}
-	if r.DB == nil {
-		return ErrDBClientRequired
-	}
-
-	return nil
-}
-
-// DirectoryAccountIngestSummary reports mapping and persistence stats
-type DirectoryAccountIngestSummary struct {
-	// Total counts total envelopes processed
-	Total int
-	// Mapped counts envelopes that produced mapped output
-	Mapped int
-	// Persisted counts envelopes that were persisted
-	Persisted int
-	// Skipped counts envelopes filtered out by mapping
-	Skipped int
-	// Failed counts envelopes that failed mapping or persistence
-	Failed int
-	// Created counts new directory accounts created
-	Created int
-	// Updated counts existing directory accounts updated
-	Updated int
-}
-
-// DirectoryAccountIngestResult captures the results of an ingestion run
-type DirectoryAccountIngestResult struct {
-	// Summary aggregates ingestion totals
-	Summary DirectoryAccountIngestSummary
-	// Errors captures per-envelope error messages
-	Errors []string
-}
-
 type directoryAccountIngestContext struct {
-	mapper               *MappingEvaluator
-	schema               integrationgenerated.IntegrationMappingSchema
-	overrideIndex        mappingOverrideIndex
-	integrationConfigMap map[string]any
-	providerStateMap     map[string]any
+	schemaIngestContext
 }
 
 // SupportsDirectoryAccountIngest reports whether default or configured mappings exist
-func SupportsDirectoryAccountIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig) bool {
-	if supportsDefaultMapping(provider, mappingSchemaDirectoryAccount) {
-		return true
-	}
-
-	return newMappingOverrideIndex(config).HasAny(provider, mappingSchemaDirectoryAccount)
+func SupportsDirectoryAccountIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig, mappingIndex integrationtypes.MappingIndex) bool {
+	return supportsSchemaIngest(mappingIndex, provider, config, mappingSchemaDirectoryAccount)
 }
 
 // newDirectoryAccountIngestContext prepares shared state for ingest runs
-func newDirectoryAccountIngestContext(req DirectoryAccountIngestRequest) (directoryAccountIngestContext, error) {
-	mapper, err := NewMappingEvaluator()
-	if err != nil {
-		return directoryAccountIngestContext{}, err
-	}
-
-	schema, ok := integrationgenerated.IntegrationMappingSchemas[mappingSchemaDirectoryAccount]
-	if !ok {
-		return directoryAccountIngestContext{}, ErrMappingSchemaNotFound
-	}
-
-	integrationConfigMap, err := jsonx.ToMap(req.IntegrationConfig)
-	if err != nil {
-		return directoryAccountIngestContext{}, err
-	}
-	providerStateMap, err := jsonx.ToMap(req.ProviderState)
+func newDirectoryAccountIngestContext(req IngestRequest) (directoryAccountIngestContext, error) {
+	ingestCtx, err := newSchemaIngestContext(req.IntegrationConfig, req.ProviderState, req.MappingIndex, mappingSchemaDirectoryAccount)
 	if err != nil {
 		return directoryAccountIngestContext{}, err
 	}
 
 	return directoryAccountIngestContext{
-		mapper:               mapper,
-		schema:               schema,
-		overrideIndex:        newMappingOverrideIndex(req.IntegrationConfig),
-		integrationConfigMap: integrationConfigMap,
-		providerStateMap:     providerStateMap,
+		schemaIngestContext: ingestCtx,
 	}, nil
 }
 
 // mapEnvelopeToDirectoryAccount applies mapping rules to a single account envelope
-func (c *directoryAccountIngestContext) mapEnvelopeToDirectoryAccount(ctx context.Context, req DirectoryAccountIngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
-	payloadMap, err := decodeAlertPayload(envelope.Payload)
-	if err != nil {
-		return nil, false, err
-	}
-
-	spec, ok := resolveMappingSpecWithIndex(c.overrideIndex, req.Provider, mappingSchemaDirectoryAccount, envelope.AlertType)
-	if !ok {
-		return nil, false, ErrMappingNotFound
-	}
-
-	vars := MappingVars{
-		Payload:           payloadMap,
-		Resource:          envelope.Resource,
-		AlertType:         envelope.AlertType,
-		Provider:          req.Provider,
-		Operation:         req.Operation,
-		OrgID:             req.OrgID,
-		IntegrationID:     req.IntegrationID,
-		Config:            req.OperationConfig,
-		IntegrationConfig: c.integrationConfigMap,
-		ProviderState:     c.providerStateMap,
-	}.Map()
-
-	allowed, err := c.mapper.EvaluateFilter(ctx, spec.FilterExpr, vars)
-	if err != nil {
-		return nil, false, err
-	}
-	if !allowed {
-		return nil, false, nil
-	}
-
-	mapped, err := c.mapper.EvaluateMap(ctx, spec.MapExpr, vars)
-	if err != nil {
-		return nil, false, err
-	}
-
-	mapped = filterMappingOutput(c.schema, mapped)
-	if err := validateMappingOutput(c.schema, mapped); err != nil {
-		return nil, false, err
-	}
-
-	return mapped, true, nil
+func (c *directoryAccountIngestContext) mapEnvelopeToDirectoryAccount(ctx context.Context, req IngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
+	return mapIngestEnvelope(ctx, c.schemaIngestContext, envelopeMappingRequest{
+		Provider:        req.Provider,
+		Operation:       req.Operation,
+		OrgID:           req.OrgID,
+		IntegrationID:   req.IntegrationID,
+		OperationConfig: req.OperationConfig,
+	}, mappingSchemaDirectoryAccount, envelope)
 }
 
 // DirectoryAccounts maps provider payloads into directory account inputs and persists them
-func DirectoryAccounts(ctx context.Context, req DirectoryAccountIngestRequest) (DirectoryAccountIngestResult, error) {
-	result := DirectoryAccountIngestResult{}
+func DirectoryAccounts(ctx context.Context, req IngestRequest) (IngestResult, error) {
+	result := IngestResult{}
 
 	if err := req.Validate(); err != nil {
 		return result, err
@@ -183,42 +56,30 @@ func DirectoryAccounts(ctx context.Context, req DirectoryAccountIngestRequest) (
 		return result, err
 	}
 
-	for _, envelope := range req.Envelopes {
-		result.Summary.Total++
-
+	summary, errors := processIngestEnvelopes(req.Envelopes, func(envelope integrationtypes.AlertEnvelope) (bool, bool, error) {
 		mapped, allowed, err := ingestCtx.mapEnvelopeToDirectoryAccount(ctx, req, envelope)
 		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
+			return false, false, err
 		}
 		if !allowed {
-			result.Summary.Skipped++
-			continue
+			return false, false, nil
 		}
 
 		input, err := decodeDirectoryAccountInput(mapped)
 		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
+			return false, false, err
 		}
 
 		created, err := upsertDirectoryAccount(ctx, req.DB, req.OrgID, req.IntegrationID, input)
 		if err != nil {
-			result.Summary.Failed++
-			result.Errors = append(result.Errors, err.Error())
-			continue
+			return false, false, err
 		}
 
-		result.Summary.Mapped++
-		result.Summary.Persisted++
-		if created {
-			result.Summary.Created++
-		} else {
-			result.Summary.Updated++
-		}
-	}
+		return true, created, nil
+	})
+
+	result.Summary = summary
+	result.Errors = errors
 
 	return result, nil
 }

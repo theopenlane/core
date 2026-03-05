@@ -9,14 +9,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	integrationconfig "github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -67,10 +66,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 
 	originalActivation := suite.h.IntegrationActivation
 	store := keystore.NewStore(suite.db)
-	sessions := keymaker.NewMemorySessionStore()
-	svc, err := keymaker.NewService(suite.h.IntegrationRegistry, store, sessions, keymaker.ServiceOptions{})
-	require.NoError(t, err)
-	activationSvc, err := activation.NewService(svc, store, &mockOperationRunner{}, &mockPayloadMinter{})
+	activationSvc, err := activation.NewService(store, &mockOperationRunner{}, &mockPayloadMinter{})
 	require.NoError(t, err)
 	suite.h.IntegrationActivation = activationSvc
 	defer func() {

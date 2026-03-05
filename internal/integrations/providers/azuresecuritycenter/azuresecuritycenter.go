@@ -3,9 +3,9 @@ package azuresecuritycenter
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TypeAzureSecurityCenter identifies the Azure Security Center provider.

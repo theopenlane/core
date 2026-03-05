@@ -6,7 +6,7 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TestMergeProviderSpecs verifies provider overrides are merged onto loaded defaults.

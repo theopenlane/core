@@ -9,12 +9,12 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/googleapi"
 
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
-	googleWorkspaceHealthOp           types.OperationName = "health.default"
+	googleWorkspaceHealthOp           types.OperationName = types.OperationHealthDefault
 	googleWorkspaceDirectorySyncOp    types.OperationName = types.OperationDirectorySync
 	googleWorkspaceDirectoryAlertType string              = "directory_account"
 	googleWorkspaceDirectoryFields    string              = "nextPageToken,users(id,primaryEmail,name/fullName,name/givenName,name/familyName,thumbnailPhotoUrl,organizations/title,organizations/department,orgUnitPath,suspended,archived,isEnforcedIn2Sv,isEnrolledIn2Sv,lastLoginTime)"

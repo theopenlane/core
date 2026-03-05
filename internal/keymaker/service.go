@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"maps"
+	"strings"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // defaultSessionTTL is the duration that OAuth sessions remain valid if no custom TTL is configured
@@ -160,7 +161,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 	}
 
 	state := session.State()
-	if state == "" {
+	if strings.TrimSpace(state) == "" {
 		return BeginResponse{}, integrations.ErrStateRequired
 	}
 

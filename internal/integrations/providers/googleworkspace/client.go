@@ -9,8 +9,9 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -20,7 +21,7 @@ const (
 
 // googleWorkspaceClientDescriptors returns the client descriptors published by Google Workspace.
 func googleWorkspaceClientDescriptors() []types.ClientDescriptor {
-	return auth.DefaultClientDescriptors(TypeGoogleWorkspace, ClientGoogleWorkspaceAPI, "Google Workspace REST API client", buildGoogleWorkspaceClient)
+	return providerkit.DefaultClientDescriptors(TypeGoogleWorkspace, ClientGoogleWorkspaceAPI, "Google Workspace REST API client", buildGoogleWorkspaceClient)
 }
 
 // buildGoogleWorkspaceClient constructs an Admin SDK client from credential payload.

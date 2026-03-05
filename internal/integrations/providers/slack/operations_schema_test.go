@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers/schematest"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TestSlackMessageConfigSchema verifies the Slack message schema has expected fields

@@ -22,7 +22,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -31,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"

@@ -17,12 +17,12 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -64,8 +64,8 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	if h.IntegrationActivation == nil {
-		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
+	if h.IntegrationKeymaker == nil {
+		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
 	}
 
 	state, err := h.generateOAuthState(caller.OrganizationID, string(providerType))
@@ -77,7 +77,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	scopes := config.MergeRequestedScopes(spec, in.Scopes)
 
-	begin, err := h.IntegrationActivation.BeginOAuth(userCtx, activation.BeginOAuthRequest{
+	begin, err := h.IntegrationKeymaker.BeginAuthorization(userCtx, keymaker.BeginRequest{
 		OrgID:    caller.OrganizationID,
 		Provider: providerType,
 		Scopes:   scopes,
@@ -117,8 +117,8 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return nil
 	}
 
-	if h.IntegrationActivation == nil {
-		return h.InternalServerError(ctx, errActivationNotConfigured, openapiCtx)
+	if h.IntegrationKeymaker == nil {
+		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -167,7 +167,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	result, err := h.IntegrationActivation.CompleteOAuth(systemCtx, activation.CompleteOAuthRequest{
+	result, err := h.IntegrationKeymaker.CompleteAuthorization(systemCtx, keymaker.CompleteRequest{
 		State: in.State,
 		Code:  in.Code,
 	})

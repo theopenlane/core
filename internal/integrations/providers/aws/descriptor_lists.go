@@ -1,6 +1,6 @@
 package aws
 
-import "github.com/theopenlane/core/common/integrations/types"
+import "github.com/theopenlane/core/internal/integrations/types"
 
 // awsOperations returns the operation descriptors supported by the AWS provider
 func awsOperations() []types.OperationDescriptor {

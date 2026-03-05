@@ -4,12 +4,12 @@ import (
 	"context"
 	"strings"
 
-	"github.com/theopenlane/core/common/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/auth"
 
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // ProviderOption customizes API key providers.
@@ -55,29 +55,20 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 		}
 	}
 
-	return providers.BuilderFunc{
-		ProviderType: provider,
-		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			if spec.AuthType != "" && spec.AuthType != types.AuthKindAPIKey {
-				return nil, ErrAuthTypeMismatch
-			}
+	return providerkit.Builder(provider, func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+		if err := providerkit.ValidateAuthType(spec, types.AuthKindAPIKey, ErrAuthTypeMismatch); err != nil {
+			return nil, err
+		}
 
-			clients := operations.SanitizeClientDescriptors(provider, cfg.clients)
-			return &Provider{
-				BaseProvider: providers.NewBaseProvider(
-					provider,
-					types.ProviderCapabilities{
-						SupportsRefreshTokens: false,
-						SupportsClientPooling: len(clients) > 0,
-						SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
-					},
-					operations.SanitizeOperationDescriptors(provider, cfg.operations),
-					clients,
-				),
-				tokenField: cfg.tokenField,
-			}, nil
-		},
-	}
+		return &Provider{
+			BaseProvider: providerkit.NewBaseProvider(provider, spec, providerkit.BaseProviderConfig{
+				SupportsRefreshTokens: false,
+				Operations:            cfg.operations,
+				Clients:               cfg.clients,
+			}),
+			tokenField: cfg.tokenField,
+		}, nil
+	})
 }
 
 // Provider implements API key based integrations.

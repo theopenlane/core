@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -35,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/integrations/state"
 )
 
 // IntegrationCreate is the builder for creating a Integration entity.

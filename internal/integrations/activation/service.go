@@ -4,13 +4,10 @@ import (
 	"context"
 	"maps"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 )
-
-const defaultHealthOperation types.OperationName = "health.default"
 
 // CredentialWriter persists credential payloads produced during activation
 type CredentialWriter interface {
@@ -31,126 +28,29 @@ type PayloadMinter interface {
 	MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error)
 }
 
-// Service coordinates activation flows for OAuth and non-OAuth providers
+// Service coordinates non-OAuth provider configuration and health validation.
 type Service struct {
-	// keymaker manages OAuth/OIDC session state
-	keymaker *keymaker.Service
-	// store persists credential payloads after successful activation
+	// store persists credential payloads after successful configuration.
 	store CredentialWriter
-	// operations executes provider operations for health checks
+	// operations executes provider operations for health checks.
 	operations OperationRunner
-	// minter mints credentials from an in-memory payload for pre-persist validation
+	// minter mints credentials from an in-memory payload for pre-persist validation.
 	minter PayloadMinter
 }
 
-// NewService constructs an activation service from the supplied dependencies
-func NewService(keymakerSvc *keymaker.Service, store CredentialWriter, operations OperationRunner, minter PayloadMinter) (*Service, error) {
+// NewService constructs an activation service from the supplied dependencies.
+func NewService(store CredentialWriter, operations OperationRunner, minter PayloadMinter) (*Service, error) {
 	if store == nil {
 		return nil, ErrStoreRequired
-	}
-	if keymakerSvc == nil {
-		return nil, ErrKeymakerRequired
 	}
 	if minter == nil {
 		return nil, ErrMinterRequired
 	}
 
 	return &Service{
-		keymaker:   keymakerSvc,
 		store:      store,
 		operations: operations,
 		minter:     minter,
-	}, nil
-}
-
-// BeginOAuthRequest starts an OAuth/OIDC activation flow
-type BeginOAuthRequest struct {
-	// OrgID identifies the organization initiating the flow
-	OrgID string
-	// IntegrationID optionally identifies the integration record being activated
-	IntegrationID string
-	// Provider specifies which provider to authorize
-	Provider types.ProviderType
-	// RedirectURI overrides the default callback URL when needed
-	RedirectURI string
-	// Scopes optionally override the provider default scopes
-	Scopes []string
-	// Metadata carries optional provider-specific metadata
-	Metadata map[string]any
-	// LabelOverrides customizes UI labels presented to the user
-	LabelOverrides map[string]string
-	// State optionally supplies a pre-generated OAuth state value
-	State string
-}
-
-// BeginOAuthResponse returns the authorization URL/state pair
-type BeginOAuthResponse struct {
-	// Provider identifies which provider issued the authorization URL
-	Provider types.ProviderType
-	// State carries the CSRF state value for the flow
-	State string
-	// AuthURL is the URL the user should visit to authorize
-	AuthURL string
-}
-
-// BeginOAuth starts an OAuth/OIDC transaction with the requested provider
-func (s *Service) BeginOAuth(ctx context.Context, req BeginOAuthRequest) (BeginOAuthResponse, error) {
-	begin, err := s.keymaker.BeginAuthorization(ctx, keymaker.BeginRequest{
-		OrgID:          req.OrgID,
-		IntegrationID:  req.IntegrationID,
-		Provider:       req.Provider,
-		RedirectURI:    req.RedirectURI,
-		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       maps.Clone(req.Metadata),
-		LabelOverrides: maps.Clone(req.LabelOverrides),
-		State:          req.State,
-	})
-	if err != nil {
-		return BeginOAuthResponse{}, err
-	}
-
-	return BeginOAuthResponse{
-		Provider: begin.Provider,
-		State:    begin.State,
-		AuthURL:  begin.AuthURL,
-	}, nil
-}
-
-// CompleteOAuthRequest finalizes an OAuth/OIDC activation flow
-type CompleteOAuthRequest struct {
-	// State is the CSRF state value returned by the provider
-	State string
-	// Code is the authorization code returned by the provider
-	Code string
-}
-
-// CompleteOAuthResult reports the persisted credential and related identifiers
-type CompleteOAuthResult struct {
-	// Provider identifies which provider issued the credential
-	Provider types.ProviderType
-	// OrgID identifies the organization that owns the credential
-	OrgID string
-	// IntegrationID identifies the integration record containing the credential
-	IntegrationID string
-	// Credential contains the persisted credential payload
-	Credential types.CredentialPayload
-}
-
-// CompleteOAuth finalizes an OAuth/OIDC transaction and persists credentials
-func (s *Service) CompleteOAuth(ctx context.Context, req CompleteOAuthRequest) (CompleteOAuthResult, error) {
-	result, err := s.keymaker.CompleteAuthorization(ctx, keymaker.CompleteRequest{
-		State: req.State,
-		Code:  req.Code,
-	})
-	if err != nil {
-		return CompleteOAuthResult{}, err
-	}
-
-	return CompleteOAuthResult{
-		Provider:      result.Provider,
-		OrgID:         result.OrgID,
-		IntegrationID: result.IntegrationID,
-		Credential:    result.Credential,
 	}, nil
 }
 
@@ -220,7 +120,7 @@ func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (Configur
 	health, err := s.operations.RunWithPayload(ctx, types.OperationRequest{
 		OrgID:    req.OrgID,
 		Provider: req.Provider,
-		Name:     defaultHealthOperation,
+		Name:     types.OperationHealthDefault,
 	}, minted)
 	if err != nil {
 		return ConfigureResult{}, err

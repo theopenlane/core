@@ -1,9 +1,9 @@
 package aws
 
 import (
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/awssts"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TypeAWS identifies the consolidated AWS provider.

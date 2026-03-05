@@ -3,16 +3,16 @@ package {{.Provider}}
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/operations"
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // {{.Provider}}Operations returns the operation descriptors for the {{.ProviderPascal}} provider
 func {{.Provider}}Operations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
-			Name:         "health.default",
+			Name:         types.OperationHealthDefault,
 			Kind:         types.OperationKindHealth,
 			Description:  "{{.ProviderPascal}} connection health check",
 			Client:       ClientDefault,

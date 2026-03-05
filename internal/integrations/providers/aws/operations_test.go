@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TestAWSMetadataFromPayload validates required AWS metadata parsing.
@@ -63,7 +63,7 @@ func TestAWSCredentialsFromPayload(t *testing.T) {
 		},
 	}}
 
-	creds := auth.AWSCredentialsFromPayload(payload)
+	creds := awskit.AWSCredentialsFromPayload(payload)
 	assert.Equal(t, "AKIA_TEST", creds.AccessKeyID)
 	assert.Equal(t, "SECRET_TEST", creds.SecretAccessKey)
 	assert.Equal(t, "session-token", creds.SessionToken)
@@ -75,7 +75,7 @@ func TestAWSCredentialsFromPayload(t *testing.T) {
 	payload.Data.ProviderData["secretAccessKey"] = "SECRET_FALLBACK"
 	payload.Data.ProviderData["sessionToken"] = "session-token"
 
-	creds = auth.AWSCredentialsFromPayload(payload)
+	creds = awskit.AWSCredentialsFromPayload(payload)
 	assert.Equal(t, "AKIA_FALLBACK", creds.AccessKeyID)
 	assert.Equal(t, "SECRET_FALLBACK", creds.SecretAccessKey)
 	assert.Equal(t, "session-token", creds.SessionToken)
@@ -83,7 +83,7 @@ func TestAWSCredentialsFromPayload(t *testing.T) {
 
 // TestParseDuration verifies session duration parsing behavior.
 func TestParseDuration(t *testing.T) {
-	assert.Equal(t, time.Duration(0), auth.ParseDuration(""))
-	assert.Equal(t, time.Duration(0), auth.ParseDuration("not-a-duration"))
-	assert.Equal(t, 30*time.Minute, auth.ParseDuration("30m"))
+	assert.Equal(t, time.Duration(0), awskit.ParseDuration(""))
+	assert.Equal(t, time.Duration(0), awskit.ParseDuration("not-a-duration"))
+	assert.Equal(t, 30*time.Minute, awskit.ParseDuration("30m"))
 }

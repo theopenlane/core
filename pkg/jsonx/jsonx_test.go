@@ -76,3 +76,34 @@ func TestToMapNonObject(t *testing.T) {
 		t.Fatalf("expected ErrObjectExpected, got %v", err)
 	}
 }
+
+func TestCloneRawMessage(t *testing.T) {
+	original := json.RawMessage(`{"ok":true}`)
+	cloned := CloneRawMessage(original)
+	if len(cloned) == 0 {
+		t.Fatalf("expected cloned message")
+	}
+
+	cloned[0] = '['
+	if original[0] != '{' {
+		t.Fatalf("expected clone to avoid aliasing original")
+	}
+}
+
+func TestToRawMessage(t *testing.T) {
+	raw, err := ToRawMessage(sample{Name: "ok", Count: 1})
+	if err != nil {
+		t.Fatalf("unexpected ToRawMessage error: %v", err)
+	}
+	if string(raw) != `{"name":"ok","count":1}` {
+		t.Fatalf("unexpected raw output: %s", string(raw))
+	}
+
+	raw, err = ToRawMessage(nil)
+	if err != nil {
+		t.Fatalf("unexpected ToRawMessage nil error: %v", err)
+	}
+	if raw != nil {
+		t.Fatalf("expected nil raw message for nil input, got %s", string(raw))
+	}
+}

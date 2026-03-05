@@ -15,11 +15,11 @@ import (
 	"google.golang.org/api/option"
 	stsv1 "google.golang.org/api/sts/v1"
 
-	"github.com/theopenlane/core/common/integrations/auth"
-	"github.com/theopenlane/core/common/integrations/config"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 

@@ -5,8 +5,6 @@ import "errors"
 var (
 	// ErrResolverSourceRequired indicates an integration source dependency is required
 	ErrResolverSourceRequired = errors.New("targetresolver: source required")
-	// ErrResolverRegistryRequired indicates an operation registry dependency is required
-	ErrResolverRegistryRequired = errors.New("targetresolver: registry required")
 	// ErrResolverDBClientRequired indicates a database client dependency is required
 	ErrResolverDBClientRequired = errors.New("targetresolver: db client required")
 	// ErrResolverOwnerIDRequired indicates owner id is required to resolve targets
@@ -19,14 +17,6 @@ var (
 	ErrResolverProviderUnknown = errors.New("targetresolver: provider unknown")
 	// ErrResolverProviderMismatch indicates provider input conflicts with resolved integration provider
 	ErrResolverProviderMismatch = errors.New("targetresolver: provider mismatch")
-	// ErrResolverOperationCriteriaRequired indicates either operation name or operation kind must be provided
-	ErrResolverOperationCriteriaRequired = errors.New("targetresolver: operation criteria required")
-	// ErrResolverOperationNotRegistered indicates no matching operation descriptor exists for the provider
-	ErrResolverOperationNotRegistered = errors.New("targetresolver: operation not registered")
-	// ErrResolverOperationKindMismatch indicates operation name and operation kind constraints conflict
-	ErrResolverOperationKindMismatch = errors.New("targetresolver: operation kind mismatch")
-	// ErrResolverOperationDescriptorAmbiguous indicates operation selection matched multiple descriptors
-	ErrResolverOperationDescriptorAmbiguous = errors.New("targetresolver: operation descriptor ambiguous")
 	// ErrResolverIntegrationNotFound indicates no installed integration matched the criteria
 	ErrResolverIntegrationNotFound = errors.New("targetresolver: integration not found")
 	// ErrResolverIntegrationAmbiguous indicates multiple installed integrations matched the criteria

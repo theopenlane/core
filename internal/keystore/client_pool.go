@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/eddy"
 
 	"github.com/theopenlane/core/common/helpers"
-	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 

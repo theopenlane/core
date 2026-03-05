@@ -23,7 +23,7 @@ This guide documents the minimum file changes required to:
 - Register both OAuth and app-style builders as needed.
 
 3. Add provider spec JSON.
-- Add file: `common/integrations/config/providers/<provider>.json`
+- Add file: `internal/integrations/config/providers/<provider>.json`
 - Include auth metadata, labels, and default scopes.
 
 4. Implement provider operations.
@@ -96,7 +96,7 @@ Do this only when existing schemas cannot represent the object.
 2. Confirm generated schema metadata in `internal/ent/integrationgenerated/integration_mapping_generated.go`:
 - `IntegrationMappingSchemas` (CEL field map contract)
 - `IntegrationIngestSchemas` (schema topic/listener contract)
-3. Add schema constant in `common/integrations/types` (`MappingSchema...`) for operation descriptors.
+3. Add schema constant in `internal/integrations/types` (`MappingSchema...`) for operation descriptors.
 4. Implement ingest handler in `internal/integrations/ingest/`.
 5. Register handler in `internal/integrations/ingest/dispatch.go`.
 6. Ensure mappings resolve through registry mapping catalog.
@@ -138,7 +138,7 @@ Ingest: []types.IngestContract{
 Run at minimum:
 
 ```bash
-go test -tags test ./common/integrations/... ./internal/integrations/... ./internal/workflows/engine
+go test -tags test ./internal/integrations/... ./internal/workflows/engine
 ```
 
 If adding a provider, also ensure catalog conformance tests pass (included in the command above).

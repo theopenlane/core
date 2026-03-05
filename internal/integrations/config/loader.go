@@ -11,7 +11,7 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // FSLoader reads provider specs from an fs.FS rooted at the configured path
@@ -97,10 +97,7 @@ func decodeProviderSpec(data []byte, parser koanf.Parser) (ProviderSpec, error) 
 		Tag: "json",
 		DecoderConfig: &mapstructure.DecoderConfig{
 			WeaklyTypedInput: true,
-			DecodeHook: mapstructure.ComposeDecodeHookFunc(
-				mapstructure.StringToTimeDurationHookFunc(),
-				mapstructure.TextUnmarshallerHookFunc(),
-			),
+			DecodeHook:       DefaultMapstructureDecodeHook(),
 		},
 	}
 

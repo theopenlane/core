@@ -5,15 +5,9 @@ import (
 
 	"github.com/samber/mo"
 
-	"github.com/theopenlane/core/common/integrations/types"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
-
-// OperationRegistry exposes provider operation descriptors to resolver consumers
-type OperationRegistry interface {
-	// OperationDescriptors returns all operation descriptors for a provider
-	OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor
-}
 
 // IntegrationSource resolves installed integration records for owner and provider criteria
 type IntegrationSource interface {
@@ -31,18 +25,12 @@ type ResolveCriteria struct {
 	IntegrationID mo.Option[string]
 	// Provider optionally constrains resolution to a provider kind
 	Provider mo.Option[types.ProviderType]
-	// OperationName optionally constrains operation descriptor selection by exact name
-	OperationName mo.Option[types.OperationName]
-	// OperationKind optionally constrains operation descriptor selection by operation kind
-	OperationKind mo.Option[types.OperationKind]
 }
 
-// ResolveResult captures the final integration and operation selected for execution
+// ResolveResult captures the final integration selected for execution.
 type ResolveResult struct {
 	// Integration is the selected installed integration
 	Integration *entgen.Integration
 	// Provider is the selected provider kind
 	Provider types.ProviderType
-	// Operation is the selected operation descriptor
-	Operation types.OperationDescriptor
 }
