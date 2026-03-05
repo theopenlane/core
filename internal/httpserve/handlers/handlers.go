@@ -24,9 +24,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
-	"github.com/theopenlane/core/internal/integrations/activation"
 	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
@@ -47,6 +45,7 @@ type ProviderRegistry interface {
 	Config(provider types.ProviderType) (config.ProviderSpec, bool)
 	ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig
 	OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor
+	MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error)
 }
 
 // SchemaRegistry interface for dynamic schema registration
@@ -128,12 +127,10 @@ type Handler struct {
 	IntegrationOperations *keystore.OperationManager
 	// Gala is the shared event runtime for asynchronous dispatch.
 	Gala *gala.Gala
-	// IntegrationActivation orchestrates integration activation flows
-	IntegrationActivation *activation.Service
 	// IntegrationKeymaker manages OAuth/OIDC begin and callback completion flows.
 	IntegrationKeymaker *keymaker.Service
-	// IntegrationIngest wires ingest runtime dependencies.
-	IntegrationIngest *ingest.Runtime
+	// IntegrationMappingIndex resolves provider default ingest mappings for listener registration.
+	IntegrationMappingIndex types.MappingIndex
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
 	// CampaignWebhook contains the configuration for campaign-related email webhooks

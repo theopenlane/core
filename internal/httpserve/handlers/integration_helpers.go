@@ -23,7 +23,6 @@ var (
 	errIntegrationOperationsNotConfigured     = errors.New("integration operations manager not configured")
 	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
 	errKeymakerNotConfigured                  = errors.New("integration keymaker not configured")
-	errActivationNotConfigured                = errors.New("integration activation service not configured")
 	// errDBClientNotConfigured indicates the database client is missing.
 	errDBClientNotConfigured = errors.New("database client not configured")
 )

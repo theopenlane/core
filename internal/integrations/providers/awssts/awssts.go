@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 

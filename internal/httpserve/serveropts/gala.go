@@ -9,6 +9,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -115,11 +116,11 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return err
 	}
 
-	ingestRuntime := so.Config.Handler.IntegrationIngest
-	if ingestRuntime == nil {
-		log.Info().Msg("integration ingest runtime not configured; skipping ingest listener registration")
+	mappingIndex := so.Config.Handler.IntegrationMappingIndex
+	if mappingIndex == nil {
+		log.Info().Msg("integration ingest mapping index not configured; skipping ingest listener registration")
 	} else {
-		if _, err := ingestRuntime.RegisterListeners(galaApp.Registry(), dbClient); err != nil {
+		if _, err := ingest.RegisterIngestListeners(galaApp.Registry(), dbClient, mappingIndex); err != nil {
 			closeRuntimes()
 
 			return err

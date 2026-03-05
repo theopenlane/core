@@ -8,8 +8,8 @@ import (
 	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
-// WithIntegrationRuntime wires the full integration runtime dependency graph:
-// Registry -> Store -> Broker -> Clients -> Operations -> Activation -> Ingest.
+// WithIntegrationRuntime wires the integration runtime dependency graph:
+// Registry -> Store -> Broker -> Clients -> Operations -> Keymaker -> MappingIndex.
 func WithIntegrationRuntime(dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if dbClient == nil {
@@ -35,7 +35,6 @@ func WithIntegrationRuntime(dbClient *ent.Client) ServerOption {
 		s.Config.Handler.IntegrationClients = integrationDeps.Clients
 		s.Config.Handler.IntegrationOperations = integrationDeps.Operations
 		s.Config.Handler.IntegrationKeymaker = integrationDeps.Keymaker
-		s.Config.Handler.IntegrationActivation = integrationDeps.Activation
-		s.Config.Handler.IntegrationIngest = integrationDeps.Ingest
+		s.Config.Handler.IntegrationMappingIndex = integrationDeps.Mapping
 	})
 }
