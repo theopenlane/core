@@ -50,6 +50,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil {
+		logx.FromContext(ctx).Error().Msg("no authenticated user found in context; unable to enqueue export job")
 		return nil, auth.ErrNoAuthUser
 	}
 
@@ -146,6 +147,7 @@ func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next e
 
 		ctx, err = checkExportFiles(ctx, m)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error processing export files for mutation")
 			return nil, err
 		}
 

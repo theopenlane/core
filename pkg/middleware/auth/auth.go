@@ -55,7 +55,14 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 // based on the presence of impersonation token
 var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
 	caller, ok := auth.CallerFromContext(c.Request().Context())
-	return ok && caller != nil && caller.IsImpersonated()
+
+	skip := ok && caller != nil && caller.IsImpersonated()
+
+	if skip {
+		logx.FromContext(c.Request().Context()).Debug().Str("user_id", caller.SubjectID).Msg("skipping authentication for impersonated user")
+	}
+
+	return skip
 }
 
 // AuthenticateSkipperFuncForWebsockets determines whether Authenticate middleware should be skipped for websocket upgrades
@@ -189,7 +196,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayload, authOptions *Options) (*auth.Caller, error) {
 	bearerToken, err := auth.GetBearerTokenFromWebsocketRequest(initPayload)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to get bearer token from websocket init payload")
+		logx.FromContext(ctx).Info().Str("error", err.Error()).Msg("failed to get bearer token from websocket init payload")
 
 		return nil, ErrUnableToAuthenticateTransport
 	}
@@ -201,7 +208,7 @@ func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayloa
 
 	claims, err := validator.VerifyWithContext(ctx, bearerToken)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to verify token in websocket init payload")
+		logx.FromContext(ctx).Info().Str("error", err.Error()).Msg("failed to verify token in websocket init payload")
 
 		return nil, ErrUnableToAuthenticateTransport
 	}

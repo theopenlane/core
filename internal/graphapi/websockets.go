@@ -56,7 +56,7 @@ func (r *Resolver) webSocketInit(
 		r.authOptions,
 	)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to authenticate websocket init payload")
+		logx.FromContext(ctx).Info().Str("error", err.Error()).Msg("failed to authenticate websocket init payload")
 
 		return ctx, nil, err
 	}
