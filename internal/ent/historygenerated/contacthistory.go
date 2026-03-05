@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -57,7 +58,13 @@ type ContactHistory struct {
 	// the address of the contact
 	Address string `json:"address,omitempty"`
 	// status of the contact
-	Status       enums.UserStatus `json:"status,omitempty"`
+	Status enums.UserStatus `json:"status,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID string `json:"external_id,omitempty"`
+	// integration that sourced this contact, when populated via integration ingest
+	IntegrationID string `json:"integration_id,omitempty"`
+	// time when this contact was last observed by the source integration
+	ObservedAt   *models.DateTime `json:"observed_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -66,11 +73,13 @@ func (*ContactHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case contacthistory.FieldObservedAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case contacthistory.FieldTags:
 			values[i] = new([]byte)
 		case contacthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldDeletedBy, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus:
+		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldDeletedBy, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus, contacthistory.FieldExternalID, contacthistory.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case contacthistory.FieldHistoryTime, contacthistory.FieldCreatedAt, contacthistory.FieldUpdatedAt, contacthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -205,6 +214,25 @@ func (_m *ContactHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = enums.UserStatus(value.String)
 			}
+		case contacthistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
+		case contacthistory.FieldIntegrationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationID = value.String
+			}
+		case contacthistory.FieldObservedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
+			} else if value.Valid {
+				_m.ObservedAt = new(models.DateTime)
+				*_m.ObservedAt = *value.S.(*models.DateTime)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -294,6 +322,17 @@ func (_m *ContactHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	builder.WriteString("integration_id=")
+	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	if v := _m.ObservedAt; v != nil {
+		builder.WriteString("observed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

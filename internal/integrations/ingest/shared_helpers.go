@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// schemaIngestContext captures shared mapping state used by schema-specific ingest handlers.
+// schemaIngestContext captures shared mapping state used by schema-specific ingest handlers
 type schemaIngestContext struct {
 	mapper               *MappingEvaluator
 	schema               integrationgenerated.IntegrationMappingSchema
@@ -20,7 +20,7 @@ type schemaIngestContext struct {
 	mappingIndex         integrationtypes.MappingIndex
 }
 
-// envelopeMappingRequest captures shared request fields used during envelope mapping.
+// envelopeMappingRequest captures shared request fields used during envelope mapping
 type envelopeMappingRequest struct {
 	Provider        integrationtypes.ProviderType
 	Operation       integrationtypes.OperationName
@@ -29,12 +29,12 @@ type envelopeMappingRequest struct {
 	OperationConfig map[string]any
 }
 
-// envelopeProcessFunc processes one envelope and reports whether it was ingested and whether it created a new record.
+// envelopeProcessFunc processes one envelope and reports whether it was ingested and whether it created a new record
 type envelopeProcessFunc func(envelope integrationtypes.AlertEnvelope) (ingested bool, created bool, err error)
 
-// newSchemaIngestContext builds shared mapping context for one schema ingest execution.
+// newSchemaIngestContext builds shared mapping context for one schema ingest execution
 func newSchemaIngestContext(integrationConfig openapi.IntegrationConfig, providerState integrationstate.IntegrationProviderState, mappingIndex integrationtypes.MappingIndex, schemaName string) (schemaIngestContext, error) {
-	mapper, err := NewMappingEvaluator()
+	mapper, err := sharedMappingEvaluator()
 	if err != nil {
 		return schemaIngestContext{}, err
 	}
@@ -63,7 +63,7 @@ func newSchemaIngestContext(integrationConfig openapi.IntegrationConfig, provide
 	}, nil
 }
 
-// mapIngestEnvelope evaluates mapping rules for one envelope using shared ingest context.
+// mapIngestEnvelope evaluates mapping rules for one envelope using shared ingest context
 func mapIngestEnvelope(ctx context.Context, ingestCtx schemaIngestContext, req envelopeMappingRequest, schemaName string, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
 	payloadMap, err := decodeAlertPayload(envelope.Payload)
 	if err != nil {
@@ -109,7 +109,7 @@ func mapIngestEnvelope(ctx context.Context, ingestCtx schemaIngestContext, req e
 	return mapped, true, nil
 }
 
-// processIngestEnvelopes runs ingest processing for each envelope and accumulates summary counters and errors.
+// processIngestEnvelopes runs ingest processing for each envelope and accumulates summary counters and errors
 func processIngestEnvelopes(envelopes []integrationtypes.AlertEnvelope, process envelopeProcessFunc) (IngestSummary, []string) {
 	summary := IngestSummary{}
 	var errors []string

@@ -112,6 +112,10 @@ const (
 	FieldCpe = "cpe"
 	// FieldCategories holds the string denoting the categories field in the database.
 	FieldCategories = "categories"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -351,6 +355,8 @@ var Columns = []string{
 	FieldPurchaseDate,
 	FieldCpe,
 	FieldCategories,
+	FieldIntegrationID,
+	FieldObservedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "assets"
@@ -691,6 +697,16 @@ func ByPurchaseDate(opts ...sql.OrderTermOption) OrderOption {
 // ByCpe orders the results by the cpe field.
 func ByCpe(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCpe, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

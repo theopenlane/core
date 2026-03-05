@@ -1146,23 +1146,43 @@ func (_u *EntityUpdate) ClearVendorMetadata() *EntityUpdate {
 	return _u
 }
 
-// SetLogoFileID sets the "logo_file_id" field.
-func (_u *EntityUpdate) SetLogoFileID(v string) *EntityUpdate {
-	_u.mutation.SetLogoFileID(v)
+// SetExternalID sets the "external_id" field.
+func (_u *EntityUpdate) SetExternalID(v string) *EntityUpdate {
+	_u.mutation.SetExternalID(v)
 	return _u
 }
 
-// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *EntityUpdate) SetNillableLogoFileID(v *string) *EntityUpdate {
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableExternalID(v *string) *EntityUpdate {
 	if v != nil {
-		_u.SetLogoFileID(*v)
+		_u.SetExternalID(*v)
 	}
 	return _u
 }
 
-// ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *EntityUpdate) ClearLogoFileID() *EntityUpdate {
-	_u.mutation.ClearLogoFileID()
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityUpdate) ClearExternalID() *EntityUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityUpdate) SetObservedAt(v models.DateTime) *EntityUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableObservedAt(v *models.DateTime) *EntityUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityUpdate) ClearObservedAt() *EntityUpdate {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -2424,6 +2444,18 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entity.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entity.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entity.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entity.FieldObservedAt, field.TypeTime)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4845,23 +4877,43 @@ func (_u *EntityUpdateOne) ClearVendorMetadata() *EntityUpdateOne {
 	return _u
 }
 
-// SetLogoFileID sets the "logo_file_id" field.
-func (_u *EntityUpdateOne) SetLogoFileID(v string) *EntityUpdateOne {
-	_u.mutation.SetLogoFileID(v)
+// SetExternalID sets the "external_id" field.
+func (_u *EntityUpdateOne) SetExternalID(v string) *EntityUpdateOne {
+	_u.mutation.SetExternalID(v)
 	return _u
 }
 
-// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *EntityUpdateOne) SetNillableLogoFileID(v *string) *EntityUpdateOne {
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableExternalID(v *string) *EntityUpdateOne {
 	if v != nil {
-		_u.SetLogoFileID(*v)
+		_u.SetExternalID(*v)
 	}
 	return _u
 }
 
-// ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *EntityUpdateOne) ClearLogoFileID() *EntityUpdateOne {
-	_u.mutation.ClearLogoFileID()
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityUpdateOne) ClearExternalID() *EntityUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityUpdateOne) SetObservedAt(v models.DateTime) *EntityUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableObservedAt(v *models.DateTime) *EntityUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityUpdateOne) ClearObservedAt() *EntityUpdateOne {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -6153,6 +6205,18 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entity.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entity.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entity.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entity.FieldObservedAt, field.TypeTime)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

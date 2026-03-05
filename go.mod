@@ -12,6 +12,8 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
+replace github.com/theopenlane/entx => /Users/manderson/entx
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.39.0
@@ -375,5 +377,3 @@ require (
 	google.golang.org/grpc v1.79.3 // indirect
 	google.golang.org/protobuf v1.36.11
 )
-
-replace github.com/theopenlane/entx => ../entx

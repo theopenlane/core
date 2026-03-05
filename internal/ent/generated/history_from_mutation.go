@@ -1453,6 +1453,14 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetCategories(categories)
 	}
 
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1766,6 +1774,18 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetCategories(asset.Categories)
 		}
 
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(asset.IntegrationID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(asset.ObservedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1848,6 +1868,8 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillablePurchaseDate(asset.PurchaseDate).
 			SetCpe(asset.Cpe).
 			SetCategories(asset.Categories).
+			SetIntegrationID(asset.IntegrationID).
+			SetNillableObservedAt(asset.ObservedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -2742,6 +2764,18 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2863,6 +2897,24 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(contact.Status)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(contact.ExternalID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(contact.IntegrationID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(contact.ObservedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2913,6 +2965,9 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPhoneNumber(contact.PhoneNumber).
 			SetAddress(contact.Address).
 			SetStatus(contact.Status).
+			SetExternalID(contact.ExternalID).
+			SetIntegrationID(contact.IntegrationID).
+			SetNillableObservedAt(contact.ObservedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7390,8 +7445,12 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetVendorMetadata(vendorMetadata)
 	}
 
-	if logoFileID, exists := m.LogoFileID(); exists {
-		create = create.SetNillableLogoFileID(&logoFileID)
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
 	}
 
 	_, err := create.Save(ctx)
@@ -7779,10 +7838,16 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVendorMetadata(entity.VendorMetadata)
 		}
 
-		if logoFileID, exists := m.LogoFileID(); exists {
-			create = create.SetNillableLogoFileID(&logoFileID)
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
 		} else {
-			create = create.SetNillableLogoFileID(entity.LogoFileID)
+			create = create.SetExternalID(entity.ExternalID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(entity.ObservedAt)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -7879,7 +7944,8 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableNextReviewAt(entity.NextReviewAt).
 			SetNillableContractRenewalAt(entity.ContractRenewalAt).
 			SetVendorMetadata(entity.VendorMetadata).
-			SetNillableLogoFileID(entity.LogoFileID).
+			SetExternalID(entity.ExternalID).
+			SetNillableObservedAt(entity.ObservedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -18301,6 +18367,18 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
+	}
+
 	if externalUUID, exists := m.ExternalUUID(); exists {
 		create = create.SetNillableExternalUUID(&externalUUID)
 	}
@@ -18490,6 +18568,24 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(risk.ScopeID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(risk.ExternalID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(risk.IntegrationID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(risk.ObservedAt)
+		}
+
 		if externalUUID, exists := m.ExternalUUID(); exists {
 			create = create.SetNillableExternalUUID(&externalUUID)
 		} else {
@@ -18626,6 +18722,9 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(risk.EnvironmentID).
 			SetScopeName(risk.ScopeName).
 			SetScopeID(risk.ScopeID).
+			SetExternalID(risk.ExternalID).
+			SetIntegrationID(risk.IntegrationID).
+			SetNillableObservedAt(risk.ObservedAt).
 			SetNillableExternalUUID(risk.ExternalUUID).
 			SetName(risk.Name).
 			SetStatus(risk.Status).

@@ -6,25 +6,26 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// mappingKey uniquely identifies a provider mapping by provider, schema, and variant.
+// mappingKey uniquely identifies a provider mapping by provider, schema, and variant
 type mappingKey struct {
 	provider types.ProviderType
 	schema   types.MappingSchema
 	variant  string
 }
 
+// providerSchemaKey identifies whether any mapping exists for a provider and schema pair
 type providerSchemaKey struct {
 	provider types.ProviderType
 	schema   types.MappingSchema
 }
 
-// mappingCatalog stores provider default mappings in a typed lookup index.
+// mappingCatalog stores provider default mappings in a typed lookup index
 type mappingCatalog struct {
 	byKey              map[mappingKey]types.MappingSpec
 	supportsByProvider map[providerSchemaKey]struct{}
 }
 
-// newMappingCatalog builds an empty provider mapping catalog.
+// newMappingCatalog builds an empty provider mapping catalog
 func newMappingCatalog() *mappingCatalog {
 	return &mappingCatalog{
 		byKey:              map[mappingKey]types.MappingSpec{},
@@ -32,7 +33,7 @@ func newMappingCatalog() *mappingCatalog {
 	}
 }
 
-// register records one provider mapping in the catalog.
+// register records one provider mapping in the catalog
 func (c *mappingCatalog) register(provider types.ProviderType, schema types.MappingSchema, variant string, spec types.MappingSpec) {
 	normalizedSchema := types.NormalizeMappingSchema(schema)
 	if provider == types.ProviderUnknown || normalizedSchema == "" {
@@ -51,7 +52,7 @@ func (c *mappingCatalog) register(provider types.ProviderType, schema types.Mapp
 	}] = struct{}{}
 }
 
-// registerProvider records all mappings published by one provider.
+// registerProvider records all mappings published by one provider
 func (c *mappingCatalog) registerProvider(provider types.ProviderType, mappings []types.MappingRegistration) {
 	if provider == types.ProviderUnknown {
 		return
@@ -62,7 +63,7 @@ func (c *mappingCatalog) registerProvider(provider types.ProviderType, mappings 
 	}
 }
 
-// supports reports whether any mapping exists for provider and schema.
+// supports reports whether any mapping exists for provider and schema
 func (c *mappingCatalog) supports(provider types.ProviderType, schema types.MappingSchema) bool {
 	_, ok := c.supportsByProvider[providerSchemaKey{
 		provider: provider,
@@ -72,7 +73,7 @@ func (c *mappingCatalog) supports(provider types.ProviderType, schema types.Mapp
 	return ok
 }
 
-// resolve returns a mapping for provider/schema/variant, falling back to empty-variant default.
+// resolve returns a mapping for provider/schema/variant, falling back to empty-variant default
 func (c *mappingCatalog) resolve(provider types.ProviderType, schema types.MappingSchema, variant string) (types.MappingSpec, bool) {
 	normalizedSchema := types.NormalizeMappingSchema(schema)
 	if normalizedSchema == "" || provider == types.ProviderUnknown {

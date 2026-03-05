@@ -3075,6 +3075,14 @@ type Asset implements Node {
 	the categories of the asset, e.g. web server, database, etc
 	"""
 	categories: [String!]
+	"""
+	integration that discovered this asset, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
 	owner: Organization
 	blockedGroups(
 		"""
@@ -3548,6 +3556,7 @@ enum AssetOrderField {
 	cost_center
 	estimated_monthly_cost
 	purchase_date
+	observed_at
 }
 """
 AssetSourceType is enum for the field source_type
@@ -4278,6 +4287,37 @@ input AssetWhereInput {
 	purchaseDateLTE: DateTime
 	purchaseDateIsNil: Boolean
 	purchaseDateNotNil: Boolean
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -6321,6 +6361,18 @@ type Contact implements Node {
 	status of the contact
 	"""
 	status: ContactUserStatus!
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
 	owner: Organization
 	entities(
 		"""
@@ -6550,6 +6602,8 @@ enum ContactOrderField {
 	company
 	email
 	STATUS
+	external_id
+	observed_at
 }
 """
 Return response for updateContact mutation
@@ -6786,6 +6840,55 @@ input ContactWhereInput {
 	statusNEQ: ContactUserStatus
 	statusIn: [ContactUserStatus!]
 	statusNotIn: [ContactUserStatus!]
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -10924,6 +11027,14 @@ input CreateAssetInput {
 	the categories of the asset, e.g. web server, database, etc
 	"""
 	categories: [String!]
+	"""
+	integration that discovered this asset, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -11159,6 +11270,18 @@ input CreateContactInput {
 	status of the contact
 	"""
 	status: ContactUserStatus
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
 	ownerID: ID
 	entityIDs: [ID!]
 	campaignIDs: [ID!]
@@ -12266,6 +12389,14 @@ input CreateEntityInput {
 	vendor metadata such as additional enrichment info, company size, public, etc.
 	"""
 	vendorMetadata: Map
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -14772,6 +14903,18 @@ input CreateRiskInput {
 	the scope of the risk
 	"""
 	scopeName: String
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
@@ -23394,9 +23537,13 @@ type Entity implements Node {
 	"""
 	vendorMetadata: Map
 	"""
-	The logo file id for the entity
+	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
-	logoFileID: ID
+	externalID: String
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
 	owner: Organization
 	blockedGroups(
 		"""
@@ -24179,6 +24326,8 @@ enum EntityOrderField {
 	REVIEW_FREQUENCY
 	next_review_at
 	contract_renewal_at
+	external_id
+	observed_at
 }
 type EntityType implements Node {
 	id: ID!
@@ -25308,23 +25457,36 @@ input EntityWhereInput {
 	contractRenewalAtIsNil: Boolean
 	contractRenewalAtNotNil: Boolean
 	"""
-	logo_file_id field predicates
+	external_id field predicates
 	"""
-	logoFileID: ID
-	logoFileIDNEQ: ID
-	logoFileIDIn: [ID!]
-	logoFileIDNotIn: [ID!]
-	logoFileIDGT: ID
-	logoFileIDGTE: ID
-	logoFileIDLT: ID
-	logoFileIDLTE: ID
-	logoFileIDContains: ID
-	logoFileIDHasPrefix: ID
-	logoFileIDHasSuffix: ID
-	logoFileIDIsNil: Boolean
-	logoFileIDNotNil: Boolean
-	logoFileIDEqualFold: ID
-	logoFileIDContainsFold: ID
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -68541,6 +68703,18 @@ type Risk implements Node {
 	"""
 	scopeID: ID
 	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
+	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
@@ -69204,6 +69378,8 @@ Properties by which Risk connections can be ordered.
 enum RiskOrderField {
 	created_at
 	updated_at
+	external_id
+	observed_at
 	name
 	STATUS
 	IMPACT
@@ -69512,6 +69688,55 @@ input RiskWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	external_uuid field predicates
 	"""
@@ -83385,6 +83610,16 @@ input UpdateAssetInput {
 	categories: [String!]
 	appendCategories: [String!]
 	clearCategories: Boolean
+	"""
+	integration that discovered this asset, when sourced via integration ingest
+	"""
+	integrationID: String
+	clearIntegrationID: Boolean
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -83704,6 +83939,21 @@ input UpdateContactInput {
 	status of the contact
 	"""
 	status: ContactUserStatus
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	clearIntegrationID: Boolean
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEntityIDs: [ID!]
@@ -85168,6 +85418,16 @@ input UpdateEntityInput {
 	"""
 	vendorMetadata: Map
 	clearVendorMetadata: Boolean
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -88755,6 +89015,21 @@ input UpdateRiskInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	clearIntegrationID: Boolean
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""

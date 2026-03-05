@@ -980,10 +980,6 @@
               "providerUsername": {
                 "description": "Username from the OAuth provider",
                 "type": "string"
-              },
-              "refreshToken": {
-                "description": "OAuth refresh token",
-                "type": "string"
               }
             },
             "type": "object"
@@ -5966,7 +5962,20 @@
             "description": ""
           }
         },
-        "security": [],
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "oauth2": []
+          },
+          {
+            "basic": []
+          },
+          {
+            "apiKey": []
+          }
+        ],
         "summary": "GitHubAppInstallCallback",
         "tags": [
           "integrations"
@@ -6444,8 +6453,7 @@
                       "success": true,
                       "token": {
                         "accessToken": "ghr_example_token",
-                        "provider": "",
-                        "refreshToken": "ghr_example_refresh_token"
+                        "provider": ""
                       }
                     }
                   }

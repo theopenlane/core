@@ -707,9 +707,6 @@ components:
                         providerUsername:
                             description: Username from the OAuth provider
                             type: string
-                        refreshToken:
-                            description: OAuth refresh token
-                            type: string
                     type: object
                 unverified:
                     type: boolean
@@ -4174,7 +4171,6 @@ paths:
                                         token:
                                             accessToken: ghr_example_token
                                             provider: ""
-                                            refreshToken: ghr_example_refresh_token
                             schema:
                                 $ref: '#/components/schemas/IntegrationTokenResponse'
                     description: Success
@@ -4237,7 +4233,11 @@ paths:
                     description: Internal Server Error
                 default:
                     description: ""
-            security: []
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
             summary: GitHubAppInstallCallback
             tags:
                 - integrations

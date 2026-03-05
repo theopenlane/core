@@ -1830,6 +1830,14 @@ type AssetHistory implements Node {
 	the categories of the asset, e.g. web server, database, etc
 	"""
 	categories: [String!]
+	"""
+	integration that discovered this asset, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
 }
 """
 AssetHistoryAssetType is enum for the field asset_type
@@ -1910,6 +1918,7 @@ enum AssetHistoryOrderField {
 	cost_center
 	estimated_monthly_cost
 	purchase_date
+	observed_at
 }
 """
 AssetHistorySourceType is enum for the field source_type
@@ -2667,6 +2676,37 @@ input AssetHistoryWhereInput {
 	purchaseDateLTE: DateTime
 	purchaseDateIsNil: Boolean
 	purchaseDateNotNil: Boolean
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 }
 type CampaignHistory implements Node {
 	id: ID!
@@ -3919,6 +3959,18 @@ type ContactHistory implements Node {
 	status of the contact
 	"""
 	status: ContactHistoryUserStatus!
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -3983,6 +4035,8 @@ enum ContactHistoryOrderField {
 	company
 	email
 	STATUS
+	external_id
+	observed_at
 }
 """
 ContactHistoryUserStatus is enum for the field status
@@ -4246,6 +4300,55 @@ input ContactHistoryWhereInput {
 	statusNEQ: ContactHistoryUserStatus
 	statusIn: [ContactHistoryUserStatus!]
 	statusNotIn: [ContactHistoryUserStatus!]
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 }
 """
 ControlControlSource is enum for the field source
@@ -10763,9 +10866,13 @@ type EntityHistory implements Node {
 	"""
 	vendorMetadata: Map
 	"""
-	The logo file id for the entity
+	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
-	logoFileID: String
+	externalID: String
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -10876,6 +10983,8 @@ enum EntityHistoryOrderField {
 	REVIEW_FREQUENCY
 	next_review_at
 	contract_renewal_at
+	external_id
+	observed_at
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -11685,23 +11794,36 @@ input EntityHistoryWhereInput {
 	contractRenewalAtIsNil: Boolean
 	contractRenewalAtNotNil: Boolean
 	"""
-	logo_file_id field predicates
+	external_id field predicates
 	"""
-	logoFileID: String
-	logoFileIDNEQ: String
-	logoFileIDIn: [String!]
-	logoFileIDNotIn: [String!]
-	logoFileIDGT: String
-	logoFileIDGTE: String
-	logoFileIDLT: String
-	logoFileIDLTE: String
-	logoFileIDContains: String
-	logoFileIDHasPrefix: String
-	logoFileIDHasSuffix: String
-	logoFileIDIsNil: Boolean
-	logoFileIDNotNil: Boolean
-	logoFileIDEqualFold: String
-	logoFileIDContainsFold: String
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 }
 type EntityTypeHistory implements Node {
 	id: ID!
@@ -29000,6 +29122,18 @@ type RiskHistory implements Node {
 	"""
 	scopeID: String
 	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
+	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
@@ -29114,6 +29248,8 @@ enum RiskHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	external_id
+	observed_at
 	name
 	STATUS
 	IMPACT
@@ -29449,6 +29585,55 @@ input RiskHistoryWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: String
 	scopeIDContainsFold: String
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	external_uuid field predicates
 	"""

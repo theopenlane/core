@@ -194,11 +194,13 @@ type ComplexityRoot struct {
 		HistoryTime                 func(childComplexity int) int
 		ID                          func(childComplexity int) int
 		Identifier                  func(childComplexity int) int
+		IntegrationID               func(childComplexity int) int
 		InternalNotes               func(childComplexity int) int
 		InternalOwner               func(childComplexity int) int
 		InternalOwnerGroupID        func(childComplexity int) int
 		InternalOwnerUserID         func(childComplexity int) int
 		Name                        func(childComplexity int) int
+		ObservedAt                  func(childComplexity int) int
 		Operation                   func(childComplexity int) int
 		OwnerID                     func(childComplexity int) int
 		PhysicalLocation            func(childComplexity int) int
@@ -321,23 +323,26 @@ type ComplexityRoot struct {
 	}
 
 	ContactHistory struct {
-		Address     func(childComplexity int) int
-		Company     func(childComplexity int) int
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Email       func(childComplexity int) int
-		FullName    func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		PhoneNumber func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Status      func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Address       func(childComplexity int) int
+		Company       func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Email         func(childComplexity int) int
+		ExternalID    func(childComplexity int) int
+		FullName      func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IntegrationID func(childComplexity int) int
+		ObservedAt    func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		PhoneNumber   func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Status        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	ContactHistoryConnection struct {
@@ -855,6 +860,7 @@ type ComplexityRoot struct {
 		EntityTypeID                          func(childComplexity int) int
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
+		ExternalID                            func(childComplexity int) int
 		HasSoc2                               func(childComplexity int) int
 		HistoryTime                           func(childComplexity int) int
 		ID                                    func(childComplexity int) int
@@ -870,6 +876,7 @@ type ComplexityRoot struct {
 		MfaSupported                          func(childComplexity int) int
 		Name                                  func(childComplexity int) int
 		NextReviewAt                          func(childComplexity int) int
+		ObservedAt                            func(childComplexity int) int
 		Operation                             func(childComplexity int) int
 		OwnerID                               func(childComplexity int) int
 		ProvidedServices                      func(childComplexity int) int
@@ -2173,14 +2180,17 @@ type ComplexityRoot struct {
 		DisplayID         func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
+		ExternalID        func(childComplexity int) int
 		ExternalUUID      func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
+		IntegrationID     func(childComplexity int) int
 		Likelihood        func(childComplexity int) int
 		Mitigation        func(childComplexity int) int
 		MitigationJSON    func(childComplexity int) int
 		Name              func(childComplexity int) int
+		ObservedAt        func(childComplexity int) int
 		Operation         func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Ref               func(childComplexity int) int
@@ -4147,6 +4157,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AssetHistory.Identifier(childComplexity), true
 
+	case "AssetHistory.integrationID":
+		if e.ComplexityRoot.AssetHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.IntegrationID(childComplexity), true
+
 	case "AssetHistory.internalNotes":
 		if e.ComplexityRoot.AssetHistory.InternalNotes == nil {
 			break
@@ -4181,6 +4198,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistory.Name(childComplexity), true
+
+	case "AssetHistory.observedAt":
+		if e.ComplexityRoot.AssetHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.ObservedAt(childComplexity), true
 
 	case "AssetHistory.operation":
 		if e.ComplexityRoot.AssetHistory.Operation == nil {
@@ -4882,6 +4906,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ContactHistory.Email(childComplexity), true
 
+	case "ContactHistory.externalID":
+		if e.ComplexityRoot.ContactHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.ExternalID(childComplexity), true
+
 	case "ContactHistory.fullName":
 		if e.ComplexityRoot.ContactHistory.FullName == nil {
 			break
@@ -4902,6 +4933,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ContactHistory.ID(childComplexity), true
+
+	case "ContactHistory.integrationID":
+		if e.ComplexityRoot.ContactHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.IntegrationID(childComplexity), true
+
+	case "ContactHistory.observedAt":
+		if e.ComplexityRoot.ContactHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.ObservedAt(childComplexity), true
 
 	case "ContactHistory.operation":
 		if e.ComplexityRoot.ContactHistory.Operation == nil {
@@ -7766,6 +7811,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EntityHistory.EnvironmentName(childComplexity), true
 
+	case "EntityHistory.externalID":
+		if e.ComplexityRoot.EntityHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ExternalID(childComplexity), true
+
 	case "EntityHistory.hasSoc2":
 		if e.ComplexityRoot.EntityHistory.HasSoc2 == nil {
 			break
@@ -7870,6 +7922,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.NextReviewAt(childComplexity), true
+
+	case "EntityHistory.observedAt":
+		if e.ComplexityRoot.EntityHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ObservedAt(childComplexity), true
 
 	case "EntityHistory.operation":
 		if e.ComplexityRoot.EntityHistory.Operation == nil {
@@ -15455,6 +15514,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.EnvironmentName(childComplexity), true
 
+	case "RiskHistory.externalID":
+		if e.ComplexityRoot.RiskHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ExternalID(childComplexity), true
+
 	case "RiskHistory.externalUUID":
 		if e.ComplexityRoot.RiskHistory.ExternalUUID == nil {
 			break
@@ -15483,6 +15549,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.Impact(childComplexity), true
 
+	case "RiskHistory.integrationID":
+		if e.ComplexityRoot.RiskHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.IntegrationID(childComplexity), true
+
 	case "RiskHistory.likelihood":
 		if e.ComplexityRoot.RiskHistory.Likelihood == nil {
 			break
@@ -15510,6 +15583,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.Name(childComplexity), true
+
+	case "RiskHistory.observedAt":
+		if e.ComplexityRoot.RiskHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ObservedAt(childComplexity), true
 
 	case "RiskHistory.operation":
 		if e.ComplexityRoot.RiskHistory.Operation == nil {
@@ -23092,6 +23172,14 @@ type AssetHistory implements Node {
   the categories of the asset, e.g. web server, database, etc
   """
   categories: [String!]
+  """
+  integration that discovered this asset, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this asset was last observed by the source integration
+  """
+  observedAt: DateTime
 }
 """
 AssetHistoryAssetType is enum for the field asset_type
@@ -23172,6 +23260,7 @@ enum AssetHistoryOrderField {
   cost_center
   estimated_monthly_cost
   purchase_date
+  observed_at
 }
 """
 AssetHistorySourceType is enum for the field source_type
@@ -23929,6 +24018,37 @@ input AssetHistoryWhereInput {
   purchaseDateLTE: DateTime
   purchaseDateIsNil: Boolean
   purchaseDateNotNil: Boolean
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
 }
 type CampaignHistory implements Node {
   id: ID!
@@ -25172,6 +25292,18 @@ type ContactHistory implements Node {
   status of the contact
   """
   status: ContactHistoryUserStatus!
+  """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that sourced this contact, when populated via integration ingest
+  """
+  integrationID: String
+  """
+  time when this contact was last observed by the source integration
+  """
+  observedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -25236,6 +25368,8 @@ enum ContactHistoryOrderField {
   company
   email
   STATUS
+  external_id
+  observed_at
 }
 """
 ContactHistoryUserStatus is enum for the field status
@@ -25499,6 +25633,55 @@ input ContactHistoryWhereInput {
   statusNEQ: ContactHistoryUserStatus
   statusIn: [ContactHistoryUserStatus!]
   statusNotIn: [ContactHistoryUserStatus!]
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
 }
 type ControlHistory implements Node {
   id: ID!
@@ -31999,9 +32182,13 @@ type EntityHistory implements Node {
   """
   vendorMetadata: Map
   """
-  The logo file id for the entity
+  stable identifier assigned by the source system, used for integration ingest deduplication
   """
-  logoFileID: String
+  externalID: String
+  """
+  time when this entity was last observed by the source integration
+  """
+  observedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -32112,6 +32299,8 @@ enum EntityHistoryOrderField {
   REVIEW_FREQUENCY
   next_review_at
   contract_renewal_at
+  external_id
+  observed_at
 }
 """
 EntityHistoryWhereInput is used for filtering EntityHistory objects.
@@ -32921,23 +33110,36 @@ input EntityHistoryWhereInput {
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
   """
-  logo_file_id field predicates
+  external_id field predicates
   """
-  logoFileID: String
-  logoFileIDNEQ: String
-  logoFileIDIn: [String!]
-  logoFileIDNotIn: [String!]
-  logoFileIDGT: String
-  logoFileIDGTE: String
-  logoFileIDLT: String
-  logoFileIDLTE: String
-  logoFileIDContains: String
-  logoFileIDHasPrefix: String
-  logoFileIDHasSuffix: String
-  logoFileIDIsNil: Boolean
-  logoFileIDNotNil: Boolean
-  logoFileIDEqualFold: String
-  logoFileIDContainsFold: String
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
 }
 type EntityTypeHistory implements Node {
   id: ID!
@@ -50204,6 +50406,18 @@ type RiskHistory implements Node {
   """
   scopeID: String
   """
+  stable identifier assigned by the source system, used for integration ingest deduplication
+  """
+  externalID: String
+  """
+  integration that surfaced this risk, when sourced via integration ingest
+  """
+  integrationID: String
+  """
+  time when this risk was last observed by the source integration
+  """
+  observedAt: DateTime
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -50318,6 +50532,8 @@ enum RiskHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
+  observed_at
   name
   STATUS
   IMPACT
@@ -50653,6 +50869,55 @@ input RiskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  observed_at field predicates
+  """
+  observedAt: DateTime
+  observedAtNEQ: DateTime
+  observedAtIn: [DateTime!]
+  observedAtNotIn: [DateTime!]
+  observedAtGT: DateTime
+  observedAtGTE: DateTime
+  observedAtLT: DateTime
+  observedAtLTE: DateTime
+  observedAtIsNil: Boolean
+  observedAtNotNil: Boolean
   """
   external_uuid field predicates
   """

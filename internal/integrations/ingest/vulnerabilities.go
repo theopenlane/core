@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 type vulnerabilityIngestContext struct {
@@ -80,7 +79,7 @@ func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, 
 			delete(mapped, integrationgenerated.IntegrationMappingVulnerabilityRawPayload)
 		}
 
-		input, err := decodeVulnerabilityInput(mapped)
+		input, err := integrationgenerated.DecodeInput[generated.CreateVulnerabilityInput](mapped)
 		if err != nil {
 			return false, false, err
 		}
@@ -117,15 +116,6 @@ func decodeAlertPayload(payload json.RawMessage) (map[string]any, error) {
 	return out, nil
 }
 
-// decodeVulnerabilityInput converts mapped fields into a create input
-func decodeVulnerabilityInput(data map[string]any) (generated.CreateVulnerabilityInput, error) {
-	var input generated.CreateVulnerabilityInput
-	if err := jsonx.RoundTrip(data, &input); err != nil {
-		return input, err
-	}
-
-	return input, nil
-}
 
 // upsertVulnerability inserts or updates a vulnerability based on external identifiers
 func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string, integrationID string, input generated.CreateVulnerabilityInput) (bool, error) {

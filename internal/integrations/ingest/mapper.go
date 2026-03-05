@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/cel-go/cel"
@@ -133,6 +134,22 @@ func NewMappingEvaluator() (*MappingEvaluator, error) {
 	}, nil
 }
 
+var (
+	sharedEvaluatorOnce sync.Once
+	sharedEvaluator     *MappingEvaluator
+	sharedEvaluatorErr  error
+)
+
+// sharedMappingEvaluator returns the package-level MappingEvaluator, constructing it once.
+// MappingEvaluator is stateless and safe to share across concurrent ingest calls
+func sharedMappingEvaluator() (*MappingEvaluator, error) {
+	sharedEvaluatorOnce.Do(func() {
+		sharedEvaluator, sharedEvaluatorErr = NewMappingEvaluator()
+	})
+
+	return sharedEvaluator, sharedEvaluatorErr
+}
+
 // newMappingEnv builds the CEL environment for mapping expressions
 func newMappingEnv() (*cel.Env, error) {
 	cfg := celx.EnvConfig{
@@ -200,7 +217,7 @@ type mappingOverrideIndex struct {
 
 // newMappingOverrideIndex builds a lookup index for mapping overrides
 func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIndex {
-	init := mappingOverrideIndex{
+	seed := mappingOverrideIndex{
 		overrides:         make(map[string]openapi.IntegrationMappingOverride, len(config.MappingOverrides)),
 		hasSchema:         map[string]struct{}{},
 		hasProviderSchema: map[string]struct{}{},
@@ -223,7 +240,7 @@ func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIn
 		}
 
 		return acc
-	}, init)
+	}, seed)
 }
 
 // HasAny reports whether any overrides exist for the provider and schema

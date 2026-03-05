@@ -144,8 +144,10 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contract_renewal_at,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]interface{} `json:"vendor_metadata,omitempty"`
-	// The logo file id for the entity
-	LogoFileID *string `json:"logo_file_id,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID string `json:"external_id,omitempty"`
+	// time when this entity was last observed by the source integration
+	ObservedAt *models.DateTime `json:"observed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntityQuery when eager-loading is set.
 	Edges                  EntityEdges `json:"edges"`
@@ -570,7 +572,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case entity.FieldLastReviewedAt, entity.FieldSoc2PeriodEnd, entity.FieldContractStartDate, entity.FieldContractEndDate, entity.FieldNextReviewAt, entity.FieldContractRenewalAt:
+		case entity.FieldLastReviewedAt, entity.FieldSoc2PeriodEnd, entity.FieldContractStartDate, entity.FieldContractEndDate, entity.FieldNextReviewAt, entity.FieldContractRenewalAt, entity.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case entity.FieldTags, entity.FieldDomains, entity.FieldLinkedAssetIds, entity.FieldProvidedServices, entity.FieldLinks, entity.FieldVendorMetadata:
 			values[i] = new([]byte)
@@ -580,7 +582,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoFileID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -993,12 +995,18 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field vendor_metadata: %w", err)
 				}
 			}
-		case entity.FieldLogoFileID:
+		case entity.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
 			} else if value.Valid {
-				_m.LogoFileID = new(string)
-				*_m.LogoFileID = value.String
+				_m.ExternalID = value.String
+			}
+		case entity.FieldObservedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
+			} else if value.Valid {
+				_m.ObservedAt = new(models.DateTime)
+				*_m.ObservedAt = *value.S.(*models.DateTime)
 			}
 		case entity.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1438,9 +1446,12 @@ func (_m *Entity) String() string {
 	builder.WriteString("vendor_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.VendorMetadata))
 	builder.WriteString(", ")
-	if v := _m.LogoFileID; v != nil {
-		builder.WriteString("logo_file_id=")
-		builder.WriteString(*v)
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	if v := _m.ObservedAt; v != nil {
+		builder.WriteString("observed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteByte(')')
 	return builder.String()

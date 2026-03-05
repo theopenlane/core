@@ -100,6 +100,23 @@ func (Contact) Fields() []ent.Field {
 			).
 			GoType(enums.UserStatus("")).
 			Default(enums.UserStatusActive.String()),
+		field.String("external_id").
+			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
+			Optional().
+			Annotations(
+				entgql.OrderField("external_id"),
+			),
+		field.String("integration_id").
+			Comment("integration that sourced this contact, when populated via integration ingest").
+			Optional(),
+		field.Time("observed_at").
+			Comment("time when this contact was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 	}
 }
 
@@ -151,5 +168,8 @@ func (c Contact) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
+		entx.IntegrationMappingSchema().
+			UpsertKeys("external_id", "email").
+			DefaultOperation("contacts.sync"),
 	}
 }

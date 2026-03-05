@@ -3691,12 +3691,6 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 	c := withTransactionalMutation(ctx)
 	builders := make([]*generated.HushCreate, len(input))
 	for i, data := range input {
-		if data == nil {
-			return nil, rout.NewMissingRequiredFieldError("input")
-		}
-		if err := validateCreateHushInput(*data); err != nil {
-			return nil, err
-		}
 		builders[i] = c.Hush.Create().SetInput(*data)
 	}
 
@@ -3704,8 +3698,6 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "hush"})
 	}
-
-	redactHushCredentialSets(res)
 
 	// return response
 	return &model.HushBulkCreatePayload{
@@ -3717,9 +3709,6 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, input generated.UpdateHushInput) (*model.HushBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-	if err := validateUpdateHushInput(input); err != nil {
-		return nil, err
 	}
 
 	ids = r.filterAuthorizedIDs(ctx, ids, "hush", fgax.CanEdit)
@@ -3755,8 +3744,6 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 			continue
 		}
 
-		redactHushCredentialSet(updatedEntity)
-
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, id)
 	}
@@ -3783,9 +3770,6 @@ func (r *mutationResolver) bulkUpdateCSVHush(ctx context.Context, inputs []*csvg
 			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for hush")
 			continue
 		}
-		if err := validateUpdateHushInput(input.Input); err != nil {
-			return nil, err
-		}
 
 		// get the existing entity first
 		existing, err := c.Hush.Get(ctx, input.ID)
@@ -3800,8 +3784,6 @@ func (r *mutationResolver) bulkUpdateCSVHush(ctx context.Context, inputs []*csvg
 			logx.FromContext(ctx).Error().Err(err).Str("hush_id", input.ID).Msg("failed to update hush in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
 		}
-
-		redactHushCredentialSet(updatedEntity)
 
 		results = append(results, updatedEntity)
 		updatedIDs = append(updatedIDs, input.ID)

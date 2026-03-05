@@ -193,5 +193,8 @@ func (DirectoryMembership) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
+		entx.IntegrationMappingSchema().
+			UpsertKeys("directory_account_id", "directory_group_id", "directory_sync_run_id").
+			DefaultOperation("directory.sync"),
 	}
 }

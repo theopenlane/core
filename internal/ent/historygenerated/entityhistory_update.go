@@ -1131,23 +1131,43 @@ func (_u *EntityHistoryUpdate) ClearVendorMetadata() *EntityHistoryUpdate {
 	return _u
 }
 
-// SetLogoFileID sets the "logo_file_id" field.
-func (_u *EntityHistoryUpdate) SetLogoFileID(v string) *EntityHistoryUpdate {
-	_u.mutation.SetLogoFileID(v)
+// SetExternalID sets the "external_id" field.
+func (_u *EntityHistoryUpdate) SetExternalID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetExternalID(v)
 	return _u
 }
 
-// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *EntityHistoryUpdate) SetNillableLogoFileID(v *string) *EntityHistoryUpdate {
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableExternalID(v *string) *EntityHistoryUpdate {
 	if v != nil {
-		_u.SetLogoFileID(*v)
+		_u.SetExternalID(*v)
 	}
 	return _u
 }
 
-// ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *EntityHistoryUpdate) ClearLogoFileID() *EntityHistoryUpdate {
-	_u.mutation.ClearLogoFileID()
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityHistoryUpdate) ClearExternalID() *EntityHistoryUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityHistoryUpdate) SetObservedAt(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableObservedAt(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityHistoryUpdate) ClearObservedAt() *EntityHistoryUpdate {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -1610,11 +1630,17 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.LogoFileID(); ok {
-		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
 	}
-	if _u.mutation.LogoFileIDCleared() {
-		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -2735,23 +2761,43 @@ func (_u *EntityHistoryUpdateOne) ClearVendorMetadata() *EntityHistoryUpdateOne 
 	return _u
 }
 
-// SetLogoFileID sets the "logo_file_id" field.
-func (_u *EntityHistoryUpdateOne) SetLogoFileID(v string) *EntityHistoryUpdateOne {
-	_u.mutation.SetLogoFileID(v)
+// SetExternalID sets the "external_id" field.
+func (_u *EntityHistoryUpdateOne) SetExternalID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetExternalID(v)
 	return _u
 }
 
-// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *EntityHistoryUpdateOne) SetNillableLogoFileID(v *string) *EntityHistoryUpdateOne {
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableExternalID(v *string) *EntityHistoryUpdateOne {
 	if v != nil {
-		_u.SetLogoFileID(*v)
+		_u.SetExternalID(*v)
 	}
 	return _u
 }
 
-// ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *EntityHistoryUpdateOne) ClearLogoFileID() *EntityHistoryUpdateOne {
-	_u.mutation.ClearLogoFileID()
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityHistoryUpdateOne) ClearExternalID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityHistoryUpdateOne) SetObservedAt(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableObservedAt(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityHistoryUpdateOne) ClearObservedAt() *EntityHistoryUpdateOne {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -3244,11 +3290,17 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.LogoFileID(); ok {
-		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
 	}
-	if _u.mutation.LogoFileIDCleared() {
-		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
