@@ -3659,6 +3659,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
@@ -3706,6 +3707,7 @@ type ComplexityRoot struct {
 		UpdateBulkProgram                    func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
 		UpdateBulkProgramMembership          func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
 		UpdateBulkRemediation                func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
+		UpdateBulkReview                     func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
 		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
@@ -5233,6 +5235,11 @@ type ComplexityRoot struct {
 
 	ReviewBulkCreatePayload struct {
 		Reviews func(childComplexity int) int
+	}
+
+	ReviewBulkUpdatePayload struct {
+		Reviews    func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	ReviewConnection struct {
@@ -28239,6 +28246,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVRemediation(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVReview":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVReview(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVRisk":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVRisk == nil {
 			break
@@ -28802,6 +28821,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkRemediation(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRemediationInput)), true
+
+	case "Mutation.updateBulkReview":
+		if e.ComplexityRoot.Mutation.UpdateBulkReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkReview(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateReviewInput)), true
 
 	case "Mutation.updateBulkRisk":
 		if e.ComplexityRoot.Mutation.UpdateBulkRisk == nil {
@@ -39691,6 +39722,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewBulkCreatePayload.Reviews(childComplexity), true
+
+	case "ReviewBulkUpdatePayload.reviews":
+		if e.ComplexityRoot.ReviewBulkUpdatePayload.Reviews == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewBulkUpdatePayload.Reviews(childComplexity), true
+
+	case "ReviewBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.ReviewBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ReviewConnection.edges":
 		if e.ComplexityRoot.ReviewConnection.Edges == nil {
@@ -141721,6 +141766,28 @@ extend type Mutation{
         """
         id: ID!
     ): ReviewDeletePayload!
+    """
+    Update multiple existing reviews
+    """
+    updateBulkReview(
+        """
+        IDs of the reviews to update
+        """
+        ids: [ID!]!
+        """
+        values to update the reviews with
+        """
+        input: UpdateReviewInput!
+    ): ReviewBulkUpdatePayload!
+    """
+    Update multiple existing reviews via file upload
+    """
+    updateBulkCSVReview(
+        """
+        csv file containing values of the review, must include ID column
+        """
+        input: Upload!
+    ): ReviewBulkUpdatePayload!
 }
 
 """
@@ -141761,6 +141828,20 @@ type ReviewBulkCreatePayload {
     Created reviews
     """
     reviews: [Review!]
+}
+
+"""
+Return response for updateBulkReview mutation
+"""
+type ReviewBulkUpdatePayload {
+    """
+    Updated reviews
+    """
+    reviews: [Review!]
+    """
+    IDs of the updated reviews
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/revision.graphql", Input: `extend input UpdateActionPlanInput {
     RevisionBump: VersionBump

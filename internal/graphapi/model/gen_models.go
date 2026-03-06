@@ -2283,6 +2283,14 @@ type ReviewBulkCreatePayload struct {
 	Reviews []*generated.Review `json:"reviews,omitempty"`
 }
 
+// Return response for updateBulkReview mutation
+type ReviewBulkUpdatePayload struct {
+	// Updated reviews
+	Reviews []*generated.Review `json:"reviews,omitempty"`
+	// IDs of the updated reviews
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createReview mutation
 type ReviewCreatePayload struct {
 	// Created review

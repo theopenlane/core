@@ -28693,6 +28693,14 @@ type ReviewBulkCreatePayload struct {
 	Reviews []*Review `json:"reviews,omitempty"`
 }
 
+// Return response for updateBulkReview mutation
+type ReviewBulkUpdatePayload struct {
+	// Updated reviews
+	Reviews []*Review `json:"reviews,omitempty"`
+	// IDs of the updated reviews
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ReviewConnection struct {
 	// A list of edges.
