@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
@@ -60,6 +61,53 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 		suite.h.IntegrationRegistry = originalRegistry
 		suite.h.IntegrationStore = originalStore
 		suite.h.IntegrationBroker = originalBroker
+		suite.h.IntegrationOperations = originalOperations
+		suite.h.IntegrationKeymaker = originalKeymaker
+	}
+}
+
+func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, spec config.ProviderSpec) func() {
+	t.Helper()
+
+	originalRegistry := suite.h.IntegrationRegistry
+	originalStore := suite.h.IntegrationStore
+	originalBroker := suite.h.IntegrationBroker
+	originalClients := suite.h.IntegrationClients
+	originalOperations := suite.h.IntegrationOperations
+	originalKeymaker := suite.h.IntegrationKeymaker
+
+	ctx := context.Background()
+	reg, err := registry.NewRegistry(ctx, nil)
+	require.NoError(t, err)
+	require.NoError(t, reg.UpsertProvider(ctx, spec, githubprovider.AppBuilder()))
+
+	suite.h.IntegrationRegistry = reg
+
+	store := keystore.NewStore(suite.db)
+	suite.h.IntegrationStore = store
+	broker := keystore.NewBroker(store, reg)
+	suite.h.IntegrationBroker = broker
+
+	clientDescriptors := keystore.FlattenDescriptors(reg.ClientDescriptorCatalog())
+	clientManager, err := keystore.NewClientPoolManager(broker, clientDescriptors)
+	require.NoError(t, err)
+	suite.h.IntegrationClients = clientManager
+
+	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
+	opManager, err := keystore.NewOperationManager(broker, opDescriptors, keystore.WithOperationClients(clientManager))
+	require.NoError(t, err)
+	suite.h.IntegrationOperations = opManager
+
+	sessions := keymaker.NewMemorySessionStore()
+	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	require.NoError(t, err)
+	suite.h.IntegrationKeymaker = keymakerSvc
+
+	return func() {
+		suite.h.IntegrationRegistry = originalRegistry
+		suite.h.IntegrationStore = originalStore
+		suite.h.IntegrationBroker = originalBroker
+		suite.h.IntegrationClients = originalClients
 		suite.h.IntegrationOperations = originalOperations
 		suite.h.IntegrationKeymaker = originalKeymaker
 	}

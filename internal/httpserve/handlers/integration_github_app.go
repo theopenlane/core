@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 
 	echo "github.com/theopenlane/echox"
@@ -11,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -128,8 +131,8 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	if err := h.validateGitHubAppConfig(); err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
-	if h.IntegrationStore == nil {
-		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapiCtx)
+	if err := h.verifyIntegrationCredentialRuntime(); err != nil {
+		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
 	req := ctx.Request()
@@ -177,6 +180,18 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	installationPayload := githubAppInstallationPayload{AppID: h.IntegrationGitHubApp.AppID, InstallationID: in.InstallationID}
+	if err := h.verifyGitHubAppInstallation(reqCtx, orgID, installationPayload); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("org_id", orgID).Str("installation_id", in.InstallationID).Msg("github app installation verification failed")
+
+		switch {
+		case errors.Is(err, ErrProviderHealthCheckFailed):
+			return h.BadRequest(ctx, err, openapiCtx)
+		case integrationHTTPStatus(err) == http.StatusBadRequest:
+			return h.BadRequest(ctx, err, openapiCtx)
+		default:
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+	}
 
 	integrationRecord, err := h.IntegrationStore.EnsureIntegration(reqCtx, orgID, github.TypeGitHubApp)
 	if err != nil {
@@ -271,6 +286,46 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integr
 	return h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
 		SetProviderState(nextState).
 		Exec(ctx)
+}
+
+// verifyGitHubAppInstallation mints and validates a GitHub App installation token before persisting installation metadata.
+func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string, installation githubAppInstallationPayload) error {
+	credentialPayload, err := types.NewCredentialBuilder(github.TypeGitHubApp).With(
+		types.WithCredentialKind(types.CredentialKindMetadata),
+		types.WithCredentialSet(models.CredentialSet{
+			ProviderData: map[string]any{
+				"appId":          installation.AppID,
+				"installationId": installation.InstallationID,
+			},
+		}),
+	).Build()
+	if err != nil {
+		return err
+	}
+
+	minted, err := h.IntegrationRegistry.MintPayload(ctx, types.CredentialSubject{
+		Provider:   github.TypeGitHubApp,
+		OrgID:      orgID,
+		Credential: credentialPayload,
+	})
+	if err != nil {
+		return err
+	}
+
+	result, err := h.IntegrationOperations.RunWithPayload(ctx, types.OperationRequest{
+		OrgID:    orgID,
+		Provider: github.TypeGitHubApp,
+		Name:     types.OperationHealthDefault,
+		Force:    true,
+	}, minted)
+	if err != nil {
+		return err
+	}
+	if result.Status != types.OperationStatusOK {
+		return ErrProviderHealthCheckFailed
+	}
+
+	return nil
 }
 
 // resolveOpenlaneOrganizationName returns display_name, then name, then ID

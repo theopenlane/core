@@ -115,14 +115,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 // persistCredentialConfiguration saves the provider credential configuration for the organization
 func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID string, provider types.ProviderType, data map[string]any) error {
-	if h.IntegrationStore == nil {
-		return errIntegrationStoreNotConfigured
-	}
-	if h.IntegrationRegistry == nil {
-		return errIntegrationRegistryNotConfigured
-	}
-	if h.IntegrationOperations == nil {
-		return errIntegrationOperationsNotConfigured
+	if err := h.verifyIntegrationCredentialRuntime(); err != nil {
+		return err
 	}
 
 	payload, err := types.NewCredentialBuilder(provider).
