@@ -109,12 +109,14 @@ func CheckAPITokenScope(ctx context.Context, objectType string, relation string,
 		return fmt.Errorf("%w: invalid scoped relation %s for object type %s", generated.ErrPermissionDenied, scopedRelation, objectType)
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		logx.FromContext(ctx).Error().Msg("unable to get caller from context for api token scope check")
+
+		return generated.ErrPermissionDenied
 	}
 
-	orgID := au.OrganizationID
+	orgID := caller.OrganizationID
 	if orgID == "" {
 		logx.FromContext(ctx).Error().Str("relation", scopedRelation).Msg("api token missing organization scope")
 
@@ -129,7 +131,7 @@ func CheckAPITokenScope(ctx context.Context, objectType string, relation string,
 	}
 
 	ac := fgax.AccessCheck{
-		SubjectID:   au.SubjectID,
+		SubjectID:   caller.SubjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
 		Relation:    scopedRelation,
 		ObjectType:  generated.TypeOrganization,
