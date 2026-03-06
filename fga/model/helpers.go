@@ -129,7 +129,7 @@ func CreateRelations() ([]string, error) {
 			continue
 		}
 
-		for rel, _ := range *td.Metadata.Relations {
+		for rel := range *td.Metadata.Relations {
 			parts := strings.SplitN(rel, "_", relationPartsCount)
 			if len(parts) == relationPartsCount && parts[0] == "can" && parts[1] == "create" {
 				relations = append(relations, rel)
