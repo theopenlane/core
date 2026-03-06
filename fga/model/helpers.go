@@ -26,20 +26,20 @@ var embeddedModel []byte
 
 var (
 	// CanView allows read-only access to an object
-	CanView string = "can_view"
+	CanView = "can_view"
 	// CanEdit allows read and write access to an object
-	CanEdit string = "can_edit"
+	CanEdit = "can_edit"
 	// CanDelete allows deletion of an object
-	CanDelete string = "can_delete"
+	CanDelete = "can_delete"
 )
 
 var (
 	// Read is an alias for can_view
-	Read string = "read"
+	Read = "read"
 	// Write is an alias for can_edit
-	Write string = "write"
+	Write = "write"
 	// Delete is an alias for can_delete
-	Delete string = "delete"
+	Delete = "delete"
 )
 
 var (
