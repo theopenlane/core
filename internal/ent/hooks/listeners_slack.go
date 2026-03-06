@@ -39,7 +39,7 @@ func RegisterGalaSlackListeners(registry *gala.Registry) ([]gala.ListenerID, err
 			Topic: gala.Topic[eventqueue.MutationGalaPayload]{
 				Name: gala.TopicName(entgen.TypeOnboarding),
 			},
-			Name:       "slack.demo_request",
+			Name:       "slack.onboarding",
 			Operations: []string{ent.OpCreate.String()},
 			Handle:     handleDemoRequestMutationGala,
 		},
@@ -66,18 +66,20 @@ func handleUserMutationGala(ctx gala.HandlerContext, payload eventqueue.Mutation
 	)
 }
 
-// handleDemoRequestMutationGala sends a Slack notification when an onboarding is created with demo_requested set to true.
+// handleDemoRequestMutationGala sends a Slack notification when an onboarding is created.
 func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	if !SlackNotificationsEnabled() {
 		return nil
 	}
 
-	raw, ok := eventqueue.MutationValue(payload, onboarding.FieldDemoRequested)
-	if !ok || raw != true {
-		return nil
-	}
-
 	companyName := eventqueue.MutationStringValuePreferPayload(payload, ctx.Envelope.Headers.Properties, onboarding.FieldCompanyName)
+	domains := eventqueue.MutationStringSliceValue(payload, onboarding.FieldDomains)
+
+	companyDetails, _ := mutationMapValue(payload, onboarding.FieldCompanyDetails)
+	userDetails, _ := mutationMapValue(payload, onboarding.FieldUserDetails)
+	compliance, _ := mutationMapValue(payload, onboarding.FieldCompliance)
+
+	demoRequested, _ := eventqueue.MutationValue(payload, onboarding.FieldDemoRequested)
 
 	var email string
 
@@ -94,14 +96,38 @@ func handleDemoRequestMutationGala(ctx gala.HandlerContext, payload eventqueue.M
 	var buf bytes.Buffer
 
 	if err := tmpl.Execute(&buf, struct {
-		CompanyName string
-		Email       string
+		CompanyName    string
+		Email          string
+		Domains        []string
+		CompanyDetails map[string]any
+		UserDetails    map[string]any
+		Compliance     map[string]any
+		DemoRequested  bool
 	}{
-		CompanyName: companyName,
-		Email:       email,
+		CompanyName:    companyName,
+		Email:          email,
+		Domains:        domains,
+		CompanyDetails: companyDetails,
+		UserDetails:    userDetails,
+		Compliance:     compliance,
+		DemoRequested:  demoRequested == true,
 	}); err != nil {
 		return err
 	}
 
 	return SendSlackNotification(ctx.Context, buf.String())
+}
+
+func mutationMapValue(payload eventqueue.MutationGalaPayload, field string) (map[string]any, bool) {
+	raw, ok := eventqueue.MutationValue(payload, field)
+	if !ok || raw == nil {
+		return nil, false
+	}
+
+	m, ok := raw.(map[string]any)
+	if !ok {
+		return nil, false
+	}
+
+	return m, true
 }
