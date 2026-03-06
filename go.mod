@@ -20,7 +20,7 @@ require (
 	github.com/99designs/gqlgen v0.17.87
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/alicebob/miniredis/v2 v2.37.0
-	github.com/alitto/pond/v2 v2.6.2
+	github.com/alitto/pond/v2 v2.7.0
 	github.com/aws/aws-sdk-go-v2 v1.41.3
 	github.com/aws/aws-sdk-go-v2/config v1.32.11
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.11

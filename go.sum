@@ -52,8 +52,8 @@ github.com/agnivade/levenshtein v1.2.1 h1:EHBY3UOn1gwdy/VbFwgo4cxecRznFk7fKWN1KO
 github.com/agnivade/levenshtein v1.2.1/go.mod h1:QVVI16kDrtSuwcpd0p1+xMC6Z/VfhtCyDIjcwga4/DU=
 github.com/alicebob/miniredis/v2 v2.37.0 h1:RheObYW32G1aiJIj81XVt78ZHJpHonHLHW7OLIshq68=
 github.com/alicebob/miniredis/v2 v2.37.0/go.mod h1:TcL7YfarKPGDAthEtl5NBeHZfeUQj6OXMm/+iu5cLMM=
-github.com/alitto/pond/v2 v2.6.2 h1:Sphe40g0ILeM1pA2c2K+Th0DGU+pt0A/Kprr+WB24Pw=
-github.com/alitto/pond/v2 v2.6.2/go.mod h1:xkjYEgQ05RSpWdfSd1nM3OVv7TBhLdy7rMp3+2Nq+yE=
+github.com/alitto/pond/v2 v2.7.0 h1:c76L+yN916m/DRXjGCeUBHHu92uWnh/g1bwVk4zyyXg=
+github.com/alitto/pond/v2 v2.7.0/go.mod h1:xkjYEgQ05RSpWdfSd1nM3OVv7TBhLdy7rMp3+2Nq+yE=
 github.com/alixaxel/pagerank v0.0.0-20160306110729-14bfb4c1d88c/go.mod h1:e7Vic/xXDZAQ8ftWoLnVrXseAAvt54SVYrcirjCKcX0=
 github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb h1:q45Ipu3ciM9kIe9XjdmHChrefQc3DBVgljoR7Ta0cYQ=
 github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb/go.mod h1:e7Vic/xXDZAQ8ftWoLnVrXseAAvt54SVYrcirjCKcX0=
