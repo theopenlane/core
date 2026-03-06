@@ -44765,6 +44765,11 @@ type Mutation {
 		values of the review
 		"""
 		input: CreateReviewInput!
+
+		"""
+		Files to attach to the review
+		"""
+		reviewFiles: [Upload!]
 	): ReviewCreatePayload!
 	"""
 	Create multiple new reviews

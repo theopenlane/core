@@ -145,7 +145,7 @@ func (f File) Mixin() []ent.Mixin {
 					// used to create parent tuples for the file, ensure these are added tot he fga model as well
 					Organization{}, Program{}, Platform{}, Scan{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
 					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
-					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}, Contact{}),
+					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}, Contact{}, Review{}),
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
 			),

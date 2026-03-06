@@ -19,7 +19,7 @@ import (
 )
 
 // CreateReview is the resolver for the createReview field.
-func (r *mutationResolver) CreateReview(ctx context.Context, input generated.CreateReviewInput) (*model.ReviewCreatePayload, error) {
+func (r *mutationResolver) CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Review.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "review"})

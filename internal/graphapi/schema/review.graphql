@@ -18,7 +18,11 @@ extend type Mutation{
         """
         values of the review
         """
-        input: CreateReviewInput!
+        input: CreateReviewInput!,
+        """
+        Files to attach to the review
+        """
+        reviewFiles: [Upload!]
     ): ReviewCreatePayload!
     """
     Create multiple new reviews

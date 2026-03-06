@@ -3432,7 +3432,7 @@ type ComplexityRoot struct {
 		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers             func(childComplexity int, input model.CreateProgramWithMembersInput) int
 		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
-		CreateReview                         func(childComplexity int, input generated.CreateReviewInput) int
+		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
@@ -25537,7 +25537,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateReview(childComplexity, args["input"].(generated.CreateReviewInput)), true
+		return e.ComplexityRoot.Mutation.CreateReview(childComplexity, args["input"].(generated.CreateReviewInput), args["reviewFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.createRisk":
 		if e.ComplexityRoot.Mutation.CreateRisk == nil {
@@ -141724,7 +141724,11 @@ extend type Mutation{
         """
         values of the review
         """
-        input: CreateReviewInput!
+        input: CreateReviewInput!,
+        """
+        Files to attach to the review
+        """
+        reviewFiles: [Upload!]
     ): ReviewCreatePayload!
     """
     Create multiple new reviews
@@ -141842,7 +141846,8 @@ type ReviewBulkUpdatePayload {
     IDs of the updated reviews
     """
     updatedIDs: [ID!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/revision.graphql", Input: `extend input UpdateActionPlanInput {
     RevisionBump: VersionBump
 }
