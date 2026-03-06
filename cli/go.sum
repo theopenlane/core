@@ -204,8 +204,8 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.11.13 h1:s5lkvnjyEYiKlSaHzl82sjJqVflOBwKu5AWSR5JCVus=
-github.com/theopenlane/core v1.11.13/go.mod h1:qPYSQTezpOexvZAuL1YG4BOVnKy9bM5nLXjt7pL8gmg=
+github.com/theopenlane/core v1.11.14 h1:EW2EsHaQxPGaymLe3nT2YHnWy4Rw82AcZhqTBLSJckA=
+github.com/theopenlane/core v1.11.14/go.mod h1:qPYSQTezpOexvZAuL1YG4BOVnKy9bM5nLXjt7pL8gmg=
 github.com/theopenlane/core/common v1.0.12 h1:Dk1LLiJGzR16aKf+bvtgtdk5IwtmGG8QC910ujWDuv8=
 github.com/theopenlane/core/common v1.0.12/go.mod h1:H1VStKpUQSYK/VhDvGupjXIyiV7goFMx/yqdZxH+J3c=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
