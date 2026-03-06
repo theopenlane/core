@@ -414,7 +414,7 @@ type MutationResolver interface {
 	UpdateBulkRemediation(ctx context.Context, ids []string, input generated.UpdateRemediationInput) (*model.RemediationBulkUpdatePayload, error)
 	UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkUpdatePayload, error)
 	DeleteBulkRemediation(ctx context.Context, ids []string) (*model.RemediationBulkDeletePayload, error)
-	CreateReview(ctx context.Context, input generated.CreateReviewInput) (*model.ReviewCreatePayload, error)
+	CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewCreatePayload, error)
 	CreateBulkReview(ctx context.Context, input []*generated.CreateReviewInput) (*model.ReviewBulkCreatePayload, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkCreatePayload, error)
 	UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput) (*model.ReviewUpdatePayload, error)
@@ -2950,6 +2950,11 @@ func (ec *executionContext) field_Mutation_createReview_args(ctx context.Context
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "reviewFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["reviewFiles"] = arg1
 	return args, nil
 }
 
@@ -26808,7 +26813,7 @@ func (ec *executionContext) _Mutation_createReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateReview(ctx, fc.Args["input"].(generated.CreateReviewInput))
+			return ec.Resolvers.Mutation().CreateReview(ctx, fc.Args["input"].(generated.CreateReviewInput), fc.Args["reviewFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload,

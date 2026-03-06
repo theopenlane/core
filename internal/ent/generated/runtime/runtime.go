@@ -6070,6 +6070,7 @@ func init() {
 	reviewMixinHooks7 := reviewMixin[7].Hooks()
 	reviewMixinHooks8 := reviewMixin[8].Hooks()
 	reviewMixinHooks9 := reviewMixin[9].Hooks()
+	reviewHooks := schema.Review{}.Hooks()
 
 	review.Hooks[1] = reviewMixinHooks0[0]
 
@@ -6092,6 +6093,8 @@ func init() {
 	review.Hooks[10] = reviewMixinHooks8[0]
 
 	review.Hooks[11] = reviewMixinHooks9[0]
+
+	review.Hooks[12] = reviewHooks[0]
 	reviewMixinInters1 := reviewMixin[1].Interceptors()
 	reviewMixinInters5 := reviewMixin[5].Interceptors()
 	review.Interceptors[0] = reviewMixinInters1[0]

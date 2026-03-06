@@ -45,6 +45,7 @@ var validMimeTypes = map[string][]string{
 	"watermarkFile":       {"image/jpeg", "image/png"},
 	"identityHolderFiles": sharedMimeTypes,
 	"entityFiles":         sharedMimeTypes,
+	"reviewFiles":         sharedMimeTypes,
 }
 
 // MimeTypeValidator returns a storage.ValidationFunc enforcing the configured mime-type set per form field.
