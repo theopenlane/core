@@ -2,21 +2,28 @@ package handlers_test
 
 import (
 	"bytes"
-	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"net/http"
 	"net/http/httptest"
+	"strings"
+	"sync/atomic"
+	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 )
@@ -50,19 +57,17 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 		suite.h.IntegrationGitHubApp = originalConfig
 	}()
 
-	originalRegistry := suite.h.IntegrationRegistry
-	suite.h.IntegrationRegistry = noHealthIntegrationRegistry{base: originalRegistry}
-	defer func() {
-		suite.h.IntegrationRegistry = originalRegistry
-	}()
-
-	originalOps := suite.h.IntegrationOperations
-	ops, err := keystore.NewOperationManager(suite.h.IntegrationBroker, nil)
-	require.NoError(t, err)
-	suite.h.IntegrationOperations = ops
-	defer func() {
-		suite.h.IntegrationOperations = originalOps
-	}()
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationconfig.ProviderSpec{
+		github.TypeGitHubApp: {
+			Name:        string(github.TypeGitHubApp),
+			DisplayName: "GitHub App",
+			Category:    "code",
+			AuthType:    types.AuthKindGitHubApp,
+			Active:      lo.ToPtr(true),
+			Visible:     lo.ToPtr(true),
+		},
+	})
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -97,51 +102,126 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	assert.Contains(t, location, "status=success")
 }
 
-// noHealthIntegrationRegistry suppresses health operation descriptors for GitHub App in tests.
-type noHealthIntegrationRegistry struct {
-	base handlers.ProviderRegistry
+// TestGitHubAppInstallCallback_VerifiesInstallationAgainstGitHubAPI verifies callback success requires a valid installation token + health call.
+func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallationAgainstGitHubAPI() {
+	t := suite.T()
+
+	installOp := suite.createImpersonationOperation("StartGitHubAppInstallWithHealth", "Start GitHub App install flow")
+	suite.registerRouteOnce(http.MethodPost, githubAppInstallPath, installOp, suite.h.StartGitHubAppInstallation)
+
+	callbackOp := suite.createImpersonationOperation("HandleGitHubAppInstallCallbackWithHealth", "Handle GitHub App install callback")
+	suite.registerRouteOnce(http.MethodGet, githubAppCallbackPath, callbackOp, suite.h.GitHubAppInstallCallback)
+
+	var (
+		accessTokenCalls atomic.Int32
+		repoLookupCalls  atomic.Int32
+	)
+
+	mockGitHubAPI := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		path := strings.TrimPrefix(req.URL.Path, "/api/v3")
+		switch {
+		case req.Method == http.MethodPost && path == "/app/installations/12345678/access_tokens":
+			accessTokenCalls.Add(1)
+			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"token":"ghs_test_installation_token","expires_at":"2030-01-01T00:00:00Z"}`))
+		case req.Method == http.MethodGet && path == "/installation/repositories":
+			repoLookupCalls.Add(1)
+			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+			_, _ = w.Write([]byte(`{"total_count":1,"repositories":[{"id":1,"name":"demo","full_name":"acme/demo","private":false}]}`))
+		default:
+			http.NotFound(w, req)
+		}
+	}))
+	defer mockGitHubAPI.Close()
+
+	privateKey := testRSAPrivateKeyPEM(t)
+	originalConfig := suite.h.IntegrationGitHubApp
+	suite.h.IntegrationGitHubApp = handlers.IntegrationGitHubAppConfig{
+		Enabled:            true,
+		AppID:              "123",
+		AppSlug:            "openlane",
+		PrivateKey:         privateKey,
+		WebhookSecret:      "secret",
+		SuccessRedirectURL: "https://console.openlane.io/integrations",
+	}
+	defer func() {
+		suite.h.IntegrationGitHubApp = originalConfig
+	}()
+
+	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, integrationconfig.ProviderSpec{
+		Name:        string(github.TypeGitHubApp),
+		DisplayName: "GitHub App",
+		Category:    "code",
+		AuthType:    types.AuthKindGitHubApp,
+		Active:      lo.ToPtr(true),
+		Visible:     lo.ToPtr(true),
+		GitHubApp: &integrationconfig.GitHubAppSpec{
+			BaseURL:    mockGitHubAPI.URL + "/api/v3",
+			AppID:      "123",
+			PrivateKey: privateKey,
+		},
+	})
+	defer restoreRuntime()
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	installReq := httptest.NewRequest(http.MethodPost, githubAppInstallPath, bytes.NewReader([]byte(`{}`)))
+	installReq.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	installRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(installRec, installReq.WithContext(user.UserCtx))
+	require.Equal(t, http.StatusOK, installRec.Code)
+
+	var installResp openapi.GitHubAppInstallResponse
+	require.NoError(t, json.Unmarshal(installRec.Body.Bytes(), &installResp))
+	require.NotEmpty(t, installResp.State)
+
+	cookies := cookieMap(installRec.Result().Cookies())
+	require.Contains(t, cookies, "githubapp_state")
+
+	callbackReq := httptest.NewRequest(http.MethodGet, githubAppCallbackPath, nil)
+	query := callbackReq.URL.Query()
+	query.Set("installation_id", "12345678")
+	query.Set("state", installResp.State)
+	callbackReq.URL.RawQuery = query.Encode()
+	callbackReq.AddCookie(cookies["githubapp_state"])
+
+	callbackRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
+
+	require.Equal(t, http.StatusFound, callbackRec.Code)
+	location := callbackRec.Header().Get("Location")
+	require.Contains(t, location, "provider=githubapp")
+	require.Contains(t, location, "status=success")
+	require.Equal(t, int32(1), accessTokenCalls.Load())
+	require.Equal(t, int32(1), repoLookupCalls.Load())
+
+	integrationRecord, err := suite.db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(user.OrganizationID),
+			integration.KindEQ(string(github.TypeGitHubApp)),
+		).
+		Only(user.UserCtx)
+	require.NoError(t, err)
+
+	providerState, err := integrationRecord.ProviderState.ProviderDataMap(string(github.TypeGitHubApp))
+	require.NoError(t, err)
+	require.Equal(t, "123", providerState["appId"])
+	require.Equal(t, "12345678", providerState["installationId"])
 }
 
-// Provider returns the provider implementation for the given type.
-func (r noHealthIntegrationRegistry) Provider(provider types.ProviderType) (types.Provider, bool) {
-	if r.base == nil {
-		return nil, false
-	}
-	return r.base.Provider(provider)
-}
+func testRSAPrivateKeyPEM(t *testing.T) string {
+	t.Helper()
 
-// Config returns the provider config for the given type.
-func (r noHealthIntegrationRegistry) Config(provider types.ProviderType) (integrationconfig.ProviderSpec, bool) {
-	if r.base == nil {
-		return integrationconfig.ProviderSpec{}, false
-	}
-	return r.base.Config(provider)
-}
+	key, err := rsa.GenerateKey(rand.Reader, 1024)
+	require.NoError(t, err)
 
-// ProviderMetadataCatalog returns the provider metadata catalog.
-func (r noHealthIntegrationRegistry) ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig {
-	if r.base == nil {
-		return nil
-	}
-	return r.base.ProviderMetadataCatalog()
-}
+	encoded := pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(key),
+	})
+	require.NotEmpty(t, encoded)
 
-// OperationDescriptors returns operation descriptors, skipping GitHub App health checks.
-func (r noHealthIntegrationRegistry) OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor {
-	if provider == github.TypeGitHubApp {
-		return nil
-	}
-	if r.base == nil {
-		return nil
-	}
-	return r.base.OperationDescriptors(provider)
-}
-
-// MintPayload forwards minting requests to the wrapped registry.
-func (r noHealthIntegrationRegistry) MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if r.base == nil {
-		return types.CredentialPayload{}, nil
-	}
-
-	return r.base.MintPayload(ctx, subject)
+	return string(encoded)
 }

@@ -7,11 +7,12 @@ import (
 	"encoding/pem"
 	"fmt"
 	"maps"
-	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	gh "github.com/google/go-github/v83/github"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/common/models"
@@ -20,8 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/httpsling/httpclient"
 )
 
 const (
@@ -33,8 +32,7 @@ var _ types.ClientProvider = (*appProvider)(nil)
 
 // Default GitHub App API configuration values.
 const (
-	defaultJWTExpiry   = 9 * time.Minute
-	defaultHTTPTimeout = 10 * time.Second
+	defaultJWTExpiry = 9 * time.Minute
 )
 
 // AppBuilder returns the GitHub App provider builder.
@@ -67,7 +65,6 @@ func AppBuilder() providers.Builder {
 				appID:      appID,
 				privateKey: privateKey,
 				tokenTTL:   tokenTTL,
-				requester:  httpsling.MustNew(httpsling.Client(httpclient.Timeout(defaultHTTPTimeout))),
 				clients:    clients,
 				caps: types.ProviderCapabilities{
 					SupportsRefreshTokens:  true,
@@ -95,8 +92,6 @@ type appProvider struct {
 	privateKey string
 	// tokenTTL optionally overrides installation token lifetime.
 	tokenTTL time.Duration
-	// requester performs HTTP requests to GitHub.
-	requester *httpsling.Requester
 	// caps advertises provider capabilities.
 	caps types.ProviderCapabilities
 	// clients enumerates supported pooled clients.
@@ -356,48 +351,34 @@ func (p *appProvider) requestInstallationToken(ctx context.Context, installation
 		return nil, ErrInstallationIDMissing
 	}
 
-	endpoint := fmt.Sprintf("%s/app/installations/%s/access_tokens", strings.TrimRight(p.baseURL, "/"), installationID)
-
-	var resp githubAppTokenResponse
-	httpResp, err := p.requester.ReceiveWithContext(
-		ctx,
-		&resp,
-		httpsling.Post(endpoint),
-		httpsling.Header(httpsling.HeaderAccept, "application/vnd.github+json"),
-		httpsling.BearerAuth(jwtToken),
-		httpsling.JSONBody(map[string]any{}),
-	)
+	installationIDInt, err := strconv.ParseInt(installationID, 10, 64)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
 	}
 
-	if httpResp != nil {
-		defer httpResp.Body.Close()
-		if httpResp.StatusCode >= http.StatusBadRequest {
-			return nil, fmt.Errorf("%w: %s", ErrInstallationTokenRequestFailed, httpResp.Status)
-		}
+	client, err := newGitHubAPIClient(jwtToken, p.baseURL)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
 	}
 
-	if resp.Token == "" {
+	installationToken, _, err := client.Apps.CreateInstallationToken(ctx, installationIDInt, &gh.InstallationTokenOptions{})
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
+	}
+
+	if installationToken.GetToken() == "" {
 		return nil, ErrInstallationTokenEmpty
 	}
 
 	token := &oauth2.Token{
-		AccessToken: resp.Token,
+		AccessToken: installationToken.GetToken(),
 		TokenType:   "Bearer",
 	}
 
-	if !resp.ExpiresAt.IsZero() {
-		token.Expiry = resp.ExpiresAt
+	expiresAt := installationToken.GetExpiresAt().Time
+	if !expiresAt.IsZero() {
+		token.Expiry = expiresAt
 	}
 
 	return token, nil
-}
-
-// githubAppTokenResponse models the GitHub installation token response.
-type githubAppTokenResponse struct {
-	// Token is the installation access token.
-	Token string `json:"token"`
-	// ExpiresAt is the token expiration timestamp.
-	ExpiresAt time.Time `json:"expires_at"`
 }
