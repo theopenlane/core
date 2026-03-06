@@ -143,6 +143,21 @@ func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
 }
 
+// verifyIntegrationCredentialRuntime ensures components required for metadata minting and health checks are configured.
+func (h *Handler) verifyIntegrationCredentialRuntime() error {
+	if h.IntegrationStore == nil {
+		return errIntegrationStoreNotConfigured
+	}
+	if h.IntegrationRegistry == nil {
+		return errIntegrationRegistryNotConfigured
+	}
+	if h.IntegrationOperations == nil {
+		return errIntegrationOperationsNotConfigured
+	}
+
+	return nil
+}
+
 func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integrationID string, provider types.ProviderType) error {
 	if h == nil || h.DBClient == nil || h.IntegrationRegistry == nil {
 		return nil

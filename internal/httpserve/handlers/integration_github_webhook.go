@@ -229,9 +229,11 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	installationID := githubInstallationID(envelope.Installation)
+	allowCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
+
 	if eventType == "ping" {
 		if installationID != "" {
-			if err := h.markGitHubWebhookVerifiedAt(req.Context(), installationID, time.Now().UTC()); err != nil {
+			if err := h.markGitHubWebhookVerifiedAt(allowCtx, installationID, time.Now().UTC()); err != nil {
 				logx.FromContext(req.Context()).Warn().Err(err).Str("installation_id", installationID).Msg("failed to persist github webhook verification timestamp")
 			}
 		}
@@ -247,11 +249,6 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
 	}
-
-	// GitHub webhooks arrive without user authentication, so the raw request context has no
-	// org identity. A privacy-allow context is required to query across organizations by
-	// installation ID.
-	allowCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
 
 	integrationRecord, err := h.findGitHubAppIntegrationByInstallationID(allowCtx, installationID)
 	if err != nil {
