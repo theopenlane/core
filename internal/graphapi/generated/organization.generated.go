@@ -178,6 +178,22 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_workflowObjectRefCreators(ctx, field)
 			case "workflowProposalCreators":
 				return ec.fieldContext_Organization_workflowProposalCreators(ctx, field)
+			case "campaignsManager":
+				return ec.fieldContext_Organization_campaignsManager(ctx, field)
+			case "complianceManager":
+				return ec.fieldContext_Organization_complianceManager(ctx, field)
+			case "groupsManager":
+				return ec.fieldContext_Organization_groupsManager(ctx, field)
+			case "policiesManager":
+				return ec.fieldContext_Organization_policiesManager(ctx, field)
+			case "registryManager":
+				return ec.fieldContext_Organization_registryManager(ctx, field)
+			case "riskManager":
+				return ec.fieldContext_Organization_riskManager(ctx, field)
+			case "trustCenterManager":
+				return ec.fieldContext_Organization_trustCenterManager(ctx, field)
+			case "workflowsManager":
+				return ec.fieldContext_Organization_workflowsManager(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -493,6 +509,22 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_workflowObjectRefCreators(ctx, field)
 			case "workflowProposalCreators":
 				return ec.fieldContext_Organization_workflowProposalCreators(ctx, field)
+			case "campaignsManager":
+				return ec.fieldContext_Organization_campaignsManager(ctx, field)
+			case "complianceManager":
+				return ec.fieldContext_Organization_complianceManager(ctx, field)
+			case "groupsManager":
+				return ec.fieldContext_Organization_groupsManager(ctx, field)
+			case "policiesManager":
+				return ec.fieldContext_Organization_policiesManager(ctx, field)
+			case "registryManager":
+				return ec.fieldContext_Organization_registryManager(ctx, field)
+			case "riskManager":
+				return ec.fieldContext_Organization_riskManager(ctx, field)
+			case "trustCenterManager":
+				return ec.fieldContext_Organization_trustCenterManager(ctx, field)
+			case "workflowsManager":
+				return ec.fieldContext_Organization_workflowsManager(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -837,6 +869,22 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_workflowObjectRefCreators(ctx, field)
 			case "workflowProposalCreators":
 				return ec.fieldContext_Organization_workflowProposalCreators(ctx, field)
+			case "campaignsManager":
+				return ec.fieldContext_Organization_campaignsManager(ctx, field)
+			case "complianceManager":
+				return ec.fieldContext_Organization_complianceManager(ctx, field)
+			case "groupsManager":
+				return ec.fieldContext_Organization_groupsManager(ctx, field)
+			case "policiesManager":
+				return ec.fieldContext_Organization_policiesManager(ctx, field)
+			case "registryManager":
+				return ec.fieldContext_Organization_registryManager(ctx, field)
+			case "riskManager":
+				return ec.fieldContext_Organization_riskManager(ctx, field)
+			case "trustCenterManager":
+				return ec.fieldContext_Organization_trustCenterManager(ctx, field)
+			case "workflowsManager":
+				return ec.fieldContext_Organization_workflowsManager(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":

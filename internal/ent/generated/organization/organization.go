@@ -145,6 +145,22 @@ const (
 	EdgeWorkflowObjectRefCreators = "workflow_object_ref_creators"
 	// EdgeWorkflowProposalCreators holds the string denoting the workflow_proposal_creators edge name in mutations.
 	EdgeWorkflowProposalCreators = "workflow_proposal_creators"
+	// EdgeCampaignsManager holds the string denoting the campaigns_manager edge name in mutations.
+	EdgeCampaignsManager = "campaigns_manager"
+	// EdgeComplianceManager holds the string denoting the compliance_manager edge name in mutations.
+	EdgeComplianceManager = "compliance_manager"
+	// EdgeGroupsManager holds the string denoting the groups_manager edge name in mutations.
+	EdgeGroupsManager = "groups_manager"
+	// EdgePoliciesManager holds the string denoting the policies_manager edge name in mutations.
+	EdgePoliciesManager = "policies_manager"
+	// EdgeRegistryManager holds the string denoting the registry_manager edge name in mutations.
+	EdgeRegistryManager = "registry_manager"
+	// EdgeRiskManager holds the string denoting the risk_manager edge name in mutations.
+	EdgeRiskManager = "risk_manager"
+	// EdgeTrustCenterManager holds the string denoting the trust_center_manager edge name in mutations.
+	EdgeTrustCenterManager = "trust_center_manager"
+	// EdgeWorkflowsManager holds the string denoting the workflows_manager edge name in mutations.
+	EdgeWorkflowsManager = "workflows_manager"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -657,6 +673,62 @@ const (
 	WorkflowProposalCreatorsInverseTable = "groups"
 	// WorkflowProposalCreatorsColumn is the table column denoting the workflow_proposal_creators relation/edge.
 	WorkflowProposalCreatorsColumn = "organization_workflow_proposal_creators"
+	// CampaignsManagerTable is the table that holds the campaigns_manager relation/edge.
+	CampaignsManagerTable = "groups"
+	// CampaignsManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	CampaignsManagerInverseTable = "groups"
+	// CampaignsManagerColumn is the table column denoting the campaigns_manager relation/edge.
+	CampaignsManagerColumn = "organization_campaigns_manager"
+	// ComplianceManagerTable is the table that holds the compliance_manager relation/edge.
+	ComplianceManagerTable = "groups"
+	// ComplianceManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ComplianceManagerInverseTable = "groups"
+	// ComplianceManagerColumn is the table column denoting the compliance_manager relation/edge.
+	ComplianceManagerColumn = "organization_compliance_manager"
+	// GroupsManagerTable is the table that holds the groups_manager relation/edge.
+	GroupsManagerTable = "groups"
+	// GroupsManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	GroupsManagerInverseTable = "groups"
+	// GroupsManagerColumn is the table column denoting the groups_manager relation/edge.
+	GroupsManagerColumn = "organization_groups_manager"
+	// PoliciesManagerTable is the table that holds the policies_manager relation/edge.
+	PoliciesManagerTable = "groups"
+	// PoliciesManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	PoliciesManagerInverseTable = "groups"
+	// PoliciesManagerColumn is the table column denoting the policies_manager relation/edge.
+	PoliciesManagerColumn = "organization_policies_manager"
+	// RegistryManagerTable is the table that holds the registry_manager relation/edge.
+	RegistryManagerTable = "groups"
+	// RegistryManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	RegistryManagerInverseTable = "groups"
+	// RegistryManagerColumn is the table column denoting the registry_manager relation/edge.
+	RegistryManagerColumn = "organization_registry_manager"
+	// RiskManagerTable is the table that holds the risk_manager relation/edge.
+	RiskManagerTable = "groups"
+	// RiskManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	RiskManagerInverseTable = "groups"
+	// RiskManagerColumn is the table column denoting the risk_manager relation/edge.
+	RiskManagerColumn = "organization_risk_manager"
+	// TrustCenterManagerTable is the table that holds the trust_center_manager relation/edge.
+	TrustCenterManagerTable = "groups"
+	// TrustCenterManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	TrustCenterManagerInverseTable = "groups"
+	// TrustCenterManagerColumn is the table column denoting the trust_center_manager relation/edge.
+	TrustCenterManagerColumn = "organization_trust_center_manager"
+	// WorkflowsManagerTable is the table that holds the workflows_manager relation/edge.
+	WorkflowsManagerTable = "groups"
+	// WorkflowsManagerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	WorkflowsManagerInverseTable = "groups"
+	// WorkflowsManagerColumn is the table column denoting the workflows_manager relation/edge.
+	WorkflowsManagerColumn = "organization_workflows_manager"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -1307,7 +1379,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [55]ent.Hook
+	Hooks        [63]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2095,6 +2167,118 @@ func ByWorkflowProposalCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByWorkflowProposalCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowProposalCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignsManagerCount orders the results by campaigns_manager count.
+func ByCampaignsManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsManagerStep(), opts...)
+	}
+}
+
+// ByCampaignsManager orders the results by campaigns_manager terms.
+func ByCampaignsManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByComplianceManagerCount orders the results by compliance_manager count.
+func ByComplianceManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newComplianceManagerStep(), opts...)
+	}
+}
+
+// ByComplianceManager orders the results by compliance_manager terms.
+func ByComplianceManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newComplianceManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByGroupsManagerCount orders the results by groups_manager count.
+func ByGroupsManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newGroupsManagerStep(), opts...)
+	}
+}
+
+// ByGroupsManager orders the results by groups_manager terms.
+func ByGroupsManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newGroupsManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPoliciesManagerCount orders the results by policies_manager count.
+func ByPoliciesManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPoliciesManagerStep(), opts...)
+	}
+}
+
+// ByPoliciesManager orders the results by policies_manager terms.
+func ByPoliciesManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPoliciesManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRegistryManagerCount orders the results by registry_manager count.
+func ByRegistryManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRegistryManagerStep(), opts...)
+	}
+}
+
+// ByRegistryManager orders the results by registry_manager terms.
+func ByRegistryManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRegistryManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRiskManagerCount orders the results by risk_manager count.
+func ByRiskManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRiskManagerStep(), opts...)
+	}
+}
+
+// ByRiskManager orders the results by risk_manager terms.
+func ByRiskManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterManagerCount orders the results by trust_center_manager count.
+func ByTrustCenterManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterManagerStep(), opts...)
+	}
+}
+
+// ByTrustCenterManager orders the results by trust_center_manager terms.
+func ByTrustCenterManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowsManagerCount orders the results by workflows_manager count.
+func ByWorkflowsManagerCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowsManagerStep(), opts...)
+	}
+}
+
+// ByWorkflowsManager orders the results by workflows_manager terms.
+func ByWorkflowsManager(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowsManagerStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -3628,6 +3812,62 @@ func newWorkflowProposalCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowProposalCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowProposalCreatorsTable, WorkflowProposalCreatorsColumn),
+	)
+}
+func newCampaignsManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsManagerTable, CampaignsManagerColumn),
+	)
+}
+func newComplianceManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ComplianceManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ComplianceManagerTable, ComplianceManagerColumn),
+	)
+}
+func newGroupsManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(GroupsManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, GroupsManagerTable, GroupsManagerColumn),
+	)
+}
+func newPoliciesManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PoliciesManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PoliciesManagerTable, PoliciesManagerColumn),
+	)
+}
+func newRegistryManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RegistryManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RegistryManagerTable, RegistryManagerColumn),
+	)
+}
+func newRiskManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RiskManagerTable, RiskManagerColumn),
+	)
+}
+func newTrustCenterManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterManagerTable, TrustCenterManagerColumn),
+	)
+}
+func newWorkflowsManagerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowsManagerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowsManagerTable, WorkflowsManagerColumn),
 	)
 }
 func newParentStep() *sqlgraph.Step {

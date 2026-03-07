@@ -15199,6 +15199,14 @@ type CreateOrganizationInput struct {
 	WorkflowInstanceCreatorIDs           []string
 	WorkflowObjectRefCreatorIDs          []string
 	WorkflowProposalCreatorIDs           []string
+	CampaignsManagerIDs                  []string
+	ComplianceManagerIDs                 []string
+	GroupsManagerIDs                     []string
+	PoliciesManagerIDs                   []string
+	RegistryManagerIDs                   []string
+	RiskManagerIDs                       []string
+	TrustCenterManagerIDs                []string
+	WorkflowsManagerIDs                  []string
 	ParentID                             *string
 	SettingID                            *string
 	PersonalAccessTokenIDs               []string
@@ -15444,6 +15452,30 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.WorkflowProposalCreatorIDs; len(v) > 0 {
 		m.AddWorkflowProposalCreatorIDs(v...)
+	}
+	if v := i.CampaignsManagerIDs; len(v) > 0 {
+		m.AddCampaignsManagerIDs(v...)
+	}
+	if v := i.ComplianceManagerIDs; len(v) > 0 {
+		m.AddComplianceManagerIDs(v...)
+	}
+	if v := i.GroupsManagerIDs; len(v) > 0 {
+		m.AddGroupsManagerIDs(v...)
+	}
+	if v := i.PoliciesManagerIDs; len(v) > 0 {
+		m.AddPoliciesManagerIDs(v...)
+	}
+	if v := i.RegistryManagerIDs; len(v) > 0 {
+		m.AddRegistryManagerIDs(v...)
+	}
+	if v := i.RiskManagerIDs; len(v) > 0 {
+		m.AddRiskManagerIDs(v...)
+	}
+	if v := i.TrustCenterManagerIDs; len(v) > 0 {
+		m.AddTrustCenterManagerIDs(v...)
+	}
+	if v := i.WorkflowsManagerIDs; len(v) > 0 {
+		m.AddWorkflowsManagerIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -15838,6 +15870,30 @@ type UpdateOrganizationInput struct {
 	ClearWorkflowProposalCreators              bool
 	AddWorkflowProposalCreatorIDs              []string
 	RemoveWorkflowProposalCreatorIDs           []string
+	ClearCampaignsManager                      bool
+	AddCampaignsManagerIDs                     []string
+	RemoveCampaignsManagerIDs                  []string
+	ClearComplianceManager                     bool
+	AddComplianceManagerIDs                    []string
+	RemoveComplianceManagerIDs                 []string
+	ClearGroupsManager                         bool
+	AddGroupsManagerIDs                        []string
+	RemoveGroupsManagerIDs                     []string
+	ClearPoliciesManager                       bool
+	AddPoliciesManagerIDs                      []string
+	RemovePoliciesManagerIDs                   []string
+	ClearRegistryManager                       bool
+	AddRegistryManagerIDs                      []string
+	RemoveRegistryManagerIDs                   []string
+	ClearRiskManager                           bool
+	AddRiskManagerIDs                          []string
+	RemoveRiskManagerIDs                       []string
+	ClearTrustCenterManager                    bool
+	AddTrustCenterManagerIDs                   []string
+	RemoveTrustCenterManagerIDs                []string
+	ClearWorkflowsManager                      bool
+	AddWorkflowsManagerIDs                     []string
+	RemoveWorkflowsManagerIDs                  []string
 	ClearSetting                               bool
 	SettingID                                  *string
 	ClearPersonalAccessTokens                  bool
@@ -16529,6 +16585,78 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveWorkflowProposalCreatorIDs; len(v) > 0 {
 		m.RemoveWorkflowProposalCreatorIDs(v...)
+	}
+	if i.ClearCampaignsManager {
+		m.ClearCampaignsManager()
+	}
+	if v := i.AddCampaignsManagerIDs; len(v) > 0 {
+		m.AddCampaignsManagerIDs(v...)
+	}
+	if v := i.RemoveCampaignsManagerIDs; len(v) > 0 {
+		m.RemoveCampaignsManagerIDs(v...)
+	}
+	if i.ClearComplianceManager {
+		m.ClearComplianceManager()
+	}
+	if v := i.AddComplianceManagerIDs; len(v) > 0 {
+		m.AddComplianceManagerIDs(v...)
+	}
+	if v := i.RemoveComplianceManagerIDs; len(v) > 0 {
+		m.RemoveComplianceManagerIDs(v...)
+	}
+	if i.ClearGroupsManager {
+		m.ClearGroupsManager()
+	}
+	if v := i.AddGroupsManagerIDs; len(v) > 0 {
+		m.AddGroupsManagerIDs(v...)
+	}
+	if v := i.RemoveGroupsManagerIDs; len(v) > 0 {
+		m.RemoveGroupsManagerIDs(v...)
+	}
+	if i.ClearPoliciesManager {
+		m.ClearPoliciesManager()
+	}
+	if v := i.AddPoliciesManagerIDs; len(v) > 0 {
+		m.AddPoliciesManagerIDs(v...)
+	}
+	if v := i.RemovePoliciesManagerIDs; len(v) > 0 {
+		m.RemovePoliciesManagerIDs(v...)
+	}
+	if i.ClearRegistryManager {
+		m.ClearRegistryManager()
+	}
+	if v := i.AddRegistryManagerIDs; len(v) > 0 {
+		m.AddRegistryManagerIDs(v...)
+	}
+	if v := i.RemoveRegistryManagerIDs; len(v) > 0 {
+		m.RemoveRegistryManagerIDs(v...)
+	}
+	if i.ClearRiskManager {
+		m.ClearRiskManager()
+	}
+	if v := i.AddRiskManagerIDs; len(v) > 0 {
+		m.AddRiskManagerIDs(v...)
+	}
+	if v := i.RemoveRiskManagerIDs; len(v) > 0 {
+		m.RemoveRiskManagerIDs(v...)
+	}
+	if i.ClearTrustCenterManager {
+		m.ClearTrustCenterManager()
+	}
+	if v := i.AddTrustCenterManagerIDs; len(v) > 0 {
+		m.AddTrustCenterManagerIDs(v...)
+	}
+	if v := i.RemoveTrustCenterManagerIDs; len(v) > 0 {
+		m.RemoveTrustCenterManagerIDs(v...)
+	}
+	if i.ClearWorkflowsManager {
+		m.ClearWorkflowsManager()
+	}
+	if v := i.AddWorkflowsManagerIDs; len(v) > 0 {
+		m.AddWorkflowsManagerIDs(v...)
+	}
+	if v := i.RemoveWorkflowsManagerIDs; len(v) > 0 {
+		m.RemoveWorkflowsManagerIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()

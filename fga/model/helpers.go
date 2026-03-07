@@ -3,6 +3,7 @@ package model
 import (
 	_ "embed"
 	"encoding/json"
+	"log"
 	"maps"
 	"sort"
 	"strings"
@@ -22,7 +23,10 @@ const (
 )
 
 //go:embed generated/crud.fga
-var embeddedModel []byte
+var embeddedCrudModel []byte
+
+//go:embed roles/roles.fga
+var embeddedRolesModel []byte
 
 var (
 	// CanView allows read-only access to an object
@@ -49,41 +53,49 @@ var (
 		"delete": CanDelete,
 	}
 
-	parseOnce sync.Once
-	parseErr  error
-	parsed    *openfga.AuthorizationModel
+	crudOnce  sync.Once
+	crudModel *openfga.AuthorizationModel
+	crudErr   error
+
+	rolesOnce  sync.Once
+	rolesModel *openfga.AuthorizationModel
+	rolesErr   error
 )
 
+func parseAuthorizationModel(embeddedModel []byte) (*openfga.AuthorizationModel, error) {
+	protoModel, err := language.TransformDSLToProto(string(embeddedModel))
+	if err != nil {
+		return nil, errors.Wrap(err, "parse fga model dsl")
+	}
+	rawJSON, err := protojson.Marshal(protoModel)
+	if err != nil {
+		return nil, errors.Wrap(err, "marshal fga model")
+	}
+	var model openfga.AuthorizationModel
+	if err := json.Unmarshal(rawJSON, &model); err != nil {
+		return nil, errors.Wrap(err, "decode fga model json")
+	}
+	return &model, nil
+}
+
 // GetAuthorizationModel returns the parsed embedded authorization model
-func GetAuthorizationModel() (*openfga.AuthorizationModel, error) {
-	parseOnce.Do(func() {
-		protoModel, err := language.TransformDSLToProto(string(embeddedModel))
-		if err != nil {
-			parseErr = errors.Wrap(err, "parse fga model dsl")
-			return
-		}
-
-		rawJSON, err := protojson.Marshal(protoModel)
-		if err != nil {
-			parseErr = errors.Wrap(err, "marshal fga model")
-			return
-		}
-
-		var model openfga.AuthorizationModel
-		if err := json.Unmarshal(rawJSON, &model); err != nil {
-			parseErr = errors.Wrap(err, "decode fga model json")
-			return
-		}
-
-		parsed = &model
+func GetCrudAuthorizationModel() (*openfga.AuthorizationModel, error) {
+	crudOnce.Do(func() {
+		crudModel, crudErr = parseAuthorizationModel(embeddedCrudModel)
 	})
+	return crudModel, crudErr
+}
 
-	return parsed, parseErr
+func GetRolesAuthorizationModel() (*openfga.AuthorizationModel, error) {
+	rolesOnce.Do(func() {
+		rolesModel, rolesErr = parseAuthorizationModel(embeddedRolesModel)
+	})
+	return rolesModel, rolesErr
 }
 
 // RelationsForService returns relations shaped like can_<verb>_<object> that directly accept service subjects.
 func RelationsForService() ([]string, error) {
-	model, err := GetAuthorizationModel()
+	model, err := GetCrudAuthorizationModel()
 	if err != nil {
 		return nil, err
 	}
@@ -115,9 +127,17 @@ func RelationsForService() ([]string, error) {
 	return relations, nil
 }
 
-// CreateRelations returns relations shaped like can_create_<object> that are used for group-based creation access
-func CreateRelations() ([]string, error) {
-	model, err := GetAuthorizationModel()
+// getRelations is a helper that returns relations for a given verb (e.g., "manage" or "create") shaped like can_<verb>_<object>
+func getRelations(embeddedModel []byte, relationType string, isCrud bool) ([]string, error) {
+	var model *openfga.AuthorizationModel
+	var err error
+
+	if isCrud {
+		model, err = GetCrudAuthorizationModel()
+	} else {
+		model, err = GetRolesAuthorizationModel()
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -130,8 +150,12 @@ func CreateRelations() ([]string, error) {
 		}
 
 		for rel := range *td.Metadata.Relations {
+			if relationType == "manage" {
+				log.Printf("rel: %s", rel)
+			}
+
 			parts := strings.SplitN(rel, "_", relationPartsCount)
-			if len(parts) == relationPartsCount && parts[0] == "can" && parts[1] == "create" {
+			if len(parts) == relationPartsCount && parts[0] == "can" && parts[1] == relationType {
 				relations = append(relations, rel)
 			}
 		}
@@ -140,6 +164,18 @@ func CreateRelations() ([]string, error) {
 	sort.Strings(relations)
 
 	return relations, nil
+}
+
+// roleRelations returns relations shaped like can_manage_<role> that indicates role management
+func roleRelations() ([]string, error) {
+	log.Printf("Parsing roles model for roleRelations")
+	return getRelations(embeddedRolesModel, "manage", false)
+}
+
+// createRelations returns relations shaped like can_create_<object> that are used for group-based creation access
+func createRelations() ([]string, error) {
+	log.Printf("Parsing crud model for createRelations")
+	return getRelations(embeddedCrudModel, "create", true)
 }
 
 // DefaultServiceScopeSet returns the default service scopes as a set
@@ -234,13 +270,7 @@ func ScopeOptions() (map[string][]string, error) {
 	return opts, nil
 }
 
-// CreateOptions returns objects with verbs that support creation
-func CreateOptions() ([]string, error) {
-	rels, err := CreateRelations()
-	if err != nil {
-		return nil, err
-	}
-
+func getRelationsOptionsForObject(rels []string) ([]string, error) {
 	objs := make([]string, 0, len(rels))
 	for _, rel := range rels {
 		parts := strings.SplitN(rel, "_", relationPartsCount)
@@ -256,4 +286,28 @@ func CreateOptions() ([]string, error) {
 	sort.Strings(objs)
 
 	return objs, nil
+}
+
+// CreateOptions returns objects with verbs that support creation
+func CreateOptions() ([]string, error) {
+	rels, err := createRelations()
+	if err != nil {
+		return nil, err
+	}
+
+	return getRelationsOptionsForObject(rels)
+}
+
+// RoleOptions returns objects with verbs that support roles
+func RoleOptions() ([]string, error) {
+	rels, err := roleRelations()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(rels) == 0 {
+		log.Fatal("no relations found for role management - ensure the embedded model contains relations shaped like can_manage_<role>")
+	}
+
+	return getRelationsOptionsForObject(rels)
 }

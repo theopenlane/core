@@ -159,6 +159,14 @@ type OrganizationQuery struct {
 	withWorkflowInstanceCreators                *GroupQuery
 	withWorkflowObjectRefCreators               *GroupQuery
 	withWorkflowProposalCreators                *GroupQuery
+	withCampaignsManager                        *GroupQuery
+	withComplianceManager                       *GroupQuery
+	withGroupsManager                           *GroupQuery
+	withPoliciesManager                         *GroupQuery
+	withRegistryManager                         *GroupQuery
+	withRiskManager                             *GroupQuery
+	withTrustCenterManager                      *GroupQuery
+	withWorkflowsManager                        *GroupQuery
 	withParent                                  *OrganizationQuery
 	withChildren                                *OrganizationQuery
 	withSetting                                 *OrganizationSettingQuery
@@ -296,6 +304,14 @@ type OrganizationQuery struct {
 	withNamedWorkflowInstanceCreators           map[string]*GroupQuery
 	withNamedWorkflowObjectRefCreators          map[string]*GroupQuery
 	withNamedWorkflowProposalCreators           map[string]*GroupQuery
+	withNamedCampaignsManager                   map[string]*GroupQuery
+	withNamedComplianceManager                  map[string]*GroupQuery
+	withNamedGroupsManager                      map[string]*GroupQuery
+	withNamedPoliciesManager                    map[string]*GroupQuery
+	withNamedRegistryManager                    map[string]*GroupQuery
+	withNamedRiskManager                        map[string]*GroupQuery
+	withNamedTrustCenterManager                 map[string]*GroupQuery
+	withNamedWorkflowsManager                   map[string]*GroupQuery
 	withNamedChildren                           map[string]*OrganizationQuery
 	withNamedPersonalAccessTokens               map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                          map[string]*APITokenQuery
@@ -1606,6 +1622,206 @@ func (_q *OrganizationQuery) QueryWorkflowProposalCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowProposalCreatorsTable, organization.WorkflowProposalCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignsManager chains the current query on the "campaigns_manager" edge.
+func (_q *OrganizationQuery) QueryCampaignsManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsManagerTable, organization.CampaignsManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryComplianceManager chains the current query on the "compliance_manager" edge.
+func (_q *OrganizationQuery) QueryComplianceManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ComplianceManagerTable, organization.ComplianceManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryGroupsManager chains the current query on the "groups_manager" edge.
+func (_q *OrganizationQuery) QueryGroupsManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupsManagerTable, organization.GroupsManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPoliciesManager chains the current query on the "policies_manager" edge.
+func (_q *OrganizationQuery) QueryPoliciesManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.PoliciesManagerTable, organization.PoliciesManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegistryManager chains the current query on the "registry_manager" edge.
+func (_q *OrganizationQuery) QueryRegistryManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.RegistryManagerTable, organization.RegistryManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRiskManager chains the current query on the "risk_manager" edge.
+func (_q *OrganizationQuery) QueryRiskManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskManagerTable, organization.RiskManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenterManager chains the current query on the "trust_center_manager" edge.
+func (_q *OrganizationQuery) QueryTrustCenterManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterManagerTable, organization.TrustCenterManagerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowsManager chains the current query on the "workflows_manager" edge.
+func (_q *OrganizationQuery) QueryWorkflowsManager() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowsManagerTable, organization.WorkflowsManagerColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -4031,6 +4247,14 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withWorkflowInstanceCreators:           _q.withWorkflowInstanceCreators.Clone(),
 		withWorkflowObjectRefCreators:          _q.withWorkflowObjectRefCreators.Clone(),
 		withWorkflowProposalCreators:           _q.withWorkflowProposalCreators.Clone(),
+		withCampaignsManager:                   _q.withCampaignsManager.Clone(),
+		withComplianceManager:                  _q.withComplianceManager.Clone(),
+		withGroupsManager:                      _q.withGroupsManager.Clone(),
+		withPoliciesManager:                    _q.withPoliciesManager.Clone(),
+		withRegistryManager:                    _q.withRegistryManager.Clone(),
+		withRiskManager:                        _q.withRiskManager.Clone(),
+		withTrustCenterManager:                 _q.withTrustCenterManager.Clone(),
+		withWorkflowsManager:                   _q.withWorkflowsManager.Clone(),
 		withParent:                             _q.withParent.Clone(),
 		withChildren:                           _q.withChildren.Clone(),
 		withSetting:                            _q.withSetting.Clone(),
@@ -4650,6 +4874,94 @@ func (_q *OrganizationQuery) WithWorkflowProposalCreators(opts ...func(*GroupQue
 		opt(query)
 	}
 	_q.withWorkflowProposalCreators = query
+	return _q
+}
+
+// WithCampaignsManager tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithCampaignsManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignsManager = query
+	return _q
+}
+
+// WithComplianceManager tells the query-builder to eager-load the nodes that are connected to
+// the "compliance_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithComplianceManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComplianceManager = query
+	return _q
+}
+
+// WithGroupsManager tells the query-builder to eager-load the nodes that are connected to
+// the "groups_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithGroupsManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withGroupsManager = query
+	return _q
+}
+
+// WithPoliciesManager tells the query-builder to eager-load the nodes that are connected to
+// the "policies_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithPoliciesManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPoliciesManager = query
+	return _q
+}
+
+// WithRegistryManager tells the query-builder to eager-load the nodes that are connected to
+// the "registry_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithRegistryManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRegistryManager = query
+	return _q
+}
+
+// WithRiskManager tells the query-builder to eager-load the nodes that are connected to
+// the "risk_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithRiskManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRiskManager = query
+	return _q
+}
+
+// WithTrustCenterManager tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithTrustCenterManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustCenterManager = query
+	return _q
+}
+
+// WithWorkflowsManager tells the query-builder to eager-load the nodes that are connected to
+// the "workflows_manager" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowsManager(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowsManager = query
 	return _q
 }
 
@@ -5694,7 +6006,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [135]bool{
+		loadedTypes = [143]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAssetCreators != nil,
 			_q.withCampaignCreators != nil,
@@ -5743,6 +6055,14 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withWorkflowInstanceCreators != nil,
 			_q.withWorkflowObjectRefCreators != nil,
 			_q.withWorkflowProposalCreators != nil,
+			_q.withCampaignsManager != nil,
+			_q.withComplianceManager != nil,
+			_q.withGroupsManager != nil,
+			_q.withPoliciesManager != nil,
+			_q.withRegistryManager != nil,
+			_q.withRiskManager != nil,
+			_q.withTrustCenterManager != nil,
+			_q.withWorkflowsManager != nil,
 			_q.withParent != nil,
 			_q.withChildren != nil,
 			_q.withSetting != nil,
@@ -6242,6 +6562,62 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *Group) {
 				n.Edges.WorkflowProposalCreators = append(n.Edges.WorkflowProposalCreators, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignsManager; query != nil {
+		if err := _q.loadCampaignsManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.CampaignsManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.CampaignsManager = append(n.Edges.CampaignsManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withComplianceManager; query != nil {
+		if err := _q.loadComplianceManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ComplianceManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.ComplianceManager = append(n.Edges.ComplianceManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withGroupsManager; query != nil {
+		if err := _q.loadGroupsManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.GroupsManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.GroupsManager = append(n.Edges.GroupsManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPoliciesManager; query != nil {
+		if err := _q.loadPoliciesManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.PoliciesManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.PoliciesManager = append(n.Edges.PoliciesManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRegistryManager; query != nil {
+		if err := _q.loadRegistryManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.RegistryManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.RegistryManager = append(n.Edges.RegistryManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRiskManager; query != nil {
+		if err := _q.loadRiskManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.RiskManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.RiskManager = append(n.Edges.RiskManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTrustCenterManager; query != nil {
+		if err := _q.loadTrustCenterManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.TrustCenterManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.TrustCenterManager = append(n.Edges.TrustCenterManager, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowsManager; query != nil {
+		if err := _q.loadWorkflowsManager(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowsManager = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.WorkflowsManager = append(n.Edges.WorkflowsManager, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -7230,6 +7606,62 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadWorkflowProposalCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedWorkflowProposalCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedWorkflowProposalCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignsManager {
+		if err := _q.loadCampaignsManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedCampaignsManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedCampaignsManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComplianceManager {
+		if err := _q.loadComplianceManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedComplianceManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedComplianceManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedGroupsManager {
+		if err := _q.loadGroupsManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedGroupsManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedGroupsManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPoliciesManager {
+		if err := _q.loadPoliciesManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedPoliciesManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedPoliciesManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRegistryManager {
+		if err := _q.loadRegistryManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedRegistryManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedRegistryManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRiskManager {
+		if err := _q.loadRiskManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedRiskManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedRiskManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustCenterManager {
+		if err := _q.loadTrustCenterManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedTrustCenterManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedTrustCenterManager(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowsManager {
+		if err := _q.loadWorkflowsManager(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowsManager(name) },
+			func(n *Organization, e *Group) { n.appendNamedWorkflowsManager(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -9316,6 +9748,254 @@ func (_q *OrganizationQuery) loadWorkflowProposalCreators(ctx context.Context, q
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_workflow_proposal_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadCampaignsManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.CampaignsManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_campaigns_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_campaigns_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_campaigns_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadComplianceManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ComplianceManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_compliance_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_compliance_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_compliance_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadGroupsManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.GroupsManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_groups_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_groups_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_groups_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadPoliciesManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.PoliciesManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_policies_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_policies_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_policies_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadRegistryManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.RegistryManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_registry_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_registry_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_registry_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadRiskManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.RiskManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_risk_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_risk_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_risk_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadTrustCenterManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.TrustCenterManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_trust_center_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_trust_center_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_trust_center_manager" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowsManager(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowsManagerColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_workflows_manager
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_workflows_manager" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_workflows_manager" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -12863,6 +13543,118 @@ func (_q *OrganizationQuery) WithNamedWorkflowProposalCreators(name string, opts
 		_q.withNamedWorkflowProposalCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedWorkflowProposalCreators[name] = query
+	return _q
+}
+
+// WithNamedCampaignsManager tells the query-builder to eager-load the nodes that are connected to the "campaigns_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedCampaignsManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignsManager == nil {
+		_q.withNamedCampaignsManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedCampaignsManager[name] = query
+	return _q
+}
+
+// WithNamedComplianceManager tells the query-builder to eager-load the nodes that are connected to the "compliance_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedComplianceManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComplianceManager == nil {
+		_q.withNamedComplianceManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedComplianceManager[name] = query
+	return _q
+}
+
+// WithNamedGroupsManager tells the query-builder to eager-load the nodes that are connected to the "groups_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedGroupsManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedGroupsManager == nil {
+		_q.withNamedGroupsManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedGroupsManager[name] = query
+	return _q
+}
+
+// WithNamedPoliciesManager tells the query-builder to eager-load the nodes that are connected to the "policies_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedPoliciesManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPoliciesManager == nil {
+		_q.withNamedPoliciesManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedPoliciesManager[name] = query
+	return _q
+}
+
+// WithNamedRegistryManager tells the query-builder to eager-load the nodes that are connected to the "registry_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedRegistryManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRegistryManager == nil {
+		_q.withNamedRegistryManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedRegistryManager[name] = query
+	return _q
+}
+
+// WithNamedRiskManager tells the query-builder to eager-load the nodes that are connected to the "risk_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedRiskManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRiskManager == nil {
+		_q.withNamedRiskManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedRiskManager[name] = query
+	return _q
+}
+
+// WithNamedTrustCenterManager tells the query-builder to eager-load the nodes that are connected to the "trust_center_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedTrustCenterManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustCenterManager == nil {
+		_q.withNamedTrustCenterManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedTrustCenterManager[name] = query
+	return _q
+}
+
+// WithNamedWorkflowsManager tells the query-builder to eager-load the nodes that are connected to the "workflows_manager"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowsManager(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowsManager == nil {
+		_q.withNamedWorkflowsManager = make(map[string]*GroupQuery)
+	}
+	_q.withNamedWorkflowsManager[name] = query
 	return _q
 }
 

@@ -6,18 +6,20 @@ import "io"
 type Role string
 
 var (
-	RoleOwner   Role = "OWNER"
-	RoleAdmin   Role = "ADMIN"
-	RoleMember  Role = "MEMBER"
-	RoleUser    Role = "USER"
-	RoleInvalid Role = "INVALID"
+	RoleOwner      Role = "OWNER"
+	RoleAdmin      Role = "ADMIN"
+	RoleSuperAdmin Role = "SUPER_ADMIN"
+	RoleMember     Role = "MEMBER"
+	RoleAuditor    Role = "AUDITOR"
+	RoleUser       Role = "USER"
+	RoleInvalid    Role = "INVALID"
 )
 
 // roleSchemaValues are the values exposed to ent schemas.
 var roleSchemaValues = []Role{RoleAdmin, RoleMember}
 
 // roleParseValues are all values accepted by ToRole.
-var roleParseValues = []Role{RoleOwner, RoleAdmin, RoleMember, RoleUser}
+var roleParseValues = []Role{RoleOwner, RoleAdmin, RoleSuperAdmin, RoleMember, RoleAuditor, RoleUser}
 
 // Values returns a slice of strings that represents all the possible values of the Role enum.
 // Possible default values are "ADMIN", "MEMBER"

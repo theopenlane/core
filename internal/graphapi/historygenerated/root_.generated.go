@@ -41466,6 +41466,8 @@ enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/commo
   ADMIN
   MEMBER
   OWNER
+  SUPER_ADMIN
+  AUDITOR
 }
 """
 OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.

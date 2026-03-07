@@ -46,7 +46,7 @@ extend type organization
     define group_manager: [service, user, group#member]
     define can_manage_groups: group_manager or full_access
 
-    # has admin access to all trust center features
+    # has admin access to all trust center features with the exception of deleting the trust center itself
     define trust_center_manager: [service, user, group#member]
     define can_manage_trust_center: trust_center_manager or full_access
 
