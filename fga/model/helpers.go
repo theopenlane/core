@@ -128,14 +128,17 @@ func RelationsForService() ([]string, error) {
 }
 
 // getRelations is a helper that returns relations for a given verb (e.g., "manage" or "create") shaped like can_<verb>_<object>
-func getRelations(embeddedModel []byte, relationType string, isCrud bool) ([]string, error) {
+func getRelations(relationType string, modelName string) ([]string, error) {
 	var model *openfga.AuthorizationModel
 	var err error
 
-	if isCrud {
+	switch modelName {
+	case "crud":
 		model, err = GetCrudAuthorizationModel()
-	} else {
+	case "role":
 		model, err = GetRolesAuthorizationModel()
+	default:
+		return nil, errors.Errorf("invalid model name: %s", modelName) //nolint:err113
 	}
 
 	if err != nil {
@@ -169,13 +172,13 @@ func getRelations(embeddedModel []byte, relationType string, isCrud bool) ([]str
 // roleRelations returns relations shaped like can_manage_<role> that indicates role management
 func roleRelations() ([]string, error) {
 	log.Printf("Parsing roles model for roleRelations")
-	return getRelations(embeddedRolesModel, "manage", false)
+	return getRelations("manage", "role")
 }
 
 // createRelations returns relations shaped like can_create_<object> that are used for group-based creation access
 func createRelations() ([]string, error) {
 	log.Printf("Parsing crud model for createRelations")
-	return getRelations(embeddedCrudModel, "create", true)
+	return getRelations("create", "crud")
 }
 
 // DefaultServiceScopeSet returns the default service scopes as a set
