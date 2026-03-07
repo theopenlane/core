@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
-	"github.com/theopenlane/utils/contextx"
 )
 
 type stubBuilder struct {
@@ -74,7 +73,7 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 }
 
 func TestKnownProviderRule(t *testing.T) {
-	ctx := contextx.With(context.Background(), objects.KnownProviderHint(storage.DiskProvider))
+	ctx := objects.WithKnownProviderHint(context.Background(), storage.DiskProvider)
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 
 	diskBuilder := &stubBuilder{providerType: "disk"}
@@ -111,7 +110,7 @@ func TestKnownProviderRule(t *testing.T) {
 }
 
 func TestModuleRules(t *testing.T) {
-	ctx := contextx.With(context.Background(), objects.ModuleHint(models.CatalogTrustCenterModule))
+	ctx := objects.WithModuleHint(context.Background(), models.CatalogTrustCenterModule)
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 
 	r2Builder := &stubBuilder{providerType: "r2"}
@@ -145,7 +144,7 @@ func TestModuleRules(t *testing.T) {
 }
 
 func TestTemplateKindRule(t *testing.T) {
-	ctx := contextx.With(context.Background(), objects.TemplateKindHint(enums.TemplateKindTrustCenterNda))
+	ctx := objects.WithTemplateKindHint(context.Background(), enums.TemplateKindTrustCenterNda)
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 
 	r2Builder := &stubBuilder{providerType: "r2"}
@@ -381,7 +380,7 @@ type oldProviderConfigWithCloudflareR2 struct {
 }
 
 func TestModuleRuleR2ProviderConstantMatchesR2ConfigField(t *testing.T) {
-	ctx := contextx.With(context.Background(), objects.ModuleHint(models.CatalogTrustCenterModule))
+	ctx := objects.WithModuleHint(context.Background(), models.CatalogTrustCenterModule)
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 
 	s3Builder := &stubBuilder{providerType: "s3"}

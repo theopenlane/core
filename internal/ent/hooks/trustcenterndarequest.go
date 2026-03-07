@@ -53,7 +53,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			email, _ := m.Email()
 
 			queryCtx := ctx
-			if _, isAnon := auth.AnonymousTrustCenterUserFromContext(ctx); isAnon {
+			if _, isAnon := auth.ActiveTrustCenterIDKey.Get(ctx); isAnon {
 				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
 			}
 
@@ -286,7 +286,9 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 	})
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{deleteTuple}); err != nil {
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuple for deleted NDA request")
+
+		return ErrInternalServerError
 	}
 
 	return nil

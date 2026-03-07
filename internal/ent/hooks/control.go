@@ -166,7 +166,9 @@ func handleControlVisibilityCreate(ctx context.Context, m *generated.ControlMuta
 	logx.FromContext(ctx).Debug().Str("control_id", ctrl.ID).Msg("creating wildcard viewer tuples for publicly visible trust center control")
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-		return nil, err
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+
+		return nil, ErrInternalServerError
 	}
 
 	return ctrl, nil
@@ -345,6 +347,11 @@ func applyControlVisibilityTransitions(ctx context.Context, m *generated.Control
 	}
 
 	_, err := m.Authz.WriteTupleKeys(ctx, writes, deletes)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to update relationship tuples for control visibility transition")
 
-	return err
+		return ErrInternalServerError
+	}
+
+	return nil
 }

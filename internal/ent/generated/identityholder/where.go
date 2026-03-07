@@ -2814,6 +2814,35 @@ func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.Ide
 	})
 }
 
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlIdentityHolders
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlIdentityHolders
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPlatforms applies the HasEdge predicate on the "platforms" edge.
 func HasPlatforms() predicate.IdentityHolder {
 	return predicate.IdentityHolder(func(s *sql.Selector) {
@@ -2893,6 +2922,35 @@ func HasTasksWith(preds ...predicate.Task) predicate.IdentityHolder {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.IdentityHolderTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFiles applies the HasEdge predicate on the "files" edge.
+func HasFiles() predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
+func HasFilesWith(preds ...predicate.File) predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := newFilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.IdentityHolderFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

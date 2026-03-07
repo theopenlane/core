@@ -45,7 +45,7 @@ func TestWorkflowContexts(t *testing.T) {
 
 func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
 	orgID := ulids.New().String()
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
 		SubjectID:       ulids.New().String(),
 		OrganizationIDs: []string{orgID},
 	})
@@ -60,7 +60,7 @@ func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
 }
 
 func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T) {
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
 		SubjectID:       ulids.New().String(),
 		OrganizationIDs: []string{ulids.New().String(), ulids.New().String()},
 	})
@@ -70,7 +70,7 @@ func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T
 }
 
 func TestAllowContextWithOrg_EmptyAuthorizedOrgs(t *testing.T) {
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
 		SubjectID:       ulids.New().String(),
 		OrganizationIDs: []string{},
 	})

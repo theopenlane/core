@@ -28,7 +28,8 @@ func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, in
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &res.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -56,17 +57,17 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 	}
 
 	// get organization ID from auth context
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("no authenticated user in context")
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		logx.FromContext(ctx).Error().Msg("no authenticated user in context")
 
 		return nil, rout.ErrPermissionDenied
 	}
 
 	// notifications can only be marked as read by users in the same organization, so we need to check for both organization ID and subject ID and
 	// disallow marking as read if either is missing or if the authentication type is API token (since API tokens are not associated with a user)
-	if au.OrganizationID == "" || au.SubjectID == "" || au.AuthenticationType == auth.APITokenAuthentication {
-		logx.FromContext(ctx).Error().Str("organization_id", au.OrganizationID).Str("subject_id", au.SubjectID).Msg("authenticated user missing organization or subject ID")
+	if caller.OrganizationID == "" || caller.SubjectID == "" || caller.AuthenticationType == auth.APITokenAuthentication {
+		logx.FromContext(ctx).Error().Str("organization_id", caller.OrganizationID).Str("subject_id", caller.SubjectID).Msg("authenticated user missing organization or subject ID")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -74,8 +75,8 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 	// Get all notifications by IDs
 	notifications, err := withTransactionalMutation(ctx).Notification.Query().
 		Where(notification.IDIn(ids...), notification.Or(
-			notification.OwnerID(au.OrganizationID),
-			notification.UserID(au.SubjectID),
+			notification.OwnerID(caller.OrganizationID),
+			notification.UserID(caller.SubjectID),
 		)).
 		All(ctx)
 	if err != nil {
@@ -90,7 +91,8 @@ func (r *mutationResolver) MarkNotificationsAsRead(ctx context.Context, ids []st
 
 	// Verify all notifications belong to the user's organization
 	for _, notif := range notifications {
-		if err := common.SetOrganizationInAuthContext(ctx, &notif.OwnerID); err != nil {
+		ctx, err = common.SetOrganizationInAuthContext(ctx, &notif.OwnerID)
+		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notification_id", notif.ID).Msg("failed to set organization in auth context")
 			return nil, rout.ErrPermissionDenied
 		}

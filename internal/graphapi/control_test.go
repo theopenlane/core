@@ -12,7 +12,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -2916,7 +2915,6 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	regularControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
-	anonCtx = contextx.With(anonCtx, auth.TrustCenterContextKey{})
 
 	testCases := []struct {
 		name     string

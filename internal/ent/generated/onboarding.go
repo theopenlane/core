@@ -35,6 +35,8 @@ type Onboarding struct {
 	UserDetails map[string]interface{} `json:"user_details,omitempty"`
 	// details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
 	Compliance map[string]interface{} `json:"compliance,omitempty"`
+	// DemoRequested holds the value of the "demo_requested" field.
+	DemoRequested bool `json:"demo_requested,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OnboardingQuery when eager-loading is set.
 	Edges        OnboardingEdges `json:"edges"`
@@ -70,6 +72,8 @@ func (*Onboarding) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case onboarding.FieldDomains, onboarding.FieldCompanyDetails, onboarding.FieldUserDetails, onboarding.FieldCompliance:
 			values[i] = new([]byte)
+		case onboarding.FieldDemoRequested:
+			values[i] = new(sql.NullBool)
 		case onboarding.FieldID, onboarding.FieldDeletedBy, onboarding.FieldOrganizationID, onboarding.FieldCompanyName:
 			values[i] = new(sql.NullString)
 		case onboarding.FieldDeletedAt:
@@ -151,6 +155,12 @@ func (_m *Onboarding) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field compliance: %w", err)
 				}
 			}
+		case onboarding.FieldDemoRequested:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field demo_requested", values[i])
+			} else if value.Valid {
+				_m.DemoRequested = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -215,6 +225,9 @@ func (_m *Onboarding) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("compliance=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Compliance))
+	builder.WriteString(", ")
+	builder.WriteString("demo_requested=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DemoRequested))
 	builder.WriteByte(')')
 	return builder.String()
 }

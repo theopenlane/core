@@ -19,7 +19,7 @@ import (
 )
 
 // CreateReview is the resolver for the createReview field.
-func (r *mutationResolver) CreateReview(ctx context.Context, input generated.CreateReviewInput) (*model.ReviewCreatePayload, error) {
+func (r *mutationResolver) CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Review.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "review"})
@@ -38,7 +38,8 @@ func (r *mutationResolver) CreateBulkReview(ctx context.Context, input []*genera
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -62,7 +63,8 @@ func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphq
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
@@ -117,6 +119,35 @@ func (r *mutationResolver) DeleteReview(ctx context.Context, id string) (*model.
 	return &model.ReviewDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// UpdateBulkReview is the resolver for the updateBulkReview field.
+func (r *mutationResolver) UpdateBulkReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateReview(ctx, ids, input)
+}
+
+// UpdateBulkCSVReview is the resolver for the updateBulkCSVReview field.
+func (r *mutationResolver) UpdateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.ReviewCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Review", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVReview(ctx, data)
 }
 
 // Review is the resolver for the review field.

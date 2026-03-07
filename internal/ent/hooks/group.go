@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/core/common/enums"
@@ -87,9 +86,10 @@ func HookManagedGroups() ent.Hook {
 				return nil, err
 			}
 
-			// allow general allow context to bypass managed group check
+			// allow general allow context or managed group bypass to modify managed groups
 			_, allowCtx := privacy.DecisionFromContext(ctx)
-			_, allowManagedCtx := contextx.From[ManagedContextKey](ctx)
+			caller, _ := auth.CallerFromContext(ctx)
+			allowManagedCtx := caller != nil && caller.Has(auth.CapBypassManagedGroup)
 
 			// before returning the error, we need to allow for edges to be updated
 			// if they are permissions edges

@@ -2852,6 +2852,35 @@ func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Campaig
 	})
 }
 
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlCampaigns
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlCampaigns
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
 func HasWorkflowObjectRefs() predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {

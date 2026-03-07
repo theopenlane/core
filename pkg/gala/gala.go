@@ -13,6 +13,7 @@ import (
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 )
 
@@ -149,7 +150,11 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 // initialize sets Gala core dependencies and default runtime services
 // future expansion / features may necessitate passing in additional dependencies or a more complex runtime config object but avoiding pre-optimization
 func (g *Gala) initialize(dispatcher Dispatcher, dispatchMode DispatchMode) error {
-	contextManager, err := NewContextManager(NewContextCodec())
+	contextManager, err := NewContextManager(
+		NewKeyCodec("caller", auth.CallerKey),
+		NewKeyCodec("log_fields", logx.FieldsKey()),
+		NewLegacyContextCodec(),
+	)
 	if err != nil {
 		return err
 	}

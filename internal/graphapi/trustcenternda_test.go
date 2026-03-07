@@ -39,16 +39,10 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	email := "test@example.com"
 
-	anonUser := &auth.AnonymousTrustCenterUser{
-		SubjectID:          anonUserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     trustCenter.OwnerID,
-		AuthenticationType: auth.JWTAuthentication,
-		TrustCenterID:      trustCenter.ID,
-		SubjectEmail:       email,
-	}
+	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", email)
 
-	anonCtxForRequest := auth.WithAnonymousTrustCenterUser(context.Background(), anonUser)
+	anonCtxForRequest := auth.WithCaller(context.Background(), anonUser)
+	anonCtxForRequest = auth.ActiveTrustCenterIDKey.Set(anonCtxForRequest, trustCenter.ID)
 	ndaCreateResp, err := suite.client.api.CreateTrustCenterNDARequest(anonCtxForRequest, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",
 		LastName:      "User",
@@ -81,7 +75,8 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
+	anonCtx := auth.WithCaller(ctx, anonUser)
+	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
 
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
@@ -266,26 +261,14 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
-	anonUser := &auth.AnonymousTrustCenterUser{
-		SubjectID:          anonUserID,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     trustCenter.OwnerID,
-		AuthenticationType: auth.JWTAuthentication,
-		TrustCenterID:      trustCenter.ID,
-		SubjectEmail:       "test@example.com",
-	}
-	anonUser2 := &auth.AnonymousTrustCenterUser{
-		SubjectID:          anonUserID2,
-		SubjectName:        "Anonymous User",
-		OrganizationID:     trustCenter2.OwnerID,
-		AuthenticationType: auth.JWTAuthentication,
-		TrustCenterID:      trustCenter2.ID,
-		SubjectEmail:       "testother@example.com",
-	}
+	anonUser := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anonymous User", "test@example.com")
+	anonUser2 := auth.NewTrustCenterCaller(trustCenter2.OwnerID, anonUserID2, "Anonymous User", "testother@example.com")
 
 	ctx := context.Background()
-	anonCtx := auth.WithAnonymousTrustCenterUser(ctx, anonUser)
-	anonCtx2 := auth.WithAnonymousTrustCenterUser(ctx, anonUser2)
+	anonCtx := auth.WithCaller(ctx, anonUser)
+	anonCtx = auth.ActiveTrustCenterIDKey.Set(anonCtx, trustCenter.ID)
+	anonCtx2 := auth.WithCaller(ctx, anonUser2)
+	anonCtx2 = auth.ActiveTrustCenterIDKey.Set(anonCtx2, trustCenter2.ID)
 
 	_, err = suite.client.api.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     "Test",

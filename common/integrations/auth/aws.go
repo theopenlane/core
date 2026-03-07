@@ -137,8 +137,7 @@ func AWSCredentialsFromPayload(payload types.CredentialPayload) AWSCredentials {
 	secretKey := payload.Data.SecretAccessKey
 	sessionToken := payload.Data.SessionToken
 
-	var decoded awsProviderData
-	if err := DecodeProviderData(payload.Data.ProviderData, &decoded); err == nil {
+	if decoded, err := ExtractMetadata[awsProviderData](payload); err == nil {
 		accessKey = lo.CoalesceOrEmpty(accessKey, decoded.AccessKeyID.String())
 		secretKey = lo.CoalesceOrEmpty(secretKey, decoded.SecretAccessKey.String())
 		sessionToken = lo.CoalesceOrEmpty(sessionToken, decoded.SessionToken.String())

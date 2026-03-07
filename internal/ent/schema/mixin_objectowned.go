@@ -19,7 +19,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/entx/accessmap"
 
@@ -376,11 +375,7 @@ var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutat
 		return true
 	}
 
-	if _, ok := contextx.From[auth.TrustCenterNDAContextKey](ctx); ok {
-		return true
-	}
-
-	if _, ok := contextx.From[auth.QuestionnaireContextKey](ctx); ok {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassFGA) {
 		return true
 	}
 
@@ -418,16 +413,9 @@ var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins
 func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context) (bool, error) {
-	if o.AllowEmptyForSystemAdmin {
-		isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
-		if err != nil {
-			return false, err
-		}
-
+	if o.AllowEmptyForSystemAdmin && auth.IsSystemAdminFromContext(ctx) {
 		// skip hook for system admins to create system level objects
-		if isAdmin {
-			return true, nil
-		}
+		return true, nil
 	}
 
 	return false, nil

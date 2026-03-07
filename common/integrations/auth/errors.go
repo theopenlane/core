@@ -11,8 +11,6 @@ var (
 	ErrAPITokenMissing = errors.New("auth: api token missing")
 	// ErrHTTPRequestFailed indicates an HTTP request returned a non-2xx status.
 	ErrHTTPRequestFailed = errors.New("auth: http request failed")
-	// ErrRandomStateGeneration indicates random state generation failed.
-	ErrRandomStateGeneration = errors.New("auth: random state generation failed")
 	// ErrDecodeProviderDataTargetNil indicates provider data decoding target is nil.
 	ErrDecodeProviderDataTargetNil = errors.New("auth: decode provider data target is nil")
 )

@@ -38,7 +38,8 @@ func (r *mutationResolver) CreateBulkFinding(ctx context.Context, input []*gener
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -62,7 +63,8 @@ func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graph
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
@@ -117,6 +119,44 @@ func (r *mutationResolver) DeleteFinding(ctx context.Context, id string) (*model
 	return &model.FindingDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// UpdateBulkFinding is the resolver for the updateBulkFinding field.
+func (r *mutationResolver) UpdateBulkFinding(ctx context.Context, ids []string, input generated.UpdateFindingInput) (*model.FindingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateFinding(ctx, ids, input)
+}
+
+// UpdateBulkCSVFinding is the resolver for the updateBulkCSVFinding field.
+func (r *mutationResolver) UpdateBulkCSVFinding(ctx context.Context, input graphql.Upload) (*model.FindingBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.FindingCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Finding", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVFinding(ctx, data)
+}
+
+// DeleteBulkFinding is the resolver for the deleteBulkFinding field.
+func (r *mutationResolver) DeleteBulkFinding(ctx context.Context, ids []string) (*model.FindingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteFinding(ctx, ids)
 }
 
 // Finding is the resolver for the finding field.

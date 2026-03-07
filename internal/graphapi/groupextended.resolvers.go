@@ -122,7 +122,8 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
 func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, groupInput.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -171,7 +172,8 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 // CreateGroupByClone is the resolver for the createGroupByClone field.
 func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, groupInput.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -313,7 +315,8 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 // CreateGroupSettings is the resolver for the createGroupSettings field.
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {
 	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
+	ctx, err := common.SetOrganizationInAuthContext(ctx, obj.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.ErrPermissionDenied

@@ -18,37 +18,58 @@
   relation: parent
   object: workflow_definition:workflow_definition-1
 
+- user: organization:openlane
+  relation: parent
+  object: workflow_definition:workflow_definition-2
+
 # org owner has editor access to workflow_definition
 - user: organization:openlane#owner
   relation: editor
   object: workflow_definition:workflow_definition-1
 
+- user: organization:openlane#owner
+  relation: editor
+  object: workflow_definition:workflow_definition-2
+
 # workflow_instance-1 is owned by openlane organization and linked to workflow_definition-1
-# Note: system-driven, no editor relation - users can only view
-- user: organization:openlane
-  relation: parent
-  object: workflow_instance:workflow_instance-1
+# Note: system-driven, no editor relation - users can only view who have access to the workflow definition or parent objects of the workflow instance
 - user: workflow_definition:workflow_definition-1
   relation: parent
   object: workflow_instance:workflow_instance-1
 
-# workflow_assignment-1 is linked to workflow_instance-1
-# Note: system-driven, no editor relation - users can only view
+- user: workflow_definition:workflow_definition-1
+  relation: parent
+  object: workflow_instance:workflow_instance-2
+
+# add control to parent to test view access to members via parent objects, e.g. all org members can view controls
+# so they should also be able to see workflow instances linked to the control
 - user: organization:openlane
   relation: parent
-  object: workflow_assignment:workflow_assignment-1
+  object: control:control-1
+- user: control:control-1
+  relation: parent
+  object: workflow_instance:workflow_instance-1
+
+# workflow_assignment-1 is linked to workflow_instance-1
+# Note: system-driven, no editor relation - users can only view if they have access to the workflow instance or parent objects of the workflow instance
 - user: workflow_instance:workflow_instance-1
   relation: parent
   object: workflow_assignment:workflow_assignment-1
 
-# workflow_object_ref-1 is linked to workflow_instance-1
-# Note: system-driven, no editor relation - users can only view
-- user: organization:openlane
+- user: workflow_instance:workflow_instance-2
   relation: parent
-  object: workflow_object_ref:workflow_object_ref-1
+  object: workflow_assignment:workflow_assignment-2
+
+
+# workflow_object_ref-1 is linked to workflow_instance-1
+# Note: system-driven, no editor relation - users can only view if they have access to the workflow instance or parent objects of the workflow instance
 - user: workflow_instance:workflow_instance-1
   relation: parent
   object: workflow_object_ref:workflow_object_ref-1
+
+- user: workflow_instance:workflow_instance-2
+  relation: parent
+  object: workflow_object_ref:workflow_object_ref-2
 
 # blocked user for workflow_object_ref
 - user: user:ulid-blocked
@@ -56,13 +77,14 @@
   object: workflow_object_ref:workflow_object_ref-1
 
 # workflow_assignment_target-1 is linked to workflow_assignment-1
-# Note: system-driven, no editor relation - users can only view
-- user: organization:openlane
-  relation: parent
-  object: workflow_assignment_target:workflow_assignment_target-1
+  # Note: system-driven, no editor relation - users can only view based on the parent object
 - user: workflow_assignment:workflow_assignment-1
   relation: parent
   object: workflow_assignment_target:workflow_assignment_target-1
+
+- user: workflow_assignment:workflow_assignment-2
+  relation: parent
+  object: workflow_assignment_target:workflow_assignment_target-2
 
 # blocked user for workflow_assignment_target
 - user: user:ulid-blocked
@@ -70,13 +92,14 @@
   object: workflow_assignment_target:workflow_assignment_target-1
 
 # workflow_event-1 is linked to workflow_instance-1
-# Note: system-driven, no editor relation - users can only view
-- user: organization:openlane
-  relation: parent
-  object: workflow_event:workflow_event-1
+# Note: system-driven, no editor relation - users can only view users can only view based on the parent object
 - user: workflow_instance:workflow_instance-1
   relation: parent
   object: workflow_event:workflow_event-1
+
+- user: workflow_instance:workflow_instance-2
+  relation: parent
+  object: workflow_event:workflow_event-2
 
 # blocked user for workflow_event
 - user: user:ulid-blocked
@@ -92,6 +115,15 @@
     context:
       public: false
 
+# setup org member but give them access via group membership
+- user: user:ulid-workflow-editor
+  relation: _self
+  object: user:ulid-workflow-editor
+
+- user: user:ulid-workflow-editor
+  relation: member
+  object: organization:openlane
+
 - user: user:ulid-workflow-editor
   relation: member
   object: group:workflow-editors
@@ -102,13 +134,14 @@
   object: workflow_definition:workflow_definition-1
 
 # workflow_proposal-1 is linked to workflow_object_ref-1
-# Note: system-driven, no editor relation - users can only view
-- user: organization:openlane
-  relation: parent
-  object: workflow_proposal:workflow_proposal-1
+# Note: system-driven, no editor relation - users can only view based on the parent object object ref
 - user: workflow_object_ref:workflow_object_ref-1
   relation: parent
   object: workflow_proposal:workflow_proposal-1
+
+- user: workflow_object_ref:workflow_object_ref-2
+  relation: parent
+  object: workflow_proposal:workflow_proposal-2
 
 # blocked user for workflow_proposal
 - user: user:ulid-blocked

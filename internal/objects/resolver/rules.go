@@ -5,7 +5,6 @@ import (
 
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -148,11 +147,11 @@ func (rc *ruleCoordinator) handleDevMode() bool {
 func (rc *ruleCoordinator) addKnownProviderRule() {
 	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 		Predicate: func(ctx context.Context) bool {
-			known, ok := contextx.From[objects.KnownProviderHint](ctx)
+			known, ok := objects.KnownProviderHintFromContext(ctx)
 			return ok && rc.providerEnabled(storage.ProviderType(known))
 		},
 		Resolver: func(ctx context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
-			known, _ := contextx.From[objects.KnownProviderHint](ctx)
+			known, _ := objects.KnownProviderHintFromContext(ctx)
 			provider := storage.ProviderType(known)
 			return rc.resolveProviderWithBuilder(provider)
 		},
@@ -170,7 +169,7 @@ func (rc *ruleCoordinator) addModuleRule(module models.OrgModule, provider stora
 	moduleProvider := provider
 	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 		Predicate: func(ctx context.Context) bool {
-			hint, ok := contextx.From[objects.ModuleHint](ctx)
+			hint, ok := objects.ModuleHintFromContext(ctx)
 			return ok && models.OrgModule(hint) == module
 		},
 		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
@@ -190,7 +189,7 @@ func (rc *ruleCoordinator) addTemplateKindRule(kind enums.TemplateKind, provider
 	templateKind := kind
 	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 		Predicate: func(ctx context.Context) bool {
-			hint, ok := contextx.From[objects.TemplateKindHint](ctx)
+			hint, ok := objects.TemplateKindHintFromContext(ctx)
 			return ok && enums.TemplateKind(hint) == templateKind
 		},
 		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {

@@ -4835,6 +4835,37 @@ type Campaign implements Node {
 		"""
 		where: IdentityHolderWhereInput
 	): IdentityHolderConnection!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
 	workflowObjectRefs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -6129,6 +6160,11 @@ input CampaignWhereInput {
 	"""
 	hasIdentityHolders: Boolean
 	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
 	workflow_object_refs edge predicates
 	"""
@@ -7477,6 +7513,161 @@ type Control implements Node {
 		"""
 		where: ScanWhereInput
 	): ScanConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	identityHolders(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IdentityHolders returned from the connection.
+		"""
+		orderBy: [IdentityHolderOrder!]
+
+		"""
+		Filtering options for IdentityHolders returned from the connection.
+		"""
+		where: IdentityHolderWhereInput
+	): IdentityHolderConnection!
+	campaigns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Campaigns returned from the connection.
+		"""
+		orderBy: [CampaignOrder!]
+
+		"""
+		Filtering options for Campaigns returned from the connection.
+		"""
+		where: CampaignWhereInput
+	): CampaignConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
 	findings(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -10228,6 +10419,31 @@ input ControlWhereInput {
 	hasScans: Boolean
 	hasScansWith: [ScanWhereInput!]
 	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	identity_holders edge predicates
+	"""
+	hasIdentityHolders: Boolean
+	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	campaigns edge predicates
+	"""
+	hasCampaigns: Boolean
+	hasCampaignsWith: [CampaignWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
 	findings edge predicates
 	"""
 	hasFindings: Boolean
@@ -10804,6 +11020,7 @@ input CreateCampaignInput {
 	userIDs: [ID!]
 	groupIDs: [ID!]
 	identityHolderIDs: [ID!]
+	controlIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 }
 """
@@ -11116,6 +11333,11 @@ input CreateControlInput {
 	platformIDs: [ID!]
 	assetIDs: [ID!]
 	scanIDs: [ID!]
+	entityIDs: [ID!]
+	identityHolderIDs: [ID!]
+	campaignIDs: [ID!]
+	remediationIDs: [ID!]
+	reviewIDs: [ID!]
 	findingIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	subcontrolIDs: [ID!]
@@ -11996,6 +12218,7 @@ input CreateEntityInput {
 	authMethodIDs: [ID!]
 	employerIdentityHolderIDs: [ID!]
 	identityHolderIDs: [ID!]
+	controlIDs: [ID!]
 	platformIDs: [ID!]
 	outOfScopePlatformIDs: [ID!]
 	sourcePlatformIDs: [ID!]
@@ -12258,6 +12481,7 @@ input CreateFileInput {
 	programIDs: [ID!]
 	platformIDs: [ID!]
 	evidenceIDs: [ID!]
+	identityHolderIDs: [ID!]
 	scanIDs: [ID!]
 	eventIDs: [ID!]
 	integrationIDs: [ID!]
@@ -12799,9 +13023,11 @@ input CreateIdentityHolderInput {
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	directoryAccountIDs: [ID!]
+	controlIDs: [ID!]
 	platformIDs: [ID!]
 	campaignIDs: [ID!]
 	taskIDs: [ID!]
+	fileIDs: [ID!]
 	findingIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 	accessPlatformIDs: [ID!]
@@ -13503,6 +13729,7 @@ input CreateOnboardingInput {
 	details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
 	"""
 	compliance: Map
+	demoRequested: Boolean
 	organizationID: ID
 }
 """
@@ -15955,6 +16182,9 @@ input CreateWorkflowDefinitionInput {
 	"""
 	trackedFields: [String!]
 	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	tagDefinitionIDs: [ID!]
 	groupIDs: [ID!]
 	notificationTemplateIDs: [ID!]
@@ -23353,6 +23583,37 @@ type Entity implements Node {
 		"""
 		where: IdentityHolderWhereInput
 	): IdentityHolderConnection!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
 	platforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -24854,6 +25115,11 @@ input EntityWhereInput {
 	"""
 	hasIdentityHolders: Boolean
 	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
 	platforms edge predicates
 	"""
@@ -27182,6 +27448,7 @@ type File implements Node {
 	program: [Program!]
 	platform: [Platform!]
 	evidence: [Evidence!]
+	identityHolder: [IdentityHolder!]
 	scan: [Scan!]
 	events(
 		"""
@@ -27897,6 +28164,11 @@ input FileWhereInput {
 	"""
 	hasEvidence: Boolean
 	hasEvidenceWith: [EvidenceWhereInput!]
+	"""
+	identity_holder edge predicates
+	"""
+	hasIdentityHolder: Boolean
+	hasIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	scan edge predicates
 	"""
@@ -28825,6 +29097,28 @@ type FindingBulkCreatePayload {
 	Created findings
 	"""
 	findings: [Finding!]
+}
+"""
+Return response for deleteBulkFinding mutation
+"""
+type FindingBulkDeletePayload {
+	"""
+	Deleted finding IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkFinding mutation
+"""
+type FindingBulkUpdatePayload {
+	"""
+	Updated findings
+	"""
+	findings: [Finding!]
+	"""
+	IDs of the updated findings
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -33763,6 +34057,37 @@ type IdentityHolder implements Node {
 		"""
 		where: DirectoryAccountWhereInput
 	): DirectoryAccountConnection!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
 	platforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -33856,6 +34181,37 @@ type IdentityHolder implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
+	files(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
+		Filtering options for Files returned from the connection.
+		"""
+		where: FileWhereInput
+	): FileConnection!
 	findings(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -34698,6 +35054,11 @@ input IdentityHolderWhereInput {
 	hasDirectoryAccounts: Boolean
 	hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
 	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
+	"""
 	platforms edge predicates
 	"""
 	hasPlatforms: Boolean
@@ -34712,6 +35073,11 @@ input IdentityHolderWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
+	"""
+	files edge predicates
+	"""
+	hasFiles: Boolean
+	hasFilesWith: [FileWhereInput!]
 	"""
 	findings edge predicates
 	"""
@@ -41738,7 +42104,7 @@ type Mutation {
 		entity type name allows the name of the entity type to be passed in over an id
 		"""
 		entityTypeName: String
-	): EntityCreatePayload!
+	entityFiles: [Upload!]): EntityCreatePayload!
 	"""
 	Create multiple new entities
 	"""
@@ -41780,7 +42146,7 @@ type Mutation {
 		New values for the entity
 		"""
 		input: UpdateEntityInput!
-	): EntityUpdatePayload!
+	entityFiles: [Upload!]): EntityUpdatePayload!
 	"""
 	Delete an existing entity
 	"""
@@ -42173,6 +42539,38 @@ type Mutation {
 		"""
 		id: ID!
 	): FindingDeletePayload!
+	"""
+	Update multiple existing findings
+	"""
+	updateBulkFinding(
+		"""
+		IDs of the findings to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the findings with
+		"""
+		input: UpdateFindingInput!
+	): FindingBulkUpdatePayload!
+	"""
+	Update multiple existing findings via file upload
+	"""
+	updateBulkCSVFinding(
+		"""
+		csv file containing values of the finding, must include ID column
+		"""
+		input: Upload!
+	): FindingBulkUpdatePayload!
+	"""
+	Delete multiple findings
+	"""
+	deleteBulkFinding(
+		"""
+		IDs of the findings to delete
+		"""
+		ids: [ID!]!
+	): FindingBulkDeletePayload!
 	"""
 	Create a new findingControl
 	"""
@@ -42599,7 +42997,7 @@ type Mutation {
 		values of the identityHolder
 		"""
 		input: CreateIdentityHolderInput!
-	): IdentityHolderCreatePayload!
+	identityHolderFiles: [Upload!]): IdentityHolderCreatePayload!
 	"""
 	Create multiple new identityHolders
 	"""
@@ -42631,7 +43029,7 @@ type Mutation {
 		New values for the identityHolder
 		"""
 		input: UpdateIdentityHolderInput!
-	): IdentityHolderUpdatePayload!
+	identityHolderFiles: [Upload!]): IdentityHolderUpdatePayload!
 	"""
 	Delete an existing identityHolder
 	"""
@@ -44328,6 +44726,38 @@ type Mutation {
 		id: ID!
 	): RemediationDeletePayload!
 	"""
+	Update multiple existing remediations
+	"""
+	updateBulkRemediation(
+		"""
+		IDs of the remediations to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the remediations with
+		"""
+		input: UpdateRemediationInput!
+	): RemediationBulkUpdatePayload!
+	"""
+	Update multiple existing remediations via file upload
+	"""
+	updateBulkCSVRemediation(
+		"""
+		csv file containing values of the remediation, must include ID column
+		"""
+		input: Upload!
+	): RemediationBulkUpdatePayload!
+	"""
+	Delete multiple remediations
+	"""
+	deleteBulkRemediation(
+		"""
+		IDs of the remediations to delete
+		"""
+		ids: [ID!]!
+	): RemediationBulkDeletePayload!
+	"""
 	Create a new review
 	"""
 	createReview(
@@ -44335,6 +44765,11 @@ type Mutation {
 		values of the review
 		"""
 		input: CreateReviewInput!
+
+		"""
+		Files to attach to the review
+		"""
+		reviewFiles: [Upload!]
 	): ReviewCreatePayload!
 	"""
 	Create multiple new reviews
@@ -44377,6 +44812,29 @@ type Mutation {
 		"""
 		id: ID!
 	): ReviewDeletePayload!
+	"""
+	Update multiple existing reviews
+	"""
+	updateBulkReview(
+		"""
+		IDs of the reviews to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the reviews with
+		"""
+		input: UpdateReviewInput!
+	): ReviewBulkUpdatePayload!
+	"""
+	Update multiple existing reviews via file upload
+	"""
+	updateBulkCSVReview(
+		"""
+		csv file containing values of the review, must include ID column
+		"""
+		input: Upload!
+	): ReviewBulkUpdatePayload!
 	"""
 	Create a new risk
 	"""
@@ -46030,6 +46488,38 @@ type Mutation {
 		"""
 		id: ID!
 	): VulnerabilityDeletePayload!
+	"""
+	Update multiple existing vulnerabilities
+	"""
+	updateBulkVulnerability(
+		"""
+		IDs of the vulnerabilities to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the vulnerabilities with
+		"""
+		input: UpdateVulnerabilityInput!
+	): VulnerabilityBulkUpdatePayload!
+	"""
+	Update multiple existing vulnerabilities via file upload
+	"""
+	updateBulkCSVVulnerability(
+		"""
+		csv file containing values of the vulnerability, must include ID column
+		"""
+		input: Upload!
+	): VulnerabilityBulkUpdatePayload!
+	"""
+	Delete multiple vulnerabilities
+	"""
+	deleteBulkVulnerability(
+		"""
+		IDs of the vulnerabilities to delete
+		"""
+		ids: [ID!]!
+	): VulnerabilityBulkDeletePayload!
 	"""
 	Resolve a vulnerability and optionally capture a review record.
 	"""
@@ -48702,6 +49192,7 @@ type Onboarding implements Node {
 	details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc
 	"""
 	compliance: Map
+	demoRequested: Boolean
 	organization: Organization
 }
 """
@@ -48768,6 +49259,13 @@ input OnboardingWhereInput {
 	companyNameHasSuffix: String
 	companyNameEqualFold: String
 	companyNameContainsFold: String
+	"""
+	demo_requested field predicates
+	"""
+	demoRequested: Boolean
+	demoRequestedNEQ: Boolean
+	demoRequestedIsNil: Boolean
+	demoRequestedNotNil: Boolean
 	"""
 	organization edge predicates
 	"""
@@ -65046,6 +65544,28 @@ type RemediationBulkCreatePayload {
 	remediations: [Remediation!]
 }
 """
+Return response for deleteBulkRemediation mutation
+"""
+type RemediationBulkDeletePayload {
+	"""
+	Deleted remediation IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkRemediation mutation
+"""
+type RemediationBulkUpdatePayload {
+	"""
+	Updated remediations
+	"""
+	remediations: [Remediation!]
+	"""
+	IDs of the updated remediations
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type RemediationConnection {
@@ -66480,6 +67000,19 @@ type ReviewBulkCreatePayload {
 	Created reviews
 	"""
 	reviews: [Review!]
+}
+"""
+Return response for updateBulkReview mutation
+"""
+type ReviewBulkUpdatePayload {
+	"""
+	Updated reviews
+	"""
+	reviews: [Review!]
+	"""
+	IDs of the updated reviews
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -81571,6 +82104,9 @@ input UpdateCampaignInput {
 	addIdentityHolderIDs: [ID!]
 	removeIdentityHolderIDs: [ID!]
 	clearIdentityHolders: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
@@ -81998,6 +82534,21 @@ input UpdateControlInput {
 	addScanIDs: [ID!]
 	removeScanIDs: [ID!]
 	clearScans: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addIdentityHolderIDs: [ID!]
+	removeIdentityHolderIDs: [ID!]
+	clearIdentityHolders: Boolean
+	addCampaignIDs: [ID!]
+	removeCampaignIDs: [ID!]
+	clearCampaigns: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
@@ -83147,6 +83698,9 @@ input UpdateEntityInput {
 	addIdentityHolderIDs: [ID!]
 	removeIdentityHolderIDs: [ID!]
 	clearIdentityHolders: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
@@ -83523,6 +84077,9 @@ input UpdateFileInput {
 	addEvidenceIDs: [ID!]
 	removeEvidenceIDs: [ID!]
 	clearEvidence: Boolean
+	addIdentityHolderIDs: [ID!]
+	removeIdentityHolderIDs: [ID!]
+	clearIdentityHolder: Boolean
 	addScanIDs: [ID!]
 	removeScanIDs: [ID!]
 	clearScan: Boolean
@@ -84321,6 +84878,9 @@ input UpdateIdentityHolderInput {
 	addDirectoryAccountIDs: [ID!]
 	removeDirectoryAccountIDs: [ID!]
 	clearDirectoryAccounts: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
@@ -84330,6 +84890,9 @@ input UpdateIdentityHolderInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	addFileIDs: [ID!]
+	removeFileIDs: [ID!]
+	clearFiles: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
@@ -88644,6 +89207,15 @@ input UpdateWorkflowDefinitionInput {
 	trackedFields: [String!]
 	appendTrackedFields: [String!]
 	clearTrackedFields: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	addTagDefinitionIDs: [ID!]
 	removeTagDefinitionIDs: [ID!]
 	clearTagDefinitions: Boolean
@@ -91022,6 +91594,28 @@ type VulnerabilityBulkCreatePayload {
 	vulnerabilities: [Vulnerability!]
 }
 """
+Return response for deleteBulkVulnerability mutation
+"""
+type VulnerabilityBulkDeletePayload {
+	"""
+	Deleted vulnerability IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkVulnerability mutation
+"""
+type VulnerabilityBulkUpdatePayload {
+	"""
+	Updated vulnerabilities
+	"""
+	vulnerabilities: [Vulnerability!]
+	"""
+	IDs of the updated vulnerabilities
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type VulnerabilityConnection {
@@ -92986,6 +93580,99 @@ type WorkflowDefinition implements Node {
 	"""
 	trackedFields: [String!]
 	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	tagDefinitions(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -93477,6 +94164,21 @@ input WorkflowDefinitionWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	tag_definitions edge predicates
 	"""

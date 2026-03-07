@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -184,6 +185,7 @@ func (r Review) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Review](r,
 				withParents(
+					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},
@@ -213,6 +215,12 @@ func (Review) Indexes() []ent.Index {
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),
 			),
+	}
+}
+
+func (Review) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookReviewFiles(),
 	}
 }
 

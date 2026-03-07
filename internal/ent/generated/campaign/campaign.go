@@ -130,6 +130,8 @@ const (
 	EdgeGroups = "groups"
 	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
 	EdgeIdentityHolders = "identity_holders"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the campaign in the database.
@@ -239,6 +241,11 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "control_campaigns"
+	// ControlsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlsInverseTable = "controls"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -314,6 +321,9 @@ var (
 	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
 	// primary key for the identity_holders relation (M2M).
 	IdentityHoldersPrimaryKey = []string{"campaign_id", "identity_holder_id"}
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"control_id", "campaign_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -778,6 +788,20 @@ func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+	}
+}
+
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -908,6 +932,13 @@ func newIdentityHoldersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
+func newControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

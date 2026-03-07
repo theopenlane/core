@@ -1674,12 +1674,12 @@ tests:
           can_edit: true
           can_delete: true
           audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-member # org member can view cannot view by default
         object: workflow_definition:workflow_definition-1
         context:
           email_domain: "example.com"
         assertions:
-          can_view: true
+          can_view: false
           can_edit: false
           can_delete: false
       - user: user:ulid-workflow-editor # group editor has edit access
@@ -1702,12 +1702,20 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-member # org member can view via control view access
         object: workflow_instance:workflow_instance-1
         context:
           email_domain: "example.com"
         assertions:
           can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member # org member cannot view because there is no parent access in this case
+        object: workflow_instance:workflow_instance-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
           can_edit: false
           can_delete: false
       - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)
@@ -1730,12 +1738,12 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_assignment:workflow_assignment-1
         context:
           email_domain: "example.com"
         assertions:
-          can_view: true
+          can_view: true 
           can_edit: false
           can_delete: false
       - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)
@@ -1758,7 +1766,7 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_object_ref:workflow_object_ref-1
         context:
           email_domain: "example.com"
@@ -1786,7 +1794,7 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_assignment_target:workflow_assignment_target-1
         context:
           email_domain: "example.com"
@@ -1814,7 +1822,7 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
-      - user: user:ulid-of-member # org member can view
+      - user: user:ulid-of-member # org member can view via workflow_instance -> control access view
         object: workflow_event:workflow_event-1
         context:
           email_domain: "example.com"
@@ -1874,15 +1882,32 @@ tests:
         assertions:
           can_view:
             - workflow_definition:workflow_definition-1
+            - workflow_definition:workflow_definition-2
           can_edit:
             - workflow_definition:workflow_definition-1
+            - workflow_definition:workflow_definition-2
           can_delete:
             - workflow_definition:workflow_definition-1
+            - workflow_definition:workflow_definition-2
+      - user: user:ulid-of-member
+        type: workflow_definition
+        assertions:
+          can_view: [] # org member cannot view workflow definitions by default
+          can_edit: [] # no edit access to any workflow definitions
+          can_delete: [] # no delete access to any workflow definitions
       - user: user:ulid-of-owner
         type: workflow_instance
         assertions:
           can_view:
             - workflow_instance:workflow_instance-1
+            - workflow_instance:workflow_instance-2
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
+      - user: user:ulid-of-member
+        type: workflow_instance
+        assertions:
+          can_view:
+            - workflow_instance:workflow_instance-1 # can only see via control, cannot access the other one that doesn't have a parent control
           can_edit: [] # system-driven, only services can edit
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
@@ -1890,6 +1915,7 @@ tests:
         assertions:
           can_view:
             - workflow_assignment:workflow_assignment-1
+            - workflow_assignment:workflow_assignment-2
           can_edit: [] # system-driven, only services can edit
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
@@ -1897,6 +1923,14 @@ tests:
         assertions:
           can_view:
             - workflow_object_ref:workflow_object_ref-1
+            - workflow_object_ref:workflow_object_ref-2
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
+      - user: user:ulid-of-member
+        type: workflow_object_ref
+        assertions:
+          can_view:
+            - workflow_object_ref:workflow_object_ref-1 # can only see via control, cannot access the other one that doesn't have a parent control
           can_edit: [] # system-driven, only services can edit
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
@@ -1904,6 +1938,14 @@ tests:
         assertions:
           can_view:
             - workflow_assignment_target:workflow_assignment_target-1
+            - workflow_assignment_target:workflow_assignment_target-2
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
+      - user: user:ulid-of-member
+        type: workflow_assignment_target
+        assertions:
+          can_view:
+            - workflow_assignment_target:workflow_assignment_target-1 # can only see via control, cannot access the other one that doesn't have a parent control
           can_edit: [] # system-driven, only services can edit
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-of-owner
@@ -1911,6 +1953,14 @@ tests:
         assertions:
           can_view:
             - workflow_event:workflow_event-1
+            - workflow_event:workflow_event-2
+          can_edit: [] # system-driven, only services can edit
+          can_delete: [] # system-driven, only services can delete
+      - user: user:ulid-of-member
+        type: workflow_event
+        assertions:
+          can_view:
+            - workflow_event:workflow_event-1 # can only see via control, cannot access the other one that doesn't have a parent control
           can_edit: [] # system-driven, only services can edit
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-blocked # blocked user has no access
@@ -1936,6 +1986,7 @@ tests:
         assertions:
           can_view:
             - workflow_proposal:workflow_proposal-1
+            - workflow_proposal:workflow_proposal-2
           can_edit: [] # system-driven, only services can edit
           can_delete: [] # system-driven, only services can delete
       - user: user:ulid-blocked # blocked user has no access

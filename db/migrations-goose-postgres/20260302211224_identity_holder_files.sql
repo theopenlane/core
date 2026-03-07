@@ -1,0 +1,7 @@
+-- +goose Up
+-- create "identity_holder_files" table
+CREATE TABLE "identity_holder_files" ("identity_holder_id" character varying NOT NULL, "file_id" character varying NOT NULL, PRIMARY KEY ("identity_holder_id", "file_id"), CONSTRAINT "identity_holder_files_file_id" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "identity_holder_files_identity_holder_id" FOREIGN KEY ("identity_holder_id") REFERENCES "identity_holders" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+
+-- +goose Down
+-- reverse: create "identity_holder_files" table
+DROP TABLE "identity_holder_files";

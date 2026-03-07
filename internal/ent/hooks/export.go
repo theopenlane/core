@@ -48,19 +48,15 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return nil, errFieldsNotProvided
 	}
 
-	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	if err != nil {
-		return nil, err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		logx.FromContext(ctx).Error().Msg("no authenticated user found in context; unable to enqueue export job")
+		return nil, auth.ErrNoAuthUser
 	}
 
-	orgID := au.OrganizationID
-	if au.OrganizationID == "" {
-		if len(au.OrganizationIDs) == 1 {
-			orgID = au.OrganizationIDs[0]
-		}
-	}
+	orgID, _ := caller.ActiveOrg()
 
-	if orgID == "" || au.SubjectID == "" {
+	if orgID == "" || caller.SubjectID == "" {
 		logx.FromContext(ctx).Error().Msg("authenticated user has no organization ID or user ID; unable to enqueue export job")
 
 		return nil, ErrNoOrganizationID
@@ -87,7 +83,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 
 	args := jobspec.ExportContentArgs{
 		ExportID:       id,
-		UserID:         au.SubjectID,
+		UserID:         caller.SubjectID,
 		OrganizationID: orgID,
 	}
 
@@ -151,6 +147,7 @@ func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next e
 
 		ctx, err = checkExportFiles(ctx, m)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error processing export files for mutation")
 			return nil, err
 		}
 

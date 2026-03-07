@@ -230,7 +230,7 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 		prefix: "WFI",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
-				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
+				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}, WorkflowDefinition{}),
 				withOrganizationOwnerServiceOnly(true),
 			),
 		},

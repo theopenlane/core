@@ -52,7 +52,7 @@ func HookTrustCenterSubprocessor() ent.Hook {
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
 				log.Error().Err(err).Interface("writes", req).Msg("failed to create relationship tuples for trust center subprocessor parent")
 
-				return nil, err
+				return nil, ErrInternalServerError
 			}
 
 			return retVal, nil

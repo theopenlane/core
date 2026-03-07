@@ -179,7 +179,9 @@ func HookUserPermissions() ent.Hook {
 			}
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for user self permissions")
+
+				return nil, ErrInternalServerError
 			}
 
 			return v, err
@@ -385,7 +387,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 	}
 
 	for _, membership := range memberships {
-		newCtx := auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+		newCtx := auth.WithCaller(ctx, &auth.Caller{
 			SubjectID:       user.ID,
 			OrganizationID:  membership.OrganizationID,
 			OrganizationIDs: []string{membership.OrganizationID},

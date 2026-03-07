@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/utils/contextx"
 )
 
 func TestPopulateProviderHints(t *testing.T) {
@@ -51,23 +50,23 @@ func TestApplyProviderHints(t *testing.T) {
 
 	ctx := ApplyProviderHints(context.Background(), hints)
 
-	pref, ok := contextx.From[PreferredProviderHint](ctx)
+	pref, ok := PreferredProviderHintFromContext(ctx)
 	require.True(t, ok)
 	assert.Equal(t, storagetypes.ProviderType(pref), storagetypes.ProviderType("s3"))
 
-	known, ok := contextx.From[KnownProviderHint](ctx)
+	known, ok := KnownProviderHintFromContext(ctx)
 	require.True(t, ok)
 	assert.Equal(t, storagetypes.ProviderType(known), storagetypes.ProviderType("disk"))
 
-	resModule, ok := contextx.From[ModuleHint](ctx)
+	resModule, ok := ModuleHintFromContext(ctx)
 	require.True(t, ok)
 	assert.Equal(t, models.OrgModule(resModule), module)
 
-	size, ok := contextx.From[SizeBytesHint](ctx)
+	size, ok := SizeBytesHintFromContext(ctx)
 	require.True(t, ok)
 	assert.Equal(t, int64(size), int64(2048))
 
-	kind, ok := contextx.From[TemplateKindHint](ctx)
+	kind, ok := TemplateKindHintFromContext(ctx)
 	require.True(t, ok)
 	assert.Equal(t, enums.TemplateKindTrustCenterNda, enums.TemplateKind(kind))
 }

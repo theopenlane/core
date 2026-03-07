@@ -162,13 +162,16 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 	}
 
 	// Get organization ID from auth context
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil || orgID == "" {
-		if auth.IsSystemAdminFromContext(ctx) {
+	var orgID string
+	if svcCaller, svcOk := auth.CallerFromContext(ctx); svcOk && svcCaller != nil {
+		orgID = svcCaller.OrganizationID
+		if orgID == "" && svcCaller.Has(auth.CapSystemAdmin) {
 			orgID = consts.SystemAdminOrgID
-		} else {
-			return nil, ErrNoOrganizationID
 		}
+	}
+
+	if orgID == "" {
+		return nil, ErrNoOrganizationID
 	}
 
 	cacheKey := ProviderCacheKey{
@@ -197,7 +200,10 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 	}
 
 	// Build ProviderCacheKey using file metadata with auth context as backup
-	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+	var orgID string
+	if dlCaller, dlOk := auth.CallerFromContext(ctx); dlOk && dlCaller != nil {
+		orgID = dlCaller.OrganizationID
+	}
 
 	cacheKey := ProviderCacheKey{
 		TenantID:        orgID,

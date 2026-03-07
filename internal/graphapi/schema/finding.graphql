@@ -60,6 +60,37 @@ extend type Mutation{
         """
         id: ID!
     ): FindingDeletePayload!
+    """
+    Update multiple existing findings
+    """
+    updateBulkFinding(
+        """
+        IDs of the findings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the findings with
+        """
+        input: UpdateFindingInput!
+    ): FindingBulkUpdatePayload!
+    """
+    Update multiple existing findings via file upload
+    """
+    updateBulkCSVFinding(
+        """
+        csv file containing values of the finding, must include ID column
+        """
+        input: Upload!
+    ): FindingBulkUpdatePayload!
+    """
+    Delete multiple findings
+    """
+    deleteBulkFinding(
+        """
+        IDs of the findings to delete
+        """
+        ids: [ID!]!
+    ): FindingBulkDeletePayload!
 }
 
 """
@@ -100,4 +131,28 @@ type FindingBulkCreatePayload {
     Created findings
     """
     findings: [Finding!]
+}
+
+"""
+Return response for updateBulkFinding mutation
+"""
+type FindingBulkUpdatePayload {
+    """
+    Updated findings
+    """
+    findings: [Finding!]
+    """
+    IDs of the updated findings
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkFinding mutation
+"""
+type FindingBulkDeletePayload {
+    """
+    Deleted finding IDs
+    """
+    deletedIDs: [ID!]!
 }

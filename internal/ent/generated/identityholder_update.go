@@ -18,9 +18,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -814,6 +816,21 @@ func (_u *IdentityHolderUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *Id
 	return _u.AddDirectoryAccountIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *IdentityHolderUpdate) AddControlIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *IdentityHolderUpdate) AddControls(v ...*Control) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *IdentityHolderUpdate) AddPlatformIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -857,6 +874,21 @@ func (_u *IdentityHolderUpdate) AddTasks(v ...*Task) *IdentityHolderUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *IdentityHolderUpdate) AddFileIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *IdentityHolderUpdate) AddFiles(v ...*File) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -1133,6 +1165,27 @@ func (_u *IdentityHolderUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) 
 	return _u.RemoveDirectoryAccountIDs(ids...)
 }
 
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *IdentityHolderUpdate) ClearControls() *IdentityHolderUpdate {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveControlIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *IdentityHolderUpdate) RemoveControls(v ...*Control) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *IdentityHolderUpdate) ClearPlatforms() *IdentityHolderUpdate {
 	_u.mutation.ClearPlatforms()
@@ -1194,6 +1247,27 @@ func (_u *IdentityHolderUpdate) RemoveTasks(v ...*Task) *IdentityHolderUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *IdentityHolderUpdate) ClearFiles() *IdentityHolderUpdate {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveFileIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *IdentityHolderUpdate) RemoveFiles(v ...*File) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -2099,6 +2173,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.ControlsTable,
+			Columns: identityholder.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.ControlsTable,
+			Columns: identityholder.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.ControlsTable,
+			Columns: identityholder.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2238,6 +2360,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolderTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   identityholder.FilesTable,
+			Columns: identityholder.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   identityholder.FilesTable,
+			Columns: identityholder.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   identityholder.FilesTable,
+			Columns: identityholder.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3208,6 +3378,21 @@ func (_u *IdentityHolderUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) 
 	return _u.AddDirectoryAccountIDs(ids...)
 }
 
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddControlIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddControlIDs(ids...)
+	return _u
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_u *IdentityHolderUpdateOne) AddControls(v ...*Control) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddControlIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddPlatformIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -3251,6 +3436,21 @@ func (_u *IdentityHolderUpdateOne) AddTasks(v ...*Task) *IdentityHolderUpdateOne
 		ids[i] = v[i].ID
 	}
 	return _u.AddTaskIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddFileIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddFileIDs(ids...)
+	return _u
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_u *IdentityHolderUpdateOne) AddFiles(v ...*File) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFileIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -3527,6 +3727,27 @@ func (_u *IdentityHolderUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccoun
 	return _u.RemoveDirectoryAccountIDs(ids...)
 }
 
+// ClearControls clears all "controls" edges to the Control entity.
+func (_u *IdentityHolderUpdateOne) ClearControls() *IdentityHolderUpdateOne {
+	_u.mutation.ClearControls()
+	return _u
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveControlIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveControlIDs(ids...)
+	return _u
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (_u *IdentityHolderUpdateOne) RemoveControls(v ...*Control) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveControlIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *IdentityHolderUpdateOne) ClearPlatforms() *IdentityHolderUpdateOne {
 	_u.mutation.ClearPlatforms()
@@ -3588,6 +3809,27 @@ func (_u *IdentityHolderUpdateOne) RemoveTasks(v ...*Task) *IdentityHolderUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTaskIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (_u *IdentityHolderUpdateOne) ClearFiles() *IdentityHolderUpdateOne {
+	_u.mutation.ClearFiles()
+	return _u
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveFileIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveFileIDs(ids...)
+	return _u
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (_u *IdentityHolderUpdateOne) RemoveFiles(v ...*File) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -4523,6 +4765,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.ControlsTable,
+			Columns: identityholder.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.ControlsTable,
+			Columns: identityholder.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.ControlsTable,
+			Columns: identityholder.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4662,6 +4952,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolderTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   identityholder.FilesTable,
+			Columns: identityholder.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   identityholder.FilesTable,
+			Columns: identityholder.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   identityholder.FilesTable,
+			Columns: identityholder.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

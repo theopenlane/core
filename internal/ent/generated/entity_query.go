@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -70,6 +71,7 @@ type EntityQuery struct {
 	withAuthMethods                       *CustomTypeEnumQuery
 	withEmployerIdentityHolders           *IdentityHolderQuery
 	withIdentityHolders                   *IdentityHolderQuery
+	withControls                          *ControlQuery
 	withPlatforms                         *PlatformQuery
 	withOutOfScopePlatforms               *PlatformQuery
 	withSourcePlatforms                   *PlatformQuery
@@ -93,6 +95,7 @@ type EntityQuery struct {
 	withNamedAuthMethods                  map[string]*CustomTypeEnumQuery
 	withNamedEmployerIdentityHolders      map[string]*IdentityHolderQuery
 	withNamedIdentityHolders              map[string]*IdentityHolderQuery
+	withNamedControls                     map[string]*ControlQuery
 	withNamedPlatforms                    map[string]*PlatformQuery
 	withNamedOutOfScopePlatforms          map[string]*PlatformQuery
 	withNamedSourcePlatforms              map[string]*PlatformQuery
@@ -782,6 +785,31 @@ func (_q *EntityQuery) QueryIdentityHolders() *IdentityHolderQuery {
 	return query
 }
 
+// QueryControls chains the current query on the "controls" edge.
+func (_q *EntityQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.ControlsTable, entity.ControlsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlEntities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatforms chains the current query on the "platforms" edge.
 func (_q *EntityQuery) QueryPlatforms() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -1100,6 +1128,7 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withAuthMethods:                       _q.withAuthMethods.Clone(),
 		withEmployerIdentityHolders:           _q.withEmployerIdentityHolders.Clone(),
 		withIdentityHolders:                   _q.withIdentityHolders.Clone(),
+		withControls:                          _q.withControls.Clone(),
 		withPlatforms:                         _q.withPlatforms.Clone(),
 		withOutOfScopePlatforms:               _q.withOutOfScopePlatforms.Clone(),
 		withSourcePlatforms:                   _q.withSourcePlatforms.Clone(),
@@ -1397,6 +1426,17 @@ func (_q *EntityQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery)) *
 	return _q
 }
 
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithControls(opts ...func(*ControlQuery)) *EntityQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControls = query
+	return _q
+}
+
 // WithPlatforms tells the query-builder to eager-load the nodes that are connected to
 // the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithPlatforms(opts ...func(*PlatformQuery)) *EntityQuery {
@@ -1526,7 +1566,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [30]bool{
+		loadedTypes = [31]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1553,6 +1593,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withAuthMethods != nil,
 			_q.withEmployerIdentityHolders != nil,
 			_q.withIdentityHolders != nil,
+			_q.withControls != nil,
 			_q.withPlatforms != nil,
 			_q.withOutOfScopePlatforms != nil,
 			_q.withSourcePlatforms != nil,
@@ -1761,6 +1802,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Controls = []*Control{} },
+			func(n *Entity, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatforms; query != nil {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Platforms = []*Platform{} },
@@ -1897,6 +1945,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadIdentityHolders(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedIdentityHolders(name) },
 			func(n *Entity, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedControls(name) },
+			func(n *Entity, e *Control) { n.appendNamedControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3022,6 +3077,68 @@ func (_q *EntityQuery) loadIdentityHolders(ctx context.Context, query *IdentityH
 	}
 	return nil
 }
+func (_q *EntityQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Control)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.ControlsTable)
+		joinT.Schema(_q.schemaConfig.ControlEntities)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(entity.ControlsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.ControlsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.ControlsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controls" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *EntityQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Platform)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Entity)
@@ -3590,6 +3707,20 @@ func (_q *EntityQuery) WithNamedIdentityHolders(name string, opts ...func(*Ident
 		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
 	}
 	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *EntityQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
+	}
+	_q.withNamedControls[name] = query
 	return _q
 }
 
