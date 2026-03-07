@@ -16,7 +16,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
 	"golang.org/x/oauth2"
@@ -44,9 +43,8 @@ import (
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -154,7 +152,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared token manager to avoid RSA key generation
 	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 
 	// shared redis client to avoid miniredis server startup
 	suite.sharedRedisClient = coreutils.NewRedisClient()
@@ -164,7 +162,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared FGA client to avoid repeated container connections
 	suite.sharedFGAClient, err = suite.ofgaTF.NewFgaClient(context.Background())
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 
 	// shared OTP manager
 	otpOpts := []totp.ConfigOption{
@@ -202,11 +200,11 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup history client
 	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
@@ -231,25 +229,25 @@ func (suite *HandlerTestSuite) SetupTest() {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
-	require.NoError(t, err, "failed opening connection to database")
+	assert.NoError(t, err, "failed opening connection to database")
 
 	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// truncate river tables
 	err = db.Job.TruncateRiverTables(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// add db to test client
 	suite.db = db
 
 	// add the client
 	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// setup router with schema registry
 	suite.router, err = setupRouter()
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
@@ -306,7 +304,7 @@ func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path str
 func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
 	// get keys from the token manager
 	keys, err := suite.db.TokenManager.Keys()
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
@@ -344,13 +342,13 @@ func (suite *HandlerTestSuite) registerRouteOnce(method, path string, operation 
 func (suite *HandlerTestSuite) TearDownTest() {
 	if suite.db != nil {
 		err := suite.db.CloseAll()
-		require.NoError(suite.T(), err)
+		assert.NoError(suite.T(), err)
 	}
 }
 
 func (suite *HandlerTestSuite) ClearTestData() {
 	err := suite.db.Job.TruncateRiverTables(context.Background())
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
@@ -358,7 +356,7 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 
 	// terminate all fga containers
 	err := suite.ofgaTF.TeardownFixture()
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 }
 
 func setupRouter() (*route.Router, error) {
@@ -391,9 +389,6 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 }
 
 func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) {
-	store := keystore.NewStore(suite.db)
-	suite.h.IntegrationStore = store
-
 	providerType := types.ProviderType("github")
 	spec := config.ProviderSpec{
 		Name:        "github",
@@ -419,21 +414,15 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	}
 
 	reg, err := registry.NewRegistry(ctx, nil)
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
 
-	suite.h.IntegrationRegistry = reg
-	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
-
-	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
-	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
+	rt, err := integrationruntime.New(integrationruntime.Config{
+		Registry: reg,
+		DB:       suite.db,
+	})
 	assert.NoError(suite.T(), err)
-	suite.h.IntegrationOperations = manager
-
-	sessions := keymaker.NewMemorySessionStore()
-	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	assert.NoError(suite.T(), err)
-	suite.h.IntegrationKeymaker = keymakerSvc
+	suite.h.IntegrationRuntime = rt
 }
 
 type testOAuthProvider struct {

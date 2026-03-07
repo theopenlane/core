@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/integrations/providers/schematest"
+	"github.com/theopenlane/core/internal/testutils/integrations/schematest"
 )
 
 // TestSecurityCenterFindingsConfigSchema verifies the Security Center schema exposes expected fields

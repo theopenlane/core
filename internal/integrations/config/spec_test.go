@@ -47,9 +47,3 @@ func TestProviderSpecToProviderConfig(t *testing.T) {
 		t.Fatalf("expected metadata to be set")
 	}
 }
-
-func TestToProviderConfigsEmpty(t *testing.T) {
-	if out := ToProviderConfigs(nil); out != nil {
-		t.Fatalf("expected nil for empty map")
-	}
-}

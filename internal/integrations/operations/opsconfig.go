@@ -24,6 +24,7 @@ func (p Pagination) EffectivePageSize(defaultValue int) int {
 	if p.PageSize > 0 {
 		return p.PageSize
 	}
+
 	return defaultValue
 }
 

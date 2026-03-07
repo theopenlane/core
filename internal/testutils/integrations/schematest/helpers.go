@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Properties extracts schema properties and fails the test if missing
+// Properties extracts schema properties and fails the test if missing.
 func Properties(t *testing.T, schema map[string]any) map[string]any {
 	t.Helper()
 
@@ -18,7 +18,7 @@ func Properties(t *testing.T, schema map[string]any) map[string]any {
 	return nil
 }
 
-// Required extracts required fields from a schema and returns them as strings
+// Required extracts required fields from a schema and returns them as strings.
 func Required(t *testing.T, schema map[string]any) []string {
 	t.Helper()
 
@@ -42,7 +42,7 @@ func Required(t *testing.T, schema map[string]any) []string {
 	return out
 }
 
-// FindMap searches nested schema content for a map value
+// FindMap searches nested schema content for a map value.
 func FindMap(node any, key string) map[string]any {
 	switch typed := node.(type) {
 	case map[string]any:
@@ -66,7 +66,7 @@ func FindMap(node any, key string) map[string]any {
 	return nil
 }
 
-// FindSlice searches nested schema content for a slice value
+// FindSlice searches nested schema content for a slice value.
 func FindSlice(node any, key string) any {
 	switch typed := node.(type) {
 	case map[string]any:

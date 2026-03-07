@@ -235,16 +235,15 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		if provider == types.ProviderUnknown {
 			return IntegrationQueueResult{}, ErrIntegrationProviderRequired
 		}
+		resolvedOperation, err := e.integrationRegistry.ResolveOperation(provider, operationName, operationKind)
+		if err != nil {
+			return IntegrationQueueResult{}, err
+		}
 		if e.integrationStore == nil {
 			return IntegrationQueueResult{}, ErrIntegrationStoreRequired
 		}
 
 		ensuredRecord, err := e.integrationStore.EnsureIntegration(allowCtx, orgID, provider)
-		if err != nil {
-			return IntegrationQueueResult{}, err
-		}
-
-		resolvedOperation, err := e.integrationRegistry.ResolveOperation(provider, operationName, operationKind)
 		if err != nil {
 			return IntegrationQueueResult{}, err
 		}

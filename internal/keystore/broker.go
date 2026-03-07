@@ -28,14 +28,12 @@ type Broker struct {
 	store *Store
 	// registry provides access to provider implementations for minting
 	registry *registry.Registry
-
 	// mu protects concurrent access to the cache
 	mu sync.RWMutex
 	// cache stores recently used credentials to avoid database roundtrips
 	cache map[cacheKey]cachedCredential
 	// maxCacheEntries bounds the number of in-memory cached credential entries
 	maxCacheEntries int
-
 	// now returns the current time, overridable for testing
 	now func() time.Time
 }
@@ -59,14 +57,18 @@ type cachedCredential struct {
 }
 
 // NewBroker constructs a broker backed by the supplied store and provider registry
-func NewBroker(store *Store, reg *registry.Registry) *Broker {
+func NewBroker(store *Store, reg *registry.Registry) (*Broker, error) {
+	if store == nil || reg == nil {
+		return nil, ErrBrokerNotInitialized
+	}
+
 	return &Broker{
 		store:           store,
 		registry:        reg,
 		cache:           make(map[cacheKey]cachedCredential),
 		maxCacheEntries: defaultBrokerCacheMaxEntries,
 		now:             time.Now,
-	}
+	}, nil
 }
 
 // Get returns the latest credential payload for the given org/provider pair (using cache when valid)
@@ -221,10 +223,6 @@ func (b *Broker) loadIntegrationSubject(ctx context.Context, orgID string, provi
 
 // lookupProvider retrieves the provider instance from the registry
 func (b *Broker) lookupProvider(provider types.ProviderType) (types.Provider, error) {
-	if b.registry == nil {
-		return nil, ErrProviderNotRegistered
-	}
-
 	instance, ok := b.registry.Provider(provider)
 	if !ok {
 		return nil, ErrProviderNotRegistered

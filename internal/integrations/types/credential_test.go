@@ -54,29 +54,6 @@ func TestMergeScopes(t *testing.T) {
 	}
 }
 
-func TestRedacted(t *testing.T) {
-	payload := CredentialPayload{
-		Provider: ProviderType("test"),
-		Kind:     CredentialKindOAuthToken,
-		Token: &oauth2.Token{
-			AccessToken:  "access",
-			RefreshToken: "refresh",
-		},
-		Data: models.CredentialSet{APIToken: "secret"},
-	}
-
-	redacted := payload.Redacted()
-	if redacted.Token == nil || redacted.Token.AccessToken != "[redacted]" {
-		t.Fatalf("expected access token redacted")
-	}
-	if redacted.Token.RefreshToken != "" {
-		t.Fatalf("expected refresh token cleared")
-	}
-	if redacted.Data.APIToken != "" {
-		t.Fatalf("expected credential data cleared")
-	}
-}
-
 func TestCredentialOptions(t *testing.T) {
 	payload := CredentialPayload{
 		Token:  &oauth2.Token{AccessToken: "token"},

@@ -1,6 +1,8 @@
 package operations
 
-import "testing"
+import (
+	"testing"
+)
 
 type schemaSample struct {
 	Name string `json:"name"`

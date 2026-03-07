@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
@@ -44,33 +45,35 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	if providerType == types.ProviderUnknown {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
+	if err := h.validateIntegrationProvider(providerType); err != nil {
+		if errors.Is(err, errIntegrationRuntimeNotConfigured) {
+			return h.InternalServerError(ctx, err, openapiCtx)
+		}
+
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
 
 	operationName := types.OperationName(req.Body.Operation)
 	if operationName == "" {
 		return h.BadRequest(ctx, rout.MissingField("operation"), openapiCtx)
 	}
+	integrationID := req.IntegrationID
 
-	if h.WorkflowEngine == nil {
-		if operationName != types.OperationHealthDefault {
-			return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
-		}
+	if h.WorkflowEngine == nil && operationName != types.OperationHealthDefault {
+		return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
 	}
 
 	queueCtx := context.WithoutCancel(requestCtx)
-
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
 	if operationName == types.OperationHealthDefault {
-		if h.IntegrationOperations == nil {
-			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
-		}
-
-		result, err := h.IntegrationOperations.Run(queueCtx, types.OperationRequest{
-			OrgID:    caller.OrganizationID,
-			Provider: providerType,
-			Name:     operationName,
-			Config:   configDoc,
-			Force:    req.Body.Force,
+		result, err := h.IntegrationRuntime.Operations().Run(queueCtx, types.OperationRequest{
+			OrgID:         caller.OrganizationID,
+			IntegrationID: integrationID,
+			Provider:      providerType,
+			Name:          operationName,
+			Config:        configDoc,
+			Force:         req.Body.Force,
 		})
 		if err != nil {
 			return h.BadRequest(ctx, err, openapiCtx)
@@ -100,12 +103,13 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
-		OrgID:     caller.OrganizationID,
-		Provider:  providerType,
-		Operation: operationName,
-		Config:    configDoc,
-		Force:     req.Body.Force,
-		RunType:   enums.IntegrationRunTypeManual,
+		OrgID:         caller.OrganizationID,
+		Provider:      providerType,
+		IntegrationID: integrationID,
+		Operation:     operationName,
+		Config:        configDoc,
+		Force:         req.Body.Force,
+		RunType:       enums.IntegrationRunTypeManual,
 	})
 	if err != nil {
 		switch integrationHTTPStatus(err) {

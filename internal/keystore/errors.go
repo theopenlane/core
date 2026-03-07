@@ -9,6 +9,8 @@ var (
 	ErrOrgIDRequired = errors.New("keystore: org id required")
 	// ErrCredentialNotFound indicates no credential exists for the supplied org/provider
 	ErrCredentialNotFound = errors.New("keystore: credential not found")
+	// ErrIntegrationAmbiguous indicates provider-level lookup matched multiple integrations
+	ErrIntegrationAmbiguous = errors.New("keystore: integration ambiguous")
 	// ErrProviderNotRegistered indicates the registry does not have a provider implementation for the requested type
 	ErrProviderNotRegistered = errors.New("keystore: provider not registered")
 	// ErrBrokerRequired indicates a client pool was constructed without a credential broker/source
@@ -31,4 +33,6 @@ var (
 	ErrOperationClientManagerRequired = errors.New("keystore: client manager required for operation")
 	// ErrStoreNotInitialized indicates the store instance is nil
 	ErrStoreNotInitialized = errors.New("keystore: store not initialized")
+	// ErrBrokerNotInitialized indicates the broker was unable to be initialized due to missing dependencies
+	ErrBrokerNotInitialized = errors.New("keystore: broker not initialized")
 )

@@ -5,29 +5,24 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
 )
 
 func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[types.ProviderType]config.ProviderSpec) func() {
 	t.Helper()
 
-	originalRegistry := suite.h.IntegrationRegistry
-	originalStore := suite.h.IntegrationStore
-	originalBroker := suite.h.IntegrationBroker
-	originalOperations := suite.h.IntegrationOperations
-	originalKeymaker := suite.h.IntegrationKeymaker
+	originalRuntime := suite.h.IntegrationRuntime
 
 	ctx := context.Background()
 	reg, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	for provider, spec := range specs {
 		pt := provider
@@ -37,79 +32,41 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 				return &testProvider{providerType: pt}, nil
 			},
 		}
-		require.NoError(t, reg.UpsertProvider(ctx, spec, builder))
+		assert.NoError(t, reg.UpsertProvider(ctx, spec, builder))
 	}
 
-	suite.h.IntegrationRegistry = reg
-
-	store := keystore.NewStore(suite.db)
-	suite.h.IntegrationStore = store
-	broker := keystore.NewBroker(store, reg)
-	suite.h.IntegrationBroker = broker
-
-	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
-	opManager, err := keystore.NewOperationManager(broker, opDescriptors)
-	require.NoError(t, err)
-	suite.h.IntegrationOperations = opManager
-
-	sessions := keymaker.NewMemorySessionStore()
-	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	require.NoError(t, err)
-	suite.h.IntegrationKeymaker = keymakerSvc
+	rt, err := integrationruntime.New(integrationruntime.Config{
+		Registry: reg,
+		DB:       suite.db,
+	})
+	assert.NoError(t, err)
+	suite.h.IntegrationRuntime = rt
 
 	return func() {
-		suite.h.IntegrationRegistry = originalRegistry
-		suite.h.IntegrationStore = originalStore
-		suite.h.IntegrationBroker = originalBroker
-		suite.h.IntegrationOperations = originalOperations
-		suite.h.IntegrationKeymaker = originalKeymaker
+		suite.h.IntegrationRuntime = originalRuntime
 	}
 }
 
-func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, spec config.ProviderSpec) func() {
+func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, spec config.ProviderSpec, ghCfg integrationruntime.GitHubAppConfig) func() {
 	t.Helper()
 
-	originalRegistry := suite.h.IntegrationRegistry
-	originalStore := suite.h.IntegrationStore
-	originalBroker := suite.h.IntegrationBroker
-	originalClients := suite.h.IntegrationClients
-	originalOperations := suite.h.IntegrationOperations
-	originalKeymaker := suite.h.IntegrationKeymaker
+	originalRuntime := suite.h.IntegrationRuntime
 
 	ctx := context.Background()
 	reg, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-	require.NoError(t, reg.UpsertProvider(ctx, spec, githubprovider.AppBuilder()))
+	assert.NoError(t, err)
+	assert.NoError(t, reg.UpsertProvider(ctx, spec, githubprovider.AppBuilder()))
 
-	suite.h.IntegrationRegistry = reg
-
-	store := keystore.NewStore(suite.db)
-	suite.h.IntegrationStore = store
-	broker := keystore.NewBroker(store, reg)
-	suite.h.IntegrationBroker = broker
-
-	clientDescriptors := keystore.FlattenDescriptors(reg.ClientDescriptorCatalog())
-	clientManager, err := keystore.NewClientPoolManager(broker, clientDescriptors)
-	require.NoError(t, err)
-	suite.h.IntegrationClients = clientManager
-
-	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
-	opManager, err := keystore.NewOperationManager(broker, opDescriptors, keystore.WithOperationClients(clientManager))
-	require.NoError(t, err)
-	suite.h.IntegrationOperations = opManager
-
-	sessions := keymaker.NewMemorySessionStore()
-	keymakerSvc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	require.NoError(t, err)
-	suite.h.IntegrationKeymaker = keymakerSvc
+	rt, err := integrationruntime.New(integrationruntime.Config{
+		Registry:  reg,
+		DB:        suite.db,
+		GitHubApp: ghCfg,
+	})
+	assert.NoError(t, err)
+	suite.h.IntegrationRuntime = rt
 
 	return func() {
-		suite.h.IntegrationRegistry = originalRegistry
-		suite.h.IntegrationStore = originalStore
-		suite.h.IntegrationBroker = originalBroker
-		suite.h.IntegrationClients = originalClients
-		suite.h.IntegrationOperations = originalOperations
-		suite.h.IntegrationKeymaker = originalKeymaker
+		suite.h.IntegrationRuntime = originalRuntime
 	}
 }
 
