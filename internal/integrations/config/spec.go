@@ -46,11 +46,11 @@ type ProviderSpec struct {
 	// UserInfo describes optional user info lookups
 	UserInfo *UserInfoSpec `json:"userInfo,omitempty"`
 	// WorkloadIdentity contains Google WIF defaults
-	GoogleWorkloadIdentity *GoogleWorkloadIdentitySpec `json:"googleWorkloadIdentity,omitempty"`
+	GoogleWorkloadIdentity *GoogleWorkloadIdentitySpec `json:"googleWorkloadIdentity,omitempty" koanf:"workloadidentity"`
 	// GitHubApp configures GitHub App providers
-	GitHubApp *GitHubAppSpec `json:"githubApp,omitempty"`
+	GitHubApp *GitHubAppSpec `json:"githubApp,omitempty" koanf:"app"`
 	// AWSSTS configures AWS federation defaults
-	AWSSTS *AWSFederationSpec `json:"awsSts,omitempty"`
+	AWSSTS *AWSFederationSpec `json:"awsSts,omitempty" koanf:"sts"`
 	// CredentialsSchema drives declarative credential forms
 	CredentialsSchema map[string]any `json:"credentialsSchema,omitempty"`
 	// Persistence configures storage policies
@@ -61,6 +61,9 @@ type ProviderSpec struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// Defaults stores provider-specific defaults
 	Defaults map[string]any `json:"defaults,omitempty"`
+	// SuccessRedirectURL is the URL to redirect to after successful authentication for this provider.
+	// When empty, handlers return JSON instead of redirecting.
+	SuccessRedirectURL string `json:"successRedirectUrl,omitempty" koanf:"successredirecturl"`
 }
 
 // ProviderType returns the normalized provider identifier
@@ -185,16 +188,16 @@ type UserInfoSpec struct {
 
 // GoogleWorkloadIdentitySpec configures Google WIF defaults
 type GoogleWorkloadIdentitySpec struct {
-	// Audience is the default audience for STS exchanges
-	Audience string `json:"audience,omitempty"`
-	// TargetServiceAccount is the default service account to impersonate
+	// Audience is the Openlane WIF pool/provider audience for STS exchanges; operator-configured.
+	Audience string `json:"audience,omitempty" koanf:"audience"`
+	// TargetServiceAccount is the per-tenant service account provided by the user via credentialsSchema; not operator-configured.
 	TargetServiceAccount string `json:"targetServiceAccount,omitempty"`
-	// Scopes enumerates default scopes on generated tokens
+	// Scopes enumerates default GCP API scopes; operator-configured.
 	Scopes []string `json:"scopes,omitempty"`
-	// TokenLifetime configures the default token lifetime
-	TokenLifetime time.Duration `json:"tokenLifetime,omitempty"`
-	// SubjectTokenType configures the subject token type for STS
-	SubjectTokenType string `json:"subjectTokenType,omitempty"`
+	// TokenLifetime configures the default token lifetime; operator-configured.
+	TokenLifetime time.Duration `json:"tokenLifetime,omitempty" koanf:"tokenlifetime"`
+	// SubjectTokenType configures the subject token type for STS; operator-configured.
+	SubjectTokenType string `json:"subjectTokenType,omitempty" koanf:"subjecttokentype"`
 }
 
 // GitHubAppSpec holds GitHub App metadata
@@ -204,23 +207,25 @@ type GitHubAppSpec struct {
 	// TokenTTL optionally indicates desired installation token lifetime
 	TokenTTL time.Duration `json:"tokenTtl,omitempty"`
 	// AppSlug optionally exposes the configured app slug for UI metadata
-	AppSlug string `json:"appSlug,omitempty"`
-	// AppID carries the runtime GitHub App ID used for signing JWTs; this field is never serialized.
-	AppID string `json:"-"`
-	// PrivateKey carries the runtime GitHub App private key used for signing JWTs; this field is never serialized.
-	PrivateKey string `json:"-" sensitive:"true"`
+	AppSlug string `json:"appSlug,omitempty" koanf:"appslug"`
+	// AppID carries the runtime GitHub App ID used for signing JWTs; this field is never serialized to JSON.
+	AppID string `json:"-" koanf:"appid" sensitive:"true"`
+	// PrivateKey carries the runtime GitHub App private key used for signing JWTs; this field is never serialized to JSON.
+	PrivateKey string `json:"-" koanf:"privatekey" sensitive:"true"`
+	// WebhookSecret is the shared secret used to validate incoming GitHub webhooks; never serialized to JSON.
+	WebhookSecret string `json:"-" koanf:"webhooksecret" sensitive:"true"`
 }
 
 // AWSFederationSpec captures AssumeRoleWithWebIdentity defaults
 type AWSFederationSpec struct {
 	// RoleARN is the default role to assume
-	RoleARN string `json:"roleArn,omitempty"`
+	RoleARN string `json:"roleArn,omitempty" koanf:"rolearn"`
 	// SessionName is the default AWS session name
-	SessionName string `json:"sessionName,omitempty"`
+	SessionName string `json:"sessionName,omitempty" koanf:"sessionname"`
 	// Duration is the default session duration
-	Duration time.Duration `json:"duration,omitempty"`
+	Duration time.Duration `json:"duration,omitempty" koanf:"duration"`
 	// Region is the default AWS region
-	Region string `json:"region,omitempty"`
+	Region string `json:"region,omitempty" koanf:"region"`
 	// ExternalID optionally configures the STS external ID
-	ExternalID string `json:"externalId,omitempty"`
+	ExternalID string `json:"externalId,omitempty" koanf:"externalid"`
 }

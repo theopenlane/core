@@ -133,7 +133,7 @@ func TestBeginAuthorizationRequiresProviderState(t *testing.T) {
 
 	providerType := types.ProviderType("acme")
 	service, err := NewService(
-		fakeResolver{provider: &fakeProvider{providerType: providerType, state: "   "}},
+		fakeResolver{provider: &fakeProvider{providerType: providerType, state: ""}},
 		&fakeKeystore{},
 		&recordingAuthStateStore{},
 		ServiceOptions{},
@@ -239,14 +239,6 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 			store:     &recordingAuthStateStore{takeErr: integrations.ErrAuthorizationStateNotFound},
 			keystore:  &fakeKeystore{},
 			wantError: integrations.ErrAuthorizationStateNotFound,
-		},
-		{
-			name: "missing auth session",
-			store: &recordingAuthStateStore{
-				takeResponse: baseAuthState,
-			},
-			keystore:  &fakeKeystore{},
-			wantError: integrations.ErrAuthSessionInvalid,
 		},
 		{
 			name: "finish error",

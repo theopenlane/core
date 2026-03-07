@@ -20,19 +20,12 @@ import (
 const statePayloadParts = 3
 
 var (
-	errIntegrationRuntimeNotConfigured        = errors.New("integration runtime not configured")
 	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
 	// errDBClientNotConfigured indicates the database client is missing.
 	errDBClientNotConfigured = errors.New("database client not configured")
+	// errGitHubAppNotConfigured indicates required GitHub App operator credentials are absent from the provider spec.
+	errGitHubAppNotConfigured = errors.New("github app integration not configured: required credentials missing from provider spec")
 )
-
-// IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
-type IntegrationOauthProviderConfig struct {
-	// Enabled toggles initialization of the integration provider registry.
-	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
-	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
-}
 
 var (
 	// ErrInvalidState is returned when OAuth state validation fails
@@ -161,15 +154,12 @@ func (h *Handler) validateIntegrationProvider(provider types.ProviderType) error
 	if provider == types.ProviderUnknown {
 		return ErrInvalidProvider
 	}
-	if h.IntegrationRuntime == nil {
-		return errIntegrationRuntimeNotConfigured
-	}
 
 	spec, ok := h.IntegrationRuntime.Registry().Config(provider)
 	if !ok {
 		return ErrInvalidProvider
 	}
-	if spec.Active != nil && !*spec.Active {
+	if spec.Active == nil || !*spec.Active {
 		return ErrProviderDisabled
 	}
 
@@ -177,10 +167,6 @@ func (h *Handler) validateIntegrationProvider(provider types.ProviderType) error
 }
 
 func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integrationID string, provider types.ProviderType) error {
-	if h == nil || h.DBClient == nil || h.IntegrationRuntime == nil {
-		return nil
-	}
-
 	reg := h.IntegrationRuntime.Registry()
 
 	spec, ok := reg.Config(provider)

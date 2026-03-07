@@ -47,7 +47,7 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 	}
 }
 
-func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, spec config.ProviderSpec, ghCfg integrationruntime.GitHubAppConfig) func() {
+func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, spec config.ProviderSpec) func() {
 	t.Helper()
 
 	originalRuntime := suite.h.IntegrationRuntime
@@ -58,9 +58,9 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, spe
 	assert.NoError(t, reg.UpsertProvider(ctx, spec, githubprovider.AppBuilder()))
 
 	rt, err := integrationruntime.New(integrationruntime.Config{
-		Registry:  reg,
-		DB:        suite.db,
-		GitHubApp: ghCfg,
+		Registry:           reg,
+		DB:                 suite.db,
+		SuccessRedirectURL: spec.SuccessRedirectURL,
 	})
 	assert.NoError(t, err)
 	suite.h.IntegrationRuntime = rt

@@ -191,9 +191,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 
 	originalRuntime := suite.h.IntegrationRuntime
 	rt, err := integrationruntime.New(integrationruntime.Config{
-		Registry: originalRuntime.Registry(),
-		DB:       suite.db,
-		OAuth:    integrationruntime.OAuthConfig{SuccessRedirectURL: "https://console.openlane.io/integrations"},
+		Registry:           originalRuntime.Registry(),
+		DB:                 suite.db,
+		SuccessRedirectURL: "https://console.openlane.io/integrations",
 	})
 	require.NoError(t, err)
 	suite.h.IntegrationRuntime = rt

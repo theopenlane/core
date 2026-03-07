@@ -17,6 +17,7 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -31,32 +32,8 @@ const (
 	githubAppUserIDCookieName = "githubapp_user_id"
 )
 
-// IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration
-type IntegrationGitHubAppConfig struct {
-	// Enabled toggles the GitHub App integration handlers
-	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// AppID is the GitHub App ID used for JWT signing
-	AppID string `json:"appid" koanf:"appid" default:"" sensitive:"true"`
-	// AppSlug is the GitHub App slug used for the install URL
-	AppSlug string `json:"appslug" koanf:"appslug" default:""`
-	// PrivateKey is the PEM-encoded GitHub App private key
-	PrivateKey string `json:"privatekey" koanf:"privatekey" default:"" sensitive:"true"`
-	// WebhookSecret is the shared secret used to validate GitHub webhooks
-	WebhookSecret string `json:"webhooksecret" koanf:"webhooksecret" default:"" sensitive:"true"`
-	// SuccessRedirectURL is the URL to redirect to after successful installation
-	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
-}
-
 // githubAppInstallationPayload captures GitHub App installation attributes persisted on the integration.
 type githubAppInstallationPayload struct {
-	// AppID is the GitHub App identifier
-	AppID string `json:"appId"`
-	// InstallationID is the installed GitHub App installation identifier
-	InstallationID string `json:"installationId"`
-}
-
-// githubAppProviderStatePatch captures provider state fields persisted on the integration record
-type githubAppProviderStatePatch struct {
 	// AppID is the GitHub App identifier
 	AppID string `json:"appId"`
 	// InstallationID is the installed GitHub App installation identifier
@@ -78,10 +55,6 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 	caller, ok := auth.CallerFromContext(userCtx)
 	if !ok || caller == nil {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
-	}
-
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
 	if err := h.validateGitHubAppConfig(); err != nil {
@@ -126,10 +99,6 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	if isRegistrationContext(ctx) {
 		return nil
-	}
-
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
 	if err := h.validateGitHubAppConfig(); err != nil {
@@ -180,7 +149,8 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
-	installationPayload := githubAppInstallationPayload{AppID: h.IntegrationRuntime.GitHubAppCfg().AppID, InstallationID: in.InstallationID}
+	ghSpec, _ := h.gitHubAppSpec()
+	installationPayload := githubAppInstallationPayload{AppID: ghSpec.GitHubApp.AppID, InstallationID: in.InstallationID}
 	if err := h.verifyGitHubAppInstallation(reqCtx, orgID, installationPayload); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("org_id", orgID).Str("installation_id", in.InstallationID).Msg("github app installation verification failed")
 
@@ -212,7 +182,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
 
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.GitHubAppCfg().SuccessRedirectURL, github.TypeGitHubApp)
+	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.SuccessRedirectURL(), github.TypeGitHubApp)
 	if redirectURL == "" {
 		return h.Success(ctx, openapi.GitHubAppInstallCallbackResponse{Reply: rout.Reply{Success: true}, Message: "GitHub App integration connected"}, openapiCtx)
 	}
@@ -220,23 +190,24 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	return h.Redirect(ctx, redirectURL, openapiCtx)
 }
 
-// validateGitHubAppConfig ensures required GitHub App settings are present.
+// gitHubAppSpec looks up the GitHub App provider spec from the registry.
+func (h *Handler) gitHubAppSpec() (integrationconfig.ProviderSpec, bool) {
+	spec, ok := h.IntegrationRuntime.Registry().Config(github.TypeGitHubApp)
+
+	return spec, ok
+}
+
+// validateGitHubAppConfig ensures the GitHub App provider is active and all required
+// operator credentials are present in the provider spec.
 func (h *Handler) validateGitHubAppConfig() error {
-	cfg := h.IntegrationRuntime.GitHubAppCfg()
-	if !cfg.Enabled {
+	spec, ok := h.gitHubAppSpec()
+	if !ok || spec.Active == nil || !*spec.Active || spec.GitHubApp == nil {
 		return ErrProviderDisabled
 	}
-	if cfg.AppSlug == "" {
-		return rout.MissingField("appSlug")
-	}
-	if cfg.AppID == "" {
-		return rout.MissingField("appId")
-	}
-	if cfg.PrivateKey == "" {
-		return rout.MissingField("privateKey")
-	}
-	if cfg.WebhookSecret == "" {
-		return rout.MissingField("webhookSecret")
+
+	s := spec.GitHubApp
+	if s.AppSlug == "" || s.AppID == "" || s.PrivateKey == "" || s.WebhookSecret == "" {
+		return errGitHubAppNotConfigured
 	}
 
 	return nil
@@ -244,10 +215,12 @@ func (h *Handler) validateGitHubAppConfig() error {
 
 // githubAppInstallURL builds the GitHub App installation URL including the state parameter
 func (h *Handler) githubAppInstallURL(state string) (string, error) {
-	slug := h.IntegrationRuntime.GitHubAppCfg().AppSlug
-	if slug == "" {
+	spec, ok := h.gitHubAppSpec()
+	if !ok || spec.GitHubApp == nil || spec.GitHubApp.AppSlug == "" {
 		return "", rout.MissingField("appSlug")
 	}
+
+	slug := spec.GitHubApp.AppSlug
 
 	u := url.URL{
 		Scheme: "https",
@@ -263,18 +236,7 @@ func (h *Handler) githubAppInstallURL(state string) (string, error) {
 
 // updateGitHubAppIntegrationMetadata merges GitHub App installation metadata into provider state.
 func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integrationRecord *ent.Integration, payload githubAppInstallationPayload) error {
-	if h.DBClient == nil {
-		return errDBClientNotConfigured
-	}
-
-	if integrationRecord == nil || integrationRecord.ID == "" || payload.AppID == "" || payload.InstallationID == "" {
-		return ErrInvalidStateFormat
-	}
-
-	statePatch, err := jsonx.ToMap(githubAppProviderStatePatch{
-		AppID:          payload.AppID,
-		InstallationID: payload.InstallationID,
-	})
+	statePatch, err := jsonx.ToMap(payload)
 	if err != nil {
 		return ErrInvalidStateFormat
 	}
@@ -331,10 +293,6 @@ func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string,
 
 // resolveOpenlaneOrganizationName returns display_name, then name, then ID
 func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID string) string {
-	if orgID == "" || h.DBClient == nil {
-		return orgID
-	}
-
 	org, err := h.DBClient.Organization.Query().Where(organization.ID(orgID)).Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("organization_id", orgID).Msg("failed to resolve openlane organization name")
@@ -355,10 +313,6 @@ func (h *Handler) resolveOpenlaneOrganizationName(ctx context.Context, orgID str
 
 // queueGitHubVulnerabilityBackfill schedules an initial vulnerability collection run after app installation
 func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, integrationID string) {
-	if orgID == "" || integrationID == "" {
-		return
-	}
-
 	if h.WorkflowEngine == nil {
 		logx.FromContext(ctx).Info().Str("org_id", orgID).Msg("github app vulnerability backfill skipped: workflow engine not configured")
 
