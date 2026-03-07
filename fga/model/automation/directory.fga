@@ -1,0 +1,46 @@
+module automation
+
+
+# directory sync run history is service-driven but visible through the parent integration
+type directory_sync_run
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+# directory accounts are internal snapshots of user identities from external systems
+type directory_account
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, directory_sync_run, identity_holder, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+# directory groups are internal snapshots of group identities from external systems
+type directory_group
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, directory_sync_run, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+# directory memberships are service-managed joins between directory accounts and groups
+type directory_membership
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, integration, directory_sync_run, directory_account, directory_group, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]

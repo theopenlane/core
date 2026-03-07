@@ -1,0 +1,37 @@
+module automation
+
+# email branding holds visual configuration for branded emails
+type email_branding
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization]
+
+# email templates support branded outbound messages (system or org-owned)
+type email_template
+  relations
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [organization, user, service, integration, workflow_definition, workflow_instance]
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+
+# notification templates drive in-app and external channel messaging
+type notification_template
+  relations
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [organization, user, service, integration, workflow_definition]
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]

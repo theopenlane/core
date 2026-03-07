@@ -174,9 +174,18 @@ func testEchoServer(c *ent.Client, u *objects.Service, includeMiddleware bool) *
 // and local validator
 func createAuthConfig(c *ent.Client) *auth.Options {
 	// setup auth middleware
+
+	// get keys from the token manager
+	keys, err := c.TokenManager.Keys()
+	if err != nil {
+		panic("failed to get keys from token manager: " + err.Error())
+	}
+
+	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
+
 	opts := []auth.Option{
 		auth.WithDBClient(c),
-		auth.WithValidator(&tokens.MockValidator{}),
+		auth.WithValidator(validator),
 	}
 
 	authConfig := auth.NewAuthOptions(opts...)

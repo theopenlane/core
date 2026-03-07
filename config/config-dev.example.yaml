@@ -94,6 +94,7 @@ authz:
   hosturl: http://localhost:8080
   # set to true in dev so the model is updated when changes happen; the container needs to be restarted to see the changes
   createnewmodel: true
+  modulefile: fga/model/fga.mod
   credentials:
     apitoken: "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
 

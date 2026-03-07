@@ -74,7 +74,6 @@ authz:
     enabled: true
     hosturl: https://authz.theopenlane.io
     maxbatchwritesize: 100
-    modelfile: fga/model/model.fga
     modelid: ""
     storeid: ""
     storename: openlane

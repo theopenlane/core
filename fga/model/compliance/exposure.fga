@@ -1,0 +1,81 @@
+module compliance
+
+# risks are associated with an organization but do not inherit access from the organization
+# the risk creator will be made the admin of the risk and all other access will be assigned via
+# a group
+type risk
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or stakeholder or delegate or (editor but not blocked)
+    define can_delete: [user, service] or stakeholder or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, program, control, control_objective, subcontrol, procedure, internal_policy]
+    define viewer: [group#member] or editor or can_view from parent
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define blocked: [user, group#member]
+    # stakeholder is the group of users that are responsible for the risk, they will have full access to the risk
+    define stakeholder: [group#member]
+    # delegate is a group of users that are given temporary access to the risk, they will have edit but not delete access
+    define delegate: [group#member]
+
+# findings can be associated with programs, controls, subcontrols, risks, assets, entities,
+# scans, directory accounts, or identity holders
+# permissions are inherited from the parent object or organization
+type finding
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity, scan, directory_account, identity_holder]
+
+# vulnerabilities can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
+# permissions are inherited from the parent object or organization
+type vulnerability
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity, scan]
+
+# reviews can be associated with programs, controls, subcontrols, risks, action_plans, findings, vulnerabilities, assets, entities, or tasks
+# permissions are inherited from the parent object or organization
+type review
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, program, control, subcontrol, risk, action_plan, finding, vulnerability, asset, entity, task]
+
+type remediation
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, action_plan, program, control, subcontrol, risk, finding, vulnerability, asset, entity, task]
+
+type scan
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, platform, asset]

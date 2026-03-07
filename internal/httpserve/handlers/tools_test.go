@@ -95,7 +95,7 @@ var (
 )
 
 const (
-	fgaModelFile             = "../../../fga/model/model.fga"
+	fgaModuleFile            = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID = "sub_test_subscription"
 )
 
@@ -142,7 +142,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(map[string]string{
 			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
 			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",

@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -490,6 +491,12 @@ func (_q *WorkflowProposalQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if workflowproposal.Policy == nil {
+		return errors.New("generated: uninitialized workflowproposal.Policy (forgotten import generated/runtime?)")
+	}
+	if err := workflowproposal.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

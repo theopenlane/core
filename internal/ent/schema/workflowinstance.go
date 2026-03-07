@@ -261,7 +261,7 @@ func (WorkflowInstance) Hooks() []ent.Hook {
 func (WorkflowInstance) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			policy.CheckServiceCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
 		),
 	)

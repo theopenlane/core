@@ -183,6 +183,7 @@ func (s Scan) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 		),
 	)
 }

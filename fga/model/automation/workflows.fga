@@ -1,0 +1,79 @@
+module automation
+
+
+
+
+# workflow definitions can be created by org admins or users in groups with create access
+type workflow_definition
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or admin or (editor but not blocked)
+    define can_delete: [user, service] or admin or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization]
+    define admin: [user, service] or can_delete from parent
+    define viewer: [group#member] or editor
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define blocked: [user, group#member]
+
+# workflow_instance and related types are system-driven
+# users can view through parent object relations but only services can create/edit/delete
+type workflow_instance
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, control, internal_policy, evidence, subcontrol, action_plan, procedure, campaign, campaign_target, identity_holder, platform, workflow_definition]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+type workflow_assignment
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, workflow_instance]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+type workflow_object_ref
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, workflow_instance, control, internal_policy, evidence, subcontrol, action_plan, procedure, campaign, campaign_target, directory_account, directory_group, directory_membership, identity_holder, platform]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+type workflow_assignment_target
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, workflow_assignment]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+type workflow_event
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, workflow_instance]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
+
+type workflow_proposal
+  relations
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, workflow_object_ref]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]

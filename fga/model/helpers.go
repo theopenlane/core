@@ -21,7 +21,7 @@ const (
 	scopePartsCount = 2
 )
 
-//go:embed model.fga
+//go:embed generated/crud.fga
 var embeddedModel []byte
 
 var (

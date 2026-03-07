@@ -68,6 +68,7 @@ tasks:
     deps:
       - task: generate:core
       - task: generate:catalog:smart
+      - task: fga:generate
     cmds:
       - task: generate:openapi:smart
       - task: tidy

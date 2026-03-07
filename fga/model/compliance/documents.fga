@@ -1,0 +1,77 @@
+module compliance
+
+# narratives are associated with an organization but do not inherit access from the organization
+# the narrative creator will be made the admin of the narrative and all other access will be assigned via
+# a group
+type narrative
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, program]
+    define viewer: [group#member] or editor or can_view from parent
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define blocked: [user, group#member]
+
+# action plans are associated with an organization but do not inherit access from the organization
+# the action plan creator will be made the admin of the action plan and all other access will be assigned via
+# associated objects or groups
+type action_plan
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, program]
+    define viewer: [group#member] or editor or can_view from parent
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define blocked: [user, group#member]
+
+# policies are always assigned to an organization and by default all org members can view
+# groups can be used to exclude users from being able to view a internal policy
+# groups can be used to give edit (or delete) access to users
+type internal_policy
+  relations
+    define can_view: ([user, service]) or can_edit or (viewer but not blocked)
+    define can_edit: ([user, service]) or admin or approver or delegate or (editor but not blocked)
+    define can_delete: ([user, service]) or admin or approver or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    # the parent of the policy will be the organization, not all permissions will be inherited
+    define parent: [organization]
+    # allow a user or service to be assigned to add edit permissions
+    define admin: [user,service] or can_delete from parent
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group#member]
+    # allow for auditors assigned to the program to view the policy
+    define viewer: [program#auditor, group#member] or editor or can_view from parent
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group#member]
+    # approver is the group of users that are responsible for the approval of changes to the policy, they will have full access to the policy
+    define approver: [group#member]
+    # delegate is a group of users that are given temporary access to the policy, they will have edit but not delete access
+    define delegate: [group#member]
+
+# procedures are always assigned to an organization and by default all org members can view
+# groups can be used to exclude users from being able to view an internal policy
+# groups can be used to give edit (or delete) access to users
+type procedure
+  relations
+    define can_view: ([user, service]) or can_edit or (viewer but not blocked)
+    define can_edit: ([user, service]) or admin or approver or delegate or (editor but not blocked)
+    define can_delete: ([user, service]) or admin or approver or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    # the parent of the procedure will be the organization, not all permissions will be inherited
+    define parent: [organization]
+    # allow a user or service to be assigned to add edit permissions
+    define admin: [user,service] or can_delete from parent
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group#member]
+      # allow for auditors assigned to the program to view the procedure
+    define viewer: [program#auditor, group#member] or editor or can_view from parent
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group#member]
+    # approver is the group of users that are responsible for the approval of changes to the procedure, they will have full access to the procedure
+    define approver: [group#member]
+    # delegate is a group of users that are given temporary access to the procedure, they will have edit but not delete access
+    define delegate: [group#member]

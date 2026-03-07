@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// scopedRelationForAPIToken returns the scoped relation for an api token based on the object type, relation, and operation
+// scopedRelationForAPIToken returns the scoped relation for an api token based on the object type, relation, and operation. A operation is checked for for create, update, delete. If instead a specific relation should be checked, that should be passed instead of the operation
 func scopedRelationForAPIToken(objectType string, relation string, op *ent.Op) string {
 	object := strcase.SnakeCase(objectType)
 	if object == "" {
@@ -148,6 +148,8 @@ func CheckAPITokenScope(ctx context.Context, objectType string, relation string,
 	if hasAccess {
 		return privacy.Allow
 	}
+
+	logx.FromContext(ctx).Info().Str("required_relation", scopedRelation).Msg("token not scoped for required relation")
 
 	return generated.ErrPermissionDenied
 }

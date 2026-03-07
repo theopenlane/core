@@ -1,0 +1,16 @@
+module base
+
+# tasks can be created by any user and permissions are assigned to the creator (assigner) and the assignee
+# tasks can also be associated with a parent object (like a control or a procedure) and inherit access from that object
+type task
+  relations
+    define can_view: [user, service] or assignee or assigner or can_delete or can_edit or viewer
+    define can_edit: [user, service] or assignee or assigner or editor or can_delete
+    # assignee cannot delete the task, only the original creator (can_delete from parent) or the assigner
+    define can_delete: [user, service] or assigner or can_delete from parent
+    define assignee: [user]
+    define assigner: [user]
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, risk, task, asset, platform, identity_holder, scan, action_plan]
+    define viewer: can_view from parent
+    define editor: [organization#owner, organization#super_admin] or can_edit from parent

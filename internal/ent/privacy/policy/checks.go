@@ -31,6 +31,15 @@ func CheckCreateAccess() privacy.MutationRule {
 	)
 }
 
+// CheckServiceCreateAccess checks if the user has access to create an object in the org
+// for create operations
+func CheckServiceCreateAccess() privacy.MutationRule {
+	return privacy.OnMutationOperation(
+		rule.CheckServiceScopeCreationAccess(),
+		ent.OpCreate,
+	)
+}
+
 // AllowCreate is mutation that allows any user to create a that mutation type
 // this is only for the actual mutation type; edges are checked by edge access
 // hooks

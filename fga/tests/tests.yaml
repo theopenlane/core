@@ -1,5 +1,5 @@
 name: Openlane
-model_file: ../model/model.fga
+model_file: ../model/fga.mod
 tuple_file: tuples/_tuples.yaml
 tests:
   - name: organization
@@ -1743,7 +1743,7 @@ tests:
         context:
           email_domain: "example.com"
         assertions:
-          can_view: true 
+          can_view: true
           can_edit: false
           can_delete: false
       - user: user:ulid-workflow-editor # group member can view but not edit/delete (system-driven)

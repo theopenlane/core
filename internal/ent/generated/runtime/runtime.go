@@ -5205,11 +5205,63 @@ func init() {
 
 	organization.Hooks[25] = organizationMixinHooks5[21]
 
-	organization.Hooks[26] = organizationHooks[0]
+	organization.Hooks[26] = organizationMixinHooks5[22]
 
-	organization.Hooks[27] = organizationHooks[1]
+	organization.Hooks[27] = organizationMixinHooks5[23]
 
-	organization.Hooks[28] = organizationHooks[2]
+	organization.Hooks[28] = organizationMixinHooks5[24]
+
+	organization.Hooks[29] = organizationMixinHooks5[25]
+
+	organization.Hooks[30] = organizationMixinHooks5[26]
+
+	organization.Hooks[31] = organizationMixinHooks5[27]
+
+	organization.Hooks[32] = organizationMixinHooks5[28]
+
+	organization.Hooks[33] = organizationMixinHooks5[29]
+
+	organization.Hooks[34] = organizationMixinHooks5[30]
+
+	organization.Hooks[35] = organizationMixinHooks5[31]
+
+	organization.Hooks[36] = organizationMixinHooks5[32]
+
+	organization.Hooks[37] = organizationMixinHooks5[33]
+
+	organization.Hooks[38] = organizationMixinHooks5[34]
+
+	organization.Hooks[39] = organizationMixinHooks5[35]
+
+	organization.Hooks[40] = organizationMixinHooks5[36]
+
+	organization.Hooks[41] = organizationMixinHooks5[37]
+
+	organization.Hooks[42] = organizationMixinHooks5[38]
+
+	organization.Hooks[43] = organizationMixinHooks5[39]
+
+	organization.Hooks[44] = organizationMixinHooks5[40]
+
+	organization.Hooks[45] = organizationMixinHooks5[41]
+
+	organization.Hooks[46] = organizationMixinHooks5[42]
+
+	organization.Hooks[47] = organizationMixinHooks5[43]
+
+	organization.Hooks[48] = organizationMixinHooks5[44]
+
+	organization.Hooks[49] = organizationMixinHooks5[45]
+
+	organization.Hooks[50] = organizationMixinHooks5[46]
+
+	organization.Hooks[51] = organizationMixinHooks5[47]
+
+	organization.Hooks[52] = organizationHooks[0]
+
+	organization.Hooks[53] = organizationHooks[1]
+
+	organization.Hooks[54] = organizationHooks[2]
 	organizationMixinInters1 := organizationMixin[1].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters1[0]
@@ -8988,16 +9040,31 @@ func init() {
 	// workflowobjectref.DefaultID holds the default value on creation for the id field.
 	workflowobjectref.DefaultID = workflowobjectrefDescID.Default.(func() string)
 	workflowproposalMixin := schema.WorkflowProposal{}.Mixin()
+	workflowproposal.Policy = privacy.NewPolicies(schema.WorkflowProposal{})
+	workflowproposal.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowproposal.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	workflowproposalMixinHooks0 := workflowproposalMixin[0].Hooks()
 	workflowproposalMixinHooks2 := workflowproposalMixin[2].Hooks()
 	workflowproposalMixinHooks3 := workflowproposalMixin[3].Hooks()
 	workflowproposalHooks := schema.WorkflowProposal{}.Hooks()
-	workflowproposal.Hooks[0] = workflowproposalMixinHooks0[0]
-	workflowproposal.Hooks[1] = workflowproposalMixinHooks2[0]
-	workflowproposal.Hooks[2] = workflowproposalMixinHooks3[0]
-	workflowproposal.Hooks[3] = workflowproposalMixinHooks3[1]
-	workflowproposal.Hooks[4] = workflowproposalHooks[0]
-	workflowproposal.Hooks[5] = workflowproposalHooks[1]
+
+	workflowproposal.Hooks[1] = workflowproposalMixinHooks0[0]
+
+	workflowproposal.Hooks[2] = workflowproposalMixinHooks2[0]
+
+	workflowproposal.Hooks[3] = workflowproposalMixinHooks3[0]
+
+	workflowproposal.Hooks[4] = workflowproposalMixinHooks3[1]
+
+	workflowproposal.Hooks[5] = workflowproposalHooks[0]
+
+	workflowproposal.Hooks[6] = workflowproposalHooks[1]
 	workflowproposalMixinInters3 := workflowproposalMixin[3].Interceptors()
 	workflowproposal.Interceptors[0] = workflowproposalMixinInters3[0]
 	workflowproposal.Interceptors[1] = workflowproposalMixinInters3[1]

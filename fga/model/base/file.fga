@@ -1,0 +1,48 @@
+module base
+
+# files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
+# user:* and service:* are used for public files (e.g. trust center logos/favicons etc) that are available to all users
+type file
+  relations
+    define can_view: [user:*, service:*, user, service, organization#member] or parent_viewer or tc_doc_viewer
+    define can_edit: [user, service] or parent_editor or tc_doc_editor
+    define can_delete: [user, service] or parent_deleter or tc_doc_deleter
+
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+
+    # permissions inherited from the parent
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    # special handling for trust center documents - only NDA signed users can view files
+    define tc_doc_viewer: nda_signed from tc_doc_parent or member from tc_doc_parent
+    define tc_doc_editor: can_edit from tc_doc_parent
+    define tc_doc_deleter: can_delete from tc_doc_parent
+    define tc_doc_parent: [trust_center_doc]
+
+    define parent: [
+        contact,
+        control,
+        document_data,
+        entity,
+        evidence,
+        export,
+        identity_holder,
+        internal_policy,
+        narrative,
+        note,
+        organization,
+        platform,
+        procedure,
+        program,
+        review,
+        scan,
+        standard,
+        subprocessor,
+        template,
+        trust_center_entity,
+        trust_center_setting,
+        trust_center_subprocessor,
+        trust_center_watermark_config,
+        user
+    ]

@@ -1,0 +1,87 @@
+module automation
+
+# templates (this encompasses things like questionnaires or jsonschemas) should be able to be
+# created by any user in the parent (organization) with edit access (directly or via a group on the organization)
+# all users in the organization should have view access, unless they are excluded (by a user or group)
+# editors will be assigned by groups and can be excluded by users or groups
+type template
+  relations
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [organization, user, trust_center, service]
+    # allow a group to be assigned to add edit/view permissions for a set of users
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group#member]
+
+# document_data is the json data that is associated to a template
+# access to the document_data is inherited from the template
+type document_data
+  relations
+    define can_view: [user, service] or can_edit or  (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [template, user]
+    # allow a group to be assigned to add edit/view permissions for a set of users
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group#member]
+
+type assessment
+  relations
+    define can_view: [user] or can_edit or (viewer but not blocked)
+    define can_edit: [user] or owner or delegate or (editor but not blocked)
+    define can_delete: [user] or owner or (editor but not blocked)
+    define parent: [organization]
+    # allow users or groups to be assigned edit/view permissions directly
+    define editor: [user, group#member] or admin from parent or full_access from parent
+    define viewer: [user, group#member] or editor
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group#member]
+    # owner is the user or group that is responsible for the assessment, they will have full access to the assessment
+    define owner: [user, group#member]
+    # delegate is a user or group that is given temporary access to the assessment, they will have edit but not delete access
+    define delegate: [user, group#member]
+
+type assessment_response
+  relations
+    define can_view: [user] or response_owner or admin_viewer or viewer
+    define can_delete: admin_viewer
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, assessment, campaign, identity_holder, entity]
+    # the user who filled out the assessment response - they can view their own response
+    define response_owner: [user]
+    # org admins and owners can view all responses for oversight/management
+    define admin_viewer: admin from parent or full_access from parent
+    # editor and viewer relations for organization-level permissions
+    define editor: [organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [organization#owner, organization#super_admin] or editor or can_view from parent
+
+
+
+type campaign
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization]
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+
+type campaign_target
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, campaign]
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]

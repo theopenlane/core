@@ -174,7 +174,7 @@ func (WorkflowAssignment) Annotations() []schema.Annotation {
 func (WorkflowAssignment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			policy.CheckServiceCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
 		),
 	)

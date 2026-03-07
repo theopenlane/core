@@ -1,0 +1,14 @@
+module registry
+
+# entities are always assigned to an organization and permissions are inherited from the organization
+# individual users or groups can also be given permission to an entity
+type entity
+  relations
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, trust_center_entity]

@@ -1,0 +1,15 @@
+module roles
+
+extend type organization
+  relations
+    define compliance_manager: [service]
+    define can_manage_compliance: owner or compliance_manager
+    define control_manager: control_creator
+
+    # define can_create_subcontrol: can_edit or control_creator
+
+    define group_manager: [service]
+    define can_manage_groups: owner or group_manager
+
+    define trust_center_admin: [user]
+    define can_manage_trust_center: trust_center_admin or owner

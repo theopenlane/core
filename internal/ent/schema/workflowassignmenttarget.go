@@ -119,11 +119,8 @@ func (WorkflowAssignmentTarget) Modules() []models.OrgModule {
 // Policy of the WorkflowAssignmentTarget
 func (WorkflowAssignmentTarget) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckServiceCreateAccess(),
 		),
 	)
 }
