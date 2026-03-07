@@ -8,7 +8,9 @@ import (
 )
 
 // Config carries all dependencies and settings for constructing the integrations runtime.
-// The registry is built internally from ProviderSpecs and GitHubApp configuration.
+// Provider credentials and settings are expressed through ProviderSpecs, which can be
+// overridden at deploy time via the integrationproviders config key (same mechanism used
+// for all providers, including OAuth clientId/clientSecret).
 // Registry may be provided directly to override the internal build; intended for tests.
 type Config struct {
 	// ProviderSpecs contains the declarative provider configurations keyed by provider name.
@@ -21,32 +23,7 @@ type Config struct {
 	DB *ent.Client
 	// AuthStateStore optionally overrides the in-memory OAuth activation session store.
 	AuthStateStore keymaker.AuthStateStore
-	// GitHubApp holds GitHub App integration configuration.
-	GitHubApp GitHubAppConfig
-	// OAuth holds OAuth provider integration configuration.
-	OAuth OAuthConfig
-}
-
-// GitHubAppConfig holds configuration for the GitHub App integration.
-type GitHubAppConfig struct {
-	// Enabled toggles the GitHub App integration handlers.
-	Enabled bool
-	// AppID is the GitHub App ID used for JWT signing.
-	AppID string
-	// AppSlug is the GitHub App slug used for the install URL.
-	AppSlug string
-	// PrivateKey is the PEM-encoded GitHub App private key.
-	PrivateKey string
-	// WebhookSecret is the shared secret used to validate GitHub webhooks.
-	WebhookSecret string
-	// SuccessRedirectURL is the URL to redirect to after successful installation.
-	SuccessRedirectURL string
-}
-
-// OAuthConfig holds configuration for integration OAuth providers.
-type OAuthConfig struct {
-	// Enabled toggles initialization of the integration provider registry.
-	Enabled bool
-	// SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
+	// SuccessRedirectURL is the global fallback URL to redirect to after successful provider
+	// authentication. Per-provider overrides take precedence when set in the provider spec.
 	SuccessRedirectURL string
 }

@@ -207,10 +207,6 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 		return CompleteResult{}, integrations.ErrAuthorizationStateExpired
 	}
 
-	if authState.AuthSession == nil {
-		return CompleteResult{}, integrations.ErrAuthSessionInvalid
-	}
-
 	payload, err := authState.AuthSession.Finish(ctx, req.Code)
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: finish auth: %w", err)

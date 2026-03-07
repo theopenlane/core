@@ -15,6 +15,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -22,26 +23,34 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/state"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
-// TestGitHubWebhookPingUpdatesIntegrationMetadata verifies ping webhook handling updates integration metadata for UI visibility
-func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
-	t := suite.T()
-
-	suite.h.IntegrationRuntime = integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
+// defaultGitHubAppSpec returns a fully-configured GitHub App provider spec for flow tests.
+func defaultGitHubAppSpec() integrationconfig.ProviderSpec {
+	return integrationconfig.ProviderSpec{
+		Name:     string(github.TypeGitHubApp),
+		Active:   lo.ToPtr(true),
+		AuthType: types.AuthKindGitHubApp,
+		GitHubApp: &integrationconfig.GitHubAppSpec{
 			AppID:         "123",
 			AppSlug:       "openlane",
 			PrivateKey:    "private-key",
 			WebhookSecret: "secret",
 		},
-		integrationruntime.OAuthConfig{},
-	)
+	}
+}
+
+// TestGitHubWebhookPingUpdatesIntegrationMetadata verifies ping webhook handling updates integration metadata for UI visibility
+func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
+	t := suite.T()
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -95,16 +104,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	t := suite.T()
 
-	suite.h.IntegrationRuntime = integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -154,16 +155,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 func (suite *HandlerTestSuite) TestGitHubWebhookPingUnknownInstallationAccepted() {
 	t := suite.T()
 
-	suite.h.IntegrationRuntime = integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -195,16 +188,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUnknownInstallationAccepted(
 func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplatedSlackNotification() {
 	t := suite.T()
 
-	suite.h.IntegrationRuntime = integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -269,16 +254,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstallationDoesNotNotify() {
 	t := suite.T()
 
-	suite.h.IntegrationRuntime = integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -327,16 +304,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstal
 func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	t := suite.T()
 
-	suite.h.IntegrationRuntime = integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})

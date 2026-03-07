@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"errors"
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
@@ -46,10 +45,6 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 	if err := h.validateIntegrationProvider(providerType); err != nil {
-		if errors.Is(err, errIntegrationRuntimeNotConfigured) {
-			return h.InternalServerError(ctx, err, openapiCtx)
-		}
-
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 

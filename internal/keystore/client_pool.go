@@ -149,10 +149,6 @@ func NewClientPool[T any](source CredentialSource, builder ClientBuilder[T], opt
 
 // Provider returns the provider type handled by this pool
 func (p *ClientPool[T]) Provider() types.ProviderType {
-	if p == nil {
-		return types.ProviderUnknown
-	}
-
 	return p.provider
 }
 
@@ -186,9 +182,6 @@ type clientRequest struct {
 // Get returns a provider-specific client for the supplied organization, reusing cached instances when possible
 func (p *ClientPool[T]) Get(ctx context.Context, orgID string, opts ...ClientRequestOption) (T, error) {
 	var zero T
-	if p == nil {
-		return zero, ErrClientUnavailable
-	}
 
 	req := clientRequest{
 		orgID: strings.TrimSpace(orgID),
@@ -258,6 +251,7 @@ func (p *ClientPool[T]) evict(orgID, version string) {
 	if orgID == "" {
 		return
 	}
+
 	p.service.Pool().RemoveClient(clientCacheKey{
 		OrgID:    orgID,
 		Provider: p.provider,
@@ -282,6 +276,7 @@ func (k clientCacheKey) String() string {
 	if version == "" {
 		return base
 	}
+
 	return base + ":" + version
 }
 
@@ -310,6 +305,7 @@ func cloneCredentialPayload(payload types.CredentialPayload) types.CredentialPay
 		Claims:   helpers.CloneOIDCClaims(payload.Claims),
 		Data:     cloneCredentialSet(payload.Data),
 	}
+
 	return clone
 }
 
@@ -322,6 +318,7 @@ func cloneCredentialSet(set models.CredentialSet) models.CredentialSet {
 		expiry := *set.OAuthExpiry
 		clone.OAuthExpiry = &expiry
 	}
+
 	return clone
 }
 

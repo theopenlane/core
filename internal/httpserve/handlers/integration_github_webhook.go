@@ -208,7 +208,8 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.BadRequest(ctx, ErrGitHubWebhookEventHeaderMissing, openapi)
 	}
 
-	webhookSecret := h.IntegrationRuntime.GitHubAppCfg().WebhookSecret
+	ghSpec, _ := h.gitHubAppSpec()
+	webhookSecret := ghSpec.GitHubApp.WebhookSecret
 	if webhookSecret == "" {
 		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "missing_webhook_secret")
 
@@ -281,7 +282,9 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	if eventType == "installation" {
-		return h.handleGitHubInstallationWebhook(ctx, openapi, eventType, envelope, integrationRecord)
+		openlaneOrgName := h.resolveOpenlaneOrganizationName(ctx.Request().Context(), integrationRecord.OwnerID)
+
+		return h.handleGitHubInstallationWebhook(ctx, openapi, eventType, envelope, integrationRecord, openlaneOrgName)
 	}
 
 	repo := githubRepoFromWebhook(envelope.Repository)
@@ -337,7 +340,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 }
 
 // handleGitHubInstallationWebhook sends a Slack notification when an installation is created
-func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *OpenAPIContext, eventType string, envelope githubWebhookEnvelope, integrationRecord *ent.Integration) error {
+func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *OpenAPIContext, eventType string, envelope githubWebhookEnvelope, integrationRecord *ent.Integration, openlaneOrgName string) error {
 	if envelope.Action != "created" {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_action_ignored")
 
@@ -364,7 +367,6 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 	}
 
 	openlaneOrgID := integrationRecord.OwnerID
-	openlaneOrgName := h.resolveOpenlaneOrganizationName(ctx.Request().Context(), openlaneOrgID)
 	message, err := hooks.RenderGitHubAppInstallSlackMessage(githubOrg, githubAccountType, openlaneOrgName, openlaneOrgID)
 	if err != nil {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_failed")

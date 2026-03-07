@@ -8,7 +8,6 @@ import (
 
 	coreconfig "github.com/theopenlane/core/config"
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 func TestWithGeneratedKeys(t *testing.T) {
@@ -31,11 +30,7 @@ func TestWithIntegrationRuntime_NilDB(t *testing.T) {
 
 	so := &ServerOptions{
 		Config: serverconfig.Config{
-			Settings: coreconfig.Config{
-				IntegrationOauthProvider: handlers.IntegrationOauthProviderConfig{
-					Enabled: true,
-				},
-			},
+			Settings:      coreconfig.Config{},
 			SessionConfig: &sessions.SessionConfig{},
 		},
 	}
@@ -52,14 +47,7 @@ func TestWithIntegrationRuntime_NilDBAlwaysSkips(t *testing.T) {
 
 	so := &ServerOptions{
 		Config: serverconfig.Config{
-			Settings: coreconfig.Config{
-				IntegrationOauthProvider: handlers.IntegrationOauthProviderConfig{
-					Enabled: true,
-				},
-				IntegrationGitHubApp: handlers.IntegrationGitHubAppConfig{
-					Enabled: true,
-				},
-			},
+			Settings:      coreconfig.Config{},
 			SessionConfig: &sessions.SessionConfig{},
 		},
 	}

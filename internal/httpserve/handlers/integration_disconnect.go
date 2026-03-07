@@ -28,10 +28,6 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapi)
-	}
-
 	provider := strings.TrimSpace(in.Provider)
 	providerType, err := parseProviderType(provider)
 	if err != nil {
