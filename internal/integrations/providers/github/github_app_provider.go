@@ -190,34 +190,6 @@ func (p *appProvider) Mint(ctx context.Context, subject types.CredentialSubject)
 	return minted, nil
 }
 
-// githubAppCredentialsFromPayload extracts GitHub App metadata from stored credentials.
-func githubAppCredentialsFromPayload(payload types.CredentialPayload) (string, string, string, error) {
-	if payload.Provider == types.ProviderUnknown {
-		return "", "", "", ErrProviderNotInitialized
-	}
-
-	decoded, err := githubAppProviderDataFromPayload(payload)
-	if err != nil {
-		return "", "", "", err
-	}
-
-	if decoded.AppID == "" {
-		return "", "", "", ErrAppIDMissing
-	}
-
-	installationID, err := resolveInstallationID(decoded, payload)
-	if err != nil {
-		return "", "", "", err
-	}
-
-	privateKey := normalizePrivateKey(decoded.PrivateKey.String())
-	if privateKey == "" {
-		return "", "", "", ErrPrivateKeyMissing
-	}
-
-	return decoded.AppID.String(), installationID, privateKey, nil
-}
-
 func (p *appProvider) resolveMintInputs(payload types.CredentialPayload) (string, string, string, error) {
 	installationID, err := githubAppInstallationIDFromCredential(payload)
 	if err != nil {

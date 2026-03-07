@@ -83,17 +83,6 @@ func (s ProviderSpec) ToProviderConfig() types.ProviderConfig {
 	}
 }
 
-// ToProviderConfigs converts a spec map into provider configs for handler consumption.
-func ToProviderConfigs(specs map[types.ProviderType]ProviderSpec) map[types.ProviderType]types.ProviderConfig {
-	if len(specs) == 0 {
-		return nil
-	}
-
-	return lo.MapEntries(specs, func(provider types.ProviderType, spec ProviderSpec) (types.ProviderType, types.ProviderConfig) {
-		return provider, spec.ToProviderConfig()
-	})
-}
-
 // MergeProviderSpecs overlays provider-specific overrides onto base specs using provider keys
 func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]ProviderSpec, overrides map[string]ProviderSpec) map[types.ProviderType]ProviderSpec {
 	merged := lo.Assign(map[types.ProviderType]ProviderSpec{}, base)

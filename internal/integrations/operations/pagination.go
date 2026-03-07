@@ -2,21 +2,18 @@ package operations
 
 import "context"
 
-// PageResult holds one page of results and the cursor for the next page.
+// PageResult holds one page of results and the cursor for the next page
 type PageResult[T any] struct {
-	// Items contains the results from this page.
+	// Items contains the results from this page
 	Items []T
-	// NextToken is the cursor for the next page. An empty string signals no more pages.
+	// NextToken is the cursor for the next page. An empty string signals no more pages
 	NextToken string
 }
 
-// PageFetcher fetches one page of results given a page token.
-// An empty pageToken requests the first page.
+// PageFetcher fetches one page of results given a page token
 type PageFetcher[T any] func(ctx context.Context, pageToken string) (PageResult[T], error)
 
-// CollectAll fetches all pages using fetch, appending results until no pages remain.
-// When maxItems is greater than zero, collection stops once that many items have been gathered.
-// A zero maxItems collects all available items.
+// CollectAll fetches all pages using fetch, appending results until no pages remain
 func CollectAll[T any](ctx context.Context, fetch PageFetcher[T], maxItems int) ([]T, error) {
 	var (
 		all       []T

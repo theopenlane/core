@@ -6,15 +6,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// BaseProviderConfig controls shared capability and descriptor wiring for base providers.
+// BaseProviderConfig controls shared capability and descriptor wiring for base providers
 type BaseProviderConfig struct {
-	// SupportsRefreshTokens indicates whether provider Mint refresh/exchange is expected.
+	// SupportsRefreshTokens indicates whether provider Mint refresh/exchange is expected
 	SupportsRefreshTokens bool
-	// EnvironmentCredentials indicates provider credentials are derived from environment/install context.
+	// EnvironmentCredentials indicates provider credentials are derived from environment (e.g. github app we store private key and load via our config, we don't derive it from customer or callback flows)
 	EnvironmentCredentials bool
-	// Operations are provider operation descriptors to register.
+	// Operations are provider operation descriptors to register
 	Operations []types.OperationDescriptor
-	// Clients are provider client descriptors to register.
+	// Clients are provider client descriptors to register
 	Clients []types.ClientDescriptor
 }
 

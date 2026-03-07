@@ -14,21 +14,21 @@ import (
 func TestNewServiceValidatesDependencies(t *testing.T) {
 	t.Parallel()
 
-	_, err := NewService(nil, &fakeKeystore{}, NewMemorySessionStore(), ServiceOptions{})
+	_, err := NewService(nil, &fakeKeystore{}, NewInMemoryAuthStateStore(), ServiceOptions{})
 	if !errors.Is(err, integrations.ErrProviderRegistryUninitialized) {
 		t.Fatalf("expected ErrProviderRegistryUninitialized, got %v", err)
 	}
 
 	resolver := fakeResolver{provider: &fakeProvider{providerType: types.ProviderType("acme")}}
 
-	_, err = NewService(resolver, nil, NewMemorySessionStore(), ServiceOptions{})
+	_, err = NewService(resolver, nil, NewInMemoryAuthStateStore(), ServiceOptions{})
 	if !errors.Is(err, integrations.ErrKeystoreRequired) {
 		t.Fatalf("expected ErrKeystoreRequired, got %v", err)
 	}
 
 	_, err = NewService(resolver, &fakeKeystore{}, nil, ServiceOptions{})
-	if !errors.Is(err, integrations.ErrSessionStoreRequired) {
-		t.Fatalf("expected ErrSessionStoreRequired, got %v", err)
+	if !errors.Is(err, integrations.ErrAuthStateStoreRequired) {
+		t.Fatalf("expected ErrAuthStateStoreRequired, got %v", err)
 	}
 }
 
@@ -48,7 +48,7 @@ func TestBeginAuthorizationClonesRequestDataAndSetsTTL(t *testing.T) {
 		},
 	}
 
-	store := &recordingSessionStore{}
+	store := &recordingAuthStateStore{}
 	service, err := NewService(
 		fakeResolver{provider: provider},
 		&fakeKeystore{},
@@ -111,7 +111,7 @@ func TestBeginAuthorizationSaveError(t *testing.T) {
 	service, err := NewService(
 		fakeResolver{provider: &fakeProvider{providerType: providerType, state: "state-xyz"}},
 		&fakeKeystore{},
-		&recordingSessionStore{saveErr: errors.New("store down")},
+		&recordingAuthStateStore{saveErr: errors.New("store down")},
 		ServiceOptions{},
 	)
 	if err != nil {
@@ -135,7 +135,7 @@ func TestBeginAuthorizationRequiresProviderState(t *testing.T) {
 	service, err := NewService(
 		fakeResolver{provider: &fakeProvider{providerType: providerType, state: "   "}},
 		&fakeKeystore{},
-		&recordingSessionStore{},
+		&recordingAuthStateStore{},
 		ServiceOptions{},
 	)
 	if err != nil {
@@ -166,7 +166,7 @@ func TestBeginAuthorizationAllowsEmptyIntegrationID(t *testing.T) {
 	service, err := NewService(
 		fakeResolver{provider: provider},
 		&fakeKeystore{},
-		NewMemorySessionStore(),
+		NewInMemoryAuthStateStore(),
 		ServiceOptions{},
 	)
 	if err != nil {
@@ -192,7 +192,7 @@ func TestCompleteAuthorizationValidatesInputs(t *testing.T) {
 	service, err := NewService(
 		fakeResolver{provider: &fakeProvider{providerType: types.ProviderType("acme")}},
 		&fakeKeystore{},
-		NewMemorySessionStore(),
+		NewInMemoryAuthStateStore(),
 		ServiceOptions{},
 	)
 	if err != nil {
@@ -216,7 +216,7 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 	ctx := context.Background()
 	providerType := types.ProviderType("acme")
 	now := time.Now()
-	baseActivation := ActivationSession{
+	baseAuthState := AuthState{
 		State:          "state-123",
 		Provider:       providerType,
 		OrgID:          "org-1",
@@ -229,30 +229,30 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 
 	tests := []struct {
 		name      string
-		store     *recordingSessionStore
+		store     *recordingAuthStateStore
 		keystore  *fakeKeystore
 		wantError error
 		checkErr  func(error) bool
 	}{
 		{
 			name:      "take error",
-			store:     &recordingSessionStore{takeErr: integrations.ErrAuthorizationStateNotFound},
+			store:     &recordingAuthStateStore{takeErr: integrations.ErrAuthorizationStateNotFound},
 			keystore:  &fakeKeystore{},
 			wantError: integrations.ErrAuthorizationStateNotFound,
 		},
 		{
 			name: "missing auth session",
-			store: &recordingSessionStore{
-				takeResponse: baseActivation,
+			store: &recordingAuthStateStore{
+				takeResponse: baseAuthState,
 			},
 			keystore:  &fakeKeystore{},
 			wantError: integrations.ErrAuthSessionInvalid,
 		},
 		{
 			name: "finish error",
-			store: &recordingSessionStore{
-				takeResponse: func() ActivationSession {
-					act := baseActivation
+			store: &recordingAuthStateStore{
+				takeResponse: func() AuthState {
+					act := baseAuthState
 					act.AuthSession = &fakeAuthSession{
 						provider:  providerType,
 						state:     act.State,
@@ -268,9 +268,9 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 		},
 		{
 			name: "save credential error",
-			store: &recordingSessionStore{
-				takeResponse: func() ActivationSession {
-					act := baseActivation
+			store: &recordingAuthStateStore{
+				takeResponse: func() AuthState {
+					act := baseAuthState
 					act.AuthSession = &fakeAuthSession{
 						provider: providerType,
 						state:    act.State,
@@ -305,7 +305,7 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 			}
 
 			_, err = service.CompleteAuthorization(ctx, CompleteRequest{
-				State: baseActivation.State,
+				State: baseAuthState.State,
 				Code:  "code-1",
 			})
 
@@ -323,14 +323,14 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 	}
 }
 
-type recordingSessionStore struct {
-	saved        ActivationSession
+type recordingAuthStateStore struct {
+	saved        AuthState
 	saveErr      error
 	takeErr      error
-	takeResponse ActivationSession
+	takeResponse AuthState
 }
 
-func (s *recordingSessionStore) Save(session ActivationSession) error {
+func (s *recordingAuthStateStore) Save(session AuthState) error {
 	if s.saveErr != nil {
 		return s.saveErr
 	}
@@ -338,9 +338,9 @@ func (s *recordingSessionStore) Save(session ActivationSession) error {
 	return nil
 }
 
-func (s *recordingSessionStore) Take(_ string) (ActivationSession, error) {
+func (s *recordingAuthStateStore) Take(_ string) (AuthState, error) {
 	if s.takeErr != nil {
-		return ActivationSession{}, s.takeErr
+		return AuthState{}, s.takeErr
 	}
 	if s.takeResponse.State != "" || s.takeResponse.AuthSession != nil {
 		return s.takeResponse, nil

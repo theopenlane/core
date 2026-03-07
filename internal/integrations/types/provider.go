@@ -4,6 +4,7 @@ package types
 import (
 	"context"
 	"encoding/json"
+	"strings"
 )
 
 // ProviderType is a strongly typed identifier for an integration provider
@@ -18,7 +19,12 @@ const (
 
 // ProviderTypeFromString normalizes arbitrary user/config input into a stable ProviderType
 func ProviderTypeFromString(value string) ProviderType {
-	return ProviderType(value)
+	normalized := strings.TrimSpace(strings.ToLower(value))
+	if normalized == "" {
+		return ProviderUnknown
+	}
+
+	return ProviderType(normalized)
 }
 
 // AuthKind indicates how a provider authenticates (oauth2, oidc, workload identity, etc)

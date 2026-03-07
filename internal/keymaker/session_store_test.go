@@ -9,11 +9,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-func TestMemorySessionStoreSaveAndTake(t *testing.T) {
+func TestInMemoryAuthStateStoreSaveAndTake(t *testing.T) {
 	t.Parallel()
 
-	store := NewMemorySessionStore()
-	session := ActivationSession{
+	store := NewInMemoryAuthStateStore()
+	session := AuthState{
 		State:       "state-1",
 		AuthSession: &fakeAuthSession{state: "state-1", provider: types.ProviderType("acme")},
 	}
@@ -37,40 +37,40 @@ func TestMemorySessionStoreSaveAndTake(t *testing.T) {
 	}
 }
 
-func TestMemorySessionStoreSaveValidatesInput(t *testing.T) {
+func TestInMemoryAuthStateStoreSaveValidatesInput(t *testing.T) {
 	t.Parallel()
 
-	store := NewMemorySessionStore()
+	store := NewInMemoryAuthStateStore()
 
-	if err := store.Save(ActivationSession{}); !errors.Is(err, integrations.ErrStateRequired) {
+	if err := store.Save(AuthState{}); !errors.Is(err, integrations.ErrStateRequired) {
 		t.Fatalf("expected ErrStateRequired, got %v", err)
 	}
 
-	err := store.Save(ActivationSession{State: "state"})
+	err := store.Save(AuthState{State: "state"})
 	if !errors.Is(err, integrations.ErrAuthSessionInvalid) {
 		t.Fatalf("expected ErrAuthSessionInvalid, got %v", err)
 	}
 }
 
-func TestMemorySessionStoreTakeValidatesState(t *testing.T) {
+func TestInMemoryAuthStateStoreTakeValidatesState(t *testing.T) {
 	t.Parallel()
 
-	store := NewMemorySessionStore()
+	store := NewInMemoryAuthStateStore()
 	_, err := store.Take("")
 	if !errors.Is(err, integrations.ErrStateRequired) {
 		t.Fatalf("expected ErrStateRequired, got %v", err)
 	}
 }
 
-func TestMemorySessionStoreTakeReturnsExpired(t *testing.T) {
+func TestInMemoryAuthStateStoreTakeReturnsExpired(t *testing.T) {
 	t.Parallel()
 
 	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
-	store := NewMemorySessionStore()
+	store := NewInMemoryAuthStateStore()
 	store.maxEntries = 10
 	store.now = func() time.Time { return now }
 
-	session := ActivationSession{
+	session := AuthState{
 		State:       "state-expired",
 		AuthSession: &fakeAuthSession{state: "state-expired", provider: types.ProviderType("acme")},
 		CreatedAt:   now.Add(-2 * time.Minute),
@@ -87,15 +87,15 @@ func TestMemorySessionStoreTakeReturnsExpired(t *testing.T) {
 	}
 }
 
-func TestMemorySessionStoreSaveEnforcesCapacity(t *testing.T) {
+func TestInMemoryAuthStateStoreSaveEnforcesCapacity(t *testing.T) {
 	t.Parallel()
 
 	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
-	store := NewMemorySessionStore()
+	store := NewInMemoryAuthStateStore()
 	store.maxEntries = 1
 	store.now = func() time.Time { return now }
 
-	first := ActivationSession{
+	first := AuthState{
 		State:       "state-1",
 		AuthSession: &fakeAuthSession{state: "state-1", provider: types.ProviderType("acme")},
 		CreatedAt:   now,
@@ -105,7 +105,7 @@ func TestMemorySessionStoreSaveEnforcesCapacity(t *testing.T) {
 		t.Fatalf("Save error: %v", err)
 	}
 
-	second := ActivationSession{
+	second := AuthState{
 		State:       "state-2",
 		AuthSession: &fakeAuthSession{state: "state-2", provider: types.ProviderType("acme")},
 		CreatedAt:   now,

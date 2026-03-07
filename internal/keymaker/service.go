@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"maps"
-	"strings"
 	"time"
 
 	"github.com/theopenlane/core/internal/integrations"
@@ -22,6 +21,7 @@ type ProviderResolver interface {
 // CredentialWriter persists credential payloads produced during activation
 type CredentialWriter interface {
 	SaveCredential(ctx context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error)
+	SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, payload types.CredentialPayload) (types.CredentialPayload, error)
 }
 
 // ServiceOptions configure optional service behaviors
@@ -38,9 +38,8 @@ type Service struct {
 	providers ProviderResolver
 	// keystore persists credential payloads after activation
 	keystore CredentialWriter
-	// sessions stores temporary OAuth state until callback completion
-	sessions SessionStore
-
+	// authStates stores temporary OAuth authorization state until callback completion.
+	authStates AuthStateStore
 	// sessionTTL controls the lifetime of pending OAuth sessions
 	sessionTTL time.Duration
 	// now returns the current time, overridable for testing
@@ -48,7 +47,7 @@ type Service struct {
 }
 
 // NewService constructs a Service from the supplied dependencies
-func NewService(providers ProviderResolver, keystore CredentialWriter, sessions SessionStore, opts ServiceOptions) (*Service, error) {
+func NewService(providers ProviderResolver, keystore CredentialWriter, authStates AuthStateStore, opts ServiceOptions) (*Service, error) {
 	if providers == nil {
 		return nil, integrations.ErrProviderRegistryUninitialized
 	}
@@ -57,8 +56,8 @@ func NewService(providers ProviderResolver, keystore CredentialWriter, sessions 
 		return nil, integrations.ErrKeystoreRequired
 	}
 
-	if sessions == nil {
-		return nil, integrations.ErrSessionStoreRequired
+	if authStates == nil {
+		return nil, integrations.ErrAuthStateStoreRequired
 	}
 
 	ttl := opts.SessionTTL
@@ -74,7 +73,7 @@ func NewService(providers ProviderResolver, keystore CredentialWriter, sessions 
 	return &Service{
 		providers:  providers,
 		keystore:   keystore,
-		sessions:   sessions,
+		authStates: authStates,
 		sessionTTL: ttl,
 		now:        nowFn,
 	}, nil
@@ -161,11 +160,11 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 	}
 
 	state := session.State()
-	if strings.TrimSpace(state) == "" {
+	if state == "" {
 		return BeginResponse{}, integrations.ErrStateRequired
 	}
 
-	activation := ActivationSession{
+	authState := AuthState{
 		State:          state,
 		Provider:       req.Provider,
 		OrgID:          req.OrgID,
@@ -177,9 +176,9 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		CreatedAt:      s.now(),
 	}
 
-	activation.ExpiresAt = activation.CreatedAt.Add(s.sessionTTL)
+	authState.ExpiresAt = authState.CreatedAt.Add(s.sessionTTL)
 
-	if err := s.sessions.Save(activation); err != nil {
+	if err := s.authStates.Save(authState); err != nil {
 		return BeginResponse{}, fmt.Errorf("keymaker: save auth session: %w", err)
 	}
 
@@ -199,37 +198,45 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 		return CompleteResult{}, integrations.ErrAuthorizationCodeRequired
 	}
 
-	activation, err := s.sessions.Take(req.State)
+	authState, err := s.authStates.Take(req.State)
 	if err != nil {
 		return CompleteResult{}, err
 	}
 
-	if s.now().After(activation.ExpiresAt) {
+	if s.now().After(authState.ExpiresAt) {
 		return CompleteResult{}, integrations.ErrAuthorizationStateExpired
 	}
 
-	if activation.AuthSession == nil {
+	if authState.AuthSession == nil {
 		return CompleteResult{}, integrations.ErrAuthSessionInvalid
 	}
 
-	payload, err := activation.AuthSession.Finish(ctx, req.Code)
+	payload, err := authState.AuthSession.Finish(ctx, req.Code)
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: finish auth: %w", err)
 	}
 
 	if payload.Provider == types.ProviderUnknown {
-		payload.Provider = activation.Provider
+		payload.Provider = authState.Provider
 	}
 
-	saved, err := s.keystore.SaveCredential(ctx, activation.OrgID, payload)
+	saveFn := func() (types.CredentialPayload, error) {
+		if authState.IntegrationID != "" {
+			return s.keystore.SaveCredentialForIntegration(ctx, authState.OrgID, authState.IntegrationID, payload)
+		}
+
+		return s.keystore.SaveCredential(ctx, authState.OrgID, payload)
+	}
+
+	saved, err := saveFn()
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: save credential: %w", err)
 	}
 
 	return CompleteResult{
-		Provider:      activation.Provider,
-		OrgID:         activation.OrgID,
-		IntegrationID: activation.IntegrationID,
+		Provider:      authState.Provider,
+		OrgID:         authState.OrgID,
+		IntegrationID: authState.IntegrationID,
 		Credential:    saved,
 	}, nil
 }

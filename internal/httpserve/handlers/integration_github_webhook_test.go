@@ -20,6 +20,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
 // githubWebhookSignature returns a GitHub-compatible HMAC signature for webhook tests
@@ -31,13 +32,16 @@ func githubWebhookSignature(secret string, payload []byte) string {
 
 // TestGitHubIntegrationWebhookHandlerMissingEventHeader verifies the missing event header response
 func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
-	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{
-		Enabled:       true,
-		AppID:         "123",
-		AppSlug:       "openlane",
-		PrivateKey:    "private-key",
-		WebhookSecret: "secret",
-	}}
+	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
+		integrationruntime.GitHubAppConfig{
+			Enabled:       true,
+			AppID:         "123",
+			AppSlug:       "openlane",
+			PrivateKey:    "private-key",
+			WebhookSecret: "secret",
+		},
+		integrationruntime.OAuthConfig{},
+	)}
 
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
 	req.Header.Set("Content-Type", "application/json")
@@ -61,13 +65,16 @@ func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
 
 // TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics verifies empty payload metrics and status
 func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
-	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{
-		Enabled:       true,
-		AppID:         "123",
-		AppSlug:       "openlane",
-		PrivateKey:    "private-key",
-		WebhookSecret: "secret",
-	}}
+	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
+		integrationruntime.GitHubAppConfig{
+			Enabled:       true,
+			AppID:         "123",
+			AppSlug:       "openlane",
+			PrivateKey:    "private-key",
+			WebhookSecret: "secret",
+		},
+		integrationruntime.OAuthConfig{},
+	)}
 
 	req := httptest.NewRequest(http.MethodPost, "/", http.NoBody)
 	req.Header.Set(githubWebhookEventHeader, "dependabot_alert")
@@ -86,13 +93,16 @@ func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
 
 // TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID verifies ping payloads are accepted without installation IDs
 func TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID(t *testing.T) {
-	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{
-		Enabled:       true,
-		AppID:         "123",
-		AppSlug:       "openlane",
-		PrivateKey:    "private-key",
-		WebhookSecret: "secret",
-	}}
+	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
+		integrationruntime.GitHubAppConfig{
+			Enabled:       true,
+			AppID:         "123",
+			AppSlug:       "openlane",
+			PrivateKey:    "private-key",
+			WebhookSecret: "secret",
+		},
+		integrationruntime.OAuthConfig{},
+	)}
 
 	payload := []byte(`{"zen":"keep it logically awesome"}`)
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))

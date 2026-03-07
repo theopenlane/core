@@ -116,17 +116,6 @@ func WithCredentialSet(set models.CredentialSet) CredentialOption {
 	}
 }
 
-// WithCredential allows providers to encode their specific credential structs via encoder
-func WithCredential[T any](value T, encoder func(T) models.CredentialSet) CredentialOption {
-	return func(payload *CredentialPayload) {
-		if encoder == nil {
-			return
-		}
-
-		payload.Data = encoder(value)
-	}
-}
-
 // WithOAuthToken embeds the upstream oauth2.Token
 func WithOAuthToken(token *oauth2.Token) CredentialOption {
 	return func(payload *CredentialPayload) {
@@ -152,27 +141,6 @@ func MergeScopes(dest []string, source ...string) []string {
 	})
 
 	return lo.Uniq(append(dest, nonEmpty...))
-}
-
-// Redacted returns a shallow copy of the payload with sensitive fields cleared
-// Useful for logging and telemetry without leaking credentials
-func (p CredentialPayload) Redacted() CredentialPayload {
-	clone := CredentialPayload{
-		Provider: p.Provider,
-		Kind:     p.Kind,
-	}
-
-	if token := helpers.CloneOAuthToken(p.Token); token != nil {
-		token.AccessToken = "[redacted]"
-		token.RefreshToken = ""
-		clone.Token = token
-	}
-
-	if claims := helpers.CloneOIDCClaims(p.Claims); claims != nil {
-		clone.Claims = claims
-	}
-	// Intentionally drop Data; CredentialSet contains sensitive material
-	return clone
 }
 
 // OAuthTokenOption returns a cloned token wrapped in an Option

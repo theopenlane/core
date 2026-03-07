@@ -7,8 +7,8 @@ var (
 	ErrHealthCheckFailed = errors.New("activation: health check failed")
 	// ErrStoreRequired indicates the credential store is required.
 	ErrStoreRequired = errors.New("activation: credential store required")
-	// ErrOperationsRequired indicates the operations manager is required for validation.
-	ErrOperationsRequired = errors.New("activation: operations manager required")
+	// ErrHealthValidatorRequired indicates a health validator dependency is required for validation.
+	ErrHealthValidatorRequired = errors.New("activation: health validator required")
 	// ErrMinterRequired indicates the payload minter is required.
 	ErrMinterRequired = errors.New("activation: payload minter required")
 )

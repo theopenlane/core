@@ -5,8 +5,8 @@ import (
 	"maps"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
 )
 
 // CredentialWriter persists credential payloads produced during activation
@@ -14,12 +14,10 @@ type CredentialWriter interface {
 	SaveCredential(ctx context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error)
 }
 
-// OperationRunner executes provider operations for health checks
-type OperationRunner interface {
-	// Run executes an operation loading credentials from the store
-	Run(ctx context.Context, req types.OperationRequest) (types.OperationResult, error)
-	// RunWithPayload executes an operation using the provided credential payload without loading from the store
-	RunWithPayload(ctx context.Context, req types.OperationRequest, payload types.CredentialPayload) (types.OperationResult, error)
+// HealthValidator validates provider connectivity using a supplied credential payload.
+type HealthValidator interface {
+	// ValidateProviderHealth executes the provider health operation using the supplied payload.
+	ValidateProviderHealth(ctx context.Context, orgID string, provider types.ProviderType, payload types.CredentialPayload) (types.OperationResult, error)
 }
 
 // PayloadMinter mints credentials from an in-memory payload without accessing the credential store
@@ -32,14 +30,14 @@ type PayloadMinter interface {
 type Service struct {
 	// store persists credential payloads after successful configuration.
 	store CredentialWriter
-	// operations executes provider operations for health checks.
-	operations OperationRunner
+	// validator executes provider health checks.
+	validator HealthValidator
 	// minter mints credentials from an in-memory payload for pre-persist validation.
 	minter PayloadMinter
 }
 
 // NewService constructs an activation service from the supplied dependencies
-func NewService(store CredentialWriter, operations OperationRunner, minter PayloadMinter) (*Service, error) {
+func NewService(store CredentialWriter, validator HealthValidator, minter PayloadMinter) (*Service, error) {
 	if store == nil {
 		return nil, ErrStoreRequired
 	}
@@ -48,9 +46,9 @@ func NewService(store CredentialWriter, operations OperationRunner, minter Paylo
 	}
 
 	return &Service{
-		store:      store,
-		operations: operations,
-		minter:     minter,
+		store:     store,
+		validator: validator,
+		minter:    minter,
 	}, nil
 }
 
@@ -77,7 +75,7 @@ type ConfigureResult struct {
 // Configure validates connectivity with the provider and persists credentials only on success
 func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (ConfigureResult, error) {
 	if req.OrgID == "" {
-		return ConfigureResult{}, keystore.ErrOrgIDRequired
+		return ConfigureResult{}, integrations.ErrOrgIDRequired
 	}
 	if req.Provider == types.ProviderUnknown {
 		return ConfigureResult{}, types.ErrProviderTypeRequired
@@ -104,8 +102,8 @@ func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (Configur
 		return ConfigureResult{Credential: saved}, nil
 	}
 
-	if s.operations == nil {
-		return ConfigureResult{}, ErrOperationsRequired
+	if s.validator == nil {
+		return ConfigureResult{}, ErrHealthValidatorRequired
 	}
 
 	minted, err := s.minter.MintPayload(ctx, types.CredentialSubject{
@@ -116,12 +114,11 @@ func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (Configur
 	if err != nil {
 		return ConfigureResult{}, err
 	}
+	if minted.Provider == types.ProviderUnknown {
+		minted.Provider = req.Provider
+	}
 
-	health, err := s.operations.RunWithPayload(ctx, types.OperationRequest{
-		OrgID:    req.OrgID,
-		Provider: req.Provider,
-		Name:     types.OperationHealthDefault,
-	}, minted)
+	health, err := s.validator.ValidateProviderHealth(ctx, req.OrgID, req.Provider, minted)
 	if err != nil {
 		return ConfigureResult{}, err
 	}
@@ -130,7 +127,24 @@ func (s *Service) Configure(ctx context.Context, req ConfigureRequest) (Configur
 		return ConfigureResult{HealthResult: &health}, ErrHealthCheckFailed
 	}
 
-	saved, err := s.store.SaveCredential(ctx, req.OrgID, payload)
+	// Persist provider-minted fields while preserving submitted provider metadata.
+	persisted := minted
+	if persisted.Kind == "" {
+		persisted.Kind = payload.Kind
+	}
+	if len(payload.Data.ProviderData) > 0 {
+		if len(persisted.Data.ProviderData) == 0 {
+			persisted.Data.ProviderData = maps.Clone(payload.Data.ProviderData)
+		} else {
+			for key, value := range payload.Data.ProviderData {
+				if _, exists := persisted.Data.ProviderData[key]; !exists {
+					persisted.Data.ProviderData[key] = value
+				}
+			}
+		}
+	}
+
+	saved, err := s.store.SaveCredential(ctx, req.OrgID, persisted)
 	if err != nil {
 		return ConfigureResult{}, err
 	}

@@ -2269,6 +2269,8 @@ type DeleteIntegrationRequest struct {
 type RefreshIntegrationTokenRequest struct {
 	// Provider is the provider value.
 	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+	// IntegrationID scopes refresh to a specific installed integration record.
+	IntegrationID string `query:"integration_id,omitempty" description:"Optional integration ID for scoped token refresh" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleRefreshIntegrationTokenRequest is an example refresh integration token request for OpenAPI documentation
@@ -2330,6 +2332,8 @@ func (r *GetIntegrationStatusRequest) Validate() error {
 type OAuthFlowRequest struct {
 	// Provider is the provider value.
 	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+	// IntegrationID scopes the OAuth callback credential save to a specific integration record.
+	IntegrationID string `json:"integrationId,omitempty" description:"Optional integration ID to attach OAuth credentials to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// RedirectURI is the redirectUri value.
 	RedirectURI string `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
 	// Scopes is the scopes value.
@@ -2808,6 +2812,8 @@ type IntegrationConfigPayload struct {
 type IntegrationOperationParams struct {
 	// Provider is the provider value.
 	Provider string `param:"provider" description:"Integration provider identifier" example:"gcpscc"`
+	// IntegrationID scopes execution to a specific installed integration.
+	IntegrationID string `query:"integration_id,omitempty" description:"Optional integration ID for provider operation execution" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // IntegrationOperationRequest describes a provider operation to run.

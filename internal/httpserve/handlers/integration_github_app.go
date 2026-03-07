@@ -80,8 +80,8 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	if h.IntegrationStore == nil {
-		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapiCtx)
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
 	if err := h.validateGitHubAppConfig(); err != nil {
@@ -128,11 +128,12 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return nil
 	}
 
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
+	}
+
 	if err := h.validateGitHubAppConfig(); err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
-	}
-	if err := h.verifyIntegrationCredentialRuntime(); err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
 	req := ctx.Request()
@@ -179,7 +180,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
-	installationPayload := githubAppInstallationPayload{AppID: h.IntegrationGitHubApp.AppID, InstallationID: in.InstallationID}
+	installationPayload := githubAppInstallationPayload{AppID: h.IntegrationRuntime.GitHubAppCfg().AppID, InstallationID: in.InstallationID}
 	if err := h.verifyGitHubAppInstallation(reqCtx, orgID, installationPayload); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("org_id", orgID).Str("installation_id", in.InstallationID).Msg("github app installation verification failed")
 
@@ -193,7 +194,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		}
 	}
 
-	integrationRecord, err := h.IntegrationStore.EnsureIntegration(reqCtx, orgID, github.TypeGitHubApp)
+	integrationRecord, err := h.IntegrationRuntime.Store().EnsureIntegration(reqCtx, orgID, github.TypeGitHubApp)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to ensure github app integration")
 
@@ -211,7 +212,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
 
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationGitHubApp.SuccessRedirectURL, github.TypeGitHubApp)
+	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.GitHubAppCfg().SuccessRedirectURL, github.TypeGitHubApp)
 	if redirectURL == "" {
 		return h.Success(ctx, openapi.GitHubAppInstallCallbackResponse{Reply: rout.Reply{Success: true}, Message: "GitHub App integration connected"}, openapiCtx)
 	}
@@ -221,7 +222,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 // validateGitHubAppConfig ensures required GitHub App settings are present.
 func (h *Handler) validateGitHubAppConfig() error {
-	cfg := h.IntegrationGitHubApp
+	cfg := h.IntegrationRuntime.GitHubAppCfg()
 	if !cfg.Enabled {
 		return ErrProviderDisabled
 	}
@@ -243,7 +244,7 @@ func (h *Handler) validateGitHubAppConfig() error {
 
 // githubAppInstallURL builds the GitHub App installation URL including the state parameter
 func (h *Handler) githubAppInstallURL(state string) (string, error) {
-	slug := h.IntegrationGitHubApp.AppSlug
+	slug := h.IntegrationRuntime.GitHubAppCfg().AppSlug
 	if slug == "" {
 		return "", rout.MissingField("appSlug")
 	}
@@ -303,7 +304,7 @@ func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string,
 		return err
 	}
 
-	minted, err := h.IntegrationRegistry.MintPayload(ctx, types.CredentialSubject{
+	minted, err := h.IntegrationRuntime.Registry().MintPayload(ctx, types.CredentialSubject{
 		Provider:   github.TypeGitHubApp,
 		OrgID:      orgID,
 		Credential: credentialPayload,
@@ -312,7 +313,7 @@ func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string,
 		return err
 	}
 
-	result, err := h.IntegrationOperations.RunWithPayload(ctx, types.OperationRequest{
+	result, err := h.IntegrationRuntime.Operations().RunWithPayload(ctx, types.OperationRequest{
 		OrgID:    orgID,
 		Provider: github.TypeGitHubApp,
 		Name:     types.OperationHealthDefault,

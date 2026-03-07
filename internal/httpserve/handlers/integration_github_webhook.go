@@ -208,7 +208,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.BadRequest(ctx, ErrGitHubWebhookEventHeaderMissing, openapi)
 	}
 
-	webhookSecret := h.IntegrationGitHubApp.WebhookSecret
+	webhookSecret := h.IntegrationRuntime.GitHubAppCfg().WebhookSecret
 	if webhookSecret == "" {
 		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "missing_webhook_secret")
 
@@ -266,23 +266,17 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	if deliveryID := req.Header.Get(githubWebhookDeliveryHeader); deliveryID != "" {
-		exists, err := h.checkForEventID(allowCtx, deliveryID)
+		duplicate, err := h.registerGitHubWebhookDelivery(allowCtx, integrationRecord, deliveryID)
 		if err != nil {
-			recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "delivery_dedupe_check_failed")
+			recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "delivery_dedupe_record_failed")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
-		if exists {
+		if duplicate {
 			recordGitHubWebhookResponse(eventType, http.StatusOK, "duplicate_delivery_ignored")
 
 			return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
-		}
-
-		if _, err := h.createEvent(allowCtx, ent.CreateEventInput{EventID: &deliveryID}); err != nil {
-			recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "delivery_record_create_failed")
-
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	}
 
@@ -571,4 +565,28 @@ func (h *Handler) markGitHubWebhookVerifiedAt(ctx context.Context, installationI
 		SetProviderState(nextState).
 		SetMetadata(nextMetadata).
 		Exec(ctx)
+}
+
+// registerGitHubWebhookDelivery inserts a unique delivery marker for idempotent processing.
+// Returns duplicate=true when the delivery has already been recorded.
+func (h *Handler) registerGitHubWebhookDelivery(ctx context.Context, integrationRecord *ent.Integration, deliveryID string) (duplicate bool, err error) {
+	if h.DBClient == nil {
+		return false, errDBClientNotConfigured
+	}
+
+	createErr := h.DBClient.IntegrationWebhook.Create().
+		SetOwnerID(integrationRecord.OwnerID).
+		SetIntegrationID(integrationRecord.ID).
+		SetProvider(string(github.TypeGitHubApp)).
+		SetExternalEventID(deliveryID).
+		Exec(ctx)
+	if createErr != nil {
+		if ent.IsConstraintError(createErr) {
+			return true, nil
+		}
+
+		return false, createErr
+	}
+
+	return false, nil
 }

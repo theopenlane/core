@@ -20,9 +20,9 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
 	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -44,28 +44,20 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	callbackOp := suite.createImpersonationOperation("HandleGitHubAppInstallCallback", "Handle GitHub App install callback")
 	suite.registerRouteOnce(http.MethodGet, githubAppCallbackPath, callbackOp, suite.h.GitHubAppInstallCallback)
 
-	originalConfig := suite.h.IntegrationGitHubApp
-	suite.h.IntegrationGitHubApp = handlers.IntegrationGitHubAppConfig{
+	restore := suite.withGitHubAppIntegrationRuntime(t, integrationconfig.ProviderSpec{
+		Name:        string(github.TypeGitHubApp),
+		DisplayName: "GitHub App",
+		Category:    "code",
+		AuthType:    types.AuthKindGitHubApp,
+		Active:      lo.ToPtr(true),
+		Visible:     lo.ToPtr(true),
+	}, integrationruntime.GitHubAppConfig{
 		Enabled:            true,
 		AppID:              "123",
 		AppSlug:            "openlane",
 		PrivateKey:         "private-key",
 		WebhookSecret:      "secret",
 		SuccessRedirectURL: "https://console.openlane.io/integrations",
-	}
-	defer func() {
-		suite.h.IntegrationGitHubApp = originalConfig
-	}()
-
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationconfig.ProviderSpec{
-		github.TypeGitHubApp: {
-			Name:        string(github.TypeGitHubApp),
-			DisplayName: "GitHub App",
-			Category:    "code",
-			AuthType:    types.AuthKindGitHubApp,
-			Active:      lo.ToPtr(true),
-			Visible:     lo.ToPtr(true),
-		},
 	})
 	defer restore()
 
@@ -136,19 +128,6 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	defer mockGitHubAPI.Close()
 
 	privateKey := testRSAPrivateKeyPEM(t)
-	originalConfig := suite.h.IntegrationGitHubApp
-	suite.h.IntegrationGitHubApp = handlers.IntegrationGitHubAppConfig{
-		Enabled:            true,
-		AppID:              "123",
-		AppSlug:            "openlane",
-		PrivateKey:         privateKey,
-		WebhookSecret:      "secret",
-		SuccessRedirectURL: "https://console.openlane.io/integrations",
-	}
-	defer func() {
-		suite.h.IntegrationGitHubApp = originalConfig
-	}()
-
 	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, integrationconfig.ProviderSpec{
 		Name:        string(github.TypeGitHubApp),
 		DisplayName: "GitHub App",
@@ -161,6 +140,13 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 			AppID:      "123",
 			PrivateKey: privateKey,
 		},
+	}, integrationruntime.GitHubAppConfig{
+		Enabled:            true,
+		AppID:              "123",
+		AppSlug:            "openlane",
+		PrivateKey:         privateKey,
+		WebhookSecret:      "secret",
+		SuccessRedirectURL: "https://console.openlane.io/integrations",
 	})
 	defer restoreRuntime()
 

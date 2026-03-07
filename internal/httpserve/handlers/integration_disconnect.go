@@ -28,8 +28,8 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
-	if h.IntegrationStore == nil {
-		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapi)
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapi)
 	}
 
 	provider := strings.TrimSpace(in.Provider)
@@ -38,7 +38,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	integrationID := strings.TrimSpace(in.IntegrationID)
+	integrationID := in.IntegrationID
 	if integrationID == "" {
 		record, err := h.DBClient.Integration.Query().
 			Where(
@@ -55,7 +55,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		integrationID = record.ID
 	}
 
-	deletedProvider, deletedID, err := h.IntegrationStore.DeleteIntegration(userCtx, caller.OrganizationID, integrationID)
+	deletedProvider, deletedID, err := h.IntegrationRuntime.Store().DeleteIntegration(userCtx, caller.OrganizationID, integrationID)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):

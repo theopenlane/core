@@ -13,33 +13,36 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// TestGitHubAppCredentialsFromPayload validates credential parsing and normalization
-func TestGitHubAppCredentialsFromPayload(t *testing.T) {
-	payload := types.CredentialPayload{Provider: types.ProviderUnknown}
-	_, _, _, err := githubAppCredentialsFromPayload(payload)
-	require.ErrorIs(t, err, ErrProviderNotInitialized)
-
-	payload = types.CredentialPayload{
+// TestGitHubAppInstallationIDFromCredential validates installation ID resolution from payload and provider state.
+func TestGitHubAppInstallationIDFromCredential(t *testing.T) {
+	payload := types.CredentialPayload{
 		Provider: TypeGitHubApp,
 		Data:     models.CredentialSet{ProviderData: map[string]any{}},
 	}
-	_, _, _, err = githubAppCredentialsFromPayload(payload)
-	require.ErrorIs(t, err, ErrAppIDMissing)
 
-	payload.Data.ProviderData["appId"] = "123"
-	_, _, _, err = githubAppCredentialsFromPayload(payload)
+	_, err := githubAppInstallationIDFromCredential(payload)
 	require.ErrorIs(t, err, ErrInstallationIDMissing)
 
-	payload.Data.ProviderData["installationId"] = "456"
-	_, _, _, err = githubAppCredentialsFromPayload(payload)
-	require.ErrorIs(t, err, ErrPrivateKeyMissing)
-
-	payload.Data.ProviderData["privateKey"] = "line1\\nline2"
-	appID, installationID, privateKey, err := githubAppCredentialsFromPayload(payload)
+	providerState := state.IntegrationProviderState{}
+	_, err = providerState.MergeProviderData(string(TypeGitHubApp), map[string]any{
+		"installationId": "789",
+	})
 	require.NoError(t, err)
-	require.Equal(t, "123", appID)
+
+	payload.ProviderState = &providerState
+	installationID, err := githubAppInstallationIDFromCredential(payload)
+	require.NoError(t, err)
+	require.Equal(t, "789", installationID)
+
+	payload.Data.ProviderData["installationId"] = "456"
+	installationID, err = githubAppInstallationIDFromCredential(payload)
+	require.NoError(t, err)
 	require.Equal(t, "456", installationID)
-	require.Equal(t, "line1\nline2", privateKey)
+}
+
+func TestNormalizePrivateKeyEscapedNewlines(t *testing.T) {
+	require.Equal(t, "line1\nline2", normalizePrivateKey("line1\\nline2"))
+	require.Equal(t, "line1\nline2", normalizePrivateKey("line1\nline2"))
 }
 
 func TestResolveMintInputsUsesProviderRuntimeConfigAndProviderState(t *testing.T) {

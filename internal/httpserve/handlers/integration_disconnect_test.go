@@ -87,7 +87,7 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 		).Build()
 	require.NoError(t, err)
 
-	_, err = suite.h.IntegrationStore.SaveCredential(ctx, orgID, payload)
+	_, err = suite.h.IntegrationRuntime.Store().SaveCredential(ctx, orgID, payload)
 	require.NoError(t, err)
 
 	record := suite.db.Integration.Query().

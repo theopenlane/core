@@ -71,7 +71,6 @@ type WebhookActionParams struct {
 	Secret string `json:"secret"`
 	// Retries overrides the retry count when non-zero
 	Retries int `json:"retries"`
-
 	// Optional override for the idempotency key header
 	IdempotencyKey string `json:"idempotency_key"`
 }

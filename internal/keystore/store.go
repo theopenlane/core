@@ -32,11 +32,15 @@ type Store struct {
 }
 
 // NewStore returns a Store backed by the supplied Ent client
-func NewStore(db *ent.Client) *Store {
+func NewStore(db *ent.Client) (*Store, error) {
+	if db == nil {
+		return nil, ErrStoreNotInitialized
+	}
+
 	return &Store{
 		db:  db,
 		now: time.Now,
-	}
+	}, nil
 }
 
 // SaveCredential upserts the credential payload for the given org/provider pair
@@ -66,13 +70,7 @@ func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	systemCtx = auth.WithCaller(systemCtx, auth.NewKeystoreCaller())
 
-	integrationRecord, err := s.db.Integration.Query().
-		Where(
-			integration.IDEQ(integrationID),
-			integration.OwnerIDEQ(orgID),
-			integration.KindEQ(string(payload.Provider)),
-		).
-		Only(systemCtx)
+	integrationRecord, err := s.integrationByID(systemCtx, orgID, payload.Provider, integrationID, false, false)
 	if err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to load integration record for credential save")
 		return types.CredentialPayload{}, err
@@ -100,18 +98,12 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 		return types.CredentialPayload{}, ErrOrgIDRequired
 	}
 
-	integrationRecord, err := s.db.Integration.Query().Where(
-		integration.And(
-			integration.OwnerIDEQ(orgID),
-			integration.KindEQ(string(provider)),
-		),
-	).WithSecrets().Only(ctx)
+	integrationRecord, found, err := s.providerIntegration(ctx, orgID, provider, true)
 	if err != nil {
-		if ent.IsNotFound(err) {
-			return types.CredentialPayload{}, ErrCredentialNotFound
-		}
-
 		return types.CredentialPayload{}, err
+	}
+	if !found {
+		return types.CredentialPayload{}, ErrCredentialNotFound
 	}
 
 	return s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
@@ -119,7 +111,7 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 
 // LoadCredentialForIntegration retrieves the credential payload for a specific integration record.
 func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error) {
-	integrationRecord, err := s.integrationRecordWithSecrets(ctx, orgID, provider, integrationID)
+	integrationRecord, err := s.integrationByID(ctx, orgID, provider, integrationID, true, true)
 	if err != nil {
 		return types.CredentialPayload{}, err
 	}
@@ -127,8 +119,9 @@ func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, 
 	return s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
 }
 
+// loadCredentialSubjectForIntegration attempts to load credential data for the given integration record
 func (s *Store) loadCredentialSubjectForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, bool, error) {
-	integrationRecord, err := s.integrationRecordWithSecrets(ctx, orgID, provider, integrationID)
+	integrationRecord, err := s.integrationByID(ctx, orgID, provider, integrationID, true, true)
 	if err != nil {
 		return types.CredentialPayload{}, false, err
 	}
@@ -163,13 +156,7 @@ func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integration
 		return types.ProviderUnknown, "", integrations.ErrIntegrationIDRequired
 	}
 
-	record, err := s.db.Integration.Query().
-		Where(
-			integration.IDEQ(integrationID),
-			integration.OwnerIDEQ(orgID),
-		).
-		WithSecrets().
-		Only(ctx)
+	record, err := s.integrationByID(ctx, orgID, types.ProviderUnknown, integrationID, true, false)
 	if err != nil {
 		return types.ProviderUnknown, "", err
 	}
@@ -206,20 +193,12 @@ func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integration
 
 // ensureIntegration guarantees an integration record exists for the given org/provider pair
 func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider types.ProviderType) (*ent.Integration, error) {
-	record, err := s.db.Integration.Query().
-		Where(
-			integration.And(
-				integration.OwnerIDEQ(orgID),
-				integration.KindEQ(string(provider)),
-			),
-		).
-		Only(ctx)
-	if err == nil {
-		return record, nil
-	}
-
-	if !ent.IsNotFound(err) {
+	record, found, err := s.providerIntegration(ctx, orgID, provider, false)
+	if err != nil {
 		return nil, err
+	}
+	if found {
+		return record, nil
 	}
 
 	record, createErr := s.db.Integration.Create().
@@ -309,24 +288,64 @@ func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType,
 	return types.CredentialPayload{}, ErrCredentialNotFound
 }
 
-func (s *Store) integrationRecordWithSecrets(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (*ent.Integration, error) {
-	integrationRecord, err := s.db.Integration.Query().
+// providerIntegrations returns up to two integrations for owner/provider.
+// A result length of 2 indicates an ambiguous provider-level lookup.
+func (s *Store) providerIntegrations(ctx context.Context, orgID string, provider types.ProviderType, withSecrets bool) ([]*ent.Integration, error) {
+	query := s.db.Integration.Query().
 		Where(
-			integration.IDEQ(integrationID),
 			integration.OwnerIDEQ(orgID),
 			integration.KindEQ(string(provider)),
 		).
-		WithSecrets().
-		Only(ctx)
+		Order(ent.Desc(integration.FieldUpdatedAt), ent.Desc(integration.FieldCreatedAt)).
+		Limit(2)
+	if withSecrets {
+		query = query.WithSecrets()
+	}
+
+	return query.All(ctx)
+}
+
+// providerIntegration resolves a single integration by owner/provider and reports whether one exists.
+// Returns ErrIntegrationAmbiguous when multiple integrations are configured for the provider.
+func (s *Store) providerIntegration(ctx context.Context, orgID string, provider types.ProviderType, withSecrets bool) (*ent.Integration, bool, error) {
+	records, err := s.providerIntegrations(ctx, orgID, provider, withSecrets)
 	if err != nil {
-		if ent.IsNotFound(err) {
+		return nil, false, err
+	}
+	switch len(records) {
+	case 0:
+		return nil, false, nil
+	case 1:
+		return records[0], true, nil
+	default:
+		return nil, false, ErrIntegrationAmbiguous
+	}
+}
+
+// integrationByID resolves an integration by explicit ID/owner and optional provider.
+func (s *Store) integrationByID(ctx context.Context, orgID string, provider types.ProviderType, integrationID string, withSecrets bool, mapNotFound bool) (*ent.Integration, error) {
+	query := s.db.Integration.Query().
+		Where(
+			integration.IDEQ(integrationID),
+			integration.OwnerIDEQ(orgID),
+		)
+	if provider != types.ProviderUnknown {
+		query = query.Where(integration.KindEQ(string(provider)))
+	}
+	if withSecrets {
+		query = query.WithSecrets()
+	}
+
+	record, err := query.Only(ctx)
+	if err != nil {
+		if mapNotFound && ent.IsNotFound(err) {
 			return nil, ErrCredentialNotFound
 		}
 
 		return nil, err
 	}
 
-	return integrationRecord, nil
+	return record, nil
 }
 
 // payloadToCredentialSet converts a CredentialPayload into a storable CredentialSet

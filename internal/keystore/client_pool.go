@@ -3,7 +3,6 @@ package keystore
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -19,8 +18,6 @@ import (
 const (
 	// defaultClientPoolTTL is the duration that cached clients remain valid
 	defaultClientPoolTTL = 5 * time.Minute
-	// refreshSkew defines how far before token expiry refresh operations begin
-	refreshSkew = cacheSkew
 )
 
 // CredentialSource exposes the subset of broker operations required by the client pool
@@ -110,6 +107,7 @@ func NewClientPool[T any](source CredentialSource, builder ClientBuilder[T], opt
 	if source == nil {
 		return nil, ErrBrokerRequired
 	}
+
 	if builder == nil {
 		return nil, ErrClientBuilderRequired
 	}
@@ -142,7 +140,7 @@ func NewClientPool[T any](source CredentialSource, builder ClientBuilder[T], opt
 	eddyPool := eddy.NewClientPool[T](settings.ttl)
 	pool.service = eddy.NewClientService(
 		eddyPool,
-		eddy.WithConfigClone[T, types.CredentialPayload, json.RawMessage](settings.configClone),
+		eddy.WithConfigClone[T, types.CredentialPayload](settings.configClone),
 		eddy.WithOutputClone[T, types.CredentialPayload, json.RawMessage](cloneCredentialPayload),
 	)
 
@@ -227,23 +225,18 @@ func (p *ClientPool[T]) Get(ctx context.Context, orgID string, opts ...ClientReq
 
 // resolveCredential retrieves or refreshes the credential for the given request
 func (p *ClientPool[T]) resolveCredential(ctx context.Context, req clientRequest) (types.CredentialPayload, error) {
-	if req.forceRefresh {
-		return p.refreshCredential(ctx, req.orgID, types.CredentialPayload{})
-	}
-
-	payload, err := p.source.Get(ctx, req.orgID, p.provider)
-	if err != nil {
-		if errors.Is(err, ErrCredentialNotFound) {
-			return p.refreshCredential(ctx, req.orgID, types.CredentialPayload{})
-		}
-		return types.CredentialPayload{}, err
-	}
-
-	if shouldRefreshCredential(payload, p.now) {
-		return p.refreshCredential(ctx, req.orgID, payload)
-	}
-
-	return payload, nil
+	// sorry this is hard to read its more work than its worth to change it
+	return resolveCredentialWithPolicy(
+		ctx,
+		req.forceRefresh,
+		p.now,
+		func(callCtx context.Context) (types.CredentialPayload, error) {
+			return p.source.Get(callCtx, req.orgID, p.provider)
+		},
+		func(callCtx context.Context, previous types.CredentialPayload) (types.CredentialPayload, error) {
+			return p.refreshCredential(callCtx, req.orgID, previous)
+		},
+	)
 }
 
 // refreshCredential obtains a fresh credential and evicts stale cache entries
@@ -270,16 +263,6 @@ func (p *ClientPool[T]) evict(orgID, version string) {
 		Provider: p.provider,
 		Version:  version,
 	})
-}
-
-// shouldRefreshCredential determines if a credential needs refreshing based on its expiry
-func shouldRefreshCredential(payload types.CredentialPayload, now func() time.Time) bool {
-	if payload.Token == nil || payload.Token.Expiry.IsZero() {
-		return false
-	}
-
-	refreshAt := payload.Token.Expiry.Add(-refreshSkew)
-	return now().After(refreshAt)
 }
 
 // clientCacheKey uniquely identifies a cached client instance
