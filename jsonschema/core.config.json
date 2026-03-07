@@ -871,6 +871,10 @@
           "type": "string",
           "description": "path to the fga model file"
         },
+        "modulefile": {
+          "type": "string",
+          "description": "path to the fga module file"
+        },
         "credentials": {
           "$ref": "#/$defs/fgax.Credentials",
           "description": "credentials for the openFGA client"

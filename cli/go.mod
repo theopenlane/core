@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v1.0.12
 	github.com/theopenlane/go-client v0.8.6
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.26.0
+	github.com/theopenlane/iam v0.27.1
 	github.com/theopenlane/utils v0.7.0
 	golang.org/x/oauth2 v0.35.0
 	golang.org/x/term v0.40.0
@@ -45,8 +45,8 @@ require (
 	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
-	github.com/go-webauthn/webauthn v0.15.0 // indirect
-	github.com/go-webauthn/x v0.1.28 // indirect
+	github.com/go-webauthn/webauthn v0.16.0 // indirect
+	github.com/go-webauthn/x v0.2.1 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
