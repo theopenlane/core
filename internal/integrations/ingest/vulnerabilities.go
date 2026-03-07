@@ -6,7 +6,6 @@ import (
 
 	"github.com/samber/lo"
 
-	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
@@ -17,11 +16,6 @@ import (
 type vulnerabilityIngestContext struct {
 	schemaIngestContext
 	storeRaw bool
-}
-
-// SupportsVulnerabilityIngest reports whether default or configured mappings exist
-func SupportsVulnerabilityIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig, mappingIndex integrationtypes.MappingIndex) bool {
-	return supportsSchemaIngest(mappingIndex, provider, config, mappingSchemaVulnerability)
 }
 
 // newVulnerabilityIngestContext prepares shared state for ingest runs
@@ -84,11 +78,11 @@ func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, 
 			return false, false, err
 		}
 
-		if req.OrgID != "" && (input.OwnerID == nil || *input.OwnerID == "") {
+		if input.OwnerID == nil || *input.OwnerID == "" {
 			owner := req.OrgID
 			input.OwnerID = &owner
 		}
-		if req.IntegrationID != "" && !lo.Contains(input.IntegrationIDs, req.IntegrationID) {
+		if !lo.Contains(input.IntegrationIDs, req.IntegrationID) {
 			input.IntegrationIDs = append(input.IntegrationIDs, req.IntegrationID)
 		}
 
@@ -115,7 +109,6 @@ func decodeAlertPayload(payload json.RawMessage) (map[string]any, error) {
 
 	return out, nil
 }
-
 
 // upsertVulnerability inserts or updates a vulnerability based on external identifiers
 func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string, integrationID string, input generated.CreateVulnerabilityInput) (bool, error) {

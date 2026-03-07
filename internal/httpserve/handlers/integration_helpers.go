@@ -9,20 +9,19 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/targetresolver"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
 // statePayloadParts is the number of parts in an encoded OAuth state payload.
 const statePayloadParts = 3
 
 var (
-	errIntegrationBrokerNotConfigured         = errors.New("integration broker not configured")
-	errIntegrationStoreNotConfigured          = errors.New("integration store not configured")
-	errIntegrationRegistryNotConfigured       = errors.New("integration registry not configured")
-	errIntegrationOperationsNotConfigured     = errors.New("integration operations manager not configured")
+	errIntegrationRuntimeNotConfigured        = errors.New("integration runtime not configured")
 	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
-	errKeymakerNotConfigured                  = errors.New("integration keymaker not configured")
 	// errDBClientNotConfigured indicates the database client is missing.
 	errDBClientNotConfigured = errors.New("database client not configured")
 )
@@ -69,11 +68,25 @@ func integrationHTTPStatus(err error) int {
 	case errors.Is(err, ErrInvalidState),
 		errors.Is(err, ErrInvalidStateFormat),
 		errors.Is(err, ErrMissingCode),
+		errors.Is(err, ErrIntegrationIDRequired),
+		errors.Is(err, ErrInvalidProvider),
+		errors.Is(err, ErrProviderDisabled),
 		errors.Is(err, ErrUnsupportedAuthType),
 		errors.Is(err, ErrExchangeAuthCode),
 		errors.Is(err, ErrValidateToken),
+		errors.Is(err, keystore.ErrProviderNotRegistered),
 		errors.Is(err, keystore.ErrOperationNotRegistered),
-		errors.Is(err, keystore.ErrCredentialNotFound):
+		errors.Is(err, keystore.ErrCredentialNotFound),
+		errors.Is(err, keystore.ErrIntegrationAmbiguous),
+		errors.Is(err, activation.ErrHealthCheckFailed),
+		errors.Is(err, engine.ErrIntegrationProviderRequired),
+		errors.Is(err, engine.ErrIntegrationOperationCriteriaRequired),
+		errors.Is(err, engine.ErrIntegrationScopeConditionFalse),
+		errors.Is(err, targetresolver.ErrResolverProviderRequired),
+		errors.Is(err, targetresolver.ErrResolverProviderUnknown),
+		errors.Is(err, targetresolver.ErrResolverProviderMismatch),
+		errors.Is(err, targetresolver.ErrResolverIntegrationNotFound),
+		errors.Is(err, targetresolver.ErrResolverIntegrationAmbiguous):
 		return http.StatusBadRequest
 	default:
 		return http.StatusInternalServerError
@@ -143,37 +156,44 @@ func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
 }
 
-// verifyIntegrationCredentialRuntime ensures components required for metadata minting and health checks are configured.
-func (h *Handler) verifyIntegrationCredentialRuntime() error {
-	if h.IntegrationStore == nil {
-		return errIntegrationStoreNotConfigured
+// validateIntegrationProvider ensures a provider exists in the registry and is active.
+func (h *Handler) validateIntegrationProvider(provider types.ProviderType) error {
+	if provider == types.ProviderUnknown {
+		return ErrInvalidProvider
 	}
-	if h.IntegrationRegistry == nil {
-		return errIntegrationRegistryNotConfigured
+	if h.IntegrationRuntime == nil {
+		return errIntegrationRuntimeNotConfigured
 	}
-	if h.IntegrationOperations == nil {
-		return errIntegrationOperationsNotConfigured
+
+	spec, ok := h.IntegrationRuntime.Registry().Config(provider)
+	if !ok {
+		return ErrInvalidProvider
+	}
+	if spec.Active != nil && !*spec.Active {
+		return ErrProviderDisabled
 	}
 
 	return nil
 }
 
 func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integrationID string, provider types.ProviderType) error {
-	if h == nil || h.DBClient == nil || h.IntegrationRegistry == nil {
+	if h == nil || h.DBClient == nil || h.IntegrationRuntime == nil {
 		return nil
 	}
 
-	spec, ok := h.IntegrationRegistry.Config(provider)
+	reg := h.IntegrationRuntime.Registry()
+
+	spec, ok := reg.Config(provider)
 	if !ok || spec.Active == nil || !*spec.Active {
 		return nil
 	}
 
-	meta, ok := h.IntegrationRegistry.ProviderMetadataCatalog()[provider]
+	meta, ok := reg.ProviderMetadataCatalog()[provider]
 	if !ok {
 		meta = spec.ToProviderConfig()
 	}
 
-	entry := buildIntegrationProviderMetadata(provider, spec, meta, h.IntegrationRegistry)
+	entry := buildIntegrationProviderMetadata(provider, spec, meta, reg)
 	return h.DBClient.Integration.UpdateOneID(integrationID).
 		SetProviderMetadata(entry).
 		Exec(ctx)

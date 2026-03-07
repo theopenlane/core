@@ -18,6 +18,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/config"
@@ -46,12 +48,16 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
+	}
+
 	providerType, err := parseProviderType(in.Provider)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
-	spec, specOk := h.IntegrationRegistry.Config(providerType)
+	spec, specOk := h.IntegrationRuntime.Registry().Config(providerType)
 	if !specOk {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -64,8 +70,18 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	if h.IntegrationKeymaker == nil {
-		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
+	integrationID, err := h.resolveOAuthIntegrationID(userCtx, caller.OrganizationID, providerType, in.IntegrationID)
+	if err != nil {
+		switch {
+		case errors.Is(err, ErrIntegrationIDRequired),
+			errors.Is(err, ErrIntegrationNotFound),
+			errors.Is(err, keystore.ErrIntegrationAmbiguous):
+			return h.BadRequest(ctx, err, openapiCtx)
+		default:
+			logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to resolve oauth integration scope")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
 	}
 
 	state, err := h.generateOAuthState(caller.OrganizationID, string(providerType))
@@ -77,11 +93,12 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	scopes := config.MergeRequestedScopes(spec, in.Scopes)
 
-	begin, err := h.IntegrationKeymaker.BeginAuthorization(userCtx, keymaker.BeginRequest{
-		OrgID:    caller.OrganizationID,
-		Provider: providerType,
-		Scopes:   scopes,
-		State:    state,
+	begin, err := h.IntegrationRuntime.Keymaker().BeginAuthorization(userCtx, keymaker.BeginRequest{
+		OrgID:         caller.OrganizationID,
+		IntegrationID: integrationID,
+		Provider:      providerType,
+		Scopes:        scopes,
+		State:         state,
 	})
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to begin OAuth flow")
@@ -117,8 +134,8 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return nil
 	}
 
-	if h.IntegrationKeymaker == nil {
-		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -167,7 +184,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	result, err := h.IntegrationKeymaker.CompleteAuthorization(systemCtx, keymaker.CompleteRequest{
+	result, err := h.IntegrationRuntime.Keymaker().CompleteAuthorization(systemCtx, keymaker.CompleteRequest{
 		State: in.State,
 		Code:  in.Code,
 	})
@@ -184,21 +201,25 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		}
 	}
 
-	integration, err := h.IntegrationStore.EnsureIntegration(systemCtx, result.OrgID, result.Provider)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("org_id", result.OrgID).Str("provider", string(result.Provider)).Msg("failed to ensure integration record")
+	integrationID := result.IntegrationID
+	if integrationID == "" {
+		integrationRecord, ensureErr := h.IntegrationRuntime.Store().EnsureIntegration(systemCtx, result.OrgID, result.Provider)
+		if ensureErr != nil {
+			logx.FromContext(reqCtx).Error().Err(ensureErr).Str("org_id", result.OrgID).Str("provider", string(result.Provider)).Msg("failed to ensure integration record")
 
-		return h.InternalServerError(ctx, err, openapiCtx)
+			return h.InternalServerError(ctx, ensureErr, openapiCtx)
+		}
+		integrationID = integrationRecord.ID
 	}
 
-	if err := h.updateIntegrationProviderMetadata(systemCtx, integration.ID, result.Provider); err != nil {
+	if err := h.updateIntegrationProviderMetadata(systemCtx, integrationID, result.Provider); err != nil {
 		logx.FromContext(reqCtx).Warn().Err(err).Str("provider", string(result.Provider)).Msg("failed to update integration provider metadata")
 	}
 
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationOauthProvider.SuccessRedirectURL, result.Provider)
+	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.OAuthCfg().SuccessRedirectURL, result.Provider)
 	if redirectURL == "" {
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
@@ -246,22 +267,30 @@ func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) st
 }
 
 // RefreshIntegrationToken refreshes an expired OAuth token if refresh token is available.
-func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string) (*openapi.IntegrationToken, error) {
-	if h.IntegrationBroker == nil {
-		return nil, wrapTokenError("refresh", provider, errIntegrationBrokerNotConfigured)
+func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string, integrationID string) (*openapi.IntegrationToken, error) {
+	if h.IntegrationRuntime == nil {
+		return nil, wrapTokenError("refresh", provider, errIntegrationRuntimeNotConfigured)
 	}
 
 	providerType, err := parseProviderType(provider)
 	if err != nil {
 		return nil, err
 	}
+	if err := h.validateIntegrationProvider(providerType); err != nil {
+		return nil, err
+	}
 
-	payload, err := h.IntegrationBroker.Mint(ctx, orgID, providerType)
+	var payload types.CredentialPayload
+	if integrationID != "" {
+		payload, err = h.IntegrationRuntime.Broker().MintForIntegration(ctx, orgID, providerType, integrationID)
+	} else {
+		payload, err = h.IntegrationRuntime.Broker().Mint(ctx, orgID, providerType)
+	}
 	if err != nil {
 		return nil, err
 	}
 
-	return integrationTokenFromPayload(provider, payload)
+	return integrationTokenFromPayload(string(providerType), payload)
 }
 
 // RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens.
@@ -277,7 +306,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	tokenData, err := h.RefreshIntegrationToken(userCtx, refreshCaller.OrganizationID, in.Provider)
+	tokenData, err := h.RefreshIntegrationToken(userCtx, refreshCaller.OrganizationID, in.Provider, in.IntegrationID)
 	if err != nil {
 		switch integrationHTTPStatus(err) {
 		case http.StatusBadRequest:
@@ -328,6 +357,41 @@ func parseProviderType(provider string) (types.ProviderType, error) {
 	}
 
 	return pt, nil
+}
+
+// resolveOAuthIntegrationID resolves which integration record should receive OAuth credentials.
+func (h *Handler) resolveOAuthIntegrationID(ctx context.Context, orgID string, provider types.ProviderType, requestedIntegrationID string) (string, error) {
+	if requestedIntegrationID != "" {
+		if h.DBClient == nil {
+			return "", errDBClientNotConfigured
+		}
+
+		record, err := h.DBClient.Integration.Query().
+			Where(
+				integration.IDEQ(requestedIntegrationID),
+				integration.OwnerIDEQ(orgID),
+				integration.KindEQ(string(provider)),
+			).
+			Only(ctx)
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return "", ErrIntegrationNotFound
+			}
+			return "", err
+		}
+
+		return record.ID, nil
+	}
+
+	record, err := h.IntegrationRuntime.Store().EnsureIntegration(ctx, orgID, provider)
+	if err != nil {
+		if errors.Is(err, keystore.ErrIntegrationAmbiguous) {
+			return "", ErrIntegrationIDRequired
+		}
+		return "", err
+	}
+
+	return record.ID, nil
 }
 
 // getOauthCookieConfig returns the cookie configuration for OAuth cookies.

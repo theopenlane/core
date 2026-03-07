@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"sync"
+	"time"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -82,27 +83,9 @@ func (m *OperationManager) RegisterDescriptor(descriptor types.OperationDescript
 
 // Run executes the requested provider operation using stored credentials and optional clients
 func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) (types.OperationResult, error) {
-	if req.OrgID == "" {
-		return types.OperationResult{}, ErrOrgIDRequired
-	}
-	if req.Provider == types.ProviderUnknown {
-		return types.OperationResult{}, ErrProviderRequired
-	}
-	if req.Name == "" {
-		return types.OperationResult{}, ErrOperationNameRequired
-	}
-
-	key := operationKey{
-		provider: req.Provider,
-		name:     req.Name,
-	}
-
-	m.mu.RLock()
-	descriptor, ok := m.descriptors[key]
-	m.mu.RUnlock()
-
-	if !ok {
-		return types.OperationResult{}, ErrOperationNotRegistered
+	descriptor, err := m.resolveRequestDescriptor(req)
+	if err != nil {
+		return types.OperationResult{}, err
 	}
 
 	payload, err := m.resolveCredential(ctx, req)
@@ -137,27 +120,9 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 
 // RunWithPayload executes the requested operation using the provided credential payload instead of loading from the store
 func (m *OperationManager) RunWithPayload(ctx context.Context, req types.OperationRequest, payload types.CredentialPayload) (types.OperationResult, error) {
-	if req.OrgID == "" {
-		return types.OperationResult{}, ErrOrgIDRequired
-	}
-	if req.Provider == types.ProviderUnknown {
-		return types.OperationResult{}, ErrProviderRequired
-	}
-	if req.Name == "" {
-		return types.OperationResult{}, ErrOperationNameRequired
-	}
-
-	key := operationKey{
-		provider: req.Provider,
-		name:     req.Name,
-	}
-
-	m.mu.RLock()
-	descriptor, ok := m.descriptors[key]
-	m.mu.RUnlock()
-
-	if !ok {
-		return types.OperationResult{}, ErrOperationNotRegistered
+	descriptor, err := m.resolveRequestDescriptor(req)
+	if err != nil {
+		return types.OperationResult{}, err
 	}
 
 	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload, req.Config)
@@ -185,6 +150,50 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 	return result, nil
 }
 
+func validateOperationRequest(req types.OperationRequest) error {
+	if req.OrgID == "" {
+		return ErrOrgIDRequired
+	}
+	if req.Provider == types.ProviderUnknown {
+		return ErrProviderRequired
+	}
+	if req.Name == "" {
+		return ErrOperationNameRequired
+	}
+
+	return nil
+}
+
+func (m *OperationManager) resolveRequestDescriptor(req types.OperationRequest) (types.OperationDescriptor, error) {
+	if err := validateOperationRequest(req); err != nil {
+		return types.OperationDescriptor{}, err
+	}
+
+	key := operationKey{
+		provider: req.Provider,
+		name:     req.Name,
+	}
+
+	m.mu.RLock()
+	descriptor, ok := m.descriptors[key]
+	m.mu.RUnlock()
+
+	if !ok {
+		return types.OperationDescriptor{}, ErrOperationNotRegistered
+	}
+
+	return descriptor, nil
+}
+
+// ValidateProviderHealth executes the default health operation with a supplied credential payload.
+func (m *OperationManager) ValidateProviderHealth(ctx context.Context, orgID string, provider types.ProviderType, payload types.CredentialPayload) (types.OperationResult, error) {
+	return m.RunWithPayload(ctx, types.OperationRequest{
+		OrgID:    orgID,
+		Provider: provider,
+		Name:     types.OperationHealthDefault,
+	}, payload)
+}
+
 // resolveClientFromPayload builds a client from the provided payload when the operation requires one
 func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
@@ -201,18 +210,30 @@ func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req typ
 // resolveCredential retrieves or refreshes the credential based on the request flags
 func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (types.CredentialPayload, error) {
 	if req.IntegrationID != "" {
-		if req.Force {
-			return m.source.MintForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
-		}
-
-		return m.source.GetForIntegration(ctx, req.OrgID, req.Provider, req.IntegrationID)
+		return resolveCredentialWithPolicy(
+			ctx,
+			req.Force,
+			time.Now,
+			func(callCtx context.Context) (types.CredentialPayload, error) {
+				return m.source.GetForIntegration(callCtx, req.OrgID, req.Provider, req.IntegrationID)
+			},
+			func(callCtx context.Context, _ types.CredentialPayload) (types.CredentialPayload, error) {
+				return m.source.MintForIntegration(callCtx, req.OrgID, req.Provider, req.IntegrationID)
+			},
+		)
 	}
 
-	if req.Force {
-		return m.source.Mint(ctx, req.OrgID, req.Provider)
-	}
-
-	return m.source.Get(ctx, req.OrgID, req.Provider)
+	return resolveCredentialWithPolicy(
+		ctx,
+		req.Force,
+		time.Now,
+		func(callCtx context.Context) (types.CredentialPayload, error) {
+			return m.source.Get(callCtx, req.OrgID, req.Provider)
+		},
+		func(callCtx context.Context, _ types.CredentialPayload) (types.CredentialPayload, error) {
+			return m.source.Mint(callCtx, req.OrgID, req.Provider)
+		},
+	)
 }
 
 // resolveClient retrieves a client instance if the operation requires one

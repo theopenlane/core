@@ -14,6 +14,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -188,10 +189,16 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
 
-	originalRedirect := suite.h.IntegrationOauthProvider.SuccessRedirectURL
-	suite.h.IntegrationOauthProvider.SuccessRedirectURL = "https://console.openlane.io/integrations"
+	originalRuntime := suite.h.IntegrationRuntime
+	rt, err := integrationruntime.New(integrationruntime.Config{
+		Registry: originalRuntime.Registry(),
+		DB:       suite.db,
+		OAuth:    integrationruntime.OAuthConfig{SuccessRedirectURL: "https://console.openlane.io/integrations"},
+	})
+	require.NoError(t, err)
+	suite.h.IntegrationRuntime = rt
 	defer func() {
-		suite.h.IntegrationOauthProvider.SuccessRedirectURL = originalRedirect
+		suite.h.IntegrationRuntime = originalRuntime
 	}()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)

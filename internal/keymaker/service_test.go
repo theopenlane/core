@@ -30,7 +30,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	}
 
 	keystore := &fakeKeystore{}
-	store := NewMemorySessionStore()
+	store := NewInMemoryAuthStateStore()
 
 	svc, err := NewService(fakeResolver{provider: provider}, keystore, store, ServiceOptions{})
 	if err != nil {
@@ -63,16 +63,19 @@ func TestService_BeginAndComplete(t *testing.T) {
 	if result.Credential.Data.APIToken != "token-123" {
 		t.Fatalf("expected credential data to persist token")
 	}
-	if len(keystore.saves) != 1 {
-		t.Fatalf("expected keystore to be called once, got %d", len(keystore.saves))
+	if len(keystore.integrationSaves) != 1 {
+		t.Fatalf("expected integration-scoped keystore call once, got %d", len(keystore.integrationSaves))
 	}
-	if keystore.saves[0].orgID != "org-1" {
+	if keystore.integrationSaves[0].orgID != "org-1" {
 		t.Fatalf("expected org ID to propagate to keystore")
+	}
+	if keystore.integrationSaves[0].integrationID != "int-1" {
+		t.Fatalf("expected integration ID to propagate to keystore")
 	}
 }
 
 func TestService_BeginAuthorizationProviderMissing(t *testing.T) {
-	svc, err := NewService(fakeResolver{}, &fakeKeystore{}, NewMemorySessionStore(), ServiceOptions{})
+	svc, err := NewService(fakeResolver{}, &fakeKeystore{}, NewInMemoryAuthStateStore(), ServiceOptions{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -106,7 +109,7 @@ func TestService_CompleteAuthorizationExpired(t *testing.T) {
 		return now
 	}
 
-	svc, err := NewService(fakeResolver{provider: provider}, &fakeKeystore{}, NewMemorySessionStore(), ServiceOptions{
+	svc, err := NewService(fakeResolver{provider: provider}, &fakeKeystore{}, NewInMemoryAuthStateStore(), ServiceOptions{
 		SessionTTL: time.Minute,
 		Now:        clock,
 	})
@@ -149,13 +152,20 @@ func (r fakeResolver) Provider(pt types.ProviderType) (types.Provider, bool) {
 }
 
 type fakeKeystore struct {
-	saves []saveCall
-	err   error
+	saves            []saveCall
+	integrationSaves []saveIntegrationCall
+	err              error
 }
 
 type saveCall struct {
 	orgID   string
 	payload types.CredentialPayload
+}
+
+type saveIntegrationCall struct {
+	orgID         string
+	integrationID string
+	payload       types.CredentialPayload
 }
 
 func (f *fakeKeystore) SaveCredential(_ context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
@@ -166,6 +176,19 @@ func (f *fakeKeystore) SaveCredential(_ context.Context, orgID string, payload t
 	if f.err != nil {
 		return types.CredentialPayload{}, f.err
 	}
+	return payload, nil
+}
+
+func (f *fakeKeystore) SaveCredentialForIntegration(_ context.Context, orgID string, integrationID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
+	f.integrationSaves = append(f.integrationSaves, saveIntegrationCall{
+		orgID:         orgID,
+		integrationID: integrationID,
+		payload:       payload,
+	})
+	if f.err != nil {
+		return types.CredentialPayload{}, f.err
+	}
+
 	return payload, nil
 }
 

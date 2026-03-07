@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/ingest"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -116,7 +117,10 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return err
 	}
 
-	mappingIndex := so.Config.Handler.IntegrationMappingIndex
+	var mappingIndex types.MappingIndex
+	if rt := so.Config.Handler.IntegrationRuntime; rt != nil {
+		mappingIndex, _ = do.Invoke[types.MappingIndex](rt.Injector())
+	}
 	if mappingIndex == nil {
 		log.Info().Msg("integration ingest mapping index not configured; skipping ingest listener registration")
 	} else {

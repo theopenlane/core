@@ -11,6 +11,7 @@ func Decode[T any](config json.RawMessage) (T, error) {
 	if err := DecodeConfig(config, &result); err != nil {
 		return result, err
 	}
+
 	return result, nil
 }
 

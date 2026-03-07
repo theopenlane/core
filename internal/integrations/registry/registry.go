@@ -58,15 +58,8 @@ func NewRegistry(ctx context.Context, overrides map[string]config.ProviderSpec) 
 		}
 
 		provider, err := builder.Build(ctx, spec)
-		if err != nil {
+		if err != nil || provider == nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", string(providerType)).Msg("provider build failed, marking inactive")
-			instance.markProviderInactive(providerType, spec)
-
-			continue
-		}
-
-		if provider == nil {
-			logx.FromContext(ctx).Warn().Str("provider", string(providerType)).Msg("provider build returned nil, marking inactive")
 			instance.markProviderInactive(providerType, spec)
 
 			continue
@@ -138,42 +131,11 @@ func (r *Registry) Config(provider types.ProviderType) (config.ProviderSpec, boo
 	return spec, ok
 }
 
-// ProviderConfigs exposes the full provider config map (copy) for consumers needing iteration
-func (r *Registry) ProviderConfigs() map[types.ProviderType]config.ProviderSpec {
-	out := make(map[types.ProviderType]config.ProviderSpec, len(r.configs))
-	maps.Copy(out, r.configs)
-
-	return out
-}
-
-// ProviderMetadata returns the handler-facing provider metadata (docs, schema, etc.).
-func (r *Registry) ProviderMetadata(provider types.ProviderType) (types.ProviderConfig, bool) {
-	spec, ok := r.configs[provider]
-	if !ok {
-		return types.ProviderConfig{}, false
-	}
-
-	return spec.ToProviderConfig(), true
-}
-
 // ProviderMetadataCatalog returns a copy of all provider metadata entries.
 func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig {
 	return lo.MapEntries(r.configs, func(key types.ProviderType, spec config.ProviderSpec) (types.ProviderType, types.ProviderConfig) {
 		return key, spec.ToProviderConfig()
 	})
-}
-
-// ClientDescriptors returns the registered client descriptors for a provider.
-func (r *Registry) ClientDescriptors(provider types.ProviderType) []types.ClientDescriptor {
-	descriptors := r.clients[provider]
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := make([]types.ClientDescriptor, len(descriptors))
-	copy(out, descriptors)
-
-	return out
 }
 
 // ClientDescriptorCatalog returns a copy of all provider client descriptors.
@@ -219,10 +181,6 @@ func (r *Registry) MintPayload(ctx context.Context, subject types.CredentialSubj
 
 // UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).
 func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec, builder providers.Builder) error {
-	if r == nil {
-		return ErrRegistryNil
-	}
-
 	providerType := spec.ProviderType()
 	if providerType == types.ProviderUnknown {
 		return ErrProviderTypeRequired

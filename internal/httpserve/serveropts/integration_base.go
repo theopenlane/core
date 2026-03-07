@@ -4,37 +4,55 @@ import (
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// WithIntegrationRuntime wires the integration runtime dependency graph:
-// Registry -> Store -> Broker -> Clients -> Operations -> Keymaker -> MappingIndex.
+// WithIntegrationRuntime builds the integrations runtime from server settings and wires it
+// into the handler. When a workflow engine is present it also injects integration dependencies.
 func WithIntegrationRuntime(dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if dbClient == nil {
 			return
 		}
 
-		reg, ok := s.Config.Handler.IntegrationRegistry.(*registry.Registry)
-		if !ok || reg == nil {
-			return
-		}
+		ghApp := s.Config.Settings.IntegrationGitHubApp
+		oauth := s.Config.Settings.IntegrationOauthProvider
 
-		integrationDeps, err := integrationruntime.New(integrationruntime.Config{
-			Registry:       reg,
-			DB:             dbClient,
-			WorkflowEngine: s.Config.Handler.WorkflowEngine,
+		rt, err := integrationruntime.New(integrationruntime.Config{
+			ProviderSpecs: s.Config.Settings.IntegrationProviders,
+			DB:            dbClient,
+			GitHubApp: integrationruntime.GitHubAppConfig{
+				Enabled:            ghApp.Enabled,
+				AppID:              ghApp.AppID,
+				AppSlug:            ghApp.AppSlug,
+				PrivateKey:         ghApp.PrivateKey,
+				WebhookSecret:      ghApp.WebhookSecret,
+				SuccessRedirectURL: ghApp.SuccessRedirectURL,
+			},
+			OAuth: integrationruntime.OAuthConfig{
+				Enabled:            oauth.Enabled,
+				SuccessRedirectURL: oauth.SuccessRedirectURL,
+			},
 		})
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to initialize integration runtime")
 		}
 
-		s.Config.Handler.IntegrationStore = integrationDeps.Store
-		s.Config.Handler.IntegrationBroker = integrationDeps.Broker
-		s.Config.Handler.IntegrationClients = integrationDeps.Clients
-		s.Config.Handler.IntegrationOperations = integrationDeps.Operations
-		s.Config.Handler.IntegrationKeymaker = integrationDeps.Keymaker
-		s.Config.Handler.IntegrationMappingIndex = integrationDeps.Mapping
+		s.Config.Handler.IntegrationRuntime = rt
+
+		wf := s.Config.Handler.WorkflowEngine
+		if wf == nil {
+			return
+		}
+
+		if err := wf.SetIntegrationDeps(engine.IntegrationDeps{
+			Registry:     rt.Registry(),
+			Store:        rt.Store(),
+			Operations:   rt.Operations(),
+			MappingIndex: rt.Registry(),
+		}); err != nil {
+			log.Panic().Err(err).Msg("failed to wire integration deps into workflow engine")
+		}
 	})
 }

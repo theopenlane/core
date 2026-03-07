@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
 )
 
 func TestNewServiceValidatesDependencies(t *testing.T) {
@@ -57,7 +57,12 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 
 	writer := &fakeCredentialWriter{}
 	runner := &fakeOperationRunner{status: types.OperationStatusOK}
-	minter := &fakePayloadMinter{}
+	minter := &fakePayloadMinter{
+		returnPayload: &types.CredentialPayload{
+			Provider: provider,
+			Kind:     types.CredentialKindOAuthToken,
+		},
+	}
 
 	svc := mustNewService(t, writer, runner, minter)
 
@@ -79,6 +84,9 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	if result.HealthResult.Status != types.OperationStatusOK {
 		t.Fatalf("expected health status ok, got %s", result.HealthResult.Status)
 	}
+	if writer.lastPayload.Kind != types.CredentialKindOAuthToken {
+		t.Fatalf("expected minted credential to be persisted, got kind %s", writer.lastPayload.Kind)
+	}
 }
 
 func TestConfigureNoValidateSkipsHealthCheck(t *testing.T) {
@@ -88,7 +96,7 @@ func TestConfigureNoValidateSkipsHealthCheck(t *testing.T) {
 	provider := types.ProviderType("acme")
 
 	writer := &fakeCredentialWriter{}
-	runner := &fakeOperationRunner{runCalled: false}
+	runner := &fakeOperationRunner{validateCalled: false}
 	minter := &fakePayloadMinter{}
 
 	svc := mustNewService(t, writer, runner, minter)
@@ -102,7 +110,7 @@ func TestConfigureNoValidateSkipsHealthCheck(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Configure() error = %v", err)
 	}
-	if runner.runCalled || runner.runWithPayloadCalled {
+	if runner.validateCalled {
 		t.Fatalf("expected no operation runner calls when Validate=false")
 	}
 	if writer.saveCount != 1 {
@@ -160,11 +168,11 @@ func TestConfigureOperationsRequiredWhenValidating(t *testing.T) {
 		ProviderData: map[string]any{"token": "value"},
 		Validate:     true,
 	})
-	if !errors.Is(err, ErrOperationsRequired) {
-		t.Fatalf("expected ErrOperationsRequired, got %v", err)
+	if !errors.Is(err, ErrHealthValidatorRequired) {
+		t.Fatalf("expected ErrHealthValidatorRequired, got %v", err)
 	}
 	if writer.saveCount != 0 {
-		t.Fatalf("expected no saves when operations not configured, got %d", writer.saveCount)
+		t.Fatalf("expected no saves when health validator not configured, got %d", writer.saveCount)
 	}
 }
 
@@ -180,7 +188,7 @@ func TestConfigureRequiresOrgID(t *testing.T) {
 		Provider: provider,
 		Validate: true,
 	})
-	if !errors.Is(err, keystore.ErrOrgIDRequired) {
+	if !errors.Is(err, integrations.ErrOrgIDRequired) {
 		t.Fatalf("expected ErrOrgIDRequired, got %v", err)
 	}
 }
@@ -202,7 +210,7 @@ func TestConfigureRequiresProvider(t *testing.T) {
 }
 
 // mustNewService constructs a Service for tests, panicking on error
-func mustNewService(t *testing.T, writer CredentialWriter, runner OperationRunner, minter PayloadMinter) *Service {
+func mustNewService(t *testing.T, writer CredentialWriter, runner HealthValidator, minter PayloadMinter) *Service {
 	t.Helper()
 
 	svc, err := NewService(writer, runner, minter)
@@ -215,8 +223,9 @@ func mustNewService(t *testing.T, writer CredentialWriter, runner OperationRunne
 
 // fakeCredentialWriter records credential saves
 type fakeCredentialWriter struct {
-	saveCount int
-	saveErr   error
+	saveCount   int
+	lastPayload types.CredentialPayload
+	saveErr     error
 }
 
 func (f *fakeCredentialWriter) SaveCredential(_ context.Context, _ string, payload types.CredentialPayload) (types.CredentialPayload, error) {
@@ -224,27 +233,19 @@ func (f *fakeCredentialWriter) SaveCredential(_ context.Context, _ string, paylo
 		return types.CredentialPayload{}, f.saveErr
 	}
 	f.saveCount++
+	f.lastPayload = payload
 	return payload, nil
 }
 
-// fakeOperationRunner records operation calls
+// fakeOperationRunner records health validation calls.
 type fakeOperationRunner struct {
-	status               types.OperationStatus
-	runCalled            bool
-	runWithPayloadCalled bool
-	runErr               error
+	status         types.OperationStatus
+	validateCalled bool
+	runErr         error
 }
 
-func (f *fakeOperationRunner) Run(_ context.Context, _ types.OperationRequest) (types.OperationResult, error) {
-	f.runCalled = true
-	if f.runErr != nil {
-		return types.OperationResult{}, f.runErr
-	}
-	return types.OperationResult{Status: f.status}, nil
-}
-
-func (f *fakeOperationRunner) RunWithPayload(_ context.Context, _ types.OperationRequest, _ types.CredentialPayload) (types.OperationResult, error) {
-	f.runWithPayloadCalled = true
+func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string, _ types.ProviderType, _ types.CredentialPayload) (types.OperationResult, error) {
+	f.validateCalled = true
 	if f.runErr != nil {
 		return types.OperationResult{}, f.runErr
 	}
@@ -253,14 +254,18 @@ func (f *fakeOperationRunner) RunWithPayload(_ context.Context, _ types.Operatio
 
 // fakePayloadMinter records mint calls and returns the subject credential unmodified
 type fakePayloadMinter struct {
-	lastSubject types.CredentialSubject
-	mintErr     error
+	lastSubject   types.CredentialSubject
+	returnPayload *types.CredentialPayload
+	mintErr       error
 }
 
 func (f *fakePayloadMinter) MintPayload(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
 	f.lastSubject = subject
 	if f.mintErr != nil {
 		return types.CredentialPayload{}, f.mintErr
+	}
+	if f.returnPayload != nil {
+		return *f.returnPayload, nil
 	}
 	return subject.Credential, nil
 }

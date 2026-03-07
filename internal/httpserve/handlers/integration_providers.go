@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/utils/rout"
@@ -18,20 +19,21 @@ import (
 
 // ListIntegrationProviders returns declarative metadata about available third-party providers
 func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	if h.IntegrationRegistry == nil {
-		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
-	catalog := h.IntegrationRegistry.ProviderMetadataCatalog()
+	reg := h.IntegrationRuntime.Registry()
+	catalog := reg.ProviderMetadataCatalog()
 	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
 
 	for providerType, meta := range catalog {
-		spec, ok := h.IntegrationRegistry.Config(providerType)
+		spec, ok := reg.Config(providerType)
 		if !ok {
 			continue
 		}
 
-		entry := buildIntegrationProviderMetadata(providerType, spec, meta, h.IntegrationRegistry)
+		entry := buildIntegrationProviderMetadata(providerType, spec, meta, reg)
 		result = append(result, entry)
 	}
 
@@ -81,7 +83,7 @@ func providerTags(spec config.ProviderSpec) []string {
 }
 
 // buildIntegrationProviderMetadata constructs provider metadata for API responses
-func buildIntegrationProviderMetadata(providerType types.ProviderType, spec config.ProviderSpec, meta types.ProviderConfig, registry ProviderRegistry) openapi.IntegrationProviderMetadata {
+func buildIntegrationProviderMetadata(providerType types.ProviderType, spec config.ProviderSpec, meta types.ProviderConfig, reg *registry.Registry) openapi.IntegrationProviderMetadata {
 	entry := openapi.IntegrationProviderMetadata{
 		Name:                   defaultProviderName(providerType, spec.Name),
 		DisplayName:            meta.DisplayName,
@@ -121,8 +123,8 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 		}
 	}
 
-	if registry != nil {
-		if descriptors := registry.OperationDescriptors(providerType); len(descriptors) > 0 {
+	if reg != nil {
+		if descriptors := reg.OperationDescriptors(providerType); len(descriptors) > 0 {
 			entry.Operations = make([]openapi.IntegrationOperationMetadata, 0, len(descriptors))
 			for _, descriptor := range descriptors {
 				entry.Operations = append(entry.Operations, openapi.IntegrationOperationMetadata{

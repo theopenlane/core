@@ -36,9 +36,6 @@ import (
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
-	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -192,26 +189,6 @@ func WithAuth() ServerOption {
 		// add oauth providers for social login
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 
-		// add oauth providers for integrations (separate config)
-		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
-		s.Config.Handler.IntegrationGitHubApp = s.Config.Settings.IntegrationGitHubApp
-		if (s.Config.Settings.IntegrationOauthProvider.Enabled || s.Config.Settings.IntegrationGitHubApp.Enabled) && s.Config.Handler.IntegrationRegistry == nil {
-			integrationRegistry, err := registry.NewRegistry(context.Background(), s.Config.Settings.IntegrationProviders)
-			if err != nil {
-				log.Panic().Err(err).Msg("failed to build integration provider registry")
-			}
-			if s.Config.Settings.IntegrationGitHubApp.Enabled {
-				if err := applyGitHubAppRuntimeConfig(context.Background(), integrationRegistry,
-					s.Config.Settings.IntegrationGitHubApp.AppSlug,
-					s.Config.Settings.IntegrationGitHubApp.AppID,
-					s.Config.Settings.IntegrationGitHubApp.PrivateKey); err != nil {
-					log.Panic().Err(err).Msg("failed to apply github app runtime config")
-				}
-			}
-
-			s.Config.Handler.IntegrationRegistry = integrationRegistry
-		}
-
 		// add auth middleware
 		opts := getAuthOptions(s)
 
@@ -254,23 +231,6 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 	return opts
 }
 
-func applyGitHubAppRuntimeConfig(ctx context.Context, integrationRegistry *registry.Registry, appSlug, appID, privateKey string) error {
-	spec, ok := integrationRegistry.Config(githubprovider.TypeGitHubApp)
-	if !ok {
-		return errors.New("github app provider config not found")
-	}
-	if spec.GitHubApp == nil {
-		spec.GitHubApp = &integrationconfig.GitHubAppSpec{}
-	}
-	if appSlug != "" {
-		spec.GitHubApp.AppSlug = appSlug
-	}
-	spec.GitHubApp.AppID = appID
-	spec.GitHubApp.PrivateKey = privateKey
-
-	return integrationRegistry.UpsertProvider(ctx, spec, githubprovider.AppBuilder())
-}
-
 // WithReadyChecks adds readiness checks to the server
 func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j riverqueue.JobClient) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
@@ -308,12 +268,15 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
 			WithWorkflowsConfig(s.Config.Settings.Workflows).
-			WithIntegrationMetadataSource(s.Config.Handler.IntegrationRegistry).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
 			WithAuthOptions(getAuthOptions(s)...)
+
+		if rt := s.Config.Handler.IntegrationRuntime; rt != nil {
+			r = r.WithIntegrationMetadataSource(rt.Registry())
+		}
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

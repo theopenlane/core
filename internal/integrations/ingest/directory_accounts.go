@@ -3,7 +3,6 @@ package ingest
 import (
 	"context"
 
-	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -14,11 +13,6 @@ import (
 
 type directoryAccountIngestContext struct {
 	schemaIngestContext
-}
-
-// SupportsDirectoryAccountIngest reports whether default or configured mappings exist
-func SupportsDirectoryAccountIngest(provider integrationtypes.ProviderType, config openapi.IntegrationConfig, mappingIndex integrationtypes.MappingIndex) bool {
-	return supportsSchemaIngest(mappingIndex, provider, config, mappingSchemaDirectoryAccount)
 }
 
 // newDirectoryAccountIngestContext prepares shared state for ingest runs

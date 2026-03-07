@@ -8,8 +8,8 @@ var (
 
 	// ErrKeystoreRequired indicates the keystore dependency is missing.
 	ErrKeystoreRequired = errors.New("integrations: keystore required")
-	// ErrSessionStoreRequired indicates the session store dependency is missing.
-	ErrSessionStoreRequired = errors.New("integrations: session store required")
+	// ErrAuthStateStoreRequired indicates the authorization state store dependency is missing.
+	ErrAuthStateStoreRequired = errors.New("integrations: auth state store required")
 	// ErrProviderNotFound signals the requested provider does not exist in the registry.
 	ErrProviderNotFound = errors.New("integrations: provider not found")
 	// ErrProviderConfigNotFound signals the requested provider config metadata is unavailable.

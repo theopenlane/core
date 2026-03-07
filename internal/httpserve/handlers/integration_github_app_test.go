@@ -6,12 +6,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/utils/rout"
 )
 
 // TestValidateGitHubAppConfig verifies required configuration errors and success cases.
 func TestValidateGitHubAppConfig(t *testing.T) {
-	valid := IntegrationGitHubAppConfig{
+	valid := integrationruntime.GitHubAppConfig{
 		Enabled:       true,
 		AppSlug:       "openlane",
 		AppID:         "12345",
@@ -21,33 +22,33 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 
 	cases := []struct {
 		name      string
-		cfg       IntegrationGitHubAppConfig
+		cfg       integrationruntime.GitHubAppConfig
 		wantErr   error
 		wantField string
 	}{
 		{
 			name:    "disabled",
-			cfg:     IntegrationGitHubAppConfig{},
+			cfg:     integrationruntime.GitHubAppConfig{},
 			wantErr: ErrProviderDisabled,
 		},
 		{
 			name:      "missing slug",
-			cfg:       IntegrationGitHubAppConfig{Enabled: true, AppID: valid.AppID, PrivateKey: valid.PrivateKey, WebhookSecret: valid.WebhookSecret},
+			cfg:       integrationruntime.GitHubAppConfig{Enabled: true, AppID: valid.AppID, PrivateKey: valid.PrivateKey, WebhookSecret: valid.WebhookSecret},
 			wantField: "appSlug",
 		},
 		{
 			name:      "missing app id",
-			cfg:       IntegrationGitHubAppConfig{Enabled: true, AppSlug: valid.AppSlug, PrivateKey: valid.PrivateKey, WebhookSecret: valid.WebhookSecret},
+			cfg:       integrationruntime.GitHubAppConfig{Enabled: true, AppSlug: valid.AppSlug, PrivateKey: valid.PrivateKey, WebhookSecret: valid.WebhookSecret},
 			wantField: "appId",
 		},
 		{
 			name:      "missing private key",
-			cfg:       IntegrationGitHubAppConfig{Enabled: true, AppSlug: valid.AppSlug, AppID: valid.AppID, WebhookSecret: valid.WebhookSecret},
+			cfg:       integrationruntime.GitHubAppConfig{Enabled: true, AppSlug: valid.AppSlug, AppID: valid.AppID, WebhookSecret: valid.WebhookSecret},
 			wantField: "privateKey",
 		},
 		{
 			name:      "missing webhook secret",
-			cfg:       IntegrationGitHubAppConfig{Enabled: true, AppSlug: valid.AppSlug, AppID: valid.AppID, PrivateKey: valid.PrivateKey},
+			cfg:       integrationruntime.GitHubAppConfig{Enabled: true, AppSlug: valid.AppSlug, AppID: valid.AppID, PrivateKey: valid.PrivateKey},
 			wantField: "webhookSecret",
 		},
 		{
@@ -59,7 +60,7 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 	for _, tc := range cases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			h := &Handler{IntegrationGitHubApp: tc.cfg}
+			h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(tc.cfg, integrationruntime.OAuthConfig{})}
 			err := h.validateGitHubAppConfig()
 			switch {
 			case tc.wantField != "":
@@ -79,7 +80,10 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 
 // TestGitHubAppInstallURL verifies install URL construction and missing slug errors.
 func TestGitHubAppInstallURL(t *testing.T) {
-	h := &Handler{IntegrationGitHubApp: IntegrationGitHubAppConfig{AppSlug: "openlane"}}
+	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
+		integrationruntime.GitHubAppConfig{AppSlug: "openlane"},
+		integrationruntime.OAuthConfig{},
+	)}
 
 	installURL, err := h.githubAppInstallURL("state-value")
 	assert.NoError(t, err)
@@ -93,7 +97,10 @@ func TestGitHubAppInstallURL(t *testing.T) {
 
 // TestGitHubAppInstallURLMissingSlug verifies missing slug errors use field helpers.
 func TestGitHubAppInstallURLMissingSlug(t *testing.T) {
-	h := &Handler{}
+	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
+		integrationruntime.GitHubAppConfig{},
+		integrationruntime.OAuthConfig{},
+	)}
 
 	_, err := h.githubAppInstallURL("state")
 	assert.Error(t, err)

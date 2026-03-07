@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/integrations/providers/schematest"
+	"github.com/theopenlane/core/internal/testutils/integrations/schematest"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 

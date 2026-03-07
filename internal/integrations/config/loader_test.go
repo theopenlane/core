@@ -5,8 +5,6 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -90,30 +88,5 @@ func TestFSLoader_LoadIncludesInactiveSpecs(t *testing.T) {
 	}
 	if spec.Active != nil && *spec.Active {
 		t.Fatalf("expected inactive provider, got active=true")
-	}
-}
-
-// TestToProviderConfigs verifies provider specs are converted into provider configs
-func TestToProviderConfigs(t *testing.T) {
-	specs := map[types.ProviderType]ProviderSpec{
-		types.ProviderType("github"): {
-			Name:        "github",
-			DisplayName: "GitHub",
-			AuthType:    types.AuthKindOAuth2,
-			Active:      lo.ToPtr(true),
-		},
-	}
-
-	configs := ToProviderConfigs(specs)
-	if len(configs) != 1 {
-		t.Fatalf("expected one config, got %d", len(configs))
-	}
-
-	cfg, ok := configs[types.ProviderType("github")]
-	if !ok {
-		t.Fatalf("expected github config")
-	}
-	if cfg.DisplayName != "GitHub" {
-		t.Fatalf("expected display name to propagate, got %q", cfg.DisplayName)
 	}
 }

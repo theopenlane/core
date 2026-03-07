@@ -91,6 +91,7 @@ func sanitizeDescriptors[T any](provider types.ProviderType, descriptors []T, is
 	return out
 }
 
+// sanitizeIngestContracts normalizes the schema in ingest contracts and filters out invalid entries
 func sanitizeIngestContracts(contracts []types.IngestContract) []types.IngestContract {
 	return lo.FilterMap(contracts, func(contract types.IngestContract, _ int) (types.IngestContract, bool) {
 		contract.Schema = types.NormalizeMappingSchema(contract.Schema)

@@ -1,18 +1,16 @@
 package handlers
 
 import (
-	"context"
 	"errors"
-	"maps"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
+	"github.com/theopenlane/core/internal/integrations/activation"
 	intauth "github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -43,8 +41,8 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	if h.IntegrationRegistry == nil {
-		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
+	if h.IntegrationRuntime == nil {
+		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
 	providerType := types.ProviderTypeFromString(providerKey)
@@ -52,7 +50,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	spec, ok := h.IntegrationRegistry.Config(providerType)
+	spec, ok := h.IntegrationRuntime.Registry().Config(providerType)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -84,25 +82,30 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, fieldErrs[0], openapiCtx)
 	}
 
-	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerType, attrs); err != nil {
+	if _, err := h.IntegrationRuntime.Activation().Configure(requestCtx, activation.ConfigureRequest{
+		OrgID:        orgID,
+		Provider:     providerType,
+		ProviderData: attrs,
+		Validate:     true,
+	}); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error persisting credential configuration")
 
 		switch {
-		case errors.Is(err, ErrProviderHealthCheckFailed):
-			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
-		case errors.Is(err, errIntegrationOperationsNotConfigured):
-			return h.InternalServerError(ctx, errIntegrationOperationsNotConfigured, openapiCtx)
+		case errors.Is(err, activation.ErrHealthCheckFailed):
+			return h.BadRequest(ctx, wrapIntegrationError("validate", ErrProviderHealthCheckFailed), openapiCtx)
+		case errors.Is(err, activation.ErrHealthValidatorRequired):
+			return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 		default:
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 	}
 
-	if record, err := h.IntegrationStore.EnsureIntegration(requestCtx, orgID, providerType); err == nil {
+	if record, err := h.IntegrationRuntime.Store().EnsureIntegration(requestCtx, orgID, providerType); err == nil {
 		if err := h.updateIntegrationProviderMetadata(requestCtx, record.ID, providerType); err != nil {
-			logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
+			logx.FromContext(requestCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
-	} else {
-		logx.FromContext(requestCtx).Warn().Err(err).Str("provider", string(providerType)).Msg("failed to ensure integration record for metadata update")
 	}
 
 	out := openapi.IntegrationConfigResponse{
@@ -111,47 +114,4 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	return h.Success(ctx, out)
-}
-
-// persistCredentialConfiguration saves the provider credential configuration for the organization
-func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID string, provider types.ProviderType, data map[string]any) error {
-	if err := h.verifyIntegrationCredentialRuntime(); err != nil {
-		return err
-	}
-
-	payload, err := types.NewCredentialBuilder(provider).
-		With(
-			types.WithCredentialKind(types.CredentialKindMetadata),
-			types.WithCredentialSet(models.CredentialSet{
-				ProviderData: maps.Clone(data),
-			}),
-		).
-		Build()
-	if err != nil {
-		return err
-	}
-
-	minted, err := h.IntegrationRegistry.MintPayload(ctx, types.CredentialSubject{
-		Provider:   provider,
-		OrgID:      orgID,
-		Credential: payload,
-	})
-	if err != nil {
-		return err
-	}
-
-	health, err := h.IntegrationOperations.RunWithPayload(ctx, types.OperationRequest{
-		OrgID:    orgID,
-		Provider: provider,
-		Name:     types.OperationHealthDefault,
-	}, minted)
-	if err != nil {
-		return err
-	}
-	if health.Status != types.OperationStatusOK {
-		return ErrProviderHealthCheckFailed
-	}
-
-	_, err = h.IntegrationStore.SaveCredential(ctx, orgID, payload)
-	return err
 }

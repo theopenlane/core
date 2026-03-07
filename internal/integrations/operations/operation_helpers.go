@@ -9,9 +9,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// OperationFailure builds a failed operation result with optional contextual details.
-// When err is non-nil it is automatically added under the "error" key unless the
-// caller already provided one.
+// OperationFailure builds a failed operation result with optional contextual details
 func OperationFailure(summary string, err error, details any) (types.OperationResult, error) {
 	if err != nil {
 		detailMap := map[string]any{}
@@ -35,7 +33,7 @@ func OperationFailure(summary string, err error, details any) (types.OperationRe
 	}, err
 }
 
-// OperationSuccess builds a successful operation result.
+// OperationSuccess builds a successful operation result
 func OperationSuccess(summary string, details any) types.OperationResult {
 	return types.OperationResult{
 		Status:  types.OperationStatusOK,
@@ -44,15 +42,17 @@ func OperationSuccess(summary string, details any) types.OperationResult {
 	}
 }
 
+// encodeOperationDetails safely encodes operation details to JSON
 func encodeOperationDetails(details any) json.RawMessage {
 	raw, err := jsonx.ToRawMessage(details)
 	if err != nil {
 		return nil
 	}
+
 	return raw
 }
 
-// HealthOperation builds a standard health check descriptor.
+// HealthOperation builds a standard health check descriptor
 func HealthOperation(name types.OperationName, description string, client types.ClientName, run types.OperationFunc) types.OperationDescriptor {
 	return types.OperationDescriptor{
 		Name:        name,
@@ -66,7 +66,7 @@ func HealthOperation(name types.OperationName, description string, client types.
 // DefaultSampleSize is the standard number of sample items returned in operation results
 const DefaultSampleSize = 5
 
-// HealthCheckRunner creates a health check operation function using the common pattern.
+// HealthCheckRunner creates a health check operation function a the common shared generic pattern
 func HealthCheckRunner[T any](extractor auth.TokenExtractor, endpoint string, failureMsg string, resultFn func(T) (string, any)) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 		client, token, err := auth.ClientAndToken(input, extractor)

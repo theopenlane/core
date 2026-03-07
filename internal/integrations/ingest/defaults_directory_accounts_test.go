@@ -53,8 +53,8 @@ func (s *stubMappingIndex) DefaultMapping(provider integrationtypes.ProviderType
 	return spec, ok
 }
 
-// TestSupportsDirectoryAccountIngestGoogleWorkspace verifies Google Workspace default mappings are enabled
-func TestSupportsDirectoryAccountIngestGoogleWorkspace(t *testing.T) {
+// TestSupportsSchemaIngestDirectoryAccountGoogleWorkspace verifies Google Workspace default mappings are enabled.
+func TestSupportsSchemaIngestDirectoryAccountGoogleWorkspace(t *testing.T) {
 	index := &stubMappingIndex{
 		dirAccProviders: map[integrationtypes.ProviderType]map[string]integrationtypes.MappingSpec{
 			googleworkspaceprovider.TypeGoogleWorkspace: {
@@ -63,11 +63,11 @@ func TestSupportsDirectoryAccountIngestGoogleWorkspace(t *testing.T) {
 		},
 	}
 
-	require.True(t, SupportsDirectoryAccountIngest(googleworkspaceprovider.TypeGoogleWorkspace, openapi.IntegrationConfig{}, index))
+	require.True(t, supportsSchemaIngest(index, googleworkspaceprovider.TypeGoogleWorkspace, openapi.IntegrationConfig{}, integrationtypes.MappingSchemaDirectoryAccount))
 }
 
-// TestSupportsDirectoryAccountIngestOverride verifies directory account overrides enable ingest for custom providers
-func TestSupportsDirectoryAccountIngestOverride(t *testing.T) {
+// TestSupportsSchemaIngestDirectoryAccountOverride verifies directory-account overrides enable ingest for custom providers.
+func TestSupportsSchemaIngestDirectoryAccountOverride(t *testing.T) {
 	config := openapi.IntegrationConfig{
 		MappingOverrides: map[string]openapi.IntegrationMappingOverride{
 			"DirectoryAccount": {
@@ -77,5 +77,5 @@ func TestSupportsDirectoryAccountIngestOverride(t *testing.T) {
 		},
 	}
 
-	require.True(t, SupportsDirectoryAccountIngest("custom", config, nil))
+	require.True(t, supportsSchemaIngest(nil, "custom", config, integrationtypes.MappingSchemaDirectoryAccount))
 }
