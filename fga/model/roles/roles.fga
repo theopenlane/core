@@ -2,12 +2,59 @@ module roles
 
 extend type organization
   relations
-    define compliance_manager: [service]
-    define can_manage_compliance: owner or compliance_manager
-    define control_manager: control_creator
+    # main roles
+    # admin have specific create + view permissions but not always edit access to objects that were created
+    define admin: [user] or admin from parent
+    # member role gives view access to objects that are organization-wide or inherited from the organization, but not edit access
+    define member: [user] or owner or admin or member from parent
+    # super_admin role has full access to all objects and permissions, it is equivalent to the owner except no access to delete the organization itself
+    define super_admin: [user] or super_admin from parent
+    # owner should be able to have full access to all objects in the system that are organization owned. The only exception would be user specific objects like their own user object or personal access tokens.
+    define owner: [user] or owner from parent
 
-    define group_manager: [service]
-    define can_manage_groups: owner or group_manager
+    # auditor role with access to:
+    # - controls + subcontrols (view)
+    # - programs (view)
+    # - evidence (view + create)
+    # - policies (view )
+    # - procedures (view)
+    # - reviews (edit)
+    # - comments (create) or view by parent
+    # - discussions (create) or view by parent
+    # - tasks (create) or view by parent
+    # - children of evidence, e.g. vulnerabilities, findings, etc. (view)
+    define auditor: [user]
 
-    define trust_center_admin: [user]
-    define can_manage_trust_center: trust_center_admin or owner
+    # has admin access to all compliance features
+    # controls, subcontrols, programs, policies, procedures, reviews, findings, vulnerabilities, risks, action plans, narratives, exposures, and registry
+    define compliance_manager: [service, user, group#member]
+    define can_manage_compliance: compliance_manager or full_access
+
+    # has admin access to all risk + exposure features (risks, vulnerabilities, scans)
+    define risk_manager: [service, user, group#member]
+    define can_manage_risk: risk_manager or full_access
+
+    # has admin access to all policies and procedures features
+    define policy_manager: [service, user, group#member]
+    define can_manage_policies: policy_manager or full_access
+
+    # has admin access to all registry features (assets, entities, identity holders)
+    define registry_manager: [service, user, group#member]
+    define can_manage_registry: registry_manager or full_access
+
+    # has admin access to group management features
+    define group_manager: [service, user, group#member]
+    define can_manage_groups: group_manager or full_access
+
+    # has admin access to all trust center features
+    define trust_center_manager: [service, user, group#member]
+    define can_manage_trust_center: trust_center_manager or full_access
+
+    # has admin access to workflows and integrations
+    define workflow_manager: [service, user, group#member]
+    define can_manage_workflows: workflow_manager or full_access
+
+    # has admin access to all campaign an assessment features
+    # by default all org admins and above should have default access to manage campaigns
+    define campaign_manager: [service, user, group#member]
+    define can_manage_campaigns: campaign_manager or admin

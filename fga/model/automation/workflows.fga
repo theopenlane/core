@@ -1,8 +1,5 @@
 module automation
 
-
-
-
 # workflow definitions can be created by org admins or users in groups with create access
 type workflow_definition
   relations

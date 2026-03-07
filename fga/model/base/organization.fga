@@ -5,11 +5,6 @@ module base
 # or define their own specific access
 type organization
   relations
-    # main roles
-    define admin: [user] or admin from parent
-    define member: [user] or owner or admin or member from parent
-    define super_admin: [user] or super_admin from parent
-    define owner: [user] or owner from parent
     # parent inheritance
     define parent: [organization]
     # organization policies to restrict access
@@ -30,7 +25,6 @@ type organization
     define user_in_context: [user]
 
     # Additional organization level permission definitions
-
     define can_view_service: [service]
     define can_edit_service: [service]
 
