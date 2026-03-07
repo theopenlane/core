@@ -77,19 +77,26 @@ func main() {
 		// schema uses these definitions in practice, just that they are defined in the model and available for use in the schema's policy
 		canViewRelations := []string{fmt.Sprintf("can_edit_%s", fgaType)}
 		canEditRelations := []string{fmt.Sprintf("can_delete_%s", fgaType)}
+		canDeleteRelations := []string{}
 		creatorRelations := []string{fmt.Sprintf("%s_creator", fgaType)}
 		additionalRelations, ok := parentObjectMap[fgaType]
 		if ok {
 			for _, r := range additionalRelations {
 				canViewRelations = append(canViewRelations, fmt.Sprintf("can_view_%s", r))
 				canEditRelations = append(canEditRelations, fmt.Sprintf("can_edit_%s", r))
+				canDeleteRelations = append(canDeleteRelations, fmt.Sprintf("can_delete_%s", r))
 				creatorRelations = append(creatorRelations, fmt.Sprintf("%s_creator", r))
 			}
 		}
 
 		buf.WriteString(fmt.Sprintf("    define can_view_%s: [service, user] or %s\n", fgaType, strings.Join(canViewRelations, " or ")))
 		buf.WriteString(fmt.Sprintf("    define can_edit_%s: [service, user] or %s\n", fgaType, strings.Join(canEditRelations, " or ")))
-		buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user]\n", fgaType))
+
+		if len(canDeleteRelations) > 0 {
+			buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user] or %s\n", fgaType, strings.Join(canDeleteRelations, " or ")))
+		} else {
+			buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user]\n", fgaType))
+		}
 
 		if typeName.canCreateAccess {
 			buf.WriteString(fmt.Sprintf("    define %s_creator: [group#member]\n", fgaType))

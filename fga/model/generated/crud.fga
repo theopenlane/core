@@ -161,11 +161,11 @@ extend type organization
 
     define can_view_group_membership: [service, user] or can_edit_group_membership or can_view_group
     define can_edit_group_membership: [service, user] or can_delete_group_membership or can_edit_group
-    define can_delete_group_membership: [service, user]
+    define can_delete_group_membership: [service, user] or can_delete_group
 
     define can_view_group_setting: [service, user] or can_edit_group_setting or can_view_group
     define can_edit_group_setting: [service, user] or can_delete_group_setting or can_edit_group
-    define can_delete_group_setting: [service, user]
+    define can_delete_group_setting: [service, user] or can_delete_group
 
     define can_view_hush: [service, user] or can_edit_hush
     define can_edit_hush: [service, user] or can_delete_hush
@@ -269,7 +269,7 @@ extend type organization
 
     define can_view_org_membership: [service, user] or can_edit_org_membership or can_view_organization
     define can_edit_org_membership: [service, user] or can_delete_org_membership or can_edit_organization
-    define can_delete_org_membership: [service, user]
+    define can_delete_org_membership: [service, user] or can_delete_organization
 
     define can_view_org_module: [service, user] or can_edit_org_module
     define can_edit_org_module: [service, user] or can_delete_org_module
@@ -293,7 +293,7 @@ extend type organization
 
     define can_view_organization_setting: [service, user] or can_edit_organization_setting or can_view_organization
     define can_edit_organization_setting: [service, user] or can_delete_organization_setting or can_edit_organization
-    define can_delete_organization_setting: [service, user]
+    define can_delete_organization_setting: [service, user] or can_delete_organization
 
     define can_view_password_reset_token: [service, user] or can_edit_password_reset_token
     define can_edit_password_reset_token: [service, user] or can_delete_password_reset_token
@@ -323,7 +323,7 @@ extend type organization
 
     define can_view_program_membership: [service, user] or can_edit_program_membership or can_view_program
     define can_edit_program_membership: [service, user] or can_delete_program_membership or can_edit_program
-    define can_delete_program_membership: [service, user]
+    define can_delete_program_membership: [service, user] or can_delete_program
 
     define can_view_remediation: [service, user] or can_edit_remediation
     define can_edit_remediation: [service, user] or can_delete_remediation
@@ -369,7 +369,7 @@ extend type organization
 
     define can_view_subcontrol: [service, user] or can_edit_subcontrol or can_view_control
     define can_edit_subcontrol: [service, user] or can_delete_subcontrol or can_edit_control
-    define can_delete_subcontrol: [service, user]
+    define can_delete_subcontrol: [service, user] or can_delete_control
     define subcontrol_creator: [group#member]
     define can_create_subcontrol: can_edit or subcontrol_creator or control_creator
 
