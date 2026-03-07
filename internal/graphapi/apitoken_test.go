@@ -8,9 +8,11 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -114,7 +116,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 			input: testclient.CreateAPITokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
-				Scopes:      []string{"read", "write"},
+				Scopes:      []string{"read:evidence", "write:evidence"},
 			},
 		},
 		{
@@ -245,7 +247,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 			name:    "happy path, add scope",
 			tokenID: token.ID,
 			input: testclient.UpdateAPITokenInput{
-				Scopes: []string{"write"},
+				Scopes: []string{"write:evidence"},
 			},
 			ctx: testUser1.UserCtx,
 		},
@@ -345,7 +347,7 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 
 func TestLastUsedAPIToken(t *testing.T) {
 	// create new API token
-	token := (&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:evidence", "read:api_token"}}).MustNew(testUser1.UserCtx, t)
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetAPITokenByID(testUser1.UserCtx, token.ID)
@@ -366,4 +368,171 @@ func TestLastUsedAPIToken(t *testing.T) {
 	out, err := graphClient.GetAPITokenByID(context.Background(), token.ID)
 	assert.NilError(t, err)
 	assert.Check(t, !out.APIToken.LastUsedAt.IsZero())
+}
+
+func TestAPITokenScopeEnforcement(t *testing.T) {
+	orgUser := suite.userBuilder(context.Background(), t)
+	orgCtx := auth.NewTestContextWithOrgID(orgUser.ID, orgUser.OrganizationID)
+
+	// create scoped tokens (read-only vs write)
+	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:organization", "read:group"}}).MustNew(orgCtx, t)
+	writeToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"write:group"}}).MustNew(orgCtx, t)
+
+	makeClient := func(token string) *testclient.TestClient {
+		authHeader := testclient.Authorization{
+			BearerToken: token,
+		}
+
+		c, err := testutils.TestClientWithAuth(
+			suite.client.db,
+			suite.client.objectStore,
+			testclient.WithCredentials(authHeader),
+		)
+		requireNoError(t, err)
+
+		return c
+	}
+
+	readClient := makeClient(readToken.Token)
+	writeClient := makeClient(writeToken.Token)
+
+	// read-only scope can fetch org details, this query includes groups so the token must have read:group scope as well
+	_, err := readClient.GetOrganizationByID(context.Background(), orgUser.OrganizationID)
+	assert.NilError(t, err)
+
+	// read-only scope cannot create a group (requires edit)
+	_, err = readClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
+		Name: gofakeit.AppName(),
+	})
+	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+
+	// write scope can create a group
+	groupResp, err := writeClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
+		Name: gofakeit.AppName(),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, groupResp != nil)
+	assert.Check(t, groupResp.CreateGroup.Group.ID != "")
+
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupResp.CreateGroup.Group.ID}}).MustDelete(orgCtx, t)
+	(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, IDs: []string{readToken.ID, writeToken.ID}}).MustDelete(orgCtx, t)
+}
+
+func TestAPITokenObjectScopeTuples(t *testing.T) {
+	orgUser := suite.userBuilder(context.Background(), t)
+	orgCtx := auth.NewTestContextWithOrgID(orgUser.ID, orgUser.OrganizationID)
+
+	evidence := (&EvidenceBuilder{client: suite.client}).MustNew(orgCtx, t)
+
+	var tokensToCleanup []string
+
+	defer (&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID}}).MustDelete(orgCtx, t)
+	defer func() {
+		if len(tokensToCleanup) > 0 {
+			(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, IDs: tokensToCleanup}).MustDelete(orgCtx, t)
+		}
+	}()
+
+	makeTokenClient := func(scopes []string) (*testclient.APIToken, *testclient.TestClient) {
+		resp, err := suite.client.api.CreateAPIToken(orgCtx, testclient.CreateAPITokenInput{
+			Name:   gofakeit.AppName(),
+			Scopes: scopes,
+		})
+		assert.NilError(t, err)
+
+		token := resp.CreateAPIToken.APIToken
+		tokensToCleanup = append(tokensToCleanup, token.ID)
+
+		authHeader := testclient.Authorization{
+			BearerToken: token.Token,
+		}
+
+		client, err := testutils.TestClientWithAuth(
+			suite.client.db,
+			suite.client.objectStore,
+			testclient.WithCredentials(authHeader),
+		)
+		assert.NilError(t, err)
+
+		apiToken := &testclient.APIToken{
+			ID:          token.ID,
+			Name:        token.Name,
+			Description: token.Description,
+			Token:       token.Token,
+			Scopes:      token.Scopes,
+			ExpiresAt:   token.ExpiresAt,
+			OwnerID:     token.OwnerID,
+			LastUsedAt:  token.LastUsedAt,
+		}
+
+		return apiToken, client
+	}
+
+	listScopedOrgIDs := func(tokenID string, relation string) []string {
+		resp, err := suite.client.db.Authz.ListObjectsRequest(context.Background(), fgax.ListRequest{
+			SubjectID:   tokenID,
+			SubjectType: auth.ServiceSubjectType,
+			Relation:    relation,
+			ObjectType:  generated.TypeOrganization,
+		})
+		assert.NilError(t, err)
+
+		ids, err := fgax.GetEntityIDs(resp)
+		assert.NilError(t, err)
+
+		return ids
+	}
+
+	viewRelation := fgamodel.NormalizeScope("read:evidence")
+	editRelation := fgamodel.NormalizeScope("write:evidence")
+
+	t.Run("read-only evidence scope", func(t *testing.T) {
+		token, client := makeTokenClient([]string{"read:evidence", "read:file", "read:control", "read:task", "read:subcontrol"})
+
+		ids := listScopedOrgIDs(token.ID, viewRelation)
+		assert.Check(t, lo.Contains(ids, orgUser.OrganizationID))
+
+		ids = listScopedOrgIDs(token.ID, editRelation)
+		assert.Check(t, !lo.Contains(ids, orgUser.OrganizationID))
+
+		_, err := client.GetEvidenceByID(context.Background(), evidence.ID)
+		assert.NilError(t, err)
+
+		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
+			Name: lo.ToPtr(gofakeit.Word()),
+		}, nil)
+		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+	})
+
+	t.Run("scope addition and removal update tuples", func(t *testing.T) {
+		token, client := makeTokenClient([]string{"read:evidence", "read:file", "read:control"})
+
+		assert.Check(t, lo.Contains(listScopedOrgIDs(token.ID, viewRelation), orgUser.OrganizationID))
+		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
+
+		_, err := suite.client.api.UpdateAPIToken(orgCtx, token.ID, testclient.UpdateAPITokenInput{
+			AppendScopes: []string{"write:evidence"},
+		})
+		assert.NilError(t, err)
+
+		assert.Check(t, lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
+
+		updatedName := gofakeit.Word()
+		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
+			Name: &updatedName,
+		}, nil)
+		assert.NilError(t, err)
+
+		_, err = suite.client.api.UpdateAPIToken(orgCtx, token.ID, testclient.UpdateAPITokenInput{
+			Scopes: []string{"read:evidence"},
+		})
+		assert.NilError(t, err)
+
+		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
+
+		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
+			Name: lo.ToPtr(gofakeit.Word()),
+		}, nil)
+		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+	})
 }

@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/stoewer/go-strcase"
@@ -14,12 +15,24 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+const (
+	CanCreatePrefix = "can_create_"
+)
+
 // CheckGroupBasedObjectCreationAccess is a rule that returns allow decision if user has
 // access to create the given object in the organization
 func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
 		if m.Op() != generated.OpCreate {
 			return privacy.Skipf("mutation is not a create operation, skipping")
+		}
+
+		// Check API token scope first if applicable
+		op := m.Op()
+		if err := CheckAPITokenScope(ctx, m.Type(), "", &op); err != nil {
+			if !errors.Is(err, privacy.Skip) {
+				return err
+			}
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
@@ -34,7 +47,7 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 		}
 
 		// get the relation, which will be can_create_<object_type>
-		relation := fmt.Sprintf("can_create_%s", strcase.SnakeCase(m.Type()))
+		relation := fmt.Sprintf("%s%s", CanCreatePrefix, strcase.SnakeCase(m.Type()))
 
 		ac := fgax.AccessCheck{
 			SubjectID:   caller.SubjectID,
