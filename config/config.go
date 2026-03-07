@@ -82,12 +82,10 @@ type Config struct {
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
 	// Slack contains settings for Slack notifications
 	Slack Slack `json:"slack" koanf:"slack"`
-	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
-	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationoauthprovider" koanf:"integrationoauthprovider"`
 	// IntegrationProviders contains provider spec overrides keyed by provider name.
 	IntegrationProviders map[string]integrationconfig.ProviderSpec `json:"integrationproviders" koanf:"integrationproviders"`
-	// IntegrationGitHubApp contains configuration for GitHub App integrations
-	IntegrationGitHubApp handlers.IntegrationGitHubAppConfig `json:"integrationgithubapp" koanf:"integrationgithubapp"`
+	// IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication.
+	IntegrationSuccessRedirectURL string `json:"integrationsuccessredirecturl" koanf:"integrationsuccessredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
 	// CampaignWebhook contains webhook configuration for campaign-related email providers

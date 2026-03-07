@@ -266,7 +266,6 @@ func isWhitelistedInternalError(err error) bool {
 		ErrUnableToRegisterJobRunner,
 		ErrObjectStoreUnavailable,
 		ErrFailedToExtractSessionID,
-		errIntegrationRuntimeNotConfigured,
 		errIntegrationWorkflowEngineNotConfigured,
 		errDBClientNotConfigured:
 		return true

@@ -19,10 +19,6 @@ import (
 
 // ListIntegrationProviders returns declarative metadata about available third-party providers
 func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
-	}
-
 	reg := h.IntegrationRuntime.Registry()
 	catalog := reg.ProviderMetadataCatalog()
 	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
@@ -89,7 +85,7 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 		DisplayName:            meta.DisplayName,
 		Category:               meta.Category,
 		Description:            meta.Description,
-		AuthType:               keystore.AuthType(meta.Auth),
+		AuthType:               meta.Auth,
 		AuthStartPath:          spec.AuthStartPath,
 		AuthCallbackPath:       spec.AuthCallbackPath,
 		Active:                 lo.FromPtr(spec.Active),

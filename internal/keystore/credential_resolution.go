@@ -41,9 +41,6 @@ func credentialNeedsRefresh(payload types.CredentialPayload, now func() time.Tim
 	if payload.Token == nil || payload.Token.Expiry.IsZero() {
 		return false
 	}
-	if now == nil {
-		now = time.Now
-	}
 
 	refreshAt := payload.Token.Expiry.Add(-cacheSkew)
 

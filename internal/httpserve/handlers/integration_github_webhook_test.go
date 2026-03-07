@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/prometheus/client_golang/prometheus/testutil"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
@@ -20,7 +21,9 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
+	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // githubWebhookSignature returns a GitHub-compatible HMAC signature for webhook tests
@@ -30,18 +33,24 @@ func githubWebhookSignature(secret string, payload []byte) string {
 	return "sha256=" + hex.EncodeToString(mac.Sum(nil))
 }
 
-// TestGitHubIntegrationWebhookHandlerMissingEventHeader verifies the missing event header response
-func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
-	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
+// fullGitHubAppSpec returns a ProviderSpec with all required GitHub App fields populated.
+func fullGitHubAppSpec() integrationconfig.ProviderSpec {
+	return integrationconfig.ProviderSpec{
+		Name:     string(githubprovider.TypeGitHubApp),
+		Active:   lo.ToPtr(true),
+		AuthType: types.AuthKindGitHubApp,
+		GitHubApp: &integrationconfig.GitHubAppSpec{
 			AppID:         "123",
 			AppSlug:       "openlane",
 			PrivateKey:    "private-key",
 			WebhookSecret: "secret",
 		},
-		integrationruntime.OAuthConfig{},
-	)}
+	}
+}
+
+// TestGitHubIntegrationWebhookHandlerMissingEventHeader verifies the missing event header response
+func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
+	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, fullGitHubAppSpec())}
 
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
 	req.Header.Set("Content-Type", "application/json")
@@ -65,16 +74,7 @@ func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
 
 // TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics verifies empty payload metrics and status
 func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
-	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)}
+	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, fullGitHubAppSpec())}
 
 	req := httptest.NewRequest(http.MethodPost, "/", http.NoBody)
 	req.Header.Set(githubWebhookEventHeader, "dependabot_alert")
@@ -93,16 +93,7 @@ func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
 
 // TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID verifies ping payloads are accepted without installation IDs
 func TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID(t *testing.T) {
-	h := &Handler{IntegrationRuntime: integrationruntime.NewConfigOnly(
-		integrationruntime.GitHubAppConfig{
-			Enabled:       true,
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
-		integrationruntime.OAuthConfig{},
-	)}
+	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, fullGitHubAppSpec())}
 
 	payload := []byte(`{"zen":"keep it logically awesome"}`)
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))
@@ -167,7 +158,7 @@ func TestHandleGitHubInstallationWebhookSendsSlack(t *testing.T) {
 				Type:  "Organization",
 			},
 		},
-	}, &ent.Integration{OwnerID: "openlane-org-id"})
+	}, &ent.Integration{OwnerID: "openlane-org-id"}, "openlane-org-id")
 
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)
@@ -199,7 +190,7 @@ func TestHandleGitHubInstallationWebhookSkipsWhenSlackDisabled(t *testing.T) {
 		Installation: &githubWebhookInstallation{
 			ID: 1234,
 		},
-	}, &ent.Integration{OwnerID: "openlane-org-id"})
+	}, &ent.Integration{OwnerID: "openlane-org-id"}, "openlane-org-id")
 
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)

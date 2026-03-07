@@ -37,13 +37,6 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	orgID := caller.OrganizationID
-	if orgID == "" {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
-	}
-
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
-	}
 
 	providerType := types.ProviderTypeFromString(providerKey)
 	if providerType == types.ProviderUnknown {
@@ -90,14 +83,11 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error persisting credential configuration")
 
-		switch {
-		case errors.Is(err, activation.ErrHealthCheckFailed):
+		if errors.Is(err, activation.ErrHealthCheckFailed) {
 			return h.BadRequest(ctx, wrapIntegrationError("validate", ErrProviderHealthCheckFailed), openapiCtx)
-		case errors.Is(err, activation.ErrHealthValidatorRequired):
-			return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
-		default:
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	if record, err := h.IntegrationRuntime.Store().EnsureIntegration(requestCtx, orgID, providerType); err == nil {

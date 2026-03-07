@@ -16,24 +16,10 @@ func WithIntegrationRuntime(dbClient *ent.Client) ServerOption {
 			return
 		}
 
-		ghApp := s.Config.Settings.IntegrationGitHubApp
-		oauth := s.Config.Settings.IntegrationOauthProvider
-
 		rt, err := integrationruntime.New(integrationruntime.Config{
-			ProviderSpecs: s.Config.Settings.IntegrationProviders,
-			DB:            dbClient,
-			GitHubApp: integrationruntime.GitHubAppConfig{
-				Enabled:            ghApp.Enabled,
-				AppID:              ghApp.AppID,
-				AppSlug:            ghApp.AppSlug,
-				PrivateKey:         ghApp.PrivateKey,
-				WebhookSecret:      ghApp.WebhookSecret,
-				SuccessRedirectURL: ghApp.SuccessRedirectURL,
-			},
-			OAuth: integrationruntime.OAuthConfig{
-				Enabled:            oauth.Enabled,
-				SuccessRedirectURL: oauth.SuccessRedirectURL,
-			},
+			ProviderSpecs:      s.Config.Settings.IntegrationProviders,
+			DB:                 dbClient,
+			SuccessRedirectURL: s.Config.Settings.IntegrationSuccessRedirectURL,
 		})
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to initialize integration runtime")

@@ -16,7 +16,6 @@ import (
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -81,10 +80,6 @@ func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, 
 
 // EnsureIntegration guarantees an integration record exists for the given org/provider pair
 func (s *Store) EnsureIntegration(ctx context.Context, orgID string, provider types.ProviderType) (*ent.Integration, error) {
-	if s == nil {
-		return nil, ErrStoreNotInitialized
-	}
-
 	return s.ensureIntegration(ctx, orgID, provider)
 }
 
@@ -145,17 +140,6 @@ func (s *Store) loadCredentialSubjectForIntegration(ctx context.Context, orgID s
 
 // DeleteIntegration removes the integration and associated secrets for the given org
 func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integrationID string) (types.ProviderType, string, error) {
-	if s == nil || s.db == nil {
-		return types.ProviderUnknown, "", ErrStoreNotInitialized
-	}
-
-	if orgID == "" {
-		return types.ProviderUnknown, "", integrations.ErrOrgIDRequired
-	}
-	if integrationID == "" {
-		return types.ProviderUnknown, "", integrations.ErrIntegrationIDRequired
-	}
-
 	record, err := s.integrationByID(ctx, orgID, types.ProviderUnknown, integrationID, true, false)
 	if err != nil {
 		return types.ProviderUnknown, "", err
@@ -213,10 +197,6 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 }
 
 func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID string, payload types.CredentialPayload, integrationRecord *ent.Integration) (types.CredentialPayload, error) {
-	if integrationRecord == nil {
-		return types.CredentialPayload{}, ErrCredentialNotFound
-	}
-
 	secretName := string(payload.Provider)
 	envelope := payloadToCredentialSet(payload, s.now)
 
@@ -263,10 +243,6 @@ func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID st
 }
 
 func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType, integrationRecord *ent.Integration) (types.CredentialPayload, error) {
-	if integrationRecord == nil {
-		return types.CredentialPayload{}, ErrCredentialNotFound
-	}
-
 	secretName := string(provider)
 	for _, secret := range integrationRecord.Edges.Secrets {
 		if secret.SecretName != secretName {

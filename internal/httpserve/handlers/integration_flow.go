@@ -48,10 +48,6 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
-	}
-
 	providerType, err := parseProviderType(in.Provider)
 	if err != nil {
 		return h.BadRequest(ctx, err, openapiCtx)
@@ -132,10 +128,6 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 	if isRegistrationContext(ctx) {
 		return nil
-	}
-
-	if h.IntegrationRuntime == nil {
-		return h.InternalServerError(ctx, errIntegrationRuntimeNotConfigured, openapiCtx)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -219,7 +211,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.OAuthCfg().SuccessRedirectURL, result.Provider)
+	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.SuccessRedirectURL(), result.Provider)
 	if redirectURL == "" {
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
@@ -268,10 +260,6 @@ func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) st
 
 // RefreshIntegrationToken refreshes an expired OAuth token if refresh token is available.
 func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string, integrationID string) (*openapi.IntegrationToken, error) {
-	if h.IntegrationRuntime == nil {
-		return nil, wrapTokenError("refresh", provider, errIntegrationRuntimeNotConfigured)
-	}
-
 	providerType, err := parseProviderType(provider)
 	if err != nil {
 		return nil, err
