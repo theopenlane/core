@@ -426,6 +426,7 @@ server:
         defaultcontenttype: application/data
         enabled: true
         mimetypesfile: ""
+    notificationlookbackdays: 30
     readheadertimeout: 2000000000
     readtimeout: 15000000000
     secretmanager: ""
