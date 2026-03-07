@@ -18,7 +18,6 @@ tasks:
     dir: ../
     cmds:
       - go run fga/generate/main.go
-      - task: test
 
   validate:
     desc: validates the fga model file

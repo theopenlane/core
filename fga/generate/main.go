@@ -20,7 +20,7 @@ import (
 )
 
 // parentObjectMap is used to add additional object types to the parent type
-// fore example, having edit to a group should also allow edit access to the group settings and group membership, but these are not separate schemas in ent, so they would not be picked up by the generator without this map
+// for example, having edit to a group should also allow edit access to the group settings and group membership, but these are not separate schemas in ent, so they would not be picked up by the generator without this map
 var parentObjectMap = map[string][]string{
 	"group_setting":        {"group"},
 	"group_membership":     {"group"},
@@ -30,7 +30,7 @@ var parentObjectMap = map[string][]string{
 	"subcontrol":           {"control"},
 }
 
-// shcemaInfo holds information about an ent schema that is relevant for generating FGA permissions, such as the name of the schema and whether it has create access rules defined in its Policy function.
+// schemaInfo holds information about an ent schema that is relevant for generating FGA permissions, such as the name of the schema and whether it has create access rules defined in its Policy function.
 type schemaInfo struct {
 	// name is the name of the schema, e.g. "User", "Group", etc.
 	name string
@@ -47,6 +47,7 @@ const (
 	checkCreateAccess = "CheckCreateAccess"
 )
 
+// this generator looks at all the ent schemas and their policy functions to determine the organization-level CRUD access for each schema and generates a crud.fga file that defines the appropriate relations for each schema based on that access. This allows us to have a consistent set of permissions for each schema in FGA that are automatically generated based on the presence of certain rules in the ent policies, which reduces the likelihood of human error in defining permissions and ensures that all schemas have a consistent permission structure in FGA.
 func main() {
 	var (
 		schemaDir = flag.String("schema-dir", "internal/ent/schema", "path to ent schema directory")
