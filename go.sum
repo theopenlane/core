@@ -679,8 +679,8 @@ github.com/theopenlane/gqlgen-plugins v0.14.5 h1:LJwpxaVC/JeXJoDb8wOZOmiSxltSCbx
 github.com/theopenlane/gqlgen-plugins v0.14.5/go.mod h1:fUjo1cVKEAPLhtRrH+iJtrfivCNp+GxVSB/UJgVBDuA=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.26.0 h1:rSZXGUa1Wa0dHYDsluXVw2HVxYdZp+1HE+E5zM8mLSM=
-github.com/theopenlane/iam v0.26.0/go.mod h1:7vdhKQc60CQXLFUT0u/+KZ81lsyeATh7UW3jSBDcuAA=
+github.com/theopenlane/iam v0.27.1 h1:oGXRdge/f6c6NLrxJKgBNI4jh5R3MEHxg609613ki3I=
+github.com/theopenlane/iam v0.27.1/go.mod h1:L1FDG5mamWxEYZvoqKvuVV7/tGJRdaM41DmDB4vRyKc=
 github.com/theopenlane/newman v0.2.2 h1:TADWEoD9vOJonRqPKTUePMudpoRq7w6K7Vdy5RdapWw=
 github.com/theopenlane/newman v0.2.2/go.mod h1:nUyyNIxUIfKpPLf4oO/v1bFp5Ca8P42FG0ObxyEp/pA=
 github.com/theopenlane/oscalot v0.1.0 h1:ExYiMU4Q1ezbGq77sxkgahmfmc46L+2NqB39fg0HXjU=
