@@ -83,6 +83,7 @@ func main() {
 			for _, r := range additionalRelations {
 				canViewRelations = append(canViewRelations, fmt.Sprintf("can_view_%s", r))
 				canEditRelations = append(canEditRelations, fmt.Sprintf("can_edit_%s", r))
+				creatorRelations = append(creatorRelations, fmt.Sprintf("%s_creator", r))
 			}
 		}
 

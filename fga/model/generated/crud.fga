@@ -371,7 +371,7 @@ extend type organization
     define can_edit_subcontrol: [service, user] or can_delete_subcontrol or can_edit_control
     define can_delete_subcontrol: [service, user]
     define subcontrol_creator: [group#member]
-    define can_create_subcontrol: can_edit or subcontrol_creator
+    define can_create_subcontrol: can_edit or subcontrol_creator or control_creator
 
     define can_view_subprocessor: [service, user] or can_edit_subprocessor
     define can_edit_subprocessor: [service, user] or can_delete_subprocessor
