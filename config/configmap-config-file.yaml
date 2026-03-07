@@ -196,6 +196,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid }}
       trustcenterpreviewzoneid: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
+      notificationlookbackdays: {{ .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.entconfig }}
     entconfig:

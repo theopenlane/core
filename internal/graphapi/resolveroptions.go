@@ -92,6 +92,14 @@ func (r Resolver) WithSSEKeepAliveInterval(interval time.Duration) *Resolver {
 	return &r
 }
 
+// WithNotificationLookbackDays sets the number of days of read notifications to pull when starting a notification subscription
+// Unread notifications are always pulled regardless of this setting
+func (r Resolver) WithNotificationLookbackDays(days int) *Resolver {
+	r.notificationLookbackDays = days
+
+	return &r
+}
+
 // WithComplexityLimit adds a complexity limit middleware to the handler
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query

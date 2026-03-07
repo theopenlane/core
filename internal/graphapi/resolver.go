@@ -73,6 +73,9 @@ type subscriptionSettings struct {
 	sseKeepAliveInterval time.Duration
 	// authOptions for authenticating websocket connections
 	authOptions *mwauth.Options
+	// notificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
+	// Unread notifications are always pulled regardless of this setting
+	notificationLookbackDays int
 }
 
 // NewResolver returns a resolver configured with the given ent client
