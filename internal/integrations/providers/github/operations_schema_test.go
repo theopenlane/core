@@ -4,18 +4,27 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/theopenlane/core/internal/testutils/integrations/schematest"
+	"github.com/xeipuuv/gojsonschema"
 )
 
-// TestGitHubRepoConfigSchema verifies the repository config schema has expected fields
+// TestGitHubRepoConfigSchema verifies the repository config schema validates expected payloads.
 func TestGitHubRepoConfigSchema(t *testing.T) {
 	schema := githubRepoConfigSchema
 	require.NotNil(t, schema)
 
-	props := schematest.Properties(t, schema)
-	require.Contains(t, props, "visibility")
-	require.Contains(t, props, "per_page")
+	validResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{"visibility":"private","per_page":50}`)),
+	)
+	require.NoError(t, err)
+	require.True(t, validResult.Valid(), "expected valid config, got errors: %v", validResult.Errors())
+
+	invalidResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{"per_page":"not-an-int"}`)),
+	)
+	require.NoError(t, err)
+	require.False(t, invalidResult.Valid(), "expected invalid config to fail schema validation")
 }
 
 // TestGitHubOrgRepoConfigSchema verifies the organization GraphQL repo config schema has expected fields.
@@ -23,31 +32,52 @@ func TestGitHubOrgRepoConfigSchema(t *testing.T) {
 	schema := githubOrgRepoConfigSchema
 	require.NotNil(t, schema)
 
-	props := schematest.Properties(t, schema)
-	require.Contains(t, props, "organization")
-	require.Contains(t, props, "per_page")
-	require.Contains(t, props, "page_size")
-	require.Contains(t, props, "include_payloads")
+	validResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{
+			"organization": "acme-org",
+			"per_page": 100,
+			"include_payloads": true
+		}`)),
+	)
+	require.NoError(t, err)
+	require.True(t, validResult.Valid(), "expected valid config, got errors: %v", validResult.Errors())
+
+	invalidResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{"organization":101}`)),
+	)
+	require.NoError(t, err)
+	require.False(t, invalidResult.Valid(), "expected invalid config to fail schema validation")
 }
 
-// TestGitHubVulnerabilityConfigSchema verifies the vulnerability schema has expected fields
+// TestGitHubVulnerabilityConfigSchema verifies the vulnerability schema validates expected payloads.
 func TestGitHubVulnerabilityConfigSchema(t *testing.T) {
 	schema := githubVulnerabilityConfigSchema
 	require.NotNil(t, schema)
 
-	props := schematest.Properties(t, schema)
-	for _, key := range []string{
-		"alert_types",
-		"repositories",
-		"visibility",
-		"affiliation",
-		"per_page",
-		"max_repos",
-		"include_payloads",
-		"alert_state",
-		"severity",
-		"ecosystem",
-	} {
-		require.Contains(t, props, key)
-	}
+	validResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{
+			"alert_types": ["dependabot", "code_scanning"],
+			"repositories": ["acme/repo-1", "acme/repo-2"],
+			"visibility": "all",
+			"affiliation": "owner",
+			"per_page": 50,
+			"max_repos": 200,
+			"include_payloads": true,
+			"alert_state": "open",
+			"severity": "critical",
+			"ecosystem": "npm"
+		}`)),
+	)
+	require.NoError(t, err)
+	require.True(t, validResult.Valid(), "expected valid config, got errors: %v", validResult.Errors())
+
+	invalidResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{"alert_types":"dependabot"}`)),
+	)
+	require.NoError(t, err)
+	require.False(t, invalidResult.Valid(), "expected invalid config to fail schema validation")
 }

@@ -15,27 +15,24 @@ import (
 )
 
 func TestBuildOktaClient_MissingToken(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	_, err := buildOktaClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrAPITokenMissing)
 }
 
 func TestBuildOktaClient_MissingOrgURL(t *testing.T) {
-	payload := types.CredentialPayload{
-		Data: models.CredentialSet{APIToken: "test-token"},
+	payload := models.CredentialSet{
+		APIToken:     "test-token",
+		ProviderData: json.RawMessage(`{}`),
 	}
 	_, err := buildOktaClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, ErrCredentialsMissing)
 }
 
 func TestBuildOktaClient_Success(t *testing.T) {
-	payload := types.CredentialPayload{
-		Data: models.CredentialSet{
-			APIToken: "test-token",
-			ProviderData: map[string]any{
-				"orgUrl": "https://example.okta.com",
-			},
-		},
+	payload := models.CredentialSet{
+		APIToken:     "test-token",
+		ProviderData: json.RawMessage(`{"orgUrl":"https://example.okta.com"}`),
 	}
 	instance, err := buildOktaClient(context.Background(), payload, json.RawMessage(nil))
 	require.NoError(t, err)
@@ -63,13 +60,9 @@ func TestResolveOktaClient_PooledClient(t *testing.T) {
 
 func TestResolveOktaClient_BuildsFromCredential(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Data: models.CredentialSet{
-				APIToken: "test-token",
-				ProviderData: map[string]any{
-					"orgUrl": "https://example.okta.com",
-				},
-			},
+		Credential: models.CredentialSet{
+			APIToken:     "test-token",
+			ProviderData: json.RawMessage(`{"orgUrl":"https://example.okta.com"}`),
 		},
 	}
 	result, err := resolveOktaClient(input)
@@ -85,8 +78,9 @@ func TestResolveOktaClient_MissingToken(t *testing.T) {
 
 func TestResolveOktaClient_MissingOrgURL(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Data: models.CredentialSet{APIToken: "test-token"},
+		Credential: models.CredentialSet{
+			APIToken:     "test-token",
+			ProviderData: json.RawMessage(`{}`),
 		},
 	}
 	_, err := resolveOktaClient(input)

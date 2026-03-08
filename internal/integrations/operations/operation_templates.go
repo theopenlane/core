@@ -1,16 +1,19 @@
 package operations
 
 import (
+	"encoding/json"
+
 	"github.com/samber/lo"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // OperationTemplate captures a stored configuration and optional override keys
 type OperationTemplate struct {
 	// Config is the base configuration for the operation
-	Config map[string]any
+	Config json.RawMessage
 	// AllowedOverrides contains keys that may be overridden at runtime
 	AllowedOverrides map[string]struct{}
 }
@@ -33,41 +36,56 @@ func OperationTemplateFor(config *openapi.IntegrationConfig, operation string) (
 	return operationTemplateFromConfig(raw)
 }
 
-// ApplyOperationTemplate merges a template with optional overrides
-func ApplyOperationTemplate(template OperationTemplate, overrides map[string]any) (map[string]any, error) {
-	result := mapx.DeepCloneMapAny(template.Config)
-
+// ApplyOperationTemplate merges a template with optional JSON overrides
+func ApplyOperationTemplate(template OperationTemplate, overrides json.RawMessage) (json.RawMessage, error) {
 	if len(overrides) == 0 {
-		return result, nil
+		return jsonx.CloneRawMessage(template.Config), nil
 	}
 
 	if len(template.AllowedOverrides) == 0 {
 		return nil, ErrOperationTemplateOverridesNotAllowed
 	}
 
-	for key, value := range overrides {
+	var overrideMap map[string]any
+	if err := json.Unmarshal(overrides, &overrideMap); err != nil {
+		return nil, err
+	}
+
+	for key := range overrideMap {
 		if _, ok := template.AllowedOverrides[key]; !ok {
 			return nil, ErrOperationTemplateOverrideNotAllowed
 		}
-		if result == nil {
-			result = map[string]any{}
-		}
-		result[key] = value
 	}
 
-	return result, nil
+	var baseMap map[string]any
+	if len(template.Config) > 0 {
+		if err := json.Unmarshal(template.Config, &baseMap); err != nil {
+			return nil, err
+		}
+	}
+
+	if baseMap == nil {
+		baseMap = map[string]any{}
+	}
+
+	for key, value := range overrideMap {
+		baseMap[key] = value
+	}
+
+	return json.Marshal(baseMap)
 }
 
-// ResolveOperationConfig merges stored templates with optional overrides
-func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string, overrides map[string]any) (map[string]any, error) {
+// ResolveOperationConfig merges stored templates with optional JSON overrides
+func ResolveOperationConfig(config *openapi.IntegrationConfig, operation string, overrides json.RawMessage) (json.RawMessage, error) {
 	if template, ok := OperationTemplateFor(config, operation); ok {
 		return ApplyOperationTemplate(template, overrides)
 	}
+
 	if len(overrides) == 0 {
 		return nil, nil
 	}
 
-	return mapx.DeepCloneMapAny(overrides), nil
+	return jsonx.CloneRawMessage(overrides), nil
 }
 
 // parseOverrideKeys normalizes and deduplicates override keys
@@ -84,14 +102,14 @@ func parseOverrideKeys(values []string) map[string]struct{} {
 
 // operationTemplateFromConfig converts stored template config into an OperationTemplate
 func operationTemplateFromConfig(template openapi.IntegrationOperationTemplate) (OperationTemplate, bool) {
-	config := mapx.DeepCloneMapAny(template.Config)
 	overrides := parseOverrideKeys(template.AllowOverrides)
-	if config == nil && overrides == nil {
+	if len(template.Config) == 0 && overrides == nil {
 		return OperationTemplate{}, false
 	}
 
+	config := jsonx.CloneRawMessage(template.Config)
 	if config == nil {
-		config = map[string]any{}
+		config = json.RawMessage("{}")
 	}
 
 	return OperationTemplate{

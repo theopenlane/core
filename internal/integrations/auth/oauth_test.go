@@ -7,21 +7,19 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"golang.org/x/oauth2"
-
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/models"
 )
 
 func TestOAuthTokenFromPayload_Missing(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	if _, err := OAuthTokenFromPayload(payload); !errors.Is(err, ErrOAuthTokenMissing) {
 		t.Fatalf("expected ErrOAuthTokenMissing, got %v", err)
 	}
 }
 
 func TestOAuthTokenFromPayload_EmptyAccess(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: ""},
+	payload := models.CredentialSet{
+		OAuthRefreshToken: "refresh-token",
 	}
 	if _, err := OAuthTokenFromPayload(payload); !errors.Is(err, ErrAccessTokenEmpty) {
 		t.Fatalf("expected ErrAccessTokenEmpty, got %v", err)
@@ -29,8 +27,8 @@ func TestOAuthTokenFromPayload_EmptyAccess(t *testing.T) {
 }
 
 func TestOAuthTokenFromPayload_Success(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: "token"},
+	payload := models.CredentialSet{
+		OAuthAccessToken: "token",
 	}
 	token, err := OAuthTokenFromPayload(payload)
 	if err != nil {
@@ -42,12 +40,12 @@ func TestOAuthTokenFromPayload_Success(t *testing.T) {
 }
 
 func TestAPITokenFromPayload(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	if _, err := APITokenFromPayload(payload); !errors.Is(err, ErrAPITokenMissing) {
 		t.Fatalf("expected ErrAPITokenMissing, got %v", err)
 	}
 
-	payload.Data.APIToken = "  token "
+	payload.APIToken = "  token "
 	token, err := APITokenFromPayload(payload)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)

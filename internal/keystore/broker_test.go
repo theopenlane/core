@@ -4,8 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/oauth2"
-
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -22,12 +20,12 @@ func TestBrokerGetCachedPurgesExpiredEntries(t *testing.T) {
 	broker := &Broker{
 		cache: map[cacheKey]cachedCredential{
 			expiredKey: {
-				payload: credentialWithExpiry(provider, now.Add(-time.Minute), "expired"),
-				expires: now.Add(-time.Second),
+				credential: credentialWithExpiry(now.Add(-time.Minute), "expired"),
+				expires:    now.Add(-time.Second),
 			},
 			validKey: {
-				payload: credentialWithExpiry(provider, now.Add(time.Hour), "valid"),
-				expires: now.Add(time.Minute),
+				credential: credentialWithExpiry(now.Add(time.Hour), "valid"),
+				expires:    now.Add(time.Minute),
 			},
 		},
 		maxCacheEntries: 10,
@@ -38,8 +36,8 @@ func TestBrokerGetCachedPurgesExpiredEntries(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected valid cache hit")
 	}
-	if payload.Data.APIToken != "valid" {
-		t.Fatalf("expected valid cached payload, got %q", payload.Data.APIToken)
+	if payload.credential.APIToken != "valid" {
+		t.Fatalf("expected valid cached payload, got %q", payload.credential.APIToken)
 	}
 
 	if len(broker.cache) != 1 {
@@ -62,9 +60,9 @@ func TestBrokerSetCachedEvictsOldestWhenCapacityReached(t *testing.T) {
 		now:             func() time.Time { return now },
 	}
 
-	broker.setCached("org-1", provider, "", credentialWithExpiry(provider, now.Add(5*time.Minute), "one"))
-	broker.setCached("org-2", provider, "", credentialWithExpiry(provider, now.Add(10*time.Minute), "two"))
-	broker.setCached("org-3", provider, "", credentialWithExpiry(provider, now.Add(15*time.Minute), "three"))
+	broker.setCached("org-1", provider, "", credentialSnapshot{credential: credentialWithExpiry(now.Add(5*time.Minute), "one")})
+	broker.setCached("org-2", provider, "", credentialSnapshot{credential: credentialWithExpiry(now.Add(10*time.Minute), "two")})
+	broker.setCached("org-3", provider, "", credentialSnapshot{credential: credentialWithExpiry(now.Add(15*time.Minute), "three")})
 
 	if len(broker.cache) != 2 {
 		t.Fatalf("expected cache size to remain bounded at 2, got %d", len(broker.cache))
@@ -81,16 +79,11 @@ func TestBrokerSetCachedEvictsOldestWhenCapacityReached(t *testing.T) {
 	}
 }
 
-func credentialWithExpiry(provider types.ProviderType, expiry time.Time, token string) types.CredentialPayload {
-	return types.CredentialPayload{
-		Provider: provider,
-		Kind:     types.CredentialKindOAuthToken,
-		Data: models.CredentialSet{
-			APIToken: token,
-		},
-		Token: &oauth2.Token{
-			AccessToken: token,
-			Expiry:      expiry,
-		},
+func credentialWithExpiry(expiry time.Time, token string) models.CredentialSet {
+	payload := models.CredentialSet{
+		APIToken:         token,
+		OAuthAccessToken: token,
 	}
+	payload.OAuthExpiry = &expiry
+	return payload
 }

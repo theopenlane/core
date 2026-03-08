@@ -241,8 +241,8 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInst
 		}
 	}
 	require.NotNil(t, githubAppProvider, "expected githubapp provider in response")
-	require.NotNil(t, githubAppProvider.GitHubApp, "expected githubApp metadata")
-	assert.Equal(t, "openlane-test-app", githubAppProvider.GitHubApp.AppSlug)
+	require.NotNil(t, githubAppProvider.EnvironmentCredentials, "expected environmentCredentials for githubapp")
+	assert.Contains(t, string(githubAppProvider.EnvironmentCredentials), "openlane-test-app")
 	assert.Equal(t, "/v1/integrations/github/app/install", githubAppProvider.AuthStartPath)
 	assert.Equal(t, "/v1/integrations/github/app/callback", githubAppProvider.AuthCallbackPath)
 	assert.Equal(t, "GitHub App integration", githubAppProvider.Description)

@@ -18,7 +18,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
-	"golang.org/x/oauth2"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
@@ -32,6 +31,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	credentialmodels "github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -458,15 +458,13 @@ func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext
 	}, nil
 }
 
-func (p *testOAuthProvider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	token := &oauth2.Token{
-		AccessToken:  "minted-access-token",
-		RefreshToken: "minted-refresh-token",
-		Expiry:       time.Now().Add(time.Hour),
-	}
-	return types.NewCredentialBuilder(subject.Provider).
-		With(types.WithOAuthToken(token)).
-		Build()
+func (p *testOAuthProvider) Mint(_ context.Context, _ types.CredentialMintRequest) (credentialmodels.CredentialSet, error) {
+	expiry := time.Now().Add(time.Hour)
+	return credentialmodels.CredentialSet{
+		OAuthAccessToken:  "minted-access-token",
+		OAuthRefreshToken: "minted-refresh-token",
+		OAuthExpiry:       &expiry,
+	}, nil
 }
 
 type testAuthSession struct {
@@ -487,15 +485,13 @@ func (s *testAuthSession) AuthURL() string {
 	return s.authURL
 }
 
-func (s *testAuthSession) Finish(context.Context, string) (types.CredentialPayload, error) {
-	token := &oauth2.Token{
-		AccessToken:  "test-access-token",
-		RefreshToken: "test-refresh-token",
-		Expiry:       time.Now().Add(time.Hour),
-	}
-	return types.NewCredentialBuilder(s.provider).
-		With(types.WithOAuthToken(token)).
-		Build()
+func (s *testAuthSession) Finish(context.Context, string) (credentialmodels.CredentialSet, error) {
+	expiry := time.Now().Add(time.Hour)
+	return credentialmodels.CredentialSet{
+		OAuthAccessToken:  "test-access-token",
+		OAuthRefreshToken: "test-refresh-token",
+		OAuthExpiry:       &expiry,
+	}, nil
 }
 
 // mockStripeClient creates a new stripe client with mock backend

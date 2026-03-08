@@ -73,6 +73,12 @@ func (l *FSLoader) Load() (map[types.ProviderType]ProviderSpec, error) {
 			return nil, &SchemaVersionError{Path: fullPath, Version: spec.SchemaVersion}
 		}
 
+		authKind := spec.AuthType.Normalize()
+		if !authKind.IsKnown() {
+			return nil, &AuthTypeError{Path: fullPath, Value: string(spec.AuthType)}
+		}
+		spec.AuthType = authKind
+
 		pt := spec.ProviderType()
 
 		specs[pt] = spec

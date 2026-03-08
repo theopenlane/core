@@ -2,6 +2,7 @@ package azuresecuritycenter
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
@@ -58,22 +59,12 @@ func resolveAzureSecurityClient(_ context.Context, input types.OperationInput) (
 		return nil, err
 	}
 
-	subscriptionID, _ := input.Credential.Data.ProviderData["subscriptionId"].(string)
-	if subscriptionID == "" {
-		return nil, ErrSubscriptionIDMissing
-	}
-
-	cred := staticAzureCredential{token: token}
-
-	client, err := armsecurity.NewPricingsClient(cred, nil)
-	if err != nil {
+	var meta azureSubscriptionMetadata
+	if err := json.Unmarshal(input.Credential.ProviderData, &meta); err != nil {
 		return nil, err
 	}
 
-	return &azurePricingsClient{
-		client: client,
-		scope:  fmt.Sprintf("%s%s", azureSubscriptionScopePrefix, subscriptionID),
-	}, nil
+	return newAzurePricingsClient(token, meta.SubscriptionID)
 }
 
 // runAzureSecurityHealth verifies access by fetching Defender pricing data.

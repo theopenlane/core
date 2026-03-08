@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/zitadel/oidc/v3/pkg/oidc"
-
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -27,7 +25,7 @@ func oidcOperations(userInfoURL string) []types.OperationDescriptor {
 // runOIDCHealth builds a health check function for OIDC tokens
 func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+		client, err := auth.ResolveAuthenticatedClient(input, auth.OAuthTokenFromPayload, "", nil)
 		if err != nil {
 			return types.OperationResult{}, err
 		}
@@ -40,7 +38,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 		}
 
 		var resp map[string]any
-		if err := auth.GetJSONWithClient(ctx, client, userInfoURL, token, nil, &resp); err != nil {
+		if err := client.GetJSON(ctx, userInfoURL, &resp); err != nil {
 			return operations.OperationFailure("OIDC userinfo call failed", err, nil)
 		}
 
@@ -64,7 +62,7 @@ func runOIDCClaims(_ context.Context, input types.OperationInput) (types.Operati
 	}
 
 	return operations.OperationSuccess("OIDC claims available", struct {
-		Claims *oidc.IDTokenClaims `json:"claims"`
+		Claims map[string]any `json:"claims"`
 	}{
 		Claims: claims,
 	}), nil

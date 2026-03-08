@@ -16,7 +16,8 @@ func Builder() providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: TypeAzureSecurityCenter,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			if spec.AuthType != "" && spec.AuthType != types.AuthKindOAuth2 {
+			authKind := spec.AuthType.Normalize()
+			if authKind != types.AuthKindOAuth2ClientCredentials {
 				return nil, ErrAuthTypeMismatch
 			}
 

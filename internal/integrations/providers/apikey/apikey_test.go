@@ -2,6 +2,7 @@ package apikey
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -9,14 +10,18 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // TestProviderMint verifies API key credentials are normalized and persisted
 func TestProviderMint(t *testing.T) {
+	schema, err := jsonx.ToRawMessage(map[string]any{"type": "object"})
+	require.NoError(t, err)
+
 	spec := config.ProviderSpec{
 		Name:              "test_apikey",
 		AuthType:          types.AuthKindAPIKey,
-		CredentialsSchema: map[string]any{"type": "object"},
+		CredentialsSchema: schema,
 	}
 
 	builder := Builder(types.ProviderType(spec.Name))
@@ -29,25 +34,24 @@ func TestProviderMint(t *testing.T) {
 	_, err = apiProvider.BeginAuth(context.Background(), types.AuthContext{})
 	require.Error(t, err)
 
-	payload, err := apiProvider.Mint(context.Background(), types.CredentialSubject{
-		Provider: types.ProviderType(spec.Name),
-		Credential: mustBuildPayload(t, spec.Name, map[string]any{
-			"apiToken": "secret-token",
-			"alias":    "test",
-		}),
+	payload, err := apiProvider.Mint(context.Background(), types.CredentialMintRequest{
+		Provider:   types.ProviderType(spec.Name),
+		Credential: mustBuildCredential(json.RawMessage(`{"apiToken":"secret-token","alias":"test"}`)),
 	})
 	require.NoError(t, err)
 
-	require.Equal(t, types.CredentialKindAPIKey, payload.Kind)
-	require.Equal(t, "secret-token", payload.Data.APIToken)
-	require.Equal(t, map[string]any{"apiToken": "secret-token", "alias": "test"}, payload.Data.ProviderData)
+	require.Equal(t, "secret-token", payload.APIToken)
+	require.JSONEq(t, `{"alias":"test"}`, string(payload.ProviderData))
 }
 
 func TestProviderMint_NormalizesExistingTokenWithoutMetadata(t *testing.T) {
+	schema, err := jsonx.ToRawMessage(map[string]any{"type": "object"})
+	require.NoError(t, err)
+
 	spec := config.ProviderSpec{
 		Name:              "test_apikey",
 		AuthType:          types.AuthKindAPIKey,
-		CredentialsSchema: map[string]any{"type": "object"},
+		CredentialsSchema: schema,
 	}
 
 	builder := Builder(types.ProviderType(spec.Name))
@@ -57,33 +61,18 @@ func TestProviderMint_NormalizesExistingTokenWithoutMetadata(t *testing.T) {
 	apiProvider, ok := provider.(*Provider)
 	require.True(t, ok)
 
-	payload, err := apiProvider.Mint(context.Background(), types.CredentialSubject{
+	payload, err := apiProvider.Mint(context.Background(), types.CredentialMintRequest{
 		Provider: types.ProviderType(spec.Name),
-		Credential: types.CredentialPayload{
-			Provider: types.ProviderType(spec.Name),
-			Kind:     types.CredentialKindMetadata,
-			Data: models.CredentialSet{
-				APIToken: "secret-token",
-			},
+		Credential: models.CredentialSet{
+			APIToken: "secret-token",
 		},
 	})
 	require.NoError(t, err)
-	require.Equal(t, types.CredentialKindAPIKey, payload.Kind)
-	require.Equal(t, "secret-token", payload.Data.APIToken)
-	require.Equal(t, map[string]any{"apiToken": "secret-token"}, payload.Data.ProviderData)
+	require.Equal(t, "secret-token", payload.APIToken)
+	require.Empty(t, payload.ProviderData)
 }
 
-// mustBuildPayload builds a credential payload for provider metadata tests
-func mustBuildPayload(t *testing.T, provider string, providerData map[string]any) types.CredentialPayload {
-	t.Helper()
-
-	payload, err := types.NewCredentialBuilder(types.ProviderType(provider)).
-		With(
-			types.WithCredentialKind(types.CredentialKindMetadata),
-			types.WithCredentialSet(models.CredentialSet{
-				ProviderData: providerData,
-			}),
-		).Build()
-	require.NoError(t, err)
-	return payload
+// mustBuildCredential builds a credential set for provider metadata tests.
+func mustBuildCredential(providerData json.RawMessage) models.CredentialSet {
+	return models.CredentialSet{ProviderData: providerData}
 }

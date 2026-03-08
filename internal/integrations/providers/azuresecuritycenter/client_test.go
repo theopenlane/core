@@ -7,7 +7,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
@@ -15,27 +14,24 @@ import (
 )
 
 func TestBuildAzureSecurityClient_MissingToken(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	_, err := buildAzureSecurityClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrOAuthTokenMissing)
 }
 
 func TestBuildAzureSecurityClient_MissingSubscriptionID(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: "test-token"},
+	payload := models.CredentialSet{
+		OAuthAccessToken: "test-token",
+		ProviderData:     json.RawMessage(`{}`),
 	}
 	_, err := buildAzureSecurityClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, ErrSubscriptionIDMissing)
 }
 
 func TestBuildAzureSecurityClient_Success(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: "test-token"},
-		Data: models.CredentialSet{
-			ProviderData: map[string]any{
-				"subscriptionId": "sub-123",
-			},
-		},
+	payload := models.CredentialSet{
+		OAuthAccessToken: "test-token",
+		ProviderData:     json.RawMessage(`{"subscriptionId":"sub-123"}`),
 	}
 	instance, err := buildAzureSecurityClient(context.Background(), payload, json.RawMessage(nil))
 	require.NoError(t, err)
@@ -58,13 +54,9 @@ func TestResolveAzureSecurityClient_PooledClient(t *testing.T) {
 
 func TestResolveAzureSecurityClient_BuildsFromCredential(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Token: &oauth2.Token{AccessToken: "test-token"},
-			Data: models.CredentialSet{
-				ProviderData: map[string]any{
-					"subscriptionId": "sub-123",
-				},
-			},
+		Credential: models.CredentialSet{
+			OAuthAccessToken: "test-token",
+			ProviderData:     json.RawMessage(`{"subscriptionId":"sub-123"}`),
 		},
 	}
 	result, err := resolveAzureSecurityClient(context.Background(), input)
@@ -81,8 +73,9 @@ func TestResolveAzureSecurityClient_MissingToken(t *testing.T) {
 
 func TestResolveAzureSecurityClient_MissingSubscriptionID(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Token: &oauth2.Token{AccessToken: "test-token"},
+		Credential: models.CredentialSet{
+			OAuthAccessToken: "test-token",
+			ProviderData:     json.RawMessage(`{}`),
 		},
 	}
 	_, err := resolveAzureSecurityClient(context.Background(), input)

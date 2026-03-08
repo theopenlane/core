@@ -3,6 +3,8 @@ package ingest
 import (
 	"context"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -10,33 +12,6 @@ import (
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
-
-type directoryAccountIngestContext struct {
-	schemaIngestContext
-}
-
-// newDirectoryAccountIngestContext prepares shared state for ingest runs
-func newDirectoryAccountIngestContext(req IngestRequest) (directoryAccountIngestContext, error) {
-	ingestCtx, err := newSchemaIngestContext(req.IntegrationConfig, req.ProviderState, req.MappingIndex, mappingSchemaDirectoryAccount)
-	if err != nil {
-		return directoryAccountIngestContext{}, err
-	}
-
-	return directoryAccountIngestContext{
-		schemaIngestContext: ingestCtx,
-	}, nil
-}
-
-// mapEnvelopeToDirectoryAccount applies mapping rules to a single account envelope
-func (c *directoryAccountIngestContext) mapEnvelopeToDirectoryAccount(ctx context.Context, req IngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
-	return mapIngestEnvelope(ctx, c.schemaIngestContext, envelopeMappingRequest{
-		Provider:        req.Provider,
-		Operation:       req.Operation,
-		OrgID:           req.OrgID,
-		IntegrationID:   req.IntegrationID,
-		OperationConfig: req.OperationConfig,
-	}, mappingSchemaDirectoryAccount, envelope)
-}
 
 // DirectoryAccounts maps provider payloads into directory account inputs and persists them
 func DirectoryAccounts(ctx context.Context, req IngestRequest) (IngestResult, error) {
@@ -46,13 +21,13 @@ func DirectoryAccounts(ctx context.Context, req IngestRequest) (IngestResult, er
 		return result, err
 	}
 
-	ingestCtx, err := newDirectoryAccountIngestContext(req)
+	ingestCtx, err := newSchemaIngestContext(req.IntegrationConfig, req.ProviderState, req.MappingIndex, mappingSchemaDirectoryAccount)
 	if err != nil {
 		return result, err
 	}
 
 	summary, errors := processIngestEnvelopes(req.Envelopes, func(envelope integrationtypes.AlertEnvelope) (bool, bool, error) {
-		mapped, allowed, err := ingestCtx.mapEnvelopeToDirectoryAccount(ctx, req, envelope)
+		mapped, allowed, err := ingestCtx.mapEnvelope(ctx, req, envelope)
 		if err != nil {
 			return false, false, err
 		}
@@ -116,12 +91,10 @@ func upsertDirectoryAccount(ctx context.Context, db *generated.Client, orgID str
 	}
 
 	if input.OwnerID == nil || *input.OwnerID == "" {
-		ownerID := orgID
-		input.OwnerID = &ownerID
+		input.OwnerID = lo.ToPtr(orgID)
 	}
 	if input.IntegrationID == nil || *input.IntegrationID == "" {
-		integrationIDValue := integrationID
-		input.IntegrationID = &integrationIDValue
+		input.IntegrationID = lo.ToPtr(integrationID)
 	}
 
 	if err := db.DirectoryAccount.Create().SetInput(input).Exec(ctx); err != nil {
@@ -131,45 +104,18 @@ func upsertDirectoryAccount(ctx context.Context, db *generated.Client, orgID str
 	return true, nil
 }
 
-// findDirectoryAccountID locates an existing directory account by external ID or canonical email
-func findDirectoryAccountID(ctx context.Context, db *generated.Client, orgID string, integrationID string, externalID string, canonicalEmail *string) (string, error) {
-	queryPredicates := []predicate.DirectoryAccount{
-		directoryaccount.ExternalIDEQ(externalID),
-	}
+// queryDirectoryAccountID queries for a directory account ID using a base predicate plus optional org and integration filters
+func queryDirectoryAccountID(ctx context.Context, db *generated.Client, orgID, integrationID string, base predicate.DirectoryAccount) (string, error) {
+	preds := []predicate.DirectoryAccount{base}
 	if orgID != "" {
-		queryPredicates = append(queryPredicates, directoryaccount.OwnerIDEQ(orgID))
+		preds = append(preds, directoryaccount.OwnerIDEQ(orgID))
 	}
 	if integrationID != "" {
-		queryPredicates = append(queryPredicates, directoryaccount.IntegrationIDEQ(integrationID))
+		preds = append(preds, directoryaccount.IntegrationIDEQ(integrationID))
 	}
 
 	id, err := db.DirectoryAccount.Query().
-		Where(queryPredicates...).
-		Order(generated.Desc(directoryaccount.FieldUpdatedAt)).
-		FirstID(ctx)
-	if err == nil {
-		return id, nil
-	}
-	if !generated.IsNotFound(err) {
-		return "", err
-	}
-
-	if canonicalEmail == nil || *canonicalEmail == "" {
-		return "", nil
-	}
-
-	queryPredicates = []predicate.DirectoryAccount{
-		directoryaccount.CanonicalEmailEQ(*canonicalEmail),
-	}
-	if orgID != "" {
-		queryPredicates = append(queryPredicates, directoryaccount.OwnerIDEQ(orgID))
-	}
-	if integrationID != "" {
-		queryPredicates = append(queryPredicates, directoryaccount.IntegrationIDEQ(integrationID))
-	}
-
-	id, err = db.DirectoryAccount.Query().
-		Where(queryPredicates...).
+		Where(preds...).
 		Order(generated.Desc(directoryaccount.FieldUpdatedAt)).
 		FirstID(ctx)
 	if err == nil {
@@ -180,4 +126,17 @@ func findDirectoryAccountID(ctx context.Context, db *generated.Client, orgID str
 	}
 
 	return "", nil
+}
+
+// findDirectoryAccountID locates an existing directory account by external ID or canonical email
+func findDirectoryAccountID(ctx context.Context, db *generated.Client, orgID string, integrationID string, externalID string, canonicalEmail *string) (string, error) {
+	if id, err := queryDirectoryAccountID(ctx, db, orgID, integrationID, directoryaccount.ExternalIDEQ(externalID)); id != "" || err != nil {
+		return id, err
+	}
+
+	if canonicalEmail == nil || *canonicalEmail == "" {
+		return "", nil
+	}
+
+	return queryDirectoryAccountID(ctx, db, orgID, integrationID, directoryaccount.CanonicalEmailEQ(*canonicalEmail))
 }

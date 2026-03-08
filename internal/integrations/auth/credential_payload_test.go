@@ -1,42 +1,27 @@
 package auth
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"golang.org/x/oauth2"
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
-
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-func TestBuildOAuthCredentialPayload(t *testing.T) {
-	provider := types.ProviderType("oidcgeneric")
-
-	payload, err := BuildOAuthCredentialPayload(
-		provider,
+func TestBuildOAuthCredentialSet(t *testing.T) {
+	credential, err := BuildOAuthCredentialSet(
 		&oauth2.Token{AccessToken: "access-token"},
 		&oidc.IDTokenClaims{TokenClaims: oidc.TokenClaims{Subject: "subject-123"}},
 	)
 	require.NoError(t, err)
-	require.Equal(t, types.CredentialKindOAuthToken, payload.Kind)
-	require.NotNil(t, payload.Token)
-	require.Equal(t, "access-token", payload.Token.AccessToken)
-	require.NotNil(t, payload.Claims)
-	require.Equal(t, "subject-123", payload.Claims.Subject)
+	require.Equal(t, "access-token", credential.OAuthAccessToken)
+	require.Equal(t, "subject-123", credential.Claims["sub"])
 }
 
-func TestBuildAPITokenCredentialPayload(t *testing.T) {
-	provider := types.ProviderType("cloudflare")
-	meta := map[string]any{
-		"apiToken": "token-1",
-		"alias":    "prod",
-	}
-
-	payload, err := BuildAPITokenCredentialPayload(provider, "token-1", meta)
-	require.NoError(t, err)
-	require.Equal(t, types.CredentialKindAPIKey, payload.Kind)
-	require.Equal(t, "token-1", payload.Data.APIToken)
-	require.Equal(t, meta, payload.Data.ProviderData)
+func TestBuildAPITokenCredentialSet(t *testing.T) {
+	credential := BuildAPITokenCredentialSet("token-1", json.RawMessage(`{"apiToken":"token-1","alias":"prod"}`))
+	require.Equal(t, "token-1", credential.APIToken)
+	require.JSONEq(t, `{"apiToken":"token-1","alias":"prod"}`, string(credential.ProviderData))
 }

@@ -2,8 +2,10 @@ package apikey
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 
 	"github.com/theopenlane/core/internal/integrations/config"
@@ -83,24 +85,39 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 	return nil, ErrBeginAuthNotSupported
 }
 
-// Mint materializes a stored API key configuration into a credential payload.
-func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	metadata := auth.CloneMetadata(subject.Credential.Data.ProviderData)
+// Mint materializes a stored API key configuration into a credential set.
+func (p *Provider) Mint(_ context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
+	var metadata map[string]any
+	if len(subject.Credential.ProviderData) > 0 {
+		if err := json.Unmarshal(subject.Credential.ProviderData, &metadata); err != nil {
+			return models.CredentialSet{}, err
+		}
+	}
+
 	token, _ := metadata[p.tokenField].(string)
 	token = strings.TrimSpace(token)
 
 	if token == "" {
-		token = strings.TrimSpace(subject.Credential.Data.APIToken)
+		token = strings.TrimSpace(subject.Credential.APIToken)
 		if token == "" {
 			if len(metadata) == 0 {
-				return types.CredentialPayload{}, ErrProviderMetadataRequired
+				return models.CredentialSet{}, ErrProviderMetadataRequired
 			}
 
-			return types.CredentialPayload{}, ErrTokenFieldRequired
+			return models.CredentialSet{}, ErrTokenFieldRequired
 		}
 	}
 
-	metadata[p.tokenField] = token
+	delete(metadata, p.tokenField)
 
-	return auth.BuildAPITokenCredentialPayload(p.Type(), token, metadata)
+	var providerDataRaw json.RawMessage
+	if len(metadata) > 0 {
+		raw, err := json.Marshal(metadata)
+		if err != nil {
+			return models.CredentialSet{}, err
+		}
+		providerDataRaw = raw
+	}
+
+	return auth.BuildAPITokenCredentialSet(token, providerDataRaw), nil
 }

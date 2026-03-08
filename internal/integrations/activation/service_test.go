@@ -2,9 +2,11 @@ package activation
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -38,7 +40,7 @@ func TestConfigureSkipsPersistOnHealthFailure(t *testing.T) {
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
 		Provider:     provider,
-		ProviderData: map[string]any{"key": "value"},
+		ProviderData: json.RawMessage(`{"key":"value"}`),
 		Validate:     true,
 	})
 	if !errors.Is(err, ErrHealthCheckFailed) {
@@ -58,10 +60,7 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	writer := &fakeCredentialWriter{}
 	runner := &fakeOperationRunner{status: types.OperationStatusOK}
 	minter := &fakePayloadMinter{
-		returnPayload: &types.CredentialPayload{
-			Provider: provider,
-			Kind:     types.CredentialKindOAuthToken,
-		},
+		returnPayload: &models.CredentialSet{OAuthAccessToken: "minted-token"},
 	}
 
 	svc := mustNewService(t, writer, runner, minter)
@@ -69,7 +68,7 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	result, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
 		Provider:     provider,
-		ProviderData: map[string]any{"key": "value"},
+		ProviderData: json.RawMessage(`{"key":"value"}`),
 		Validate:     true,
 	})
 	if err != nil {
@@ -84,8 +83,8 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	if result.HealthResult.Status != types.OperationStatusOK {
 		t.Fatalf("expected health status ok, got %s", result.HealthResult.Status)
 	}
-	if writer.lastPayload.Kind != types.CredentialKindOAuthToken {
-		t.Fatalf("expected minted credential to be persisted, got kind %s", writer.lastPayload.Kind)
+	if writer.lastAuthKind != types.AuthKindOAuth2 {
+		t.Fatalf("expected minted credential to be persisted as oauth2, got kind %s", writer.lastAuthKind)
 	}
 }
 
@@ -104,7 +103,7 @@ func TestConfigureNoValidateSkipsHealthCheck(t *testing.T) {
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
 		Provider:     provider,
-		ProviderData: map[string]any{"key": "value"},
+		ProviderData: json.RawMessage(`{"key":"value"}`),
 		Validate:     false,
 	})
 	if err != nil {
@@ -130,7 +129,7 @@ func TestConfigureMintReceivesBuiltPayload(t *testing.T) {
 
 	svc := mustNewService(t, writer, runner, minter)
 
-	providerData := map[string]any{"serviceAccountKey": "test-key"}
+	providerData := json.RawMessage(`{"region":"us-east-1"}`)
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
 		Provider:     provider,
@@ -140,14 +139,18 @@ func TestConfigureMintReceivesBuiltPayload(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Configure() error = %v", err)
 	}
-	if minter.lastSubject.Provider != provider {
-		t.Fatalf("expected minter to receive provider %s, got %s", provider, minter.lastSubject.Provider)
+	if minter.lastRequest.Provider != provider {
+		t.Fatalf("expected minter to receive provider %s, got %s", provider, minter.lastRequest.Provider)
 	}
-	if minter.lastSubject.OrgID != "org-1" {
-		t.Fatalf("expected minter to receive org-1, got %s", minter.lastSubject.OrgID)
+	if minter.lastRequest.OrgID != "org-1" {
+		t.Fatalf("expected minter to receive org-1, got %s", minter.lastRequest.OrgID)
 	}
-	if minter.lastSubject.Credential.Data.ProviderData["serviceAccountKey"] != "test-key" {
-		t.Fatalf("expected minter to receive provider data, got %v", minter.lastSubject.Credential.Data.ProviderData)
+	if string(minter.lastRequest.Credential.ProviderData) != string(providerData) {
+		t.Fatalf(
+			"expected minter to receive provider data %s, got %s",
+			string(providerData),
+			string(minter.lastRequest.Credential.ProviderData),
+		)
 	}
 }
 
@@ -165,7 +168,7 @@ func TestConfigureOperationsRequiredWhenValidating(t *testing.T) {
 	_, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
 		Provider:     provider,
-		ProviderData: map[string]any{"token": "value"},
+		ProviderData: json.RawMessage(`{"token":"value"}`),
 		Validate:     true,
 	})
 	if !errors.Is(err, ErrHealthValidatorRequired) {
@@ -210,7 +213,7 @@ func TestConfigureRequiresProvider(t *testing.T) {
 }
 
 // mustNewService constructs a Service for tests, panicking on error
-func mustNewService(t *testing.T, writer CredentialWriter, runner HealthValidator, minter PayloadMinter) *Service {
+func mustNewService(t *testing.T, writer CredentialWriter, runner HealthValidator, minter CredentialMinter) *Service {
 	t.Helper()
 
 	svc, err := NewService(writer, runner, minter)
@@ -223,16 +226,18 @@ func mustNewService(t *testing.T, writer CredentialWriter, runner HealthValidato
 
 // fakeCredentialWriter records credential saves
 type fakeCredentialWriter struct {
-	saveCount   int
-	lastPayload types.CredentialPayload
-	saveErr     error
+	saveCount    int
+	lastPayload  models.CredentialSet
+	lastAuthKind types.AuthKind
+	saveErr      error
 }
 
-func (f *fakeCredentialWriter) SaveCredential(_ context.Context, _ string, payload types.CredentialPayload) (types.CredentialPayload, error) {
+func (f *fakeCredentialWriter) SaveCredential(_ context.Context, _ string, _ types.ProviderType, authKind types.AuthKind, payload models.CredentialSet) (models.CredentialSet, error) {
 	if f.saveErr != nil {
-		return types.CredentialPayload{}, f.saveErr
+		return models.CredentialSet{}, f.saveErr
 	}
 	f.saveCount++
+	f.lastAuthKind = authKind
 	f.lastPayload = payload
 	return payload, nil
 }
@@ -244,7 +249,7 @@ type fakeOperationRunner struct {
 	runErr         error
 }
 
-func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string, _ types.ProviderType, _ types.CredentialPayload) (types.OperationResult, error) {
+func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string, _ types.ProviderType, _ models.CredentialSet) (types.OperationResult, error) {
 	f.validateCalled = true
 	if f.runErr != nil {
 		return types.OperationResult{}, f.runErr
@@ -254,18 +259,18 @@ func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string
 
 // fakePayloadMinter records mint calls and returns the subject credential unmodified
 type fakePayloadMinter struct {
-	lastSubject   types.CredentialSubject
-	returnPayload *types.CredentialPayload
+	lastRequest   types.CredentialMintRequest
+	returnPayload *models.CredentialSet
 	mintErr       error
 }
 
-func (f *fakePayloadMinter) MintPayload(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	f.lastSubject = subject
+func (f *fakePayloadMinter) MintCredential(_ context.Context, request types.CredentialMintRequest) (models.CredentialSet, error) {
+	f.lastRequest = request
 	if f.mintErr != nil {
-		return types.CredentialPayload{}, f.mintErr
+		return models.CredentialSet{}, f.mintErr
 	}
 	if f.returnPayload != nil {
 		return *f.returnPayload, nil
 	}
-	return subject.Credential, nil
+	return request.Credential, nil
 }

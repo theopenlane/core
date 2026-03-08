@@ -23,6 +23,7 @@ import (
 	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 )
@@ -43,6 +44,24 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	callbackOp := suite.createImpersonationOperation("HandleGitHubAppInstallCallback", "Handle GitHub App install callback")
 	suite.registerRouteOnce(http.MethodGet, githubAppCallbackPath, callbackOp, suite.h.GitHubAppInstallCallback)
 
+	mockGitHubAPI := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		path := strings.TrimPrefix(req.URL.Path, "/api/v3")
+		switch {
+		case req.Method == http.MethodPost && path == "/app/installations/12345678/access_tokens":
+			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"token":"ghs_test_installation_token","expires_at":"2030-01-01T00:00:00Z"}`))
+		case req.Method == http.MethodGet && path == "/installation/repositories":
+			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+			_, _ = w.Write([]byte(`{"total_count":1,"repositories":[{"id":1,"name":"demo","full_name":"acme/demo","private":false}]}`))
+		default:
+			http.NotFound(w, req)
+		}
+	}))
+	defer mockGitHubAPI.Close()
+
+	privateKey := testRSAPrivateKeyPEM(t)
+
 	restore := suite.withGitHubAppIntegrationRuntime(t, integrationconfig.ProviderSpec{
 		Name:               string(github.TypeGitHubApp),
 		DisplayName:        "GitHub App",
@@ -52,9 +71,10 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 		Visible:            lo.ToPtr(true),
 		SuccessRedirectURL: "https://console.openlane.io/integrations",
 		GitHubApp: &integrationconfig.GitHubAppSpec{
+			BaseURL:       mockGitHubAPI.URL + "/api/v3",
 			AppID:         "123",
 			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
+			PrivateKey:    privateKey,
 			WebhookSecret: "secret",
 		},
 	})
@@ -81,8 +101,9 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	query.Set("installation_id", "12345678")
 	query.Set("state", installResp.State)
 	callbackReq.URL.RawQuery = query.Encode()
-
-	callbackReq.AddCookie(cookies["githubapp_state"])
+	for _, name := range []string{"githubapp_state", "githubapp_org_id", "githubapp_user_id"} {
+		callbackReq.AddCookie(cookies[name])
+	}
 
 	callbackRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
@@ -166,7 +187,9 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	query.Set("installation_id", "12345678")
 	query.Set("state", installResp.State)
 	callbackReq.URL.RawQuery = query.Encode()
-	callbackReq.AddCookie(cookies["githubapp_state"])
+	for _, name := range []string{"githubapp_state", "githubapp_org_id", "githubapp_user_id"} {
+		callbackReq.AddCookie(cookies[name])
+	}
 
 	callbackRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
@@ -186,7 +209,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 		Only(user.UserCtx)
 	require.NoError(t, err)
 
-	providerState, err := integrationRecord.ProviderState.ProviderDataMap(string(github.TypeGitHubApp))
+	providerState, err := jsonx.ToMap(integrationRecord.ProviderState.ProviderData(string(github.TypeGitHubApp)))
 	require.NoError(t, err)
 	require.Equal(t, "123", providerState["appId"])
 	require.Equal(t, "12345678", providerState["installationId"])

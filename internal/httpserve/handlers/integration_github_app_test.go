@@ -43,8 +43,9 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 		{
 			name: "provider disabled",
 			spec: integrationconfig.ProviderSpec{
-				Name:   string(githubprovider.TypeGitHubApp),
-				Active: lo.ToPtr(false),
+				Name:     string(githubprovider.TypeGitHubApp),
+				Active:   lo.ToPtr(false),
+				AuthType: types.AuthKindGitHubApp,
 			},
 			wantErr: ErrProviderDisabled,
 		},

@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/mapx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -176,6 +175,13 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 		return nil
 	}
 
+	if e.gala != nil {
+		err := e.gala.ContextManager().Register(gala.NewKeyCodec("integration_execution", types.IntegrationExecutionContextKey()))
+		if err != nil && !errors.Is(err, gala.ErrContextCodecAlreadyRegistered) {
+			return err
+		}
+	}
+
 	if e.gala == nil || e.integrationListenersRegistered {
 		return nil
 	}
@@ -273,23 +279,15 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		operationKind = operationDescriptor.Kind
 	}
 
-	operationConfig, err := decodeJSONObjectDocument(req.Config)
+	operationConfig, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), req.Config)
 	if err != nil {
 		return IntegrationQueueResult{}, err
 	}
-
-	if merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), operationConfig); err != nil {
-		return IntegrationQueueResult{}, err
-	} else if merged != nil {
-		operationConfig = merged
+	if operationConfig == nil {
+		operationConfig = req.Config
 	}
 
-	scopePayload, err := decodeJSONObjectDocument(req.ScopePayload)
-	if err != nil {
-		return IntegrationQueueResult{}, err
-	}
-
-	scopeAllowed, err := evaluateIntegrationScope(allowCtx, e.scopeEvaluator, req, integrationRecord, provider, operationName, operationConfig, scopePayload)
+	scopeAllowed, err := evaluateIntegrationScope(allowCtx, e.scopeEvaluator, req, integrationRecord, provider, operationName, operationConfig, req.ScopePayload)
 	if err != nil {
 		return IntegrationQueueResult{}, err
 	}
@@ -313,8 +311,14 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		SetOperationKind(integrationRunOperationKind(runType, operationKind)).
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending)
-	if operationConfig != nil {
-		runBuilder.SetOperationConfig(operationConfig)
+	if len(operationConfig) > 0 {
+		var configMap map[string]interface{}
+		if err := json.Unmarshal(operationConfig, &configMap); err != nil {
+			return IntegrationQueueResult{}, err
+		}
+		if configMap != nil {
+			runBuilder.SetOperationConfig(configMap)
+		}
 	}
 
 	runRecord, err := runBuilder.Save(allowCtx)
@@ -341,7 +345,15 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	envelope := integrations.NewIntegrationOperationEnvelope(payload)
-	receipt := workflows.EmitWorkflowEventWithHeaders(ctx, e.gala, integrations.IntegrationOperationRequestedTopic.Name, envelope, envelope.Headers())
+	emitCtx := types.WithIntegrationExecutionContext(ctx, types.IntegrationExecutionContext{
+		OrgID:         orgID,
+		IntegrationID: integrationRecord.ID,
+		Provider:      provider,
+		RunID:         runRecord.ID,
+		Operation:     operationName,
+	})
+
+	receipt := workflows.EmitWorkflowEventWithHeaders(emitCtx, e.gala, integrations.IntegrationOperationRequestedTopic.Name, envelope, envelope.Headers())
 	if receipt.Err != nil {
 		if err := e.client.IntegrationRun.UpdateOneID(runRecord.ID).SetStatus(enums.IntegrationRunStatusFailed).SetError(receipt.Err.Error()).Exec(allowCtx); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("run_id", runRecord.ID).Msg("failed to mark integration run as failed after event emission error")
@@ -488,19 +500,26 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 
 	ingestContracts := operationDescriptor.Ingest
 
-	operationConfig := mapx.DeepCloneMapAny(run.OperationConfig)
+	var operationConfig json.RawMessage
+	if len(run.OperationConfig) > 0 {
+		operationConfig, err = json.Marshal(run.OperationConfig)
+		if err != nil {
+			return err
+		}
+	}
 	if shouldEnsurePayloads(ingestContracts) {
 		operationConfig = operations.EnsureIncludePayloads(operationConfig)
 	}
 
-	var operationConfigDoc json.RawMessage
-	if len(operationConfig) > 0 {
-		if err := jsonx.RoundTrip(operationConfig, &operationConfigDoc); err != nil {
-			return err
-		}
-	}
+	baseOperationCtx := types.WithIntegrationExecutionContext(systemCtx, types.IntegrationExecutionContext{
+		OrgID:         run.OwnerID,
+		IntegrationID: run.IntegrationID,
+		Provider:      provider,
+		RunID:         run.ID,
+		Operation:     operationName,
+	})
 
-	operationCtx, cancel := integrationOperationContext(systemCtx, envelope.TimeoutSeconds)
+	operationCtx, cancel := integrationOperationContext(baseOperationCtx, envelope.TimeoutSeconds)
 	defer cancel()
 
 	result, opErr := e.integrationOperations.Run(operationCtx, types.OperationRequest{
@@ -508,7 +527,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		IntegrationID: run.IntegrationID,
 		Provider:      provider,
 		Name:          operationName,
-		Config:        operationConfigDoc,
+		Config:        operationConfig,
 		Force:         payload.Force,
 		ClientForce:   payload.ClientForce,
 	})
@@ -582,7 +601,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 	}
 
 	if payload.WorkflowInstanceID != "" && payload.WorkflowActionIndex >= 0 {
-		e.emitWorkflowActionCompleted(ctx.Context, envelope, runStatus, errorText)
+		e.emitWorkflowActionCompleted(baseOperationCtx, envelope, runStatus, errorText)
 	}
 
 	if runStatus != enums.IntegrationRunStatusSuccess {
@@ -593,50 +612,32 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 }
 
 // evaluateIntegrationScope evaluates optional scope expressions before queueing integration runs
-func evaluateIntegrationScope(ctx context.Context, evaluator integrationscope.ConditionEvaluator, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig map[string]any, scopePayload map[string]any) (bool, error) {
+func evaluateIntegrationScope(ctx context.Context, evaluator integrationscope.ConditionEvaluator, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig json.RawMessage, scopePayload json.RawMessage) (bool, error) {
 	if evaluator == nil || req.ScopeExpression == "" {
 		return true, nil
 	}
 
-	integrationConfig, err := jsonx.ToMap(integrationRecord.Config)
+	integrationConfigRaw, err := json.Marshal(integrationRecord.Config)
 	if err != nil {
 		return false, err
 	}
 
-	providerState, err := jsonx.ToMap(integrationRecord.ProviderState)
+	providerStateRaw, err := json.Marshal(integrationRecord.ProviderState)
 	if err != nil {
 		return false, err
 	}
 
 	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, integrationscope.ScopeVars{
-		Payload:           mapx.DeepCloneMapAny(scopePayload),
+		Payload:           scopePayload,
 		Resource:          req.ScopeResource,
 		Provider:          provider,
 		Operation:         operationName,
-		Config:            mapx.DeepCloneMapAny(operationConfig),
-		IntegrationConfig: integrationConfig,
-		ProviderState:     providerState,
+		Config:            operationConfig,
+		IntegrationConfig: integrationConfigRaw,
+		ProviderState:     providerStateRaw,
 		OrgID:             req.OrgID,
 		IntegrationID:     integrationRecord.ID,
 	})
-}
-
-// decodeJSONObjectDocument decodes a raw JSON document into a map payload when provided.
-func decodeJSONObjectDocument(raw json.RawMessage) (map[string]any, error) {
-	if len(raw) == 0 {
-		return nil, nil
-	}
-
-	decoded, err := jsonx.ToMap(raw)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(decoded) == 0 {
-		return nil, nil
-	}
-
-	return decoded, nil
 }
 
 // integrationRunOperationKind maps operation descriptors into integration run operation kinds

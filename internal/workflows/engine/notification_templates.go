@@ -278,19 +278,12 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 			}
 		}
 
-		var configDoc json.RawMessage
-		if len(config) > 0 {
-			if err := jsonx.RoundTrip(config, &configDoc); err != nil {
-				return err
-			}
-		}
-
 		_, err = e.integrationOperations.Run(ctx, types.OperationRequest{
 			OrgID:         ownerID,
 			IntegrationID: integrationIDForRecord(selection.Integration),
 			Provider:      selection.Provider,
 			Name:          selection.Operation.Name,
-			Config:        configDoc,
+			Config:        config,
 		})
 		if err != nil {
 			return err
@@ -341,19 +334,12 @@ func (e *WorkflowEngine) dispatchUserNotification(ctx context.Context, ownerID, 
 		}
 	}
 
-	var configDoc json.RawMessage
-	if len(config) > 0 {
-		if err := jsonx.RoundTrip(config, &configDoc); err != nil {
-			return err
-		}
-	}
-
 	_, err = e.integrationOperations.Run(ctx, types.OperationRequest{
 		OrgID:         ownerID,
 		IntegrationID: integrationIDForRecord(integrationRecord),
 		Provider:      provider,
 		Name:          operationName,
-		Config:        configDoc,
+		Config:        config,
 	})
 
 	return err
@@ -465,7 +451,7 @@ func (e *WorkflowEngine) loadNotificationPreference(ctx context.Context, ownerID
 }
 
 // buildNotificationOperationConfig builds the provider operation config for a channel
-func buildNotificationOperationConfig(channel enums.Channel, preference *generated.NotificationPreference, rendered *renderedNotificationTemplate) (map[string]any, error) {
+func buildNotificationOperationConfig(channel enums.Channel, preference *generated.NotificationPreference, rendered *renderedNotificationTemplate) (json.RawMessage, error) {
 	var config map[string]any
 	if preference != nil && len(preference.Config) > 0 {
 		config = mapx.DeepCloneMapAny(preference.Config)
@@ -488,7 +474,6 @@ func buildNotificationOperationConfig(channel enums.Channel, preference *generat
 				config["blocks"] = rendered.Blocks
 			}
 		}
-		return config, nil
 	case enums.ChannelTeams:
 		teamID, channelID := resolveTeamsDestination(preference, config)
 		if teamID != "" {
@@ -516,10 +501,16 @@ func buildNotificationOperationConfig(channel enums.Channel, preference *generat
 				}
 			}
 		}
-		return config, nil
 	default:
 		return nil, ErrNotificationChannelUnsupported
 	}
+
+	out, err := json.Marshal(config)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
 }
 
 // decodeRenderedNotificationBlocks converts rendered template blocks into a structured block list

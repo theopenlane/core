@@ -16,14 +16,22 @@ type CredentialSet struct {
 	SecretAccessKey string `json:"secretAccessKey"`
 	// SessionToken for temporary cloud credentials
 	SessionToken string `json:"sessionToken"`
+	// ClientID for OAuth2 client credential style integrations
+	ClientID string `json:"clientId,omitempty"`
+	// ClientSecret for OAuth2 client credential style integrations
+	ClientSecret string `json:"clientSecret,omitempty"`
+	// ServiceAccountKey for service-account based integrations
+	ServiceAccountKey string `json:"serviceAccountKey,omitempty"`
+	// SubjectToken for workload identity based integrations
+	SubjectToken string `json:"subjectToken,omitempty"`
 	// ProjectID for GCS
 	ProjectID string `json:"projectID"`
 	// AccountID for Cloudflare R2
 	AccountID string `json:"accountID"`
 	// APIToken for Cloudflare R2
 	APIToken string `json:"apiToken"`
-	// ProviderData stores provider-specific metadata or attributes
-	ProviderData map[string]any `json:"providerData,omitempty"`
+	// ProviderData stores provider-specific non-credential metadata or attributes
+	ProviderData json.RawMessage `json:"providerData,omitempty"`
 	// OAuthAccessToken holds the OAuth access token when applicable
 	OAuthAccessToken string `json:"oauthAccessToken,omitempty"`
 	// OAuthRefreshToken holds the OAuth refresh token when applicable
@@ -49,6 +57,18 @@ func (c CredentialSet) String() string {
 	}
 	if c.SessionToken != "" {
 		masked["sessionToken"] = "***"
+	}
+	if c.ClientID != "" {
+		masked["clientID"] = "***"
+	}
+	if c.ClientSecret != "" {
+		masked["clientSecret"] = "***"
+	}
+	if c.ServiceAccountKey != "" {
+		masked["serviceAccountKey"] = "***"
+	}
+	if c.SubjectToken != "" {
+		masked["subjectToken"] = "***"
 	}
 
 	if c.ProjectID != "" {

@@ -12,6 +12,7 @@ import (
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -79,8 +80,10 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	}
 
 	cfg := securityHubFindingsConfig{PageSize: awsSecurityHubDefaultPageSize}
-	if err := operations.DecodeConfig(input.Config, &cfg); err != nil {
-		return types.OperationResult{}, err
+	if len(input.Config) > 0 {
+		if err := json.Unmarshal(input.Config, &cfg); err != nil {
+			return types.OperationResult{}, err
+		}
 	}
 
 	pageSize := cfg.PageSize
@@ -210,7 +213,7 @@ func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (
 }
 
 // buildSecurityHubClient builds a Security Hub client from stored credentials.
-func buildSecurityHubClient(ctx context.Context, payload types.CredentialPayload) (*securityhub.Client, awskit.AWSMetadata, error) {
+func buildSecurityHubClient(ctx context.Context, payload models.CredentialSet) (*securityhub.Client, awskit.AWSMetadata, error) {
 	return buildAWSClient(ctx, payload, newSecurityHubClient)
 }
 

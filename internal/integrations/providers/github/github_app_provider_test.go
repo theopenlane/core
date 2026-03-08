@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/samber/lo"
@@ -15,27 +16,21 @@ import (
 
 // TestGitHubAppInstallationIDFromCredential validates installation ID resolution from payload and provider state.
 func TestGitHubAppInstallationIDFromCredential(t *testing.T) {
-	payload := types.CredentialPayload{
-		Provider: TypeGitHubApp,
-		Data:     models.CredentialSet{ProviderData: map[string]any{}},
-	}
+	payload := models.CredentialSet{ProviderData: json.RawMessage(`{}`)}
 
-	_, err := githubAppInstallationIDFromCredential(payload)
+	_, err := githubAppInstallationIDFromCredential(payload, nil)
 	require.ErrorIs(t, err, ErrInstallationIDMissing)
 
 	providerState := state.IntegrationProviderState{}
-	_, err = providerState.MergeProviderData(string(TypeGitHubApp), map[string]any{
-		"installationId": "789",
-	})
+	_, err = providerState.MergeProviderData(string(TypeGitHubApp), json.RawMessage(`{"installationId":"789"}`))
 	require.NoError(t, err)
 
-	payload.ProviderState = &providerState
-	installationID, err := githubAppInstallationIDFromCredential(payload)
+	installationID, err := githubAppInstallationIDFromCredential(payload, &providerState)
 	require.NoError(t, err)
 	require.Equal(t, "789", installationID)
 
-	payload.Data.ProviderData["installationId"] = "456"
-	installationID, err = githubAppInstallationIDFromCredential(payload)
+	payload.ProviderData = json.RawMessage(`{"installationId":"456"}`)
+	installationID, err = githubAppInstallationIDFromCredential(payload, &providerState)
 	require.NoError(t, err)
 	require.Equal(t, "456", installationID)
 }
@@ -47,9 +42,7 @@ func TestNormalizePrivateKeyEscapedNewlines(t *testing.T) {
 
 func TestResolveMintInputsUsesProviderRuntimeConfigAndProviderState(t *testing.T) {
 	providerState := state.IntegrationProviderState{}
-	_, err := providerState.MergeProviderData(string(TypeGitHubApp), map[string]any{
-		"installationId": "789",
-	})
+	_, err := providerState.MergeProviderData(string(TypeGitHubApp), json.RawMessage(`{"installationId":"789"}`))
 	require.NoError(t, err)
 
 	provider := &appProvider{
@@ -58,11 +51,10 @@ func TestResolveMintInputsUsesProviderRuntimeConfigAndProviderState(t *testing.T
 		privateKey: "line1\nline2",
 	}
 
-	appID, installationID, privateKey, err := provider.resolveMintInputs(types.CredentialPayload{
-		Provider:      TypeGitHubApp,
-		ProviderState: &providerState,
-		Data:          models.CredentialSet{ProviderData: map[string]any{}},
-	})
+	appID, installationID, privateKey, err := provider.resolveMintInputs(
+		models.CredentialSet{ProviderData: json.RawMessage(`{}`)},
+		&providerState,
+	)
 	require.NoError(t, err)
 	require.Equal(t, "123", appID)
 	require.Equal(t, "789", installationID)

@@ -4,24 +4,32 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/theopenlane/core/internal/testutils/integrations/schematest"
+	"github.com/xeipuuv/gojsonschema"
 )
 
-// TestSecurityHubFindingsConfigSchema verifies the Security Hub schema exposes expected fields
+// TestSecurityHubFindingsConfigSchema verifies the Security Hub schema validates expected payloads.
 func TestSecurityHubFindingsConfigSchema(t *testing.T) {
 	schema := securityHubFindingsSchema
 	require.NotNil(t, schema)
 
-	props := schematest.Properties(t, schema)
-	for _, key := range []string{
-		"page_size",
-		"max_findings",
-		"severity",
-		"record_state",
-		"workflow_status",
-		"include_payloads",
-	} {
-		require.Contains(t, props, key)
-	}
+	validResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{
+			"page_size": 25,
+			"max_findings": 100,
+			"severity": "high",
+			"record_state": "ACTIVE",
+			"workflow_status": "NEW",
+			"include_payloads": true
+		}`)),
+	)
+	require.NoError(t, err)
+	require.True(t, validResult.Valid(), "expected valid config, got errors: %v", validResult.Errors())
+
+	invalidResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{"page_size":"not-an-int"}`)),
+	)
+	require.NoError(t, err)
+	require.False(t, invalidResult.Valid(), "expected invalid config to fail schema validation")
 }

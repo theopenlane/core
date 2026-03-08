@@ -6,9 +6,13 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+var defaultObjectSchema = json.RawMessage(`{"type":"object"}`)
 
 // DefaultClientDescriptor returns a descriptor with a default object config schema
 func DefaultClientDescriptor(provider types.ProviderType, name types.ClientName, description string, build types.ClientBuilderFunc) types.ClientDescriptor {
@@ -17,7 +21,7 @@ func DefaultClientDescriptor(provider types.ProviderType, name types.ClientName,
 		Name:         name,
 		Description:  description,
 		Build:        build,
-		ConfigSchema: map[string]any{"type": "object"},
+		ConfigSchema: jsonx.CloneRawMessage(defaultObjectSchema),
 	}
 }
 
@@ -29,14 +33,14 @@ func DefaultClientDescriptors(provider types.ProviderType, name types.ClientName
 }
 
 // TokenClientBuilder returns a ClientBuilderFunc that extracts a token and creates an authenticated HTTP client
-func TokenClientBuilder(extract func(types.CredentialPayload) (string, error), headers map[string]string) types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+func TokenClientBuilder(extract func(models.CredentialSet) (string, error), headers map[string]string) types.ClientBuilderFunc {
+	return func(_ context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 		token, err := extract(payload)
 		if err != nil {
 			return types.EmptyClientInstance(), err
 		}
 
-		return types.NewClientInstance(auth.NewAuthenticatedClient(token, headers)), nil
+		return types.NewClientInstance(auth.NewAuthenticatedClient("", token, headers)), nil
 	}
 }
 

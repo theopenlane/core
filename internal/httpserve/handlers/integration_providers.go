@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"maps"
+	"encoding/json"
 	"sort"
 	"strings"
 
@@ -14,11 +14,12 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // ListIntegrationProviders returns declarative metadata about available third-party providers
-func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
 	reg := h.IntegrationRuntime.Registry()
 	catalog := reg.ProviderMetadataCatalog()
 	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
@@ -78,6 +79,28 @@ func providerTags(spec config.ProviderSpec) []string {
 	return tags
 }
 
+// environmentCredentials marshals the operator-configured credential attributes from the
+// provider spec that are merged with tenant-supplied inputs at runtime. Returns nil when
+// the spec carries no environment credential configuration.
+func environmentCredentials(spec config.ProviderSpec) json.RawMessage {
+	switch {
+	case spec.GitHubApp != nil:
+		b, err := json.Marshal(spec.GitHubApp)
+		if err != nil {
+			return nil
+		}
+		return b
+	case spec.GoogleWorkloadIdentity != nil:
+		b, err := json.Marshal(spec.GoogleWorkloadIdentity)
+		if err != nil {
+			return nil
+		}
+		return b
+	default:
+		return nil
+	}
+}
+
 // buildIntegrationProviderMetadata constructs provider metadata for API responses
 func buildIntegrationProviderMetadata(providerType types.ProviderType, spec config.ProviderSpec, meta types.ProviderConfig, reg *registry.Registry) openapi.IntegrationProviderMetadata {
 	entry := openapi.IntegrationProviderMetadata{
@@ -94,19 +117,18 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 		LogoURL:                meta.LogoURL,
 		DocsURL:                meta.DocsURL,
 		Persistence:            spec.Persistence,
-		GoogleWorkloadIdentity: spec.GoogleWorkloadIdentity,
-		GitHubApp:              spec.GitHubApp,
 		Labels:                 spec.Labels,
-		CredentialsSchema: func() map[string]any {
+		EnvironmentCredentials: environmentCredentials(spec),
+		CredentialsSchema: func() json.RawMessage {
 			if len(meta.Schema) > 0 {
-				return meta.Schema
+				return jsonx.CloneRawMessage(meta.Schema)
 			}
 
-			return spec.CredentialsSchema
+			return jsonx.CloneRawMessage(spec.CredentialsSchema)
 		}(),
 	}
 
-	if spec.OAuth != nil && (spec.AuthType == types.AuthKindOAuth2 || spec.AuthType == types.AuthKindOIDC) {
+	if spec.SupportsInteractiveAuthFlow() {
 		entry.OAuth = &openapi.IntegrationOAuthMetadata{
 			ClientID:    spec.OAuth.ClientID,
 			AuthURL:     spec.OAuth.AuthURL,
@@ -128,7 +150,7 @@ func buildIntegrationProviderMetadata(providerType types.ProviderType, spec conf
 					Kind:         string(descriptor.Kind),
 					Description:  descriptor.Description,
 					Client:       string(descriptor.Client),
-					ConfigSchema: maps.Clone(descriptor.ConfigSchema),
+					ConfigSchema: jsonx.CloneRawMessage(descriptor.ConfigSchema),
 				})
 			}
 		}

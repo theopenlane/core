@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -19,7 +20,7 @@ func awsAuditManagerClientDescriptors() []types.ClientDescriptor {
 }
 
 // pooledAuditManagerClient builds the AWS Audit Manager client for pooling, discarding metadata.
-func pooledAuditManagerClient(ctx context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+func pooledAuditManagerClient(ctx context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 	client, _, err := buildAuditManagerClient(ctx, payload)
 	if err != nil {
 		return types.EmptyClientInstance(), err

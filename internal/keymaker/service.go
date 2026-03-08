@@ -6,6 +6,7 @@ import (
 	"maps"
 	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -20,8 +21,8 @@ type ProviderResolver interface {
 
 // CredentialWriter persists credential payloads produced during activation
 type CredentialWriter interface {
-	SaveCredential(ctx context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error)
-	SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, payload types.CredentialPayload) (types.CredentialPayload, error)
+	SaveCredential(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error)
+	SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error)
 }
 
 // ServiceOptions configure optional service behaviors
@@ -126,7 +127,7 @@ type CompleteResult struct {
 	// IntegrationID identifies the integration record containing the credential
 	IntegrationID string
 	// Credential contains the persisted credential payload
-	Credential types.CredentialPayload
+	Credential models.CredentialSet
 }
 
 // BeginAuthorization starts an OAuth/OIDC transaction with the requested provider
@@ -207,21 +208,19 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 		return CompleteResult{}, integrations.ErrAuthorizationStateExpired
 	}
 
-	payload, err := authState.AuthSession.Finish(ctx, req.Code)
+	credential, err := authState.AuthSession.Finish(ctx, req.Code)
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: finish auth: %w", err)
 	}
 
-	if payload.Provider == types.ProviderUnknown {
-		payload.Provider = authState.Provider
-	}
+	authKind := types.InferAuthKind(credential)
 
-	saveFn := func() (types.CredentialPayload, error) {
+	saveFn := func() (models.CredentialSet, error) {
 		if authState.IntegrationID != "" {
-			return s.keystore.SaveCredentialForIntegration(ctx, authState.OrgID, authState.IntegrationID, payload)
+			return s.keystore.SaveCredentialForIntegration(ctx, authState.OrgID, authState.IntegrationID, authState.Provider, authKind, credential)
 		}
 
-		return s.keystore.SaveCredential(ctx, authState.OrgID, payload)
+		return s.keystore.SaveCredential(ctx, authState.OrgID, authState.Provider, authKind, credential)
 	}
 
 	saved, err := saveFn()

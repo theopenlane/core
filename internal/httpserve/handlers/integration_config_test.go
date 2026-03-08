@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
@@ -72,7 +73,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	assert.Len(t, stored.Edges.Secrets, 1)
 
 	credential := stored.Edges.Secrets[0]
-	assert.Contains(t, credential.CredentialSet.ProviderData, "projectId")
+	assert.Contains(t, string(credential.CredentialSet.ProviderData), "projectId")
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() {
@@ -323,5 +324,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Len(t, stored.Edges.Secrets, 1)
 
 	credential := stored.Edges.Secrets[0]
-	assert.Equal(t, "updated-project", credential.CredentialSet.ProviderData["projectId"])
+	providerData, err := jsonx.ToMap(credential.CredentialSet.ProviderData)
+	require.NoError(t, err)
+	assert.Equal(t, "updated-project", providerData["projectId"])
 }

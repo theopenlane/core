@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -25,9 +26,9 @@ type OperationManager struct {
 type IntegrationCredentialSource interface {
 	CredentialSource
 	// GetForIntegration retrieves credentials scoped to a specific integration.
-	GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error)
+	GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (models.CredentialSet, error)
 	// MintForIntegration refreshes credentials scoped to a specific integration.
-	MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialPayload, error)
+	MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (models.CredentialSet, error)
 }
 
 // OperationManagerOption customizes manager construction
@@ -118,14 +119,14 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 	return result, nil
 }
 
-// RunWithPayload executes the requested operation using the provided credential payload instead of loading from the store
-func (m *OperationManager) RunWithPayload(ctx context.Context, req types.OperationRequest, payload types.CredentialPayload) (types.OperationResult, error) {
+// RunWithCredential executes the requested operation using the provided credential set instead of loading from the store.
+func (m *OperationManager) RunWithCredential(ctx context.Context, req types.OperationRequest, credential models.CredentialSet) (types.OperationResult, error) {
 	descriptor, err := m.resolveRequestDescriptor(req)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	client, err := m.resolveClientFromPayload(ctx, req, descriptor, payload, req.Config)
+	client, err := m.resolveClientFromCredential(ctx, req, descriptor, credential, req.Config)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -133,7 +134,7 @@ func (m *OperationManager) RunWithPayload(ctx context.Context, req types.Operati
 	input := types.OperationInput{
 		OrgID:      req.OrgID,
 		Provider:   req.Provider,
-		Credential: payload,
+		Credential: credential,
 		Client:     client,
 		Config:     append(json.RawMessage(nil), req.Config...),
 	}
@@ -186,16 +187,16 @@ func (m *OperationManager) resolveRequestDescriptor(req types.OperationRequest) 
 }
 
 // ValidateProviderHealth executes the default health operation with a supplied credential payload.
-func (m *OperationManager) ValidateProviderHealth(ctx context.Context, orgID string, provider types.ProviderType, payload types.CredentialPayload) (types.OperationResult, error) {
-	return m.RunWithPayload(ctx, types.OperationRequest{
+func (m *OperationManager) ValidateProviderHealth(ctx context.Context, orgID string, provider types.ProviderType, credential models.CredentialSet) (types.OperationResult, error) {
+	return m.RunWithCredential(ctx, types.OperationRequest{
 		OrgID:    orgID,
 		Provider: provider,
 		Name:     types.OperationHealthDefault,
-	}, payload)
+	}, credential)
 }
 
-// resolveClientFromPayload builds a client from the provided payload when the operation requires one
-func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
+// resolveClientFromCredential builds a client from the provided credential when the operation requires one.
+func (m *OperationManager) resolveClientFromCredential(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, credential models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
 		return types.EmptyClientInstance(), nil
 	}
@@ -204,20 +205,20 @@ func (m *OperationManager) resolveClientFromPayload(ctx context.Context, req typ
 		return types.EmptyClientInstance(), ErrOperationClientManagerRequired
 	}
 
-	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, payload, append(json.RawMessage(nil), config...))
+	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, credential, append(json.RawMessage(nil), config...))
 }
 
 // resolveCredential retrieves or refreshes the credential based on the request flags
-func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (types.CredentialPayload, error) {
+func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (models.CredentialSet, error) {
 	if req.IntegrationID != "" {
 		return resolveCredentialWithPolicy(
 			ctx,
 			req.Force,
 			time.Now,
-			func(callCtx context.Context) (types.CredentialPayload, error) {
+			func(callCtx context.Context) (models.CredentialSet, error) {
 				return m.source.GetForIntegration(callCtx, req.OrgID, req.Provider, req.IntegrationID)
 			},
-			func(callCtx context.Context, _ types.CredentialPayload) (types.CredentialPayload, error) {
+			func(callCtx context.Context, _ models.CredentialSet) (models.CredentialSet, error) {
 				return m.source.MintForIntegration(callCtx, req.OrgID, req.Provider, req.IntegrationID)
 			},
 		)
@@ -227,23 +228,23 @@ func (m *OperationManager) resolveCredential(ctx context.Context, req types.Oper
 		ctx,
 		req.Force,
 		time.Now,
-		func(callCtx context.Context) (types.CredentialPayload, error) {
+		func(callCtx context.Context) (models.CredentialSet, error) {
 			return m.source.Get(callCtx, req.OrgID, req.Provider)
 		},
-		func(callCtx context.Context, _ types.CredentialPayload) (types.CredentialPayload, error) {
+		func(callCtx context.Context, _ models.CredentialSet) (models.CredentialSet, error) {
 			return m.source.Mint(callCtx, req.OrgID, req.Provider)
 		},
 	)
 }
 
 // resolveClient retrieves a client instance if the operation requires one
-func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
+func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor, credential models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 	if descriptor.Client == "" {
 		return types.EmptyClientInstance(), nil
 	}
 
 	if req.IntegrationID != "" {
-		return m.resolveClientFromPayload(ctx, req, descriptor, payload, config)
+		return m.resolveClientFromCredential(ctx, req, descriptor, credential, config)
 	}
 
 	if m.clients == nil {

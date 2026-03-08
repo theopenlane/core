@@ -2,6 +2,7 @@ package microsoftteams
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
 
@@ -10,8 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// teamsRestClient is the package-level REST client for Microsoft Graph API requests.
-var teamsRestClient = auth.RESTClient{BaseURL: "https://graph.microsoft.com/v1.0/"}
+const teamsGraphBaseURL = "https://graph.microsoft.com/v1.0/"
 
 const (
 	teamsHealthOp      types.OperationName = types.OperationHealthDefault
@@ -94,7 +94,7 @@ type teamsMessageSendDetails struct {
 
 // runTeamsSample collects a sample of joined Teams for the authenticated user
 func runTeamsSample(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := auth.ResolveAuthenticatedClient(input, auth.OAuthTokenFromPayload, teamsGraphBaseURL, nil)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -109,7 +109,7 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 		} `json:"value"`
 	}
 
-	if err := teamsRestClient.GetJSON(ctx, client, token, "me/joinedTeams?$top=5", nil, &resp); err != nil {
+	if err := client.GetJSON(ctx, "me/joinedTeams?$top=5", &resp); err != nil {
 		return operations.OperationFailure("Graph joinedTeams failed", err, nil)
 	}
 
@@ -126,14 +126,16 @@ func runTeamsSample(ctx context.Context, input types.OperationInput) (types.Oper
 
 // runTeamsMessageSendOperation posts a message to a Teams channel
 func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	_, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := auth.ResolveAuthenticatedClient(input, auth.OAuthTokenFromPayload, teamsGraphBaseURL, nil)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	cfg, err := operations.Decode[teamsMessageOperationConfig](input.Config)
-	if err != nil {
-		return types.OperationResult{}, err
+	var cfg teamsMessageOperationConfig
+	if len(input.Config) > 0 {
+		if err := json.Unmarshal(input.Config, &cfg); err != nil {
+			return types.OperationResult{}, err
+		}
 	}
 
 	teamID := cfg.TeamID
@@ -170,7 +172,7 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 	var resp struct {
 		ID string `json:"id"`
 	}
-	if err := teamsRestClient.PostJSON(ctx, nil, token, path, payload, &resp); err != nil {
+	if err := client.PostJSON(ctx, path, payload, &resp); err != nil {
 		return operations.OperationFailure("Graph channel message failed", err, nil)
 	}
 

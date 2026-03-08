@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // TestBuildNotificationOperationConfigSlack verifies Slack config generation
@@ -25,11 +26,13 @@ func TestBuildNotificationOperationConfigSlack(t *testing.T) {
 
 	config, err := buildNotificationOperationConfig(enums.ChannelSlack, preference, rendered)
 	require.NoError(t, err)
+	configMap, err := jsonx.ToMap(config)
+	require.NoError(t, err)
 
-	require.Equal(t, "C12345", config["channel"])
-	require.Equal(t, "Body text", config["text"])
-	require.Equal(t, "123.456", config["thread_ts"])
-	require.NotNil(t, config["blocks"])
+	require.Equal(t, "C12345", configMap["channel"])
+	require.Equal(t, "Body text", configMap["text"])
+	require.Equal(t, "123.456", configMap["thread_ts"])
+	require.NotNil(t, configMap["blocks"])
 }
 
 // TestBuildNotificationOperationConfigTeams verifies Teams config generation
@@ -48,12 +51,14 @@ func TestBuildNotificationOperationConfigTeams(t *testing.T) {
 
 	config, err := buildNotificationOperationConfig(enums.ChannelTeams, preference, rendered)
 	require.NoError(t, err)
+	configMap, err := jsonx.ToMap(config)
+	require.NoError(t, err)
 
-	require.Equal(t, "team-1", config["team_id"])
-	require.Equal(t, "channel-2", config["channel_id"])
-	require.Equal(t, "Body text", config["body"])
-	require.Equal(t, "Subject line", config["subject"])
-	require.Equal(t, "html", config["body_format"])
+	require.Equal(t, "team-1", configMap["team_id"])
+	require.Equal(t, "channel-2", configMap["channel_id"])
+	require.Equal(t, "Body text", configMap["body"])
+	require.Equal(t, "Subject line", configMap["subject"])
+	require.Equal(t, "html", configMap["body_format"])
 }
 
 // TestResolveTeamsDestination verifies destination parsing for Teams

@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -36,16 +37,18 @@ type githubOrganizationFailureDetails struct {
 
 // runGitHubOrganizationReposOperation collects organization repositories through the GraphQL API.
 func runGitHubOrganizationReposOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	config, err := operations.Decode[githubOrgRepoOperationConfig](input.Config)
-	if err != nil {
-		return types.OperationResult{}, err
+	var config githubOrgRepoOperationConfig
+	if len(input.Config) > 0 {
+		if err := json.Unmarshal(input.Config, &config); err != nil {
+			return types.OperationResult{}, err
+		}
 	}
 
 	if config.Organization == "" {
 		return types.OperationResult{}, ErrOrganizationRequired
 	}
 
-	client, err := githubGraphQLClientForOperation(input)
+	client, err := githubGraphQLClientForOperation(ctx, input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -199,7 +202,7 @@ func listGitHubOrganizationRepositories(ctx context.Context, client *githubv4.Cl
 }
 
 // githubGraphQLClientForOperation returns a pooled GraphQL client or a token-derived fallback.
-func githubGraphQLClientForOperation(input types.OperationInput) (*githubv4.Client, error) {
+func githubGraphQLClientForOperation(ctx context.Context, input types.OperationInput) (*githubv4.Client, error) {
 	client := githubGraphQLClientFromClient(input.Client)
 	if client != nil {
 		return client, nil
@@ -210,5 +213,5 @@ func githubGraphQLClientForOperation(input types.OperationInput) (*githubv4.Clie
 		return nil, err
 	}
 
-	return newGitHubGraphQLClient(token), nil
+	return newGitHubGraphQLClient(ctx, token), nil
 }

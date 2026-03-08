@@ -7,6 +7,7 @@ import (
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -78,6 +79,6 @@ func resolveAuditManagerClient(ctx context.Context, input types.OperationInput) 
 }
 
 // buildAuditManagerClient constructs an Audit Manager client from the stored credential payload.
-func buildAuditManagerClient(ctx context.Context, payload types.CredentialPayload) (*auditmanager.Client, awskit.AWSMetadata, error) {
+func buildAuditManagerClient(ctx context.Context, payload models.CredentialSet) (*auditmanager.Client, awskit.AWSMetadata, error) {
 	return buildAWSClient(ctx, payload, newAuditManagerClient)
 }

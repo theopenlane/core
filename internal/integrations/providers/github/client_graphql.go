@@ -8,6 +8,7 @@ import (
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -39,20 +40,20 @@ func (t githubHeaderTransport) RoundTrip(req *http.Request) (*http.Response, err
 
 // buildGitHubGraphQLClient returns a pooled client builder for the GitHub GraphQL API.
 func buildGitHubGraphQLClient() types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+	return func(ctx context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 		token, err := auth.OAuthTokenFromPayload(payload)
 		if err != nil {
 			return types.EmptyClientInstance(), err
 		}
 
-		return types.NewClientInstance(newGitHubGraphQLClient(token)), nil
+		return types.NewClientInstance(newGitHubGraphQLClient(ctx, token)), nil
 	}
 }
 
 // newGitHubGraphQLClient initializes an authenticated GitHub GraphQL client.
-func newGitHubGraphQLClient(token string) *githubv4.Client {
+func newGitHubGraphQLClient(ctx context.Context, token string) *githubv4.Client {
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-	httpClient := oauth2.NewClient(context.Background(), source)
+	httpClient := oauth2.NewClient(ctx, source)
 	httpClient.Transport = githubHeaderTransport{
 		next:    httpClient.Transport,
 		headers: githubClientHeaders,

@@ -13,6 +13,7 @@ import (
 const (
 	vercelHealthOp   types.OperationName = types.OperationHealthDefault
 	vercelProjectsOp types.OperationName = "projects.sample"
+	vercelAPIBaseURL                     = "https://api.vercel.com"
 )
 
 type vercelUserResponse struct {
@@ -63,7 +64,7 @@ func vercelOperations() []types.OperationDescriptor {
 
 // runVercelProjects returns a sample of projects for drift detection.
 func runVercelProjects(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.APITokenFromPayload)
+	client, err := auth.ResolveAuthenticatedClient(input, auth.APITokenFromPayload, vercelAPIBaseURL, nil)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -83,8 +84,7 @@ func runVercelProjects(ctx context.Context, input types.OperationInput) (types.O
 		} `json:"projects"`
 	}
 
-	endpoint := "https://api.vercel.com/v4/projects?" + params.Encode()
-	if err := auth.GetJSONWithClient(ctx, client, endpoint, token, nil, &resp); err != nil {
+	if err := client.GetJSONWithParams(ctx, "/v4/projects", params, &resp); err != nil {
 		return operations.OperationFailure("Vercel projects fetch failed", err, nil)
 	}
 

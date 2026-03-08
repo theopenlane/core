@@ -2,11 +2,11 @@ package awssts
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -72,35 +72,25 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 }
 
 // Mint validates the stored AWS metadata and persists structured credential fields.
-func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	meta := subject.Credential.Data.ProviderData
-	if len(meta) == 0 {
-		return types.CredentialPayload{}, ErrProviderMetadataRequired
-	}
-
-	decoded, err := awsSTSMetadataFromMap(meta)
+func (p *Provider) Mint(_ context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
+	decoded, err := awsSTSMetadataFromPayload(subject.Credential)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
 	creds := decoded.credentials()
 
-	sanitized, err := auth.PersistMetadata(meta, decoded)
+	providerData, err := json.Marshal(decoded.providerData())
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	builder := types.NewCredentialBuilder(p.Type()).With(
-		types.WithCredentialKind(types.CredentialKindMetadata),
-		types.WithCredentialSet(models.CredentialSet{
-			AccessKeyID:     creds.AccessKeyID,
-			SecretAccessKey: creds.SecretAccessKey,
-			SessionToken:    creds.SessionToken,
-			ProviderData:    sanitized,
-		}),
-	)
-
-	return builder.Build()
+	return models.CredentialSet{
+		AccessKeyID:     creds.AccessKeyID,
+		SecretAccessKey: creds.SecretAccessKey,
+		SessionToken:    creds.SessionToken,
+		ProviderData:    providerData,
+	}, nil
 }
 
 type awsSTSMetadata struct {
@@ -127,20 +117,34 @@ type awsSTSMetadata struct {
 	// AccountID is the AWS account identifier
 	AccountID types.TrimmedString `json:"accountId,omitempty"`
 	// AccessKeyID is the AWS access key ID
-	AccessKeyID types.TrimmedString `json:"accessKeyId,omitempty"`
+	AccessKeyID string `json:"accessKeyId,omitempty"`
 	// SecretAccessKey is the AWS secret access key
-	SecretAccessKey types.TrimmedString `json:"secretAccessKey,omitempty"`
+	SecretAccessKey string `json:"secretAccessKey,omitempty"`
 	// SessionToken is the AWS session token
-	SessionToken types.TrimmedString `json:"sessionToken,omitempty"`
+	SessionToken string `json:"sessionToken,omitempty"`
 }
 
-func awsSTSMetadataFromMap(meta map[string]any) (awsSTSMetadata, error) {
+func awsSTSMetadataFromPayload(payload models.CredentialSet) (awsSTSMetadata, error) {
+	if len(payload.ProviderData) == 0 {
+		return awsSTSMetadata{}, ErrProviderMetadataRequired
+	}
+
 	var decoded awsSTSMetadata
-	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
+	if err := json.Unmarshal(payload.ProviderData, &decoded); err != nil {
 		return awsSTSMetadata{}, err
 	}
 
 	decoded.applyDefaults()
+
+	if decoded.AccessKeyID == "" {
+		decoded.AccessKeyID = payload.AccessKeyID
+	}
+	if decoded.SecretAccessKey == "" {
+		decoded.SecretAccessKey = payload.SecretAccessKey
+	}
+	if decoded.SessionToken == "" {
+		decoded.SessionToken = payload.SessionToken
+	}
 
 	return decoded, nil
 }
@@ -157,8 +161,38 @@ func (m *awsSTSMetadata) applyDefaults() {
 
 func (m awsSTSMetadata) credentials() awskit.AWSCredentials {
 	return awskit.AWSCredentials{
-		AccessKeyID:     m.AccessKeyID.String(),
-		SecretAccessKey: m.SecretAccessKey.String(),
-		SessionToken:    m.SessionToken.String(),
+		AccessKeyID:     m.AccessKeyID,
+		SecretAccessKey: m.SecretAccessKey,
+		SessionToken:    m.SessionToken,
+	}
+}
+
+type awsSTSProviderData struct {
+	RoleARN         string   `json:"roleArn,omitempty"`
+	Region          string   `json:"region,omitempty"`
+	HomeRegion      string   `json:"homeRegion,omitempty"`
+	LinkedRegions   []string `json:"linkedRegions,omitempty"`
+	OrganizationID  string   `json:"organizationId,omitempty"`
+	AccountScope    string   `json:"accountScope,omitempty"`
+	AccountIDs      []string `json:"accountIds,omitempty"`
+	ExternalID      string   `json:"externalId,omitempty"`
+	SessionName     string   `json:"sessionName,omitempty"`
+	SessionDuration string   `json:"sessionDuration,omitempty"`
+	AccountID       string   `json:"accountId,omitempty"`
+}
+
+func (m awsSTSMetadata) providerData() awsSTSProviderData {
+	return awsSTSProviderData{
+		RoleARN:         m.RoleARN.String(),
+		Region:          m.Region.String(),
+		HomeRegion:      m.HomeRegion.String(),
+		LinkedRegions:   m.LinkedRegions,
+		OrganizationID:  m.OrganizationID.String(),
+		AccountScope:    m.AccountScope.String(),
+		AccountIDs:      m.AccountIDs,
+		ExternalID:      m.ExternalID.String(),
+		SessionName:     m.SessionName.String(),
+		SessionDuration: m.SessionDuration.String(),
+		AccountID:       m.AccountID.String(),
 	}
 }

@@ -2,7 +2,6 @@ package ingest
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/samber/lo"
 
@@ -36,17 +35,6 @@ func newVulnerabilityIngestContext(req IngestRequest) (vulnerabilityIngestContex
 	}, nil
 }
 
-// mapEnvelopeToVulnerability applies mapping rules to a single alert envelope
-func (c *vulnerabilityIngestContext) mapEnvelopeToVulnerability(ctx context.Context, req IngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
-	return mapIngestEnvelope(ctx, c.schemaIngestContext, envelopeMappingRequest{
-		Provider:        req.Provider,
-		Operation:       req.Operation,
-		OrgID:           req.OrgID,
-		IntegrationID:   req.IntegrationID,
-		OperationConfig: req.OperationConfig,
-	}, mappingSchemaVulnerability, envelope)
-}
-
 // VulnerabilityAlerts maps provider alerts into vulnerability inputs and persists them
 func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, error) {
 	result := IngestResult{}
@@ -61,7 +49,7 @@ func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, 
 	}
 
 	summary, errors := processIngestEnvelopes(req.Envelopes, func(envelope integrationtypes.AlertEnvelope) (bool, bool, error) {
-		mapped, allowed, err := ingestCtx.mapEnvelopeToVulnerability(ctx, req, envelope)
+		mapped, allowed, err := ingestCtx.mapEnvelope(ctx, req, envelope)
 		if err != nil {
 			return false, false, err
 		}
@@ -79,8 +67,7 @@ func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, 
 		}
 
 		if input.OwnerID == nil || *input.OwnerID == "" {
-			owner := req.OrgID
-			input.OwnerID = &owner
+			input.OwnerID = lo.ToPtr(req.OrgID)
 		}
 		if !lo.Contains(input.IntegrationIDs, req.IntegrationID) {
 			input.IntegrationIDs = append(input.IntegrationIDs, req.IntegrationID)
@@ -100,24 +87,12 @@ func VulnerabilityAlerts(ctx context.Context, req IngestRequest) (IngestResult, 
 	return result, nil
 }
 
-// decodeAlertPayload converts a raw alert payload into a map
-func decodeAlertPayload(payload json.RawMessage) (map[string]any, error) {
-	var out map[string]any
-	if err := json.Unmarshal(payload, &out); err != nil {
-		return nil, err
-	}
-
-	return out, nil
-}
-
 // upsertVulnerability inserts or updates a vulnerability based on external identifiers
 func upsertVulnerability(ctx context.Context, db *generated.Client, orgID string, integrationID string, input generated.CreateVulnerabilityInput) (bool, error) {
 	externalID := input.ExternalID
 	if externalID == "" {
 		return false, ErrExternalIDRequired
 	}
-
-	input.ExternalID = externalID
 
 	existingID, err := findVulnerabilityID(ctx, db, orgID, input.ExternalID, input.CveID)
 	if err != nil {

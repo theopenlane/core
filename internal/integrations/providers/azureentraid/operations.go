@@ -9,8 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// azureEntraRestClient is the package-level REST client for Microsoft Graph API requests.
-var azureEntraRestClient = auth.RESTClient{BaseURL: "https://graph.microsoft.com/v1.0/"}
+const azureEntraGraphBaseURL = "https://graph.microsoft.com/v1.0/"
 
 const (
 	azureEntraHealthOp types.OperationName = types.OperationHealthDefault
@@ -45,12 +44,12 @@ func azureOperations() []types.OperationDescriptor {
 
 // runAzureEntraHealth performs a basic tenant reachability check
 func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := auth.ResolveAuthenticatedClient(input, auth.OAuthTokenFromPayload, azureEntraGraphBaseURL, nil)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	org, err := fetchOrganization(ctx, token, client)
+	org, err := fetchOrganization(ctx, client)
 	if err != nil {
 		return operations.OperationFailure("Graph organization lookup failed", err, nil)
 	}
@@ -65,12 +64,12 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 
 // runAzureEntraTenantInspect collects tenant metadata from Microsoft Graph
 func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
+	client, err := auth.ResolveAuthenticatedClient(input, auth.OAuthTokenFromPayload, azureEntraGraphBaseURL, nil)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	org, err := fetchOrganization(ctx, token, client)
+	org, err := fetchOrganization(ctx, client)
 	if err != nil {
 		return operations.OperationFailure("Graph organization lookup failed", err, nil)
 	}
@@ -99,9 +98,9 @@ type graphOrganizationResponse struct {
 }
 
 // fetchOrganization retrieves the first organization entry from Microsoft Graph.
-func fetchOrganization(ctx context.Context, token string, client *auth.AuthenticatedClient) (graphOrganization, error) {
+func fetchOrganization(ctx context.Context, client *auth.AuthenticatedClient) (graphOrganization, error) {
 	var resp graphOrganizationResponse
-	if err := azureEntraRestClient.GetJSON(ctx, client, token, "organization?$select=id,displayName,tenantId,verifiedDomains&$top=1", nil, &resp); err != nil {
+	if err := client.GetJSON(ctx, "organization?$select=id,displayName,tenantId,verifiedDomains&$top=1", &resp); err != nil {
 		return graphOrganization{}, err
 	}
 

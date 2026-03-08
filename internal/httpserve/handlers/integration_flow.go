@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -62,7 +63,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
-	if spec.AuthType != types.AuthKindOAuth2 && spec.AuthType != types.AuthKindOIDC {
+	if !spec.SupportsInteractiveAuthFlow() {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
@@ -268,7 +269,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 		return nil, err
 	}
 
-	var payload types.CredentialPayload
+	var payload models.CredentialSet
 	if integrationID != "" {
 		payload, err = h.IntegrationRuntime.Broker().MintForIntegration(ctx, orgID, providerType, integrationID)
 	} else {
@@ -314,23 +315,20 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	return h.Success(ctx, out)
 }
 
-func integrationTokenFromPayload(provider string, payload types.CredentialPayload) (*openapi.IntegrationToken, error) {
-	tokenOpt := payload.OAuthTokenOption()
-	if !tokenOpt.IsPresent() {
+func integrationTokenFromPayload(provider string, payload models.CredentialSet) (*openapi.IntegrationToken, error) {
+	if payload.OAuthAccessToken == "" {
 		return nil, wrapTokenError("find access", provider, keystore.ErrCredentialNotFound)
 	}
 
-	token := tokenOpt.MustGet()
-
 	var expiresAt *time.Time
-	if !token.Expiry.IsZero() {
-		expiry := token.Expiry
+	if payload.OAuthExpiry != nil && !payload.OAuthExpiry.IsZero() {
+		expiry := payload.OAuthExpiry.UTC()
 		expiresAt = &expiry
 	}
 
 	return &openapi.IntegrationToken{
 		Provider:         provider,
-		AccessToken:      token.AccessToken,
+		AccessToken:      payload.OAuthAccessToken,
 		ExpiresAt:        expiresAt,
 		ProviderUserID:   "",
 		ProviderUsername: "",

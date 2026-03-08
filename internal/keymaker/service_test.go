@@ -20,12 +20,8 @@ func TestService_BeginAndComplete(t *testing.T) {
 		providerType: providerType,
 		state:        "state-123",
 		authURL:      "https://example.com/auth",
-		payload: types.CredentialPayload{
-			Provider: providerType,
-			Kind:     types.CredentialKindOAuthToken,
-			Data: models.CredentialSet{
-				APIToken: "token-123",
-			},
+		payload: models.CredentialSet{
+			OAuthAccessToken: "token-123",
 		},
 	}
 
@@ -60,7 +56,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CompleteAuthorization error: %v", err)
 	}
-	if result.Credential.Data.APIToken != "token-123" {
+	if result.Credential.OAuthAccessToken != "token-123" {
 		t.Fatalf("expected credential data to persist token")
 	}
 	if len(keystore.integrationSaves) != 1 {
@@ -97,11 +93,7 @@ func TestService_CompleteAuthorizationExpired(t *testing.T) {
 		providerType: providerType,
 		state:        "state-456",
 		authURL:      "https://example.com/authorize",
-		payload: types.CredentialPayload{
-			Provider: providerType,
-			Kind:     types.CredentialKindOAuthToken,
-			Data:     models.CredentialSet{},
-		},
+		payload:      models.CredentialSet{},
 	}
 
 	now := time.Now()
@@ -158,45 +150,53 @@ type fakeKeystore struct {
 }
 
 type saveCall struct {
-	orgID   string
-	payload types.CredentialPayload
+	orgID      string
+	provider   types.ProviderType
+	authKind   types.AuthKind
+	credential models.CredentialSet
 }
 
 type saveIntegrationCall struct {
 	orgID         string
 	integrationID string
-	payload       types.CredentialPayload
+	provider      types.ProviderType
+	authKind      types.AuthKind
+	credential    models.CredentialSet
 }
 
-func (f *fakeKeystore) SaveCredential(_ context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
+func (f *fakeKeystore) SaveCredential(_ context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error) {
 	f.saves = append(f.saves, saveCall{
-		orgID:   orgID,
-		payload: payload,
+		orgID:      orgID,
+		provider:   provider,
+		authKind:   authKind,
+		credential: credential,
 	})
 	if f.err != nil {
-		return types.CredentialPayload{}, f.err
+		return models.CredentialSet{}, f.err
 	}
-	return payload, nil
+	return credential, nil
 }
 
-func (f *fakeKeystore) SaveCredentialForIntegration(_ context.Context, orgID string, integrationID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
+func (f *fakeKeystore) SaveCredentialForIntegration(_ context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error) {
 	f.integrationSaves = append(f.integrationSaves, saveIntegrationCall{
 		orgID:         orgID,
 		integrationID: integrationID,
-		payload:       payload,
+		provider:      provider,
+		authKind:      authKind,
+		credential:    credential,
 	})
 	if f.err != nil {
-		return types.CredentialPayload{}, f.err
+		return models.CredentialSet{}, f.err
 	}
 
-	return payload, nil
+	return credential, nil
 }
 
 type fakeProvider struct {
 	providerType types.ProviderType
 	state        string
 	authURL      string
-	payload      types.CredentialPayload
+	payload      models.CredentialSet
 	beginErr     error
 	finishErr    error
 }
@@ -222,15 +222,15 @@ func (p *fakeProvider) BeginAuth(context.Context, types.AuthContext) (types.Auth
 	}, nil
 }
 
-func (p *fakeProvider) Mint(context.Context, types.CredentialSubject) (types.CredentialPayload, error) {
-	return types.CredentialPayload{}, errors.New("not implemented")
+func (p *fakeProvider) Mint(context.Context, types.CredentialMintRequest) (models.CredentialSet, error) {
+	return models.CredentialSet{}, errors.New("not implemented")
 }
 
 type fakeAuthSession struct {
 	provider  types.ProviderType
 	state     string
 	authURL   string
-	payload   types.CredentialPayload
+	payload   models.CredentialSet
 	finishErr error
 }
 
@@ -246,9 +246,9 @@ func (s *fakeAuthSession) AuthURL() string {
 	return s.authURL
 }
 
-func (s *fakeAuthSession) Finish(context.Context, string) (types.CredentialPayload, error) {
+func (s *fakeAuthSession) Finish(context.Context, string) (models.CredentialSet, error) {
 	if s.finishErr != nil {
-		return types.CredentialPayload{}, s.finishErr
+		return models.CredentialSet{}, s.finishErr
 	}
 	return s.payload, nil
 }

@@ -90,3 +90,48 @@ func TestFSLoader_LoadIncludesInactiveSpecs(t *testing.T) {
 		t.Fatalf("expected inactive provider, got active=true")
 	}
 }
+
+func TestFSLoader_LoadMissingAuthType(t *testing.T) {
+	fsys := fstest.MapFS{
+		"providers/github.json": {
+			Data: []byte(`{
+				"name": "github",
+				"displayName": "GitHub",
+				"category": "code",
+				"active": true
+			}`),
+		},
+	}
+
+	loader := NewFSLoader(fsys, "providers")
+	_, err := loader.Load()
+	if err == nil {
+		t.Fatalf("expected auth type error")
+	}
+	if !errors.Is(err, ErrAuthTypeInvalid) {
+		t.Fatalf("expected ErrAuthTypeInvalid, got %v", err)
+	}
+}
+
+func TestFSLoader_LoadInvalidAuthType(t *testing.T) {
+	fsys := fstest.MapFS{
+		"providers/github.json": {
+			Data: []byte(`{
+				"name": "github",
+				"displayName": "GitHub",
+				"category": "code",
+				"authType": "oauth_token",
+				"active": true
+			}`),
+		},
+	}
+
+	loader := NewFSLoader(fsys, "providers")
+	_, err := loader.Load()
+	if err == nil {
+		t.Fatalf("expected auth type error")
+	}
+	if !errors.Is(err, ErrAuthTypeInvalid) {
+		t.Fatalf("expected ErrAuthTypeInvalid, got %v", err)
+	}
+}

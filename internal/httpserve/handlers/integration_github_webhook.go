@@ -311,7 +311,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	if h.Gala != nil {
-		topic, ok := ingest.IngestRequestedTopicForSchema(integrationgenerated.IntegrationMappingSchemaVulnerability)
+		topic, ok := ingest.RequestedTopicForSchema(integrationgenerated.IntegrationMappingSchemaVulnerability)
 		if !ok {
 			logx.FromContext(req.Context()).Warn().Msg("failed to resolve ingest topic for schema")
 		} else {
@@ -541,7 +541,7 @@ func (h *Handler) markGitHubWebhookVerifiedAt(ctx context.Context, installationI
 		return nil
 	}
 
-	statePatch, err := jsonx.ToMap(githubWebhookVerificationStatePatch{
+	statePatch, err := json.Marshal(githubWebhookVerificationStatePatch{
 		InstallationID:    installationID,
 		WebhookVerifiedAt: verifiedAt,
 	})

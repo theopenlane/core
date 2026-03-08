@@ -19,13 +19,7 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialPayload{
-		Provider: provider,
-		Kind:     types.CredentialKindAPIKey,
-		Data: models.CredentialSet{
-			AccessKeyID: "ak-1",
-		},
-	}
+	payload := models.CredentialSet{AccessKeyID: "ak-1"}
 
 	source := &credentialSourceStub{getPayload: payload}
 
@@ -33,12 +27,12 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
+		Build: func(_ context.Context, cred models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			buildCount.Add(1)
-			if cred.Data.AccessKeyID == "" {
+			if cred.AccessKeyID == "" {
 				t.Fatalf("expected credential payload in builder")
 			}
-			return types.NewClientInstance(&pooledClient{id: cred.Data.AccessKeyID}), nil
+			return types.NewClientInstance(&pooledClient{id: cred.AccessKeyID}), nil
 		},
 	}
 
@@ -84,13 +78,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialPayload{
-		Provider: provider,
-		Kind:     types.CredentialKindAPIKey,
-		Data: models.CredentialSet{
-			APIToken: "token",
-		},
-	}
+	payload := models.CredentialSet{APIToken: "token"}
 
 	manager, err := NewClientPoolManager(&credentialSourceStub{getPayload: payload}, nil)
 	if err != nil {
@@ -106,7 +94,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing provider",
 			descriptor: types.ClientDescriptor{
 				Name: types.ClientName("rest"),
-				Build: func(context.Context, types.CredentialPayload, json.RawMessage) (types.ClientInstance, error) {
+				Build: func(context.Context, models.CredentialSet, json.RawMessage) (types.ClientInstance, error) {
 					return types.EmptyClientInstance(), nil
 				},
 			},
@@ -116,7 +104,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing name",
 			descriptor: types.ClientDescriptor{
 				Provider: provider,
-				Build: func(context.Context, types.CredentialPayload, json.RawMessage) (types.ClientInstance, error) {
+				Build: func(context.Context, models.CredentialSet, json.RawMessage) (types.ClientInstance, error) {
 					return types.EmptyClientInstance(), nil
 				},
 			},
@@ -147,23 +135,17 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialPayload{
-		Provider: provider,
-		Kind:     types.CredentialKindAPIKey,
-		Data: models.CredentialSet{
-			APIToken: "direct-token",
-		},
-	}
+	payload := models.CredentialSet{APIToken: "direct-token"}
 
-	var captured types.CredentialPayload
+	var captured models.CredentialSet
 	var capturedConfig json.RawMessage
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
+		Build: func(_ context.Context, cred models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			captured = cred
 			capturedConfig = config
-			return types.NewClientInstance(&pooledClient{id: cred.Data.APIToken}), nil
+			return types.NewClientInstance(&pooledClient{id: cred.APIToken}), nil
 		},
 	}
 
@@ -182,11 +164,11 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected *pooledClient, got %T", result)
 	}
-	if client.id != payload.Data.APIToken {
+	if client.id != payload.APIToken {
 		t.Fatalf("expected client built from provided payload, got %s", client.id)
 	}
-	if captured.Data.APIToken != payload.Data.APIToken {
-		t.Fatalf("expected builder to receive provided payload, got %s", captured.Data.APIToken)
+	if captured.APIToken != payload.APIToken {
+		t.Fatalf("expected builder to receive provided payload, got %s", captured.APIToken)
 	}
 
 	var decodedConfig map[string]any

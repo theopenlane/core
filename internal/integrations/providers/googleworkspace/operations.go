@@ -104,9 +104,11 @@ func runGoogleWorkspaceDirectorySync(ctx context.Context, input types.OperationI
 		return types.OperationResult{}, err
 	}
 
-	config, err := operations.Decode[googleWorkspaceDirectoryConfig](input.Config)
-	if err != nil {
-		return types.OperationResult{}, err
+	var config googleWorkspaceDirectoryConfig
+	if len(input.Config) > 0 {
+		if err := json.Unmarshal(input.Config, &config); err != nil {
+			return types.OperationResult{}, err
+		}
 	}
 
 	customer := "my_customer"
@@ -114,7 +116,7 @@ func runGoogleWorkspaceDirectorySync(ctx context.Context, input types.OperationI
 		customer = config.Customer
 	}
 
-	fetch := func(ctx context.Context, pageToken string) (operations.PageResult[*admin.User], error) {
+	fetch := func(_ context.Context, pageToken string) (operations.PageResult[*admin.User], error) {
 		call := svc.Users.List().
 			MaxResults(googleWorkspaceDirectoryDefaultPageSize).
 			Projection("full").

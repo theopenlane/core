@@ -1,13 +1,14 @@
 package graphapi
 
 import (
-	"sort"
+	"cmp"
+	"encoding/json"
+	"slices"
 
 	"github.com/theopenlane/core/common/enums"
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // integrationScopeVariableNames lists CEL variables exposed to integration scope expressions
@@ -62,7 +63,7 @@ type integrationProviderExtensionsDocument struct {
 	// AuthKind is the provider auth kind
 	AuthKind string `json:"auth_kind"`
 	// CredentialsSchema is the provider credentials schema
-	CredentialsSchema map[string]any `json:"credentials_schema,omitempty"`
+	CredentialsSchema json.RawMessage `json:"credentials_schema,omitempty"`
 	// Operations lists provider operation descriptors
 	Operations []integrationOperationExtensionsDocument `json:"operations"`
 }
@@ -78,9 +79,9 @@ type integrationOperationExtensionsDocument struct {
 	// Client is the operation client identifier
 	Client string `json:"client,omitempty"`
 	// ConfigSchema is the operation config schema
-	ConfigSchema map[string]any `json:"config_schema,omitempty"`
+	ConfigSchema json.RawMessage `json:"config_schema,omitempty"`
 	// OutputSchema is the operation output schema
-	OutputSchema map[string]any `json:"output_schema,omitempty"`
+	OutputSchema json.RawMessage `json:"output_schema,omitempty"`
 }
 
 // workflowMetadataExtensions builds extensible workflow metadata payloads for non-object schema surfaces
@@ -117,44 +118,34 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 	for provider := range catalog {
 		providers = append(providers, provider)
 	}
-	sort.Slice(providers, func(i int, j int) bool {
-		return providers[i] < providers[j]
-	})
+	slices.SortFunc(providers, cmp.Compare)
 
 	providerEntries := make([]integrationProviderExtensionsDocument, 0, len(providers))
 	for _, provider := range providers {
 		meta := catalog[provider]
 		entry := integrationProviderExtensionsDocument{
-			Provider:    string(provider),
-			DisplayName: meta.DisplayName,
-			Category:    meta.Category,
-			AuthKind:    string(meta.Auth),
-		}
-		if len(meta.Schema) > 0 {
-			entry.CredentialsSchema = mapx.DeepCloneMapAny(meta.Schema)
+			Provider:          string(provider),
+			DisplayName:       meta.DisplayName,
+			Category:          meta.Category,
+			AuthKind:          string(meta.Auth),
+			CredentialsSchema: jsonx.CloneRawMessage(meta.Schema),
 		}
 
 		descriptors := source.OperationDescriptors(provider)
-		sort.Slice(descriptors, func(i int, j int) bool {
-			return descriptors[i].Name < descriptors[j].Name
+		slices.SortFunc(descriptors, func(a, b integrationtypes.OperationDescriptor) int {
+			return cmp.Compare(a.Name, b.Name)
 		})
 
 		operations := make([]integrationOperationExtensionsDocument, 0, len(descriptors))
 		for _, descriptor := range descriptors {
-			op := integrationOperationExtensionsDocument{
-				Name:        string(descriptor.Name),
-				Kind:        string(descriptor.Kind),
-				Description: descriptor.Description,
-				Client:      string(descriptor.Client),
-			}
-			if len(descriptor.ConfigSchema) > 0 {
-				op.ConfigSchema = mapx.DeepCloneMapAny(descriptor.ConfigSchema)
-			}
-			if len(descriptor.OutputSchema) > 0 {
-				op.OutputSchema = mapx.DeepCloneMapAny(descriptor.OutputSchema)
-			}
-
-			operations = append(operations, op)
+			operations = append(operations, integrationOperationExtensionsDocument{
+				Name:         string(descriptor.Name),
+				Kind:         string(descriptor.Kind),
+				Description:  descriptor.Description,
+				Client:       string(descriptor.Client),
+				ConfigSchema: jsonx.CloneRawMessage(descriptor.ConfigSchema),
+				OutputSchema: jsonx.CloneRawMessage(descriptor.OutputSchema),
+			})
 		}
 		entry.Operations = operations
 

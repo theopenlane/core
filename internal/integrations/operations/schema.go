@@ -1,6 +1,8 @@
 package operations
 
 import (
+	"encoding/json"
+
 	"github.com/invopop/jsonschema"
 
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -11,11 +13,11 @@ var schemaReflector = &jsonschema.Reflector{
 	RequiredFromJSONSchemaTags: true,
 }
 
-// SchemaFrom reflects a JSON schema from a Go type and returns it as a map
-func SchemaFrom[T any]() map[string]any {
+// SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON.
+func SchemaFrom[T any]() json.RawMessage {
 	schema := schemaReflector.Reflect(new(T))
 
-	out, err := jsonx.ToMap(schema)
+	out, err := jsonx.ToRawMessage(schema)
 	if err != nil {
 		return nil
 	}

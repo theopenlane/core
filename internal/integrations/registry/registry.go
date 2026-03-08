@@ -6,6 +6,7 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -169,14 +170,14 @@ func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.O
 	})
 }
 
-// MintPayload calls the registered provider's Mint method with the supplied subject without accessing the credential store
-func (r *Registry) MintPayload(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	provider, ok := r.providers[subject.Provider]
+// MintCredential calls the registered provider's Mint method without accessing the credential store.
+func (r *Registry) MintCredential(ctx context.Context, request types.CredentialMintRequest) (models.CredentialSet, error) {
+	provider, ok := r.providers[request.Provider]
 	if !ok {
-		return types.CredentialPayload{}, ErrProviderNotFound
+		return models.CredentialSet{}, ErrProviderNotFound
 	}
 
-	return provider.Mint(ctx, subject)
+	return provider.Mint(ctx, request)
 }
 
 // UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).

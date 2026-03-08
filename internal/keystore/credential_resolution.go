@@ -5,28 +5,28 @@ import (
 	"errors"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/models"
 )
 
-// credentialGetter retrieves the currently persisted credential payload
-type credentialGetter func(ctx context.Context) (types.CredentialPayload, error)
+// credentialGetter retrieves the currently persisted credential set.
+type credentialGetter func(ctx context.Context) (models.CredentialSet, error)
 
-// credentialMinter mints/refreshed a credential payload; previous is populated when refresh is triggered
-type credentialMinter func(ctx context.Context, previous types.CredentialPayload) (types.CredentialPayload, error)
+// credentialMinter mints/refreshed credential sets; previous is populated when refresh is triggered.
+type credentialMinter func(ctx context.Context, previous models.CredentialSet) (models.CredentialSet, error)
 
 // resolveCredentialWithPolicy standardizes credential resolution across client pools
-func resolveCredentialWithPolicy(ctx context.Context, force bool, now func() time.Time, get credentialGetter, mint credentialMinter) (types.CredentialPayload, error) {
+func resolveCredentialWithPolicy(ctx context.Context, force bool, now func() time.Time, get credentialGetter, mint credentialMinter) (models.CredentialSet, error) {
 	if force {
-		return mint(ctx, types.CredentialPayload{})
+		return mint(ctx, models.CredentialSet{})
 	}
 
 	payload, err := get(ctx)
 	if err != nil {
 		if errors.Is(err, ErrCredentialNotFound) {
-			return mint(ctx, types.CredentialPayload{})
+			return mint(ctx, models.CredentialSet{})
 		}
 
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
 	if credentialNeedsRefresh(payload, now) {
@@ -36,13 +36,13 @@ func resolveCredentialWithPolicy(ctx context.Context, force bool, now func() tim
 	return payload, nil
 }
 
-// credentialNeedsRefresh determines if a credential needs refreshing based on its expiry
-func credentialNeedsRefresh(payload types.CredentialPayload, now func() time.Time) bool {
-	if payload.Token == nil || payload.Token.Expiry.IsZero() {
+// credentialNeedsRefresh determines if a credential needs refreshing based on OAuth expiry.
+func credentialNeedsRefresh(payload models.CredentialSet, now func() time.Time) bool {
+	if payload.OAuthExpiry == nil || payload.OAuthExpiry.IsZero() {
 		return false
 	}
 
-	refreshAt := payload.Token.Expiry.Add(-cacheSkew)
+	refreshAt := payload.OAuthExpiry.Add(-cacheSkew)
 
 	return now().After(refreshAt)
 }

@@ -4,30 +4,37 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/theopenlane/core/internal/testutils/integrations/schematest"
+	"github.com/xeipuuv/gojsonschema"
 )
 
-// TestTeamsMessageConfigSchema verifies the Teams message schema has expected fields
+// TestTeamsMessageConfigSchema verifies the Teams message schema validates expected payloads.
 func TestTeamsMessageConfigSchema(t *testing.T) {
 	schema := teamsMessageConfigSchema
 	require.NotNil(t, schema)
 
-	props := schematest.Properties(t, schema)
-	for _, key := range []string{
-		"team_id",
-		"channel_id",
-		"body",
-		"body_format",
-		"subject",
-	} {
-		require.Contains(t, props, key)
-	}
+	validResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{
+			"team_id": "team-1",
+			"channel_id": "channel-1",
+			"body": "hello",
+			"body_format": "text",
+			"subject": "test message"
+		}`)),
+	)
+	require.NoError(t, err)
+	require.True(t, validResult.Valid(), "expected valid config, got errors: %v", validResult.Errors())
 
-	required := schematest.Required(t, schema)
-	require.Contains(t, required, "team_id")
-	require.Contains(t, required, "channel_id")
-	require.Contains(t, required, "body")
+	invalidResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{
+			"team_id": 1,
+			"channel_id": "channel-1",
+			"body": "hello"
+		}`)),
+	)
+	require.NoError(t, err)
+	require.False(t, invalidResult.Valid(), "expected invalid config to fail schema validation")
 }
 
 // TestTeamsOperationsIncludeMessageSend verifies message.send operation registration

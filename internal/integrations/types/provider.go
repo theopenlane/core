@@ -5,6 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"strings"
+
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/integrations/state"
 )
 
 // ProviderType is a strongly typed identifier for an integration provider
@@ -31,8 +34,13 @@ func ProviderTypeFromString(value string) ProviderType {
 type AuthKind string
 
 const (
+	// AuthKindUnknown represents an unset authentication kind.
+	AuthKindUnknown AuthKind = ""
 	// AuthKindOAuth2 represents OAuth2 authentication
 	AuthKindOAuth2 AuthKind = "oauth2"
+	// AuthKindOAuth2ClientCredentials represents OAuth2 client-credentials authentication.
+	// #nosec G101 -- this is an auth kind enum identifier, not a secret.
+	AuthKindOAuth2ClientCredentials AuthKind = "oauth2_client_credentials"
 	// AuthKindOIDC represents OpenID Connect authentication
 	AuthKindOIDC AuthKind = "oidc"
 	// AuthKindAPIKey represents API key authentication
@@ -44,6 +52,41 @@ const (
 	// AuthKindAWSFederation represents AWS STS federation authentication
 	AuthKindAWSFederation AuthKind = "aws_sts"
 )
+
+// AuthKindFromString normalizes auth kind values from config/user input.
+func AuthKindFromString(value string) AuthKind {
+	normalized := strings.TrimSpace(strings.ToLower(value))
+	if normalized == "" {
+		return AuthKindUnknown
+	}
+
+	return AuthKind(normalized)
+}
+
+// Normalize returns a normalized auth kind value.
+func (k AuthKind) Normalize() AuthKind {
+	return AuthKindFromString(string(k))
+}
+
+// IsKnown reports whether the auth kind is one of the supported canonical values.
+func (k AuthKind) IsKnown() bool {
+	switch k.Normalize() {
+	case AuthKindOAuth2, AuthKindOAuth2ClientCredentials, AuthKindOIDC, AuthKindAPIKey, AuthKindGitHubApp, AuthKindWorkloadIdentity, AuthKindAWSFederation:
+		return true
+	default:
+		return false
+	}
+}
+
+// SupportsInteractiveFlow reports whether the auth kind supports browser OAuth/OIDC redirects.
+func (k AuthKind) SupportsInteractiveFlow() bool {
+	switch k.Normalize() {
+	case AuthKindOAuth2, AuthKindOIDC:
+		return true
+	default:
+		return false
+	}
+}
 
 // ProviderCapabilities describe optional behaviours supported by a provider
 type ProviderCapabilities struct {
@@ -76,10 +119,10 @@ type ProviderConfig struct {
 	DocsURL string
 	// LogoURL references a logo asset
 	LogoURL string
-	// Schema exposes the JSON schema for declarative credential forms
-	Schema map[string]any
-	// Metadata contains additional provider metadata
-	Metadata map[string]any
+	// Schema exposes the JSON schema for declarative credential forms.
+	Schema json.RawMessage
+	// Metadata contains additional provider metadata.
+	Metadata json.RawMessage
 }
 
 // Provider defines the behaviour required to integrate a third-party system
@@ -91,14 +134,14 @@ type Provider interface {
 	// BeginAuth starts an authentication flow
 	BeginAuth(ctx context.Context, input AuthContext) (AuthSession, error)
 	// Mint refreshes or exchanges credentials
-	Mint(ctx context.Context, subject CredentialSubject) (CredentialPayload, error)
+	Mint(ctx context.Context, request CredentialMintRequest) (models.CredentialSet, error)
 }
 
 // ClientName identifies a specific client type exposed by a provider (e.g., rest, graphql)
 type ClientName string
 
 // ClientBuilderFunc constructs provider-specific clients using persisted credentials and optional config
-type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config json.RawMessage) (ClientInstance, error)
+type ClientBuilderFunc func(ctx context.Context, credential models.CredentialSet, config json.RawMessage) (ClientInstance, error)
 
 // ClientDescriptor describes a provider-managed client that can be pooled/reused downstream
 type ClientDescriptor struct {
@@ -110,8 +153,8 @@ type ClientDescriptor struct {
 	Description string
 	// Build is the function that constructs the client
 	Build ClientBuilderFunc
-	// ConfigSchema defines the JSON schema for client configuration
-	ConfigSchema map[string]any
+	// ConfigSchema defines the JSON schema for client configuration.
+	ConfigSchema json.RawMessage
 }
 
 // ClientProvider is implemented by providers that expose SDK clients for downstream services
@@ -163,19 +206,22 @@ type AuthSession interface {
 	// AuthURL returns the URL where the user should be redirected
 	AuthURL() string
 	// Finish exchanges the authorization code for credentials
-	Finish(ctx context.Context, code string) (CredentialPayload, error)
+	Finish(ctx context.Context, code string) (models.CredentialSet, error)
 }
 
-// CredentialSubject is passed to Provider.Mint when the broker needs to refresh or exchange long-lived credentials for short-lived ones (e.g., STS, PKCE)
-type CredentialSubject struct {
+// CredentialMintRequest is passed to Provider.Mint when the broker needs to refresh
+// or exchange long-lived credentials for short-lived ones (e.g., STS, PKCE).
+type CredentialMintRequest struct {
 	// Provider identifies the provider whose credentials are being refreshed
 	Provider ProviderType
 	// OrgID identifies the organization requesting minting
 	OrgID string
 	// IntegrationID references the integration record containing the credential
 	IntegrationID string
-	// Credential contains the previously stored credential payload
-	Credential CredentialPayload
+	// Credential contains the previously stored credential fields
+	Credential models.CredentialSet
+	// ProviderState carries optional provider state from the integration record
+	ProviderState *state.IntegrationProviderState
 	// Attributes carries additional provider-specific attributes
 	Attributes map[string]string
 	// Scopes optionally override scopes for the mint call

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 
 	echo "github.com/theopenlane/echox"
@@ -64,7 +65,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
 	}
 
-	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
+	schemaLoader := gojsonschema.NewBytesLoader(spec.CredentialsSchema)
 	documentLoader := gojsonschema.NewGoLoader(attrs)
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
 	if err != nil {
@@ -75,10 +76,16 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, fieldErrs[0], openapiCtx)
 	}
 
+	providerData, err := json.Marshal(attrs)
+	if err != nil {
+		return h.InternalServerError(ctx, err, openapiCtx)
+	}
+
 	if _, err := h.IntegrationRuntime.Activation().Configure(requestCtx, activation.ConfigureRequest{
 		OrgID:        orgID,
 		Provider:     providerType,
-		ProviderData: attrs,
+		AuthKind:     spec.AuthType.Normalize(),
+		ProviderData: providerData,
 		Validate:     true,
 	}); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error persisting credential configuration")
@@ -90,12 +97,17 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if record, err := h.IntegrationRuntime.Store().EnsureIntegration(requestCtx, orgID, providerType); err == nil {
-		if err := h.updateIntegrationProviderMetadata(requestCtx, record.ID, providerType); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
+	record, err := h.IntegrationRuntime.Store().EnsureIntegration(requestCtx, orgID, providerType)
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to ensure integration record")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if err := h.updateIntegrationProviderMetadata(requestCtx, record.ID, providerType); err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to update integration provider metadata")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	out := openapi.IntegrationConfigResponse{

@@ -8,30 +8,26 @@ import (
 	slackgo "github.com/slack-go/slack"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestBuildSlackClient_MissingToken(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	_, err := buildSlackClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrOAuthTokenMissing)
 }
 
 func TestBuildSlackClient_EmptyAccessToken(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: ""},
-	}
+	payload := models.CredentialSet{OAuthTokenType: "Bearer"}
 	_, err := buildSlackClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrAccessTokenEmpty)
 }
 
 func TestBuildSlackClient_Success(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: "xoxb-test-token"},
-	}
+	payload := models.CredentialSet{OAuthAccessToken: "xoxb-test-token"}
 	instance, err := buildSlackClient(context.Background(), payload, json.RawMessage(nil))
 	require.NoError(t, err)
 
@@ -52,9 +48,7 @@ func TestResolveSlackClient_PooledClient(t *testing.T) {
 
 func TestResolveSlackClient_BuildsFromCredential(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Token: &oauth2.Token{AccessToken: "xoxb-test-token"},
-		},
+		Credential: models.CredentialSet{OAuthAccessToken: "xoxb-test-token"},
 	}
 	result, err := resolveSlackClient(input)
 	require.NoError(t, err)
