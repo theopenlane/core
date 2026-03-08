@@ -85,7 +85,7 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Subprocessor](
 				t,
-				withParents(TrustCenterSubprocessor{}),
+				withParents(Organization{}, TrustCenterSubprocessor{}),
 				withOrganizationOwner(true),
 				withAllowAnonymousTrustCenterAccess(true),
 				withSkipForSystemAdmin(true),

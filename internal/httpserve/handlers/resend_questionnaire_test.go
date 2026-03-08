@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/jobs"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -33,11 +32,7 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
 
-	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
-	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
-		SubjectID:      testUser1.ID,
-		OrganizationID: testUser1.OrganizationID,
-	})
+	questionnaireCtx := auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", ""))
 
 	template, err := suite.db.Template.Create().
 		SetName("Resend Test Template").

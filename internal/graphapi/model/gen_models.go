@@ -1168,6 +1168,20 @@ type FindingBulkCreatePayload struct {
 	Findings []*generated.Finding `json:"findings,omitempty"`
 }
 
+// Return response for deleteBulkFinding mutation
+type FindingBulkDeletePayload struct {
+	// Deleted finding IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkFinding mutation
+type FindingBulkUpdatePayload struct {
+	// Updated findings
+	Findings []*generated.Finding `json:"findings,omitempty"`
+	// IDs of the updated findings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createBulkFindingControl mutation
 type FindingControlBulkCreatePayload struct {
 	// Created findingControls
@@ -2205,6 +2219,20 @@ type RemediationBulkCreatePayload struct {
 	Remediations []*generated.Remediation `json:"remediations,omitempty"`
 }
 
+// Return response for deleteBulkRemediation mutation
+type RemediationBulkDeletePayload struct {
+	// Deleted remediation IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkRemediation mutation
+type RemediationBulkUpdatePayload struct {
+	// Updated remediations
+	Remediations []*generated.Remediation `json:"remediations,omitempty"`
+	// IDs of the updated remediations
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createRemediation mutation
 type RemediationCreatePayload struct {
 	// Created remediation
@@ -2253,6 +2281,14 @@ type ResolveVulnerabilityInput struct {
 type ReviewBulkCreatePayload struct {
 	// Created reviews
 	Reviews []*generated.Review `json:"reviews,omitempty"`
+}
+
+// Return response for updateBulkReview mutation
+type ReviewBulkUpdatePayload struct {
+	// Updated reviews
+	Reviews []*generated.Review `json:"reviews,omitempty"`
+	// IDs of the updated reviews
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createReview mutation
@@ -3127,6 +3163,20 @@ type UserUpdatePayload struct {
 type VulnerabilityBulkCreatePayload struct {
 	// Created vulnerabilitys
 	Vulnerabilities []*generated.Vulnerability `json:"vulnerabilities,omitempty"`
+}
+
+// Return response for deleteBulkVulnerability mutation
+type VulnerabilityBulkDeletePayload struct {
+	// Deleted vulnerability IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkVulnerability mutation
+type VulnerabilityBulkUpdatePayload struct {
+	// Updated vulnerabilities
+	Vulnerabilities []*generated.Vulnerability `json:"vulnerabilities,omitempty"`
+	// IDs of the updated vulnerabilities
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createVulnerability mutation

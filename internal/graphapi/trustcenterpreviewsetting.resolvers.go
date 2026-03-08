@@ -26,7 +26,8 @@ func (r *mutationResolver) CreateTrustCenterPreviewSetting(ctx context.Context, 
 	}
 
 	// Set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied

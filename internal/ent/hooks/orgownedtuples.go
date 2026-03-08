@@ -46,15 +46,15 @@ func hookOrgOwnedTuples(includeAdminRelation bool) ent.Hook {
 			// add user and org owner tuples to the object on creation
 			if m.Op() == ent.OpCreate {
 				if includeAdminRelation {
-					a, err := auth.GetAuthenticatedUserFromContext(ctx)
-					if err != nil {
-						return nil, err
+					orgOwnedCaller, ok := auth.CallerFromContext(ctx)
+					if !ok || orgOwnedCaller == nil {
+						return nil, auth.ErrNoAuthUser
 					}
 
 					// add user permissions to the object as the parent on creation
 					userTuple := fgax.GetTupleKey(fgax.TupleRequest{
-						SubjectID:   a.SubjectID,
-						SubjectType: auth.GetAuthzSubjectType(ctx),
+						SubjectID:   orgOwnedCaller.SubjectID,
+						SubjectType: orgOwnedCaller.SubjectType(),
 						ObjectID:    objectID,                        // this is the object id being created
 						ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
 						Relation:    fgax.AdminRelation,
@@ -74,7 +74,9 @@ func hookOrgOwnedTuples(includeAdminRelation bool) ent.Hook {
 			// write the tuples to the authz service
 			if len(addTuples) != 0 {
 				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, nil); err != nil {
-					return nil, err
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
+
+					return nil, ErrInternalServerError
 				}
 			}
 

@@ -316,6 +316,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "identity_holder",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "workflow_object_refs": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
@@ -461,6 +465,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "scans": {
 	ObjectType:      "scan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "remediations": {
+	ObjectType:      "remediation",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "reviews": {
+	ObjectType:      "review",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "findings": {
@@ -1022,6 +1046,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "identity_holder",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "platforms": {
 	ObjectType:      "platform",
 	SkipEditCheck:   false,
@@ -1213,6 +1241,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "evidence": {
 	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holder": {
+	ObjectType:      "identity_holder",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "scan": {
@@ -1659,6 +1691,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "directory_account",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "platforms": {
 	ObjectType:      "platform",
 	SkipEditCheck:   false,
@@ -1669,6 +1705,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "tasks": {
 	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "files": {
+	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "findings": {
@@ -4206,6 +4246,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "tag_definitions": {
 	ObjectType:      "tag_definition",
 	SkipEditCheck:   true,

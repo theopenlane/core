@@ -16,8 +16,8 @@ import (
 
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
 func parseRequestError(ctx context.Context, err error, a common.Action) error {
-	// log the error for debugging
-	logx.FromContext(ctx).Error().
+	// log the error for debugging, these can be user errors so we want to log at info level instead of error level to avoid alert fatigue, but we still want to log the error for debugging purposes
+	logx.FromContext(ctx).Info().
 		Err(err).
 		Str("action", a.Action).
 		Str("object", a.Object).
@@ -79,7 +79,7 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 
 		return newPermissionDeniedError()
 	default:
-		logx.FromContext(ctx).Error().Err(err).Msg("unexpected error occurred")
+		logx.FromContext(ctx).Warn().Err(err).Msg("unexpected error occurred")
 
 		return err
 	}

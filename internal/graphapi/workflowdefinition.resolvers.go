@@ -34,8 +34,8 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 	ownerID := ""
 	if input.OwnerID != nil {
 		ownerID = *input.OwnerID
-	} else if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil {
-		ownerID = orgID
+	} else if wdCaller, ok := auth.CallerFromContext(ctx); ok && wdCaller != nil {
+		ownerID = wdCaller.OrganizationID
 	}
 
 	if err := validateWorkflowDefinitionTemplateRefs(ctx, withTransactionalMutation(ctx), input.DefinitionJSON, ownerID); err != nil {
@@ -91,7 +91,8 @@ func (r *mutationResolver) CreateBulkWorkflowDefinition(ctx context.Context, inp
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -119,7 +120,8 @@ func (r *mutationResolver) CreateBulkCSVWorkflowDefinition(ctx context.Context, 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {

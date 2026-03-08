@@ -93,6 +93,20 @@ func (_c *OnboardingCreate) SetCompliance(v map[string]interface{}) *OnboardingC
 	return _c
 }
 
+// SetDemoRequested sets the "demo_requested" field.
+func (_c *OnboardingCreate) SetDemoRequested(v bool) *OnboardingCreate {
+	_c.mutation.SetDemoRequested(v)
+	return _c
+}
+
+// SetNillableDemoRequested sets the "demo_requested" field if the given value is not nil.
+func (_c *OnboardingCreate) SetNillableDemoRequested(v *bool) *OnboardingCreate {
+	if v != nil {
+		_c.SetDemoRequested(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OnboardingCreate) SetID(v string) *OnboardingCreate {
 	_c.mutation.SetID(v)
@@ -149,6 +163,10 @@ func (_c *OnboardingCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (_c *OnboardingCreate) defaults() error {
+	if _, ok := _c.mutation.DemoRequested(); !ok {
+		v := onboarding.DefaultDemoRequested
+		_c.mutation.SetDemoRequested(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if onboarding.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized onboarding.DefaultID (forgotten import generated/runtime?)")
@@ -232,6 +250,10 @@ func (_c *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Compliance(); ok {
 		_spec.SetField(onboarding.FieldCompliance, field.TypeJSON, value)
 		_node.Compliance = value
+	}
+	if value, ok := _c.mutation.DemoRequested(); ok {
+		_spec.SetField(onboarding.FieldDemoRequested, field.TypeBool, value)
+		_node.DemoRequested = value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

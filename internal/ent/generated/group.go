@@ -131,6 +131,9 @@ type Group struct {
 	vulnerability_blocked_groups                    *string
 	vulnerability_editors                           *string
 	vulnerability_viewers                           *string
+	workflow_definition_blocked_groups              *string
+	workflow_definition_editors                     *string
+	workflow_definition_viewers                     *string
 	workflow_definition_groups                      *string
 	selectValues                                    sql.SelectValues
 }
@@ -876,7 +879,13 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[63]: // vulnerability_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[64]: // workflow_definition_groups
+		case group.ForeignKeys[64]: // workflow_definition_blocked_groups
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[65]: // workflow_definition_editors
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[66]: // workflow_definition_viewers
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[67]: // workflow_definition_groups
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -1489,6 +1498,27 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 				*_m.vulnerability_viewers = value.String
 			}
 		case group.ForeignKeys[64]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_definition_blocked_groups", values[i])
+			} else if value.Valid {
+				_m.workflow_definition_blocked_groups = new(string)
+				*_m.workflow_definition_blocked_groups = value.String
+			}
+		case group.ForeignKeys[65]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_definition_editors", values[i])
+			} else if value.Valid {
+				_m.workflow_definition_editors = new(string)
+				*_m.workflow_definition_editors = value.String
+			}
+		case group.ForeignKeys[66]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_definition_viewers", values[i])
+			} else if value.Valid {
+				_m.workflow_definition_viewers = new(string)
+				*_m.workflow_definition_viewers = value.String
+			}
+		case group.ForeignKeys[67]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_definition_groups", values[i])
 			} else if value.Valid {

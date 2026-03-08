@@ -60,7 +60,8 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 	}
 
 	if proposal.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -107,13 +108,15 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, err
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	submitCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || submitCaller == nil || submitCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
+	userID := submitCaller.SubjectID
 
 	if proposal.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -168,13 +171,15 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, fmt.Errorf("%w: workflow proposal is not withdrawable", rout.ErrBadRequest)
 	}
 
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil || userID == "" {
+	withdrawCaller, ok := auth.CallerFromContext(ctx)
+	if !ok || withdrawCaller == nil || withdrawCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
+	userID := withdrawCaller.SubjectID
 
 	if proposal.OwnerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -239,11 +244,11 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 
 	if err := r.requireWorkflowObjectEditAccess(ctx, objectType, objectID); err != nil {
 		if errors.Is(err, rout.ErrPermissionDenied) {
-			userID, err := auth.GetSubjectIDFromContext(ctx)
-			if err != nil || userID == "" {
+			viewCaller, ok := auth.CallerFromContext(ctx)
+			if !ok || viewCaller == nil || viewCaller.SubjectID == "" {
 				return nil, rout.ErrPermissionDenied
 			}
-			isApprover, err := workflowProposalHasApprover(ctx, r.db, proposal.ID, userID)
+			isApprover, err := workflowProposalHasApprover(ctx, r.db, proposal.ID, viewCaller.SubjectID)
 			if err != nil {
 				return nil, err
 			}
@@ -283,7 +288,8 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
 	}
 	if ownerID != "" {
-		if err := common.SetOrganizationInAuthContext(allowCtx, &ownerID); err != nil {
+		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &ownerID)
+		if err != nil {
 			return nil, err
 		}
 	}

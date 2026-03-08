@@ -100,6 +100,12 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionBulkCreatePayload_wor
 				return ec.fieldContext_WorkflowDefinition_trackedFields(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowDefinition_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_WorkflowDefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_WorkflowDefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_WorkflowDefinition_viewers(ctx, field)
 			case "tagDefinitions":
 				return ec.fieldContext_WorkflowDefinition_tagDefinitions(ctx, field)
 			case "groups":
@@ -187,6 +193,12 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionCreatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_trackedFields(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowDefinition_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_WorkflowDefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_WorkflowDefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_WorkflowDefinition_viewers(ctx, field)
 			case "tagDefinitions":
 				return ec.fieldContext_WorkflowDefinition_tagDefinitions(ctx, field)
 			case "groups":
@@ -303,6 +315,12 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionUpdatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_trackedFields(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowDefinition_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_WorkflowDefinition_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_WorkflowDefinition_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_WorkflowDefinition_viewers(ctx, field)
 			case "tagDefinitions":
 				return ec.fieldContext_WorkflowDefinition_tagDefinitions(ctx, field)
 			case "groups":

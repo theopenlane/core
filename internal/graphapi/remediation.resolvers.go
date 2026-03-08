@@ -38,7 +38,8 @@ func (r *mutationResolver) CreateBulkRemediation(ctx context.Context, input []*g
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	ctx, err := common.SetOrganizationInAuthContextBulkRequest(ctx, input)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -62,7 +63,8 @@ func (r *mutationResolver) CreateBulkCSVRemediation(ctx context.Context, input g
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	ctx, err = common.SetOrganizationInAuthContextBulkRequest(ctx, data)
+	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if _, ownerErr := common.GetBulkUploadOwnerInput(data); ownerErr != nil {
@@ -117,6 +119,44 @@ func (r *mutationResolver) DeleteRemediation(ctx context.Context, id string) (*m
 	return &model.RemediationDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// UpdateBulkRemediation is the resolver for the updateBulkRemediation field.
+func (r *mutationResolver) UpdateBulkRemediation(ctx context.Context, ids []string, input generated.UpdateRemediationInput) (*model.RemediationBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateRemediation(ctx, ids, input)
+}
+
+// UpdateBulkCSVRemediation is the resolver for the updateBulkCSVRemediation field.
+func (r *mutationResolver) UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[csvgenerated.RemediationCSVUpdateInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "remediation"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if err := resolveCSVReferencesForSchema(ctx, "Remediation", data); err != nil {
+		return nil, err
+	}
+
+	return r.bulkUpdateCSVRemediation(ctx, data)
+}
+
+// DeleteBulkRemediation is the resolver for the deleteBulkRemediation field.
+func (r *mutationResolver) DeleteBulkRemediation(ctx context.Context, ids []string) (*model.RemediationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteRemediation(ctx, ids)
 }
 
 // Remediation is the resolver for the remediation field.

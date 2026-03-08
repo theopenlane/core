@@ -17,12 +17,12 @@ func ObjectRefIDs(ctx context.Context, client *generated.Client, obj *Object) ([
 		return nil, ErrMissingObjectID
 	}
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, err
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return nil, auth.ErrNoAuthUser
 	}
 
-	query := buildObjectRefQuery(client.WorkflowObjectRef.Query().Where(workflowobjectref.OwnerIDEQ(orgID)), obj)
+	query := buildObjectRefQuery(client.WorkflowObjectRef.Query().Where(workflowobjectref.OwnerIDEQ(caller.OrganizationID)), obj)
 	if query == nil {
 		return nil, ErrUnsupportedObjectType
 	}

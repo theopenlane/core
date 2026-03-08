@@ -597,7 +597,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 
 	tests := []struct {
 		name        string
-		authUser    *auth.AuthenticatedUser
+		caller      *auth.Caller
 		variables   map[string]any
 		inputKey    string
 		expectedOrg string
@@ -605,7 +605,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 	}{
 		{
 			name: "Org already set in context",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationID:     primaryOrg,
 				AuthenticationType: auth.PATAuthentication,
 			},
@@ -615,7 +615,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "PAT requires explicit owner",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
 				AuthenticationType: auth.PATAuthentication,
 			},
@@ -629,7 +629,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "PAT missing owner errors",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
 				AuthenticationType: auth.PATAuthentication,
 			},
@@ -639,7 +639,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "Non-PAT single authorized org fallback",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg},
 				AuthenticationType: auth.APITokenAuthentication,
 			},
@@ -649,7 +649,7 @@ func TestSetOrganizationForUploads(t *testing.T) {
 		},
 		{
 			name: "Non-PAT multiple orgs require owner input",
-			authUser: &auth.AuthenticatedUser{
+			caller: &auth.Caller{
 				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
 				AuthenticationType: auth.APITokenAuthentication,
 			},
@@ -661,18 +661,18 @@ func TestSetOrganizationForUploads(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := auth.WithAuthenticatedUser(context.Background(), tt.authUser)
+			ctx := auth.WithCaller(context.Background(), tt.caller)
 
-			err := setOrganizationForUploads(ctx, tt.variables, tt.inputKey)
+			gotCtx, err := setOrganizationForUploads(ctx, tt.variables, tt.inputKey)
 			if tt.expectedErr != nil {
 				assert.ErrorIs(t, err, tt.expectedErr)
 				return
 			}
 
 			assert.NilError(t, err)
-			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			assert.NilError(t, err)
-			assert.Check(t, is.Equal(tt.expectedOrg, orgID))
+			helpersTestCaller, helpersTestCallerOk := auth.CallerFromContext(gotCtx)
+			assert.Check(t, helpersTestCallerOk)
+			assert.Check(t, is.Equal(tt.expectedOrg, helpersTestCaller.OrganizationID))
 		})
 	}
 }
@@ -744,6 +744,61 @@ func TestUnmarshalBulkDataInvalidJSONMap(t *testing.T) {
 	_, err := UnmarshalBulkData[csvRow](upload)
 	assert.Assert(t, err != nil)
 	assert.Check(t, strings.Contains(err.Error(), "list or object values must be valid JSON"))
+}
+
+func TestInsensitiveHeaders(t *testing.T) {
+	t.Parallel()
+
+	type csvRow struct {
+		StatusPageURL string `csv:"StatusPageURL"`
+		DisplayName   string `csv:"DisplayName"`
+	}
+
+	tests := []struct {
+		name     string
+		header   string
+		wantURL  string
+		wantName string
+	}{
+		{
+			name:     "mixed case URL acronym",
+			header:   "StatusPageUrl,DisplayName",
+			wantURL:  "https://theopenlane.io",
+			wantName: "Marketing site",
+		},
+		{
+			name:     "all lowercase",
+			header:   "statuspageurl,displayname",
+			wantURL:  "https://theopenlane.io",
+			wantName: "Marketing site",
+		},
+		{
+			name:     "all uppercase",
+			header:   "STATUSPAGEURL,DISPLAYNAME",
+			wantURL:  "https://theopenlane.io",
+			wantName: "Marketing site",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			csvData := tc.header + "\nhttps://theopenlane.io,Marketing site\n"
+			upload := graphql.Upload{
+				File:        strings.NewReader(csvData),
+				Filename:    "case.csv",
+				Size:        int64(len(csvData)),
+				ContentType: "text/csv",
+			}
+
+			rows, err := UnmarshalBulkData[csvRow](upload)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(rows, 1))
+			assert.Check(t, is.Equal(tc.wantURL, rows[0].StatusPageURL))
+			assert.Check(t, is.Equal(tc.wantName, rows[0].DisplayName))
+		})
+	}
 }
 
 // TestGetOrgOwnerFromInputWrapped verifies wrapped Input owner extraction.

@@ -89,7 +89,7 @@ func createWildcardTuple(ctx context.Context, m ent.Mutation) error {
 	if _, err := genericMut.Client().Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create public viewer relationship tuples")
 
-		return err
+		return ErrInternalServerError
 	}
 
 	return nil

@@ -30,7 +30,7 @@ func azureOperations() []types.OperationDescriptor {
 
 // runAzureEntraHealth performs a basic tenant reachability check
 func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
@@ -54,7 +54,7 @@ func runAzureEntraHealth(ctx context.Context, input types.OperationInput) (types
 
 // runAzureEntraTenantInspect collects tenant metadata from Microsoft Graph
 func runAzureEntraTenantInspect(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, token, err := auth.ClientAndOAuthToken(input)
+	client, token, err := auth.ClientAndToken(input, auth.OAuthTokenFromPayload)
 	if err != nil {
 		return types.OperationResult{}, err
 	}

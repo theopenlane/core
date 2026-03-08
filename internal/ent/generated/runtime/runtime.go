@@ -2380,6 +2380,8 @@ func init() {
 	entity.Hooks[15] = entityMixinHooks13[0]
 
 	entity.Hooks[16] = entityHooks[0]
+
+	entity.Hooks[17] = entityHooks[1]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
@@ -3338,6 +3340,7 @@ func init() {
 	identityholderMixinHooks8 := identityholderMixin[8].Hooks()
 	identityholderMixinHooks9 := identityholderMixin[9].Hooks()
 	identityholderMixinHooks10 := identityholderMixin[10].Hooks()
+	identityholderHooks := schema.IdentityHolder{}.Hooks()
 
 	identityholder.Hooks[1] = identityholderMixinHooks0[0]
 
@@ -3362,6 +3365,8 @@ func init() {
 	identityholder.Hooks[11] = identityholderMixinHooks9[0]
 
 	identityholder.Hooks[12] = identityholderMixinHooks10[0]
+
+	identityholder.Hooks[13] = identityholderHooks[0]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]
@@ -4878,6 +4883,10 @@ func init() {
 	onboardingDescOrganizationID := onboardingFields[0].Descriptor()
 	// onboarding.OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
 	onboarding.OrganizationIDValidator = onboardingDescOrganizationID.Validators[0].(func(string) error)
+	// onboardingDescDemoRequested is the schema descriptor for demo_requested field.
+	onboardingDescDemoRequested := onboardingFields[6].Descriptor()
+	// onboarding.DefaultDemoRequested holds the default value on creation for the demo_requested field.
+	onboarding.DefaultDemoRequested = onboardingDescDemoRequested.Default.(bool)
 	// onboardingDescID is the schema descriptor for id field.
 	onboardingDescID := onboardingMixinFields0[0].Descriptor()
 	// onboarding.DefaultID holds the default value on creation for the id field.
@@ -6061,6 +6070,7 @@ func init() {
 	reviewMixinHooks7 := reviewMixin[7].Hooks()
 	reviewMixinHooks8 := reviewMixin[8].Hooks()
 	reviewMixinHooks9 := reviewMixin[9].Hooks()
+	reviewHooks := schema.Review{}.Hooks()
 
 	review.Hooks[1] = reviewMixinHooks0[0]
 
@@ -6083,6 +6093,8 @@ func init() {
 	review.Hooks[10] = reviewMixinHooks8[0]
 
 	review.Hooks[11] = reviewMixinHooks9[0]
+
+	review.Hooks[12] = reviewHooks[0]
 	reviewMixinInters1 := reviewMixin[1].Interceptors()
 	reviewMixinInters5 := reviewMixin[5].Interceptors()
 	review.Interceptors[0] = reviewMixinInters1[0]
@@ -8637,7 +8649,7 @@ func init() {
 	// workflowassignmenttarget.DefaultID holds the default value on creation for the id field.
 	workflowassignmenttarget.DefaultID = workflowassignmenttargetDescID.Default.(func() string)
 	workflowdefinitionMixin := schema.WorkflowDefinition{}.Mixin()
-	workflowdefinition.Policy = privacy.NewPolicies(workflowdefinitionMixin[6], schema.WorkflowDefinition{})
+	workflowdefinition.Policy = privacy.NewPolicies(workflowdefinitionMixin[7], schema.WorkflowDefinition{})
 	workflowdefinition.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := workflowdefinition.Policy.EvalMutation(ctx, m); err != nil {
@@ -8652,6 +8664,7 @@ func init() {
 	workflowdefinitionMixinHooks3 := workflowdefinitionMixin[3].Hooks()
 	workflowdefinitionMixinHooks5 := workflowdefinitionMixin[5].Hooks()
 	workflowdefinitionMixinHooks6 := workflowdefinitionMixin[6].Hooks()
+	workflowdefinitionMixinHooks7 := workflowdefinitionMixin[7].Hooks()
 	workflowdefinitionHooks := schema.WorkflowDefinition{}.Hooks()
 
 	workflowdefinition.Hooks[1] = workflowdefinitionMixinHooks0[0]
@@ -8668,7 +8681,13 @@ func init() {
 
 	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks6[0]
 
-	workflowdefinition.Hooks[8] = workflowdefinitionHooks[0]
+	workflowdefinition.Hooks[8] = workflowdefinitionMixinHooks6[1]
+
+	workflowdefinition.Hooks[9] = workflowdefinitionMixinHooks6[2]
+
+	workflowdefinition.Hooks[10] = workflowdefinitionMixinHooks7[0]
+
+	workflowdefinition.Hooks[11] = workflowdefinitionHooks[0]
 	workflowdefinitionMixinInters1 := workflowdefinitionMixin[1].Interceptors()
 	workflowdefinitionMixinInters5 := workflowdefinitionMixin[5].Interceptors()
 	workflowdefinition.Interceptors[0] = workflowdefinitionMixinInters1[0]
@@ -8682,8 +8701,8 @@ func init() {
 	_ = workflowdefinitionMixinFields3
 	workflowdefinitionMixinFields5 := workflowdefinitionMixin[5].Fields()
 	_ = workflowdefinitionMixinFields5
-	workflowdefinitionMixinFields6 := workflowdefinitionMixin[6].Fields()
-	_ = workflowdefinitionMixinFields6
+	workflowdefinitionMixinFields7 := workflowdefinitionMixin[7].Fields()
+	_ = workflowdefinitionMixinFields7
 	workflowdefinitionFields := schema.WorkflowDefinition{}.Fields()
 	_ = workflowdefinitionFields
 	// workflowdefinitionDescCreatedAt is the schema descriptor for created_at field.
@@ -8709,7 +8728,7 @@ func init() {
 	// workflowdefinition.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	workflowdefinition.OwnerIDValidator = workflowdefinitionDescOwnerID.Validators[0].(func(string) error)
 	// workflowdefinitionDescSystemOwned is the schema descriptor for system_owned field.
-	workflowdefinitionDescSystemOwned := workflowdefinitionMixinFields6[0].Descriptor()
+	workflowdefinitionDescSystemOwned := workflowdefinitionMixinFields7[0].Descriptor()
 	// workflowdefinition.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	workflowdefinition.DefaultSystemOwned = workflowdefinitionDescSystemOwned.Default.(bool)
 	// workflowdefinitionDescName is the schema descriptor for name field.

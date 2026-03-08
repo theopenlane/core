@@ -11,7 +11,6 @@ import (
 	"github.com/resend/resend-go/v3"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -94,7 +93,7 @@ func (h *Handler) ResendWebhookHandler(ctx echo.Context, openapi *OpenAPIContext
 	}
 
 	allowCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
+	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
 
 	if event.Type != "" {
 		eventLabel = "resend." + event.Type

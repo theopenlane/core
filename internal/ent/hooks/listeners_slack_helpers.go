@@ -7,9 +7,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/theopenlane/utils/slack"
+
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
-	"github.com/theopenlane/utils/slack"
 )
 
 // SlackConfig defines the runtime configuration for Slack notifications emitted by listeners

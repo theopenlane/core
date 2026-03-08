@@ -270,7 +270,7 @@ func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Entity](e,
-				withParents(Organization{}, TrustCenterEntity{}),
+				withParents(Organization{}, TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),
@@ -310,6 +310,7 @@ func (e Entity) Edges() []ent.Edge {
 			ref:        "employer",
 		}),
 		defaultEdgeFromWithPagination(e, IdentityHolder{}),
+		defaultEdgeFromWithPagination(e, Control{}),
 		defaultEdgeFromWithPagination(e, Platform{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: e,
@@ -351,6 +352,7 @@ func (Entity) Indexes() []ent.Index {
 func (Entity) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEntityCreate(),
+		hooks.HookEntityFiles(),
 	}
 }
 

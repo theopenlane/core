@@ -121,12 +121,12 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 
 	ownerID := instance.OwnerID
 	if ownerID == "" {
-		extracted, err := auth.GetOrganizationIDFromContext(ctx)
-		if err != nil {
-			return err
+		caller, callerOk := auth.CallerFromContext(ctx)
+		if !callerOk || caller == nil || caller.OrganizationID == "" {
+			return auth.ErrNoAuthUser
 		}
 
-		ownerID = extracted
+		ownerID = caller.OrganizationID
 	}
 
 	actionIndex := actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key)

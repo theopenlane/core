@@ -25,4 +25,6 @@ var (
 	ErrMissingAPIKey = errors.New("missing API key")
 	// ErrNoSubscriptionItems is returned when no subscription items are found
 	ErrNoSubscriptionItems = errors.New("no subscription items found to create subscription")
+	// ErrInternalServerError is returned when an error occurs that should not be exposed to the user and is not the user's fault
+	ErrInternalServerError = errors.New("internal server error")
 )

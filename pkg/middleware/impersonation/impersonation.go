@@ -1,10 +1,11 @@
 package impersonation
 
 import (
+	"context"
 	"net/http"
 	"slices"
 
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -36,21 +37,21 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		// Validate the impersonation token
 		claims, err := m.tokenManager.ValidateImpersonationToken(ctx, tokenString)
 		if err != nil {
-			log.Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
+			logx.FromContext(ctx).Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
 
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid impersonation token")
 		}
 
-		// Create the impersonated user context
-		impersonatedUser, err := m.createImpersonatedUser(claims)
+		// Create the impersonated caller context
+		impersonatedCaller, err := m.createImpersonatedCaller(claims)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to create impersonated user context")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create impersonated user context")
 
 			return echo.NewHTTPError(http.StatusInternalServerError, "failed to process impersonation")
 		}
 
-		// Set the impersonated user in the context
-		ctx = auth.WithImpersonatedUser(ctx, impersonatedUser)
+		// Set the impersonated caller in the context.
+		ctx = auth.WithCaller(ctx, impersonatedCaller)
 		c.SetRequest(c.Request().WithContext(ctx))
 
 		// Log the impersonation action
@@ -60,20 +61,11 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// createImpersonatedUser creates an ImpersonatedUser from impersonation claims
-func (m *Middleware) createImpersonatedUser(claims *tokens.ImpersonationClaims) (*auth.ImpersonatedUser, error) {
-	// Create the target user (who is being impersonated)
-	targetUser := &auth.AuthenticatedUser{
+// createImpersonatedCaller creates a Caller with impersonation context from impersonation claims.
+func (m *Middleware) createImpersonatedCaller(claims *tokens.ImpersonationClaims) (*auth.Caller, error) {
+	caller := &auth.Caller{
 		SubjectID:          claims.UserID,
 		SubjectEmail:       claims.TargetUserEmail,
-		OrganizationID:     claims.OrgID,
-		AuthenticationType: auth.JWTAuthentication,
-	}
-
-	// Create the original user (who is doing the impersonation)
-	originalUser := &auth.AuthenticatedUser{
-		SubjectID:          claims.ImpersonatorID,
-		SubjectEmail:       claims.ImpersonatorEmail,
 		OrganizationID:     claims.OrgID,
 		AuthenticationType: auth.JWTAuthentication,
 	}
@@ -92,19 +84,19 @@ func (m *Middleware) createImpersonatedUser(claims *tokens.ImpersonationClaims) 
 		Scopes:            claims.Scopes,
 	}
 
-	// Create the impersonated user
-	impersonatedUser := &auth.ImpersonatedUser{
-		AuthenticatedUser:    targetUser,
-		ImpersonationContext: impersonationContext,
-		OriginalUser:         originalUser,
-	}
+	caller.Impersonation = impersonationContext
 
-	return impersonatedUser, nil
+	return caller, nil
 }
 
 // logImpersonationAccess logs when an impersonation token is used
-func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, _ echo.Context) {
-	log.Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
+func (m *Middleware) logImpersonationAccess(claims *tokens.ImpersonationClaims, c echo.Context) {
+	ctx := context.Background()
+	if c != nil {
+		ctx = c.Request().Context()
+	}
+
+	logx.FromContext(ctx).Info().Str("impersonator", claims.ImpersonatorID).Str("target", claims.UserID).Msg("impersonation token used")
 }
 
 // RequireImpersonationScope creates middleware that requires specific impersonation scopes
@@ -113,15 +105,18 @@ func RequireImpersonationScope(requiredScope string) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			// Check if this is an impersonated request
-			impUser, ok := auth.ImpersonatedUserFromContext(ctx)
-			if !ok {
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil || !caller.IsImpersonated() {
 				// Not impersonated, proceed normally
 				return next(c)
 			}
 
 			// Check if the impersonation has the required scope
-			if !impUser.CanPerformAction(requiredScope) {
+			if !caller.CanPerformAction(requiredScope) {
+				logx.FromContext(ctx).Info().
+					Str("user_id", caller.SubjectID).
+					Str("missing_scope", requiredScope).
+					Msg("impersonated user missing required scope for this action")
 				return echo.NewHTTPError(http.StatusForbidden, "impersonation scope insufficient for this action")
 			}
 
@@ -136,8 +131,9 @@ func BlockImpersonation() echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			// Check if this is an impersonated request
-			if _, ok := auth.ImpersonatedUserFromContext(ctx); ok {
+			caller, ok := auth.CallerFromContext(ctx)
+			if ok && caller != nil && caller.IsImpersonated() {
+				logx.FromContext(ctx).Info().Str("user_id", caller.SubjectID).Msg("impersonated user attempted to access blocked endpoint")
 				return echo.NewHTTPError(http.StatusForbidden, "action not allowed during impersonation session")
 			}
 
@@ -152,15 +148,14 @@ func AllowOnlyImpersonationType(allowedTypes ...auth.ImpersonationType) echo.Mid
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			// Check if this is an impersonated request
-			impUser, ok := auth.ImpersonatedUserFromContext(ctx)
-			if !ok {
+			caller, ok := auth.CallerFromContext(ctx)
+			if !ok || caller == nil || !caller.IsImpersonated() {
 				// Not impersonated, proceed normally
 				return next(c)
 			}
 
 			// Check if the impersonation type is allowed
-			if slices.Contains(allowedTypes, impUser.ImpersonationContext.Type) {
+			if slices.Contains(allowedTypes, caller.Impersonation.Type) {
 				return next(c)
 			}
 
@@ -177,15 +172,15 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			ctx := c.Request().Context()
 
-			// Check if there's already an authenticated user (from previous middleware)
-			currentUser, hasUser := auth.AuthenticatedUserFromContext(ctx)
-			if !hasUser {
-				// No authenticated user, continue normally
+			// Check if there's already an authenticated caller (from previous middleware)
+			caller, hasUser := auth.CallerFromContext(ctx)
+			if !hasUser || caller == nil {
+				// No authenticated caller, continue normally
 				return next(c)
 			}
 
 			// Only proceed if the current user is a system admin
-			if !currentUser.IsSystemAdmin {
+			if !caller.Has(auth.CapSystemAdmin) {
 				return next(c)
 			}
 
@@ -196,25 +191,19 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 
 			targetUserID, targetOrgID := auth.GetUserContextHeaders(c)
 
-			// Create user context for the target user
-			targetUser := &auth.AuthenticatedUser{
+			// Replace the caller in the context with the target user
+			ctx = auth.WithCaller(ctx, &auth.Caller{
 				SubjectID:          targetUserID,
-				SubjectEmail:       "", // Will be populated by subsequent middleware if needed
 				OrganizationID:     targetOrgID,
 				OrganizationIDs:    []string{targetOrgID},
 				AuthenticationType: auth.PATAuthentication,
-				IsSystemAdmin:      false, // Target user runs with their own permissions
-			}
-
-			// Store the original admin user in context before switching
-			ctx = auth.WithSystemAdminContext(ctx, currentUser)
-
-			// Replace the authenticated user in the context
-			ctx = auth.WithAuthenticatedUser(ctx, targetUser)
+			})
+			// Preserve the original admin caller on the active caller lineage.
+			ctx = auth.WithOriginalSystemAdminCaller(ctx, caller)
 			c.SetRequest(c.Request().WithContext(ctx))
 
 			// Log the system admin user context switch
-			log.Info().Str("admin", currentUser.SubjectID).Str("user", targetUserID).Msg("system admin user context")
+			logx.FromContext(ctx).Info().Str("admin", caller.SubjectID).Str("user", targetUserID).Msg("system admin user context")
 
 			return next(c)
 		}

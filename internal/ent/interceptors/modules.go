@@ -20,7 +20,7 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
-type moduleInterceptorKey struct{}
+var moduleInterceptorContextKey = contextx.NewKey[struct{}]()
 
 // InterceptorModules uses the query type to automatically validate the modules
 // from the auto generated pipeline
@@ -40,7 +40,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 			}
 		}
 
-		if _, ok := contextx.From[moduleInterceptorKey](ctx); ok {
+		if _, ok := moduleInterceptorContextKey.Get(ctx); ok {
 			return nil
 		}
 
@@ -61,7 +61,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 
 		// prevent infinite recursion. HasAllFeatures calls the OrgModule queries in some scenarios.
 		// This prevents a scenario where this interceptor is called again when already inside this function
-		ctxWithKey := contextx.With(ctx, moduleInterceptorKey{})
+		ctxWithKey := moduleInterceptorContextKey.Set(ctx, struct{}{})
 
 		ok, module, err := rule.HasAnyFeature(ctxWithKey, schemaFeatures...)
 		if err != nil || !ok {

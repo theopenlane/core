@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
@@ -234,9 +235,11 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Asset{}),
 		defaultEdgeToWithPagination(p, Entity{}),
 		defaultEdgeToWithPagination(p, DirectoryAccount{}),
+		defaultEdgeFromWithPagination(p, Control{}),
 		defaultEdgeFromWithPagination(p, Platform{}),
 		defaultEdgeFromWithPagination(p, Campaign{}),
 		defaultEdgeToWithPagination(p, Task{}),
+		defaultEdgeToWithPagination(p, File{}),
 		defaultEdgeFromWithPagination(p, Finding{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: p,
@@ -285,6 +288,13 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
+	}
+}
+
+// Hooks of the IdentityHolder
+func (IdentityHolder) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookIdentityHolderFiles(),
 	}
 }
 

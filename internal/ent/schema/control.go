@@ -105,6 +105,11 @@ func (c Control) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(c, Platform{}),
 		defaultEdgeToWithPagination(c, Asset{}),
 		defaultEdgeToWithPagination(c, Scan{}),
+		defaultEdgeToWithPagination(c, Entity{}),
+		defaultEdgeToWithPagination(c, IdentityHolder{}),
+		defaultEdgeToWithPagination(c, Campaign{}),
+		defaultEdgeFromWithPagination(c, Remediation{}),
+		defaultEdgeFromWithPagination(c, Review{}),
 		edge.From("findings", Finding.Type).
 			Ref("controls").
 			Annotations(

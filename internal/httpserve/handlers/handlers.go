@@ -36,7 +36,6 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -58,10 +57,8 @@ func isRegistrationContext(ctx echo.Context) bool {
 	if ctx == nil || ctx.Request() == nil {
 		return false
 	}
-	// Check if the request context has the registration marker
-	_, ok := contextx.From[common.RegistrationMarker](ctx.Request().Context())
 
-	return ok
+	return common.IsRegistrationContext(ctx.Request().Context())
 }
 
 // OpenAPIContext holds the OpenAPI operation and schema registry for automatic registration
@@ -168,7 +165,7 @@ type CloudflareConfig struct {
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
 // during a login or verification process
 func setAuthenticatedContext(ctx context.Context, user *ent.User) context.Context {
-	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
+	ctx = auth.WithCaller(ctx, &auth.Caller{
 		SubjectID:    user.ID,
 		SubjectEmail: user.Email,
 	})
@@ -345,8 +342,8 @@ func ProcessRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *Open
 	return h.Success(ctx, resp, openapi)
 }
 
-// ProcessAuthenticatedRequest provides a generic pattern for authenticated requests with automatic user context injection
-func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq, *auth.AuthenticatedUser) (*TResp, error)) error {
+// ProcessAuthenticatedRequest provides a generic pattern for authenticated requests with automatic caller context injection
+func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, openapi *OpenAPIContext, requestExample TReq, responseExample TResp, processor func(context.Context, *TReq, *auth.Caller) (*TResp, error)) error {
 	// Bind and validate the request
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, requestExample, responseExample, openapi.Registry)
 	if err != nil {
@@ -357,17 +354,17 @@ func ProcessAuthenticatedRequest[TReq, TResp any](ctx echo.Context, h *Handler, 
 		return nil
 	}
 
-	// Get authenticated user from context
+	// Get caller from context
 	reqCtx := ctx.Request().Context()
 
-	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
-		return h.InternalServerError(ctx, err, openapi)
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
+		logx.FromContext(reqCtx).Error().Msg("error getting caller from context")
+		return h.InternalServerError(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
-	// Process the request with authenticated user context
-	resp, err := processor(reqCtx, req, au)
+	// Process the request with caller context
+	resp, err := processor(reqCtx, req, caller)
 	if err != nil {
 		return h.InternalServerError(ctx, err, openapi)
 	}

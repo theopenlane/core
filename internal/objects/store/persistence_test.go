@@ -17,7 +17,7 @@ func TestGetOrgOwnerIDUsesSingleAuthorizedOrg(t *testing.T) {
 
 	orgID := ulids.New().String()
 
-	ctx := auth.WithAuthenticatedUser(context.Background(), &auth.AuthenticatedUser{
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
 		OrganizationIDs: []string{orgID},
 	})
 

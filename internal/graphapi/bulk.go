@@ -2755,6 +2755,141 @@ func (r *mutationResolver) bulkCreateFinding(ctx context.Context, input []*gener
 	}, nil
 }
 
+// bulkUpdateFinding updates multiple Finding entities
+func (r *mutationResolver) bulkUpdateFinding(ctx context.Context, ids []string, input generated.UpdateFindingInput) (*model.FindingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Finding, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each finding individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for finding")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Finding.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("finding_id", id).Msg("failed to get finding in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendCategories(input.AppendCategories).AppendReferences(input.AppendReferences).AppendStepsToReproduce(input.AppendStepsToReproduce).AppendTargets(input.AppendTargets).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("finding_id", id).Msg("failed to update finding in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.FindingBulkUpdatePayload{
+		Findings:   results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVFinding updates multiple Finding entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVFinding(ctx context.Context, inputs []*csvgenerated.FindingCSVUpdateInput) (*model.FindingBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Finding, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each finding individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for finding")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Finding.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("finding_id", input.ID).Msg("failed to get finding in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendCategories(input.Input.AppendCategories).AppendReferences(input.Input.AppendReferences).AppendStepsToReproduce(input.Input.AppendStepsToReproduce).AppendTargets(input.Input.AppendTargets).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("finding_id", input.ID).Msg("failed to update finding in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.FindingBulkUpdatePayload{
+		Findings:   results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkDeleteFinding deletes multiple Finding entities by their IDs
+func (r *mutationResolver) bulkDeleteFinding(ctx context.Context, ids []string) (*model.FindingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each finding individually to ensure proper cleanup
+			if err := r.db.Finding.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("finding_id", id).Msg("failed to delete finding in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.FindingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("finding_id", id).Msg("failed to cleanup finding edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some finding deletions failed")
+	}
+
+	return &model.FindingBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateFindingControl uses the CreateBulk function to create multiple FindingControl entities
 func (r *mutationResolver) bulkCreateFindingControl(ctx context.Context, input []*generated.CreateFindingControlInput) (*model.FindingControlBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -5584,6 +5719,141 @@ func (r *mutationResolver) bulkCreateRemediation(ctx context.Context, input []*g
 	}, nil
 }
 
+// bulkUpdateRemediation updates multiple Remediation entities
+func (r *mutationResolver) bulkUpdateRemediation(ctx context.Context, ids []string, input generated.UpdateRemediationInput) (*model.RemediationBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Remediation, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each remediation individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for remediation")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Remediation.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("remediation_id", id).Msg("failed to get remediation in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("remediation_id", id).Msg("failed to update remediation in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.RemediationBulkUpdatePayload{
+		Remediations: results,
+		UpdatedIDs:   updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVRemediation updates multiple Remediation entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVRemediation(ctx context.Context, inputs []*csvgenerated.RemediationCSVUpdateInput) (*model.RemediationBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Remediation, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each remediation individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for remediation")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Remediation.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("remediation_id", input.ID).Msg("failed to get remediation in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("remediation_id", input.ID).Msg("failed to update remediation in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "remediation"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.RemediationBulkUpdatePayload{
+		Remediations: results,
+		UpdatedIDs:   updatedIDs,
+	}, nil
+}
+
+// bulkDeleteRemediation deletes multiple Remediation entities by their IDs
+func (r *mutationResolver) bulkDeleteRemediation(ctx context.Context, ids []string) (*model.RemediationBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each remediation individually to ensure proper cleanup
+			if err := r.db.Remediation.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("remediation_id", id).Msg("failed to delete remediation in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.RemediationEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("remediation_id", id).Msg("failed to cleanup remediation edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some remediation deletions failed")
+	}
+
+	return &model.RemediationBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateReview uses the CreateBulk function to create multiple Review entities
 func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*generated.CreateReviewInput) (*model.ReviewBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -5600,6 +5870,88 @@ func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*genera
 	// return response
 	return &model.ReviewBulkCreatePayload{
 		Reviews: res,
+	}, nil
+}
+
+// bulkUpdateReview updates multiple Review entities
+func (r *mutationResolver) bulkUpdateReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Review, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each review individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for review")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Review.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", id).Msg("failed to get review in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", id).Msg("failed to update review in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.ReviewBulkUpdatePayload{
+		Reviews:    results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVReview updates multiple Review entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVReview(ctx context.Context, inputs []*csvgenerated.ReviewCSVUpdateInput) (*model.ReviewBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Review, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each review individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for review")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Review.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", input.ID).Msg("failed to get review in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("review_id", input.ID).Msg("failed to update review in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.ReviewBulkUpdatePayload{
+		Reviews:    results,
+		UpdatedIDs: updatedIDs,
 	}, nil
 }
 
@@ -7750,6 +8102,141 @@ func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []
 	// return response
 	return &model.VulnerabilityBulkCreatePayload{
 		Vulnerabilities: res,
+	}, nil
+}
+
+// bulkUpdateVulnerability updates multiple Vulnerability entities
+func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []string, input generated.UpdateVulnerabilityInput) (*model.VulnerabilityBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Vulnerability, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each vulnerability individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for vulnerability")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Vulnerability.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", id).Msg("failed to get vulnerability in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences).AppendImpacts(input.AppendImpacts).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", id).Msg("failed to update vulnerability in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.VulnerabilityBulkUpdatePayload{
+		Vulnerabilities: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVVulnerability updates multiple Vulnerability entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVVulnerability(ctx context.Context, inputs []*csvgenerated.VulnerabilityCSVUpdateInput) (*model.VulnerabilityBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Vulnerability, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each vulnerability individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for vulnerability")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Vulnerability.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", input.ID).Msg("failed to get vulnerability in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendReferences(input.Input.AppendReferences).AppendImpacts(input.Input.AppendImpacts).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", input.ID).Msg("failed to update vulnerability in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.VulnerabilityBulkUpdatePayload{
+		Vulnerabilities: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
+// bulkDeleteVulnerability deletes multiple Vulnerability entities by their IDs
+func (r *mutationResolver) bulkDeleteVulnerability(ctx context.Context, ids []string) (*model.VulnerabilityBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each vulnerability individually to ensure proper cleanup
+			if err := r.db.Vulnerability.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vulnerability_id", id).Msg("failed to delete vulnerability in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.VulnerabilityEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vulnerability_id", id).Msg("failed to cleanup vulnerability edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vulnerability deletions failed")
+	}
+
+	return &model.VulnerabilityBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 

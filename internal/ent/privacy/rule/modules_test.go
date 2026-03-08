@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
@@ -57,7 +56,7 @@ func setupContext(t *testing.T, org string, feats []models.OrgModule) context.Co
 
 	_ = cache.SetFeatures(ctx, org, feats)
 	ctx = permissioncache.WithCache(ctx, cache)
-	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{OrganizationID: org})
+	ctx = auth.WithCaller(ctx, &auth.Caller{OrganizationID: org})
 	return ctx
 }
 
@@ -228,15 +227,15 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 		assert.Contains(t, err.Error(), "skip rule")
 	})
 
-	t.Run("bypass with OrgSubscriptionContextKey", func(t *testing.T) {
-		ctx := contextx.With(baseCtx, auth.OrgSubscriptionContextKey{})
+	t.Run("bypass with WebhookCaller", func(t *testing.T) {
+		ctx := auth.WithCaller(baseCtx, auth.NewWebhookCaller(""))
 		err := featureRule.EvalMutation(ctx, testMutation)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")
 	})
 
-	t.Run("bypass with OrganizationCreationContextKey", func(t *testing.T) {
-		ctx := contextx.With(baseCtx, auth.OrganizationCreationContextKey{})
+	t.Run("bypass with InternalOperationCaller", func(t *testing.T) {
+		ctx := auth.WithCaller(baseCtx, &auth.Caller{Capabilities: auth.CapInternalOperation})
 		err := featureRule.EvalMutation(ctx, testMutation)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "skip rule")

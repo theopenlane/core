@@ -18,7 +18,7 @@ import (
 // AccountAccessHandler list roles a subject has access to in relation an object
 func (h *Handler) AccountRolesHandler(ctx echo.Context, openapi *OpenAPIContext) error {
 	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountRolesRequest, models.ExampleAccountRolesReply,
-		func(reqCtx context.Context, in *models.AccountRolesRequest, au *auth.AuthenticatedUser) (*models.AccountRolesReply, error) {
+		func(reqCtx context.Context, in *models.AccountRolesRequest, caller *auth.Caller) (*models.AccountRolesReply, error) {
 			ids := in.ObjectIDs
 			if len(ids) == 0 {
 				ids = []string{in.ObjectID}
@@ -29,11 +29,11 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context, openapi *OpenAPIContext)
 			for _, id := range ids {
 				req := fgax.ListAccess{
 					SubjectType: in.SubjectType,
-					SubjectID:   au.SubjectID,
+					SubjectID:   caller.SubjectID,
 					ObjectID:    id,
 					ObjectType:  fgax.Kind(in.ObjectType),
 					Relations:   in.Relations,
-					Context:     utils.NewOrganizationContextKey(au.SubjectEmail),
+					Context:     utils.NewOrganizationContextKey(caller.SubjectEmail),
 				}
 
 				roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)

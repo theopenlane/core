@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -759,6 +760,21 @@ func (_u *FileUpdate) AddEvidence(v ...*Evidence) *FileUpdate {
 	return _u.AddEvidenceIDs(ids...)
 }
 
+// AddIdentityHolderIDs adds the "identity_holder" edge to the IdentityHolder entity by IDs.
+func (_u *FileUpdate) AddIdentityHolderIDs(ids ...string) *FileUpdate {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolder adds the "identity_holder" edges to the IdentityHolder entity.
+func (_u *FileUpdate) AddIdentityHolder(v ...*IdentityHolder) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // AddScanIDs adds the "scan" edge to the Scan entity by IDs.
 func (_u *FileUpdate) AddScanIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddScanIDs(ids...)
@@ -1089,6 +1105,27 @@ func (_u *FileUpdate) RemoveEvidence(v ...*Evidence) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearIdentityHolder clears all "identity_holder" edges to the IdentityHolder entity.
+func (_u *FileUpdate) ClearIdentityHolder() *FileUpdate {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holder" edge to IdentityHolder entities by IDs.
+func (_u *FileUpdate) RemoveIdentityHolderIDs(ids ...string) *FileUpdate {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolder removes "identity_holder" edges to IdentityHolder entities.
+func (_u *FileUpdate) RemoveIdentityHolder(v ...*IdentityHolder) *FileUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
 // ClearScan clears all "scan" edges to the Scan entity.
@@ -2023,6 +2060,54 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHolderIDs(); len(nodes) > 0 && !_u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3098,6 +3183,21 @@ func (_u *FileUpdateOne) AddEvidence(v ...*Evidence) *FileUpdateOne {
 	return _u.AddEvidenceIDs(ids...)
 }
 
+// AddIdentityHolderIDs adds the "identity_holder" edge to the IdentityHolder entity by IDs.
+func (_u *FileUpdateOne) AddIdentityHolderIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolder adds the "identity_holder" edges to the IdentityHolder entity.
+func (_u *FileUpdateOne) AddIdentityHolder(v ...*IdentityHolder) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // AddScanIDs adds the "scan" edge to the Scan entity by IDs.
 func (_u *FileUpdateOne) AddScanIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddScanIDs(ids...)
@@ -3428,6 +3528,27 @@ func (_u *FileUpdateOne) RemoveEvidence(v ...*Evidence) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearIdentityHolder clears all "identity_holder" edges to the IdentityHolder entity.
+func (_u *FileUpdateOne) ClearIdentityHolder() *FileUpdateOne {
+	_u.mutation.ClearIdentityHolder()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holder" edge to IdentityHolder entities by IDs.
+func (_u *FileUpdateOne) RemoveIdentityHolderIDs(ids ...string) *FileUpdateOne {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolder removes "identity_holder" edges to IdentityHolder entities.
+func (_u *FileUpdateOne) RemoveIdentityHolder(v ...*IdentityHolder) *FileUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
 }
 
 // ClearScan clears all "scan" edges to the Scan entity.
@@ -4392,6 +4513,54 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EvidenceFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHolderIDs(); len(nodes) > 0 && !_u.mutation.IdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.IdentityHolderTable,
+			Columns: file.IdentityHolderPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

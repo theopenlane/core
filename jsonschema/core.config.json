@@ -442,6 +442,10 @@
         "trustcenterpreviewzoneid": {
           "type": "string",
           "description": "TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain"
+        },
+        "notificationlookbackdays": {
+          "type": "integer",
+          "description": "NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription\nUnread notifications are always pulled regardless of this setting"
         }
       },
       "additionalProperties": false,
