@@ -62,8 +62,6 @@ type assessment_response
     define editor: [organization#owner, organization#super_admin] or can_edit from parent
     define viewer: [organization#owner, organization#super_admin] or editor or can_view from parent
 
-
-
 type campaign
   relations
     define can_view: [user, service] or can_edit or (viewer but not blocked)

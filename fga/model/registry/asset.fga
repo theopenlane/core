@@ -8,7 +8,7 @@ type asset
     define can_edit: [user, service] or (editor but not blocked)
     define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define editor: [group#member, organization#owner, organization#super_admin] or can_edit from parent
+    define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
     define parent: [user, service, organization, platform, entity]

@@ -2,7 +2,8 @@ module roles
 
 extend type organization
   relations
-    # main roles
+    # main roles defined as top-level org membership roles. All users are assigned a base role and additional "meta" roles can be assigned on top of the base role to give additional permissions. For example, a user could be a member but also be given the campaign_manager role which would give them permissions to manage campaigns but not other objects in the system.
+
     # admin have specific create + view permissions but not always edit access to objects that were created
     define admin: [user] or admin from parent
     # member role gives view access to objects that are organization-wide or inherited from the organization, but not edit access
@@ -12,49 +13,40 @@ extend type organization
     # owner should be able to have full access to all objects in the system that are organization owned. The only exception would be user specific objects like their own user object or personal access tokens.
     define owner: [user] or owner from parent
 
-    # auditor role with access to:
-    # - controls + subcontrols (view)
-    # - programs (view)
-    # - evidence (view + create)
-    # - policies (view )
-    # - procedures (view)
-    # - reviews (edit)
-    # - comments (create) or view by parent
-    # - discussions (create) or view by parent
-    # - tasks (create) or view by parent
-    # - children of evidence, e.g. vulnerabilities, findings, etc. (view)
+    # @create: review, comment, discussion, task, evidence
+    # @view: control, subcontrol, program, evidence, policy, procedure, review
     define auditor: [user]
 
-    # has admin access to all compliance features
-    # controls, subcontrols, programs, policies, procedures, reviews, findings, vulnerabilities, risks, action plans, narratives, exposures, and registry
-    define compliance_manager: [service, user, group#member]
+    # @inherit: can_manage_compliance, can_manage_policies, can_manage_registry, can_manage_risk
+    # @crud: control, subcontrol, program, evidence, narrative, standard, control_objective, control_implementation, mapped_control
     define can_manage_compliance: compliance_manager or full_access
+    define compliance_manager: [service, user, group#member]
 
-    # has admin access to all risk + exposure features (risks, vulnerabilities, scans)
-    define risk_manager: [service, user, group#member]
+    # @crud: risk, vulnerability, scan, finding, action_plan, remediation, review
     define can_manage_risk: risk_manager or full_access
+    define risk_manager: [service, user, group#member]
 
-    # has admin access to all policies and procedures features
-    define policy_manager: [service, user, group#member]
+    # @crud: internal_policy, procedure
     define can_manage_policies: policy_manager or full_access
+    define policy_manager: [service, user, group#member]
 
-    # has admin access to all registry features (assets, entities, identity holders)
+    # @crud: asset, entity, contact, identity_holder, platform, system_detail
+    define can_manage_registry: registry_manager or admin
     define registry_manager: [service, user, group#member]
-    define can_manage_registry: registry_manager or full_access
 
-    # has admin access to group management features
+    # @crud: group
+    define can_manage_group: group_manager or full_access
     define group_manager: [service, user, group#member]
-    define can_manage_groups: group_manager or full_access
 
-    # has admin access to all trust center features with the exception of deleting the trust center itself
-    define trust_center_manager: [service, user, group#member]
+    # @crud: trust_center
     define can_manage_trust_center: trust_center_manager or full_access
+    define trust_center_manager: [service, user, group#member]
 
-    # has admin access to workflows and integrations
-    define workflow_manager: [service, user, group#member]
+    # @crud: workflow_definition, scheduled_job, job_runner, job_template, integration, integration_webhook
     define can_manage_workflows: workflow_manager or full_access
+    define workflow_manager: [service, user, group#member]
 
-    # has admin access to all campaign an assessment features
-    # by default all org admins and above should have default access to manage campaigns
-    define campaign_manager: [service, user, group#member]
+    # @crud: campaign, assessment, template, email_template, email_branding, notification_template
+    # @view: document_data, assessment_response
     define can_manage_campaigns: campaign_manager or admin
+    define campaign_manager: [service, user, group#member]
