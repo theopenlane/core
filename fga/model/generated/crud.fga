@@ -7,9 +7,9 @@ extend type organization
     define can_edit_api_token: [service, user] or can_delete_api_token
     define can_delete_api_token: [service, user]
 
-    define can_view_action_plan: [service, user] or can_edit_action_plan or can_manage_risk or can_manage_compliance
-    define can_edit_action_plan: [service, user] or can_delete_action_plan or can_manage_risk or can_manage_compliance
-    define can_delete_action_plan: [service, user] or can_manage_risk or can_manage_compliance
+    define can_view_action_plan: [service, user] or can_edit_action_plan or can_manage_compliance or can_manage_risk
+    define can_edit_action_plan: [service, user] or can_delete_action_plan or can_manage_compliance or can_manage_risk
+    define can_delete_action_plan: [service, user] or can_manage_compliance or can_manage_risk
     define action_plan_creator: [group#member]
     define can_create_action_plan: can_edit or action_plan_creator or can_manage_risk or can_manage_compliance
 
@@ -40,28 +40,28 @@ extend type organization
     define campaign_target_creator: [group#member]
     define can_create_campaign_target: can_edit or campaign_target_creator
 
-    define can_view_contact: [service, user] or can_edit_contact or can_manage_registry or can_manage_compliance
-    define can_edit_contact: [service, user] or can_delete_contact or can_manage_registry or can_manage_compliance
-    define can_delete_contact: [service, user] or can_manage_registry or can_manage_compliance
+    define can_view_contact: [service, user] or can_edit_contact or can_manage_compliance or can_manage_registry
+    define can_edit_contact: [service, user] or can_delete_contact or can_manage_compliance or can_manage_registry
+    define can_delete_contact: [service, user] or can_manage_compliance or can_manage_registry
     define can_create_contact: can_manage_registry or can_manage_compliance
 
-    define can_view_control: [service, user] or can_edit_control or can_manage_compliance or auditor
-    define can_edit_control: [service, user] or can_delete_control or can_manage_compliance
-    define can_delete_control: [service, user] or can_manage_compliance
+    define can_view_control: [service, user] or auditor or can_edit_control or can_manage_compliance or can_manage_compliance
+    define can_edit_control: [service, user] or can_delete_control or can_manage_compliance or can_manage_compliance
+    define can_delete_control: [service, user] or can_manage_compliance or can_manage_compliance
     define control_creator: [group#member]
-    define can_create_control: can_edit or control_creator or can_manage_compliance
+    define can_create_control: can_edit or control_creator or can_manage_compliance or can_manage_compliance
 
-    define can_view_control_implementation: [service, user] or can_edit_control_implementation or can_manage_compliance
-    define can_edit_control_implementation: [service, user] or can_delete_control_implementation or can_manage_compliance
-    define can_delete_control_implementation: [service, user] or can_manage_compliance
+    define can_view_control_implementation: [service, user] or can_edit_control_implementation or can_manage_compliance or can_manage_compliance
+    define can_edit_control_implementation: [service, user] or can_delete_control_implementation or can_manage_compliance or can_manage_compliance
+    define can_delete_control_implementation: [service, user] or can_manage_compliance or can_manage_compliance
     define control_implementation_creator: [group#member]
-    define can_create_control_implementation: can_edit or control_implementation_creator or can_manage_compliance
+    define can_create_control_implementation: can_edit or control_implementation_creator or can_manage_compliance or can_manage_compliance
 
-    define can_view_control_objective: [service, user] or can_edit_control_objective or can_manage_compliance
-    define can_edit_control_objective: [service, user] or can_delete_control_objective or can_manage_compliance
-    define can_delete_control_objective: [service, user] or can_manage_compliance
+    define can_view_control_objective: [service, user] or can_edit_control_objective or can_manage_compliance or can_manage_compliance
+    define can_edit_control_objective: [service, user] or can_delete_control_objective or can_manage_compliance or can_manage_compliance
+    define can_delete_control_objective: [service, user] or can_manage_compliance or can_manage_compliance
     define control_objective_creator: [group#member]
-    define can_create_control_objective: can_edit or control_objective_creator or can_manage_compliance
+    define can_create_control_objective: can_edit or control_objective_creator or can_manage_compliance or can_manage_compliance
 
     define can_view_custom_domain: [service, user] or can_edit_custom_domain
     define can_edit_custom_domain: [service, user] or can_delete_custom_domain
@@ -115,9 +115,9 @@ extend type organization
     define can_edit_email_verification_token: [service, user] or can_delete_email_verification_token
     define can_delete_email_verification_token: [service, user]
 
-    define can_view_entity: [service, user] or can_edit_entity or can_manage_registry or can_manage_compliance
-    define can_edit_entity: [service, user] or can_delete_entity or can_manage_registry or can_manage_compliance
-    define can_delete_entity: [service, user] or can_manage_registry or can_manage_compliance
+    define can_view_entity: [service, user] or can_edit_entity or can_manage_compliance or can_manage_registry
+    define can_edit_entity: [service, user] or can_delete_entity or can_manage_compliance or can_manage_registry
+    define can_delete_entity: [service, user] or can_manage_compliance or can_manage_registry
     define entity_creator: [group#member]
     define can_create_entity: can_edit or entity_creator or can_manage_registry or can_manage_compliance
 
@@ -129,11 +129,11 @@ extend type organization
     define can_edit_event: [service, user] or can_delete_event
     define can_delete_event: [service, user]
 
-    define can_view_evidence: [service, user] or can_edit_evidence or can_manage_compliance or auditor
-    define can_edit_evidence: [service, user] or can_delete_evidence or can_manage_compliance
-    define can_delete_evidence: [service, user] or can_manage_compliance
+    define can_view_evidence: [service, user] or auditor or can_edit_evidence or can_manage_compliance or can_manage_compliance
+    define can_edit_evidence: [service, user] or can_delete_evidence or can_manage_compliance or can_manage_compliance
+    define can_delete_evidence: [service, user] or can_manage_compliance or can_manage_compliance
     define evidence_creator: [group#member]
-    define can_create_evidence: can_edit or evidence_creator or auditor or can_manage_compliance
+    define can_create_evidence: can_edit or evidence_creator or auditor or can_manage_compliance or can_manage_compliance
 
     define can_view_export: [service, user] or can_edit_export
     define can_edit_export: [service, user] or can_delete_export
@@ -147,9 +147,9 @@ extend type organization
     define can_edit_file_download_token: [service, user] or can_delete_file_download_token
     define can_delete_file_download_token: [service, user]
 
-    define can_view_finding: [service, user] or can_edit_finding or can_manage_risk or can_manage_compliance
-    define can_edit_finding: [service, user] or can_delete_finding or can_manage_risk or can_manage_compliance
-    define can_delete_finding: [service, user] or can_manage_risk or can_manage_compliance
+    define can_view_finding: [service, user] or can_edit_finding or can_manage_compliance or can_manage_risk
+    define can_edit_finding: [service, user] or can_delete_finding or can_manage_compliance or can_manage_risk
+    define can_delete_finding: [service, user] or can_manage_compliance or can_manage_risk
     define finding_creator: [group#member]
     define can_create_finding: can_edit or finding_creator or can_manage_risk or can_manage_compliance
 
@@ -175,9 +175,9 @@ extend type organization
     define can_edit_hush: [service, user] or can_delete_hush
     define can_delete_hush: [service, user]
 
-    define can_view_identity_holder: [service, user] or can_edit_identity_holder or can_manage_registry or can_manage_compliance
-    define can_edit_identity_holder: [service, user] or can_delete_identity_holder or can_manage_registry or can_manage_compliance
-    define can_delete_identity_holder: [service, user] or can_manage_registry or can_manage_compliance
+    define can_view_identity_holder: [service, user] or can_edit_identity_holder or can_manage_compliance or can_manage_registry
+    define can_edit_identity_holder: [service, user] or can_delete_identity_holder or can_manage_compliance or can_manage_registry
+    define can_delete_identity_holder: [service, user] or can_manage_compliance or can_manage_registry
     define identity_holder_creator: [group#member]
     define can_create_identity_holder: can_edit or identity_holder_creator or can_manage_registry or can_manage_compliance
 
@@ -199,9 +199,9 @@ extend type organization
     define can_delete_integration_webhook: [service, user] or can_manage_workflows
     define can_create_integration_webhook: can_manage_workflows
 
-    define can_view_internal_policy: [service, user] or can_edit_internal_policy or can_manage_policies or can_manage_compliance
-    define can_edit_internal_policy: [service, user] or can_delete_internal_policy or can_manage_policies or can_manage_compliance
-    define can_delete_internal_policy: [service, user] or can_manage_policies or can_manage_compliance
+    define can_view_internal_policy: [service, user] or can_edit_internal_policy or can_manage_compliance or can_manage_policies
+    define can_edit_internal_policy: [service, user] or can_delete_internal_policy or can_manage_compliance or can_manage_policies
+    define can_delete_internal_policy: [service, user] or can_manage_compliance or can_manage_policies
     define internal_policy_creator: [group#member]
     define can_create_internal_policy: can_edit or internal_policy_creator or can_manage_policies or can_manage_compliance
 
@@ -241,17 +241,17 @@ extend type organization
     define can_edit_mappable_domain: [service, user] or can_delete_mappable_domain
     define can_delete_mappable_domain: [service, user]
 
-    define can_view_mapped_control: [service, user] or can_edit_mapped_control or can_manage_compliance
-    define can_edit_mapped_control: [service, user] or can_delete_mapped_control or can_manage_compliance
-    define can_delete_mapped_control: [service, user] or can_manage_compliance
+    define can_view_mapped_control: [service, user] or can_edit_mapped_control or can_manage_compliance or can_manage_compliance
+    define can_edit_mapped_control: [service, user] or can_delete_mapped_control or can_manage_compliance or can_manage_compliance
+    define can_delete_mapped_control: [service, user] or can_manage_compliance or can_manage_compliance
     define mapped_control_creator: [group#member]
-    define can_create_mapped_control: can_edit or mapped_control_creator or can_manage_compliance
+    define can_create_mapped_control: can_edit or mapped_control_creator or can_manage_compliance or can_manage_compliance
 
-    define can_view_narrative: [service, user] or can_edit_narrative or can_manage_compliance
-    define can_edit_narrative: [service, user] or can_delete_narrative or can_manage_compliance
-    define can_delete_narrative: [service, user] or can_manage_compliance
+    define can_view_narrative: [service, user] or can_edit_narrative or can_manage_compliance or can_manage_compliance
+    define can_edit_narrative: [service, user] or can_delete_narrative or can_manage_compliance or can_manage_compliance
+    define can_delete_narrative: [service, user] or can_manage_compliance or can_manage_compliance
     define narrative_creator: [group#member]
-    define can_create_narrative: can_edit or narrative_creator or can_manage_compliance
+    define can_create_narrative: can_edit or narrative_creator or can_manage_compliance or can_manage_compliance
 
     define can_view_note: [service, user] or can_edit_note
     define can_edit_note: [service, user] or can_delete_note
@@ -310,43 +310,43 @@ extend type organization
     define can_edit_personal_access_token: [service, user] or can_delete_personal_access_token
     define can_delete_personal_access_token: [service, user]
 
-    define can_view_platform: [service, user] or can_edit_platform or can_manage_registry or can_manage_compliance
-    define can_edit_platform: [service, user] or can_delete_platform or can_manage_registry or can_manage_compliance
-    define can_delete_platform: [service, user] or can_manage_registry or can_manage_compliance
+    define can_view_platform: [service, user] or can_edit_platform or can_manage_compliance or can_manage_registry
+    define can_edit_platform: [service, user] or can_delete_platform or can_manage_compliance or can_manage_registry
+    define can_delete_platform: [service, user] or can_manage_compliance or can_manage_registry
     define platform_creator: [group#member]
-    define can_create_platform: can_edit or platform_creator or can_manage_compliance or can_manage_registry
+    define can_create_platform: can_edit or platform_creator or can_manage_registry or can_manage_compliance
 
-    define can_view_procedure: [service, user] or can_edit_procedure or can_manage_policies or can_manage_compliance or auditor
-    define can_edit_procedure: [service, user] or can_delete_procedure or can_manage_policies or can_manage_compliance
-    define can_delete_procedure: [service, user] or can_manage_policies or can_manage_compliance
+    define can_view_procedure: [service, user] or auditor or can_edit_procedure or can_manage_compliance or can_manage_policies
+    define can_edit_procedure: [service, user] or can_delete_procedure or can_manage_compliance or can_manage_policies
+    define can_delete_procedure: [service, user] or can_manage_compliance or can_manage_policies
     define procedure_creator: [group#member]
-    define can_create_procedure: can_edit or procedure_creator or can_manage_compliance or can_manage_policies
+    define can_create_procedure: can_edit or procedure_creator or can_manage_policies or can_manage_compliance
 
-    define can_view_program: [service, user] or can_edit_program or can_manage_compliance or auditor
-    define can_edit_program: [service, user] or can_delete_program or can_manage_compliance
-    define can_delete_program: [service, user] or can_manage_compliance
+    define can_view_program: [service, user] or auditor or can_edit_program or can_manage_compliance or can_manage_compliance
+    define can_edit_program: [service, user] or can_delete_program or can_manage_compliance or can_manage_compliance
+    define can_delete_program: [service, user] or can_manage_compliance or can_manage_compliance
     define program_creator: [group#member]
-    define can_create_program: can_edit or program_creator or can_manage_compliance
+    define can_create_program: can_edit or program_creator or can_manage_compliance or can_manage_compliance
 
     define can_view_program_membership: [service, user] or can_edit_program_membership or can_view_program
     define can_edit_program_membership: [service, user] or can_delete_program_membership or can_edit_program
     define can_delete_program_membership: [service, user] or can_delete_program
 
-    define can_view_remediation: [service, user] or can_edit_remediation or can_manage_risk or can_manage_compliance
-    define can_edit_remediation: [service, user] or can_delete_remediation or can_manage_risk or can_manage_compliance
-    define can_delete_remediation: [service, user] or can_manage_risk or can_manage_compliance
+    define can_view_remediation: [service, user] or can_edit_remediation or can_manage_compliance or can_manage_risk
+    define can_edit_remediation: [service, user] or can_delete_remediation or can_manage_compliance or can_manage_risk
+    define can_delete_remediation: [service, user] or can_manage_compliance or can_manage_risk
     define remediation_creator: [group#member]
     define can_create_remediation: can_edit or remediation_creator or can_manage_risk or can_manage_compliance
 
-    define can_view_review: [service, user] or can_edit_review or can_manage_risk or can_manage_compliance or auditor
-    define can_edit_review: [service, user] or can_delete_review or can_manage_risk or can_manage_compliance
-    define can_delete_review: [service, user] or can_manage_risk or can_manage_compliance
+    define can_view_review: [service, user] or auditor or can_edit_review or can_manage_compliance or can_manage_risk
+    define can_edit_review: [service, user] or can_delete_review or can_manage_compliance or can_manage_risk
+    define can_delete_review: [service, user] or can_manage_compliance or can_manage_risk
     define review_creator: [group#member]
     define can_create_review: can_edit or review_creator or auditor or can_manage_risk or can_manage_compliance
 
-    define can_view_risk: [service, user] or can_edit_risk or can_manage_risk or can_manage_compliance
-    define can_edit_risk: [service, user] or can_delete_risk or can_manage_risk or can_manage_compliance
-    define can_delete_risk: [service, user] or can_manage_risk or can_manage_compliance
+    define can_view_risk: [service, user] or can_edit_risk or can_manage_compliance or can_manage_risk
+    define can_edit_risk: [service, user] or can_delete_risk or can_manage_compliance or can_manage_risk
+    define can_delete_risk: [service, user] or can_manage_compliance or can_manage_risk
     define risk_creator: [group#member]
     define can_create_risk: can_edit or risk_creator or can_manage_risk or can_manage_compliance
 
@@ -368,17 +368,17 @@ extend type organization
     define scheduled_job_run_creator: [group#member]
     define can_create_scheduled_job_run: can_edit or scheduled_job_run_creator
 
-    define can_view_standard: [service, user] or can_edit_standard or can_manage_compliance
-    define can_edit_standard: [service, user] or can_delete_standard or can_manage_compliance
-    define can_delete_standard: [service, user] or can_manage_compliance
+    define can_view_standard: [service, user] or can_edit_standard or can_manage_compliance or can_manage_compliance
+    define can_edit_standard: [service, user] or can_delete_standard or can_manage_compliance or can_manage_compliance
+    define can_delete_standard: [service, user] or can_manage_compliance or can_manage_compliance
     define standard_creator: [group#member]
-    define can_create_standard: can_edit or standard_creator or can_manage_compliance
+    define can_create_standard: can_edit or standard_creator or can_manage_compliance or can_manage_compliance
 
-    define can_view_subcontrol: [service, user] or can_edit_subcontrol or can_manage_compliance or auditor or can_view_control
-    define can_edit_subcontrol: [service, user] or can_delete_subcontrol or can_manage_compliance or can_edit_control
-    define can_delete_subcontrol: [service, user] or can_manage_compliance or can_delete_control
+    define can_view_subcontrol: [service, user] or auditor or can_edit_subcontrol or can_manage_compliance or can_manage_compliance or can_view_control
+    define can_edit_subcontrol: [service, user] or can_delete_subcontrol or can_edit_control or can_manage_compliance or can_manage_compliance
+    define can_delete_subcontrol: [service, user] or can_delete_control or can_manage_compliance or can_manage_compliance
     define subcontrol_creator: [group#member]
-    define can_create_subcontrol: can_edit or subcontrol_creator or can_manage_compliance
+    define can_create_subcontrol: can_edit or subcontrol_creator or can_manage_compliance or can_manage_compliance
 
     define can_view_subprocessor: [service, user] or can_edit_subprocessor
     define can_edit_subprocessor: [service, user] or can_delete_subprocessor
@@ -472,9 +472,9 @@ extend type organization
     define can_edit_user_setting: [service, user] or can_delete_user_setting
     define can_delete_user_setting: [service, user]
 
-    define can_view_vulnerability: [service, user] or can_edit_vulnerability or can_manage_risk or can_manage_compliance
-    define can_edit_vulnerability: [service, user] or can_delete_vulnerability or can_manage_risk or can_manage_compliance
-    define can_delete_vulnerability: [service, user] or can_manage_risk or can_manage_compliance
+    define can_view_vulnerability: [service, user] or can_edit_vulnerability or can_manage_compliance or can_manage_risk
+    define can_edit_vulnerability: [service, user] or can_delete_vulnerability or can_manage_compliance or can_manage_risk
+    define can_delete_vulnerability: [service, user] or can_manage_compliance or can_manage_risk
     define vulnerability_creator: [group#member]
     define can_create_vulnerability: can_edit or vulnerability_creator or can_manage_risk or can_manage_compliance
 
