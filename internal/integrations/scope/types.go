@@ -1,6 +1,7 @@
 package scope
 
 import (
+	"encoding/json"
 	"time"
 
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
@@ -52,9 +53,10 @@ type EvaluatorConfig struct {
 }
 
 // ScopeVars contains standard variables available to integration scope expressions
+//revive:disable-next-line
 type ScopeVars struct {
 	// Payload contains provider payload data for filtering
-	Payload map[string]any
+	Payload json.RawMessage
 	// Resource contains provider resource identity values
 	Resource string
 	// Provider contains provider kind values
@@ -62,27 +64,38 @@ type ScopeVars struct {
 	// Operation contains operation name values
 	Operation integrationtypes.OperationName
 	// Config contains operation config values
-	Config map[string]any
+	Config json.RawMessage
 	// IntegrationConfig contains integration-level config values
-	IntegrationConfig map[string]any
+	IntegrationConfig json.RawMessage
 	// ProviderState contains integration provider state values
-	ProviderState map[string]any
+	ProviderState json.RawMessage
 	// OrgID contains integration owner id values
 	OrgID string
 	// IntegrationID contains installed integration id values
 	IntegrationID string
 }
 
-// Map converts scope vars into CEL variable bindings
-func (v ScopeVars) Map() map[string]any {
+// CELVars converts scope vars into CEL variable bindings
+func (v ScopeVars) CELVars() map[string]any {
+	decodeOrNil := func(raw json.RawMessage) any {
+		if len(raw) == 0 {
+			return nil
+		}
+		var out any
+		if err := json.Unmarshal(raw, &out); err != nil {
+			return nil
+		}
+		return out
+	}
+
 	return map[string]any{
-		VariablePayload:           v.Payload,
+		VariablePayload:           decodeOrNil(v.Payload),
 		VariableResource:          v.Resource,
 		VariableProvider:          string(v.Provider),
 		VariableOperation:         string(v.Operation),
-		VariableConfig:            v.Config,
-		VariableIntegrationConfig: v.IntegrationConfig,
-		VariableProviderState:     v.ProviderState,
+		VariableConfig:            decodeOrNil(v.Config),
+		VariableIntegrationConfig: decodeOrNil(v.IntegrationConfig),
+		VariableProviderState:     decodeOrNil(v.ProviderState),
 		VariableOrgID:             v.OrgID,
 		VariableIntegrationID:     v.IntegrationID,
 	}

@@ -2,6 +2,7 @@ package okta
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	okta "github.com/okta/okta-sdk-golang/v5/okta"
@@ -56,7 +57,12 @@ func resolveOktaClient(input types.OperationInput) (*okta.APIClient, error) {
 		return nil, err
 	}
 
-	orgURL, _ := input.Credential.Data.ProviderData["orgUrl"].(string)
+	var meta oktaProviderMetadata
+	if err := json.Unmarshal(input.Credential.ProviderData, &meta); err != nil {
+		return nil, err
+	}
+
+	orgURL := meta.OrgURL
 	if orgURL == "" {
 		return nil, ErrCredentialsMissing
 	}

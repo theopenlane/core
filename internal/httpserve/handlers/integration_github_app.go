@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -21,7 +22,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -137,14 +137,16 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
-	if orgCookie, orgErr := sessions.GetCookie(req, githubAppOrgIDCookieName); orgErr == nil && orgCookie.Value != "" && caller.OrganizationID != orgCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("cookie_org_id", orgCookie.Value).Str("caller_org_id", caller.OrganizationID).Msg("github app callback org cookie mismatch")
+	orgCookie, orgErr := sessions.GetCookie(req, githubAppOrgIDCookieName)
+	if orgErr != nil || orgCookie.Value == "" || caller.OrganizationID != orgCookie.Value {
+		logx.FromContext(reqCtx).Error().Err(orgErr).Str("caller_org_id", caller.OrganizationID).Msg("github app callback org id cookie invalid")
 
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
-	if userCookie, userErr := sessions.GetCookie(req, githubAppUserIDCookieName); userErr == nil && userCookie.Value != "" && caller.SubjectID != userCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("cookie_user_id", userCookie.Value).Str("caller_user_id", caller.SubjectID).Msg("github app callback user cookie mismatch")
+	userCookie, userErr := sessions.GetCookie(req, githubAppUserIDCookieName)
+	if userErr != nil || userCookie.Value == "" || caller.SubjectID != userCookie.Value {
+		logx.FromContext(reqCtx).Error().Err(userErr).Str("caller_user_id", caller.SubjectID).Msg("github app callback user id cookie invalid")
 
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
@@ -236,7 +238,7 @@ func (h *Handler) githubAppInstallURL(state string) (string, error) {
 
 // updateGitHubAppIntegrationMetadata merges GitHub App installation metadata into provider state.
 func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integrationRecord *ent.Integration, payload githubAppInstallationPayload) error {
-	statePatch, err := jsonx.ToMap(payload)
+	statePatch, err := json.Marshal(payload)
 	if err != nil {
 		return ErrInvalidStateFormat
 	}
@@ -253,29 +255,25 @@ func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integr
 
 // verifyGitHubAppInstallation mints and validates a GitHub App installation token before persisting installation metadata.
 func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string, installation githubAppInstallationPayload) error {
-	credentialPayload, err := types.NewCredentialBuilder(github.TypeGitHubApp).With(
-		types.WithCredentialKind(types.CredentialKindMetadata),
-		types.WithCredentialSet(models.CredentialSet{
-			ProviderData: map[string]any{
-				"appId":          installation.AppID,
-				"installationId": installation.InstallationID,
-			},
-		}),
-	).Build()
+	providerData, err := json.Marshal(installation)
 	if err != nil {
 		return err
 	}
 
-	minted, err := h.IntegrationRuntime.Registry().MintPayload(ctx, types.CredentialSubject{
+	credential := models.CredentialSet{
+		ProviderData: providerData,
+	}
+
+	minted, err := h.IntegrationRuntime.Registry().MintCredential(ctx, types.CredentialMintRequest{
 		Provider:   github.TypeGitHubApp,
 		OrgID:      orgID,
-		Credential: credentialPayload,
+		Credential: credential,
 	})
 	if err != nil {
 		return err
 	}
 
-	result, err := h.IntegrationRuntime.Operations().RunWithPayload(ctx, types.OperationRequest{
+	result, err := h.IntegrationRuntime.Operations().RunWithCredential(ctx, types.OperationRequest{
 		OrgID:    orgID,
 		Provider: github.TypeGitHubApp,
 		Name:     types.OperationHealthDefault,

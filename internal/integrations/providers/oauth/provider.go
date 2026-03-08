@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	iamauth "github.com/theopenlane/iam/auth"
 )
 
@@ -26,19 +27,15 @@ const (
 type Provider struct {
 	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
-	spec                 config.ProviderSpec
-	oauthConfig          *oauth2.Config
-	relyingParty         rp.RelyingParty
-	authParams           map[string]string
-	tokenParams          map[string]string
-	credentialSetBuilder CredentialSetBuilder
+	spec         config.ProviderSpec
+	oauthConfig  *oauth2.Config
+	relyingParty rp.RelyingParty
+	authParams   map[string]string
+	tokenParams  map[string]string
 }
 
 // ProviderOption customizes OAuth provider construction.
 type ProviderOption func(*Provider)
-
-// CredentialSetBuilder builds provider-specific credential metadata from an OAuth token
-type CredentialSetBuilder func(token *oauth2.Token) models.CredentialSet
 
 // WithClientDescriptors registers client descriptors for pooling.
 func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
@@ -47,17 +44,14 @@ func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption 
 	}
 }
 
-// WithCredentialSetBuilder configures provider-specific credential metadata extraction from OAuth tokens
-func WithCredentialSetBuilder(builder CredentialSetBuilder) ProviderOption {
-	return func(p *Provider) {
-		p.credentialSetBuilder = builder
-	}
-}
-
 // New constructs a Provider from the supplied spec
 func New(spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
 	if spec.OAuth == nil {
 		return nil, providers.ErrSpecOAuthRequired
+	}
+	authKind := spec.AuthType.Normalize()
+	if !authKind.SupportsInteractiveFlow() {
+		return nil, ErrAuthTypeMismatch
 	}
 
 	cfg := &oauth2.Config{
@@ -135,31 +129,41 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 	return session, nil
 }
 
-// Mint refreshes an access token using the stored credential payload
-func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	tokenOpt := subject.Credential.OAuthTokenOption()
-	if !tokenOpt.IsPresent() {
-		return types.CredentialPayload{}, providers.ErrTokenUnavailable
+// Mint refreshes an access token using the stored credential set.
+func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
+	if subject.Credential.OAuthAccessToken == "" && subject.Credential.OAuthRefreshToken == "" {
+		return models.CredentialSet{}, providers.ErrTokenUnavailable
 	}
 
-	tokenSource := p.oauthConfig.TokenSource(ctx, tokenOpt.MustGet())
+	token := &oauth2.Token{
+		AccessToken:  subject.Credential.OAuthAccessToken,
+		RefreshToken: subject.Credential.OAuthRefreshToken,
+		TokenType:    subject.Credential.OAuthTokenType,
+	}
+	if subject.Credential.OAuthExpiry != nil {
+		token.Expiry = subject.Credential.OAuthExpiry.UTC()
+	}
+
+	tokenSource := p.oauthConfig.TokenSource(ctx, token)
 	freshToken, err := tokenSource.Token()
 	if err != nil {
-		return types.CredentialPayload{}, providers.ErrTokenRefresh
+		return models.CredentialSet{}, providers.ErrTokenRefresh
 	}
 
 	var claims *oidc.IDTokenClaims
-	claimOpt := subject.Credential.ClaimsOption()
-	if claimOpt.IsPresent() {
-		claims = claimOpt.MustGet()
+	if len(subject.Credential.Claims) > 0 {
+		var decoded oidc.IDTokenClaims
+		if err := jsonx.RoundTrip(subject.Credential.Claims, &decoded); err == nil {
+			claims = &decoded
+		}
 	}
 
-	payload, err := integrationauth.BuildOAuthCredentialPayload(p.Type(), freshToken, claims)
+	credential, err := integrationauth.BuildOAuthCredentialSet(freshToken, claims)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	return payload, nil
+	return credential, nil
 }
 
 // WithOperations configures provider-managed operations.

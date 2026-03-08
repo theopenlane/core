@@ -11,28 +11,25 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestBuildGoogleWorkspaceClient_MissingToken(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	_, err := buildGoogleWorkspaceClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrOAuthTokenMissing)
 }
 
 func TestBuildGoogleWorkspaceClient_EmptyAccessToken(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: ""},
-	}
+	payload := models.CredentialSet{OAuthTokenType: "Bearer"}
 	_, err := buildGoogleWorkspaceClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrAccessTokenEmpty)
 }
 
 func TestBuildGoogleWorkspaceClient_Success(t *testing.T) {
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: "ya29.test-token"},
-	}
+	payload := models.CredentialSet{OAuthAccessToken: "ya29.test-token"}
 	instance, err := buildGoogleWorkspaceClient(context.Background(), payload, json.RawMessage(nil))
 	require.NoError(t, err)
 
@@ -56,9 +53,7 @@ func TestResolveGoogleWorkspaceClient_PooledClient(t *testing.T) {
 
 func TestResolveGoogleWorkspaceClient_BuildsFromCredential(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Token: &oauth2.Token{AccessToken: "ya29.test-token"},
-		},
+		Credential: models.CredentialSet{OAuthAccessToken: "ya29.test-token"},
 	}
 	result, err := resolveGoogleWorkspaceClient(context.Background(), input)
 	require.NoError(t, err)

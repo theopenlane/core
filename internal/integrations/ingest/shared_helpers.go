@@ -2,22 +2,23 @@ package ingest
 
 import (
 	"context"
+	"encoding/json"
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // schemaIngestContext captures shared mapping state used by schema-specific ingest handlers
 type schemaIngestContext struct {
-	mapper               *MappingEvaluator
-	schema               integrationgenerated.IntegrationMappingSchema
-	overrideIndex        mappingOverrideIndex
-	integrationConfigMap map[string]any
-	providerStateMap     map[string]any
-	mappingIndex         integrationtypes.MappingIndex
+	mapper            *MappingEvaluator
+	schema            integrationgenerated.IntegrationMappingSchema
+	schemaName        string
+	overrideIndex     mappingOverrideIndex
+	integrationConfig json.RawMessage
+	providerState     json.RawMessage
+	mappingIndex      integrationtypes.MappingIndex
 }
 
 // envelopeMappingRequest captures shared request fields used during envelope mapping
@@ -26,7 +27,7 @@ type envelopeMappingRequest struct {
 	Operation       integrationtypes.OperationName
 	OrgID           string
 	IntegrationID   string
-	OperationConfig map[string]any
+	OperationConfig json.RawMessage
 }
 
 // envelopeProcessFunc processes one envelope and reports whether it was ingested and whether it created a new record
@@ -44,39 +45,47 @@ func newSchemaIngestContext(integrationConfig openapi.IntegrationConfig, provide
 		return schemaIngestContext{}, ErrMappingSchemaNotFound
 	}
 
-	integrationConfigMap, err := jsonx.ToMap(integrationConfig)
+	integrationConfigRaw, err := json.Marshal(integrationConfig)
 	if err != nil {
 		return schemaIngestContext{}, err
 	}
-	providerStateMap, err := jsonx.ToMap(providerState)
+
+	providerStateRaw, err := json.Marshal(providerState)
 	if err != nil {
 		return schemaIngestContext{}, err
 	}
 
 	return schemaIngestContext{
-		mapper:               mapper,
-		schema:               schema,
-		overrideIndex:        newMappingOverrideIndex(integrationConfig),
-		integrationConfigMap: integrationConfigMap,
-		providerStateMap:     providerStateMap,
-		mappingIndex:         mappingIndex,
+		mapper:            mapper,
+		schema:            schema,
+		schemaName:        schemaName,
+		overrideIndex:     newMappingOverrideIndex(integrationConfig),
+		integrationConfig: integrationConfigRaw,
+		providerState:     providerStateRaw,
+		mappingIndex:      mappingIndex,
 	}, nil
+}
+
+// mapEnvelope evaluates mapping rules for one envelope using this ingest context
+func (c schemaIngestContext) mapEnvelope(ctx context.Context, req IngestRequest, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
+	return mapIngestEnvelope(ctx, c, envelopeMappingRequest{
+		Provider:        req.Provider,
+		Operation:       req.Operation,
+		OrgID:           req.OrgID,
+		IntegrationID:   req.IntegrationID,
+		OperationConfig: req.OperationConfig,
+	}, c.schemaName, envelope)
 }
 
 // mapIngestEnvelope evaluates mapping rules for one envelope using shared ingest context
 func mapIngestEnvelope(ctx context.Context, ingestCtx schemaIngestContext, req envelopeMappingRequest, schemaName string, envelope integrationtypes.AlertEnvelope) (map[string]any, bool, error) {
-	payloadMap, err := decodeAlertPayload(envelope.Payload)
-	if err != nil {
-		return nil, false, err
-	}
-
 	spec, ok := resolveMappingSpecWithIndex(ingestCtx.overrideIndex, ingestCtx.mappingIndex, req.Provider, schemaName, envelope.AlertType)
 	if !ok {
 		return nil, false, ErrMappingNotFound
 	}
 
 	vars := MappingVars{
-		Payload:           payloadMap,
+		Payload:           envelope.Payload,
 		Resource:          envelope.Resource,
 		AlertType:         envelope.AlertType,
 		Provider:          req.Provider,
@@ -84,9 +93,9 @@ func mapIngestEnvelope(ctx context.Context, ingestCtx schemaIngestContext, req e
 		OrgID:             req.OrgID,
 		IntegrationID:     req.IntegrationID,
 		Config:            req.OperationConfig,
-		IntegrationConfig: ingestCtx.integrationConfigMap,
-		ProviderState:     ingestCtx.providerStateMap,
-	}.Map()
+		IntegrationConfig: ingestCtx.integrationConfig,
+		ProviderState:     ingestCtx.providerState,
+	}.CELVars()
 
 	allowed, err := ingestCtx.mapper.EvaluateFilter(ctx, spec.FilterExpr, vars)
 	if err != nil {
@@ -129,7 +138,6 @@ func processIngestEnvelopes(envelopes []integrationtypes.AlertEnvelope, process 
 		}
 
 		summary.Mapped++
-		summary.Persisted++
 		if created {
 			summary.Created++
 		} else {

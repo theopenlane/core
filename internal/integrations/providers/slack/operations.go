@@ -2,6 +2,7 @@ package slack
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	slackgo "github.com/slack-go/slack"
@@ -136,9 +137,11 @@ func runSlackMessagePostOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, err
 	}
 
-	cfg, err := operations.Decode[slackMessageOperationConfig](input.Config)
-	if err != nil {
-		return types.OperationResult{}, err
+	var cfg slackMessageOperationConfig
+	if len(input.Config) > 0 {
+		if err := json.Unmarshal(input.Config, &cfg); err != nil {
+			return types.OperationResult{}, err
+		}
 	}
 
 	channel := cfg.Channel

@@ -1,6 +1,8 @@
 package operations
 
 import (
+	"encoding/json"
+
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -34,15 +36,25 @@ type PayloadOptions struct {
 	IncludePayloads bool `json:"include_payloads"`
 }
 
-// EnsureIncludePayloads forces include_payloads to true.
-func EnsureIncludePayloads(config map[string]any) map[string]any {
-	if config == nil {
-		config = map[string]any{}
+// EnsureIncludePayloads forces include_payloads to true in a JSON config document.
+func EnsureIncludePayloads(config json.RawMessage) json.RawMessage {
+	var m map[string]any
+	if len(config) > 0 {
+		if err := json.Unmarshal(config, &m); err != nil {
+			m = map[string]any{}
+		}
+	} else {
+		m = map[string]any{}
 	}
 
-	config["include_payloads"] = true
+	m["include_payloads"] = true
 
-	return config
+	out, err := json.Marshal(m)
+	if err != nil {
+		return config
+	}
+
+	return out
 }
 
 // RepositorySelector captures repository selection settings

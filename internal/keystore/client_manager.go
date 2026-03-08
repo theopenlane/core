@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"sync"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -115,7 +116,7 @@ type descriptorClientBuilder struct {
 }
 
 // Build constructs a client using the descriptor's build function
-func (b descriptorClientBuilder) Build(ctx context.Context, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
+func (b descriptorClientBuilder) Build(ctx context.Context, payload models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 	return b.descriptor.Build(ctx, payload, append(json.RawMessage(nil), config...))
 }
 
@@ -133,7 +134,7 @@ type clientDescriptorKey struct {
 }
 
 // BuildFromPayload constructs a client directly from the provided payload without using the credential store or pool
-func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types.ProviderType, client types.ClientName, payload types.CredentialPayload, config json.RawMessage) (types.ClientInstance, error) {
+func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types.ProviderType, client types.ClientName, payload models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 	m.mu.RLock()
 	descriptor, ok := m.descriptors[clientDescriptorKey{Provider: provider, Name: client}]
 	m.mu.RUnlock()

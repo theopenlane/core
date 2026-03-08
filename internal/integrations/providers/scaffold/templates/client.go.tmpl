@@ -24,7 +24,7 @@ func {{.Provider}}ClientDescriptors() []types.ClientDescriptor {
 	}
 }
 
-func build{{.ProviderPascal}}Client(_ context.Context, payload types.CredentialPayload, _ map[string]any) (types.ClientInstance, error) {
+func build{{.ProviderPascal}}Client(_ context.Context, payload models.CredentialSet, _ map[string]any) (types.ClientInstance, error) {
 	token, err := auth.OAuthTokenFromPayload(payload)
 	if err != nil {
 		return types.ClientInstance{}, ErrClientBuild

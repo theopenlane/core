@@ -2,13 +2,13 @@ package azuresecuritycenter
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
@@ -50,34 +50,36 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 }
 
 // Mint exchanges stored client credentials for an Azure access token.
-func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	if len(subject.Credential.Data.ProviderData) == 0 {
-		return types.CredentialPayload{}, ErrProviderMetadataRequired
-	}
-
-	credentials, err := azureSecurityCenterMetadataFromMap(subject.Credential.Data.ProviderData)
+func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
+	credentials, err := azureSecurityCenterMetadataFromPayload(subject.Credential)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
 	token, err := p.requestToken(ctx, credentials, subject.Scopes)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	providerData, err := auth.PersistMetadata(subject.Credential.Data.ProviderData, credentials)
+	providerData, err := json.Marshal(credentials.providerData())
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
-	builder := types.NewCredentialBuilder(p.Type()).With(
-		types.WithCredentialKind(types.CredentialKindOAuthToken),
-		types.WithOAuthToken(token),
-		types.WithCredentialSet(models.CredentialSet{
-			ProviderData: providerData,
-		}),
-	)
 
-	return builder.Build()
+	credential := models.CredentialSet{
+		ClientID:          credentials.ClientID,
+		ClientSecret:      credentials.ClientSecret,
+		ProviderData:      providerData,
+		OAuthAccessToken:  token.AccessToken,
+		OAuthRefreshToken: token.RefreshToken,
+		OAuthTokenType:    token.TokenType,
+	}
+	if !token.Expiry.IsZero() {
+		exp := token.Expiry.UTC()
+		credential.OAuthExpiry = &exp
+	}
+
+	return credential, nil
 }
 
 // requestToken obtains an Azure access token using the client credentials flow.
@@ -89,8 +91,8 @@ func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMet
 
 	scopeList := meta.scopes(scopes)
 	cfg := clientcredentials.Config{
-		ClientID:     meta.ClientID.String(),
-		ClientSecret: meta.ClientSecret.String(),
+		ClientID:     meta.ClientID,
+		ClientSecret: meta.ClientSecret,
 		TokenURL:     tokenURL,
 		Scopes:       scopeList,
 		AuthStyle:    oauth2.AuthStyleInParams,
@@ -98,7 +100,7 @@ func (p *Provider) requestToken(ctx context.Context, meta azureSecurityCenterMet
 
 	token, err := cfg.Token(ctx)
 	if err != nil {
-		return nil, ErrTokenExchangeFailed
+		return nil, fmt.Errorf("%w: %w", ErrTokenExchangeFailed, err)
 	}
 
 	return token, nil
@@ -116,9 +118,9 @@ type azureSecurityCenterMetadata struct {
 	// TenantID identifies the Azure tenant
 	TenantID types.TrimmedString `json:"tenantId,omitempty"`
 	// ClientID identifies the Azure application
-	ClientID types.TrimmedString `json:"clientId,omitempty"`
+	ClientID string `json:"clientId,omitempty"`
 	// ClientSecret holds the client credential secret
-	ClientSecret types.TrimmedString `json:"clientSecret,omitempty"`
+	ClientSecret string `json:"clientSecret,omitempty"`
 	// SubscriptionID identifies the Azure subscription
 	SubscriptionID types.TrimmedString `json:"subscriptionId,omitempty"`
 	// ResourceGroup scopes access to a resource group
@@ -129,11 +131,41 @@ type azureSecurityCenterMetadata struct {
 	Scope types.TrimmedString `json:"scope,omitempty"`
 }
 
-// azureSecurityCenterMetadataFromMap normalizes and validates provider metadata.
-func azureSecurityCenterMetadataFromMap(meta map[string]any) (azureSecurityCenterMetadata, error) {
+type azureSecurityCenterProviderData struct {
+	TenantID       string `json:"tenantId,omitempty"`
+	SubscriptionID string `json:"subscriptionId,omitempty"`
+	ResourceGroup  string `json:"resourceGroup,omitempty"`
+	WorkspaceID    string `json:"workspaceId,omitempty"`
+	Scope          string `json:"scope,omitempty"`
+}
+
+func (m azureSecurityCenterMetadata) providerData() azureSecurityCenterProviderData {
+	return azureSecurityCenterProviderData{
+		TenantID:       m.TenantID.String(),
+		SubscriptionID: m.SubscriptionID.String(),
+		ResourceGroup:  m.ResourceGroup.String(),
+		WorkspaceID:    m.WorkspaceID.String(),
+		Scope:          m.Scope.String(),
+	}
+}
+
+// azureSecurityCenterMetadataFromPayload normalizes and validates provider metadata.
+func azureSecurityCenterMetadataFromPayload(payload models.CredentialSet) (azureSecurityCenterMetadata, error) {
+	if len(payload.ProviderData) == 0 && payload.ClientID == "" && payload.ClientSecret == "" {
+		return azureSecurityCenterMetadata{}, ErrProviderMetadataRequired
+	}
+
 	var decoded azureSecurityCenterMetadata
-	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
-		return azureSecurityCenterMetadata{}, err
+	if len(payload.ProviderData) > 0 {
+		if err := json.Unmarshal(payload.ProviderData, &decoded); err != nil {
+			return azureSecurityCenterMetadata{}, err
+		}
+	}
+	if decoded.ClientID == "" {
+		decoded.ClientID = payload.ClientID
+	}
+	if decoded.ClientSecret == "" {
+		decoded.ClientSecret = payload.ClientSecret
 	}
 
 	switch {

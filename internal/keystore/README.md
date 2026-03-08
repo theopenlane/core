@@ -14,7 +14,7 @@ The `keystore` package owns credential persistence, secure refresh, and the reus
 
 ### Store
 - Validates org/provider inputs, ensures an integration record exists, and persists credential payloads as hush secrets (`SaveCredential`, `LoadCredential`, `DeleteIntegration`).
-- Converts between `types.CredentialPayload` and the `models.CredentialSet` envelope for storage, cloning timestamps and provider metadata.
+- Converts between `models.CredentialSet` and the `models.CredentialSet` envelope for storage, cloning timestamps and provider metadata.
 - Acts as the durable source of truth for all credentials referenced by the broker.
 
 ### Broker (CredentialSource)
@@ -41,7 +41,7 @@ The `keystore` package owns credential persistence, secure refresh, and the reus
 
 ## Descriptor Types
 
-- **`types.ClientDescriptor`**: provider identifier, logical client name, and a build function `func(context.Context, types.CredentialPayload, map[string]any) (any, error)`. Used by `ClientPoolManager`.
+- **`types.ClientDescriptor`**: provider identifier, logical client name, and a build function `func(context.Context, models.CredentialSet, map[string]any) (any, error)`. Used by `ClientPoolManager`.
 - **`types.OperationDescriptor`**: provider identifier, operation name, optional client name dependency, and a run function that receives `types.OperationInput`. Used by `OperationManager`.
 - Helper constructors such as `FlattenDescriptors` / `FlattenOperationDescriptors` convert provider‑keyed maps into the slices accepted by the managers.
 

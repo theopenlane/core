@@ -4,166 +4,50 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
-	"github.com/samber/mo"
-	"golang.org/x/oauth2"
 
-	"github.com/zitadel/oidc/v3/pkg/oidc"
-
-	"github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/state"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
-// CredentialKind distinguishes the various credential payloads managed by the broker
-type CredentialKind string
+// CloneCredentialSet returns a deep copy of a credential set.
+func CloneCredentialSet(set models.CredentialSet) models.CredentialSet {
+	cloned := set
+	cloned.ProviderData = jsonx.CloneRawMessage(set.ProviderData)
+	cloned.Claims = mapx.DeepCloneMapAny(set.Claims)
 
-const (
-	// CredentialKindOAuthToken represents OAuth2 token credentials
-	CredentialKindOAuthToken CredentialKind = "oauth_token" //nolint:gosec
-	// CredentialKindMetadata represents integration metadata credentials
-	CredentialKindMetadata CredentialKind = "integration_metadata"
-	// CredentialKindAPIKey represents API key credentials
-	CredentialKindAPIKey CredentialKind = "api_key"
-	// CredentialKindWorkload represents workload identity credentials
-	CredentialKindWorkload CredentialKind = "workload_identity"
-)
-
-// CredentialPayload is the canonical envelope exchanged between keymaker and keystore.
-// It embeds the upstream token/claims types when applicable and stores the
-// persisted credential set for non-OAuth flows.
-type CredentialPayload struct {
-	// Provider identifies the source provider for the credential
-	Provider ProviderType `json:"provider"`
-	// Kind indicates the credential kind (oauth token, metadata, etc)
-	Kind CredentialKind `json:"kind"`
-	// ProviderState carries optional provider state from the integration record
-	ProviderState *state.IntegrationProviderState `json:"-"`
-	// Token optionally embeds the upstream oauth2 token
-	Token *oauth2.Token `json:"token,omitempty"`
-	// Claims optionally carries upstream OIDC claims
-	Claims *oidc.IDTokenClaims `json:"claims,omitempty"`
-	// Data stores provider-specific credential data serialized via CredentialSet
-	Data models.CredentialSet `json:"credential"`
-}
-
-// CredentialOption mutates the payload being built
-type CredentialOption func(*CredentialPayload)
-
-// BuildCredentialPayload applies the provided options and enforces invariants
-func BuildCredentialPayload(provider ProviderType, opts ...CredentialOption) (CredentialPayload, error) {
-	payload := CredentialPayload{
-		Provider: provider,
+	if set.OAuthExpiry != nil {
+		expiry := *set.OAuthExpiry
+		cloned.OAuthExpiry = &expiry
 	}
 
-	for _, opt := range opts {
-		if opt == nil {
-			continue
-		}
-		opt(&payload)
-	}
-
-	if payload.Provider == ProviderUnknown {
-		return CredentialPayload{}, ErrProviderTypeRequired
-	}
-
-	if isCredentialSetEmpty(payload.Data) && payload.Token == nil {
-		return CredentialPayload{}, ErrCredentialSetRequired
-	}
-
-	if payload.Kind == "" {
-		payload.Kind = CredentialKindOAuthToken
-	}
-
-	return payload, nil
+	return cloned
 }
 
-// CredentialBuilder offers a fluent API around BuildCredentialPayload
-type CredentialBuilder struct {
-	// provider is the provider used for the payload
-	provider ProviderType
-	// options holds the queued credential options
-	options []CredentialOption
-}
-
-// NewCredentialBuilder initializes a builder for the given provider
-func NewCredentialBuilder(provider ProviderType) *CredentialBuilder {
-	return &CredentialBuilder{provider: provider}
-}
-
-// With appends options to the builder
-func (b *CredentialBuilder) With(opts ...CredentialOption) *CredentialBuilder {
-	b.options = append(b.options, opts...)
-
-	return b
-}
-
-// Build returns the final payload
-func (b *CredentialBuilder) Build() (CredentialPayload, error) {
-	return BuildCredentialPayload(b.provider, b.options...)
-}
-
-// WithCredentialKind overrides the automatically inferred kind
-func WithCredentialKind(kind CredentialKind) CredentialOption {
-	return func(payload *CredentialPayload) {
-		payload.Kind = kind
+// InferAuthKind infers an auth kind from populated credential fields.
+func InferAuthKind(set models.CredentialSet) AuthKind {
+	switch {
+	case len(set.Claims) > 0:
+		return AuthKindOIDC
+	case strings.TrimSpace(set.OAuthAccessToken) != "" || strings.TrimSpace(set.OAuthRefreshToken) != "":
+		return AuthKindOAuth2
+	case strings.TrimSpace(set.APIToken) != "":
+		return AuthKindAPIKey
+	case strings.TrimSpace(set.ClientID) != "" || strings.TrimSpace(set.ClientSecret) != "":
+		return AuthKindOAuth2ClientCredentials
+	case strings.TrimSpace(set.AccessKeyID) != "" ||
+		strings.TrimSpace(set.SecretAccessKey) != "" ||
+		strings.TrimSpace(set.SessionToken) != "":
+		return AuthKindAWSFederation
+	case strings.TrimSpace(set.ServiceAccountKey) != "" || strings.TrimSpace(set.SubjectToken) != "":
+		return AuthKindWorkloadIdentity
+	default:
+		return AuthKindUnknown
 	}
 }
 
-// WithCredentialSet sets the stored credential data directly
-func WithCredentialSet(set models.CredentialSet) CredentialOption {
-	return func(payload *CredentialPayload) {
-		payload.Data = set
-	}
-}
-
-// WithOAuthToken embeds the upstream oauth2.Token
-func WithOAuthToken(token *oauth2.Token) CredentialOption {
-	return func(payload *CredentialPayload) {
-		payload.Token = helpers.CloneOAuthToken(token)
-	}
-}
-
-// WithOIDCClaims embeds the upstream OIDC claims struct
-func WithOIDCClaims(claims *oidc.IDTokenClaims) CredentialOption {
-	return func(payload *CredentialPayload) {
-		payload.Claims = helpers.CloneOIDCClaims(claims)
-	}
-}
-
-// MergeScopes merges scopes from an oauth2.Token into a plain slice (helpful for persistence)
-func MergeScopes(dest []string, source ...string) []string {
-	filtered := lo.Map(source, func(item string, _ int) string {
-		return strings.TrimSpace(item)
-	})
-
-	nonEmpty := lo.Filter(filtered, func(item string, _ int) bool {
-		return item != ""
-	})
-
-	return lo.Uniq(append(dest, nonEmpty...))
-}
-
-// OAuthTokenOption returns a cloned token wrapped in an Option
-func (p CredentialPayload) OAuthTokenOption() mo.Option[*oauth2.Token] {
-	return optionFromPointer(helpers.CloneOAuthToken(p.Token))
-}
-
-// ClaimsOption returns cloned OIDC claims wrapped in an Option
-func (p CredentialPayload) ClaimsOption() mo.Option[*oidc.IDTokenClaims] {
-	return optionFromPointer(helpers.CloneOIDCClaims(p.Claims))
-}
-
-// optionFromPointer wraps a pointer in an Option, returning None if nil
-func optionFromPointer[T any](value *T) mo.Option[*T] {
-	if value == nil {
-		return mo.None[*T]()
-	}
-
-	return mo.Some(value)
-}
-
-// isCredentialSetEmpty checks if all fields in a credential set are empty
-func isCredentialSetEmpty(set models.CredentialSet) bool {
+// IsCredentialSetEmpty reports whether all credential fields are empty.
+func IsCredentialSetEmpty(set models.CredentialSet) bool {
 	fields := []string{
 		set.AccessKeyID,
 		set.SecretAccessKey,
@@ -171,6 +55,10 @@ func isCredentialSetEmpty(set models.CredentialSet) bool {
 		set.ProjectID,
 		set.AccountID,
 		set.APIToken,
+		set.ClientID,
+		set.ClientSecret,
+		set.ServiceAccountKey,
+		set.SubjectToken,
 		set.OAuthAccessToken,
 		set.OAuthRefreshToken,
 		set.OAuthTokenType,
@@ -195,4 +83,17 @@ func isCredentialSetEmpty(set models.CredentialSet) bool {
 	}
 
 	return true
+}
+
+// MergeScopes merges scope values into a unique non-empty set.
+func MergeScopes(dest []string, source ...string) []string {
+	filtered := lo.Map(source, func(item string, _ int) string {
+		return strings.TrimSpace(item)
+	})
+
+	nonEmpty := lo.Filter(filtered, func(item string, _ int) bool {
+		return item != ""
+	})
+
+	return lo.Uniq(append(dest, nonEmpty...))
 }

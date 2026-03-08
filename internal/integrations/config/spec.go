@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/samber/lo"
@@ -41,26 +42,20 @@ type ProviderSpec struct {
 	SchemaVersion string `json:"schemaVersion,omitempty"`
 	// OAuth contains OAuth configuration when applicable
 	OAuth *OAuthSpec `json:"oauth,omitempty" koanf:"oauth"`
-	// APIKey contains API key configuration when applicable
-	APIKey *APIKeySpec `json:"apiKey,omitempty"`
 	// UserInfo describes optional user info lookups
 	UserInfo *UserInfoSpec `json:"userInfo,omitempty"`
 	// WorkloadIdentity contains Google WIF defaults
 	GoogleWorkloadIdentity *GoogleWorkloadIdentitySpec `json:"googleWorkloadIdentity,omitempty" koanf:"workloadidentity"`
 	// GitHubApp configures GitHub App providers
 	GitHubApp *GitHubAppSpec `json:"githubApp,omitempty" koanf:"app"`
-	// AWSSTS configures AWS federation defaults
-	AWSSTS *AWSFederationSpec `json:"awsSts,omitempty" koanf:"sts"`
-	// CredentialsSchema drives declarative credential forms
-	CredentialsSchema map[string]any `json:"credentialsSchema,omitempty"`
+	// CredentialsSchema drives declarative credential forms.
+	CredentialsSchema json.RawMessage `json:"credentialsSchema,omitempty"`
 	// Persistence configures storage policies
 	Persistence *PersistenceSpec `json:"persistence,omitempty"`
 	// Labels carries optional metadata labels
 	Labels map[string]string `json:"labels,omitempty"`
-	// Metadata stores additional provider metadata
-	Metadata map[string]any `json:"metadata,omitempty"`
-	// Defaults stores provider-specific defaults
-	Defaults map[string]any `json:"defaults,omitempty"`
+	// Metadata stores additional provider metadata.
+	Metadata json.RawMessage `json:"metadata,omitempty"`
 	// SuccessRedirectURL is the URL to redirect to after successful authentication for this provider.
 	// When empty, handlers return JSON instead of redirecting.
 	SuccessRedirectURL string `json:"successRedirectUrl,omitempty" koanf:"successredirecturl"`
@@ -71,18 +66,23 @@ func (s ProviderSpec) ProviderType() types.ProviderType {
 	return types.ProviderTypeFromString(s.Name)
 }
 
+// SupportsInteractiveAuthFlow reports whether the spec supports browser OAuth/OIDC callbacks.
+func (s ProviderSpec) SupportsInteractiveAuthFlow() bool {
+	return s.OAuth != nil && s.AuthType.SupportsInteractiveFlow()
+}
+
 // ToProviderConfig exposes the subset of spec fields used by registries and handlers
 func (s ProviderSpec) ToProviderConfig() types.ProviderConfig {
 	return types.ProviderConfig{
 		Type:        s.ProviderType(),
-		Auth:        s.AuthType,
+		Auth:        s.AuthType.Normalize(),
 		DisplayName: s.DisplayName,
 		Description: s.Description,
 		Category:    s.Category,
 		DocsURL:     s.DocsURL,
 		LogoURL:     s.LogoURL,
-		Schema:      s.CredentialsSchema,
-		Metadata:    s.Metadata,
+		Schema:      jsonx.CloneRawMessage(s.CredentialsSchema),
+		Metadata:    jsonx.CloneRawMessage(s.Metadata),
 	}
 }
 
@@ -97,23 +97,24 @@ func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]Provide
 			continue
 		}
 
-		currentMap, err := jsonx.ToMap(current)
+		baseRaw, err := json.Marshal(current)
 		if err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize base provider spec for merge")
 			continue
 		}
 
-		nextMap, err := JSONValue(currentMap, override, MapOptions{
-			PruneZero: true,
-			DeepMerge: true,
-		})
+		overrideRaw, err := json.Marshal(override)
 		if err != nil {
-			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to merge provider spec override")
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize override provider spec for merge")
 			continue
 		}
 
 		var next ProviderSpec
-		if err := jsonx.RoundTrip(nextMap, &next); err != nil {
+		if err := json.Unmarshal(baseRaw, &next); err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to deserialize base provider spec for merge")
+			continue
+		}
+		if err := json.Unmarshal(overrideRaw, &next); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to apply provider spec override")
 			continue
 		}
@@ -154,16 +155,6 @@ type OAuthSpec struct {
 	TokenParams map[string]string `json:"tokenParams,omitempty"`
 	// AdditionalHosts enumerates additional acceptable callback hosts
 	AdditionalHosts []string `json:"additionalHosts,omitempty"`
-}
-
-// APIKeySpec represents non OAuth-based providers
-type APIKeySpec struct {
-	// KeyLabel is the label shown in the UI
-	KeyLabel string `json:"keyLabel"`
-	// HeaderName describes the HTTP header carrying the key
-	HeaderName string `json:"headerName"`
-	// QueryParam optionally describes the query parameter carrying the key
-	QueryParam string `json:"queryParam,omitempty"`
 }
 
 // UserInfoSpec drives post-auth userinfo lookups
@@ -214,18 +205,4 @@ type GitHubAppSpec struct {
 	PrivateKey string `json:"-" koanf:"privatekey" sensitive:"true"`
 	// WebhookSecret is the shared secret used to validate incoming GitHub webhooks; never serialized to JSON.
 	WebhookSecret string `json:"-" koanf:"webhooksecret" sensitive:"true"`
-}
-
-// AWSFederationSpec captures AssumeRoleWithWebIdentity defaults
-type AWSFederationSpec struct {
-	// RoleARN is the default role to assume
-	RoleARN string `json:"roleArn,omitempty" koanf:"rolearn"`
-	// SessionName is the default AWS session name
-	SessionName string `json:"sessionName,omitempty" koanf:"sessionname"`
-	// Duration is the default session duration
-	Duration time.Duration `json:"duration,omitempty" koanf:"duration"`
-	// Region is the default AWS region
-	Region string `json:"region,omitempty" koanf:"region"`
-	// ExternalID optionally configures the STS external ID
-	ExternalID string `json:"externalId,omitempty" koanf:"externalid"`
 }

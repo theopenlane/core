@@ -6,6 +6,7 @@ import (
 
 	buildkitego "github.com/buildkite/go-buildkite/v3/buildkite"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -22,7 +23,7 @@ func buildkiteClientDescriptors() []types.ClientDescriptor {
 }
 
 // buildBuildkiteClient constructs a Buildkite SDK client from credential payload.
-func buildBuildkiteClient(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+func buildBuildkiteClient(_ context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 	token, err := auth.APITokenFromPayload(payload)
 	if err != nil {
 		return types.EmptyClientInstance(), err

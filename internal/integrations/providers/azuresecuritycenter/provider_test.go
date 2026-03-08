@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"golang.org/x/oauth2"
 )
 
@@ -66,9 +67,12 @@ func TestAzureSecurityCenterMint_ClientCredentials(t *testing.T) {
 	client := &http.Client{Transport: transport}
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, client)
 
+	schema, err := jsonx.ToRawMessage(map[string]any{"type": "object"})
+	require.NoError(t, err)
+
 	spec := config.ProviderSpec{
-		AuthType:          types.AuthKindOAuth2,
-		CredentialsSchema: map[string]any{"type": "object"},
+		AuthType:          types.AuthKindOAuth2ClientCredentials,
+		CredentialsSchema: schema,
 	}
 
 	provider, err := Builder().Build(context.Background(), spec)
@@ -83,27 +87,24 @@ func TestAzureSecurityCenterMint_ClientCredentials(t *testing.T) {
 		return "https://example.com/token"
 	}
 
-	payload, err := types.NewCredentialBuilder(TypeAzureSecurityCenter).With(
-		types.WithCredentialKind(types.CredentialKindMetadata),
-		types.WithCredentialSet(models.CredentialSet{
-			ProviderData: map[string]any{
-				"tenantId":       "tenant-123",
-				"clientId":       "client-id",
-				"clientSecret":   "client-secret",
-				"subscriptionId": "sub-456",
-			},
-		}),
-	).Build()
-	require.NoError(t, err)
+	payload := models.CredentialSet{
+		ProviderData: json.RawMessage(`{
+			"tenantId":"tenant-123",
+			"clientId":"client-id",
+			"clientSecret":"client-secret",
+			"subscriptionId":"sub-456"
+		}`),
+	}
 
-	result, err := azureProvider.Mint(ctx, types.CredentialSubject{
+	result, err := azureProvider.Mint(ctx, types.CredentialMintRequest{
 		Provider:   TypeAzureSecurityCenter,
 		Credential: payload,
 	})
 	require.NoError(t, err)
 	require.Equal(t, types.TrimmedString("tenant-123"), capturedTenant)
-	require.NotNil(t, result.Token)
-	require.Equal(t, "token-value", result.Token.AccessToken)
-	require.Equal(t, "Bearer", result.Token.TokenType)
-	require.Equal(t, "sub-456", result.Data.ProviderData["subscriptionId"])
+	require.Equal(t, "token-value", result.OAuthAccessToken)
+	require.Equal(t, "Bearer", result.OAuthTokenType)
+	require.Equal(t, "client-id", result.ClientID)
+	require.Equal(t, "client-secret", result.ClientSecret)
+	require.JSONEq(t, `{"tenantId":"tenant-123","subscriptionId":"sub-456"}`, string(result.ProviderData))
 }

@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -9,23 +10,19 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // TestAWSMetadataFromPayload validates required AWS metadata parsing.
 func TestAWSMetadataFromPayload(t *testing.T) {
-	payload := types.CredentialPayload{
-		Provider: TypeAWS,
-		Data: models.CredentialSet{
-			ProviderData: map[string]any{
-				"region":          "us-east-1",
-				"roleArn":         "arn:aws:iam::123456789012:role/SecurityHub",
-				"externalId":      "external-123",
-				"sessionName":     "openlane-test",
-				"sessionDuration": "45m",
-				"accountId":       "123456789012",
-			},
-		},
+	payload := models.CredentialSet{
+		ProviderData: json.RawMessage(`{
+				"region":"us-east-1",
+				"roleArn":"arn:aws:iam::123456789012:role/SecurityHub",
+				"externalId":"external-123",
+				"sessionName":"openlane-test",
+				"sessionDuration":"45m",
+				"accountId":"123456789012"
+			}`),
 	}
 
 	meta, err := awsMetadataFromPayload(payload, awsDefaultSession)
@@ -40,45 +37,40 @@ func TestAWSMetadataFromPayload(t *testing.T) {
 
 // TestAWSMetadataFromPayloadMissing ensures missing metadata fails fast.
 func TestAWSMetadataFromPayloadMissing(t *testing.T) {
-	_, err := awsMetadataFromPayload(types.CredentialPayload{}, awsDefaultSession)
+	_, err := awsMetadataFromPayload(models.CredentialSet{}, awsDefaultSession)
 	assert.ErrorIs(t, err, ErrMetadataMissing)
 
-	payload := types.CredentialPayload{Data: models.CredentialSet{ProviderData: map[string]any{}}}
+	payload := models.CredentialSet{ProviderData: json.RawMessage(`{}`)}
 	_, err = awsMetadataFromPayload(payload, awsDefaultSession)
-	assert.ErrorIs(t, err, ErrMetadataMissing)
+	assert.ErrorIs(t, err, ErrRoleARNMissing)
 
-	payload.Data.ProviderData["roleArn"] = "arn:aws:iam::123456789012:role/SecurityHub"
+	payload.ProviderData = json.RawMessage(`{"roleArn":"arn:aws:iam::123456789012:role/SecurityHub"}`)
 	_, err = awsMetadataFromPayload(payload, awsDefaultSession)
 	assert.ErrorIs(t, err, ErrRegionMissing)
 }
 
 // TestAWSCredentialsFromPayload verifies access keys are resolved from payload data.
 func TestAWSCredentialsFromPayload(t *testing.T) {
-	payload := types.CredentialPayload{Data: models.CredentialSet{
+	payload := models.CredentialSet{
 		AccessKeyID:     "AKIA_TEST",
 		SecretAccessKey: "SECRET_TEST",
 		SessionToken:    "session-token",
-		ProviderData: map[string]any{
-			"sessionToken": "ignored-token",
-		},
-	}}
+		ProviderData:    json.RawMessage(`{"sessionToken":"ignored-token"}`),
+	}
 
 	creds := awskit.AWSCredentialsFromPayload(payload)
 	assert.Equal(t, "AKIA_TEST", creds.AccessKeyID)
 	assert.Equal(t, "SECRET_TEST", creds.SecretAccessKey)
 	assert.Equal(t, "session-token", creds.SessionToken)
 
-	payload.Data.AccessKeyID = ""
-	payload.Data.SecretAccessKey = ""
-	payload.Data.SessionToken = ""
-	payload.Data.ProviderData["accessKeyId"] = "AKIA_FALLBACK"
-	payload.Data.ProviderData["secretAccessKey"] = "SECRET_FALLBACK"
-	payload.Data.ProviderData["sessionToken"] = "session-token"
+	payload.AccessKeyID = ""
+	payload.SecretAccessKey = ""
+	payload.SessionToken = ""
 
 	creds = awskit.AWSCredentialsFromPayload(payload)
-	assert.Equal(t, "AKIA_FALLBACK", creds.AccessKeyID)
-	assert.Equal(t, "SECRET_FALLBACK", creds.SecretAccessKey)
-	assert.Equal(t, "session-token", creds.SessionToken)
+	assert.Equal(t, "", creds.AccessKeyID)
+	assert.Equal(t, "", creds.SecretAccessKey)
+	assert.Equal(t, "", creds.SessionToken)
 }
 
 // TestParseDuration verifies session duration parsing behavior.

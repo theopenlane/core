@@ -1,41 +1,46 @@
 package auth
 
 import (
+	"encoding/json"
+
 	"golang.org/x/oauth2"
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// BuildOAuthCredentialPayload builds a normalized OAuth credential payload
-func BuildOAuthCredentialPayload(provider types.ProviderType, token *oauth2.Token, claims *oidc.IDTokenClaims, opts ...types.CredentialOption) (types.CredentialPayload, error) {
-	options := []types.CredentialOption{
-		types.WithCredentialSet(models.CredentialSet{}),
-		types.WithOAuthToken(token),
-		types.WithCredentialKind(types.CredentialKindOAuthToken),
+// BuildOAuthCredentialSet builds OAuth/OIDC credential fields from upstream token/claims.
+func BuildOAuthCredentialSet(token *oauth2.Token, claims *oidc.IDTokenClaims) (models.CredentialSet, error) {
+	credential := models.CredentialSet{}
+
+	if token != nil {
+		credential.OAuthAccessToken = token.AccessToken
+		credential.OAuthRefreshToken = token.RefreshToken
+		credential.OAuthTokenType = token.TokenType
+		if !token.Expiry.IsZero() {
+			exp := token.Expiry.UTC()
+			credential.OAuthExpiry = &exp
+		}
 	}
 
 	if claims != nil {
-		options = append(options, types.WithOIDCClaims(claims))
+		claimsMap, err := jsonx.ToMap(claims)
+		if err != nil {
+			return models.CredentialSet{}, err
+		}
+		credential.Claims = claimsMap
 	}
 
-	options = append(options, opts...)
-
-	return types.NewCredentialBuilder(provider).With(options...).Build()
+	return credential, nil
 }
 
-// BuildAPITokenCredentialPayload builds a normalized API token credential payload
-func BuildAPITokenCredentialPayload(provider types.ProviderType, token string, providerData map[string]any, opts ...types.CredentialOption) (types.CredentialPayload, error) {
-	options := []types.CredentialOption{
-		types.WithCredentialKind(types.CredentialKindAPIKey),
-		types.WithCredentialSet(models.CredentialSet{
-			APIToken:     token,
-			ProviderData: CloneMetadata(providerData),
-		}),
+// BuildAPITokenCredentialSet builds API token credentials with optional provider metadata.
+func BuildAPITokenCredentialSet(token string, providerData json.RawMessage) models.CredentialSet {
+	credential := models.CredentialSet{APIToken: token}
+	if len(providerData) > 0 {
+		credential.ProviderData = providerData
 	}
-	options = append(options, opts...)
-
-	return types.NewCredentialBuilder(provider).With(options...).Build()
+	return credential
 }

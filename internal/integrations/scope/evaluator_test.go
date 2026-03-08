@@ -2,6 +2,7 @@ package scope
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -55,9 +56,7 @@ func TestEvaluateConditionWithMapAndListVars(t *testing.T) {
 	evaluator := newTestEvaluator(t, DefaultEvaluatorConfig())
 
 	vars := ScopeVars{
-		Payload: map[string]any{
-			"tags": []any{"prod", "pci"},
-		},
+		Payload:   json.RawMessage(`{"tags":["prod","pci"]}`),
 		Provider:  integrationtypes.ProviderType("githubapp"),
 		Operation: integrationtypes.OperationVulnerabilitiesCollect,
 	}

@@ -3,6 +3,8 @@ package gcpscc
 import "errors"
 
 var (
+	// ErrAuthTypeMismatch indicates the provider spec specifies an incompatible auth type.
+	ErrAuthTypeMismatch = errors.New("gcpscc: auth type mismatch")
 	// ErrSecurityCenterClientRequired indicates the security center client was not provided or is invalid
 	ErrSecurityCenterClientRequired = errors.New("gcpscc: security center client required")
 	// ErrBeginAuthNotSupported indicates BeginAuth is not supported for GCP SCC providers

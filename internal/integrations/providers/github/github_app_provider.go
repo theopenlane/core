@@ -4,9 +4,9 @@ import (
 	"context"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
-	"maps"
 	"strconv"
 	"strings"
 	"time"
@@ -16,10 +16,10 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -40,8 +40,9 @@ func AppBuilder() providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: TypeGitHubApp,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			if spec.AuthType != "" && spec.AuthType != types.AuthKindGitHubApp {
-				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, TypeGitHubApp, types.AuthKindGitHubApp, spec.AuthType)
+			authKind := spec.AuthType.Normalize()
+			if authKind != types.AuthKindGitHubApp {
+				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, TypeGitHubApp, types.AuthKindGitHubApp, authKind)
 			}
 
 			baseURL := strings.TrimRight(githubAPIBaseURL, "/")
@@ -145,53 +146,50 @@ func (p *appProvider) DefaultMappings() []types.MappingRegistration {
 }
 
 // Mint exchanges GitHub App credentials for an installation access token.
-func (p *appProvider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
-	appID, installationID, privateKey, err := p.resolveMintInputs(subject.Credential)
+func (p *appProvider) Mint(ctx context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
+	appID, installationID, privateKey, err := p.resolveMintInputs(subject.Credential, subject.ProviderState)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
 	jwtToken, err := p.buildAppJWT(appID, privateKey)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
 	installToken, err := p.requestInstallationToken(ctx, installationID, jwtToken)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	providerData := maps.Clone(subject.Credential.Data.ProviderData)
-	if providerData == nil {
-		providerData = map[string]any{}
-	}
-
-	providerData["appId"] = appID
-	providerData["installationId"] = installationID
-	delete(providerData, "privateKey")
-
-	payload := types.NewCredentialBuilder(p.provider).With(
-		types.WithCredentialKind(types.CredentialKindOAuthToken),
-		types.WithCredentialSet(models.CredentialSet{
-			ProviderData: providerData,
-		}),
-		types.WithOAuthToken(installToken),
-	)
-
-	minted, err := payload.Build()
+	metadata, err := githubAppProviderDataFromPayload(subject.Credential)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
+	}
+	metadata.AppID = appID
+	metadata.InstallationID = installationID
+	metadata.PrivateKey = ""
+	providerData, err := json.Marshal(metadata)
+	if err != nil {
+		return models.CredentialSet{}, err
 	}
 
-	if subject.Credential.ProviderState != nil {
-		minted.ProviderState = subject.Credential.ProviderState
+	credential := models.CredentialSet{
+		ProviderData:      providerData,
+		OAuthAccessToken:  installToken.AccessToken,
+		OAuthRefreshToken: installToken.RefreshToken,
+		OAuthTokenType:    installToken.TokenType,
+	}
+	if !installToken.Expiry.IsZero() {
+		exp := installToken.Expiry.UTC()
+		credential.OAuthExpiry = &exp
 	}
 
-	return minted, nil
+	return credential, nil
 }
 
-func (p *appProvider) resolveMintInputs(payload types.CredentialPayload) (string, string, string, error) {
-	installationID, err := githubAppInstallationIDFromCredential(payload)
+func (p *appProvider) resolveMintInputs(credential models.CredentialSet, providerState *integrationstate.IntegrationProviderState) (string, string, string, error) {
+	installationID, err := githubAppInstallationIDFromCredential(credential, providerState)
 	if err != nil {
 		return "", "", "", err
 	}
@@ -209,10 +207,12 @@ func (p *appProvider) resolveMintInputs(payload types.CredentialPayload) (string
 	return appID, installationID, privateKey, nil
 }
 
-func githubAppProviderDataFromPayload(payload types.CredentialPayload) (githubAppProviderData, error) {
+func githubAppProviderDataFromPayload(payload models.CredentialSet) (githubAppProviderData, error) {
 	var decoded githubAppProviderData
-	if err := auth.DecodeProviderData(payload.Data.ProviderData, &decoded); err != nil {
-		return githubAppProviderData{}, err
+	if len(payload.ProviderData) > 0 {
+		if err := json.Unmarshal(payload.ProviderData, &decoded); err != nil {
+			return githubAppProviderData{}, err
+		}
 	}
 
 	return decoded, nil
@@ -220,22 +220,22 @@ func githubAppProviderDataFromPayload(payload types.CredentialPayload) (githubAp
 
 // resolveInstallationID returns the installation ID from the already-decoded provider data,
 // falling back to the provider state when the credential payload does not carry it directly.
-func resolveInstallationID(decoded githubAppProviderData, payload types.CredentialPayload) (string, error) {
+func resolveInstallationID(decoded githubAppProviderData, providerState *integrationstate.IntegrationProviderState) (string, error) {
 	if decoded.InstallationID != "" {
-		return decoded.InstallationID.String(), nil
+		return decoded.InstallationID, nil
 	}
 
-	if payload.ProviderState == nil {
+	if providerState == nil {
 		return "", ErrInstallationIDMissing
 	}
 
-	stateProviderData, err := payload.ProviderState.ProviderDataMap(string(TypeGitHubApp))
-	if err != nil {
-		return "", err
+	stateRaw := providerState.Providers[string(TypeGitHubApp)]
+	if len(stateRaw) == 0 {
+		return "", ErrInstallationIDMissing
 	}
 
 	var stateDecoded githubAppProviderData
-	if err := auth.DecodeProviderData(stateProviderData, &stateDecoded); err != nil {
+	if err := json.Unmarshal(stateRaw, &stateDecoded); err != nil {
 		return "", err
 	}
 
@@ -243,16 +243,16 @@ func resolveInstallationID(decoded githubAppProviderData, payload types.Credenti
 		return "", ErrInstallationIDMissing
 	}
 
-	return stateDecoded.InstallationID.String(), nil
+	return stateDecoded.InstallationID, nil
 }
 
-func githubAppInstallationIDFromCredential(payload types.CredentialPayload) (string, error) {
+func githubAppInstallationIDFromCredential(payload models.CredentialSet, providerState *integrationstate.IntegrationProviderState) (string, error) {
 	decoded, err := githubAppProviderDataFromPayload(payload)
 	if err != nil {
 		return "", err
 	}
 
-	return resolveInstallationID(decoded, payload)
+	return resolveInstallationID(decoded, providerState)
 }
 
 // normalizePrivateKey converts escaped newlines to PEM newlines.
@@ -265,9 +265,9 @@ func normalizePrivateKey(value string) string {
 }
 
 type githubAppProviderData struct {
-	AppID          types.TrimmedString `json:"appId"`
-	InstallationID types.TrimmedString `json:"installationId"`
-	PrivateKey     types.TrimmedString `json:"privateKey"`
+	AppID          string `json:"appId"`
+	InstallationID string `json:"installationId"`
+	PrivateKey     string `json:"privateKey"`
 }
 
 // buildAppJWT signs a GitHub App JWT for authentication.
@@ -328,7 +328,7 @@ func (p *appProvider) requestInstallationToken(ctx context.Context, installation
 		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
 	}
 
-	client, err := newGitHubAPIClient(jwtToken, p.baseURL)
+	client, err := newGitHubAPIClient(ctx, jwtToken, p.baseURL)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
 	}

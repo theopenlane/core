@@ -3,6 +3,7 @@ package ingest
 import (
 	"cmp"
 	"context"
+	"encoding/json"
 	"slices"
 
 	"github.com/rs/zerolog/log"
@@ -37,29 +38,21 @@ type requestedSchemaContract struct {
 }
 
 // requestedSchemaContracts maps schema names to their generated ingest topic contracts, built at init time
-var requestedSchemaContracts = lo.Reduce(lo.Entries(integrationgenerated.IntegrationIngestSchemas), func(
-	acc map[string]requestedSchemaContract,
-	entry lo.Entry[string, integrationgenerated.IntegrationIngestSchema],
-	_ int,
-) map[string]requestedSchemaContract {
-	schemaName := entry.Key
-	if schemaName == "" {
-		return acc
-	}
+var requestedSchemaContracts = lo.SliceToMap(
+	lo.Filter(lo.Entries(integrationgenerated.IntegrationIngestSchemas), func(e lo.Entry[string, integrationgenerated.IntegrationIngestSchema], _ int) bool {
+		return e.Key != ""
+	}),
+	func(entry lo.Entry[string, integrationgenerated.IntegrationIngestSchema]) (string, requestedSchemaContract) {
+		return entry.Key, requestedSchemaContract{
+			Schema:   types.MappingSchema(entry.Key),
+			Topic:    gala.TopicName(entry.Value.Topic),
+			Listener: entry.Value.Listener,
+		}
+	},
+)
 
-	contract := entry.Value
-	acc[schemaName] = requestedSchemaContract{
-		Schema:   types.MappingSchema(entry.Key),
-		Topic:    gala.TopicName(contract.Topic),
-		Listener: contract.Listener,
-	}
-
-	return acc
-}, map[string]requestedSchemaContract{})
-
-
-// IngestRequestedTopicForSchema resolves the schema-scoped ingest topic
-func IngestRequestedTopicForSchema(schema string) (gala.Topic[RequestedPayload], bool) {
+// RequestedTopicForSchema resolves the schema-scoped ingest topic.
+func RequestedTopicForSchema(schema string) (gala.Topic[RequestedPayload], bool) {
 	contract, ok := requestedSchemaContracts[schema]
 	if !ok {
 		return gala.Topic[RequestedPayload]{}, false
@@ -135,7 +128,7 @@ func handleIngestRequested(ctx context.Context, db *ent.Client, payload Requeste
 	}
 
 	operationName := operationNameForRequestedPayload(payload, schema)
-	operationConfig := map[string]any{}
+	var operationConfig json.RawMessage
 	if operationName != "" {
 		operationConfig, err = operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), nil)
 		if err != nil {
@@ -171,9 +164,6 @@ func operationNameForRequestedPayload(payload RequestedPayload, schema types.Map
 	}
 
 	contract, ok := integrationgenerated.IntegrationIngestSchemas[string(schema)]
-	if !ok {
-		return ""
-	}
 
-	return types.OperationName(contract.DefaultOperation)
+	return lo.Ternary(ok, types.OperationName(contract.DefaultOperation), "")
 }

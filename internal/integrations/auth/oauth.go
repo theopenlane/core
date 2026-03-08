@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/models"
 )
 
 const (
@@ -22,24 +22,25 @@ var defaultHTTPRequester = httpsling.MustNew(
 	httpsling.Client(httpclient.Timeout(defaultHTTPTimeout)),
 )
 
-// OAuthTokenFromPayload extracts a usable access token from the credential payload
-func OAuthTokenFromPayload(payload types.CredentialPayload) (string, error) {
-	tokenOpt := payload.OAuthTokenOption()
-	if !tokenOpt.IsPresent() {
+// OAuthTokenFromPayload extracts a usable access token from the credential set.
+func OAuthTokenFromPayload(payload models.CredentialSet) (string, error) {
+	if payload.OAuthAccessToken == "" &&
+		payload.OAuthRefreshToken == "" &&
+		payload.OAuthTokenType == "" &&
+		payload.OAuthExpiry == nil {
 		return "", ErrOAuthTokenMissing
 	}
 
-	token := tokenOpt.MustGet()
-	if token == nil || token.AccessToken == "" {
+	if payload.OAuthAccessToken == "" {
 		return "", ErrAccessTokenEmpty
 	}
 
-	return token.AccessToken, nil
+	return payload.OAuthAccessToken, nil
 }
 
-// APITokenFromPayload extracts a raw API token from the credential payload.
-func APITokenFromPayload(payload types.CredentialPayload) (string, error) {
-	token := payload.Data.APIToken
+// APITokenFromPayload extracts a raw API token from the credential set.
+func APITokenFromPayload(payload models.CredentialSet) (string, error) {
+	token := payload.APIToken
 	if token == "" {
 		return "", ErrAPITokenMissing
 	}

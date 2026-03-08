@@ -10,6 +10,7 @@ package main
 
 import (
 	"embed"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -28,6 +29,13 @@ const (
 	authCustom = "custom"
 
 	goModule = "github.com/theopenlane/core"
+
+	defaultDirectoryPermission = 0o755
+)
+
+var (
+	errScaffoldInvalidAuthType = errors.New("scaffold: invalid auth type")
+	errScaffoldRepoRootMissing = errors.New("scaffold: repository root missing")
 )
 
 // providerData holds the template variables for all rendered files
@@ -77,7 +85,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := os.MkdirAll(targetDir, 0o755); err != nil {
+	if err := os.MkdirAll(targetDir, defaultDirectoryPermission); err != nil {
 		fmt.Fprintln(os.Stderr, "error creating directory:", err)
 		os.Exit(1)
 	}
@@ -141,7 +149,7 @@ func validateAuthType(authType string) error {
 	case authOAuth, authAPIKey, authCustom:
 		return nil
 	default:
-		return fmt.Errorf("auth type must be one of: %s, %s, %s (got: %s)", authOAuth, authAPIKey, authCustom, authType)
+		return fmt.Errorf("%w: expected one of %s, %s, %s (got: %s)", errScaffoldInvalidAuthType, authOAuth, authAPIKey, authCustom, authType)
 	}
 }
 
@@ -180,7 +188,7 @@ func findRepoRoot() (string, error) {
 
 		parent := filepath.Dir(dir)
 		if parent == dir {
-			return "", fmt.Errorf("could not find go.work or go.mod; run from within the repository")
+			return "", errScaffoldRepoRootMissing
 		}
 		dir = parent
 	}

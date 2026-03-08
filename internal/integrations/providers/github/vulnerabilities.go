@@ -16,6 +16,7 @@ const (
 	githubAlertTypeDependabot     = "dependabot"
 	githubAlertTypeCodeScanning   = "code_scanning"
 	githubAlertTypeSecretScanning = "secret_scanning"
+	githubRepositoryNameParts     = 2
 )
 
 type githubVulnerabilityConfig struct {
@@ -55,14 +56,16 @@ type githubRepositoryFailureDetails struct {
 
 // runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	client, err := githubRESTClientForOperation(input)
+	client, err := githubRESTClientForOperation(ctx, input)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	config, err := operations.Decode[githubVulnerabilityConfig](input.Config)
-	if err != nil {
-		return types.OperationResult{}, err
+	var config githubVulnerabilityConfig
+	if len(input.Config) > 0 {
+		if err := json.Unmarshal(input.Config, &config); err != nil {
+			return types.OperationResult{}, err
+		}
 	}
 
 	alertTypes := alertTypesFromConfig(config.AlertTypes)
@@ -359,7 +362,7 @@ func listSecretScanningAlerts(ctx context.Context, client *gh.Client, repo strin
 
 // splitGitHubRepository parses owner/repo repository names.
 func splitGitHubRepository(value string) (string, string, error) {
-	parts := strings.SplitN(strings.TrimSpace(value), "/", 2)
+	parts := strings.SplitN(strings.TrimSpace(value), "/", githubRepositoryNameParts)
 	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
 		return "", "", fmt.Errorf("%w: %q", ErrRepositoryInvalid, value)
 	}

@@ -78,16 +78,11 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.Context, orgID string, provider types.ProviderType) string {
 	t.Helper()
 
-	payload, err := types.NewCredentialBuilder(provider).
-		With(
-			types.WithCredentialKind(types.CredentialKindMetadata),
-			types.WithCredentialSet(credentialmodels.CredentialSet{
-				ProviderData: map[string]any{"token": "secret"},
-			}),
-		).Build()
-	require.NoError(t, err)
+	payload := credentialmodels.CredentialSet{
+		ProviderData: json.RawMessage(`{"token":"secret"}`),
+	}
 
-	_, err = suite.h.IntegrationRuntime.Store().SaveCredential(ctx, orgID, payload)
+	_, err := suite.h.IntegrationRuntime.Store().SaveCredential(ctx, orgID, provider, types.AuthKindAPIKey, payload)
 	require.NoError(t, err)
 
 	record := suite.db.Integration.Query().

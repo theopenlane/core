@@ -8,6 +8,7 @@ import (
 	gh "github.com/google/go-github/v83/github"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -45,13 +46,13 @@ func githubClientDescriptorsWithBaseURL(provider types.ProviderType, baseURL str
 
 // buildGitHubAPIClient returns a pooled client builder for the GitHub REST API.
 func buildGitHubAPIClient(baseURL string) types.ClientBuilderFunc {
-	return func(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+	return func(ctx context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 		token, err := auth.OAuthTokenFromPayload(payload)
 		if err != nil {
 			return types.EmptyClientInstance(), err
 		}
 
-		client, err := newGitHubAPIClient(token, baseURL)
+		client, err := newGitHubAPIClient(ctx, token, baseURL)
 		if err != nil {
 			return types.EmptyClientInstance(), err
 		}
@@ -61,9 +62,9 @@ func buildGitHubAPIClient(baseURL string) types.ClientBuilderFunc {
 }
 
 // newGitHubAPIClient initializes an authenticated GitHub REST client.
-func newGitHubAPIClient(token string, baseURL string) (*gh.Client, error) {
+func newGitHubAPIClient(ctx context.Context, token string, baseURL string) (*gh.Client, error) {
 	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-	httpClient := oauth2.NewClient(context.Background(), source)
+	httpClient := oauth2.NewClient(ctx, source)
 	httpClient.Transport = githubHeaderTransport{
 		next:    httpClient.Transport,
 		headers: githubClientHeaders,
@@ -94,12 +95,12 @@ func githubAPIClientFromClient(value types.ClientInstance) *gh.Client {
 }
 
 // githubRESTClientForOperation returns a pooled REST client or a token-derived fallback.
-func githubRESTClientForOperation(input types.OperationInput) (*gh.Client, error) {
-	return githubRESTClientForOperationWithBaseURL(input, githubAPIBaseURL)
+func githubRESTClientForOperation(ctx context.Context, input types.OperationInput) (*gh.Client, error) {
+	return githubRESTClientForOperationWithBaseURL(ctx, input, githubAPIBaseURL)
 }
 
 // githubRESTClientForOperationWithBaseURL returns a pooled REST client or a token-derived fallback using the given base URL.
-func githubRESTClientForOperationWithBaseURL(input types.OperationInput, baseURL string) (*gh.Client, error) {
+func githubRESTClientForOperationWithBaseURL(ctx context.Context, input types.OperationInput, baseURL string) (*gh.Client, error) {
 	client := githubAPIClientFromClient(input.Client)
 	if client != nil {
 		return client, nil
@@ -110,5 +111,5 @@ func githubRESTClientForOperationWithBaseURL(input types.OperationInput, baseURL
 		return nil, err
 	}
 
-	return newGitHubAPIClient(token, baseURL)
+	return newGitHubAPIClient(ctx, token, baseURL)
 }

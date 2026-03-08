@@ -9,7 +9,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
@@ -17,15 +16,13 @@ import (
 )
 
 func TestBuildCloudflareClient_MissingToken(t *testing.T) {
-	payload := types.CredentialPayload{}
+	payload := models.CredentialSet{}
 	_, err := buildCloudflareClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrAPITokenMissing)
 }
 
 func TestBuildCloudflareClient_Success(t *testing.T) {
-	payload := types.CredentialPayload{
-		Data: models.CredentialSet{APIToken: "test-token"},
-	}
+	payload := models.CredentialSet{APIToken: "test-token"}
 	instance, err := buildCloudflareClient(context.Background(), payload, json.RawMessage(nil))
 	require.NoError(t, err)
 
@@ -46,9 +43,7 @@ func TestResolveCloudflareClient_PooledClient(t *testing.T) {
 
 func TestResolveCloudflareClient_BuildsFromCredential(t *testing.T) {
 	input := types.OperationInput{
-		Credential: types.CredentialPayload{
-			Data: models.CredentialSet{APIToken: "test-token"},
-		},
+		Credential: models.CredentialSet{APIToken: "test-token"},
 	}
 	result, err := resolveCloudflareClient(input)
 	require.NoError(t, err)
@@ -63,9 +58,7 @@ func TestResolveCloudflareClient_MissingCredential(t *testing.T) {
 
 func TestBuildCloudflareClient_OAuthTokenIgnored(t *testing.T) {
 	// Cloudflare uses API token, not OAuth — OAuth token alone should fail
-	payload := types.CredentialPayload{
-		Token: &oauth2.Token{AccessToken: "oauth-token"},
-	}
+	payload := models.CredentialSet{OAuthAccessToken: "oauth-token"}
 	_, err := buildCloudflareClient(context.Background(), payload, json.RawMessage(nil))
 	require.ErrorIs(t, err, auth.ErrAPITokenMissing)
 }

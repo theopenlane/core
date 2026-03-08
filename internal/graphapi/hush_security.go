@@ -35,12 +35,6 @@ func redactHushCredentialSet(value *generated.Hush) {
 	value.CredentialSet = models.CredentialSet{}
 }
 
-func redactHushCredentialSets(values []*generated.Hush) {
-	for _, value := range values {
-		redactHushCredentialSet(value)
-	}
-}
-
 func redactHushConnection(conn *generated.HushConnection) {
 	if conn == nil {
 		return

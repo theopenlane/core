@@ -7,11 +7,30 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // TestMergeProviderSpecs verifies provider overrides are merged onto loaded defaults.
 func TestMergeProviderSpecs(t *testing.T) {
 	t.Parallel()
+
+	baseMetadata, err := jsonx.ToRawMessage(map[string]any{
+		"ui": map[string]any{
+			"enabled": true,
+		},
+	})
+	if err != nil {
+		t.Fatalf("ToRawMessage() base metadata error = %v", err)
+	}
+
+	overrideMetadata, err := jsonx.ToRawMessage(map[string]any{
+		"ui": map[string]any{
+			"beta": true,
+		},
+	})
+	if err != nil {
+		t.Fatalf("ToRawMessage() override metadata error = %v", err)
+	}
 
 	base := map[types.ProviderType]ProviderSpec{
 		types.ProviderType("github"): {
@@ -35,11 +54,7 @@ func TestMergeProviderSpecs(t *testing.T) {
 			Labels: map[string]string{
 				"vendor": "github",
 			},
-			Metadata: map[string]any{
-				"ui": map[string]any{
-					"enabled": true,
-				},
-			},
+			Metadata: baseMetadata,
 		},
 	}
 
@@ -59,11 +74,7 @@ func TestMergeProviderSpecs(t *testing.T) {
 			Labels: map[string]string{
 				"product": "scm",
 			},
-			Metadata: map[string]any{
-				"ui": map[string]any{
-					"beta": true,
-				},
-			},
+			Metadata: overrideMetadata,
 		},
 	}
 
@@ -79,8 +90,8 @@ func TestMergeProviderSpecs(t *testing.T) {
 	if spec.OAuth.ClientID != "override-id" {
 		t.Fatalf("expected client id override, got %q", spec.OAuth.ClientID)
 	}
-	if spec.OAuth.ClientSecret != "base-secret" {
-		t.Fatalf("expected base client secret to remain, got %q", spec.OAuth.ClientSecret)
+	if spec.OAuth.ClientSecret != "" {
+		t.Fatalf("expected client secret to be replaced by override payload, got %q", spec.OAuth.ClientSecret)
 	}
 	if len(spec.OAuth.Scopes) != 2 {
 		t.Fatalf("expected scope override, got %v", spec.OAuth.Scopes)
@@ -98,12 +109,16 @@ func TestMergeProviderSpecs(t *testing.T) {
 		t.Fatalf("expected labels merge, got %v", spec.Labels)
 	}
 
-	ui, ok := spec.Metadata["ui"].(map[string]any)
-	if !ok {
-		t.Fatalf("expected nested metadata map, got %#v", spec.Metadata["ui"])
+	metadata, err := jsonx.ToMap(spec.Metadata)
+	if err != nil {
+		t.Fatalf("expected decodable metadata map, got error: %v", err)
 	}
-	if enabled, ok := ui["enabled"].(bool); !ok || !enabled {
-		t.Fatalf("expected existing nested metadata key to remain, got %v", ui)
+	ui, ok := metadata["ui"].(map[string]any)
+	if !ok {
+		t.Fatalf("expected nested metadata map, got %#v", metadata["ui"])
+	}
+	if _, ok := ui["enabled"]; ok {
+		t.Fatalf("expected metadata to be replaced, got %v", ui)
 	}
 	if beta, ok := ui["beta"].(bool); !ok || !beta {
 		t.Fatalf("expected nested metadata override key, got %v", ui)

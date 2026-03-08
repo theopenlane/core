@@ -11,8 +11,8 @@ var (
 	ErrAPITokenMissing = errors.New("auth: api token missing")
 	// ErrHTTPRequestFailed indicates an HTTP request returned a non-2xx status.
 	ErrHTTPRequestFailed = errors.New("auth: http request failed")
-	// ErrDecodeProviderDataTargetNil indicates provider data decoding target is nil.
-	ErrDecodeProviderDataTargetNil = errors.New("auth: decode provider data target is nil")
+	// ErrClientResolutionFailed indicates an operation client could not be resolved.
+	ErrClientResolutionFailed = errors.New("auth: client resolution failed")
 )
 
 // HTTPRequestError captures metadata for failed HTTP requests.

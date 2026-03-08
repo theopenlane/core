@@ -452,8 +452,10 @@ func resolveSecurityCenterSources(meta credentialMetadata, config securityCenter
 // decodeSecurityCenterFindingsConfig decodes operation config into a typed struct
 func decodeSecurityCenterFindingsConfig(config json.RawMessage) (securityCenterFindingsConfig, error) {
 	var decoded securityCenterFindingsConfig
-	if err := operations.DecodeConfig(config, &decoded); err != nil {
-		return decoded, err
+	if len(config) > 0 {
+		if err := json.Unmarshal(config, &decoded); err != nil {
+			return decoded, err
+		}
 	}
 	decoded.SourceIDs = types.NormalizeStringSlice(decoded.SourceIDs)
 	return decoded, nil

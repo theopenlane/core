@@ -2,6 +2,7 @@ package awskit
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
@@ -11,7 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/integrations/auth"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -103,9 +104,9 @@ type AWSCredentials struct {
 }
 
 // AWSMetadataFromProviderData normalizes AWS metadata with a default session name.
-func AWSMetadataFromProviderData(meta map[string]any, defaultSessionName string) (AWSMetadata, error) {
+func AWSMetadataFromProviderData(providerData json.RawMessage, defaultSessionName string) (AWSMetadata, error) {
 	var decoded awsProviderData
-	if err := auth.DecodeProviderData(meta, &decoded); err != nil {
+	if err := json.Unmarshal(providerData, &decoded); err != nil {
 		return AWSMetadata{}, err
 	}
 
@@ -132,22 +133,12 @@ func AWSMetadataFromProviderData(meta map[string]any, defaultSessionName string)
 	}, nil
 }
 
-// AWSCredentialsFromPayload extracts access keys from payload credentials with metadata fallback.
-func AWSCredentialsFromPayload(payload types.CredentialPayload) AWSCredentials {
-	accessKey := payload.Data.AccessKeyID
-	secretKey := payload.Data.SecretAccessKey
-	sessionToken := payload.Data.SessionToken
-
-	if decoded, err := auth.ExtractMetadata[awsProviderData](payload); err == nil {
-		accessKey = lo.CoalesceOrEmpty(accessKey, decoded.AccessKeyID.String())
-		secretKey = lo.CoalesceOrEmpty(secretKey, decoded.SecretAccessKey.String())
-		sessionToken = lo.CoalesceOrEmpty(sessionToken, decoded.SessionToken.String())
-	}
-
+// AWSCredentialsFromPayload extracts access keys from typed credential fields.
+func AWSCredentialsFromPayload(payload models.CredentialSet) AWSCredentials {
 	return AWSCredentials{
-		AccessKeyID:     accessKey,
-		SecretAccessKey: secretKey,
-		SessionToken:    sessionToken,
+		AccessKeyID:     payload.AccessKeyID,
+		SecretAccessKey: payload.SecretAccessKey,
+		SessionToken:    payload.SessionToken,
 	}
 }
 

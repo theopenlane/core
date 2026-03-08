@@ -21,7 +21,12 @@ func Builder(provider types.ProviderType, build BuildFunc) providers.Builder {
 
 // ValidateAuthType checks that an optional auth type declaration matches the expected auth kind
 func ValidateAuthType(spec config.ProviderSpec, expected types.AuthKind, mismatch error) error {
-	if spec.AuthType != "" && spec.AuthType != expected {
+	if expected.Normalize() == types.AuthKindUnknown {
+		return nil
+	}
+
+	kind := spec.AuthType.Normalize()
+	if kind != expected.Normalize() {
 		return mismatch
 	}
 

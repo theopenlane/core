@@ -3,12 +3,13 @@ package types //nolint:revive
 import "errors"
 
 var (
-	// ErrProviderTypeRequired indicates a builder or option pipeline did not
-	// receive a provider identifier. Every credential payload must be scoped to
-	// a provider to avoid ambiguous persistence/lookups.
+	// ErrProviderTypeRequired indicates a required provider identifier was missing.
 	ErrProviderTypeRequired = errors.New("integrations/types: provider type required")
 
-	// ErrCredentialSetRequired signals that no credential set was provided while
-	// building a payload.
+	// ErrCredentialSetRequired signals that no credential set was provided where required.
 	ErrCredentialSetRequired = errors.New("integrations/types: credential set required")
+
+	// ErrCredentialMetadataInvalid indicates provider metadata could not be marshaled
+	// or unmarshaled into canonical JSON/map form.
+	ErrCredentialMetadataInvalid = errors.New("integrations/types: credential metadata invalid")
 )

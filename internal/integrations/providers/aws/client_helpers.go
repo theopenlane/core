@@ -5,6 +5,7 @@ import (
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 
+	"github.com/theopenlane/core/common/models"
 	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -13,7 +14,7 @@ import (
 type ClientConstructor[T any] func(cfg awssdk.Config) T
 
 // buildAWSClient builds a typed AWS client from stored credentials using the provided constructor function
-func buildAWSClient[T any](ctx context.Context, payload types.CredentialPayload, constructor ClientConstructor[T]) (T, awskit.AWSMetadata, error) {
+func buildAWSClient[T any](ctx context.Context, payload models.CredentialSet, constructor ClientConstructor[T]) (T, awskit.AWSMetadata, error) {
 	var zero T
 
 	meta, err := awsMetadataFromPayload(payload, awsDefaultSession)

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 func TestProviderSpecProviderType(t *testing.T) {
@@ -14,6 +15,18 @@ func TestProviderSpecProviderType(t *testing.T) {
 }
 
 func TestProviderSpecToProviderConfig(t *testing.T) {
+	credentialsSchema, err := jsonx.ToRawMessage(map[string]any{
+		"type": "object",
+	})
+	if err != nil {
+		t.Fatalf("ToRawMessage() credentials schema error = %v", err)
+	}
+
+	metadata, err := jsonx.ToRawMessage(map[string]any{"foo": "bar"})
+	if err != nil {
+		t.Fatalf("ToRawMessage() metadata error = %v", err)
+	}
+
 	spec := ProviderSpec{
 		Name:        "github",
 		DisplayName: "GitHub",
@@ -21,10 +34,8 @@ func TestProviderSpecToProviderConfig(t *testing.T) {
 		DocsURL:     "docs",
 		LogoURL:     "logo",
 		AuthType:    types.AuthKindOAuth2,
-		CredentialsSchema: map[string]any{
-			"type": "object",
-		},
-		Metadata: map[string]any{"foo": "bar"},
+		CredentialsSchema: credentialsSchema,
+		Metadata:          metadata,
 	}
 
 	cfg := spec.ToProviderConfig()

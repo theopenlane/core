@@ -15,6 +15,8 @@ var (
 	ErrRawBytesProviderRead = errors.New("config: rawBytesProvider does not support Read")
 	// ErrSchemaVersionUnsupported indicates a provider spec declares an unknown schema version.
 	ErrSchemaVersionUnsupported = errors.New("integrations: schema version unsupported")
+	// ErrAuthTypeInvalid indicates a provider spec declares an unsupported auth type.
+	ErrAuthTypeInvalid = errors.New("integrations: auth type invalid")
 )
 
 // LoaderPathError captures loader failures tied to a specific path.
@@ -53,4 +55,22 @@ func (e *SchemaVersionError) Error() string {
 // Unwrap exposes the base schema version error for errors.Is and errors.As
 func (e *SchemaVersionError) Unwrap() error {
 	return ErrSchemaVersionUnsupported
+}
+
+// AuthTypeError captures auth type validation details.
+type AuthTypeError struct {
+	// Path is the provider spec path that failed validation
+	Path string
+	// Value is the auth type value declared by the spec
+	Value string
+}
+
+// Error returns the base auth type validation error message.
+func (e *AuthTypeError) Error() string {
+	return ErrAuthTypeInvalid.Error()
+}
+
+// Unwrap exposes the base auth type validation error for errors.Is and errors.As.
+func (e *AuthTypeError) Unwrap() error {
+	return ErrAuthTypeInvalid
 }

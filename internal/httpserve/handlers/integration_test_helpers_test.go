@@ -7,12 +7,14 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[types.ProviderType]config.ProviderSpec) func() {
@@ -82,8 +84,8 @@ func (p *testProvider) BeginAuth(context.Context, types.AuthContext) (types.Auth
 	return nil, nil
 }
 
-func (p *testProvider) Mint(context.Context, types.CredentialSubject) (types.CredentialPayload, error) {
-	return types.CredentialPayload{}, nil
+func (p *testProvider) Mint(context.Context, types.CredentialMintRequest) (models.CredentialSet, error) {
+	return models.CredentialSet{}, nil
 }
 
 func (p *testProvider) Operations() []types.OperationDescriptor {
@@ -103,38 +105,43 @@ func (p *testProvider) Operations() []types.OperationDescriptor {
 }
 
 func gcpSCCSpec() config.ProviderSpec {
-	return config.ProviderSpec{
-		Name:        "gcpscc",
-		DisplayName: "Google Cloud SCC",
-		Category:    "cloud",
-		Description: "Google Cloud Security Command Center integration",
-		AuthType:    types.AuthKindWorkloadIdentity,
-		Active:      lo.ToPtr(true),
-		Visible:     lo.ToPtr(true),
-		Tags:        []string{"cloud", "google"},
-		CredentialsSchema: map[string]any{
-			"type": "object",
-			"required": []string{
-				"projectId",
-				"serviceAccountEmail",
+	schema, err := jsonx.ToRawMessage(map[string]any{
+		"type": "object",
+		"required": []string{
+			"projectId",
+			"serviceAccountEmail",
+		},
+		"properties": map[string]any{
+			"projectId": map[string]any{
+				"type":        "string",
+				"title":       "Project ID",
+				"description": "GCP project identifier",
 			},
-			"properties": map[string]any{
-				"projectId": map[string]any{
-					"type":        "string",
-					"title":       "Project ID",
-					"description": "GCP project identifier",
-				},
-				"serviceAccountEmail": map[string]any{
-					"type":        "string",
-					"title":       "Service Account Email",
-					"description": "Workload identity service account",
-				},
-				"organizationId": map[string]any{
-					"type":        "string",
-					"title":       "Organization ID",
-					"description": "Optional organization scope",
-				},
+			"serviceAccountEmail": map[string]any{
+				"type":        "string",
+				"title":       "Service Account Email",
+				"description": "Workload identity service account",
+			},
+			"organizationId": map[string]any{
+				"type":        "string",
+				"title":       "Organization ID",
+				"description": "Optional organization scope",
 			},
 		},
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	return config.ProviderSpec{
+		Name:              "gcpscc",
+		DisplayName:       "Google Cloud SCC",
+		Category:          "cloud",
+		Description:       "Google Cloud Security Command Center integration",
+		AuthType:          types.AuthKindWorkloadIdentity,
+		Active:            lo.ToPtr(true),
+		Visible:           lo.ToPtr(true),
+		Tags:              []string{"cloud", "google"},
+		CredentialsSchema: schema,
 	}
 }

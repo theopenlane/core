@@ -2,6 +2,7 @@ package ingest
 
 import (
 	"context"
+	"encoding/json"
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -13,9 +14,11 @@ import (
 // implementations receive a unified IngestRequest and return an IngestResult.
 // The function signature is stable across ingest categories — the operation name
 // and provider type inside IngestRequest determine which mapping schema is applied
+//revive:disable-next-line
 type IngestFunc func(ctx context.Context, req IngestRequest) (IngestResult, error)
 
 // IngestRequest is the unified request type passed to all IngestFunc implementations
+//revive:disable-next-line
 type IngestRequest struct {
 	// OrgID identifies the organization that owns the ingested records
 	OrgID string
@@ -30,7 +33,7 @@ type IngestRequest struct {
 	// ProviderState carries provider-specific state for mapping
 	ProviderState integrationstate.IntegrationProviderState
 	// OperationConfig supplies operation-level configuration for mapping
-	OperationConfig map[string]any
+	OperationConfig json.RawMessage
 	// MappingIndex resolves provider-registered default mappings.
 	MappingIndex integrationtypes.MappingIndex
 	// Envelopes holds the alert payloads to ingest
@@ -61,13 +64,12 @@ func (r *IngestRequest) Validate() error {
 }
 
 // IngestSummary reports mapping and persistence statistics for a single ingest run
+//revive:disable-next-line
 type IngestSummary struct {
 	// Total counts total envelopes processed
 	Total int `json:"total"`
-	// Mapped counts envelopes that produced mapped output
+	// Mapped counts envelopes that were successfully mapped and persisted
 	Mapped int `json:"mapped"`
-	// Persisted counts envelopes that were persisted
-	Persisted int `json:"persisted"`
 	// Skipped counts envelopes filtered out by mapping
 	Skipped int `json:"skipped"`
 	// Failed counts envelopes that failed mapping or persistence
@@ -79,6 +81,7 @@ type IngestSummary struct {
 }
 
 // IngestResult captures the outcome of an IngestFunc call
+//revive:disable-next-line
 type IngestResult struct {
 	// Summary aggregates ingest totals
 	Summary IngestSummary

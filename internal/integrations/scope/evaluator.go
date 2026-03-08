@@ -91,7 +91,7 @@ func (e *Evaluator) EvaluateCondition(ctx context.Context, expression string, va
 
 // EvaluateConditionWithVars evaluates a bool condition expression using typed scope vars
 func (e *Evaluator) EvaluateConditionWithVars(ctx context.Context, expression string, vars ScopeVars) (bool, error) {
-	return e.EvaluateCondition(ctx, expression, vars.Map())
+	return e.EvaluateCondition(ctx, expression, vars.CELVars())
 }
 
 // normalizeEvaluatorConfig applies defaults for zero-valued configuration fields

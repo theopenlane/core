@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
@@ -14,32 +13,18 @@ type IntegrationProviderState struct {
 	Providers map[string]json.RawMessage `json:"providers,omitempty"`
 }
 
-// ProviderDataMap returns a cloned provider state map for a provider key
-func (s IntegrationProviderState) ProviderDataMap(provider string) (map[string]any, error) {
+// ProviderData returns the raw provider state for a provider key.
+func (s IntegrationProviderState) ProviderData(provider string) json.RawMessage {
 	if provider == "" || len(s.Providers) == 0 {
-		return nil, nil
+		return nil
 	}
 
-	raw := s.Providers[provider]
-	if len(raw) == 0 {
-		return nil, nil
-	}
-
-	var decoded map[string]any
-	if err := jsonx.RoundTrip(raw, &decoded); err != nil {
-		return nil, ErrProviderStateDecode
-	}
-
-	return mapx.DeepCloneMapAny(decoded), nil
+	return s.Providers[provider]
 }
 
 // MergeProviderData deep-merges provider state and reports whether state changed
-func (s *IntegrationProviderState) MergeProviderData(provider string, patch map[string]any) (bool, error) {
-	if s == nil || provider == "" || patch == nil {
-		return false, nil
-	}
-
-	if len(patch) == 0 {
+func (s *IntegrationProviderState) MergeProviderData(provider string, patch json.RawMessage) (bool, error) {
+	if s == nil || provider == "" || len(patch) == 0 {
 		return false, nil
 	}
 
@@ -47,12 +32,19 @@ func (s *IntegrationProviderState) MergeProviderData(provider string, patch map[
 		s.Providers = map[string]json.RawMessage{}
 	}
 
-	current, err := s.ProviderDataMap(provider)
-	if err != nil {
-		return false, err
+	var current map[string]any
+	if raw := s.Providers[provider]; len(raw) > 0 {
+		if err := json.Unmarshal(raw, &current); err != nil {
+			return false, ErrProviderStateDecode
+		}
 	}
 
-	next := mapx.DeepMergeMapAny(current, mapx.DeepCloneMapAny(patch))
+	var patchMap map[string]any
+	if err := json.Unmarshal(patch, &patchMap); err != nil {
+		return false, ErrProviderStatePatchEncode
+	}
+
+	next := mapx.DeepMergeMapAny(current, mapx.DeepCloneMapAny(patchMap))
 	if reflect.DeepEqual(current, next) {
 		return false, nil
 	}

@@ -2,7 +2,7 @@
   "name": "azuresecuritycenter",
   "displayName": "Microsoft Defender for Cloud",
   "category": "compliance",
-  "authType": "oauth2",
+  "authType": "oauth2_client_credentials",
   "active": false,
   "visible": true,
   "logoUrl": "https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256",

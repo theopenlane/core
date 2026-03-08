@@ -44,6 +44,6 @@ func (p *provider) BeginAuth(_ context.Context, _ types.AuthContext) (types.Auth
 }
 
 // Mint validates and repackages the stored credential for {{.ProviderPascal}}
-func (p *provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+func (p *provider) Mint(_ context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
 	return subject.Credential, nil
 }

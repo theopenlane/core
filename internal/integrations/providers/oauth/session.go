@@ -6,6 +6,7 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
+	"github.com/theopenlane/core/common/models"
 	integrationauth "github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -33,19 +34,19 @@ func (s *Session) AuthURL() string {
 	return s.authURL
 }
 
-// Finish exchanges the authorization code for a credential payload
-func (s *Session) Finish(ctx context.Context, code string) (types.CredentialPayload, error) {
+// Finish exchanges the authorization code for a credential set.
+func (s *Session) Finish(ctx context.Context, code string) (models.CredentialSet, error) {
 	codeOpts := buildCodeExchangeOpts(s.provider.tokenParams)
 
 	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](ctx, code, s.provider.relyingParty, codeOpts...)
 	if err != nil {
-		return types.CredentialPayload{}, providers.ErrCodeExchange
+		return models.CredentialSet{}, providers.ErrCodeExchange
 	}
 
-	payload, err := integrationauth.BuildOAuthCredentialPayload(s.provider.Type(), tokens.Token, tokens.IDTokenClaims)
+	credential, err := integrationauth.BuildOAuthCredentialSet(tokens.Token, tokens.IDTokenClaims)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	return payload, nil
+	return credential, nil
 }

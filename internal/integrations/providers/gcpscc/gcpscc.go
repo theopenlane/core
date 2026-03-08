@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -45,6 +46,17 @@ const ClientSecurityCenter types.ClientName = "securitycenter.v2"
 
 const securityCenterDescription = "Google Cloud Security Command Center v2 client"
 
+type securityCenterClientConfig struct {
+	// FindingFilter overrides the finding filter in provider metadata.
+	FindingFilter string `json:"findingFilter,omitempty" jsonschema:"description=Optional SCC findings filter overriding the stored metadata."`
+	// SourceID sets one SCC source (for example organizations/123/sources/456).
+	SourceID string `json:"sourceId,omitempty" jsonschema:"description=Optional SCC source override (e.g. organizations/123/sources/456)."`
+	// SourceIDs sets multiple SCC sources for fan-out collection.
+	SourceIDs []string `json:"sourceIds,omitempty" jsonschema:"description=Optional SCC source overrides for fan-out collection."`
+}
+
+var securityCenterClientConfigSchema = operations.SchemaFrom[securityCenterClientConfig]()
+
 var _ types.ClientProvider = (*Provider)(nil)
 
 // Provider implements the GCP SCC integration using workload identity federation.
@@ -67,6 +79,10 @@ func Builder() providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: TypeGCPSCC,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+			authKind := spec.AuthType.Normalize()
+			if authKind != types.AuthKindWorkloadIdentity {
+				return nil, ErrAuthTypeMismatch
+			}
 			if spec.GoogleWorkloadIdentity == nil {
 				return nil, providers.ErrSpecWorkloadIdentityRequired
 			}
@@ -117,91 +133,74 @@ func (p *Provider) BeginAuth(_ context.Context, _ types.AuthContext) (types.Auth
 	return nil, ErrBeginAuthNotSupported
 }
 
-// Mint exchanges stored workload identity metadata for short-lived Google credentials and persists the updated payload.
-func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+// Mint exchanges stored workload identity metadata for short-lived Google credentials and persists updated credential fields.
+func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
 	meta, err := metadataFromPayload(subject.Credential)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
 	meta = meta.withDefaults(p.defaults)
 
 	if meta.ServiceAccountKey != "" {
 		if _, err := serviceAccountCredentials(ctx, meta.ServiceAccountKey, meta.Scopes); err != nil {
-			return types.CredentialPayload{}, err
+			return models.CredentialSet{}, err
 		}
 
-		providerData, err := auth.PersistMetadata(subject.Credential.Data.ProviderData, meta)
+		providerData, err := json.Marshal(meta.providerData())
 		if err != nil {
-			return types.CredentialPayload{}, err
+			return models.CredentialSet{}, err
 		}
 
-		builder := types.NewCredentialBuilder(TypeGCPSCC).With(
-			types.WithCredentialKind(types.CredentialKindMetadata),
-			types.WithCredentialSet(models.CredentialSet{
-				ProviderData: providerData,
-			}),
-		)
-
-		return builder.Build()
+		return models.CredentialSet{
+			ServiceAccountKey: meta.ServiceAccountKey,
+			SubjectToken:      meta.SubjectToken,
+			ProviderData:      providerData,
+		}, nil
 	}
 
 	var subjectToken, tokenType string
 	subjectToken, tokenType, err = resolveSubjectToken(subject, meta, p.defaults)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
-	meta.SubjectToken = types.TrimmedString(subjectToken)
+	meta.SubjectToken = subjectToken
 
 	accessToken, err := p.mintWorkloadToken(ctx, meta, subjectToken, tokenType)
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	providerData, err := auth.PersistMetadata(subject.Credential.Data.ProviderData, meta)
+	providerData, err := json.Marshal(meta.providerData())
 	if err != nil {
-		return types.CredentialPayload{}, err
+		return models.CredentialSet{}, err
 	}
 
-	builder := types.NewCredentialBuilder(TypeGCPSCC).With(
-		types.WithCredentialKind(types.CredentialKindWorkload),
-		types.WithOAuthToken(accessToken),
-		types.WithCredentialSet(models.CredentialSet{
-			ProviderData: providerData,
-		}),
-	)
+	credential := models.CredentialSet{
+		ServiceAccountKey: meta.ServiceAccountKey,
+		SubjectToken:      meta.SubjectToken,
+		ProviderData:      providerData,
+		OAuthAccessToken:  accessToken.AccessToken,
+		OAuthRefreshToken: accessToken.RefreshToken,
+		OAuthTokenType:    accessToken.TokenType,
+	}
+	if !accessToken.Expiry.IsZero() {
+		exp := accessToken.Expiry.UTC()
+		credential.OAuthExpiry = &exp
+	}
 
-	return builder.Build()
+	return credential, nil
 }
 
 // ClientDescriptors returns the client builders exposed by this provider.
 func (p *Provider) ClientDescriptors() []types.ClientDescriptor {
 	return []types.ClientDescriptor{
 		{
-			Provider:    TypeGCPSCC,
-			Name:        ClientSecurityCenter,
-			Description: securityCenterDescription,
-			Build:       buildSecurityCenterClient,
-			ConfigSchema: map[string]any{
-				"type": "object",
-				"properties": map[string]any{
-					"findingFilter": map[string]any{
-						"type":        "string",
-						"description": "Optional SCC findings filter overriding the stored metadata.",
-					},
-					"sourceId": map[string]any{
-						"type":        "string",
-						"description": "Optional SCC source override (e.g. organizations/123/sources/456).",
-					},
-					"sourceIds": map[string]any{
-						"type":        "array",
-						"description": "Optional SCC source overrides for fan-out collection.",
-						"items": map[string]any{
-							"type": "string",
-						},
-					},
-				},
-			},
+			Provider:     TypeGCPSCC,
+			Name:         ClientSecurityCenter,
+			Description:  securityCenterDescription,
+			Build:        buildSecurityCenterClient,
+			ConfigSchema: securityCenterClientConfigSchema,
 		},
 	}
 }
@@ -271,13 +270,13 @@ func (p *Provider) mintWorkloadToken(ctx context.Context, meta credentialMetadat
 }
 
 // buildSecurityCenterClient builds the SCC client using stored credentials
-func buildSecurityCenterClient(ctx context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+func buildSecurityCenterClient(ctx context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 	meta, err := metadataFromPayload(payload)
 	if err != nil {
 		return types.EmptyClientInstance(), err
 	}
 
-	clientOpts, err := securityCenterClientOptions(ctx, meta, payload.Token)
+	clientOpts, err := securityCenterClientOptions(ctx, meta, oauthTokenFromCredential(payload))
 	if err != nil {
 		return types.EmptyClientInstance(), err
 	}
@@ -383,9 +382,45 @@ type credentialMetadata struct {
 	// FindingFilter holds the default SCC findings filter
 	FindingFilter types.TrimmedString `json:"findingFilter,omitempty"`
 	// SubjectToken stores the subject token for STS exchange
-	SubjectToken types.TrimmedString `json:"subjectToken,omitempty"`
+	SubjectToken string `json:"subjectToken,omitempty"`
 	// ServiceAccountKey stores the service account key JSON
-	ServiceAccountKey types.TrimmedString `json:"serviceAccountKey,omitempty"`
+	ServiceAccountKey string `json:"serviceAccountKey,omitempty"`
+}
+
+type providerData struct {
+	ProjectID                string   `json:"projectId,omitempty"`
+	OrganizationID           string   `json:"organizationId,omitempty"`
+	ProjectScope             string   `json:"projectScope,omitempty"`
+	ProjectIDs               []string `json:"projectIds,omitempty"`
+	WorkloadIdentityProvider string   `json:"workloadIdentityProvider,omitempty"`
+	Audience                 string   `json:"audience,omitempty"`
+	ServiceAccountEmail      string   `json:"serviceAccountEmail,omitempty"`
+	SourceID                 string   `json:"sourceId,omitempty"`
+	SourceIDs                []string `json:"sourceIds,omitempty"`
+	Scopes                   []string `json:"scopes,omitempty"`
+	TokenLifetime            string   `json:"tokenLifetime,omitempty"`
+	AudienceHint             string   `json:"audienceHint,omitempty"`
+	WorkloadPoolProject      string   `json:"workloadPoolProject,omitempty"`
+	FindingFilter            string   `json:"findingFilter,omitempty"`
+}
+
+func (m credentialMetadata) providerData() providerData {
+	return providerData{
+		ProjectID:                m.ProjectID.String(),
+		OrganizationID:           m.OrganizationID.String(),
+		ProjectScope:             m.ProjectScope.String(),
+		ProjectIDs:               m.ProjectIDs,
+		WorkloadIdentityProvider: m.WorkloadIdentityProvider.String(),
+		Audience:                 m.Audience.String(),
+		ServiceAccountEmail:      m.ServiceAccountEmail.String(),
+		SourceID:                 m.SourceID.String(),
+		SourceIDs:                m.SourceIDs,
+		Scopes:                   m.Scopes,
+		TokenLifetime:            m.TokenLifetime.String(),
+		AudienceHint:             m.AudienceHint.String(),
+		WorkloadPoolProject:      m.WorkloadPoolProject.String(),
+		FindingFilter:            m.FindingFilter.String(),
+	}
 }
 
 // withDefaults applies provider defaults to missing metadata values
@@ -417,25 +452,50 @@ func (m credentialMetadata) tokenLifetime() time.Duration {
 }
 
 // metadataFromPayload decodes provider metadata from the credential payload
-func metadataFromPayload(payload types.CredentialPayload) (credentialMetadata, error) {
-	if len(payload.Data.ProviderData) == 0 {
+func metadataFromPayload(payload models.CredentialSet) (credentialMetadata, error) {
+	if len(payload.ProviderData) == 0 && payload.ServiceAccountKey == "" && payload.SubjectToken == "" {
 		return credentialMetadata{}, ErrCredentialMetadataRequired
 	}
 
-	meta, err := auth.ExtractMetadata[credentialMetadata](payload)
-	if err != nil {
-		return credentialMetadata{}, ErrMetadataDecode
+	var meta credentialMetadata
+	if len(payload.ProviderData) > 0 {
+		if err := json.Unmarshal(payload.ProviderData, &meta); err != nil {
+			return credentialMetadata{}, ErrMetadataDecode
+		}
+	}
+	if meta.ServiceAccountKey == "" {
+		meta.ServiceAccountKey = payload.ServiceAccountKey
+	}
+	if meta.SubjectToken == "" {
+		meta.SubjectToken = payload.SubjectToken
 	}
 
 	return meta.applyDefaults(), nil
 }
 
+func oauthTokenFromCredential(payload models.CredentialSet) *oauth2.Token {
+	if payload.OAuthAccessToken == "" && payload.OAuthRefreshToken == "" {
+		return nil
+	}
+
+	token := &oauth2.Token{
+		AccessToken:  payload.OAuthAccessToken,
+		RefreshToken: payload.OAuthRefreshToken,
+		TokenType:    payload.OAuthTokenType,
+	}
+	if payload.OAuthExpiry != nil {
+		token.Expiry = payload.OAuthExpiry.UTC()
+	}
+
+	return token
+}
+
 // resolveSubjectToken selects the subject token and token type for STS exchange
-func resolveSubjectToken(subject types.CredentialSubject, meta credentialMetadata, defaults workloadDefaults) (token string, tokenType string, err error) {
+func resolveSubjectToken(subject types.CredentialMintRequest, meta credentialMetadata, defaults workloadDefaults) (token string, tokenType string, err error) {
 	if attr := subject.Attributes[subjectTokenAttr]; attr != "" {
 		token = attr
 	} else {
-		token = meta.SubjectToken.String()
+		token = meta.SubjectToken
 	}
 
 	if token == "" {
@@ -485,7 +545,7 @@ func (m credentialMetadata) applyDefaults() credentialMetadata {
 	}
 	normalized.ProjectIDs = types.NormalizeStringSlice(normalized.ProjectIDs)
 	normalized.SourceIDs = types.NormalizeStringSlice(normalized.SourceIDs)
-	normalized.ServiceAccountKey = types.TrimmedString(auth.NormalizeServiceAccountKey(normalized.ServiceAccountKey.String()))
+	normalized.ServiceAccountKey = auth.NormalizeServiceAccountKey(normalized.ServiceAccountKey)
 	normalized.Scopes = types.NormalizeStringSlice(normalized.Scopes)
 	return normalized
 }

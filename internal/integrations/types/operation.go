@@ -3,6 +3,8 @@ package types //nolint:revive
 import (
 	"context"
 	"encoding/json"
+
+	"github.com/theopenlane/core/common/models"
 )
 
 // OperationName identifies a provider operation (health check, findings harvest, etc).
@@ -57,10 +59,10 @@ type OperationDescriptor struct {
 	Client ClientName
 	// Run is the function that executes the operation
 	Run OperationFunc
-	// ConfigSchema defines the JSON schema for operation configuration
-	ConfigSchema map[string]any
-	// OutputSchema defines the JSON schema for operation output
-	OutputSchema map[string]any
+	// ConfigSchema defines the JSON schema for operation configuration.
+	ConfigSchema json.RawMessage
+	// OutputSchema defines the JSON schema for operation output.
+	OutputSchema json.RawMessage
 	// Ingest declares one or more optional ingest contracts emitted by this operation.
 	// Each contract maps operation output envelopes to a normalized ingest schema.
 	Ingest []IngestContract
@@ -80,8 +82,8 @@ type OperationInput struct {
 	OrgID string
 	// Provider identifies the provider for this operation
 	Provider ProviderType
-	// Credential contains the credential payload for authentication
-	Credential CredentialPayload
+	// Credential contains the credential fields for authentication
+	Credential models.CredentialSet
 	// Client is the provider-specific client instance wrapper
 	Client ClientInstance
 	// Config contains operation-specific configuration as a JSON object document

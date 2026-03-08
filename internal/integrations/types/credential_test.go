@@ -2,42 +2,125 @@ package types
 
 import (
 	"testing"
-
-	"golang.org/x/oauth2"
-
-	"github.com/zitadel/oidc/v3/pkg/oidc"
+	"time"
 
 	"github.com/theopenlane/core/common/models"
 )
 
-func TestBuildCredentialPayloadValidation(t *testing.T) {
-	if _, err := BuildCredentialPayload(ProviderUnknown); err != ErrProviderTypeRequired {
-		t.Fatalf("expected ErrProviderTypeRequired, got %v", err)
+func TestCloneCredentialSet(t *testing.T) {
+	expiry := time.Now().UTC().Add(time.Hour).Truncate(time.Second)
+	input := models.CredentialSet{
+		APIToken:     "token",
+		ProviderData: []byte(`{"region":"us-east-1"}`),
+		Claims: map[string]any{
+			"sub": "abc",
+			"nested": map[string]any{
+				"role": "admin",
+			},
+		},
+		OAuthExpiry: &expiry,
 	}
 
-	if _, err := BuildCredentialPayload(ProviderType("test")); err != ErrCredentialSetRequired {
-		t.Fatalf("expected ErrCredentialSetRequired, got %v", err)
+	cloned := CloneCredentialSet(input)
+	if cloned.APIToken != "token" {
+		t.Fatalf("expected APIToken to be copied")
+	}
+	if string(cloned.ProviderData) != string(input.ProviderData) {
+		t.Fatalf("expected ProviderData to match")
+	}
+	if cloned.OAuthExpiry == nil || !cloned.OAuthExpiry.Equal(expiry) {
+		t.Fatalf("expected OAuthExpiry to be copied")
+	}
+
+	cloned.ProviderData[0] = 'x'
+	if string(input.ProviderData) == string(cloned.ProviderData) {
+		t.Fatalf("expected ProviderData deep clone")
+	}
+
+	cloned.Claims["sub"] = "changed"
+	nested := cloned.Claims["nested"].(map[string]any) //nolint:forcetypeassert
+	nested["role"] = "viewer"
+
+	if input.Claims["sub"] != "abc" {
+		t.Fatalf("expected Claims top-level deep clone")
+	}
+	originalNested := input.Claims["nested"].(map[string]any) //nolint:forcetypeassert
+	if originalNested["role"] != "admin" {
+		t.Fatalf("expected Claims nested deep clone")
 	}
 }
 
-func TestBuildCredentialPayloadDefaults(t *testing.T) {
-	payload, err := BuildCredentialPayload(ProviderType("test"), WithCredentialSet(models.CredentialSet{APIToken: "token"}))
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
+func TestInferAuthKind(t *testing.T) {
+	tests := []struct {
+		name string
+		set  models.CredentialSet
+		want AuthKind
+	}{
+		{
+			name: "oidc claims",
+			set:  models.CredentialSet{Claims: map[string]any{"sub": "abc"}},
+			want: AuthKindOIDC,
+		},
+		{
+			name: "oauth token",
+			set:  models.CredentialSet{OAuthAccessToken: "access"},
+			want: AuthKindOAuth2,
+		},
+		{
+			name: "api key",
+			set:  models.CredentialSet{APIToken: "token"},
+			want: AuthKindAPIKey,
+		},
+		{
+			name: "client credentials",
+			set:  models.CredentialSet{ClientID: "id", ClientSecret: "secret"},
+			want: AuthKindOAuth2ClientCredentials,
+		},
+		{
+			name: "aws federation",
+			set:  models.CredentialSet{AccessKeyID: "key"},
+			want: AuthKindAWSFederation,
+		},
+		{
+			name: "workload identity",
+			set:  models.CredentialSet{ServiceAccountKey: "key"},
+			want: AuthKindWorkloadIdentity,
+		},
+		{
+			name: "unknown",
+			set:  models.CredentialSet{},
+			want: AuthKindUnknown,
+		},
 	}
-	if payload.Kind != CredentialKindOAuthToken {
-		t.Fatalf("expected default kind oauth token")
+
+	for _, tt := range tests {
+		got := InferAuthKind(tt.set)
+		if got != tt.want {
+			t.Fatalf("%s: expected %q, got %q", tt.name, tt.want, got)
+		}
 	}
 }
 
-func TestCredentialBuilder(t *testing.T) {
-	builder := NewCredentialBuilder(ProviderType("test")).With(WithCredentialSet(models.CredentialSet{APIToken: "token"}))
-	payload, err := builder.Build()
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
+func TestIsCredentialSetEmpty(t *testing.T) {
+	if !IsCredentialSetEmpty(models.CredentialSet{}) {
+		t.Fatalf("expected empty credential set to be empty")
 	}
-	if payload.Provider != ProviderType("test") {
-		t.Fatalf("expected provider")
+
+	if IsCredentialSetEmpty(models.CredentialSet{APIToken: "token"}) {
+		t.Fatalf("expected API token credential set to be non-empty")
+	}
+
+	if IsCredentialSetEmpty(models.CredentialSet{ProviderData: []byte(`{"region":"us-east-1"}`)}) {
+		t.Fatalf("expected provider data credential set to be non-empty")
+	}
+
+	expiry := time.Now().UTC().Add(time.Hour)
+	if IsCredentialSetEmpty(models.CredentialSet{OAuthExpiry: &expiry}) {
+		t.Fatalf("expected expiry-only credential set to be non-empty")
+	}
+
+	if IsCredentialSetEmpty(models.CredentialSet{Claims: map[string]any{"sub": "abc"}}) {
+		t.Fatalf("expected claims credential set to be non-empty")
 	}
 }
 
@@ -51,32 +134,5 @@ func TestMergeScopes(t *testing.T) {
 		if out[i] != want[i] {
 			t.Fatalf("expected %q at %d, got %q", want[i], i, out[i])
 		}
-	}
-}
-
-func TestCredentialOptions(t *testing.T) {
-	payload := CredentialPayload{
-		Token:  &oauth2.Token{AccessToken: "token"},
-		Claims: &oidc.IDTokenClaims{TokenClaims: oidc.TokenClaims{Subject: "sub"}},
-	}
-
-	tokenOpt := payload.OAuthTokenOption()
-	if !tokenOpt.IsPresent() {
-		t.Fatalf("expected token option to be present")
-	}
-	if tokenOpt.MustGet().AccessToken != "token" {
-		t.Fatalf("expected access token")
-	}
-
-	claimsOpt := payload.ClaimsOption()
-	if !claimsOpt.IsPresent() {
-		t.Fatalf("expected claims option to be present")
-	}
-	if claimsOpt.MustGet().Subject != "sub" {
-		t.Fatalf("expected subject")
-	}
-
-	if optionFromPointer[*oauth2.Token](nil).IsPresent() {
-		t.Fatalf("expected none option")
 	}
 }

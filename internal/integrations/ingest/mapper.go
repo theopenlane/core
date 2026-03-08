@@ -2,6 +2,7 @@ package ingest
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"sync"
@@ -45,19 +46,7 @@ const (
 	mappingVarProviderState     = integrationscope.VariableProviderState
 )
 
-var defaultCELTimeout = 100 * time.Millisecond
-
-var knownMappingSchemas = func() map[string]struct{} {
-	out := map[string]struct{}{}
-	for name := range integrationgenerated.IntegrationMappingSchemas {
-		if name == "" {
-			continue
-		}
-		out[name] = struct{}{}
-	}
-
-	return out
-}()
+const defaultCELTimeout = 100 * time.Millisecond
 
 // Evaluator defines the interface for mapping expression evaluation
 type Evaluator interface {
@@ -79,7 +68,7 @@ var _ Evaluator = (*MappingEvaluator)(nil)
 // MappingVars holds CEL variables for integration mappings
 type MappingVars struct {
 	// Payload holds the raw provider payload for mapping
-	Payload map[string]any
+	Payload json.RawMessage
 	// Resource identifies the upstream resource associated with the payload
 	Resource string
 	// AlertType identifies the alert type for the payload
@@ -93,26 +82,37 @@ type MappingVars struct {
 	// IntegrationID identifies the integration record
 	IntegrationID string
 	// Config holds operation configuration values
-	Config map[string]any
+	Config json.RawMessage
 	// IntegrationConfig holds integration-level configuration values
-	IntegrationConfig map[string]any
+	IntegrationConfig json.RawMessage
 	// ProviderState holds provider state captured during activation
-	ProviderState map[string]any
+	ProviderState json.RawMessage
 }
 
-// Map converts MappingVars into the CEL variable map
-func (m MappingVars) Map() map[string]any {
+// CELVars converts MappingVars into the CEL variable map, unmarshaling JSON fields inline.
+func (m MappingVars) CELVars() map[string]any {
+	decodeOrNil := func(raw json.RawMessage) any {
+		if len(raw) == 0 {
+			return nil
+		}
+		var out any
+		if err := json.Unmarshal(raw, &out); err != nil {
+			return nil
+		}
+		return out
+	}
+
 	return map[string]any{
-		mappingVarPayload:           m.Payload,
+		mappingVarPayload:           decodeOrNil(m.Payload),
 		mappingVarResource:          m.Resource,
 		mappingVarAlertType:         m.AlertType,
 		mappingVarProvider:          string(m.Provider),
 		mappingVarOperation:         string(m.Operation),
 		mappingVarOrgID:             m.OrgID,
 		mappingVarIntegrationID:     m.IntegrationID,
-		mappingVarConfig:            m.Config,
-		mappingVarIntegrationConfig: m.IntegrationConfig,
-		mappingVarProviderState:     m.ProviderState,
+		mappingVarConfig:            decodeOrNil(m.Config),
+		mappingVarIntegrationConfig: decodeOrNil(m.IntegrationConfig),
+		mappingVarProviderState:     decodeOrNil(m.ProviderState),
 	}
 }
 
@@ -245,11 +245,10 @@ func newMappingOverrideIndex(config openapi.IntegrationConfig) mappingOverrideIn
 
 // HasAny reports whether any overrides exist for the provider and schema
 func (m mappingOverrideIndex) HasAny(provider integrationtypes.ProviderType, schemaName string) bool {
-	schemaKey := schemaName
-	if schemaKey == "" {
+	if schemaName == "" {
 		return false
 	}
-	if _, ok := m.hasSchema[schemaKey]; ok {
+	if lo.HasKey(m.hasSchema, schemaName) {
 		return true
 	}
 
@@ -258,9 +257,7 @@ func (m mappingOverrideIndex) HasAny(provider integrationtypes.ProviderType, sch
 		return false
 	}
 
-	_, ok := m.hasProviderSchema[fmt.Sprintf("%s:%s", providerKey, schemaKey)]
-
-	return ok
+	return lo.HasKey(m.hasProviderSchema, fmt.Sprintf("%s:%s", providerKey, schemaName))
 }
 
 // Resolve selects the most specific override for the provider, schema, and variant
@@ -269,22 +266,12 @@ func (m mappingOverrideIndex) Resolve(provider integrationtypes.ProviderType, sc
 	schemaKey := schemaName
 	variantKey := variant
 
-	candidates := []string{}
-	if providerKey != "" && schemaKey != "" && variantKey != "" {
-		candidates = append(candidates, fmt.Sprintf("%s:%s:%s", providerKey, schemaKey, variantKey))
-	}
-
-	if providerKey != "" && schemaKey != "" {
-		candidates = append(candidates, fmt.Sprintf("%s:%s", providerKey, schemaKey))
-	}
-
-	if schemaKey != "" && variantKey != "" {
-		candidates = append(candidates, fmt.Sprintf("%s:%s", schemaKey, variantKey))
-	}
-
-	if schemaKey != "" {
-		candidates = append(candidates, schemaKey)
-	}
+	candidates := lo.Compact([]string{
+		lo.Ternary(providerKey != "" && schemaKey != "" && variantKey != "", fmt.Sprintf("%s:%s:%s", providerKey, schemaKey, variantKey), ""),
+		lo.Ternary(providerKey != "" && schemaKey != "", fmt.Sprintf("%s:%s", providerKey, schemaKey), ""),
+		lo.Ternary(schemaKey != "" && variantKey != "", fmt.Sprintf("%s:%s", schemaKey, variantKey), ""),
+		schemaKey,
+	})
 
 	for _, key := range candidates {
 		if override, ok := m.overrides[key]; ok {
@@ -322,7 +309,11 @@ func mappingKeyParts(key string) (schemaKey string, providerKey string) {
 
 // isMappingSchema reports whether a name matches a known mapping schema
 func isMappingSchema(value string) bool {
-	_, ok := knownMappingSchemas[value]
+	if value == "" {
+		return false
+	}
+
+	_, ok := integrationgenerated.IntegrationMappingSchemas[value]
 
 	return ok
 }
@@ -364,14 +355,15 @@ func validateMappingOutput(schema integrationgenerated.IntegrationMappingSchema,
 		})
 	}
 
-	for _, key := range requiredKeys {
+	if lo.SomeBy(requiredKeys, func(key string) bool {
 		value, ok := input[key]
 		if !ok || value == nil {
-			return ErrMappingRequiredField
+			return true
 		}
-		if str, ok := value.(string); ok && str == "" {
-			return ErrMappingRequiredField
-		}
+		str, ok := value.(string)
+		return ok && str == ""
+	}) {
+		return ErrMappingRequiredField
 	}
 
 	return nil

@@ -7,6 +7,7 @@ import (
 	cf "github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -23,7 +24,7 @@ func cloudflareClientDescriptors() []types.ClientDescriptor {
 }
 
 // buildCloudflareClient constructs a Cloudflare SDK client from credential payload.
-func buildCloudflareClient(_ context.Context, payload types.CredentialPayload, _ json.RawMessage) (types.ClientInstance, error) {
+func buildCloudflareClient(_ context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
 	token, err := auth.APITokenFromPayload(payload)
 	if err != nil {
 		return types.EmptyClientInstance(), err

@@ -15,6 +15,5 @@ func Builder() providers.Builder {
 		TypeSlack,
 		oauth.WithOperations(slackOperations()),
 		oauth.WithClientDescriptors(slackClientDescriptors()),
-		oauth.WithCredentialSetBuilder(slackCredentialSet),
 	)
 }

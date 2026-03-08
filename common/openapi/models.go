@@ -2855,7 +2855,7 @@ type IntegrationOperationMetadata struct {
 	// Client is the client value.
 	Client string `json:"client,omitempty"`
 	// ConfigSchema is the configSchema value.
-	ConfigSchema map[string]any `json:"configSchema,omitempty"`
+	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
 }
 
 // IntegrationProviderMetadata describes the data required for rendering integration forms.
@@ -2886,14 +2886,15 @@ type IntegrationProviderMetadata struct {
 	DocsURL string `json:"docsUrl,omitempty"`
 	// OAuth is the oauth value.
 	OAuth *IntegrationOAuthMetadata `json:"oauth,omitempty"`
-	// GoogleWorkloadIdentity is the workloadIdentity value.
-	GoogleWorkloadIdentity *config.GoogleWorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
-	// GitHubApp is the githubApp value.
-	GitHubApp *config.GitHubAppSpec `json:"githubApp,omitempty"`
+	// EnvironmentCredentials carries operator-configured credential attributes that are
+	// merged with tenant-supplied inputs to compose the final credential envelope. Present
+	// for providers whose credentials are fully or partially sourced from the operator
+	// environment (e.g. GitHub App installation keys, GCP workload identity pool config).
+	EnvironmentCredentials json.RawMessage `json:"environmentCredentials,omitempty"`
 	// Persistence is the persistence value.
 	Persistence *config.PersistenceSpec `json:"persistence,omitempty"`
 	// CredentialsSchema is the credentialsSchema value.
-	CredentialsSchema map[string]any `json:"credentialsSchema,omitempty"`
+	CredentialsSchema json.RawMessage `json:"credentialsSchema,omitempty"`
 	// Labels is the labels value.
 	Labels map[string]string `json:"labels,omitempty"`
 	// Operations is the operations value.
@@ -2903,7 +2904,7 @@ type IntegrationProviderMetadata struct {
 // IntegrationOperationTemplate captures persisted configuration for an operation.
 type IntegrationOperationTemplate struct {
 	// Config holds the IntegrationOperationTemplate configuration
-	Config map[string]any `json:"config,omitempty"`
+	Config json.RawMessage `json:"config,omitempty"`
 	// AllowOverrides lists which config fields can be overridden at runtime
 	AllowOverrides []string `json:"allowOverrides,omitempty"`
 }
@@ -2933,7 +2934,7 @@ type IntegrationConfig struct {
 	// EnabledOperations lists which operations are enabled
 	EnabledOperations []string `json:"enabledOperations,omitempty"`
 	// ClientConfig holds provider-specific client configuration
-	ClientConfig map[string]any `json:"clientConfig,omitempty"`
+	ClientConfig json.RawMessage `json:"clientConfig,omitempty"`
 	// CollectionStrategy defines how data is collected from the provider
 	CollectionStrategy string `json:"collectionStrategy,omitempty"`
 	// Schedule defines the integration schedule

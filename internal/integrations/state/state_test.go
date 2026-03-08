@@ -1,67 +1,72 @@
 package state
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
-func TestProviderDataReturnsDeepClone(t *testing.T) {
+func TestProviderDataReturnsRawMessage(t *testing.T) {
 	s := IntegrationProviderState{}
-	changed, err := s.MergeProviderData("githubapp", map[string]any{
+	patch, err := json.Marshal(map[string]any{
 		"installationId": "123",
 		"nested": map[string]any{
 			"enabled": true,
 		},
 	})
 	if err != nil {
+		t.Fatalf("expected marshal success: %v", err)
+	}
+
+	changed, err := s.MergeProviderData("githubapp", patch)
+	if err != nil {
 		t.Fatalf("expected merge success: %v", err)
 	}
 	if !changed {
 		t.Fatalf("expected merge to change state")
 	}
 
-	out, err := s.ProviderDataMap("githubapp")
-	if err != nil {
-		t.Fatalf("expected provider data: %v", err)
-	}
-	if out == nil {
+	raw := s.ProviderData("githubapp")
+	if len(raw) == 0 {
 		t.Fatalf("expected provider data")
 	}
 
-	nested, ok := out["nested"].(map[string]any)
-	if !ok {
-		t.Fatalf("expected nested map")
+	var out map[string]any
+	if err := json.Unmarshal(raw, &out); err != nil {
+		t.Fatalf("expected unmarshal success: %v", err)
 	}
-	nested["enabled"] = false
-
-	source, err := s.ProviderDataMap("githubapp")
-	if err != nil {
-		t.Fatalf("expected provider data map: %v", err)
-	}
-	sourceNested, ok := source["nested"].(map[string]any)
-	if !ok {
-		t.Fatalf("expected source nested map")
-	}
-	if sourceNested["enabled"] != true {
-		t.Fatalf("expected source nested value to remain true")
+	if out["installationId"] != "123" {
+		t.Fatalf("expected installationId to be '123'")
 	}
 }
 
 func TestMergeProviderDataMergesDeeply(t *testing.T) {
 	s := IntegrationProviderState{}
-	_, err := s.MergeProviderData("githubapp", map[string]any{
+
+	patch1, err := json.Marshal(map[string]any{
 		"appId": "10",
 		"nested": map[string]any{
 			"a": "one",
 		},
 	})
 	if err != nil {
+		t.Fatalf("expected marshal success: %v", err)
+	}
+
+	if _, err := s.MergeProviderData("githubapp", patch1); err != nil {
 		t.Fatalf("expected initial merge success: %v", err)
 	}
 
-	changed, err := s.MergeProviderData("githubapp", map[string]any{
+	patch2, err := json.Marshal(map[string]any{
 		"installationId": "20",
 		"nested": map[string]any{
 			"b": "two",
 		},
 	})
+	if err != nil {
+		t.Fatalf("expected marshal success: %v", err)
+	}
+
+	changed, err := s.MergeProviderData("githubapp", patch2)
 	if err != nil {
 		t.Fatalf("expected merge success: %v", err)
 	}
@@ -69,9 +74,10 @@ func TestMergeProviderDataMergesDeeply(t *testing.T) {
 		t.Fatalf("expected merge to change state")
 	}
 
-	provider, err := s.ProviderDataMap("githubapp")
-	if err != nil {
-		t.Fatalf("expected provider data map: %v", err)
+	raw := s.ProviderData("githubapp")
+	var provider map[string]any
+	if err := json.Unmarshal(raw, &provider); err != nil {
+		t.Fatalf("expected unmarshal success: %v", err)
 	}
 	if provider["appId"] != "10" {
 		t.Fatalf("expected appId to be preserved")
@@ -90,16 +96,19 @@ func TestMergeProviderDataMergesDeeply(t *testing.T) {
 
 func TestMergeProviderDataNoChange(t *testing.T) {
 	s := IntegrationProviderState{}
-	_, err := s.MergeProviderData("slack", map[string]any{
+
+	patch, err := json.Marshal(map[string]any{
 		"teamId": "T123",
 	})
 	if err != nil {
+		t.Fatalf("expected marshal success: %v", err)
+	}
+
+	if _, err := s.MergeProviderData("slack", patch); err != nil {
 		t.Fatalf("expected initial merge success: %v", err)
 	}
 
-	changed, err := s.MergeProviderData("slack", map[string]any{
-		"teamId": "T123",
-	})
+	changed, err := s.MergeProviderData("slack", patch)
 	if err != nil {
 		t.Fatalf("expected merge success: %v", err)
 	}
