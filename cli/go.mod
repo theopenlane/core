@@ -3,7 +3,7 @@ module github.com/theopenlane/core/cli
 go 1.25.7
 
 require (
-	github.com/99designs/gqlgen v0.17.87
+	github.com/99designs/gqlgen v0.17.88
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
@@ -17,7 +17,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.11.17
+	github.com/theopenlane/core v1.11.18
 	github.com/theopenlane/core/common v1.0.12
 	github.com/theopenlane/go-client v0.8.6
 	github.com/theopenlane/httpsling v0.3.0
@@ -83,7 +83,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/samber/mo v1.16.0 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect
-	github.com/sosodev/duration v1.3.1 // indirect
+	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/stoewer/go-strcase v1.3.1 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect

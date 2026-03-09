@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20260218064135-ab0540611e15
-	github.com/99designs/gqlgen v0.17.87
+	github.com/99designs/gqlgen v0.17.88
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/alitto/pond/v2 v2.7.0
@@ -331,7 +331,7 @@ require (
 	github.com/segmentio/asm v1.2.1 // indirect
 	github.com/sethvargo/go-retry v0.3.0 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
-	github.com/sosodev/duration v1.3.1 // indirect
+	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
