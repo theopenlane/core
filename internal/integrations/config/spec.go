@@ -97,24 +97,8 @@ func MergeProviderSpecs(ctx context.Context, base map[types.ProviderType]Provide
 			continue
 		}
 
-		baseRaw, err := json.Marshal(current)
+		next, err := jsonx.ApplyOverlay(current, override)
 		if err != nil {
-			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize base provider spec for merge")
-			continue
-		}
-
-		overrideRaw, err := json.Marshal(override)
-		if err != nil {
-			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to serialize override provider spec for merge")
-			continue
-		}
-
-		var next ProviderSpec
-		if err := json.Unmarshal(baseRaw, &next); err != nil {
-			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to deserialize base provider spec for merge")
-			continue
-		}
-		if err := json.Unmarshal(overrideRaw, &next); err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("provider", key).Msg("failed to apply provider spec override")
 			continue
 		}

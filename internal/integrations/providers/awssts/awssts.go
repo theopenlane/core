@@ -2,7 +2,6 @@ package awssts
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/samber/lo"
 
@@ -12,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providers"
 	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // ProviderOption customizes AWS STS providers.
@@ -80,7 +80,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialMintRequest) 
 
 	creds := decoded.credentials()
 
-	providerData, err := json.Marshal(decoded.providerData())
+	providerData, err := jsonx.ToRawMessage(decoded.providerData())
 	if err != nil {
 		return models.CredentialSet{}, err
 	}
@@ -130,7 +130,7 @@ func awsSTSMetadataFromPayload(payload models.CredentialSet) (awsSTSMetadata, er
 	}
 
 	var decoded awsSTSMetadata
-	if err := json.Unmarshal(payload.ProviderData, &decoded); err != nil {
+	if err := jsonx.UnmarshalIfPresent(payload.ProviderData, &decoded); err != nil {
 		return awsSTSMetadata{}, err
 	}
 

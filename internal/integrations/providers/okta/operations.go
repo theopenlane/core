@@ -2,7 +2,6 @@ package okta
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	okta "github.com/okta/okta-sdk-golang/v5/okta"
@@ -11,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -64,7 +64,7 @@ func resolveOktaClient(input types.OperationInput) (*okta.APIClient, error) {
 	}
 
 	var meta oktaProviderMetadata
-	if err := json.Unmarshal(input.Credential.ProviderData, &meta); err != nil {
+	if err := jsonx.UnmarshalIfPresent(input.Credential.ProviderData, &meta); err != nil {
 		return nil, err
 	}
 

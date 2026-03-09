@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 type azureSubscriptionMetadata struct {
@@ -60,7 +61,7 @@ func buildAzureSecurityClient(_ context.Context, payload models.CredentialSet, _
 	}
 
 	var meta azureSubscriptionMetadata
-	if err := json.Unmarshal(payload.ProviderData, &meta); err != nil {
+	if err := jsonx.UnmarshalIfPresent(payload.ProviderData, &meta); err != nil {
 		return types.EmptyClientInstance(), err
 	}
 

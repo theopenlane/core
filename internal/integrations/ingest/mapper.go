@@ -18,6 +18,7 @@ import (
 	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/celx"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -91,28 +92,17 @@ type MappingVars struct {
 
 // CELVars converts MappingVars into the CEL variable map, unmarshaling JSON fields inline.
 func (m MappingVars) CELVars() map[string]any {
-	decodeOrNil := func(raw json.RawMessage) any {
-		if len(raw) == 0 {
-			return nil
-		}
-		var out any
-		if err := json.Unmarshal(raw, &out); err != nil {
-			return nil
-		}
-		return out
-	}
-
 	return map[string]any{
-		mappingVarPayload:           decodeOrNil(m.Payload),
+		mappingVarPayload:           jsonx.DecodeAnyOrNil(m.Payload),
 		mappingVarResource:          m.Resource,
 		mappingVarAlertType:         m.AlertType,
 		mappingVarProvider:          string(m.Provider),
 		mappingVarOperation:         string(m.Operation),
 		mappingVarOrgID:             m.OrgID,
 		mappingVarIntegrationID:     m.IntegrationID,
-		mappingVarConfig:            decodeOrNil(m.Config),
-		mappingVarIntegrationConfig: decodeOrNil(m.IntegrationConfig),
-		mappingVarProviderState:     decodeOrNil(m.ProviderState),
+		mappingVarConfig:            jsonx.DecodeAnyOrNil(m.Config),
+		mappingVarIntegrationConfig: jsonx.DecodeAnyOrNil(m.IntegrationConfig),
+		mappingVarProviderState:     jsonx.DecodeAnyOrNil(m.ProviderState),
 	}
 }
 

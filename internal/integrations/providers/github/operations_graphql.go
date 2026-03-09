@@ -2,7 +2,6 @@ package github
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // githubOrgRepoOperationConfig captures GraphQL organization repository collection settings.
@@ -38,10 +38,8 @@ type githubOrganizationFailureDetails struct {
 // runGitHubOrganizationReposOperation collects organization repositories through the GraphQL API.
 func runGitHubOrganizationReposOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	var config githubOrgRepoOperationConfig
-	if len(input.Config) > 0 {
-		if err := json.Unmarshal(input.Config, &config); err != nil {
-			return types.OperationResult{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(input.Config, &config); err != nil {
+		return types.OperationResult{}, err
 	}
 
 	if config.Organization == "" {

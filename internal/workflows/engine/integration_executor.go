@@ -617,12 +617,12 @@ func evaluateIntegrationScope(ctx context.Context, evaluator integrationscope.Co
 		return true, nil
 	}
 
-	integrationConfigRaw, err := json.Marshal(integrationRecord.Config)
+	integrationConfigRaw, err := jsonx.ToRawMessage(integrationRecord.Config)
 	if err != nil {
 		return false, err
 	}
 
-	providerStateRaw, err := json.Marshal(integrationRecord.ProviderState)
+	providerStateRaw, err := jsonx.ToRawMessage(integrationRecord.ProviderState)
 	if err != nil {
 		return false, err
 	}
@@ -792,11 +792,7 @@ type integrationRunMetrics struct {
 
 // encodeIntegrationRunOperationDetails normalizes operation details for metrics payloads
 func encodeIntegrationRunOperationDetails(details json.RawMessage) json.RawMessage {
-	if len(details) == 0 {
-		return nil
-	}
-
-	return append(json.RawMessage(nil), details...)
+	return jsonx.CloneRawMessage(details)
 }
 
 // buildOperationMetrics builds a metrics document for operation output
@@ -827,7 +823,7 @@ func appendIngestMetrics(metrics integrationRunMetrics, schema types.MappingSche
 		return metrics
 	}
 
-	raw, err := json.Marshal(result.Summary)
+	raw, err := jsonx.ToRawMessage(result.Summary)
 	if err == nil {
 		if metrics.IngestSummaries == nil {
 			metrics.IngestSummaries = map[string]json.RawMessage{}

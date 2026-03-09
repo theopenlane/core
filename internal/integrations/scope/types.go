@@ -5,6 +5,7 @@ import (
 	"time"
 
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -76,25 +77,14 @@ type ScopeVars struct {
 
 // CELVars converts scope vars into CEL variable bindings
 func (v ScopeVars) CELVars() map[string]any {
-	decodeOrNil := func(raw json.RawMessage) any {
-		if len(raw) == 0 {
-			return nil
-		}
-		var out any
-		if err := json.Unmarshal(raw, &out); err != nil {
-			return nil
-		}
-		return out
-	}
-
 	return map[string]any{
-		VariablePayload:           decodeOrNil(v.Payload),
+		VariablePayload:           jsonx.DecodeAnyOrNil(v.Payload),
 		VariableResource:          v.Resource,
 		VariableProvider:          string(v.Provider),
 		VariableOperation:         string(v.Operation),
-		VariableConfig:            decodeOrNil(v.Config),
-		VariableIntegrationConfig: decodeOrNil(v.IntegrationConfig),
-		VariableProviderState:     decodeOrNil(v.ProviderState),
+		VariableConfig:            jsonx.DecodeAnyOrNil(v.Config),
+		VariableIntegrationConfig: jsonx.DecodeAnyOrNil(v.IntegrationConfig),
+		VariableProviderState:     jsonx.DecodeAnyOrNil(v.ProviderState),
 		VariableOrgID:             v.OrgID,
 		VariableIntegrationID:     v.IntegrationID,
 	}

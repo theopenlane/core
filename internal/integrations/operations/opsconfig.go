@@ -6,6 +6,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Pagination captures common paging controls
@@ -38,18 +39,7 @@ type PayloadOptions struct {
 
 // EnsureIncludePayloads forces include_payloads to true in a JSON config document.
 func EnsureIncludePayloads(config json.RawMessage) json.RawMessage {
-	var m map[string]json.RawMessage
-	if len(config) > 0 {
-		if err := json.Unmarshal(config, &m); err != nil {
-			m = map[string]json.RawMessage{}
-		}
-	} else {
-		m = map[string]json.RawMessage{}
-	}
-
-	m["include_payloads"] = json.RawMessage(`true`)
-
-	out, err := json.Marshal(m)
+	out, _, err := jsonx.SetObjectKey(config, "include_payloads", true)
 	if err != nil {
 		return config
 	}
