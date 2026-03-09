@@ -12,15 +12,16 @@ import (
 // OperationFailure builds a failed operation result with optional contextual details
 func OperationFailure(summary string, err error, details any) (types.OperationResult, error) {
 	if err != nil {
-		detailMap := map[string]any{}
+		detailMap := map[string]json.RawMessage{}
 		if details != nil {
-			if parsed, parseErr := jsonx.ToMap(details); parseErr == nil && parsed != nil {
-				detailMap = parsed
+			if parseErr := jsonx.RoundTrip(details, &detailMap); parseErr != nil {
+				detailMap = map[string]json.RawMessage{}
 			}
 		}
 
 		if _, exists := detailMap["error"]; !exists {
-			detailMap["error"] = err.Error()
+			errJSON, _ := json.Marshal(err.Error())
+			detailMap["error"] = errJSON
 		}
 
 		details = detailMap

@@ -2,6 +2,7 @@ package keymaker
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"maps"
 	"time"
@@ -93,7 +94,7 @@ type BeginRequest struct {
 	// Scopes requests specific authorization scopes from the provider
 	Scopes []string
 	// Metadata carries additional provider-specific configuration
-	Metadata map[string]any
+	Metadata json.RawMessage
 	// LabelOverrides customizes UI labels presented during authorization
 	LabelOverrides map[string]string
 	// State optionally supplies a custom CSRF token
@@ -151,7 +152,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		RedirectURI:    req.RedirectURI,
 		State:          req.State,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       maps.Clone(req.Metadata),
+		Metadata:       append(json.RawMessage(nil), req.Metadata...),
 		LabelOverrides: maps.Clone(req.LabelOverrides),
 	}
 
@@ -171,7 +172,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		OrgID:          req.OrgID,
 		IntegrationID:  req.IntegrationID,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       maps.Clone(req.Metadata),
+		Metadata:       append(json.RawMessage(nil), req.Metadata...),
 		LabelOverrides: maps.Clone(req.LabelOverrides),
 		AuthSession:    session,
 		CreatedAt:      s.now(),

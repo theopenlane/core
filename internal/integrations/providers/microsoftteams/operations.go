@@ -92,6 +92,16 @@ type teamsMessageSendDetails struct {
 	MessageID string `json:"messageId"`
 }
 
+type teamsChannelMessageBody struct {
+	ContentType string `json:"contentType"`
+	Content     string `json:"content"`
+}
+
+type teamsChannelMessageRequest struct {
+	Body    teamsChannelMessageBody `json:"body"`
+	Subject string                 `json:"subject,omitempty"`
+}
+
 // runTeamsSample collects a sample of joined Teams for the authenticated user
 func runTeamsSample(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, err := auth.ResolveAuthenticatedClient(input, auth.OAuthTokenFromPayload, teamsGraphBaseURL, nil)
@@ -157,15 +167,12 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 		return types.OperationResult{}, ErrTeamsMessageFormatInvalid
 	}
 
-	payload := map[string]any{
-		"body": map[string]any{
-			"contentType": contentType,
-			"content":     body,
+	payload := teamsChannelMessageRequest{
+		Body: teamsChannelMessageBody{
+			ContentType: contentType,
+			Content:     body,
 		},
-	}
-
-	if cfg.Subject != "" {
-		payload["subject"] = cfg.Subject
+		Subject: cfg.Subject,
 	}
 
 	path := fmt.Sprintf("teams/%s/channels/%s/messages", url.PathEscape(teamID), url.PathEscape(channelID))

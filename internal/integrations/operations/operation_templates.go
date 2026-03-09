@@ -2,6 +2,7 @@ package operations
 
 import (
 	"encoding/json"
+	"maps"
 
 	"github.com/samber/lo"
 
@@ -46,7 +47,7 @@ func ApplyOperationTemplate(template OperationTemplate, overrides json.RawMessag
 		return nil, ErrOperationTemplateOverridesNotAllowed
 	}
 
-	var overrideMap map[string]any
+	var overrideMap map[string]json.RawMessage
 	if err := json.Unmarshal(overrides, &overrideMap); err != nil {
 		return nil, err
 	}
@@ -57,7 +58,7 @@ func ApplyOperationTemplate(template OperationTemplate, overrides json.RawMessag
 		}
 	}
 
-	var baseMap map[string]any
+	var baseMap map[string]json.RawMessage
 	if len(template.Config) > 0 {
 		if err := json.Unmarshal(template.Config, &baseMap); err != nil {
 			return nil, err
@@ -65,12 +66,10 @@ func ApplyOperationTemplate(template OperationTemplate, overrides json.RawMessag
 	}
 
 	if baseMap == nil {
-		baseMap = map[string]any{}
+		baseMap = map[string]json.RawMessage{}
 	}
 
-	for key, value := range overrideMap {
-		baseMap[key] = value
-	}
+	maps.Copy(baseMap, overrideMap)
 
 	return json.Marshal(baseMap)
 }

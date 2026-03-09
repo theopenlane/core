@@ -2,9 +2,8 @@ package state
 
 import (
 	"encoding/json"
-	"reflect"
 
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // IntegrationProviderState stores provider-specific integration state captured during auth/config
@@ -32,29 +31,16 @@ func (s *IntegrationProviderState) MergeProviderData(provider string, patch json
 		s.Providers = map[string]json.RawMessage{}
 	}
 
-	var current map[string]any
-	if raw := s.Providers[provider]; len(raw) > 0 {
-		if err := json.Unmarshal(raw, &current); err != nil {
-			return false, ErrProviderStateDecode
-		}
+	merged, changed, err := jsonx.DeepMerge(s.Providers[provider], patch)
+	if err != nil {
+		return false, ErrProviderStateDecode
 	}
 
-	var patchMap map[string]any
-	if err := json.Unmarshal(patch, &patchMap); err != nil {
-		return false, ErrProviderStatePatchEncode
-	}
-
-	next := mapx.DeepMergeMapAny(current, mapx.DeepCloneMapAny(patchMap))
-	if reflect.DeepEqual(current, next) {
+	if !changed {
 		return false, nil
 	}
 
-	encoded, err := json.Marshal(next)
-	if err != nil {
-		return false, ErrProviderStatePatchEncode
-	}
-
-	s.Providers[provider] = encoded
+	s.Providers[provider] = merged
 
 	return true, nil
 }

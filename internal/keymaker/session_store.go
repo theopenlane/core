@@ -1,6 +1,7 @@
 package keymaker
 
 import (
+	"encoding/json"
 	"sync"
 	"time"
 
@@ -23,7 +24,7 @@ type AuthState struct {
 	// Scopes contains the authorization scopes requested from the provider
 	Scopes []string
 	// Metadata carries additional provider-specific configuration
-	Metadata map[string]any
+	Metadata json.RawMessage
 	// LabelOverrides customizes UI labels presented during authorization
 	LabelOverrides map[string]string
 	// CreatedAt records when the session was initiated

@@ -2,6 +2,7 @@ package keymaker
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"strings"
 	"testing"
@@ -61,7 +62,7 @@ func TestBeginAuthorizationClonesRequestDataAndSetsTTL(t *testing.T) {
 	}
 
 	scopes := []string{"repo"}
-	metadata := map[string]any{"env": "prod"}
+	metadataRaw := json.RawMessage(`{"env":"prod"}`)
 	labels := map[string]string{"color": "blue"}
 
 	if _, err := service.BeginAuthorization(ctx, BeginRequest{
@@ -69,7 +70,7 @@ func TestBeginAuthorizationClonesRequestDataAndSetsTTL(t *testing.T) {
 		IntegrationID:  "int-1",
 		Provider:       providerType,
 		Scopes:         scopes,
-		Metadata:       metadata,
+		Metadata:       metadataRaw,
 		LabelOverrides: labels,
 	}); err != nil {
 		t.Fatalf("BeginAuthorization error: %v", err)
@@ -88,14 +89,19 @@ func TestBeginAuthorizationClonesRequestDataAndSetsTTL(t *testing.T) {
 
 	// Mutate the original inputs and ensure the saved session did not change.
 	scopes[0] = "mutated"
-	metadata["env"] = "dev"
+	// Overwrite the original metadata bytes in place to verify the saved copy is independent.
+	copy(metadataRaw, `{"env":"----"}`)
 	labels["color"] = "red"
 
 	if saved.Scopes[0] != "repo" {
 		t.Fatalf("expected scopes to be cloned, got %v", saved.Scopes)
 	}
-	if saved.Metadata["env"] != "prod" {
-		t.Fatalf("expected metadata to be cloned, got %v", saved.Metadata)
+	var savedMeta map[string]string
+	if err := json.Unmarshal(saved.Metadata, &savedMeta); err != nil {
+		t.Fatalf("expected decodable metadata, got error: %v", err)
+	}
+	if savedMeta["env"] != "prod" {
+		t.Fatalf("expected metadata to be cloned, got %v", savedMeta)
 	}
 	if saved.LabelOverrides["color"] != "blue" {
 		t.Fatalf("expected label overrides to be cloned, got %v", saved.LabelOverrides)
@@ -222,7 +228,7 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 		CreatedAt:      now.Add(-time.Minute),
 		ExpiresAt:      now.Add(time.Minute),
 		LabelOverrides: map[string]string{},
-		Metadata:       map[string]any{},
+		Metadata:       json.RawMessage(`{}`),
 	}
 
 	tests := []struct {

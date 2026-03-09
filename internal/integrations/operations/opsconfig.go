@@ -38,16 +38,16 @@ type PayloadOptions struct {
 
 // EnsureIncludePayloads forces include_payloads to true in a JSON config document.
 func EnsureIncludePayloads(config json.RawMessage) json.RawMessage {
-	var m map[string]any
+	var m map[string]json.RawMessage
 	if len(config) > 0 {
 		if err := json.Unmarshal(config, &m); err != nil {
-			m = map[string]any{}
+			m = map[string]json.RawMessage{}
 		}
 	} else {
-		m = map[string]any{}
+		m = map[string]json.RawMessage{}
 	}
 
-	m["include_payloads"] = true
+	m["include_payloads"] = json.RawMessage(`true`)
 
 	out, err := json.Marshal(m)
 	if err != nil {

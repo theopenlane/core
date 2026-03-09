@@ -87,15 +87,19 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint materializes a stored API key configuration into a credential set.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
-	var metadata map[string]any
+	var metadata map[string]json.RawMessage
 	if len(subject.Credential.ProviderData) > 0 {
 		if err := json.Unmarshal(subject.Credential.ProviderData, &metadata); err != nil {
 			return models.CredentialSet{}, err
 		}
 	}
 
-	token, _ := metadata[p.tokenField].(string)
-	token = strings.TrimSpace(token)
+	var token string
+	if raw := metadata[p.tokenField]; len(raw) > 0 {
+		if err := json.Unmarshal(raw, &token); err == nil {
+			token = strings.TrimSpace(token)
+		}
+	}
 
 	if token == "" {
 		token = strings.TrimSpace(subject.Credential.APIToken)
