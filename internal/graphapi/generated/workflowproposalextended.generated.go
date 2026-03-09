@@ -234,6 +234,10 @@ func (ec *executionContext) fieldContext_WorkflowProposalWithdrawPayload_workflo
 
 func (ec *executionContext) unmarshalInputUpdateWorkflowProposalChangesInput(ctx context.Context, obj any) (model.UpdateWorkflowProposalChangesInput, error) {
 	var it model.UpdateWorkflowProposalChangesInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

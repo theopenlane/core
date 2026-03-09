@@ -353,6 +353,10 @@ func (ec *executionContext) fieldContext_GroupPermissionEdge_cursor(_ context.Co
 
 func (ec *executionContext) unmarshalInputGroupMembersInput(ctx context.Context, obj any) (model.GroupMembersInput, error) {
 	var it model.GroupMembersInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -386,6 +390,10 @@ func (ec *executionContext) unmarshalInputGroupMembersInput(ctx context.Context,
 
 func (ec *executionContext) unmarshalInputGroupPermissionOrder(ctx context.Context, obj any) (model.GroupPermissionOrder, error) {
 	var it model.GroupPermissionOrder
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -423,6 +431,10 @@ func (ec *executionContext) unmarshalInputGroupPermissionOrder(ctx context.Conte
 
 func (ec *executionContext) unmarshalInputGroupPermissionWhereInput(ctx context.Context, obj any) (model.GroupPermissionWhereInput, error) {
 	var it model.GroupPermissionWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

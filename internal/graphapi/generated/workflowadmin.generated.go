@@ -265,6 +265,10 @@ func (ec *executionContext) fieldContext_WorkflowInstanceBulkAdminPayload_update
 
 func (ec *executionContext) unmarshalInputReassignWorkflowAssignmentInput(ctx context.Context, obj any) (model.ReassignWorkflowAssignmentInput, error) {
 	var it model.ReassignWorkflowAssignmentInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -298,6 +302,10 @@ func (ec *executionContext) unmarshalInputReassignWorkflowAssignmentInput(ctx co
 
 func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetInput(ctx context.Context, obj any) (model.WorkflowAssignmentTargetInput, error) {
 	var it model.WorkflowAssignmentTargetInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

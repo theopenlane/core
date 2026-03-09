@@ -128,6 +128,10 @@ func (ec *executionContext) fieldContext_TrustCenterPreviewSettingCreatePayload_
 
 func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(ctx context.Context, obj any) (model.CreateTrustCenterPreviewSettingInput, error) {
 	var it model.CreateTrustCenterPreviewSettingInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
