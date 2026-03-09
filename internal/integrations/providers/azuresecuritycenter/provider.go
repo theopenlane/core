@@ -2,7 +2,6 @@ package azuresecuritycenter
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"golang.org/x/oauth2"
@@ -13,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -61,7 +61,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest
 		return models.CredentialSet{}, err
 	}
 
-	providerData, err := json.Marshal(credentials.providerData())
+	providerData, err := jsonx.ToRawMessage(credentials.providerData())
 	if err != nil {
 		return models.CredentialSet{}, err
 	}
@@ -156,10 +156,8 @@ func azureSecurityCenterMetadataFromPayload(payload models.CredentialSet) (azure
 	}
 
 	var decoded azureSecurityCenterMetadata
-	if len(payload.ProviderData) > 0 {
-		if err := json.Unmarshal(payload.ProviderData, &decoded); err != nil {
-			return azureSecurityCenterMetadata{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(payload.ProviderData, &decoded); err != nil {
+		return azureSecurityCenterMetadata{}, err
 	}
 	if decoded.ClientID == "" {
 		decoded.ClientID = payload.ClientID

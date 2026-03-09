@@ -2,7 +2,6 @@ package operations
 
 import (
 	"encoding/json"
-	"maps"
 
 	"github.com/samber/lo"
 
@@ -47,8 +46,8 @@ func ApplyOperationTemplate(template OperationTemplate, overrides json.RawMessag
 		return nil, ErrOperationTemplateOverridesNotAllowed
 	}
 
-	var overrideMap map[string]json.RawMessage
-	if err := json.Unmarshal(overrides, &overrideMap); err != nil {
+	overrideMap, err := jsonx.ToRawMap(overrides)
+	if err != nil {
 		return nil, err
 	}
 
@@ -58,20 +57,12 @@ func ApplyOperationTemplate(template OperationTemplate, overrides json.RawMessag
 		}
 	}
 
-	var baseMap map[string]json.RawMessage
-	if len(template.Config) > 0 {
-		if err := json.Unmarshal(template.Config, &baseMap); err != nil {
-			return nil, err
-		}
+	merged, _, err := jsonx.MergeObjectMap(template.Config, overrideMap)
+	if err != nil {
+		return nil, err
 	}
 
-	if baseMap == nil {
-		baseMap = map[string]json.RawMessage{}
-	}
-
-	maps.Copy(baseMap, overrideMap)
-
-	return json.Marshal(baseMap)
+	return merged, nil
 }
 
 // ResolveOperationConfig merges stored templates with optional JSON overrides

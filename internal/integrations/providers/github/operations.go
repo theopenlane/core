@@ -2,7 +2,6 @@ package github
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -210,10 +210,8 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}
 
 	var repoConfig githubRepoOperationConfig
-	if len(input.Config) > 0 {
-		if err := json.Unmarshal(input.Config, &repoConfig); err != nil {
-			return types.OperationResult{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(input.Config, &repoConfig); err != nil {
+		return types.OperationResult{}, err
 	}
 
 	config := githubVulnerabilityConfig{

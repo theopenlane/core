@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -106,7 +107,7 @@ type AWSCredentials struct {
 // AWSMetadataFromProviderData normalizes AWS metadata with a default session name.
 func AWSMetadataFromProviderData(providerData json.RawMessage, defaultSessionName string) (AWSMetadata, error) {
 	var decoded awsProviderData
-	if err := json.Unmarshal(providerData, &decoded); err != nil {
+	if err := jsonx.UnmarshalIfPresent(providerData, &decoded); err != nil {
 		return AWSMetadata{}, err
 	}
 

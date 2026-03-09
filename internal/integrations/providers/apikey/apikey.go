@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // ProviderOption customizes API key providers.
@@ -87,16 +88,14 @@ func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSess
 
 // Mint materializes a stored API key configuration into a credential set.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
-	var metadata map[string]json.RawMessage
-	if len(subject.Credential.ProviderData) > 0 {
-		if err := json.Unmarshal(subject.Credential.ProviderData, &metadata); err != nil {
-			return models.CredentialSet{}, err
-		}
+	metadata, err := jsonx.ToRawMap(subject.Credential.ProviderData)
+	if err != nil {
+		return models.CredentialSet{}, err
 	}
 
 	var token string
 	if raw := metadata[p.tokenField]; len(raw) > 0 {
-		if err := json.Unmarshal(raw, &token); err == nil {
+		if err := jsonx.RoundTrip(raw, &token); err == nil {
 			token = strings.TrimSpace(token)
 		}
 	}
@@ -116,7 +115,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialMintRequest) 
 
 	var providerDataRaw json.RawMessage
 	if len(metadata) > 0 {
-		raw, err := json.Marshal(metadata)
+		raw, err := jsonx.ToRawMessage(metadata)
 		if err != nil {
 			return models.CredentialSet{}, err
 		}

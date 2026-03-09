@@ -2,7 +2,6 @@ package azuresecuritycenter
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
@@ -11,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -60,7 +60,7 @@ func resolveAzureSecurityClient(_ context.Context, input types.OperationInput) (
 	}
 
 	var meta azureSubscriptionMetadata
-	if err := json.Unmarshal(input.Credential.ProviderData, &meta); err != nil {
+	if err := jsonx.UnmarshalIfPresent(input.Credential.ProviderData, &meta); err != nil {
 		return nil, err
 	}
 

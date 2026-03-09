@@ -2,13 +2,13 @@ package microsoftteams
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const teamsGraphBaseURL = "https://graph.microsoft.com/v1.0/"
@@ -99,7 +99,7 @@ type teamsChannelMessageBody struct {
 
 type teamsChannelMessageRequest struct {
 	Body    teamsChannelMessageBody `json:"body"`
-	Subject string                 `json:"subject,omitempty"`
+	Subject string                  `json:"subject,omitempty"`
 }
 
 // runTeamsSample collects a sample of joined Teams for the authenticated user
@@ -142,10 +142,8 @@ func runTeamsMessageSendOperation(ctx context.Context, input types.OperationInpu
 	}
 
 	var cfg teamsMessageOperationConfig
-	if len(input.Config) > 0 {
-		if err := json.Unmarshal(input.Config, &cfg); err != nil {
-			return types.OperationResult{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(input.Config, &cfg); err != nil {
+		return types.OperationResult{}, err
 	}
 
 	teamID := cfg.TeamID

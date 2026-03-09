@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // schemaIngestContext captures shared mapping state used by schema-specific ingest handlers
@@ -45,12 +46,12 @@ func newSchemaIngestContext(integrationConfig openapi.IntegrationConfig, provide
 		return schemaIngestContext{}, ErrMappingSchemaNotFound
 	}
 
-	integrationConfigRaw, err := json.Marshal(integrationConfig)
+	integrationConfigRaw, err := jsonx.ToRawMessage(integrationConfig)
 	if err != nil {
 		return schemaIngestContext{}, err
 	}
 
-	providerStateRaw, err := json.Marshal(providerState)
+	providerStateRaw, err := jsonx.ToRawMessage(providerState)
 	if err != nil {
 		return schemaIngestContext{}, err
 	}

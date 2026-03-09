@@ -10,6 +10,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -62,10 +63,8 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	}
 
 	var config githubVulnerabilityConfig
-	if len(input.Config) > 0 {
-		if err := json.Unmarshal(input.Config, &config); err != nil {
-			return types.OperationResult{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(input.Config, &config); err != nil {
+		return types.OperationResult{}, err
 	}
 
 	alertTypes := alertTypesFromConfig(config.AlertTypes)

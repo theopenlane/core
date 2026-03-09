@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"strconv"
@@ -21,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providers"
 	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -169,7 +169,7 @@ func (p *appProvider) Mint(ctx context.Context, subject types.CredentialMintRequ
 	metadata.AppID = appID
 	metadata.InstallationID = installationID
 	metadata.PrivateKey = ""
-	providerData, err := json.Marshal(metadata)
+	providerData, err := jsonx.ToRawMessage(metadata)
 	if err != nil {
 		return models.CredentialSet{}, err
 	}
@@ -209,10 +209,8 @@ func (p *appProvider) resolveMintInputs(credential models.CredentialSet, provide
 
 func githubAppProviderDataFromPayload(payload models.CredentialSet) (githubAppProviderData, error) {
 	var decoded githubAppProviderData
-	if len(payload.ProviderData) > 0 {
-		if err := json.Unmarshal(payload.ProviderData, &decoded); err != nil {
-			return githubAppProviderData{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(payload.ProviderData, &decoded); err != nil {
+		return githubAppProviderData{}, err
 	}
 
 	return decoded, nil
@@ -235,7 +233,7 @@ func resolveInstallationID(decoded githubAppProviderData, providerState *integra
 	}
 
 	var stateDecoded githubAppProviderData
-	if err := json.Unmarshal(stateRaw, &stateDecoded); err != nil {
+	if err := jsonx.UnmarshalIfPresent(stateRaw, &stateDecoded); err != nil {
 		return "", err
 	}
 

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/operations"
 	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -80,10 +81,8 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	}
 
 	cfg := securityHubFindingsConfig{PageSize: awsSecurityHubDefaultPageSize}
-	if len(input.Config) > 0 {
-		if err := json.Unmarshal(input.Config, &cfg); err != nil {
-			return types.OperationResult{}, err
-		}
+	if err := jsonx.UnmarshalIfPresent(input.Config, &cfg); err != nil {
+		return types.OperationResult{}, err
 	}
 
 	pageSize := cfg.PageSize

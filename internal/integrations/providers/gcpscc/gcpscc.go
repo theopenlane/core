@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -147,7 +148,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest
 			return models.CredentialSet{}, err
 		}
 
-		providerData, err := json.Marshal(meta.providerData())
+		providerData, err := jsonx.ToRawMessage(meta.providerData())
 		if err != nil {
 			return models.CredentialSet{}, err
 		}
@@ -171,7 +172,7 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest
 		return models.CredentialSet{}, err
 	}
 
-	providerData, err := json.Marshal(meta.providerData())
+	providerData, err := jsonx.ToRawMessage(meta.providerData())
 	if err != nil {
 		return models.CredentialSet{}, err
 	}
@@ -458,10 +459,8 @@ func metadataFromPayload(payload models.CredentialSet) (credentialMetadata, erro
 	}
 
 	var meta credentialMetadata
-	if len(payload.ProviderData) > 0 {
-		if err := json.Unmarshal(payload.ProviderData, &meta); err != nil {
-			return credentialMetadata{}, ErrMetadataDecode
-		}
+	if err := jsonx.UnmarshalIfPresent(payload.ProviderData, &meta); err != nil {
+		return credentialMetadata{}, ErrMetadataDecode
 	}
 	if meta.ServiceAccountKey == "" {
 		meta.ServiceAccountKey = payload.ServiceAccountKey

@@ -169,3 +169,46 @@ func TestMergeProviderSpecsIgnoresUnknown(t *testing.T) {
 		t.Fatal("expected existing provider to remain")
 	}
 }
+
+// TestMergeProviderSpecsPreservesRuntimeGitHubAppFields verifies json:"-" runtime fields are retained.
+func TestMergeProviderSpecsPreservesRuntimeGitHubAppFields(t *testing.T) {
+	t.Parallel()
+
+	base := map[types.ProviderType]ProviderSpec{
+		types.ProviderType("githubapp"): {
+			Name: "githubapp",
+			GitHubApp: &GitHubAppSpec{
+				BaseURL:       "https://api.github.com",
+				AppID:         "123",
+				PrivateKey:    "private-key",
+				WebhookSecret: "webhook-secret",
+			},
+		},
+	}
+
+	overrides := map[string]ProviderSpec{
+		"githubapp": {
+			GitHubApp: &GitHubAppSpec{
+				BaseURL: "https://ghe.example.com/api/v3",
+			},
+		},
+	}
+
+	merged := MergeProviderSpecs(context.Background(), base, overrides)
+	spec := merged[types.ProviderType("githubapp")]
+	if spec.GitHubApp == nil {
+		t.Fatal("expected github app config")
+	}
+	if spec.GitHubApp.BaseURL != "https://ghe.example.com/api/v3" {
+		t.Fatalf("expected base URL override, got %q", spec.GitHubApp.BaseURL)
+	}
+	if spec.GitHubApp.AppID != "123" {
+		t.Fatalf("expected app id to be preserved, got %q", spec.GitHubApp.AppID)
+	}
+	if spec.GitHubApp.PrivateKey != "private-key" {
+		t.Fatalf("expected private key to be preserved, got %q", spec.GitHubApp.PrivateKey)
+	}
+	if spec.GitHubApp.WebhookSecret != "webhook-secret" {
+		t.Fatalf("expected webhook secret to be preserved, got %q", spec.GitHubApp.WebhookSecret)
+	}
+}

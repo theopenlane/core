@@ -225,3 +225,140 @@ func TestToRawMessage(t *testing.T) {
 		t.Fatalf("expected nil raw message for nil input, got %s", string(raw))
 	}
 }
+
+func TestToRawMap(t *testing.T) {
+	m, err := ToRawMap(sample{Name: "ok", Count: 1})
+	if err != nil {
+		t.Fatalf("ToRawMap failed: %v", err)
+	}
+	if string(m["name"]) != `"ok"` {
+		t.Fatalf("unexpected name raw value: %s", string(m["name"]))
+	}
+	if string(m["count"]) != "1" {
+		t.Fatalf("unexpected count raw value: %s", string(m["count"]))
+	}
+
+	if _, err := ToRawMap([]string{"a"}); !errors.Is(err, ErrObjectExpected) {
+		t.Fatalf("expected ErrObjectExpected, got %v", err)
+	}
+}
+
+func TestUnmarshalIfPresent(t *testing.T) {
+	var out sample
+	if err := UnmarshalIfPresent(nil, &out); err != nil {
+		t.Fatalf("unexpected empty unmarshal error: %v", err)
+	}
+	if out != (sample{}) {
+		t.Fatalf("expected zero value after empty unmarshal, got %+v", out)
+	}
+
+	if err := UnmarshalIfPresent(json.RawMessage(`{"name":"ok","count":2}`), &out); err != nil {
+		t.Fatalf("unexpected unmarshal error: %v", err)
+	}
+	if out.Name != "ok" || out.Count != 2 {
+		t.Fatalf("unexpected decoded value: %+v", out)
+	}
+}
+
+func TestDecodeAnyOrNil(t *testing.T) {
+	if value := DecodeAnyOrNil(nil); value != nil {
+		t.Fatalf("expected nil for empty value, got %#v", value)
+	}
+
+	value := DecodeAnyOrNil(json.RawMessage(`{"a":1}`))
+	obj, ok := value.(map[string]any)
+	if !ok {
+		t.Fatalf("expected decoded map, got %T", value)
+	}
+	if obj["a"] != float64(1) {
+		t.Fatalf("unexpected decoded value: %#v", obj["a"])
+	}
+
+	if value := DecodeAnyOrNil(json.RawMessage(`{`)); value != nil {
+		t.Fatalf("expected nil for invalid json, got %#v", value)
+	}
+}
+
+func TestMergeObjectMap(t *testing.T) {
+	base := json.RawMessage(`{"a":1}`)
+	patch := map[string]json.RawMessage{"b": json.RawMessage(`2`)}
+
+	out, changed, err := MergeObjectMap(base, patch)
+	if err != nil {
+		t.Fatalf("unexpected merge error: %v", err)
+	}
+	if !changed {
+		t.Fatalf("expected merge to report change")
+	}
+
+	var merged map[string]any
+	if err := json.Unmarshal(out, &merged); err != nil {
+		t.Fatalf("unexpected unmarshal error: %v", err)
+	}
+	if merged["a"] != float64(1) || merged["b"] != float64(2) {
+		t.Fatalf("unexpected merged output: %#v", merged)
+	}
+
+	out, changed, err = MergeObjectMap(out, map[string]json.RawMessage{"b": json.RawMessage(`2`)})
+	if err != nil {
+		t.Fatalf("unexpected idempotent merge error: %v", err)
+	}
+	if changed {
+		t.Fatalf("expected idempotent merge to report unchanged")
+	}
+	if string(out) != `{"a":1,"b":2}` {
+		t.Fatalf("unexpected idempotent output: %s", string(out))
+	}
+}
+
+func TestSetObjectKey(t *testing.T) {
+	out, changed, err := SetObjectKey(json.RawMessage(`{"a":1}`), "b", true)
+	if err != nil {
+		t.Fatalf("unexpected set error: %v", err)
+	}
+	if !changed {
+		t.Fatalf("expected set to change object")
+	}
+
+	var merged map[string]any
+	if err := json.Unmarshal(out, &merged); err != nil {
+		t.Fatalf("unexpected unmarshal error: %v", err)
+	}
+	if merged["b"] != true {
+		t.Fatalf("expected b=true, got %#v", merged["b"])
+	}
+
+	if _, _, err := SetObjectKey(nil, "", true); !errors.Is(err, ErrKeyRequired) {
+		t.Fatalf("expected ErrKeyRequired, got %v", err)
+	}
+}
+
+func TestApplyOverlay(t *testing.T) {
+	type overlay struct {
+		Name string            `json:"name,omitempty"`
+		Meta map[string]string `json:"meta,omitempty"`
+	}
+
+	base := overlay{
+		Name: "base",
+		Meta: map[string]string{
+			"a": "1",
+		},
+	}
+
+	out, err := ApplyOverlay(base, overlay{
+		Name: "next",
+		Meta: map[string]string{
+			"b": "2",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected overlay error: %v", err)
+	}
+	if out.Name != "next" {
+		t.Fatalf("expected name override, got %q", out.Name)
+	}
+	if out.Meta["a"] != "1" || out.Meta["b"] != "2" {
+		t.Fatalf("expected map merge, got %#v", out.Meta)
+	}
+}
