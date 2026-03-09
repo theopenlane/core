@@ -20,6 +20,12 @@ const (
 	oktaSignOnPolicyType = "OKTA_SIGN_ON"
 )
 
+type oktaHealthDetails struct {
+	ID    string `json:"id"`
+	Login string `json:"login"`
+	Email string `json:"email"`
+}
+
 type oktaPolicySample struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
@@ -93,10 +99,10 @@ func runOktaHealth(ctx context.Context, input types.OperationInput) (types.Opera
 	profile := user.GetProfile()
 	login := profile.GetLogin()
 
-	return operations.OperationSuccess(fmt.Sprintf("Okta token valid for %s", login), map[string]any{
-		"id":    user.GetId(),
-		"login": login,
-		"email": profile.GetEmail(),
+	return operations.OperationSuccess(fmt.Sprintf("Okta token valid for %s", login), oktaHealthDetails{
+		ID:    user.GetId(),
+		Login: login,
+		Email: profile.GetEmail(),
 	}), nil
 }
 

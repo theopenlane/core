@@ -2,6 +2,7 @@ package keymaker
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -38,9 +39,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 		IntegrationID: "int-1",
 		Provider:      providerType,
 		Scopes:        []string{"repo"},
-		Metadata: map[string]any{
-			"label": "value",
-		},
+		Metadata: json.RawMessage(`{"label":"value"}`),
 	})
 	if err != nil {
 		t.Fatalf("BeginAuthorization error: %v", err)

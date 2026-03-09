@@ -14,10 +14,12 @@ import (
 // implementations receive a unified IngestRequest and return an IngestResult.
 // The function signature is stable across ingest categories — the operation name
 // and provider type inside IngestRequest determine which mapping schema is applied
+//
 //revive:disable-next-line
 type IngestFunc func(ctx context.Context, req IngestRequest) (IngestResult, error)
 
 // IngestRequest is the unified request type passed to all IngestFunc implementations
+//
 //revive:disable-next-line
 type IngestRequest struct {
 	// OrgID identifies the organization that owns the ingested records
@@ -64,6 +66,7 @@ func (r *IngestRequest) Validate() error {
 }
 
 // IngestSummary reports mapping and persistence statistics for a single ingest run
+//
 //revive:disable-next-line
 type IngestSummary struct {
 	// Total counts total envelopes processed
@@ -81,6 +84,7 @@ type IngestSummary struct {
 }
 
 // IngestResult captures the outcome of an IngestFunc call
+//
 //revive:disable-next-line
 type IngestResult struct {
 	// Summary aggregates ingest totals

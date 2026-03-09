@@ -191,7 +191,7 @@ type AuthContext struct {
 	// Scopes optionally override provider defaults
 	Scopes []string
 	// Metadata carries additional activation metadata
-	Metadata map[string]any
+	Metadata json.RawMessage
 	// LabelOverrides customizes labels shown to users
 	LabelOverrides map[string]string
 }

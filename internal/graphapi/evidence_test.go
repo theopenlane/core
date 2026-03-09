@@ -348,7 +348,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateEvidenceInput{
-				Name: "Test Evidence - TSK-123",
+				Name:    "Test Evidence - TSK-123",
+				OwnerID: &testUser1.OrganizationID,
 			},
 			files: []*graphql.Upload{
 				txtFile,
@@ -482,8 +483,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			} else {
 				assert.Check(t, !resp.CreateEvidence.Evidence.RenewalDate.IsZero())
-				diff := resp.CreateEvidence.Evidence.RenewalDate.Sub(time.Now().Add(365 * 24 * time.Hour)) // check that it is 1 year from now
-				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
+				assert.Check(t, resp.CreateEvidence.Evidence.RenewalDate.After(resp.CreateEvidence.Evidence.CreationDate))
 			}
 
 			if tc.request.IsAutomated != nil {

@@ -6,6 +6,124 @@ import (
 	"testing"
 )
 
+func TestDeepMerge(t *testing.T) {
+	t.Parallel()
+
+	t.Run("empty patch returns base unchanged", func(t *testing.T) {
+		t.Parallel()
+		base := json.RawMessage(`{"a":1}`)
+		merged, changed, err := DeepMerge(base, nil)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if changed {
+			t.Fatal("expected no change")
+		}
+		if string(merged) != string(base) {
+			t.Fatalf("expected base unchanged, got %s", merged)
+		}
+	})
+
+	t.Run("patch adds new key", func(t *testing.T) {
+		t.Parallel()
+		base := json.RawMessage(`{"a":1}`)
+		patch := json.RawMessage(`{"b":2}`)
+		merged, changed, err := DeepMerge(base, patch)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !changed {
+			t.Fatal("expected change")
+		}
+		var out map[string]any
+		if err := json.Unmarshal(merged, &out); err != nil {
+			t.Fatalf("unmarshal error: %v", err)
+		}
+		if out["a"] != float64(1) || out["b"] != float64(2) {
+			t.Fatalf("unexpected merged output: %v", out)
+		}
+	})
+
+	t.Run("patch overwrites existing key", func(t *testing.T) {
+		t.Parallel()
+		base := json.RawMessage(`{"a":1}`)
+		patch := json.RawMessage(`{"a":99}`)
+		merged, changed, err := DeepMerge(base, patch)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !changed {
+			t.Fatal("expected change")
+		}
+		var out map[string]any
+		if err := json.Unmarshal(merged, &out); err != nil {
+			t.Fatalf("unmarshal error: %v", err)
+		}
+		if out["a"] != float64(99) {
+			t.Fatalf("expected a=99, got %v", out["a"])
+		}
+	})
+
+	t.Run("patch with same values reports no change", func(t *testing.T) {
+		t.Parallel()
+		base := json.RawMessage(`{"a":1}`)
+		patch := json.RawMessage(`{"a":1}`)
+		_, changed, err := DeepMerge(base, patch)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if changed {
+			t.Fatal("expected no change for identical values")
+		}
+	})
+
+	t.Run("nested deep merge", func(t *testing.T) {
+		t.Parallel()
+		base := json.RawMessage(`{"a":{"x":1,"y":2}}`)
+		patch := json.RawMessage(`{"a":{"y":99},"b":3}`)
+		merged, changed, err := DeepMerge(base, patch)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !changed {
+			t.Fatal("expected change")
+		}
+		var out map[string]any
+		if err := json.Unmarshal(merged, &out); err != nil {
+			t.Fatalf("unmarshal error: %v", err)
+		}
+		nested, ok := out["a"].(map[string]any)
+		if !ok {
+			t.Fatalf("expected nested map, got %T", out["a"])
+		}
+		if nested["x"] != float64(1) || nested["y"] != float64(99) {
+			t.Fatalf("unexpected nested values: %v", nested)
+		}
+		if out["b"] != float64(3) {
+			t.Fatalf("expected b=3, got %v", out["b"])
+		}
+	})
+
+	t.Run("nil base with patch", func(t *testing.T) {
+		t.Parallel()
+		patch := json.RawMessage(`{"a":1}`)
+		merged, changed, err := DeepMerge(nil, patch)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !changed {
+			t.Fatal("expected change")
+		}
+		var out map[string]any
+		if err := json.Unmarshal(merged, &out); err != nil {
+			t.Fatalf("unmarshal error: %v", err)
+		}
+		if out["a"] != float64(1) {
+			t.Fatalf("expected a=1, got %v", out["a"])
+		}
+	})
+}
+
 type sample struct {
 	Name  string `json:"name"`
 	Count int    `json:"count"`

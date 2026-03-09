@@ -24,9 +24,9 @@ type slackMessageOperationConfig struct {
 	// Text is the message text when blocks are not supplied
 	Text string `json:"text,omitempty" jsonschema:"description=Message text (required unless blocks are supplied)."`
 	// Blocks carries optional Block Kit payloads
-	Blocks []map[string]any `json:"blocks,omitempty" jsonschema:"description=Optional Slack Block Kit payload."`
+	Blocks []json.RawMessage `json:"blocks,omitempty" jsonschema:"description=Optional Slack Block Kit payload."`
 	// Attachments carries optional attachments payloads
-	Attachments []map[string]any `json:"attachments,omitempty" jsonschema:"description=Optional attachments payload."`
+	Attachments []json.RawMessage `json:"attachments,omitempty" jsonschema:"description=Optional attachments payload."`
 	// ThreadTS identifies the thread timestamp for replies
 	ThreadTS string `json:"thread_ts,omitempty" jsonschema:"description=Optional thread timestamp to reply within an existing thread."`
 	// UnfurlLinks controls link unfurling in messages

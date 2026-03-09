@@ -53,7 +53,6 @@ type EvaluatorConfig struct {
 }
 
 // ScopeVars contains standard variables available to integration scope expressions
-//revive:disable-next-line
 type ScopeVars struct {
 	// Payload contains provider payload data for filtering
 	Payload json.RawMessage
