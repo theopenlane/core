@@ -54,6 +54,10 @@ extend type Mutation{
         New values for the review
         """
         input: UpdateReviewInput!
+        """
+        Files to attach to the review
+        """
+        reviewFiles: [Upload!]
     ): ReviewUpdatePayload!
     """
     Delete an existing review

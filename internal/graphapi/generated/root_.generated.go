@@ -3775,7 +3775,7 @@ type ComplexityRoot struct {
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
 		UpdateRemediation                    func(childComplexity int, id string, input generated.UpdateRemediationInput) int
-		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput) int
+		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
@@ -29648,7 +29648,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateReview(childComplexity, args["id"].(string), args["input"].(generated.UpdateReviewInput)), true
+		return e.ComplexityRoot.Mutation.UpdateReview(childComplexity, args["id"].(string), args["input"].(generated.UpdateReviewInput), args["reviewFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateRisk":
 		if e.ComplexityRoot.Mutation.UpdateRisk == nil {
@@ -78411,6 +78411,7 @@ type EvidenceEdge {
 EvidenceEvidenceStatus is enum for the field status
 """
 enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
+  DRAFT
   SUBMITTED
   READY_FOR_AUDITOR
   AUDITOR_APPROVED
@@ -141760,6 +141761,10 @@ extend type Mutation{
         New values for the review
         """
         input: UpdateReviewInput!
+        """
+        Files to attach to the review
+        """
+        reviewFiles: [Upload!]
     ): ReviewUpdatePayload!
     """
     Delete an existing review

@@ -694,6 +694,10 @@ func (ec *executionContext) fieldContext_CampaignTestEmailPayload_skippedCount(_
 
 func (ec *executionContext) unmarshalInputCreateCampaignWithTargetsInput(ctx context.Context, obj any) (model.CreateCampaignWithTargetsInput, error) {
 	var it model.CreateCampaignWithTargetsInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -727,6 +731,10 @@ func (ec *executionContext) unmarshalInputCreateCampaignWithTargetsInput(ctx con
 
 func (ec *executionContext) unmarshalInputLaunchCampaignInput(ctx context.Context, obj any) (model.LaunchCampaignInput, error) {
 	var it model.LaunchCampaignInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -767,6 +775,10 @@ func (ec *executionContext) unmarshalInputLaunchCampaignInput(ctx context.Contex
 
 func (ec *executionContext) unmarshalInputResendCampaignIncompleteInput(ctx context.Context, obj any) (model.ResendCampaignIncompleteInput, error) {
 	var it model.ResendCampaignIncompleteInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -800,6 +812,10 @@ func (ec *executionContext) unmarshalInputResendCampaignIncompleteInput(ctx cont
 
 func (ec *executionContext) unmarshalInputSendCampaignTestEmailInput(ctx context.Context, obj any) (model.SendCampaignTestEmailInput, error) {
 	var it model.SendCampaignTestEmailInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

@@ -2390,7 +2390,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},

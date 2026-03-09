@@ -269,8 +269,8 @@ mutation UpdateBulkCSVReview($input: Upload!) {
   }
 }
 
-mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!) {
-  updateReview(id: $updateReviewId, input: $input) {
+mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!, $reviewFiles: [Upload!]) {
+  updateReview(id: $updateReviewId, input: $input, reviewFiles: $reviewFiles) {
     review {
       approved
       approvedAt

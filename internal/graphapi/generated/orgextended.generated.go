@@ -326,6 +326,10 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_in
 
 func (ec *executionContext) unmarshalInputOrgMembersInput(ctx context.Context, obj any) (model.OrgMembersInput, error) {
 	var it model.OrgMembersInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
