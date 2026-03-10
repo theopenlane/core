@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // defaultSessionTTL is the duration that OAuth sessions remain valid if no custom TTL is configured
@@ -152,7 +153,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		RedirectURI:    req.RedirectURI,
 		State:          req.State,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       append(json.RawMessage(nil), req.Metadata...),
+		Metadata:       jsonx.CloneRawMessage(req.Metadata),
 		LabelOverrides: maps.Clone(req.LabelOverrides),
 	}
 
@@ -172,7 +173,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 		OrgID:          req.OrgID,
 		IntegrationID:  req.IntegrationID,
 		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       append(json.RawMessage(nil), req.Metadata...),
+		Metadata:       jsonx.CloneRawMessage(req.Metadata),
 		LabelOverrides: maps.Clone(req.LabelOverrides),
 		AuthSession:    session,
 		CreatedAt:      s.now(),

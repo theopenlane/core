@@ -9,7 +9,6 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/samber/mo"
-	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -155,9 +154,7 @@ func validateNotificationTemplateData(template *generated.NotificationTemplate, 
 		return nil
 	}
 
-	schemaLoader := gojsonschema.NewGoLoader(template.Jsonconfig)
-	documentLoader := gojsonschema.NewGoLoader(data)
-	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
+	result, err := jsonx.ValidateSchema(template.Jsonconfig, data)
 	if err != nil {
 		return err
 	}

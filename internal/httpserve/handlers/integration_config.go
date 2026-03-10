@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	echo "github.com/theopenlane/echox"
-	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/activation"
 	intauth "github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -65,9 +65,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
 	}
 
-	schemaLoader := gojsonschema.NewBytesLoader(spec.CredentialsSchema)
-	documentLoader := gojsonschema.NewGoLoader(attrs)
-	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
+	result, err := jsonx.ValidateSchema(spec.CredentialsSchema, attrs)
 	if err != nil {
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}

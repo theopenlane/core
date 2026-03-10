@@ -1058,39 +1058,17 @@ data:
       newusermessagefile: {{ .Values.openlane.coreConfiguration.slack.newusermessagefile | quote }}
       {{- end }}
     {{- end }}
-    {{- if .Values.openlane.coreConfiguration.integrationoauthprovider }}
-    integrationoauthprovider:
-      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.enabled }}
-      enabled: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.enabled }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.successredirecturl }}
-      successredirecturl: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.successredirecturl | quote }}
-      {{- else if .Values.domain }}
-      successredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
-      {{- else }}
-      successredirecturl: ""
-      {{- end }}
-    {{- end }}
     {{- $mapValue := (.Values.openlane.coreConfiguration.integrationproviders | default (dict)) }}
     {{- if gt (len $mapValue) 0 }}
     integrationproviders:
     {{- toYaml $mapValue | nindent 6 }}
     {{- end }}
-    {{- if .Values.openlane.coreConfiguration.integrationgithubapp }}
-    integrationgithubapp:
-      {{- if .Values.openlane.coreConfiguration.integrationgithubapp.enabled }}
-      enabled: {{ .Values.openlane.coreConfiguration.integrationgithubapp.enabled }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationgithubapp.appslug }}
-      appslug: {{ .Values.openlane.coreConfiguration.integrationgithubapp.appslug | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationgithubapp.successredirecturl }}
-      successredirecturl: {{ .Values.openlane.coreConfiguration.integrationgithubapp.successredirecturl | quote }}
-      {{- else if .Values.domain }}
-      successredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
-      {{- else }}
-      successredirecturl: ""
-      {{- end }}
+    {{- if .Values.openlane.coreConfiguration.integrationsuccessredirecturl }}
+    integrationsuccessredirecturl: {{ .Values.openlane.coreConfiguration.integrationsuccessredirecturl | quote }}
+    {{- else if .Values.domain }}
+    integrationsuccessredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
+    {{- else }}
+    integrationsuccessredirecturl: ""
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

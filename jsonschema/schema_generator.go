@@ -249,9 +249,11 @@ func buildDefaultConfig() *config.Config {
 	return cfg
 }
 
-// initializeIntegrationProviders seeds the integration providers map from the embedded provider specs,
-// including only those that declare OAuth configuration, so the schema generator walks into OAuthSpec
-// and produces env vars and external secrets for clientid and clientsecret
+// initializeIntegrationProviders seeds the integration providers map from the embedded provider specs
+// so the schema generator walks into all operator-configurable ProviderSpec sub-types and produces
+// env vars for every runtime-configurable field regardless of auth kind. Only pointer-to-struct fields
+// with a koanf tag are initialized — read-only metadata fields (credentialsSchema, display names, etc.)
+// are excluded because they carry no koanf tag and are not operator-configurable.
 func initializeIntegrationProviders(cfg *config.Config) {
 	loader := integrationconfig.NewFSLoader(integrationconfig.ProvidersFS, "providers")
 
@@ -265,16 +267,42 @@ func initializeIntegrationProviders(cfg *config.Config) {
 	}
 
 	for _, spec := range specs {
-		if spec.OAuth == nil {
+		if _, exists := cfg.IntegrationProviders[spec.Name]; !exists {
+			cfg.IntegrationProviders[spec.Name] = providerStubFromSpec(spec)
+		}
+	}
+}
+
+// providerStubFromSpec builds a minimal ProviderSpec containing only the operator-configurable
+// sub-specs. It reflects over the loaded spec and initializes any pointer-to-struct field that
+// has a koanf tag and is non-nil in the source, so the schema generator descends into it without
+// pulling in read-only metadata (credentialsSchema, display names, categories, etc.).
+func providerStubFromSpec(spec integrationconfig.ProviderSpec) integrationconfig.ProviderSpec {
+	stub := integrationconfig.ProviderSpec{}
+
+	specType := reflect.TypeOf(spec)
+	specVal := reflect.ValueOf(spec)
+	stubVal := reflect.ValueOf(&stub).Elem()
+
+	for i := range specType.NumField() {
+		field := specType.Field(i)
+
+		if _, hasKoanf := field.Tag.Lookup("koanf"); !hasKoanf {
 			continue
 		}
 
-		if _, exists := cfg.IntegrationProviders[spec.Name]; !exists {
-			cfg.IntegrationProviders[spec.Name] = integrationconfig.ProviderSpec{
-				OAuth: &integrationconfig.OAuthSpec{},
-			}
+		fieldVal := specVal.Field(i)
+		if fieldVal.Kind() != reflect.Ptr || fieldVal.IsNil() {
+			continue
+		}
+
+		stubField := stubVal.Field(i)
+		if stubField.CanSet() {
+			stubField.Set(reflect.New(fieldVal.Type().Elem()))
 		}
 	}
+
+	return stub
 }
 
 // initializeStripeWebhookSecrets ensures the stripe webhook secrets map includes entries for the current and discard API versions

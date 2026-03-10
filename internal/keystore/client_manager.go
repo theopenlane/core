@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // ClientPoolManager manages client pools constructed from provider-published descriptors
@@ -117,7 +118,7 @@ type descriptorClientBuilder struct {
 
 // Build constructs a client using the descriptor's build function
 func (b descriptorClientBuilder) Build(ctx context.Context, payload models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
-	return b.descriptor.Build(ctx, payload, append(json.RawMessage(nil), config...))
+	return b.descriptor.Build(ctx, payload, jsonx.CloneRawMessage(config))
 }
 
 // ProviderType returns the provider identifier for this client builder
@@ -143,7 +144,7 @@ func (m *ClientPoolManager) BuildFromPayload(ctx context.Context, provider types
 		return types.EmptyClientInstance(), ErrClientNotRegistered
 	}
 
-	return descriptor.Build(ctx, payload, append(json.RawMessage(nil), config...))
+	return descriptor.Build(ctx, payload, jsonx.CloneRawMessage(config))
 }
 
 // FlattenDescriptors converts a map of provider descriptors into a single slice for manager construction

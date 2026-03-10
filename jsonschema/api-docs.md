@@ -24,9 +24,8 @@ Config contains the configuration for the core server
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
-|[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
 |[**integrationproviders**](#integrationproviders)|`object`|||
-|[**integrationgithubapp**](#integrationgithubapp)|`object`|IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.<br/>||
+|**integrationsuccessredirecturl**|`string`|IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication.<br/>||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
@@ -129,9 +128,7 @@ Config contains the configuration for the core server
     },
     "keywatcher": {},
     "slack": {},
-    "integrationoauthprovider": {},
     "integrationproviders": {},
-    "integrationgithubapp": {},
     "workflows": {
         "cel": {},
         "gala": {}
@@ -1577,20 +1574,6 @@ Slack contains settings for Slack notifications
 |**newusermessagefile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
 
 **Additional Properties:** not allowed  
-<a name="integrationoauthprovider"></a>
-## integrationoauthprovider: object
-
-IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles initialization of the integration provider registry.<br/>||
-|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
-
-**Additional Properties:** not allowed  
 <a name="integrationproviders"></a>
 ## integrationproviders: object
 
@@ -1621,16 +1604,14 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**DocsURL**|`string`|||
 |**SchemaVersion**|`string`|||
 |[**oauth**](#integrationprovidersadditionalpropertiesoauth)|`object`|||
-|[**APIKey**](#integrationprovidersadditionalpropertiesapikey)|`object`|||
 |[**UserInfo**](#integrationprovidersadditionalpropertiesuserinfo)|`object`|||
-|[**GoogleWorkloadIdentity**](#integrationprovidersadditionalpropertiesgoogleworkloadidentity)|`object`|||
-|[**GitHubApp**](#integrationprovidersadditionalpropertiesgithubapp)|`object`|||
-|[**AWSSTS**](#integrationprovidersadditionalpropertiesawssts)|`object`|||
-|[**CredentialsSchema**](#integrationprovidersadditionalpropertiescredentialsschema)|`object`|||
+|[**workloadidentity**](#integrationprovidersadditionalpropertiesworkloadidentity)|`object`|||
+|[**app**](#integrationprovidersadditionalpropertiesapp)|`object`|||
+|**CredentialsSchema**||||
 |[**Persistence**](#integrationprovidersadditionalpropertiespersistence)|`object`|||
 |[**Labels**](#integrationprovidersadditionalpropertieslabels)|`object`|||
-|[**Metadata**](#integrationprovidersadditionalpropertiesmetadata)|`object`|||
-|[**Defaults**](#integrationprovidersadditionalpropertiesdefaults)|`object`|||
+|**Metadata**||||
+|**successredirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1641,16 +1622,11 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
         "AuthParams": {},
         "TokenParams": {}
     },
-    "APIKey": {},
     "UserInfo": {},
-    "GoogleWorkloadIdentity": {},
-    "GitHubApp": {},
-    "AWSSTS": {},
-    "CredentialsSchema": {},
+    "workloadidentity": {},
+    "app": {},
     "Persistence": {},
-    "Labels": {},
-    "Metadata": {},
-    "Defaults": {}
+    "Labels": {}
 }
 ```
 
@@ -1719,18 +1695,6 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 **Items**
 
 **Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesapikey"></a>
-#### integrationproviders\.additionalProperties\.APIKey: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**KeyLabel**|`string`|||
-|**HeaderName**|`string`|||
-|**QueryParam**|`string`|||
-
-**Additional Properties:** not allowed  
 <a name="integrationprovidersadditionalpropertiesuserinfo"></a>
 #### integrationproviders\.additionalProperties\.UserInfo: object
 
@@ -1748,28 +1712,28 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**SecondaryEmailURL**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesgoogleworkloadidentity"></a>
-#### integrationproviders\.additionalProperties\.GoogleWorkloadIdentity: object
+<a name="integrationprovidersadditionalpropertiesworkloadidentity"></a>
+#### integrationproviders\.additionalProperties\.workloadidentity: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**Audience**|`string`|||
+|**audience**|`string`|||
 |**TargetServiceAccount**|`string`|||
-|[**Scopes**](#integrationprovidersadditionalpropertiesgoogleworkloadidentityscopes)|`string[]`|||
-|**TokenLifetime**|`integer`|||
-|**SubjectTokenType**|`string`|||
+|[**Scopes**](#integrationprovidersadditionalpropertiesworkloadidentityscopes)|`string[]`|||
+|**tokenlifetime**|`integer`|||
+|**subjecttokentype**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesgoogleworkloadidentityscopes"></a>
-##### integrationproviders\.additionalProperties\.GoogleWorkloadIdentity\.Scopes: array
+<a name="integrationprovidersadditionalpropertiesworkloadidentityscopes"></a>
+##### integrationproviders\.additionalProperties\.workloadidentity\.Scopes: array
 
 **Items**
 
 **Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesgithubapp"></a>
-#### integrationproviders\.additionalProperties\.GitHubApp: object
+<a name="integrationprovidersadditionalpropertiesapp"></a>
+#### integrationproviders\.additionalProperties\.app: object
 
 **Properties**
 
@@ -1777,28 +1741,12 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**BaseURL**|`string`|||
 |**TokenTTL**|`integer`|||
-|**AppSlug**|`string`|||
+|**appslug**|`string`|||
+|**appid**|`string`|||
+|**privatekey**|`string`|||
+|**webhooksecret**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesawssts"></a>
-#### integrationproviders\.additionalProperties\.AWSSTS: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**RoleARN**|`string`|||
-|**SessionName**|`string`|||
-|**Duration**|`integer`|||
-|**Region**|`string`|||
-|**ExternalID**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiescredentialsschema"></a>
-#### integrationproviders\.additionalProperties\.CredentialsSchema: object
-
-**No properties.**
-
 <a name="integrationprovidersadditionalpropertiespersistence"></a>
 #### integrationproviders\.additionalProperties\.Persistence: object
 
@@ -1818,34 +1766,6 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**Additional Properties**|`string`|||
 
-<a name="integrationprovidersadditionalpropertiesmetadata"></a>
-#### integrationproviders\.additionalProperties\.Metadata: object
-
-**No properties.**
-
-<a name="integrationprovidersadditionalpropertiesdefaults"></a>
-#### integrationproviders\.additionalProperties\.Defaults: object
-
-**No properties.**
-
-<a name="integrationgithubapp"></a>
-## integrationgithubapp: object
-
-IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration.
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles the GitHub App integration handlers.<br/>||
-|**appid**|`string`|AppID is the GitHub App ID used for JWT signing.<br/>||
-|**appslug**|`string`|AppSlug is the GitHub App slug used for the install URL.<br/>||
-|**privatekey**|`string`|PrivateKey is the PEM-encoded GitHub App private key.<br/>||
-|**webhooksecret**|`string`|WebhookSecret is the shared secret used to validate GitHub webhooks.<br/>||
-|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful installation.<br/>||
-
-**Additional Properties:** not allowed  
 <a name="workflows"></a>
 ## workflows: object
 

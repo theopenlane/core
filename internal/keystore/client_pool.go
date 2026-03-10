@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/helpers"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -119,7 +120,7 @@ func NewClientPool[T any](source CredentialSource, builder ClientBuilder[T], opt
 	settings := &clientPoolSettings{
 		ttl: defaultClientPoolTTL,
 		configClone: func(cfg json.RawMessage) json.RawMessage {
-			return append(json.RawMessage(nil), cfg...)
+			return jsonx.CloneRawMessage(cfg)
 		},
 	}
 

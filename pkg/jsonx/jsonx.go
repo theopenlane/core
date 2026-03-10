@@ -77,7 +77,7 @@ func ToRawMap(value any) (map[string]json.RawMessage, error) {
 	return nil, err
 }
 
-// CloneRawMessage copies a raw JSON document to avoid accidental aliasing.
+// CloneRawMessage copies a raw JSON document to avoid accidental aliasing
 func CloneRawMessage(raw json.RawMessage) json.RawMessage {
 	if len(raw) == 0 {
 		return nil
@@ -86,13 +86,14 @@ func CloneRawMessage(raw json.RawMessage) json.RawMessage {
 	return append(json.RawMessage(nil), raw...)
 }
 
-// IsEmptyRawMessage reports whether a raw JSON message is empty or null.
+// IsEmptyRawMessage reports whether a raw JSON message is empty or null
 func IsEmptyRawMessage(raw json.RawMessage) bool {
 	trimmed := bytes.TrimSpace(raw)
+
 	return len(trimmed) == 0 || bytes.Equal(trimmed, []byte("null"))
 }
 
-// UnmarshalIfPresent unmarshals raw JSON when it is non-empty.
+// UnmarshalIfPresent unmarshals raw JSON when it is non-empty
 func UnmarshalIfPresent(raw json.RawMessage, output any) error {
 	if IsEmptyRawMessage(raw) {
 		return nil
@@ -101,7 +102,7 @@ func UnmarshalIfPresent(raw json.RawMessage, output any) error {
 	return json.Unmarshal(raw, output)
 }
 
-// DecodeAnyOrNil decodes raw JSON to an untyped value or returns nil on failure/empty input.
+// DecodeAnyOrNil decodes raw JSON to an untyped value or returns nil on failure/empty input
 func DecodeAnyOrNil(raw json.RawMessage) any {
 	if IsEmptyRawMessage(raw) {
 		return nil
@@ -117,7 +118,7 @@ func DecodeAnyOrNil(raw json.RawMessage) any {
 
 // DeepMerge deep-merges patch into base and reports whether the document changed.
 // Both arguments must be JSON objects. Returns the merged document and a boolean
-// indicating whether the result differs from base.
+// indicating whether the result differs from base
 func DeepMerge(base, patch json.RawMessage) (json.RawMessage, bool, error) {
 	if len(patch) == 0 {
 		return base, false, nil
@@ -148,7 +149,7 @@ func DeepMerge(base, patch json.RawMessage) (json.RawMessage, bool, error) {
 	return out, true, nil
 }
 
-// MergeObjectMap shallow-merges a raw JSON object with the supplied top-level patch map.
+// MergeObjectMap shallow-merges a raw JSON object with the supplied top-level patch map
 func MergeObjectMap(base json.RawMessage, patch map[string]json.RawMessage) (json.RawMessage, bool, error) {
 	if len(patch) == 0 {
 		return CloneRawMessage(base), false, nil
@@ -183,7 +184,7 @@ func MergeObjectMap(base json.RawMessage, patch map[string]json.RawMessage) (jso
 	return out, true, nil
 }
 
-// SetObjectKey sets or replaces one top-level key in a raw JSON object.
+// SetObjectKey sets or replaces one top-level key in a raw JSON object
 func SetObjectKey(base json.RawMessage, key string, value any) (json.RawMessage, bool, error) {
 	if key == "" {
 		return nil, false, ErrKeyRequired
@@ -200,7 +201,7 @@ func SetObjectKey(base json.RawMessage, key string, value any) (json.RawMessage,
 	return MergeObjectMap(base, map[string]json.RawMessage{key: raw})
 }
 
-// ApplyOverlay applies a JSON overlay to an existing typed value.
+// ApplyOverlay applies a JSON overlay to an existing typed value
 func ApplyOverlay[T any](base T, overlay any) (T, error) {
 	if overlay == nil {
 		return base, nil
@@ -215,7 +216,7 @@ func ApplyOverlay[T any](base T, overlay any) (T, error) {
 	return out, nil
 }
 
-// ToRawMessage converts an arbitrary value into a raw JSON document.
+// ToRawMessage converts an arbitrary value into a raw JSON document
 func ToRawMessage(value any) (json.RawMessage, error) {
 	if value == nil {
 		return nil, nil
