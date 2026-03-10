@@ -725,6 +725,16 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	assert.Check(t, doc.CreateTrustCenterDoc.TrustCenterDoc.Title == "Test Doc")
 	docID := doc.CreateTrustCenterDoc.TrustCenterDoc.ID
 
+	// create trust center FAQ
+	faqNote := (&NoteBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser.UserCtx, t)
+	faqResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+		NoteID:        faqNote.ID,
+		TrustCenterID: &trustCenter.ID,
+		ReferenceLink: lo.ToPtr("https://example.com/faq"),
+		DisplayOrder:  lo.ToPtr(int64(1)),
+	})
+	assert.NilError(t, err)
+
 	// Create another trust center that the anonymous user should NOT have access to
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
 
@@ -806,7 +816,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 
 			// // Verify that children are accessible
 			assert.Assert(t, trustCenter.Posts.Edges != nil)
-			assert.Assert(t, is.Len(trustCenter.Posts.Edges, 1))
+			assert.Assert(t, is.Len(trustCenter.Posts.Edges, 2))
 			postID = trustCenter.Posts.Edges[0].Node.ID
 
 			assert.Assert(t, trustCenter.TrustCenterCompliances.Edges != nil)
@@ -830,6 +840,13 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			assert.Check(t, is.Len(trustCenter.TrustCenterEntities.Edges, 1))
 			assert.Check(t, trustCenter.TrustCenterEntities.Edges[0].Node.LogoFile != nil)
 			assert.Check(t, trustCenter.TrustCenterEntities.Edges[0].Node.LogoFile.Base64 != nil)
+
+			// trust center FAQs
+			assert.Assert(t, trustCenter.TrustCenterFaqs.Edges != nil)
+			assert.Assert(t, is.Len(trustCenter.TrustCenterFaqs.Edges, 1))
+			assert.Check(t, trustCenter.TrustCenterFaqs.Edges[0].Node.ID != "")
+			assert.Check(t, trustCenter.TrustCenterFaqs.Edges[0].Node.NoteID != "")
+			assert.Check(t, trustCenter.TrustCenterFaqs.Edges[0].Node.ReferenceLink != nil)
 		})
 	}
 
@@ -867,6 +884,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 		assert.Check(t, tc.TrustCenterEntities.Edges != nil)
 		assert.Check(t, tc.TrustCenterSubprocessors.Edges != nil)
 		assert.Check(t, tc.Posts.Edges != nil)
+		assert.Check(t, tc.TrustCenterFaqs.Edges != nil)
 		assert.Assert(t, resp.Controls.Edges != nil)
 		assert.Assert(t, is.Len(resp.Controls.Edges, 1))
 		assert.Check(t, resp.Controls.Edges[0].Node.ID == tcControl.ID)
@@ -887,6 +905,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	// Cleanup Trust Center Children
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: tcControl.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, ID: entity1.CreateTrustCenterEntity.TrustCenterEntity.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: faqResp.CreateTrustCenterFaq.TrustCenterFaq.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.NoteDeleteOne]{client: suite.client.db.Note, ID: postID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: tcc.CreateTrustCenterCompliance.TrustCenterCompliance.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcs.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID}).MustDelete(testUser.UserCtx, t)
