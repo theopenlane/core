@@ -364,6 +364,18 @@ query GetTrustCenterFrontendQuery {
             }
           }
         }
+        trustCenterFaqs {
+          edges {
+            node {
+              referenceLink
+              id
+              noteID
+              note {
+                id
+              }
+            }
+          }
+        }
       }
     }
   }
