@@ -304,6 +304,28 @@ func TestApprovalDomainsInvalidParams(t *testing.T) {
 	assert.ErrorIs(t, err, ErrApprovalActionParamsInvalid)
 }
 
+// TestApprovalDomainsIgnoresLegacyRequiredShape verifies legacy required values
+// do not break domain extraction when only fields are needed.
+func TestApprovalDomainsIgnoresLegacyRequiredShape(t *testing.T) {
+	doc := models.WorkflowDefinitionDocument{
+		Actions: []models.WorkflowAction{
+			{
+				Key:  "approval",
+				Type: enums.WorkflowActionTypeApproval.String(),
+				Params: json.RawMessage(`{
+					"fields":["status"],
+					"required":"false",
+					"assignees":{"users":["user-1"]}
+				}`),
+			},
+		},
+	}
+
+	domains, err := ApprovalDomains(doc)
+	assert.NoError(t, err)
+	assert.Equal(t, [][]string{{"status"}}, domains)
+}
+
 // TestSplitChangesByDomains verifies splitting changes into domains
 func TestSplitChangesByDomains(t *testing.T) {
 	changes := map[string]any{

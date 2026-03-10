@@ -37,4 +37,15 @@ func TestSchemaFrom(t *testing.T) {
 	if invalidResult.Valid() {
 		t.Fatalf("expected payload type mismatch to fail validation")
 	}
+
+	unknownFieldResult, err := gojsonschema.Validate(
+		gojsonschema.NewBytesLoader(schema),
+		gojsonschema.NewBytesLoader([]byte(`{"name":"value","unknown":true}`)),
+	)
+	if err != nil {
+		t.Fatalf("expected unknown-field validation to run, got error: %v", err)
+	}
+	if unknownFieldResult.Valid() {
+		t.Fatalf("expected additional properties to be rejected")
+	}
 }

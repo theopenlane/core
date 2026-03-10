@@ -16,10 +16,10 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/stripe/stripe-go/v84"
-	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 //go:embed genjsonschema/catalog.schema.json
@@ -106,17 +106,13 @@ func LoadCatalog(path string) (*Catalog, error) {
 		return nil, fs.ErrNotExist
 	}
 
-	schema := gojsonschema.NewBytesLoader(schemaBytes)
-
 	jsonData, err := yaml.YAMLToJSON(data)
 	if err != nil {
 		return nil, ErrYamlToJSONConversion
 	}
 
-	doc := gojsonschema.NewBytesLoader(jsonData)
-
 	// this effectively "lints" the catalog to ensure it conforms against the schema
-	res, err := gojsonschema.Validate(schema, doc)
+	res, err := jsonx.ValidateSchema(schemaBytes, jsonData)
 	if err != nil {
 		return nil, err
 	}

@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // ensure Broker satisfies IntegrationCredentialSource at compile time.
@@ -380,7 +381,7 @@ func cloneProviderState(state *integrationstate.IntegrationProviderState) *integ
 	if len(state.Providers) > 0 {
 		cloned.Providers = make(map[string]json.RawMessage, len(state.Providers))
 		for key, value := range state.Providers {
-			cloned.Providers[key] = append(json.RawMessage(nil), value...)
+			cloned.Providers[key] = jsonx.CloneRawMessage(value)
 		}
 	}
 

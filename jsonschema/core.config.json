@@ -99,42 +99,6 @@
       "type": "object",
       "description": "Config is the config values for the cache-control middleware"
     },
-    "config.APIKeySpec": {
-      "properties": {
-        "KeyLabel": {
-          "type": "string"
-        },
-        "HeaderName": {
-          "type": "string"
-        },
-        "QueryParam": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "config.AWSFederationSpec": {
-      "properties": {
-        "RoleARN": {
-          "type": "string"
-        },
-        "SessionName": {
-          "type": "string"
-        },
-        "Duration": {
-          "type": "integer"
-        },
-        "Region": {
-          "type": "string"
-        },
-        "ExternalID": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "config.Auth": {
       "properties": {
         "enabled": {
@@ -169,7 +133,16 @@
         "TokenTTL": {
           "type": "integer"
         },
-        "AppSlug": {
+        "appslug": {
+          "type": "string"
+        },
+        "appid": {
+          "type": "string"
+        },
+        "privatekey": {
+          "type": "string"
+        },
+        "webhooksecret": {
           "type": "string"
         }
       },
@@ -178,7 +151,7 @@
     },
     "config.GoogleWorkloadIdentitySpec": {
       "properties": {
-        "Audience": {
+        "audience": {
           "type": "string"
         },
         "TargetServiceAccount": {
@@ -187,10 +160,10 @@
         "Scopes": {
           "$ref": "#/$defs/[]string"
         },
-        "TokenLifetime": {
+        "tokenlifetime": {
           "type": "integer"
         },
-        "SubjectTokenType": {
+        "subjecttokentype": {
           "type": "string"
         }
       },
@@ -315,35 +288,25 @@
         "oauth": {
           "$ref": "#/$defs/config.OAuthSpec"
         },
-        "APIKey": {
-          "$ref": "#/$defs/config.APIKeySpec"
-        },
         "UserInfo": {
           "$ref": "#/$defs/config.UserInfoSpec"
         },
-        "GoogleWorkloadIdentity": {
+        "workloadidentity": {
           "$ref": "#/$defs/config.GoogleWorkloadIdentitySpec"
         },
-        "GitHubApp": {
+        "app": {
           "$ref": "#/$defs/config.GitHubAppSpec"
         },
-        "AWSSTS": {
-          "$ref": "#/$defs/config.AWSFederationSpec"
-        },
-        "CredentialsSchema": {
-          "$ref": "#/$defs/map[string]interface {}"
-        },
+        "CredentialsSchema": true,
         "Persistence": {
           "$ref": "#/$defs/config.PersistenceSpec"
         },
         "Labels": {
           "$ref": "#/$defs/map[string]string"
         },
-        "Metadata": {
-          "$ref": "#/$defs/map[string]interface {}"
-        },
-        "Defaults": {
-          "$ref": "#/$defs/map[string]interface {}"
+        "Metadata": true,
+        "successredirecturl": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1020,52 +983,6 @@
       "type": "object",
       "description": "CloudflareConfig contains configuration for Cloudflare integration."
     },
-    "handlers.IntegrationGitHubAppConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled toggles the GitHub App integration handlers."
-        },
-        "appid": {
-          "type": "string",
-          "description": "AppID is the GitHub App ID used for JWT signing."
-        },
-        "appslug": {
-          "type": "string",
-          "description": "AppSlug is the GitHub App slug used for the install URL."
-        },
-        "privatekey": {
-          "type": "string",
-          "description": "PrivateKey is the PEM-encoded GitHub App private key."
-        },
-        "webhooksecret": {
-          "type": "string",
-          "description": "WebhookSecret is the shared secret used to validate GitHub webhooks."
-        },
-        "successredirecturl": {
-          "type": "string",
-          "description": "SuccessRedirectURL is the URL to redirect to after successful installation."
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "IntegrationGitHubAppConfig contains configuration required to install and operate the GitHub App integration."
-    },
-    "handlers.IntegrationOauthProviderConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled toggles initialization of the integration provider registry."
-        },
-        "successredirecturl": {
-          "type": "string",
-          "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration."
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations."
-    },
     "handlers.OauthProviderConfig": {
       "properties": {
         "redirecturl": {
@@ -1099,9 +1016,6 @@
       "additionalProperties": {
         "$ref": "#/$defs/config.ProviderSpec"
       },
-      "type": "object"
-    },
-    "map[string]interface {}": {
       "type": "object"
     },
     "map[string]river.QueueConfig": {
@@ -2063,17 +1977,13 @@
       "$ref": "#/$defs/config.Slack",
       "description": "Slack contains settings for Slack notifications"
     },
-    "integrationoauthprovider": {
-      "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
-      "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
-    },
     "integrationproviders": {
       "$ref": "#/$defs/map[string]config.ProviderSpec",
       "description": "IntegrationProviders contains provider spec overrides keyed by provider name."
     },
-    "integrationgithubapp": {
-      "$ref": "#/$defs/handlers.IntegrationGitHubAppConfig",
-      "description": "IntegrationGitHubApp contains configuration for GitHub App integrations"
+    "integrationsuccessredirecturl": {
+      "type": "string",
+      "description": "IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication."
     },
     "workflows": {
       "$ref": "#/$defs/workflows.Config",

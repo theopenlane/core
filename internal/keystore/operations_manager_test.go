@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/models"
+	integrationops "github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -51,6 +52,40 @@ func TestOperationManagerRunUsesStoredCredential(t *testing.T) {
 	}
 	if source.getCount != 1 || source.mintCount != 0 {
 		t.Fatalf("expected one Get call, zero Mint calls; got %d/%d", source.getCount, source.mintCount)
+	}
+}
+
+func TestOperationManagerRunValidatesConfigSchema(t *testing.T) {
+	t.Parallel()
+
+	provider := types.ProviderType("acme")
+	source := &credentialSourceStub{getPayload: models.CredentialSet{APIToken: "stored"}}
+
+	descriptor := types.OperationDescriptor{
+		Provider:     provider,
+		Name:         types.OperationName("validate"),
+		ConfigSchema: json.RawMessage(`{"type":"object","required":["region"],"properties":{"region":{"type":"string"}}}`),
+		Run: func(_ context.Context, _ types.OperationInput) (types.OperationResult, error) {
+			return types.OperationResult{Status: types.OperationStatusOK}, nil
+		},
+	}
+
+	manager, err := NewOperationManager(source, []types.OperationDescriptor{descriptor})
+	if err != nil {
+		t.Fatalf("NewOperationManager() error = %v", err)
+	}
+
+	_, err = manager.Run(context.Background(), types.OperationRequest{
+		OrgID:    "org-1",
+		Provider: provider,
+		Name:     descriptor.Name,
+		Config:   json.RawMessage(`{"region":1}`),
+	})
+	if !errors.Is(err, integrationops.ErrOperationConfigInvalid) {
+		t.Fatalf("expected ErrOperationConfigInvalid, got %v", err)
+	}
+	if source.getCount != 0 {
+		t.Fatalf("expected config validation to fail before credential reads, got get=%d", source.getCount)
 	}
 }
 

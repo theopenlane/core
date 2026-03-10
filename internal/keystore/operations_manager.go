@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/models"
+	integrationops "github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // OperationManager executes provider-published operations using stored credentials and optional client pools
@@ -88,6 +90,9 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 	if err != nil {
 		return types.OperationResult{}, err
 	}
+	if err := integrationops.ValidateConfig(descriptor.ConfigSchema, req.Config); err != nil {
+		return types.OperationResult{}, err
+	}
 
 	payload, err := m.resolveCredential(ctx, req)
 	if err != nil {
@@ -104,7 +109,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 		Provider:   req.Provider,
 		Credential: payload,
 		Client:     client,
-		Config:     append(json.RawMessage(nil), req.Config...),
+		Config:     jsonx.CloneRawMessage(req.Config),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)
@@ -125,6 +130,9 @@ func (m *OperationManager) RunWithCredential(ctx context.Context, req types.Oper
 	if err != nil {
 		return types.OperationResult{}, err
 	}
+	if err := integrationops.ValidateConfig(descriptor.ConfigSchema, req.Config); err != nil {
+		return types.OperationResult{}, err
+	}
 
 	client, err := m.resolveClientFromCredential(ctx, req, descriptor, credential, req.Config)
 	if err != nil {
@@ -136,7 +144,7 @@ func (m *OperationManager) RunWithCredential(ctx context.Context, req types.Oper
 		Provider:   req.Provider,
 		Credential: credential,
 		Client:     client,
-		Config:     append(json.RawMessage(nil), req.Config...),
+		Config:     jsonx.CloneRawMessage(req.Config),
 	}
 
 	result, runErr := descriptor.Run(ctx, input)
@@ -205,7 +213,7 @@ func (m *OperationManager) resolveClientFromCredential(ctx context.Context, req 
 		return types.EmptyClientInstance(), ErrOperationClientManagerRequired
 	}
 
-	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, credential, append(json.RawMessage(nil), config...))
+	return m.clients.BuildFromPayload(ctx, req.Provider, descriptor.Client, credential, jsonx.CloneRawMessage(config))
 }
 
 // resolveCredential retrieves or refreshes the credential based on the request flags
@@ -253,7 +261,7 @@ func (m *OperationManager) resolveClient(ctx context.Context, req types.Operatio
 
 	opts := []ClientRequestOption{}
 	if len(config) > 0 {
-		opts = append(opts, WithClientConfig(append(json.RawMessage(nil), config...)))
+		opts = append(opts, WithClientConfig(jsonx.CloneRawMessage(config)))
 	}
 	if req.ClientForce {
 		opts = append(opts, WithClientForceRefresh())

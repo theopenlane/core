@@ -161,7 +161,9 @@ func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) 
 			continue
 		}
 
-		var params ApprovalActionParams
+		var params struct {
+			Fields []string `json:"fields"`
+		}
 		if len(action.Params) == 0 {
 			continue
 		}

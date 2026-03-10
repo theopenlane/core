@@ -9,7 +9,7 @@ import (
 )
 
 var schemaReflector = &jsonschema.Reflector{
-	AllowAdditionalProperties:  true,
+	AllowAdditionalProperties:  false,
 	RequiredFromJSONSchemaTags: true,
 }
 

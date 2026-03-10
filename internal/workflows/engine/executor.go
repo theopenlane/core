@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"strconv"
 	"strings"
 	"time"
 
@@ -308,12 +309,9 @@ func (e *WorkflowEngine) executeFieldUpdate(ctx context.Context, action models.W
 
 // executeApproval creates workflow assignments for approval actions
 func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
-	var params wfworkflows.ApprovalActionParams
-
-	if action.Params != nil {
-		if err := json.Unmarshal(action.Params, &params); err != nil {
-			return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
-		}
+	params, err := decodeApprovalActionParams(action.Params)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
 	}
 
 	required := true
@@ -353,6 +351,131 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 		ProposedHash:   proposedHash,
 		NoTargetsError: ErrApprovalNoTargets,
 	})
+}
+
+type approvalAssignees struct {
+	Users     []string `json:"users"`
+	Groups    []string `json:"groups"`
+	Roles     []string `json:"roles"`
+	Resolvers []string `json:"resolvers"`
+}
+
+type approvalActionParamsCompat struct {
+	Targets       []wfworkflows.TargetConfig `json:"targets"`
+	Assignees     approvalAssignees          `json:"assignees"`
+	Required      any                        `json:"required"`
+	Label         string                     `json:"label"`
+	RequiredCount int                        `json:"required_count"`
+	Fields        []string                   `json:"fields,omitempty"`
+}
+
+func decodeApprovalActionParams(raw json.RawMessage) (wfworkflows.ApprovalActionParams, error) {
+	if len(raw) == 0 {
+		return wfworkflows.ApprovalActionParams{}, nil
+	}
+
+	var parsed approvalActionParamsCompat
+	if err := json.Unmarshal(raw, &parsed); err != nil {
+		return wfworkflows.ApprovalActionParams{}, err
+	}
+
+	targets := parsed.Targets
+	if len(targets) == 0 {
+		targets = legacyApprovalTargets(parsed.Assignees)
+	}
+
+	required, requiredCount, err := approvalRequired(parsed.Required, parsed.RequiredCount)
+	if err != nil {
+		return wfworkflows.ApprovalActionParams{}, err
+	}
+
+	return wfworkflows.ApprovalActionParams{
+		TargetedActionParams: wfworkflows.TargetedActionParams{
+			Targets: targets,
+		},
+		Required:      required,
+		Label:         parsed.Label,
+		RequiredCount: requiredCount,
+		Fields:        parsed.Fields,
+	}, nil
+}
+
+func legacyApprovalTargets(assignees approvalAssignees) []wfworkflows.TargetConfig {
+	targets := make([]wfworkflows.TargetConfig, 0, len(assignees.Users)+len(assignees.Groups)+len(assignees.Roles)+len(assignees.Resolvers))
+
+	for _, id := range assignees.Users {
+		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeUser, ID: id})
+	}
+
+	for _, id := range assignees.Groups {
+		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeGroup, ID: id})
+	}
+
+	for _, id := range assignees.Roles {
+		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeRole, ID: id})
+	}
+
+	for _, key := range assignees.Resolvers {
+		targets = append(targets, wfworkflows.TargetConfig{Type: enums.WorkflowTargetTypeResolver, ResolverKey: key})
+	}
+
+	return targets
+}
+
+func approvalRequired(required any, requiredCount int) (*bool, int, error) {
+	switch v := required.(type) {
+	case nil:
+		return nil, requiredCount, nil
+	case bool:
+		value := v
+		return &value, requiredCount, nil
+	case float64:
+		if v < 0 {
+			return nil, requiredCount, fmt.Errorf("%w: required", wfworkflows.ErrApprovalActionParamsInvalid)
+		}
+
+		return approvalRequiredFromNumber(v, requiredCount), approvalRequiredCountFromNumber(v, requiredCount), nil
+	case string:
+		trimmed := strings.TrimSpace(v)
+		if trimmed == "" {
+			return nil, requiredCount, nil
+		}
+
+		switch strings.ToLower(trimmed) {
+		case "true":
+			value := true
+			return &value, requiredCount, nil
+		case "false":
+			value := false
+			return &value, requiredCount, nil
+		}
+
+		number, err := strconv.ParseFloat(trimmed, 64)
+		if err != nil || number < 0 {
+			return nil, requiredCount, fmt.Errorf("%w: required", wfworkflows.ErrApprovalActionParamsInvalid)
+		}
+
+		return approvalRequiredFromNumber(number, requiredCount), approvalRequiredCountFromNumber(number, requiredCount), nil
+	default:
+		return nil, requiredCount, fmt.Errorf("%w: required", wfworkflows.ErrApprovalActionParamsInvalid)
+	}
+}
+
+func approvalRequiredFromNumber(number float64, _ int) *bool {
+	required := number != 0
+	return &required
+}
+
+func approvalRequiredCountFromNumber(number float64, requiredCount int) int {
+	if requiredCount > 0 {
+		return requiredCount
+	}
+
+	if number > 1 && number == float64(int(number)) {
+		return int(number)
+	}
+
+	return requiredCount
 }
 
 // executeNotification sends notifications to targets

@@ -2,14 +2,12 @@ package hooks
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
@@ -17,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -215,11 +214,19 @@ func validateTrustCenterNDAJSON(schema interface{}, document map[string]interfac
 		return err
 	}
 
-	signatoryInfo := document["signatory_info"].(map[string]any)
+	signatoryInfo, ok := document["signatory_info"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("%w: signatory_info must be an object", errValidationFailed)
+	}
+
+	signatureMetadata, ok := document["signature_metadata"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("%w: signature_metadata must be an object", errValidationFailed)
+	}
 
 	if document["trust_center_id"] != trustCenterID ||
 		signatoryInfo["email"] != subjectEmail ||
-		document["signature_metadata"].(map[string]any)["user_id"] != subjectID {
+		signatureMetadata["user_id"] != subjectID {
 		return errDocInfoDoesNotMatchCaller
 	}
 
@@ -236,34 +243,13 @@ func validateTrustCenterNDAJSON(schema interface{}, document map[string]interfac
 
 // validateJSON validates a document against a schema
 func validateJSON(schema interface{}, document interface{}) error {
-	// Convert to JSON first
-	schemaBytes, err := json.Marshal(schema)
-	if err != nil {
-		return err
-	}
-
-	documentBytes, err := json.Marshal(document)
-	if err != nil {
-		return err
-	}
-
-	// Create loaders
-	schemaLoader := gojsonschema.NewBytesLoader(schemaBytes)
-	documentLoader := gojsonschema.NewBytesLoader(documentBytes)
-
-	// Perform validation
-	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
+	result, err := jsonx.ValidateSchema(schema, document)
 	if err != nil {
 		return err
 	}
 
 	if !result.Valid() {
-		var errors []string
-		for _, err := range result.Errors() {
-			errors = append(errors, err.String())
-		}
-
-		return fmt.Errorf("%w: %v", errValidationFailed, errors)
+		return fmt.Errorf("%w: %v", errValidationFailed, jsonx.ValidationErrorStrings(result))
 	}
 
 	return nil
