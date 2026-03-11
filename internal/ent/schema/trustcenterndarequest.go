@@ -200,7 +200,6 @@ func (TrustCenterNDARequest) Indexes() []ent.Index {
 // Annotations of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SettingsChecks("trust_center"),
 		entfga.SelfAccessChecks(),
 	}
 }
