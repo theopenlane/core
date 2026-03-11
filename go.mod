@@ -107,7 +107,7 @@ require (
 	github.com/zitadel/oidc/v3 v3.45.5
 	gocloud.dev v0.45.0
 	golang.org/x/crypto v0.48.0
-	golang.org/x/mod v0.33.0
+	golang.org/x/mod v0.34.0
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.20.0
 	golang.org/x/text v0.34.0
