@@ -28716,6 +28716,12 @@ type ReviewBulkCreatePayload struct {
 	Reviews []*Review `json:"reviews,omitempty"`
 }
 
+// Return response for deleteBulkReview mutation
+type ReviewBulkDeletePayload struct {
+	// Deleted trustCenterNDARequest IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
 // Return response for updateBulkReview mutation
 type ReviewBulkUpdatePayload struct {
 	// Updated reviews

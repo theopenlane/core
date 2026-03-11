@@ -3509,6 +3509,7 @@ type ComplexityRoot struct {
 		DeleteBulkProgram                    func(childComplexity int, ids []string) int
 		DeleteBulkProgramMembership          func(childComplexity int, ids []string) int
 		DeleteBulkRemediation                func(childComplexity int, ids []string) int
+		DeleteBulkReview                     func(childComplexity int, ids []string) int
 		DeleteBulkRisk                       func(childComplexity int, ids []string) int
 		DeleteBulkScan                       func(childComplexity int, ids []string) int
 		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
@@ -5237,6 +5238,10 @@ type ComplexityRoot struct {
 
 	ReviewBulkCreatePayload struct {
 		Reviews func(childComplexity int) int
+	}
+
+	ReviewBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
 	}
 
 	ReviewBulkUpdatePayload struct {
@@ -26443,6 +26448,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.DeleteBulkRemediation(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkReview":
+		if e.ComplexityRoot.Mutation.DeleteBulkReview == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkReview_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkReview(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkRisk":
 		if e.ComplexityRoot.Mutation.DeleteBulkRisk == nil {
 			break
@@ -39738,6 +39755,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewBulkCreatePayload.Reviews(childComplexity), true
+
+	case "ReviewBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.ReviewBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "ReviewBulkUpdatePayload.reviews":
 		if e.ComplexityRoot.ReviewBulkUpdatePayload.Reviews == nil {
@@ -141790,6 +141814,15 @@ extend type Mutation{
         input: [CreateReviewInput!]
     ): ReviewBulkCreatePayload!
     """
+    Delete multiple existing reviews (soft-deletes them and removes FGA tuples)
+    """
+    deleteBulkReview(
+        """
+        IDs of the reviews to delete
+        """
+        ids: [ID!]!
+    ): ReviewBulkDeletePayload!
+    """
     Create multiple new reviews via file upload
     """
     createBulkCSVReview(
@@ -141900,6 +141933,16 @@ type ReviewBulkUpdatePayload {
     IDs of the updated reviews
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkReview mutation
+"""
+type ReviewBulkDeletePayload {
+    """
+    Deleted trustCenterNDARequest IDs
+    """
+    deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/revision.graphql", Input: `extend input UpdateActionPlanInput {
