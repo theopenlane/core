@@ -299,3 +299,9 @@ mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!, $reviewF
     }
   }
 }
+
+mutation DeleteBulkReviewReview($ids: [ID!]!) {
+  deleteBulkReview(ids: $ids) {
+    deletedIDs
+  }
+}

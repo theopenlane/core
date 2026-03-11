@@ -34,6 +34,15 @@ extend type Mutation{
         input: [CreateReviewInput!]
     ): ReviewBulkCreatePayload!
     """
+    Delete multiple existing reviews (soft-deletes them and removes FGA tuples)
+    """
+    deleteBulkReview(
+        """
+        IDs of the reviews to delete
+        """
+        ids: [ID!]!
+    ): ReviewBulkDeletePayload!
+    """
     Create multiple new reviews via file upload
     """
     createBulkCSVReview(
@@ -144,4 +153,14 @@ type ReviewBulkUpdatePayload {
     IDs of the updated reviews
     """
     updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkReview mutation
+"""
+type ReviewBulkDeletePayload {
+    """
+    Deleted trustCenterNDARequest IDs
+    """
+    deletedIDs: [ID!]!
 }
