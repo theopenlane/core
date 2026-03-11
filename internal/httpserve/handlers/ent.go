@@ -74,17 +74,11 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 	return nil
 }
 
-// updateSubscriber updates a subscriber by in the database based on the input
-func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *User) error {
-	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse ttl")
-		return err
-	}
-
-	err = transaction.FromContext(ctx).Subscriber.UpdateOneID(user.ID).
-		SetToken(user.EmailVerificationToken.String).
-		SetSecret(user.EmailVerificationSecret).
+// updateSubscriberVerificationToken updates subscriber token fields in the database.
+func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, subscriberID, token string, ttl time.Time, secret []byte) error {
+	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(subscriberID).
+		SetToken(token).
+		SetSecret(secret).
 		SetTTL(ttl).
 		Exec(ctx)
 	if err != nil {
@@ -144,21 +138,30 @@ func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*en
 	return meowtoken, nil
 }
 
-// getUserByEVToken returns the ent user with the user settings and email verification token fields based on the
-// token in the request
-func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User, error) {
-	user, err := transaction.FromContext(ctx).EmailVerificationToken.Query().
+// getUserByEVToken returns the token row and its owner for the provided verification token.
+func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User, *ent.EmailVerificationToken, error) {
+	tokenRecord, err := transaction.FromContext(ctx).EmailVerificationToken.Query().
 		Where(
 			emailverificationtoken.Token(token),
 		).
-		QueryOwner().WithSetting().WithEmailVerificationTokens().Only(ctx)
+		WithOwner(func(query *ent.UserQuery) {
+			query.WithSetting()
+		}).
+		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from email verification token")
 
-		return nil, err
+		return nil, nil, err
 	}
 
-	return user, nil
+	owner, err := tokenRecord.Edges.OwnerOrErr()
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining owner from email verification token")
+
+		return nil, nil, err
+	}
+
+	return owner, tokenRecord, nil
 }
 
 // getFilebyDownloadToken returns the ent file and download token based on the token in the request
@@ -190,21 +193,30 @@ func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*en
 	return fileRecord, tokenRecord, nil
 }
 
-// getUserByResetToken returns the ent user with the user settings and password reset tokens based on the
-// token in the request
-func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.User, error) {
-	user, err := transaction.FromContext(ctx).PasswordResetToken.Query().
+// getUserByResetToken returns the token row and its owner for the provided password reset token.
+func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.User, *ent.PasswordResetToken, error) {
+	tokenRecord, err := transaction.FromContext(ctx).PasswordResetToken.Query().
 		Where(
 			passwordresettoken.Token(token),
 		).
-		QueryOwner().WithSetting().WithPasswordResetTokens().Only(ctx)
+		WithOwner(func(query *ent.UserQuery) {
+			query.WithSetting()
+		}).
+		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from reset token")
 
-		return nil, err
+		return nil, nil, err
 	}
 
-	return user, nil
+	owner, err := tokenRecord.Edges.OwnerOrErr()
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining owner from reset token")
+
+		return nil, nil, err
+	}
+
+	return owner, tokenRecord, nil
 }
 
 // getUserByEmail returns the ent user with the user settings based on the email in the request

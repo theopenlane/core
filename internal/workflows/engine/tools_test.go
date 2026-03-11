@@ -15,10 +15,10 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	dbtestutils "github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
@@ -160,7 +160,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		generated.Authz(*fgaClient),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
-		generated.Emailer(&emailtemplates.Config{}),
+		generated.Emailer(&compose.Config{}),
 		generated.HistoryClient(historyClient),
 		generated.EntitlementManager(entitlements),
 		generated.Pool(pool),

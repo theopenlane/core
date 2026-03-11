@@ -7,9 +7,11 @@ import (
 	"time"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/newman/compose"
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
@@ -174,5 +176,13 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	return meowtoken, h.sendVerificationEmail(ctx, user, meowtoken.Token)
+	if err := h.sendEmail(ctx, "", emailruntime.TemplateKeyVerifyEmail,
+		compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+		emailruntime.NewTemplateData().
+			WithTokenURL(emailruntime.TemplateURLVerify, meowtoken.Token),
+	); err != nil {
+		return nil, err
+	}
+
+	return meowtoken, nil
 }

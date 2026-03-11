@@ -17,12 +17,12 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
 
@@ -67,7 +67,7 @@ type Config struct {
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
 	// Email contains email sending configuration for the server
-	Email emailtemplates.Config `json:"email" koanf:"email"`
+	Email compose.Config `json:"email" koanf:"email"`
 	// Sessions config for user sessions and cookies
 	Sessions sessions.Config `json:"sessions" koanf:"sessions"`
 	// TOTP contains the configuration for the TOTP provider

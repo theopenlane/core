@@ -7,13 +7,13 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/ulids"
+	"github.com/theopenlane/newman/compose"
 
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/core/internal/emailruntime"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -71,8 +71,61 @@ func HookInvite() ent.Hook {
 				}
 			}
 
-			// queue the email to be sent
-			if err := createInviteToSend(ctx, m); err != nil {
+			orgIDValue, ownerOK := m.OwnerID()
+			orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
+			if err != nil {
+				return nil, err
+			}
+
+			reqID, _ := m.RequestorID()
+			tokenRaw, tokenOK := m.Token()
+			tokenValue, err := requiredMutationString("token", tokenRaw, tokenOK)
+			if err != nil {
+				return nil, err
+			}
+
+			recipientRaw, recipientOK := m.Recipient()
+			emailAddress, err := requiredMutationString("recipient", recipientRaw, recipientOK)
+			if err != nil {
+				return nil, err
+			}
+
+			role, _ := m.Role()
+
+			orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
+			if err != nil {
+				return retValue, err
+			}
+
+			authType := auth.GetAuthzSubjectType(ctx)
+
+			var inviterName string
+
+			switch authType {
+			case auth.UserSubjectType:
+				requestor, reqErr := m.Client().User.Query().
+					Where(user.ID(reqID)).
+					Select(user.FieldFirstName).
+					Only(ctx)
+				if reqErr != nil {
+					return retValue, reqErr
+				}
+
+				inviterName = requestor.FirstName
+			case auth.ServiceSubjectType:
+				inviterName = orgName
+			default:
+				return retValue, ErrInternalServerError
+			}
+
+			if err := sendEmail(ctx, m.Client(), orgID, emailruntime.TemplateKeyInvite,
+				compose.Recipient{Email: emailAddress},
+				emailruntime.NewTemplateData().
+					WithField("InviterName", inviterName).
+					WithField("OrganizationName", orgName).
+					WithField("Role", string(role)).
+					WithTokenURL(emailruntime.TemplateURLInvite, tokenValue),
+			); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 			}
 
@@ -265,12 +318,12 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			invite := emailtemplates.InviteTemplateData{
-				OrganizationName: org.DisplayName,
-				Role:             string(role),
-			}
-
-			if err := createOrgInviteAcceptedToSend(ctx, m, recipient, invite); err != nil {
+			if err := sendEmail(ctx, m.Client(), ownerID, emailruntime.TemplateKeyInviteJoined,
+				compose.Recipient{Email: recipient},
+				emailruntime.NewTemplateData().
+					WithField("OrganizationName", org.DisplayName).
+					WithField("Role", string(role)),
+			); err != nil {
 				return retValue, err
 			}
 
@@ -380,96 +433,6 @@ func setRecipientAndToken(m *generated.InviteMutation) (*generated.InviteMutatio
 	m.SetSecret(secret)
 
 	return m, nil
-}
-
-// createInviteToSend sets the necessary data to send invite email + token
-func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error {
-	// these are all required fields on create so should be found
-	orgID, _ := m.OwnerID()
-	reqID, _ := m.RequestorID()
-	token, _ := m.Token()
-	emailAddress, _ := m.Recipient()
-	role, _ := m.Role()
-
-	org, err := m.Client().Organization.Query().
-		Where(organization.ID(orgID)).
-		Select(organization.FieldDisplayName).
-		Only(ctx)
-	if err != nil {
-		return err
-	}
-
-	var inviterName string
-
-	switch auth.GetAuthzSubjectType(ctx) {
-	case auth.UserSubjectType:
-		requestor, err := m.Client().User.Query().
-			Where(user.ID(reqID)).
-			Select(user.FieldFirstName).
-			Only(ctx)
-		if err != nil {
-			return err
-		}
-
-		inviterName = requestor.FirstName
-
-	case auth.ServiceSubjectType:
-		// default to org name
-		inviterName = org.DisplayName
-
-	default:
-		// should never really get here
-		return ErrInternalServerError
-	}
-
-	invite := emailtemplates.InviteTemplateData{
-		InviterName:      inviterName,
-		OrganizationName: org.DisplayName,
-		Role:             string(role),
-	}
-
-	email, err := m.Emailer.NewInviteEmail(emailtemplates.Recipient{
-		Email: emailAddress,
-	}, invite, token)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error rendering email")
-
-		return err
-	}
-
-	// send the email
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
-
-		return err
-	}
-
-	return nil
-}
-
-// createOrgInviteAcceptedToSend composes the email metadata and queues the email to be sent
-func createOrgInviteAcceptedToSend(ctx context.Context, m *generated.InviteMutation, recipient string, i emailtemplates.InviteTemplateData) error {
-	email, err := m.Emailer.NewInviteAcceptedEmail(emailtemplates.Recipient{
-		Email: recipient,
-	}, i)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error rendering email")
-
-		return err
-	}
-
-	// send the email
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
-
-		return err
-	}
-
-	return nil
 }
 
 var maxAttempts = 5
