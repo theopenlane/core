@@ -240,6 +240,26 @@ func (_u *GroupUpdate) ClearLogoURL() *GroupUpdate {
 	return _u
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupUpdate) SetAvatarLocalFileID(v string) *GroupUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupUpdate) SetNillableAvatarLocalFileID(v *string) *GroupUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupUpdate) ClearAvatarLocalFileID() *GroupUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *GroupUpdate) SetDisplayName(v string) *GroupUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -1029,6 +1049,25 @@ func (_u *GroupUpdate) AddIntegrations(v ...*Integration) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_u *GroupUpdate) SetAvatarFileID(id string) *GroupUpdate {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_u *GroupUpdate) SetNillableAvatarFileID(id *string) *GroupUpdate {
+	if id != nil {
+		_u = _u.SetAvatarFileID(*id)
+	}
+	return _u
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_u *GroupUpdate) SetAvatarFile(v *File) *GroupUpdate {
+	return _u.SetAvatarFileID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -1997,6 +2036,12 @@ func (_u *GroupUpdate) RemoveIntegrations(v ...*Integration) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (_u *GroupUpdate) ClearAvatarFile() *GroupUpdate {
+	_u.mutation.ClearAvatarFile()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -4381,6 +4426,37 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4874,6 +4950,26 @@ func (_u *GroupUpdateOne) SetNillableLogoURL(v *string) *GroupUpdateOne {
 // ClearLogoURL clears the value of the "logo_url" field.
 func (_u *GroupUpdateOne) ClearLogoURL() *GroupUpdateOne {
 	_u.mutation.ClearLogoURL()
+	return _u
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupUpdateOne) SetAvatarLocalFileID(v string) *GroupUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableAvatarLocalFileID(v *string) *GroupUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupUpdateOne) ClearAvatarLocalFileID() *GroupUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
 	return _u
 }
 
@@ -5666,6 +5762,25 @@ func (_u *GroupUpdateOne) AddIntegrations(v ...*Integration) *GroupUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_u *GroupUpdateOne) SetAvatarFileID(id string) *GroupUpdateOne {
+	_u.mutation.SetAvatarFileID(id)
+	return _u
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_u *GroupUpdateOne) SetNillableAvatarFileID(id *string) *GroupUpdateOne {
+	if id != nil {
+		_u = _u.SetAvatarFileID(*id)
+	}
+	return _u
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_u *GroupUpdateOne) SetAvatarFile(v *File) *GroupUpdateOne {
+	return _u.SetAvatarFileID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -6634,6 +6749,12 @@ func (_u *GroupUpdateOne) RemoveIntegrations(v ...*Integration) *GroupUpdateOne 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationIDs(ids...)
+}
+
+// ClearAvatarFile clears the "avatar_file" edge to the File entity.
+func (_u *GroupUpdateOne) ClearAvatarFile() *GroupUpdateOne {
+	_u.mutation.ClearAvatarFile()
+	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -9043,6 +9164,37 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.Integration
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AvatarFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

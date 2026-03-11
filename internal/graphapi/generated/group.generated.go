@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_gravatarLogoURL(ctx, field)
 			case "logoURL":
 				return ec.fieldContext_Group_logoURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Group_avatarLocalFileID(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "oscalRole":
@@ -180,6 +182,8 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_events(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Group_integrations(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Group_avatarFile(ctx, field)
 			case "files":
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":
@@ -278,6 +282,8 @@ func (ec *executionContext) fieldContext_GroupBulkUpdatePayload_groups(_ context
 				return ec.fieldContext_Group_gravatarLogoURL(ctx, field)
 			case "logoURL":
 				return ec.fieldContext_Group_logoURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Group_avatarLocalFileID(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "oscalRole":
@@ -380,6 +386,8 @@ func (ec *executionContext) fieldContext_GroupBulkUpdatePayload_groups(_ context
 				return ec.fieldContext_Group_events(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Group_integrations(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Group_avatarFile(ctx, field)
 			case "files":
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":
@@ -478,6 +486,8 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_gravatarLogoURL(ctx, field)
 			case "logoURL":
 				return ec.fieldContext_Group_logoURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Group_avatarLocalFileID(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "oscalRole":
@@ -580,6 +590,8 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_events(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Group_integrations(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Group_avatarFile(ctx, field)
 			case "files":
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":
@@ -678,6 +690,8 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_gravatarLogoURL(ctx, field)
 			case "logoURL":
 				return ec.fieldContext_Group_logoURL(ctx, field)
+			case "avatarLocalFileID":
+				return ec.fieldContext_Group_avatarLocalFileID(ctx, field)
 			case "displayName":
 				return ec.fieldContext_Group_displayName(ctx, field)
 			case "oscalRole":
@@ -780,6 +794,8 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_events(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Group_integrations(ctx, field)
+			case "avatarFile":
+				return ec.fieldContext_Group_avatarFile(ctx, field)
 			case "files":
 				return ec.fieldContext_Group_files(ctx, field)
 			case "tasks":

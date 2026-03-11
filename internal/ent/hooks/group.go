@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/logx"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 // HookGroup runs on group mutations to set default values that are not provided
@@ -59,6 +60,18 @@ func HookGroup() ent.Hook {
 				isManaged, _ := m.IsManaged()
 				if isManaged {
 					m.SetName(StripInvalidChars(name))
+				}
+			}
+
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				var err error
+
+				ctx, err = processSingleMutationFile(ctx, m, "avatarFile", "group", ErrTooManyAvatarFiles,
+					func(mut *generated.GroupMutation, id string) { mut.SetAvatarLocalFileID(id) },
+				)
+				if err != nil {
+					return nil, err
 				}
 			}
 

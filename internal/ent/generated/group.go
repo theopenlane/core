@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -48,6 +49,8 @@ type Group struct {
 	GravatarLogoURL string `json:"gravatar_logo_url,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL string `json:"logo_url,omitempty"`
+	// The group's local avatar file id, takes precedence over the gravatar logo URL
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"display_name,omitempty"`
 	// OSCAL role identifier used for role-based responsibility mapping
@@ -226,6 +229,8 @@ type GroupEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// Integrations holds the value of the integrations edge.
 	Integrations []*Integration `json:"integrations,omitempty"`
+	// AvatarFile holds the value of the avatar_file edge.
+	AvatarFile *File `json:"avatar_file,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// Tasks holds the value of the tasks edge.
@@ -240,9 +245,9 @@ type GroupEdges struct {
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [49]bool
+	loadedTypes [50]bool
 	// totalCount holds the count of the edges above.
-	totalCount [48]map[string]int
+	totalCount [49]map[string]int
 
 	namedProgramEditors                     map[string][]*Program
 	namedProgramBlockedGroups               map[string][]*Program
@@ -684,10 +689,21 @@ func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
 	return nil, &NotLoadedError{edge: "integrations"}
 }
 
+// AvatarFileOrErr returns the AvatarFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e GroupEdges) AvatarFileOrErr() (*File, error) {
+	if e.AvatarFile != nil {
+		return e.AvatarFile, nil
+	} else if e.loadedTypes[43] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "avatar_file"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[43] {
+	if e.loadedTypes[44] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -696,7 +712,7 @@ func (e GroupEdges) FilesOrErr() ([]*File, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[44] {
+	if e.loadedTypes[45] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -705,7 +721,7 @@ func (e GroupEdges) TasksOrErr() ([]*Task, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[45] {
+	if e.loadedTypes[46] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -714,7 +730,7 @@ func (e GroupEdges) CampaignsOrErr() ([]*Campaign, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[46] {
+	if e.loadedTypes[47] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -723,7 +739,7 @@ func (e GroupEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // InvitesOrErr returns the Invites value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
-	if e.loadedTypes[47] {
+	if e.loadedTypes[48] {
 		return e.Invites, nil
 	}
 	return nil, &NotLoadedError{edge: "invites"}
@@ -732,7 +748,7 @@ func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[48] {
+	if e.loadedTypes[49] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -747,7 +763,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case group.FieldIsManaged, group.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldDeletedBy, group.FieldDisplayID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldDisplayName, group.FieldOscalRole, group.FieldOscalPartyUUID, group.FieldScimExternalID, group.FieldScimDisplayName, group.FieldScimGroupMailing:
+		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldDeletedBy, group.FieldDisplayID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldAvatarLocalFileID, group.FieldDisplayName, group.FieldOscalRole, group.FieldOscalPartyUUID, group.FieldScimExternalID, group.FieldScimDisplayName, group.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -993,6 +1009,13 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field logo_url", values[i])
 			} else if value.Valid {
 				_m.LogoURL = value.String
+			}
+		case group.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
 			}
 		case group.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1753,6 +1776,11 @@ func (_m *Group) QueryIntegrations() *IntegrationQuery {
 	return NewGroupClient(_m.config).QueryIntegrations(_m)
 }
 
+// QueryAvatarFile queries the "avatar_file" edge of the Group entity.
+func (_m *Group) QueryAvatarFile() *FileQuery {
+	return NewGroupClient(_m.config).QueryAvatarFile(_m)
+}
+
 // QueryFiles queries the "files" edge of the Group entity.
 func (_m *Group) QueryFiles() *FileQuery {
 	return NewGroupClient(_m.config).QueryFiles(_m)
@@ -1847,6 +1875,11 @@ func (_m *Group) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("logo_url=")
 	builder.WriteString(_m.LogoURL)
+	builder.WriteString(", ")
+	if v := _m.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)

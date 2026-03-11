@@ -1119,6 +1119,7 @@ type ComplexityRoot struct {
 	}
 
 	GroupHistory struct {
+		AvatarLocalFileID func(childComplexity int) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		Description       func(childComplexity int) int
@@ -9184,6 +9185,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistoryEdge.Node(childComplexity), true
+
+	case "GroupHistory.avatarLocalFileID":
+		if e.ComplexityRoot.GroupHistory.AvatarLocalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.AvatarLocalFileID(childComplexity), true
 
 	case "GroupHistory.createdAt":
 		if e.ComplexityRoot.GroupHistory.CreatedAt == nil {
@@ -35345,6 +35353,10 @@ type GroupHistory implements Node {
   """
   logoURL: String
   """
+  The group's local avatar file id, takes precedence over the gravatar logo URL
+  """
+  avatarLocalFileID: String
+  """
   The group's displayed 'friendly' name
   """
   displayName: String!
@@ -35614,6 +35626,24 @@ input GroupHistoryWhereInput {
   isManagedNEQ: Boolean
   isManagedIsNil: Boolean
   isManagedNotNil: Boolean
+  """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: String
+  avatarLocalFileIDNEQ: String
+  avatarLocalFileIDIn: [String!]
+  avatarLocalFileIDNotIn: [String!]
+  avatarLocalFileIDGT: String
+  avatarLocalFileIDGTE: String
+  avatarLocalFileIDLT: String
+  avatarLocalFileIDLTE: String
+  avatarLocalFileIDContains: String
+  avatarLocalFileIDHasPrefix: String
+  avatarLocalFileIDHasSuffix: String
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: String
+  avatarLocalFileIDContainsFold: String
   """
   display_name field predicates
   """

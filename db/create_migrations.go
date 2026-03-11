@@ -18,10 +18,11 @@ import (
 
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
+	"github.com/theopenlane/utils/testutils"
+
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	historymigrate "github.com/theopenlane/core/internal/ent/historygenerated/migrate"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/utils/testutils"
 )
 
 func main() {
@@ -60,7 +61,7 @@ func main() {
 	// "connected database is not clean: found table"
 	// it means it's likely hitting a connection limit issue and you need
 	// to increase the max connections
-	maxConnections := 40
+	maxConnections := 50
 
 	tf, err := testutils.GetPostgresDockerTest(pgDBURI, 5*time.Minute, maxConnections)
 	if err != nil {

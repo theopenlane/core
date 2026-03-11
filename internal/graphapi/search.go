@@ -971,14 +971,15 @@ func adminSearchGroups(ctx context.Context, query string, after *entgql.Cursor[s
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				group.OwnerIDContainsFold(query),        // search by OwnerID
-				group.NameContainsFold(query),           // search by Name
-				group.DisplayNameContainsFold(query),    // search by DisplayName
-				group.OscalRoleContainsFold(query),      // search by OscalRole
-				group.OscalPartyUUIDContainsFold(query), // search by OscalPartyUUID
+				group.OwnerIDContainsFold(query),           // search by OwnerID
+				group.NameContainsFold(query),              // search by Name
+				group.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
+				group.DisplayNameContainsFold(query),       // search by DisplayName
+				group.OscalRoleContainsFold(query),         // search by OscalRole
+				group.OscalPartyUUIDContainsFold(query),    // search by OscalPartyUUID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(oscal_contact_uuids)::text LIKE $9", likeQuery)) // search by OscalContactUuids
+					s.Where(sql.ExprP("(oscal_contact_uuids)::text LIKE $10", likeQuery)) // search by OscalContactUuids
 				},
 				group.ScimExternalIDContainsFold(query),   // search by ScimExternalID
 				group.ScimDisplayNameContainsFold(query),  // search by ScimDisplayName

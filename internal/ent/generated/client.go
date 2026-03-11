@@ -12966,6 +12966,25 @@ func (c *GroupClient) QueryIntegrations(_m *Group) *IntegrationQuery {
 	return query
 }
 
+// QueryAvatarFile queries the avatar_file edge of a Group.
+func (c *GroupClient) QueryAvatarFile(_m *Group) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, group.AvatarFileTable, group.AvatarFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFiles queries the files edge of a Group.
 func (c *GroupClient) QueryFiles(_m *Group) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()

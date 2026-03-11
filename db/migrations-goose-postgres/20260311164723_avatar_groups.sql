@@ -1,0 +1,7 @@
+-- +goose Up
+-- modify "groups" table
+ALTER TABLE "groups" ADD COLUMN "avatar_local_file_id" character varying NULL, ADD COLUMN "workflow_definition_blocked_groups" character varying NULL, ADD COLUMN "workflow_definition_editors" character varying NULL, ADD COLUMN "workflow_definition_viewers" character varying NULL, ADD CONSTRAINT "groups_files_avatar_file" FOREIGN KEY ("avatar_local_file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_workflow_definitions_blocked_groups" FOREIGN KEY ("workflow_definition_blocked_groups") REFERENCES "workflow_definitions" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_workflow_definitions_editors" FOREIGN KEY ("workflow_definition_editors") REFERENCES "workflow_definitions" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_workflow_definitions_viewers" FOREIGN KEY ("workflow_definition_viewers") REFERENCES "workflow_definitions" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- +goose Down
+-- reverse: modify "groups" table
+ALTER TABLE "groups" DROP CONSTRAINT "groups_workflow_definitions_viewers", DROP CONSTRAINT "groups_workflow_definitions_editors", DROP CONSTRAINT "groups_workflow_definitions_blocked_groups", DROP CONSTRAINT "groups_files_avatar_file", DROP COLUMN "workflow_definition_viewers", DROP COLUMN "workflow_definition_editors", DROP COLUMN "workflow_definition_blocked_groups", DROP COLUMN "avatar_local_file_id";

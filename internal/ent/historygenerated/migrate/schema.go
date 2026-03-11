@@ -1208,6 +1208,7 @@ var (
 		{Name: "is_managed", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
 		{Name: "oscal_role", Type: field.TypeString, Nullable: true},
 		{Name: "oscal_party_uuid", Type: field.TypeString, Nullable: true},

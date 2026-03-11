@@ -142,6 +142,11 @@ func LogoURL(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldLogoURL, v))
 }
 
+// AvatarLocalFileID applies equality check predicate on the "avatar_local_file_id" field. It's identical to AvatarLocalFileIDEQ.
+func AvatarLocalFileID(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldEQ(FieldDisplayName, v))
@@ -1145,6 +1150,81 @@ func LogoURLEqualFold(v string) predicate.GroupHistory {
 // LogoURLContainsFold applies the ContainsFold predicate on the "logo_url" field.
 func LogoURLContainsFold(v string) predicate.GroupHistory {
 	return predicate.GroupHistory(sql.FieldContainsFold(FieldLogoURL, v))
+}
+
+// AvatarLocalFileIDEQ applies the EQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDNEQ applies the NEQ predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNEQ(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNEQ(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIn applies the In predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDNotIn applies the NotIn predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotIn(vs ...string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotIn(FieldAvatarLocalFileID, vs...))
+}
+
+// AvatarLocalFileIDGT applies the GT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDGTE applies the GTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDGTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldGTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLT applies the LT predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLT(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLT(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDLTE applies the LTE predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDLTE(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldLTE(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContains applies the Contains predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContains(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContains(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasPrefix applies the HasPrefix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasPrefix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasPrefix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDHasSuffix applies the HasSuffix predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDHasSuffix(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldHasSuffix(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDIsNil applies the IsNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDIsNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldIsNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDNotNil applies the NotNil predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDNotNil() predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldNotNull(FieldAvatarLocalFileID))
+}
+
+// AvatarLocalFileIDEqualFold applies the EqualFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDEqualFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldEqualFold(FieldAvatarLocalFileID, v))
+}
+
+// AvatarLocalFileIDContainsFold applies the ContainsFold predicate on the "avatar_local_file_id" field.
+func AvatarLocalFileIDContainsFold(v string) predicate.GroupHistory {
+	return predicate.GroupHistory(sql.FieldContainsFold(FieldAvatarLocalFileID, v))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.

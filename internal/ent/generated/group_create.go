@@ -216,6 +216,20 @@ func (_c *GroupCreate) SetNillableLogoURL(v *string) *GroupCreate {
 	return _c
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_c *GroupCreate) SetAvatarLocalFileID(v string) *GroupCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableAvatarLocalFileID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
+	}
+	return _c
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_c *GroupCreate) SetDisplayName(v string) *GroupCreate {
 	_c.mutation.SetDisplayName(v)
@@ -971,6 +985,25 @@ func (_c *GroupCreate) AddIntegrations(v ...*Integration) *GroupCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddIntegrationIDs(ids...)
+}
+
+// SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
+func (_c *GroupCreate) SetAvatarFileID(id string) *GroupCreate {
+	_c.mutation.SetAvatarFileID(id)
+	return _c
+}
+
+// SetNillableAvatarFileID sets the "avatar_file" edge to the File entity by ID if the given value is not nil.
+func (_c *GroupCreate) SetNillableAvatarFileID(id *string) *GroupCreate {
+	if id != nil {
+		_c = _c.SetAvatarFileID(*id)
+	}
+	return _c
+}
+
+// SetAvatarFile sets the "avatar_file" edge to the File entity.
+func (_c *GroupCreate) SetAvatarFile(v *File) *GroupCreate {
+	return _c.SetAvatarFileID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -2038,6 +2071,24 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AvatarFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AvatarLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {

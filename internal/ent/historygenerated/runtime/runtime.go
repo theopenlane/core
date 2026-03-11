@@ -1271,11 +1271,11 @@ func init() {
 	// grouphistory.DefaultIsManaged holds the default value on creation for the is_managed field.
 	grouphistory.DefaultIsManaged = grouphistoryDescIsManaged.Default.(bool)
 	// grouphistoryDescDisplayName is the schema descriptor for display_name field.
-	grouphistoryDescDisplayName := grouphistoryFields[18].Descriptor()
+	grouphistoryDescDisplayName := grouphistoryFields[19].Descriptor()
 	// grouphistory.DefaultDisplayName holds the default value on creation for the display_name field.
 	grouphistory.DefaultDisplayName = grouphistoryDescDisplayName.Default.(string)
 	// grouphistoryDescScimActive is the schema descriptor for scim_active field.
-	grouphistoryDescScimActive := grouphistoryFields[24].Descriptor()
+	grouphistoryDescScimActive := grouphistoryFields[25].Descriptor()
 	// grouphistory.DefaultScimActive holds the default value on creation for the scim_active field.
 	grouphistory.DefaultScimActive = grouphistoryDescScimActive.Default.(bool)
 	// grouphistoryDescID is the schema descriptor for id field.

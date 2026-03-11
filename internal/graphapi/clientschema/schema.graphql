@@ -12825,6 +12825,7 @@ input CreateGroupInput {
 	settingID: ID
 	eventIDs: [ID!]
 	integrationIDs: [ID!]
+	avatarFileID: ID
 	fileIDs: [ID!]
 	taskIDs: [ID!]
 	campaignIDs: [ID!]
@@ -30365,6 +30366,10 @@ type Group implements Node {
 	"""
 	logoURL: String
 	"""
+	The group's local avatar file id, takes precedence over the gravatar logo URL
+	"""
+	avatarLocalFileID: ID
+	"""
 	The group's displayed 'friendly' name
 	"""
 	displayName: String!
@@ -31669,6 +31674,7 @@ type Group implements Node {
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
+	avatarFile: File
 	files(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -32785,6 +32791,24 @@ input GroupWhereInput {
 	isManagedIsNil: Boolean
 	isManagedNotNil: Boolean
 	"""
+	avatar_local_file_id field predicates
+	"""
+	avatarLocalFileID: ID
+	avatarLocalFileIDNEQ: ID
+	avatarLocalFileIDIn: [ID!]
+	avatarLocalFileIDNotIn: [ID!]
+	avatarLocalFileIDGT: ID
+	avatarLocalFileIDGTE: ID
+	avatarLocalFileIDLT: ID
+	avatarLocalFileIDLTE: ID
+	avatarLocalFileIDContains: ID
+	avatarLocalFileIDHasPrefix: ID
+	avatarLocalFileIDHasSuffix: ID
+	avatarLocalFileIDIsNil: Boolean
+	avatarLocalFileIDNotNil: Boolean
+	avatarLocalFileIDEqualFold: ID
+	avatarLocalFileIDContainsFold: ID
+	"""
 	display_name field predicates
 	"""
 	displayName: String
@@ -33112,6 +33136,11 @@ input GroupWhereInput {
 	"""
 	hasIntegrations: Boolean
 	hasIntegrationsWith: [IntegrationWhereInput!]
+	"""
+	avatar_file edge predicates
+	"""
+	hasAvatarFile: Boolean
+	hasAvatarFileWith: [FileWhereInput!]
 	"""
 	files edge predicates
 	"""
@@ -42630,7 +42659,7 @@ type Mutation {
 		values of the group
 		"""
 		input: CreateGroupInput!
-	): GroupCreatePayload!
+	avatarFile: Upload): GroupCreatePayload!
 	"""
 	Create multiple new groups
 	"""
@@ -42662,7 +42691,7 @@ type Mutation {
 		New values for the group
 		"""
 		input: UpdateGroupInput!
-	): GroupUpdatePayload!
+	avatarFile: Upload): GroupUpdatePayload!
 	"""
 	Delete an existing group
 	"""
@@ -84621,6 +84650,8 @@ input UpdateGroupInput {
 	addIntegrationIDs: [ID!]
 	removeIntegrationIDs: [ID!]
 	clearIntegrations: Boolean
+	avatarFileID: ID
+	clearAvatarFile: Boolean
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean

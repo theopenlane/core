@@ -218,10 +218,10 @@ type MutationResolver interface {
 	CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload) (*model.FindingControlBulkCreatePayload, error)
 	UpdateFindingControl(ctx context.Context, id string, input generated.UpdateFindingControlInput) (*model.FindingControlUpdatePayload, error)
 	DeleteFindingControl(ctx context.Context, id string) (*model.FindingControlDeletePayload, error)
-	CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error)
+	CreateGroup(ctx context.Context, input generated.CreateGroupInput, avatarFile *graphql.Upload) (*model.GroupCreatePayload, error)
 	CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error)
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error)
-	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error)
+	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload) (*model.GroupUpdatePayload, error)
 	DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error)
 	DeleteBulkGroup(ctx context.Context, ids []string) (*model.GroupBulkDeletePayload, error)
 	UpdateBulkGroup(ctx context.Context, ids []string, input generated.UpdateGroupInput) (*model.GroupBulkUpdatePayload, error)
@@ -2628,6 +2628,11 @@ func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg1
 	return args, nil
 }
 
@@ -6997,6 +7002,11 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg2
 	return args, nil
 }
 
@@ -17920,7 +17930,7 @@ func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_createGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput))
+			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload,
@@ -18055,7 +18065,7 @@ func (ec *executionContext) _Mutation_updateGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput))
+			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload,
