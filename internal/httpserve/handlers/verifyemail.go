@@ -2,9 +2,7 @@ package handlers
 
 import (
 	"errors"
-	"time"
 
-	"entgo.io/ent/dialect/sql"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -33,7 +31,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	// setup viewer context
 	ctxWithToken := token.NewContextWithVerifyToken(reqCtx, in.Token)
 
-	entUser, err := h.getUserByEVToken(ctxWithToken, in.Token)
+	entUser, verificationTokenRecord, err := h.getUserByEVToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return h.BadRequest(ctx, err, openapi)
@@ -44,40 +42,33 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
-	// create email verification
-	user := &User{
-		ID:    entUser.ID,
-		Email: entUser.Email,
-	}
-
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	// check to see if user is already confirmed
 	if !entUser.Edges.Setting.EmailConfirmed {
-		// set tokens for request
-		if err := user.setUserTokens(entUser, in.Token); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set user tokens for request")
+		if verificationTokenRecord.TTL == nil || verificationTokenRecord.Secret == nil {
+			logx.FromContext(reqCtx).Error().Msg("verification token missing required fields")
 
-			return h.BadRequest(ctx, err, openapi)
+			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 
 		// Construct the user token from the database fields
 		t := &tokens.VerificationToken{
 			Email: entUser.Email,
 		}
-
-		if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
-
-			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
-		}
+		t.ExpiresAt = *verificationTokenRecord.TTL
 
 		// Verify the token with the stored secret
-		if err = t.Verify(user.GetVerificationToken(), user.EmailVerificationSecret); err != nil {
+		if err = t.Verify(verificationTokenRecord.Token, *verificationTokenRecord.Secret); err != nil {
 			if errors.Is(err, tokens.ErrTokenExpired) {
-				userCtx = token.NewContextWithSignUpToken(userCtx, user.Email)
+				userCtx = token.NewContextWithSignUpToken(userCtx, entUser.Email)
 
-				meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
+				meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, &User{
+					ID:        entUser.ID,
+					Email:     entUser.Email,
+					FirstName: entUser.FirstName,
+					LastName:  entUser.LastName,
+				})
 				if err != nil {
 					logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resend verification token")
 
@@ -87,7 +78,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 				out := &models.VerifyReply{
 					Reply:   rout.Reply{Success: false},
 					ID:      meowtoken.ID,
-					Email:   user.Email,
+					Email:   entUser.Email,
 					Message: "Token expired, a new token has been issued. Please check your email and try again.",
 				}
 
@@ -119,20 +110,4 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	}
 
 	return h.Success(ctx, out, openapi)
-}
-
-// setUserTokens sets the fields to verify the email
-func (u *User) setUserTokens(user *generated.User, reqToken string) error {
-	tokens := user.Edges.EmailVerificationTokens
-	for _, t := range tokens {
-		if t.Token == reqToken {
-			u.EmailVerificationToken = sql.NullString{String: t.Token, Valid: true}
-			u.EmailVerificationSecret = *t.Secret
-			u.EmailVerificationExpires = sql.NullString{String: t.TTL.Format(time.RFC3339Nano), Valid: true}
-
-			return nil
-		}
-	}
-
-	return ErrNotFound
 }

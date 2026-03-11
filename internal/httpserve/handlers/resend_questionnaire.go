@@ -8,16 +8,16 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/newman"
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -135,19 +135,6 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	email, err := h.Emailer.NewQuestionnaireAuthEmail(emailtemplates.Recipient{
-		Email: in.Email,
-	}, accessToken, emailtemplates.QuestionnaireAuthData{
-		CompanyName:              org.DisplayName,
-		AssessmentName:           assessmentData.Name,
-		QuestionnaireAuthFullURL: authURL,
-	})
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating questionnaire auth email")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
 	tags := []newman.Tag{
 		{Name: "assessment_response_id", Value: assessmentResp.ID},
 	}
@@ -156,12 +143,15 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		tags = append(tags, newman.Tag{Name: "campaign_id", Value: assessmentResp.CampaignID})
 	}
 
-	email.Tags = append(email.Tags, tags...)
-
-	if _, err = h.DBClient.Job.Insert(reqCtx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error queuing questionnaire auth email")
+	if err = h.sendEmail(reqCtx, assessmentResp.OwnerID, emailruntime.TemplateKeyQuestionnaireAuth,
+		compose.Recipient{Email: in.Email},
+		emailruntime.NewTemplateData().
+			WithField("CompanyName", org.DisplayName).
+			WithField("AssessmentName", assessmentData.Name).
+			WithField("QuestionnaireAuthURL", authURL),
+		emailruntime.WithTags(tags...),
+	); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending questionnaire auth email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}

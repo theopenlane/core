@@ -167,3 +167,6 @@ models:
   ExportMetadata:
     model:
       - github.com/theopenlane/core/common/models.ExportMetadata
+  TemplateContextEntry:
+    model:
+      - github.com/theopenlane/core/common/models.TemplateContextEntry

@@ -6,9 +6,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/newman/compose"
+
+	"github.com/theopenlane/core/internal/emailruntime"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -63,7 +64,35 @@ func HookSubscriberCreate() ent.Hook {
 				}
 			}
 
-			if err := queueSubscriberEmail(ctx, m); err != nil {
+			orgIDValue, ownerOK := m.OwnerID()
+			orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
+			if err != nil {
+				return nil, err
+			}
+
+			tokenRaw, tokenOK := m.Token()
+			tokenValue, err := requiredMutationString("token", tokenRaw, tokenOK)
+			if err != nil {
+				return nil, err
+			}
+
+			emailRaw, emailOK := m.Email()
+			emailAddress, err := requiredMutationString("email", emailRaw, emailOK)
+			if err != nil {
+				return nil, err
+			}
+
+			orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
+			if err != nil {
+				return nil, err
+			}
+
+			if err := sendEmail(ctx, m.Client(), orgID, emailruntime.TemplateKeySubscribe,
+				compose.Recipient{Email: emailAddress},
+				emailruntime.NewTemplateData().
+					WithField("OrganizationName", orgName).
+					WithTokenURL(emailruntime.TemplateURLVerifySubscriber, tokenValue),
+			); err != nil {
 				return nil, err
 			}
 
@@ -90,41 +119,6 @@ func HookSubscriberUpdated() ent.Hook {
 			hook.HasFields("unsubscribed"),
 		),
 	)
-}
-
-// queueSubscriberEmail queues the email to be sent to the subscriber
-func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) error {
-	// Get the details from the mutation, these will never be empty because they are set in the hook
-	// or are required fields
-	orgID, _ := m.OwnerID()
-	tok, _ := m.Token()
-	e, _ := m.Email()
-
-	// Get the organization name
-	org, err := m.Client().Organization.Get(ctx, orgID)
-	if err != nil {
-		return err
-	}
-
-	email, err := m.Emailer.NewSubscriberEmail(emailtemplates.Recipient{
-		Email: e,
-	}, org.DisplayName, tok)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error rendering email")
-
-		return err
-	}
-
-	// send the email via the job queue
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
-
-		return err
-	}
-
-	return nil
 }
 
 // createVerificationToken creates a new email verification token for the user

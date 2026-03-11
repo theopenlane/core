@@ -30,7 +30,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/genhooks"
@@ -43,6 +42,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/newman/compose"
 )
 
 var (
@@ -466,7 +466,7 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 		),
 		entc.Dependency(
 			entc.DependencyName("Emailer"),
-			entc.DependencyType(&emailtemplates.Config{}),
+			entc.DependencyType(&compose.Config{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("TOTP"),
