@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -120,6 +121,12 @@ func (TrustCenterFAQ) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.TrustCenterFAQMutation](),
 		),
 	)
+}
+
+func (TrustCenterFAQ) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookTrustCenterFAQ(),
+	}
 }
 
 // Indexes of the TrustCenterFAQ
