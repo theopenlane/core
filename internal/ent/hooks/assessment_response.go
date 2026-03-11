@@ -8,10 +8,11 @@ import (
 
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/newman/compose"
+
+	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/newman"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/logx"
@@ -237,15 +237,27 @@ func isUniqueConstraintError(err error) bool {
 
 // createResponseEmail builds and queues the assessment response email for a recipient.
 func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMutation, responseID string) error {
-	orgID, _ := m.OwnerID()
-	assessmentID, _ := m.AssessmentID()
-	emailAddress, _ := m.Email()
+	orgIDValue, ownerOK := m.OwnerID()
+	orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
+	if err != nil {
+		return err
+	}
+
+	assessmentIDValue, assessmentOK := m.AssessmentID()
+	assessmentID, err := requiredMutationString("assessment_id", assessmentIDValue, assessmentOK)
+	if err != nil {
+		return err
+	}
+
+	emailRaw, emailOK := m.Email()
+	emailAddress, err := requiredMutationString("email", emailRaw, emailOK)
+	if err != nil {
+		return err
+	}
+
 	campaignID, _ := m.CampaignID()
 
-	org, err := m.Client().Organization.Query().
-		Where(organization.ID(orgID)).
-		Select(organization.FieldDisplayName).
-		Only(ctx)
+	orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
 	if err != nil {
 		return err
 	}
@@ -287,17 +299,6 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
-	email, err := m.Emailer.NewQuestionnaireAuthEmail(emailtemplates.Recipient{
-		Email: emailAddress,
-	}, accessToken, emailtemplates.QuestionnaireAuthData{
-		CompanyName:              org.DisplayName,
-		AssessmentName:           assessmentData.Name,
-		QuestionnaireAuthFullURL: fullURL,
-	})
-	if err != nil {
-		return err
-	}
-
 	tags := []newman.Tag{}
 	if responseID != "" {
 		tags = append(tags, newman.Tag{Name: "assessment_response_id", Value: responseID})
@@ -320,15 +321,19 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		}
 	}
 
+	opts := []emailruntime.SendOption{}
 	if len(tags) > 0 {
-		email.Tags = append(email.Tags, tags...)
+		opts = append(opts, emailruntime.WithTags(tags...))
 	}
 
-	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil)
-
-	return err
+	return sendEmail(ctx, m.Client(), orgID, emailruntime.TemplateKeyQuestionnaireAuth,
+		compose.Recipient{Email: emailAddress},
+		emailruntime.NewTemplateData().
+			WithField("CompanyName", orgName).
+			WithField("AssessmentName", assessmentData.Name).
+			WithField("QuestionnaireAuthURL", fullURL),
+		opts...,
+	)
 }
 
 // HookUpdateAssessmentResponse validates status transitions and checks if the assessment response

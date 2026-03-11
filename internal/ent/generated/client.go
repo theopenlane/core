@@ -12,6 +12,7 @@ import (
 	"ariga.io/entcache"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"entgo.io/ent"
@@ -134,7 +135,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
@@ -518,7 +518,7 @@ type (
 		Authz              fgax.Client
 		TokenManager       *tokens.TokenManager
 		SessionConfig      *sessions.SessionConfig
-		Emailer            *emailtemplates.Config
+		Emailer            *compose.Config
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
@@ -623,7 +623,7 @@ func SessionConfig(v *sessions.SessionConfig) Option {
 }
 
 // Emailer configures the Emailer.
-func Emailer(v *emailtemplates.Config) Option {
+func Emailer(v *compose.Config) Option {
 	return func(c *config) {
 		c.Emailer = v
 	}

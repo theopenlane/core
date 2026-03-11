@@ -4,10 +4,12 @@ import (
 	"context"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/newman/compose"
 
 	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/emailruntime"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -82,8 +84,11 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	// add email send to the job queue
-	if err := h.sendPasswordResetRequestEmail(ctx, user); err != nil {
+	if err := h.sendEmail(ctx, "", emailruntime.TemplateKeyPasswordResetRequest,
+		compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+		emailruntime.NewTemplateData().
+			WithTokenURL(emailruntime.TemplateURLPasswordReset, meowtoken.Token),
+	); err != nil {
 		return nil, err
 	}
 

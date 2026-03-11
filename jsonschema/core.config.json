@@ -418,7 +418,7 @@
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
     },
-    "emailtemplates.Config": {
+    "compose.Config": {
       "properties": {
         "companyname": {
           "type": "string"
@@ -1900,7 +1900,7 @@
       "description": "Redis contains the redis configuration for the key-value store"
     },
     "email": {
-      "$ref": "#/$defs/emailtemplates.Config",
+      "$ref": "#/$defs/compose.Config",
       "description": "Email contains email sending configuration for the server"
     },
     "sessions": {

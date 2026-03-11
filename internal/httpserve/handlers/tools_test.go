@@ -20,12 +20,12 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
@@ -299,7 +299,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Emailer(&emailtemplates.Config{
+		ent.Emailer(&compose.Config{
 			CompanyName: "Meow Inc.",
 		}),
 		ent.TokenManager(suite.sharedTokenManager),

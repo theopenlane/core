@@ -133,11 +133,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
-			fullURL, _, err := buildTrustCenterAuthURL(ctx, ndaAuthEmailData{
-				requestID:     ndaRequestID,
-				email:         caller.SubjectEmail,
-				trustCenterID: tcID,
-			})
+			fullURL, _, err := buildTrustCenterAuthURL(ctx, ndaRequestID, caller.SubjectEmail, tcID)
 			if err != nil {
 				return nil, err
 			}

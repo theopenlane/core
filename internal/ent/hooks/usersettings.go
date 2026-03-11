@@ -8,9 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/newman/compose"
+
+	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -139,44 +140,18 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			if err := sendRegisterWelcomeEmail(ctx, user, m); err != nil {
+			if m.Client().Job == nil {
+				logx.FromContext(ctx).Info().Msg("no job client, skipping welcome email")
+			} else if err := sendEmail(ctx, m.Client(), "", emailruntime.TemplateKeyWelcome,
+				compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+				nil,
+			); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("could not send welcome email")
 			}
 
 			return v, nil
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
-}
-
-// sendRegisterWelcomeEmail sends a welcome email to the user after registration welcoming to the platform
-func sendRegisterWelcomeEmail(ctx context.Context, user *generated.User, m *generated.UserSettingMutation) error {
-	// if there is not job client, we can't send the email
-	if m.Job == nil {
-		logx.FromContext(ctx).Info().Msg("no job client, skipping welcome email")
-
-		return nil
-	}
-
-	email, err := m.Emailer.NewWelcomeEmail(emailtemplates.Recipient{
-		Email:     user.Email,
-		FirstName: user.FirstName,
-		LastName:  user.LastName,
-	})
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error creating welcome email")
-
-		return err
-	}
-
-	if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
-		Message: *email,
-	}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
-
-		return err
-	}
-
-	return nil
 }
 
 // autoJoinOrganizationsForUser automatically adds a user to organizations with matching email domains
