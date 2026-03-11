@@ -21,13 +21,13 @@ require (
 	github.com/samber/mo v1.16.0
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/theopenlane/core v1.11.18
+	github.com/theopenlane/core v1.11.19
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.23.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.7.0
 	github.com/zitadel/oidc/v3 v3.45.5
-	golang.org/x/oauth2 v0.35.0
+	golang.org/x/oauth2 v0.36.0
 	gotest.tools/v3 v3.5.2
 )
 
