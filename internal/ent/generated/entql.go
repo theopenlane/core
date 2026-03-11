@@ -1341,6 +1341,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldIsManaged:         {Type: field.TypeBool, Column: group.FieldIsManaged},
 			group.FieldGravatarLogoURL:   {Type: field.TypeString, Column: group.FieldGravatarLogoURL},
 			group.FieldLogoURL:           {Type: field.TypeString, Column: group.FieldLogoURL},
+			group.FieldAvatarLocalFileID: {Type: field.TypeString, Column: group.FieldAvatarLocalFileID},
 			group.FieldDisplayName:       {Type: field.TypeString, Column: group.FieldDisplayName},
 			group.FieldOscalRole:         {Type: field.TypeString, Column: group.FieldOscalRole},
 			group.FieldOscalPartyUUID:    {Type: field.TypeString, Column: group.FieldOscalPartyUUID},
@@ -8286,6 +8287,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Group",
 		"Integration",
+	)
+	graph.MustAddE(
+		"avatar_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   group.AvatarFileTable,
+			Columns: []string{group.AvatarFileColumn},
+			Bidi:    false,
+		},
+		"Group",
+		"File",
 	)
 	graph.MustAddE(
 		"files",
@@ -26752,6 +26765,11 @@ func (f *GroupFilter) WhereLogoURL(p entql.StringP) {
 	f.Where(p.Field(group.FieldLogoURL))
 }
 
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *GroupFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(group.FieldAvatarLocalFileID))
+}
+
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *GroupFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(group.FieldDisplayName))
@@ -27388,6 +27406,20 @@ func (f *GroupFilter) WhereHasIntegrations() {
 // WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
 func (f *GroupFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
 	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAvatarFile applies a predicate to check if query has an edge avatar_file.
+func (f *GroupFilter) WhereHasAvatarFile() {
+	f.Where(entql.HasEdge("avatar_file"))
+}
+
+// WhereHasAvatarFileWith applies a predicate to check if query has an edge avatar_file with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasAvatarFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("avatar_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

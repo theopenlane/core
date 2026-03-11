@@ -218,6 +218,26 @@ func (_u *GroupHistoryUpdate) ClearLogoURL() *GroupHistoryUpdate {
 	return _u
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdate) SetAvatarLocalFileID(v string) *GroupHistoryUpdate {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupHistoryUpdate) SetNillableAvatarLocalFileID(v *string) *GroupHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdate) ClearAvatarLocalFileID() *GroupHistoryUpdate {
+	_u.mutation.ClearAvatarLocalFileID()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *GroupHistoryUpdate) SetDisplayName(v string) *GroupHistoryUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -506,6 +526,12 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(grouphistory.FieldAvatarLocalFileID, field.TypeString)
+	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
 	}
@@ -761,6 +787,26 @@ func (_u *GroupHistoryUpdateOne) SetNillableLogoURL(v *string) *GroupHistoryUpda
 // ClearLogoURL clears the value of the "logo_url" field.
 func (_u *GroupHistoryUpdateOne) ClearLogoURL() *GroupHistoryUpdateOne {
 	_u.mutation.ClearLogoURL()
+	return _u
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdateOne) SetAvatarLocalFileID(v string) *GroupHistoryUpdateOne {
+	_u.mutation.SetAvatarLocalFileID(v)
+	return _u
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_u *GroupHistoryUpdateOne) SetNillableAvatarLocalFileID(v *string) *GroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarLocalFileID(*v)
+	}
+	return _u
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (_u *GroupHistoryUpdateOne) ClearAvatarLocalFileID() *GroupHistoryUpdateOne {
+	_u.mutation.ClearAvatarLocalFileID()
 	return _u
 }
 
@@ -1081,6 +1127,12 @@ func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHisto
 	}
 	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if _u.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(grouphistory.FieldAvatarLocalFileID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)

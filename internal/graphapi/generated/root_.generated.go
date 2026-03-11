@@ -2292,6 +2292,8 @@ type ComplexityRoot struct {
 		ActionPlanBlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		ActionPlanEditors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		ActionPlanViewers                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AvatarFile                         func(childComplexity int) int
+		AvatarLocalFileID                  func(childComplexity int) int
 		CampaignBlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CampaignEditors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CampaignTargets                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
@@ -3401,7 +3403,7 @@ type ComplexityRoot struct {
 		CreateFinding                        func(childComplexity int, input generated.CreateFindingInput) int
 		CreateFindingControl                 func(childComplexity int, input generated.CreateFindingControlInput) int
 		CreateFullProgram                    func(childComplexity int, input model.CreateFullProgramInput) int
-		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput) int
+		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput, avatarFile *graphql.Upload) int
 		CreateGroupByClone                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
 		CreateGroupMembership                func(childComplexity int, input generated.CreateGroupMembershipInput) int
 		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
@@ -3748,7 +3750,7 @@ type ComplexityRoot struct {
 		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
 		UpdateFinding                        func(childComplexity int, id string, input generated.UpdateFindingInput) int
 		UpdateFindingControl                 func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
-		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput) int
+		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload) int
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
@@ -18523,6 +18525,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Group.ActionPlanViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Group.avatarFile":
+		if e.ComplexityRoot.Group.AvatarFile == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.AvatarFile(childComplexity), true
+
+	case "Group.avatarLocalFileID":
+		if e.ComplexityRoot.Group.AvatarLocalFileID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Group.AvatarLocalFileID(childComplexity), true
+
 	case "Group.campaignBlockedGroups":
 		if e.ComplexityRoot.Group.CampaignBlockedGroups == nil {
 			break
@@ -25165,7 +25181,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateGroup(childComplexity, args["input"].(generated.CreateGroupInput)), true
+		return e.ComplexityRoot.Mutation.CreateGroup(childComplexity, args["input"].(generated.CreateGroupInput), args["avatarFile"].(*graphql.Upload)), true
 
 	case "Mutation.createGroupByClone":
 		if e.ComplexityRoot.Mutation.CreateGroupByClone == nil {
@@ -29324,7 +29340,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateGroup(childComplexity, args["id"].(string), args["input"].(generated.UpdateGroupInput)), true
+		return e.ComplexityRoot.Mutation.UpdateGroup(childComplexity, args["id"].(string), args["input"].(generated.UpdateGroupInput), args["avatarFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateGroupMembership":
 		if e.ComplexityRoot.Mutation.UpdateGroupMembership == nil {
@@ -65746,6 +65762,7 @@ input CreateGroupInput {
   settingID: ID
   eventIDs: [ID!]
   integrationIDs: [ID!]
+  avatarFileID: ID
   fileIDs: [ID!]
   taskIDs: [ID!]
   campaignIDs: [ID!]
@@ -82227,6 +82244,10 @@ type Group implements Node {
   """
   logoURL: String
   """
+  The group's local avatar file id, takes precedence over the gravatar logo URL
+  """
+  avatarLocalFileID: ID
+  """
   The group's displayed 'friendly' name
   """
   displayName: String!
@@ -83531,6 +83552,7 @@ type Group implements Node {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  avatarFile: File
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -84301,6 +84323,24 @@ input GroupWhereInput {
   isManagedIsNil: Boolean
   isManagedNotNil: Boolean
   """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: ID
+  avatarLocalFileIDNEQ: ID
+  avatarLocalFileIDIn: [ID!]
+  avatarLocalFileIDNotIn: [ID!]
+  avatarLocalFileIDGT: ID
+  avatarLocalFileIDGTE: ID
+  avatarLocalFileIDLT: ID
+  avatarLocalFileIDLTE: ID
+  avatarLocalFileIDContains: ID
+  avatarLocalFileIDHasPrefix: ID
+  avatarLocalFileIDHasSuffix: ID
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: ID
+  avatarLocalFileIDContainsFold: ID
+  """
   display_name field predicates
   """
   displayName: String
@@ -84628,6 +84668,11 @@ input GroupWhereInput {
   """
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
+  """
+  avatar_file edge predicates
+  """
+  hasAvatarFile: Boolean
+  hasAvatarFileWith: [FileWhereInput!]
   """
   files edge predicates
   """
@@ -125065,6 +125110,8 @@ input UpdateGroupInput {
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
+  avatarFileID: ID
+  clearAvatarFile: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -137179,6 +137226,7 @@ extend type Mutation{
         values of the group
         """
         input: CreateGroupInput!
+        avatarFile: Upload
     ): GroupCreatePayload!
     """
     Create multiple new groups
@@ -137210,6 +137258,7 @@ extend type Mutation{
         New values for the group
         """
         input: UpdateGroupInput!
+        avatarFile: Upload
     ): GroupUpdatePayload!
     """
     Delete an existing group

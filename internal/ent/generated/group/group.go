@@ -43,6 +43,8 @@ const (
 	FieldGravatarLogoURL = "gravatar_logo_url"
 	// FieldLogoURL holds the string denoting the logo_url field in the database.
 	FieldLogoURL = "logo_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldOscalRole holds the string denoting the oscal_role field in the database.
@@ -145,6 +147,8 @@ const (
 	EdgeEvents = "events"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
+	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
+	EdgeAvatarFile = "avatar_file"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
@@ -380,6 +384,13 @@ const (
 	IntegrationsInverseTable = "integrations"
 	// IntegrationsColumn is the table column denoting the integrations relation/edge.
 	IntegrationsColumn = "group_integrations"
+	// AvatarFileTable is the table that holds the avatar_file relation/edge.
+	AvatarFileTable = "groups"
+	// AvatarFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	AvatarFileInverseTable = "files"
+	// AvatarFileColumn is the table column denoting the avatar_file relation/edge.
+	AvatarFileColumn = "avatar_local_file_id"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "group_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -433,6 +444,7 @@ var Columns = []string{
 	FieldIsManaged,
 	FieldGravatarLogoURL,
 	FieldLogoURL,
+	FieldAvatarLocalFileID,
 	FieldDisplayName,
 	FieldOscalRole,
 	FieldOscalPartyUUID,
@@ -776,6 +788,11 @@ func ByGravatarLogoURL(opts ...sql.OrderTermOption) OrderOption {
 // ByLogoURL orders the results by the logo_url field.
 func ByLogoURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
 }
 
 // ByDisplayName orders the results by the display_name field.
@@ -1401,6 +1418,13 @@ func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAvatarFileField orders the results by avatar_file field.
+func ByAvatarFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAvatarFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1783,6 +1807,13 @@ func newIntegrationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
+	)
+}
+func newAvatarFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AvatarFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AvatarFileTable, AvatarFileColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

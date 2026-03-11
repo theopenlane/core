@@ -1567,6 +1567,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "avatar_file": {
+	ObjectType:      "avatar_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "files": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
