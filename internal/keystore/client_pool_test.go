@@ -8,7 +8,6 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -17,26 +16,26 @@ type fakeClient struct {
 }
 
 type fakeCredentialSource struct {
-	payload     models.CredentialSet
-	mintPayload models.CredentialSet
+	payload     types.CredentialSet
+	mintPayload types.CredentialSet
 	getErr      error
 	mintErr     error
 	getCalls    int
 	mintCalls   int
 }
 
-func (f *fakeCredentialSource) Get(context.Context, string, types.ProviderType) (models.CredentialSet, error) {
+func (f *fakeCredentialSource) Get(context.Context, string, types.ProviderType) (types.CredentialSet, error) {
 	f.getCalls++
 	if f.getErr != nil {
-		return models.CredentialSet{}, f.getErr
+		return types.CredentialSet{}, f.getErr
 	}
 	return types.CloneCredentialSet(f.payload), nil
 }
 
-func (f *fakeCredentialSource) Mint(context.Context, string, types.ProviderType) (models.CredentialSet, error) {
+func (f *fakeCredentialSource) Mint(context.Context, string, types.ProviderType) (types.CredentialSet, error) {
 	f.mintCalls++
 	if f.mintErr != nil {
-		return models.CredentialSet{}, f.mintErr
+		return types.CredentialSet{}, f.mintErr
 	}
 	if !types.IsCredentialSetEmpty(f.mintPayload) {
 		f.payload = types.CloneCredentialSet(f.mintPayload)
@@ -50,7 +49,7 @@ type trackingBuilder struct {
 	builds   int
 }
 
-func (b *trackingBuilder) Build(_ context.Context, payload models.CredentialSet, _ json.RawMessage) (*fakeClient, error) {
+func (b *trackingBuilder) Build(_ context.Context, payload types.CredentialSet, _ json.RawMessage) (*fakeClient, error) {
 	b.builds++
 	return &fakeClient{Token: payload.OAuthAccessToken}, nil
 }
@@ -129,8 +128,8 @@ func TestClientPoolForceRefresh(t *testing.T) {
 	require.Equal(t, 1, source.mintCalls)
 }
 
-func newOAuthPayload(token string, expiry time.Time) models.CredentialSet {
-	payload := models.CredentialSet{
+func newOAuthPayload(token string, expiry time.Time) types.CredentialSet {
+	payload := types.CredentialSet{
 		OAuthAccessToken:  token,
 		OAuthRefreshToken: "refresh-" + token,
 		OAuthTokenType:    "bearer",

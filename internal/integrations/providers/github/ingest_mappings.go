@@ -7,8 +7,11 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
+
+// mappingSchemaVulnerability identifies vulnerability ingest mappings for this provider.
+const mappingSchemaVulnerability types.MappingSchema = integrationgenerated.IntegrationMappingSchemaVulnerability
 
 type celMapEntry struct {
 	key  string
@@ -97,9 +100,9 @@ var (
 	)
 )
 
-// githubVulnerabilityMappings returns the built-in vulnerability mapping specs for GitHub providers.
-func githubVulnerabilityMappings() map[string]integrationtypes.MappingSpec {
-	return map[string]integrationtypes.MappingSpec{
+// githubVulnerabilityMappings returns the built-in vulnerability mapping overrides for GitHub providers.
+func githubVulnerabilityMappings() map[string]types.MappingOverride {
+	return map[string]types.MappingOverride{
 		githubAlertTypeDependabot: {
 			FilterExpr: "true",
 			MapExpr:    mapExprGitHubDependabot,
@@ -116,12 +119,12 @@ func githubVulnerabilityMappings() map[string]integrationtypes.MappingSpec {
 }
 
 // githubDefaultMappings returns all built-in ingest mappings published by GitHub providers.
-func githubDefaultMappings() []integrationtypes.MappingRegistration {
-	return lo.MapToSlice(githubVulnerabilityMappings(), func(variant string, spec integrationtypes.MappingSpec) integrationtypes.MappingRegistration {
-		return integrationtypes.MappingRegistration{
-			Schema:  integrationtypes.MappingSchemaVulnerability,
+func githubDefaultMappings() []types.MappingRegistration {
+	return lo.MapToSlice(githubVulnerabilityMappings(), func(variant string, override types.MappingOverride) types.MappingRegistration {
+		return types.MappingRegistration{
+			Schema:  mappingSchemaVulnerability,
 			Variant: variant,
-			Spec:    spec,
+			Spec:    override,
 		}
 	})
 }

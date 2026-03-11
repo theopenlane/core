@@ -7,7 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 type celMapEntry struct {
@@ -15,7 +15,7 @@ type celMapEntry struct {
 	expr string
 }
 
-// celMapExpr renders CEL map entries into a CEL object literal string.
+// celMapExpr renders CEL map entries into a CEL object literal string
 func celMapExpr(entries []celMapEntry) string {
 	if len(entries) == 0 {
 		return "{}"
@@ -114,9 +114,12 @@ var mapExprGoogleWorkspaceDirectoryAccount = celMapExpr([]celMapEntry{
 	},
 })
 
-// googleWorkspaceDirectoryAccountMappings returns the built-in directory account mapping specs for Google Workspace.
-func googleWorkspaceDirectoryAccountMappings() map[string]integrationtypes.MappingSpec {
-	return map[string]integrationtypes.MappingSpec{
+// mappingSchemaDirectoryAccount is the schema identifier for directory account ingest
+const mappingSchemaDirectoryAccount = types.MappingSchema(integrationgenerated.IntegrationMappingSchemaDirectoryAccount)
+
+// googleWorkspaceDirectoryAccountMappings returns the built-in directory account mapping specs for Google Workspace
+func googleWorkspaceDirectoryAccountMappings() map[string]types.MappingOverride {
+	return map[string]types.MappingOverride{
 		"": {
 			FilterExpr: `payload.id != "" || payload.primaryEmail != ""`,
 			MapExpr:    mapExprGoogleWorkspaceDirectoryAccount,
@@ -124,11 +127,11 @@ func googleWorkspaceDirectoryAccountMappings() map[string]integrationtypes.Mappi
 	}
 }
 
-// googleWorkspaceDefaultMappings returns all built-in ingest mappings for Google Workspace.
-func googleWorkspaceDefaultMappings() []integrationtypes.MappingRegistration {
-	return lo.MapToSlice(googleWorkspaceDirectoryAccountMappings(), func(variant string, spec integrationtypes.MappingSpec) integrationtypes.MappingRegistration {
-		return integrationtypes.MappingRegistration{
-			Schema:  integrationtypes.MappingSchemaDirectoryAccount,
+// googleWorkspaceDefaultMappings returns all built-in ingest mappings for Google Workspace
+func googleWorkspaceDefaultMappings() []types.MappingRegistration {
+	return lo.MapToSlice(googleWorkspaceDirectoryAccountMappings(), func(variant string, spec types.MappingOverride) types.MappingRegistration {
+		return types.MappingRegistration{
+			Schema:  mappingSchemaDirectoryAccount,
 			Variant: variant,
 			Spec:    spec,
 		}

@@ -1,8 +1,8 @@
 package graphapihistory
 
 import (
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 func redactHushHistoryCredentialSet(value *historygenerated.HushHistory) {
@@ -10,7 +10,7 @@ func redactHushHistoryCredentialSet(value *historygenerated.HushHistory) {
 		return
 	}
 
-	value.CredentialSet = models.CredentialSet{}
+	value.CredentialSet = integrationtypes.CredentialSet{}
 }
 
 func redactHushHistoryConnection(conn *historygenerated.HushHistoryConnection) {

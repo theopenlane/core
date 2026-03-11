@@ -1,27 +1,29 @@
 package aws
 
 import (
-	"github.com/theopenlane/core/common/models"
-	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const awsDefaultSession = "openlane-aws"
 
-// awsMetadataFromPayload extracts and validates AWS metadata from a credential payload
-func awsMetadataFromPayload(payload models.CredentialSet, defaultSessionName string) (awskit.AWSMetadata, error) {
-	if len(payload.ProviderData) == 0 {
-		return awskit.AWSMetadata{}, ErrMetadataMissing
+// awsMetadataFromCredential extracts and validates AWS metadata from a credential set
+func awsMetadataFromCredential(credential types.CredentialSet, defaultSessionName string) (awskit.Metadata, error) {
+	if len(credential.ProviderData) == 0 {
+		return awskit.Metadata{}, ErrMetadataMissing
 	}
 
-	parsed, err := awskit.AWSMetadataFromProviderData(payload.ProviderData, defaultSessionName)
+	parsed, err := awskit.MetadataFromProviderData(credential.ProviderData, defaultSessionName)
 	if err != nil {
-		return awskit.AWSMetadata{}, err
+		return awskit.Metadata{}, err
 	}
+
 	if parsed.RoleARN == "" {
-		return awskit.AWSMetadata{}, ErrRoleARNMissing
+		return awskit.Metadata{}, ErrRoleARNMissing
 	}
+
 	if parsed.Region == "" {
-		return awskit.AWSMetadata{}, ErrRegionMissing
+		return awskit.Metadata{}, ErrRegionMissing
 	}
 
 	return parsed, nil

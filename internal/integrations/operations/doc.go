@@ -1,2 +1,2 @@
-// Package operations hosts shared operation helpers and configuration utilities.
+// Package operations implements the integration operation execution engine.
 package operations

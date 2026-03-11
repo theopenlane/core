@@ -8,7 +8,8 @@ import (
 
 	gh "github.com/google/go-github/v84/github"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/integrations/operations"
+
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -20,13 +21,37 @@ const (
 	githubRepositoryNameParts     = 2
 )
 
+// repositorySelector captures repository selection fields for GitHub operation configs.
+type repositorySelector struct {
+	// Repositories lists repository names to include
+	Repositories []types.TrimmedString `json:"repositories"`
+	// Repos lists repository names using a shorter alias
+	Repos []types.TrimmedString `json:"repos"`
+	// Repository selects a single repository name
+	Repository types.TrimmedString `json:"repository"`
+	// Owner filters repositories by owner
+	Owner types.TrimmedString `json:"owner"`
+}
+
+// List returns a merged, de-duplicated list of repository name strings.
+func (r repositorySelector) List() []string {
+	combined := make([]types.TrimmedString, 0, len(r.Repositories)+len(r.Repos)+1)
+	combined = append(combined, r.Repositories...)
+	combined = append(combined, r.Repos...)
+	combined = append(combined, r.Repository)
+
+	return lo.Uniq(lo.FilterMap(combined, func(v types.TrimmedString, _ int) (string, bool) {
+		return v.String(), v != ""
+	}))
+}
+
 type githubVulnerabilityConfig struct {
-	// RepositorySelector controls which repositories to scan
-	operations.RepositorySelector
+	// repositorySelector controls which repositories to scan
+	repositorySelector
 	// Pagination controls page sizing for list calls
-	operations.Pagination
+	providerkit.Pagination
 	// PayloadOptions controls payload inclusion
-	operations.PayloadOptions
+	providerkit.PayloadOptions
 
 	// AlertTypes selects which alert types to collect
 	AlertTypes []types.LowerString `json:"alert_types"`
@@ -55,7 +80,7 @@ type githubRepositoryFailureDetails struct {
 	Repository string `json:"repository,omitempty"`
 }
 
-// runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads
+// runGitHubVulnerabilityOperation collects GitHub alert data and returns envelope payloads.
 func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, err := githubRESTClientForOperation(ctx, input)
 	if err != nil {
@@ -73,13 +98,14 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 	if len(repoNames) == 0 {
 		repos, err := listGitHubReposForProvider(ctx, client, input.Provider, config)
 		if err != nil {
-			return operations.OperationFailure("GitHub repository listing failed", err, nil)
+			return providerkit.OperationFailure("GitHub repository listing failed", err, nil)
 		}
+
 		repoNames = repoNamesFromResponses(repos, config.Owner.String())
 	}
 
 	if len(repoNames) == 0 {
-		return operations.OperationSuccess("No repositories available for vulnerability alerts", githubVulnerabilityDetails{
+		return providerkit.OperationSuccess("No repositories available for vulnerability alerts", githubVulnerabilityDetails{
 			RepositoriesScanned: 0,
 			AlertsTotal:         0,
 		}), nil
@@ -99,10 +125,11 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeDependabot) {
 			batch, err := listDependabotAlerts(ctx, client, repo, config)
 			if err != nil {
-				return operations.OperationFailure("GitHub Dependabot alert collection failed", err, githubRepositoryFailureDetails{
+				return providerkit.OperationFailure("GitHub Dependabot alert collection failed", err, githubRepositoryFailureDetails{
 					Repository: repo,
 				})
 			}
+
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeDependabot, repo, batch)
 			totalAlerts += len(batch)
 			alertTypeCounts[githubAlertTypeDependabot] += len(batch)
@@ -111,10 +138,11 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeCodeScanning) {
 			batch, err := listCodeScanningAlerts(ctx, client, repo, config)
 			if err != nil {
-				return operations.OperationFailure("GitHub code scanning alert collection failed", err, githubRepositoryFailureDetails{
+				return providerkit.OperationFailure("GitHub code scanning alert collection failed", err, githubRepositoryFailureDetails{
 					Repository: repo,
 				})
 			}
+
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeCodeScanning, repo, batch)
 			totalAlerts += len(batch)
 			alertTypeCounts[githubAlertTypeCodeScanning] += len(batch)
@@ -123,10 +151,11 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		if alertTypeRequested(alertTypes, githubAlertTypeSecretScanning) {
 			batch, err := listSecretScanningAlerts(ctx, client, repo, config)
 			if err != nil {
-				return operations.OperationFailure("GitHub secret scanning alert collection failed", err, githubRepositoryFailureDetails{
+				return providerkit.OperationFailure("GitHub secret scanning alert collection failed", err, githubRepositoryFailureDetails{
 					Repository: repo,
 				})
 			}
+
 			envelopes = appendAlertEnvelopes(envelopes, githubAlertTypeSecretScanning, repo, batch)
 			totalAlerts += len(batch)
 			alertTypeCounts[githubAlertTypeSecretScanning] += len(batch)
@@ -138,14 +167,15 @@ func runGitHubVulnerabilityOperation(ctx context.Context, input types.OperationI
 		AlertsTotal:         totalAlerts,
 		AlertTypeCounts:     alertTypeCounts,
 	}
+
 	if config.IncludePayloads {
 		details.Alerts = envelopes
 	}
 
-	return operations.OperationSuccess(fmt.Sprintf("Collected %d vulnerability alerts from %d repositories", totalAlerts, len(repoNames)), details), nil
+	return providerkit.OperationSuccess(fmt.Sprintf("Collected %d vulnerability alerts from %d repositories", totalAlerts, len(repoNames)), details), nil
 }
 
-// listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens
+// listGitHubReposForProvider enumerates repositories using either OAuth or app installation tokens.
 func listGitHubReposForProvider(ctx context.Context, client *gh.Client, provider types.ProviderType, config githubVulnerabilityConfig) ([]*gh.Repository, error) {
 	if provider == TypeGitHubApp {
 		return listGitHubInstallationRepos(ctx, client, config)
@@ -154,7 +184,7 @@ func listGitHubReposForProvider(ctx context.Context, client *gh.Client, provider
 	return listGitHubRepos(ctx, client, config)
 }
 
-// listGitHubInstallationRepos lists repositories visible to a GitHub App installation
+// listGitHubInstallationRepos lists repositories visible to a GitHub App installation.
 func listGitHubInstallationRepos(ctx context.Context, client *gh.Client, config githubVulnerabilityConfig) ([]*gh.Repository, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	out := make([]*gh.Repository, 0)
@@ -164,6 +194,7 @@ func listGitHubInstallationRepos(ctx context.Context, client *gh.Client, config 
 		if err != nil {
 			return nil, nil, normalizeGitHubAPIError(err)
 		}
+
 		if response == nil {
 			return nil, httpResponse, nil
 		}
@@ -180,7 +211,7 @@ func listGitHubInstallationRepos(ctx context.Context, client *gh.Client, config 
 	return out, nil
 }
 
-// listGitHubRepos lists repositories accessible to the OAuth token
+// listGitHubRepos lists repositories accessible to the OAuth token.
 func listGitHubRepos(ctx context.Context, client *gh.Client, config githubVulnerabilityConfig) ([]*gh.Repository, error) {
 	perPage := clampPerPage(config.EffectivePageSize(defaultPerPage))
 	out := make([]*gh.Repository, 0)
@@ -189,9 +220,11 @@ func listGitHubRepos(ctx context.Context, client *gh.Client, config githubVulner
 		opts := &gh.RepositoryListByAuthenticatedUserOptions{
 			ListOptions: gh.ListOptions{Page: page, PerPage: perPage},
 		}
+
 		if visibility := config.Visibility.String(); visibility != "" {
 			opts.Visibility = visibility
 		}
+
 		if affiliation := config.Affiliation.String(); affiliation != "" {
 			opts.Affiliation = affiliation
 		}
@@ -213,7 +246,7 @@ func listGitHubRepos(ctx context.Context, client *gh.Client, config githubVulner
 	return out, nil
 }
 
-// listDependabotAlerts fetches Dependabot alerts for a repository
+// listDependabotAlerts fetches Dependabot alerts for a repository.
 func listDependabotAlerts(ctx context.Context, client *gh.Client, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	owner, repository, err := splitGitHubRepository(repo)
 	if err != nil {
@@ -228,12 +261,15 @@ func listDependabotAlerts(ctx context.Context, client *gh.Client, repo string, c
 		opts := &gh.ListAlertsOptions{
 			ListOptions: gh.ListOptions{Page: page, PerPage: perPage},
 		}
+
 		if state != "" {
 			opts.State = lo.ToPtr(state)
 		}
+
 		if severity := config.Severity.String(); severity != "" {
 			opts.Severity = lo.ToPtr(severity)
 		}
+
 		if ecosystem := config.Ecosystem.String(); ecosystem != "" {
 			opts.Ecosystem = lo.ToPtr(ecosystem)
 		}
@@ -267,7 +303,7 @@ func listDependabotAlerts(ctx context.Context, client *gh.Client, repo string, c
 	return out, nil
 }
 
-// listCodeScanningAlerts fetches code scanning alerts for a repository
+// listCodeScanningAlerts fetches code scanning alerts for a repository.
 func listCodeScanningAlerts(ctx context.Context, client *gh.Client, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	owner, repository, err := splitGitHubRepository(repo)
 	if err != nil {
@@ -313,7 +349,7 @@ func listCodeScanningAlerts(ctx context.Context, client *gh.Client, repo string,
 	return out, nil
 }
 
-// listSecretScanningAlerts fetches secret scanning alerts for a repository
+// listSecretScanningAlerts fetches secret scanning alerts for a repository.
 func listSecretScanningAlerts(ctx context.Context, client *gh.Client, repo string, config githubVulnerabilityConfig) ([]json.RawMessage, error) {
 	owner, repository, err := splitGitHubRepository(repo)
 	if err != nil {
@@ -362,7 +398,7 @@ func listSecretScanningAlerts(ctx context.Context, client *gh.Client, repo strin
 // splitGitHubRepository parses owner/repo repository names.
 func splitGitHubRepository(value string) (string, string, error) {
 	parts := strings.SplitN(strings.TrimSpace(value), "/", githubRepositoryNameParts)
-	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+	if len(parts) != githubRepositoryNameParts || parts[0] == "" || parts[1] == "" {
 		return "", "", fmt.Errorf("%w: %q", ErrRepositoryInvalid, value)
 	}
 
@@ -372,6 +408,7 @@ func splitGitHubRepository(value string) (string, string, error) {
 // collectGitHubPaged iterates through paged GitHub API responses.
 func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page, perPage int) ([]T, *gh.Response, error), handle func([]T) error) error {
 	page := 1
+
 	for {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -394,14 +431,14 @@ func collectGitHubPaged[T any](ctx context.Context, perPage int, fetch func(page
 	}
 }
 
-// appendAlertEnvelopes wraps payloads into alert envelopes
+// appendAlertEnvelopes wraps payloads into alert envelopes.
 func appendAlertEnvelopes(envelopes []types.AlertEnvelope, alertType, resource string, payloads []json.RawMessage) []types.AlertEnvelope {
 	return append(envelopes, lo.Map(payloads, func(p json.RawMessage, _ int) types.AlertEnvelope {
 		return types.AlertEnvelope{AlertType: alertType, Resource: resource, Payload: p}
 	})...)
 }
 
-// repoNamesFromResponses builds full repo names from API responses
+// repoNamesFromResponses builds full repo names from API responses.
 func repoNamesFromResponses(repos []*gh.Repository, ownerFilter string) []string {
 	return lo.FilterMap(repos, func(repo *gh.Repository, _ int) (string, bool) {
 		if repo == nil {
@@ -424,6 +461,7 @@ func repoNamesFromResponses(repos []*gh.Repository, ownerFilter string) []string
 		if full == "" {
 			return "", false
 		}
+
 		if ownerFilter == "" {
 			return full, true
 		}
@@ -440,7 +478,7 @@ func repoNamesFromResponses(repos []*gh.Repository, ownerFilter string) []string
 // defaultAlertTypes lists every alert category collected when none is specified.
 var defaultAlertTypes = []string{githubAlertTypeDependabot, githubAlertTypeCodeScanning, githubAlertTypeSecretScanning}
 
-// alertTypesFromConfig normalizes and defaults the requested alert types
+// alertTypesFromConfig normalizes and defaults the requested alert types.
 func alertTypesFromConfig(values []types.LowerString) []string {
 	out := lo.Uniq(lo.FilterMap(values, func(value types.LowerString, _ int) (string, bool) {
 		normalized := normalizeAlertType(value.String())
@@ -454,7 +492,7 @@ func alertTypesFromConfig(values []types.LowerString) []string {
 	return out
 }
 
-// alertTypeRequested checks whether a specific alert type should be fetched
+// alertTypeRequested checks whether a specific alert type should be fetched.
 func alertTypeRequested(alertTypes []string, target string) bool {
 	if len(alertTypes) == 0 {
 		return true
@@ -470,10 +508,11 @@ func alertTypeRequested(alertTypes []string, target string) bool {
 	})
 }
 
-// normalizeAlertType standardizes alert type identifiers
+// normalizeAlertType standardizes alert type identifiers.
 func normalizeAlertType(value string) string {
 	value = strings.ReplaceAll(value, "-", "_")
 	value = strings.ReplaceAll(value, " ", "_")
+
 	switch value {
 	case "dependabot_alerts":
 		return githubAlertTypeDependabot

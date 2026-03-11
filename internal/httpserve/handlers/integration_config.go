@@ -8,7 +8,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
 	"github.com/theopenlane/core/internal/integrations/activation"
 	intauth "github.com/theopenlane/core/internal/integrations/auth"
@@ -20,7 +19,7 @@ import (
 
 // ConfigureIntegrationProvider stores non-OAuth credentials/configuration for a provider
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationConfigPayload, openapi.IntegrationConfigResponse{}, openapiCtx.Registry)
+	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationConfigPayload, IntegrationConfigResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -108,7 +107,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	out := openapi.IntegrationConfigResponse{
+	out := IntegrationConfigResponse{
 		Reply:    rout.Reply{Success: true},
 		Provider: string(providerType),
 	}

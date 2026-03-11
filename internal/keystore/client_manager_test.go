@@ -7,7 +7,6 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -19,7 +18,7 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := models.CredentialSet{AccessKeyID: "ak-1"}
+	payload := types.CredentialSet{AccessKeyID: "ak-1"}
 
 	source := &credentialSourceStub{getPayload: payload}
 
@@ -27,7 +26,7 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
+		Build: func(_ context.Context, cred types.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			buildCount.Add(1)
 			if cred.AccessKeyID == "" {
 				t.Fatalf("expected credential payload in builder")
@@ -78,7 +77,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := models.CredentialSet{APIToken: "token"}
+	payload := types.CredentialSet{APIToken: "token"}
 
 	manager, err := NewClientPoolManager(&credentialSourceStub{getPayload: payload}, nil)
 	if err != nil {
@@ -94,7 +93,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing provider",
 			descriptor: types.ClientDescriptor{
 				Name: types.ClientName("rest"),
-				Build: func(context.Context, models.CredentialSet, json.RawMessage) (types.ClientInstance, error) {
+				Build: func(context.Context, types.CredentialSet, json.RawMessage) (types.ClientInstance, error) {
 					return types.EmptyClientInstance(), nil
 				},
 			},
@@ -104,7 +103,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 			name: "missing name",
 			descriptor: types.ClientDescriptor{
 				Provider: provider,
-				Build: func(context.Context, models.CredentialSet, json.RawMessage) (types.ClientInstance, error) {
+				Build: func(context.Context, types.CredentialSet, json.RawMessage) (types.ClientInstance, error) {
 					return types.EmptyClientInstance(), nil
 				},
 			},
@@ -135,14 +134,14 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := models.CredentialSet{APIToken: "direct-token"}
+	payload := types.CredentialSet{APIToken: "direct-token"}
 
-	var captured models.CredentialSet
+	var captured types.CredentialSet
 	var capturedConfig json.RawMessage
 	descriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, cred models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
+		Build: func(_ context.Context, cred types.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			captured = cred
 			capturedConfig = config
 			return types.NewClientInstance(&pooledClient{id: cred.APIToken}), nil

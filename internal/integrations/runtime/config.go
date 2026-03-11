@@ -2,21 +2,21 @@ package runtime
 
 import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 )
 
 // Config carries all dependencies and settings for constructing the integrations runtime.
-// Provider credentials and settings are expressed through ProviderSpecs, which can be
-// overridden at deploy time via the integrationproviders config key (same mechanism used
-// for all providers, including OAuth clientId/clientSecret).
-// Registry may be provided directly to override the internal build; intended for tests.
+// Builders provides the set of provider builders used to construct the registry; when nil
+// the catalog defaults are used. Registry may be provided directly to bypass builder
+// construction entirely; intended for tests.
 type Config struct {
-	// ProviderSpecs contains the declarative provider configurations keyed by provider name.
+	// Builders is the list of provider builders used to initialize the registry.
+	// When nil, catalog.Builders with default (empty) operator config is used.
 	// Ignored when Registry is provided directly.
-	ProviderSpecs map[string]integrationconfig.ProviderSpec
-	// Registry optionally provides a pre-built registry, bypassing ProviderSpecs construction.
+	Builders []providers.Builder
+	// Registry optionally provides a pre-built registry, bypassing builder construction.
 	// Intended for test use only.
 	Registry *registry.Registry
 	// DB provides persistence for credentials and integration records.

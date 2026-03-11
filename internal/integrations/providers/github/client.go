@@ -8,16 +8,14 @@ import (
 	gh "github.com/google/go-github/v83/github"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
-	// ClientGitHubAPI identifies the GitHub REST API client.
+	// ClientGitHubAPI identifies the GitHub REST API client
 	ClientGitHubAPI types.ClientName = "api"
-	// ClientGitHubGraphQL identifies the GitHub GraphQL API client.
+	// ClientGitHubGraphQL identifies the GitHub GraphQL API client
 	ClientGitHubGraphQL types.ClientName = "graphql"
 )
 
@@ -44,10 +42,19 @@ func githubClientDescriptorsWithBaseURL(provider types.ProviderType, baseURL str
 	return descriptors
 }
 
+// oauthTokenFromCredential extracts the OAuth access token from a credential set.
+func oauthTokenFromCredential(credential types.CredentialSet) (string, error) {
+	if credential.OAuthAccessToken == "" {
+		return "", ErrOAuthTokenMissing
+	}
+
+	return credential.OAuthAccessToken, nil
+}
+
 // buildGitHubAPIClient returns a pooled client builder for the GitHub REST API.
 func buildGitHubAPIClient(baseURL string) types.ClientBuilderFunc {
-	return func(ctx context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
-		token, err := auth.OAuthTokenFromPayload(payload)
+	return func(ctx context.Context, credential types.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
+		token, err := oauthTokenFromCredential(credential)
 		if err != nil {
 			return types.EmptyClientInstance(), err
 		}
@@ -72,6 +79,7 @@ func newGitHubAPIClient(ctx context.Context, token string, baseURL string) (*gh.
 
 	client := gh.NewClient(httpClient)
 	normalizedBaseURL := strings.TrimRight(baseURL, "/")
+
 	if normalizedBaseURL == "" || normalizedBaseURL == githubAPIBaseURL {
 		return client, nil
 	}
@@ -106,7 +114,7 @@ func githubRESTClientForOperationWithBaseURL(ctx context.Context, input types.Op
 		return client, nil
 	}
 
-	token, err := auth.OAuthTokenFromPayload(input.Credential)
+	token, err := oauthTokenFromCredential(input.Credential)
 	if err != nil {
 		return nil, err
 	}

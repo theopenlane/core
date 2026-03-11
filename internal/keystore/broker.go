@@ -7,9 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -55,20 +53,20 @@ type cacheKey struct {
 // cachedCredential holds credential data, metadata, and cache expiry.
 type cachedCredential struct {
 	// credential contains cached credential fields.
-	credential models.CredentialSet
+	credential types.CredentialSet
 	// authKind stores persisted auth kind metadata.
 	authKind types.AuthKind
 	// providerState stores integration provider state used by environment credentials.
-	providerState *integrationstate.IntegrationProviderState
+	providerState *types.IntegrationProviderState
 	// expires specifies when this cache entry should be invalidated.
 	expires time.Time
 }
 
 // credentialSnapshot carries credential data with metadata for mint/persist decisions.
 type credentialSnapshot struct {
-	credential    models.CredentialSet
+	credential    types.CredentialSet
 	authKind      types.AuthKind
-	providerState *integrationstate.IntegrationProviderState
+	providerState *types.IntegrationProviderState
 }
 
 // NewBroker constructs a broker backed by the supplied store and provider registry.
@@ -87,14 +85,14 @@ func NewBroker(store *Store, reg *registry.Registry) (*Broker, error) {
 }
 
 // Get returns the latest credential set for the given org/provider pair (using cache when valid).
-func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderType) (models.CredentialSet, error) {
+func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialSet, error) {
 	if snapshot, ok := b.getCached(orgID, provider, ""); ok {
 		return snapshot.credential, nil
 	}
 
 	credential, authKind, providerState, err := b.store.LoadCredential(ctx, orgID, provider)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	b.setCached(orgID, provider, "", credentialSnapshot{
@@ -107,14 +105,14 @@ func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderT
 }
 
 // GetForIntegration returns credentials scoped to a specific integration record.
-func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (models.CredentialSet, error) {
+func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialSet, error) {
 	if snapshot, ok := b.getCached(orgID, provider, integrationID); ok {
 		return snapshot.credential, nil
 	}
 
 	providerInstance, err := b.lookupProvider(provider)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	if providerInstance.Capabilities().EnvironmentCredentials {
@@ -123,7 +121,7 @@ func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider t
 
 	credential, authKind, providerState, err := b.store.LoadCredentialForIntegration(ctx, orgID, provider, integrationID)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	b.setCached(orgID, provider, integrationID, credentialSnapshot{
@@ -136,15 +134,15 @@ func (b *Broker) GetForIntegration(ctx context.Context, orgID string, provider t
 }
 
 // Mint refreshes the stored credential via the provider and returns the updated credential set.
-func (b *Broker) Mint(ctx context.Context, orgID string, provider types.ProviderType) (models.CredentialSet, error) {
+func (b *Broker) Mint(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialSet, error) {
 	providerInstance, err := b.lookupProvider(provider)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	stored, err := b.loadProviderSnapshot(ctx, orgID, provider)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	minted, err := providerInstance.Mint(ctx, types.CredentialMintRequest{
@@ -154,14 +152,14 @@ func (b *Broker) Mint(ctx context.Context, orgID string, provider types.Provider
 		ProviderState: cloneProviderState(stored.providerState),
 	})
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	resolvedKind := normalizeMintedAuthKind(stored.authKind, minted)
 
 	persisted, err := b.store.SaveCredential(ctx, orgID, provider, resolvedKind, minted)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	b.setCached(orgID, provider, "", credentialSnapshot{
@@ -174,15 +172,15 @@ func (b *Broker) Mint(ctx context.Context, orgID string, provider types.Provider
 }
 
 // MintForIntegration refreshes and persists credentials scoped to a specific integration record.
-func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (models.CredentialSet, error) {
+func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialSet, error) {
 	providerInstance, err := b.lookupProvider(provider)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	stored, persistedCredential, err := b.loadIntegrationSubject(ctx, orgID, provider, integrationID)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	minted, err := providerInstance.Mint(ctx, types.CredentialMintRequest{
@@ -193,7 +191,7 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 		ProviderState: cloneProviderState(stored.providerState),
 	})
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	resolvedKind := normalizeMintedAuthKind(stored.authKind, minted)
@@ -210,7 +208,7 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 
 	persisted, err := b.store.SaveCredentialForIntegration(ctx, orgID, integrationID, provider, resolvedKind, minted)
 	if err != nil {
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	b.setCached(orgID, provider, integrationID, credentialSnapshot{
@@ -352,7 +350,7 @@ func (b *Broker) evictOldestLocked() {
 // cacheExpiry determines the cache expiry time based on OAuth expiry fields.
 // For credentials with OAuth expiry, the entry expires slightly before the token does (cacheSkew).
 // For credentials without expiry (API keys, service account metadata), a longer TTL is used.
-func cacheExpiry(credential models.CredentialSet, now func() time.Time) time.Time {
+func cacheExpiry(credential types.CredentialSet, now func() time.Time) time.Time {
 	if credential.OAuthExpiry != nil && !credential.OAuthExpiry.IsZero() {
 		expires := credential.OAuthExpiry.Add(-cacheSkew)
 		if expires.After(now()) {
@@ -363,7 +361,7 @@ func cacheExpiry(credential models.CredentialSet, now func() time.Time) time.Tim
 	return now().Add(nonExpiringCredentialTTL)
 }
 
-func normalizeMintedAuthKind(storedKind types.AuthKind, credential models.CredentialSet) types.AuthKind {
+func normalizeMintedAuthKind(storedKind types.AuthKind, credential types.CredentialSet) types.AuthKind {
 	normalized := storedKind.Normalize()
 	if normalized != types.AuthKindUnknown {
 		return normalized
@@ -372,12 +370,12 @@ func normalizeMintedAuthKind(storedKind types.AuthKind, credential models.Creden
 	return types.InferAuthKind(credential)
 }
 
-func cloneProviderState(state *integrationstate.IntegrationProviderState) *integrationstate.IntegrationProviderState {
+func cloneProviderState(state *types.IntegrationProviderState) *types.IntegrationProviderState {
 	if state == nil {
 		return nil
 	}
 
-	cloned := integrationstate.IntegrationProviderState{}
+	cloned := types.IntegrationProviderState{}
 	if len(state.Providers) > 0 {
 		cloned.Providers = make(map[string]json.RawMessage, len(state.Providers))
 		for key, value := range state.Providers {

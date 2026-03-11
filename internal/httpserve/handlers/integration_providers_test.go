@@ -1,3 +1,5 @@
+//go:build test
+
 package handlers_test
 
 import (
@@ -12,8 +14,8 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -24,7 +26,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	op.OperationID = "ListIntegrationProviders"
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
-	specs := map[types.ProviderType]config.ProviderSpec{
+	specs := map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	}
 	restore := suite.withIntegrationRegistry(t, specs)
@@ -37,10 +39,10 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	suite.e.ServeHTTP(rec, req)
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.IntegrationProvidersResponse
+	var resp handlers.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	providersByName := make(map[string]models.IntegrationProviderMetadata)
+	providersByName := make(map[string]types.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
 		providersByName[provider.Name] = provider
 	}
@@ -63,7 +65,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 	op.OperationID = "ListIntegrationProvidersMultiple"
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
-	specs := map[types.ProviderType]config.ProviderSpec{
+	specs := map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 		types.ProviderType("github"): {
 			Name:             "github",
@@ -76,7 +78,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 			Active:           lo.ToPtr(true),
 			Visible:          lo.ToPtr(true),
 			Tags:             []string{"code", "github"},
-			OAuth: &config.OAuthSpec{
+			OAuth: &integrationspec.OAuthSpec{
 				ClientID:     "test-client",
 				ClientSecret: "test-secret",
 				AuthURL:      "https://github.com/login/oauth/authorize",
@@ -96,11 +98,11 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 	suite.e.ServeHTTP(rec, req)
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.IntegrationProvidersResponse
+	var resp handlers.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	providerNames := make(map[string]bool)
-	providersByName := make(map[string]models.IntegrationProviderMetadata)
+	providersByName := make(map[string]types.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
 		providerNames[provider.Name] = true
 		providersByName[provider.Name] = provider
@@ -120,7 +122,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersSingleProvider() {
 	op.OperationID = "ListIntegrationProvidersSingle"
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
-	specs := map[types.ProviderType]config.ProviderSpec{
+	specs := map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	}
 	restore := suite.withIntegrationRegistry(t, specs)
@@ -133,7 +135,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersSingleProvider() {
 	suite.e.ServeHTTP(rec, req)
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.IntegrationProvidersResponse
+	var resp handlers.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 
@@ -163,7 +165,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	inactiveSpec.Active = lo.ToPtr(false)
 	inactiveSpec.Visible = lo.ToPtr(true)
 
-	specs := map[types.ProviderType]config.ProviderSpec{
+	specs := map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"):            activeSpec,
 		types.ProviderType("inactive_provider"): inactiveSpec,
 	}
@@ -177,11 +179,11 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	suite.e.ServeHTTP(rec, req)
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.IntegrationProvidersResponse
+	var resp handlers.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 
-	providersByName := make(map[string]models.IntegrationProviderMetadata)
+	providersByName := make(map[string]types.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
 		providersByName[provider.Name] = provider
 	}
@@ -202,7 +204,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInst
 	op.OperationID = "ListIntegrationProvidersGitHubAppMetadata"
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", op, suite.h.ListIntegrationProviders)
 
-	specs := map[types.ProviderType]config.ProviderSpec{
+	specs := map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("githubapp"): {
 			Name:             "githubapp",
 			DisplayName:      "GitHub App",
@@ -213,10 +215,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInst
 			AuthCallbackPath: "/v1/integrations/github/app/callback",
 			Active:           lo.ToPtr(true),
 			Visible:          lo.ToPtr(true),
-			GitHubApp: &config.GitHubAppSpec{
-				BaseURL: "https://api.github.com",
-				AppSlug: "openlane-test-app",
-			},
+			ProviderConfig:   json.RawMessage(`{"baseurl":"https://api.github.com","appslug":"openlane-test-app"}`),
 		},
 	}
 	restore := suite.withIntegrationRegistry(t, specs)
@@ -229,11 +228,11 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesGitHubAppInst
 	suite.e.ServeHTTP(rec, req)
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.IntegrationProvidersResponse
+	var resp handlers.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 
-	var githubAppProvider *models.IntegrationProviderMetadata
+	var githubAppProvider *types.IntegrationProviderMetadata
 	for i := range resp.Providers {
 		if resp.Providers[i].Name == "githubapp" {
 			githubAppProvider = &resp.Providers[i]

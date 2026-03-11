@@ -2,7 +2,6 @@ package awskit
 
 import (
 	"context"
-	"encoding/json"
 	"time"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
@@ -12,114 +11,120 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
-	// AWSAccountScopeAll indicates operations should run across all accessible accounts.
-	AWSAccountScopeAll = "all"
-	// AWSAccountScopeSpecific indicates operations should be limited to explicitly listed accounts.
-	AWSAccountScopeSpecific = "specific"
+	// AccountScopeAll indicates operations should run across all accessible accounts
+	AccountScopeAll = "all"
+	// AccountScopeSpecific indicates operations should be limited to explicitly listed accounts
+	AccountScopeSpecific = "specific"
 )
 
-// awsProviderData holds AWS provider data fields used for authentication.
+// awsProviderData holds AWS provider data fields used for authentication
 type awsProviderData struct {
-	// Region is the AWS region for API calls.
+	// Region is the AWS region for API calls
 	Region types.TrimmedString `json:"region"`
-	// HomeRegion is the Security Hub home region for aggregated queries.
+	// HomeRegion is the Security Hub home region for aggregated queries
 	HomeRegion types.TrimmedString `json:"homeRegion"`
-	// LinkedRegions optionally limits queries to the listed regions.
+	// LinkedRegions optionally limits queries to the listed regions
 	LinkedRegions []string `json:"linkedRegions"`
-	// OrganizationID is the AWS Organizations identifier associated with this integration.
+	// OrganizationID is the AWS Organizations identifier associated with this integration
 	OrganizationID types.TrimmedString `json:"organizationId"`
-	// AccountScope controls whether queries should use all accounts or a provided subset.
+	// AccountScope controls whether queries should use all accounts or a provided subset
 	AccountScope types.LowerString `json:"accountScope"`
-	// AccountIDs optionally scopes collection to specific AWS account IDs.
+	// AccountIDs optionally scopes collection to specific AWS account IDs
 	AccountIDs []string `json:"accountIds"`
-	// RoleARN is the ARN of the role to assume.
+	// RoleARN is the ARN of the role to assume
 	RoleARN types.TrimmedString `json:"roleArn"`
-	// AccountID is the AWS account ID.
+	// AccountID is the AWS account ID
 	AccountID types.TrimmedString `json:"accountId"`
-	// ExternalID is the external ID for role assumption.
+	// ExternalID is the external ID for role assumption
 	ExternalID types.TrimmedString `json:"externalId"`
-	// SessionName is the name for the session.
+	// SessionName is the name for the session
 	SessionName types.TrimmedString `json:"sessionName"`
-	// SessionDuration is the duration for the session.
+	// SessionDuration is the duration for the session
 	SessionDuration types.TrimmedString `json:"sessionDuration"`
-	// AccessKeyID is the AWS access key ID.
+	// AccessKeyID is the AWS access key ID
 	AccessKeyID types.TrimmedString `json:"accessKeyId"`
-	// SecretAccessKey is the AWS secret access key.
+	// SecretAccessKey is the AWS secret access key
 	SecretAccessKey types.TrimmedString `json:"secretAccessKey"`
-	// SessionToken is the AWS session token.
+	// SessionToken is the AWS session token
 	SessionToken types.TrimmedString `json:"sessionToken"`
 }
 
-// AWSMetadata captures common AWS configuration fields stored in provider metadata.
-type AWSMetadata struct {
-	// Region is the AWS region for API calls.
+// Metadata captures common AWS configuration fields stored in provider metadata
+type Metadata struct {
+	// Region is the AWS region for API calls
 	Region string
-	// HomeRegion is the Security Hub home region for aggregated queries.
+	// HomeRegion is the Security Hub home region for aggregated queries
 	HomeRegion string
-	// LinkedRegions optionally limits queries to the listed regions.
+	// LinkedRegions optionally limits queries to the listed regions
 	LinkedRegions []string
-	// OrganizationID is the AWS Organizations identifier associated with this integration.
+	// OrganizationID is the AWS Organizations identifier associated with this integration
 	OrganizationID string
-	// AccountScope controls whether queries should use all accounts or a provided subset.
+	// AccountScope controls whether queries should use all accounts or a provided subset
 	AccountScope string
-	// AccountIDs optionally scopes collection to specific AWS account IDs.
+	// AccountIDs optionally scopes collection to specific AWS account IDs
 	AccountIDs []string
-	// RoleARN is the ARN of the role to assume.
+	// RoleARN is the ARN of the role to assume
 	RoleARN string
-	// AccountID is the AWS account ID.
+	// AccountID is the AWS account ID
 	AccountID string
-	// ExternalID is the external ID for role assumption.
+	// ExternalID is the external ID for role assumption
 	ExternalID string
-	// SessionName is the name for the session.
+	// SessionName is the name for the session
 	SessionName string
-	// SessionDuration is the duration for the session.
+	// SessionDuration is the duration for the session
 	SessionDuration time.Duration
-}
-
-// AWSAssumeRole captures the optional STS assume-role settings.
-type AWSAssumeRole struct {
-	// RoleARN is the ARN of the role to assume.
-	RoleARN string
-	// ExternalID is the external ID for role assumption.
-	ExternalID string
-	// SessionName is the name for the session.
-	SessionName string
-	// SessionDuration is the duration for the session.
-	SessionDuration time.Duration
-}
-
-// AWSCredentials captures static AWS access key credentials.
-type AWSCredentials struct {
-	// AccessKeyID is the AWS access key ID.
+	// AccessKeyID is the AWS access key ID
 	AccessKeyID string
-	// SecretAccessKey is the AWS secret access key.
+	// SecretAccessKey is the AWS secret access key
 	SecretAccessKey string
-	// SessionToken is the AWS session token.
+	// SessionToken is the AWS session token
 	SessionToken string
 }
 
-// AWSMetadataFromProviderData normalizes AWS metadata with a default session name.
-func AWSMetadataFromProviderData(providerData json.RawMessage, defaultSessionName string) (AWSMetadata, error) {
+// AssumeRole captures the optional STS assume-role settings
+type AssumeRole struct {
+	// RoleARN is the ARN of the role to assume
+	RoleARN string
+	// ExternalID is the external ID for role assumption
+	ExternalID string
+	// SessionName is the name for the session
+	SessionName string
+	// SessionDuration is the duration for the session
+	SessionDuration time.Duration
+}
+
+// Credentials captures static AWS access key credentials
+type Credentials struct {
+	// AccessKeyID is the AWS access key ID
+	AccessKeyID string
+	// SecretAccessKey is the AWS secret access key
+	SecretAccessKey string
+	// SessionToken is the AWS session token
+	SessionToken string
+}
+
+// MetadataFromProviderData normalizes AWS metadata from a CredentialSet's ProviderData field,
+// applying a default session name when one is not present in the stored data
+func MetadataFromProviderData(providerData []byte, defaultSessionName string) (Metadata, error) {
 	var decoded awsProviderData
 	if err := jsonx.UnmarshalIfPresent(providerData, &decoded); err != nil {
-		return AWSMetadata{}, err
+		return Metadata{}, err
 	}
 
 	region := lo.CoalesceOrEmpty(decoded.Region.String(), decoded.HomeRegion.String())
 	homeRegion := lo.CoalesceOrEmpty(decoded.HomeRegion.String(), region)
 	sessionName := lo.CoalesceOrEmpty(decoded.SessionName.String(), defaultSessionName)
-	accountScope := lo.CoalesceOrEmpty(decoded.AccountScope.String(), AWSAccountScopeAll)
+	accountScope := lo.CoalesceOrEmpty(decoded.AccountScope.String(), AccountScopeAll)
 
 	linkedRegions := types.NormalizeStringSlice(decoded.LinkedRegions)
 	accountIDs := types.NormalizeStringSlice(decoded.AccountIDs)
 
-	return AWSMetadata{
+	return Metadata{
 		Region:          region,
 		HomeRegion:      homeRegion,
 		LinkedRegions:   linkedRegions,
@@ -131,20 +136,23 @@ func AWSMetadataFromProviderData(providerData json.RawMessage, defaultSessionNam
 		ExternalID:      decoded.ExternalID.String(),
 		SessionName:     sessionName,
 		SessionDuration: ParseDuration(decoded.SessionDuration.String()),
+		AccessKeyID:     decoded.AccessKeyID.String(),
+		SecretAccessKey: decoded.SecretAccessKey.String(),
+		SessionToken:    decoded.SessionToken.String(),
 	}, nil
 }
 
-// AWSCredentialsFromPayload extracts access keys from typed credential fields.
-func AWSCredentialsFromPayload(payload models.CredentialSet) AWSCredentials {
-	return AWSCredentials{
-		AccessKeyID:     payload.AccessKeyID,
-		SecretAccessKey: payload.SecretAccessKey,
-		SessionToken:    payload.SessionToken,
+// CredentialsFromMetadata extracts static credential fields from a parsed Metadata struct
+func CredentialsFromMetadata(meta Metadata) Credentials {
+	return Credentials{
+		AccessKeyID:     meta.AccessKeyID,
+		SecretAccessKey: meta.SecretAccessKey,
+		SessionToken:    meta.SessionToken,
 	}
 }
 
-// BuildAWSConfig constructs an AWS SDK config with optional static and assumed credentials.
-func BuildAWSConfig(ctx context.Context, region string, creds AWSCredentials, assume AWSAssumeRole) (awssdk.Config, error) {
+// BuildAWSConfig constructs an AWS SDK config with optional static and assumed credentials
+func BuildAWSConfig(ctx context.Context, region string, creds Credentials, assume AssumeRole) (awssdk.Config, error) {
 	opts := []func(*config.LoadOptions) error{
 		config.WithRegion(region),
 	}
@@ -178,7 +186,7 @@ func BuildAWSConfig(ctx context.Context, region string, creds AWSCredentials, as
 	return cfg, nil
 }
 
-// ParseDuration parses a duration string and returns 0 when empty or invalid.
+// ParseDuration parses a duration string and returns 0 when empty or invalid
 func ParseDuration(value string) time.Duration {
 	if value == "" {
 		return 0

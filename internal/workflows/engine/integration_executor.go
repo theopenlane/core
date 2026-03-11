@@ -570,7 +570,6 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 					OperationConfig:   operationConfig,
 					MappingIndex:      e.integrationMappingIndex,
 					Envelopes:         batch.Envelopes,
-					DB:                e.client,
 				})
 
 				metricsDoc = appendIngestMetrics(metricsDoc, batch.Schema, ingestResult)

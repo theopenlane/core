@@ -1,15 +1,16 @@
-package types //nolint:revive
+package types
 
 import "errors"
 
 var (
-	// ErrProviderTypeRequired indicates a required provider identifier was missing.
-	ErrProviderTypeRequired = errors.New("integrations/types: provider type required")
-
-	// ErrCredentialSetRequired signals that no credential set was provided where required.
-	ErrCredentialSetRequired = errors.New("integrations/types: credential set required")
-
-	// ErrCredentialMetadataInvalid indicates provider metadata could not be marshaled
-	// or unmarshaled into canonical JSON/map form.
-	ErrCredentialMetadataInvalid = errors.New("integrations/types: credential metadata invalid")
+	// ErrIngestOrgIDRequired is returned when the organization id is missing from an ingest request
+	ErrIngestOrgIDRequired = errors.New("ingest: org id required")
+	// ErrIngestIntegrationRequired is returned when the integration id is missing from an ingest request
+	ErrIngestIntegrationRequired = errors.New("ingest: integration id required")
+	// ErrIngestProviderUnknown is returned when the provider type is unknown in an ingest request
+	ErrIngestProviderUnknown = errors.New("ingest: provider unknown")
+	// ErrIngestOperationRequired is returned when the operation name is missing from an ingest request
+	ErrIngestOperationRequired = errors.New("ingest: operation required")
+	// ErrProviderStateDecode is returned when provider state decoding fails
+	ErrProviderStateDecode = errors.New("integration state provider decode failed")
 )

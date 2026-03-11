@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 type APIToken struct {
@@ -7110,7 +7111,7 @@ type CreateHushInput struct {
 	// the secret value
 	SecretValue *string `json:"secretValue,omitempty"`
 	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
+	CredentialSet *integrationtypes.CredentialSet `json:"credentialSet,omitempty"`
 	// additional metadata about the credential
 	Metadata   map[string]any `json:"metadata,omitempty"`
 	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
@@ -18386,7 +18387,7 @@ type Hush struct {
 	// the generic name of a secret associated with the organization
 	SecretName *string `json:"secretName,omitempty"`
 	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
+	CredentialSet *integrationtypes.CredentialSet `json:"credentialSet,omitempty"`
 	// additional metadata about the credential
 	Metadata   map[string]any `json:"metadata,omitempty"`
 	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
@@ -40385,7 +40386,7 @@ type UpdateHushInput struct {
 	Kind      *string `json:"kind,omitempty"`
 	ClearKind *bool   `json:"clearKind,omitempty"`
 	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet      *models.CredentialSet `json:"credentialSet,omitempty"`
+	CredentialSet      *integrationtypes.CredentialSet `json:"credentialSet,omitempty"`
 	ClearCredentialSet *bool                 `json:"clearCredentialSet,omitempty"`
 	// additional metadata about the credential
 	Metadata        map[string]any `json:"metadata,omitempty"`

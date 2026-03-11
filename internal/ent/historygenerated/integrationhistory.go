@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
-	"github.com/theopenlane/core/internal/integrations/state"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+
 	"github.com/theopenlane/entx/history"
 )
 
@@ -71,11 +71,11 @@ type IntegrationHistory struct {
 	// optional platform associated with this integration for downstream inventory linkage
 	PlatformID string `json:"platform_id,omitempty"`
 	// cached provider metadata for UI and registry access
-	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
+	ProviderMetadata integrationtypes.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// runtime configuration for operations, scheduling, and mappings
-	Config openapi.IntegrationConfig `json:"config,omitempty"`
+	Config integrationtypes.IntegrationConfig `json:"config,omitempty"`
 	// provider-specific integration state captured during auth/config
-	ProviderState state.IntegrationProviderState `json:"provider_state,omitempty"`
+	ProviderState integrationtypes.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// the canonical definition identifier for the installation

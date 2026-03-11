@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/common/models"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -59,7 +59,7 @@ type HushHistory struct {
 	// the secret value
 	SecretValue string `json:"-"`
 	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet models.CredentialSet `json:"credential_set,omitempty"`
+	CredentialSet integrationtypes.CredentialSet `json:"credential_set,omitempty"`
 	// additional metadata about the credential
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// LastUsedAt holds the value of the "last_used_at" field.

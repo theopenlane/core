@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -44,7 +43,7 @@ func TestBeginAuthorizationClonesRequestDataAndSetsTTL(t *testing.T) {
 		providerType: providerType,
 		state:        "state-1",
 		authURL:      "https://example.com/auth",
-		payload:      models.CredentialSet{OAuthAccessToken: "token-1"},
+		payload:      types.CredentialSet{OAuthAccessToken: "token-1"},
 	}
 
 	store := &recordingAuthStateStore{}
@@ -270,7 +269,7 @@ func TestCompleteAuthorizationSessionErrors(t *testing.T) {
 					act.AuthSession = &fakeAuthSession{
 						provider: providerType,
 						state:    act.State,
-						payload:  models.CredentialSet{},
+						payload:  types.CredentialSet{},
 					}
 					return act
 				}(),

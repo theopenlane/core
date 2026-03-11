@@ -8,16 +8,14 @@ import (
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // githubHeaderTransport injects static headers into outgoing GitHub requests.
 type githubHeaderTransport struct {
-	// next is the wrapped transport.
+	// next is the wrapped transport
 	next http.RoundTripper
-	// headers are the static headers to apply.
+	// headers are the static headers to apply
 	headers map[string]string
 }
 
@@ -40,8 +38,8 @@ func (t githubHeaderTransport) RoundTrip(req *http.Request) (*http.Response, err
 
 // buildGitHubGraphQLClient returns a pooled client builder for the GitHub GraphQL API.
 func buildGitHubGraphQLClient() types.ClientBuilderFunc {
-	return func(ctx context.Context, payload models.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
-		token, err := auth.OAuthTokenFromPayload(payload)
+	return func(ctx context.Context, credential types.CredentialSet, _ json.RawMessage) (types.ClientInstance, error) {
+		token, err := oauthTokenFromCredential(credential)
 		if err != nil {
 			return types.EmptyClientInstance(), err
 		}

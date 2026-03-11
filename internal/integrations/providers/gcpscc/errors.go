@@ -3,7 +3,7 @@ package gcpscc
 import "errors"
 
 var (
-	// ErrAuthTypeMismatch indicates the provider spec specifies an incompatible auth type.
+	// ErrAuthTypeMismatch indicates the provider spec specifies an incompatible auth type
 	ErrAuthTypeMismatch = errors.New("gcpscc: auth type mismatch")
 	// ErrSecurityCenterClientRequired indicates the security center client was not provided or is invalid
 	ErrSecurityCenterClientRequired = errors.New("gcpscc: security center client required")
@@ -17,7 +17,7 @@ var (
 	ErrSourceIDRequired = errors.New("gcpscc: sourceId required")
 	// ErrCredentialMetadataRequired indicates provider metadata is missing
 	ErrCredentialMetadataRequired = errors.New("gcpscc: provider metadata required")
-	// ErrAccessTokenMissing indicates the oauth token is missing from the credential payload
+	// ErrAccessTokenMissing indicates the oauth token is missing from the credential set
 	ErrAccessTokenMissing = errors.New("gcpscc: oauth token missing from credential payload")
 	// ErrServiceAccountKeyInvalid indicates the service account key is invalid
 	ErrServiceAccountKeyInvalid = errors.New("gcpscc: service account key invalid")

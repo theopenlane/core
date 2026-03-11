@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/elimity-com/scim"
+	"github.com/samber/lo"
 )
 
 // UserAttributes holds extracted and validated SCIM user attributes
@@ -262,15 +263,5 @@ func extractMemberIDsFromValue(value any) []string {
 		memberIDs = append(memberIDs, memberID)
 	}
 
-	seen := make(map[string]bool)
-	unique := make([]string, 0, len(memberIDs))
-
-	for _, id := range memberIDs {
-		if !seen[id] {
-			seen[id] = true
-			unique = append(unique, id)
-		}
-	}
-
-	return unique
+	return lo.Uniq(memberIDs)
 }

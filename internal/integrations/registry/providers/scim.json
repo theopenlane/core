@@ -1,0 +1,15 @@
+{
+  "name": "scim",
+  "displayName": "SCIM 2.0",
+  "category": "identity",
+  "authType": "none",
+  "active": true,
+  "visible": true,
+  "logoUrl": "",
+  "docsUrl": "https://docs.theopenlane.io/docs/platform/integrations/scim/overview",
+  "tags": ["scim", "provisioning", "identity"],
+  "labels": {
+    "protocol": "scim2"
+  },
+  "description": "Enable SCIM 2.0 push-based provisioning so external identity providers can sync users and groups into Openlane."
+}

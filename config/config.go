@@ -28,7 +28,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -83,7 +83,7 @@ type Config struct {
 	// Slack contains settings for Slack notifications
 	Slack Slack `json:"slack" koanf:"slack"`
 	// IntegrationProviders contains provider spec overrides keyed by provider name.
-	IntegrationProviders map[string]integrationconfig.ProviderSpec `json:"integrationproviders" koanf:"integrationproviders"`
+	IntegrationProviders map[string]integrationspec.ProviderSpec `json:"integrationproviders" koanf:"integrationproviders"`
 	// IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication.
 	IntegrationSuccessRedirectURL string `json:"integrationsuccessredirecturl" koanf:"integrationsuccessredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
 	// Workflows contains the configuration for the workflows engine

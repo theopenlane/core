@@ -4,7 +4,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -79,8 +78,8 @@ func TestBrokerSetCachedEvictsOldestWhenCapacityReached(t *testing.T) {
 	}
 }
 
-func credentialWithExpiry(expiry time.Time, token string) models.CredentialSet {
-	payload := models.CredentialSet{
+func credentialWithExpiry(expiry time.Time, token string) types.CredentialSet {
+	payload := types.CredentialSet{
 		APIToken:         token,
 		OAuthAccessToken: token,
 	}

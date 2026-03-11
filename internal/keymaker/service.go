@@ -7,7 +7,6 @@ import (
 	"maps"
 	"time"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -23,8 +22,8 @@ type ProviderResolver interface {
 
 // CredentialWriter persists credential payloads produced during activation
 type CredentialWriter interface {
-	SaveCredential(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error)
-	SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error)
+	SaveCredential(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet) (types.CredentialSet, error)
+	SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet) (types.CredentialSet, error)
 }
 
 // ServiceOptions configure optional service behaviors
@@ -129,7 +128,7 @@ type CompleteResult struct {
 	// IntegrationID identifies the integration record containing the credential
 	IntegrationID string
 	// Credential contains the persisted credential payload
-	Credential models.CredentialSet
+	Credential types.CredentialSet
 }
 
 // BeginAuthorization starts an OAuth/OIDC transaction with the requested provider
@@ -217,7 +216,7 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 
 	authKind := types.InferAuthKind(credential)
 
-	saveFn := func() (models.CredentialSet, error) {
+	saveFn := func() (types.CredentialSet, error) {
 		if authState.IntegrationID != "" {
 			return s.keystore.SaveCredentialForIntegration(ctx, authState.OrgID, authState.IntegrationID, authState.Provider, authKind, credential)
 		}

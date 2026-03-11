@@ -17,7 +17,6 @@ func WithIntegrationRuntime(dbClient *ent.Client) ServerOption {
 		}
 
 		rt, err := integrationruntime.New(integrationruntime.Config{
-			ProviderSpecs:      s.Config.Settings.IntegrationProviders,
 			DB:                 dbClient,
 			SuccessRedirectURL: s.Config.Settings.IntegrationSuccessRedirectURL,
 		})

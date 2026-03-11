@@ -136,7 +136,7 @@ models:
       - github.com/theopenlane/core/common/models.AuditLogOrderField
   CredentialSet:
     model:
-      - github.com/theopenlane/core/common/models.CredentialSet
+      - github.com/theopenlane/core/internal/integrations/types.CredentialSet
   SearchContext:
     model:
       - github.com/theopenlane/core/common/models.SearchContext

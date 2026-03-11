@@ -7,8 +7,8 @@ import (
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 
-	"github.com/theopenlane/core/internal/integrations/operations"
-	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -24,30 +24,31 @@ type awsHealthDetails struct {
 
 // awsHealthOperation builds the AWS health operation descriptor
 func awsHealthOperation() types.OperationDescriptor {
-	return operations.HealthOperation(awsHealthDefault, "Validate AWS access via STS GetCallerIdentity.", "", runAWSHealth)
+	return providerkit.HealthOperation(awsHealthDefault, "Validate AWS access via STS GetCallerIdentity.", "", runAWSHealth)
 }
 
-// runAWSHealth validates credentials using STS GetCallerIdentity.
+// runAWSHealth validates credentials using STS GetCallerIdentity
 func runAWSHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	meta, err := awsMetadataFromPayload(input.Credential, awsDefaultSession)
+	meta, err := awsMetadataFromCredential(input.Credential, awsDefaultSession)
 	if err != nil {
 		return types.OperationResult{}, err
 	}
 
-	cfg, err := awskit.BuildAWSConfig(ctx, meta.Region, awskit.AWSCredentialsFromPayload(input.Credential), awskit.AWSAssumeRole{
+	cfg, err := awskit.BuildAWSConfig(ctx, meta.Region, awskit.CredentialsFromMetadata(meta), awskit.AssumeRole{
 		RoleARN:         meta.RoleARN,
 		ExternalID:      meta.ExternalID,
 		SessionName:     meta.SessionName,
 		SessionDuration: meta.SessionDuration,
 	})
 	if err != nil {
-		return operations.OperationFailure("AWS config build failed", err, nil)
+		return providerkit.OperationFailure("AWS config build failed", err, nil)
 	}
 
 	client := sts.NewFromConfig(cfg)
+
 	resp, err := client.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
-		return operations.OperationFailure("AWS STS GetCallerIdentity failed", err, nil)
+		return providerkit.OperationFailure("AWS STS GetCallerIdentity failed", err, nil)
 	}
 
 	accountID := awssdk.ToString(resp.Account)
@@ -55,12 +56,15 @@ func runAWSHealth(ctx context.Context, input types.OperationInput) (types.Operat
 		Region:  meta.Region,
 		RoleArn: meta.RoleARN,
 	}
+
 	if accountID != "" {
 		details.AccountID = accountID
 	}
+
 	if arn := awssdk.ToString(resp.Arn); arn != "" {
 		details.ARN = arn
 	}
+
 	if userID := awssdk.ToString(resp.UserId); userID != "" {
 		details.UserID = userID
 	}
@@ -70,5 +74,5 @@ func runAWSHealth(ctx context.Context, input types.OperationInput) (types.Operat
 		summary = fmt.Sprintf("AWS credentials verified for account %s", accountID)
 	}
 
-	return operations.OperationSuccess(summary, details), nil
+	return providerkit.OperationSuccess(summary, details), nil
 }

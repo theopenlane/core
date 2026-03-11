@@ -11,6 +11,7 @@ func (r *Registry) ResolveOperation(provider types.ProviderType, operationName t
 	if provider == types.ProviderUnknown {
 		return types.OperationDescriptor{}, ErrProviderTypeRequired
 	}
+
 	if operationName == "" && operationKind == "" {
 		return types.OperationDescriptor{}, ErrOperationCriteriaRequired
 	}
@@ -27,6 +28,7 @@ func (r *Registry) ResolveOperation(provider types.ProviderType, operationName t
 	matches := lo.Filter(descriptors, func(descriptor types.OperationDescriptor, _ int) bool {
 		return descriptor.Kind == operationKind
 	})
+
 	switch len(matches) {
 	case 0:
 		return types.OperationDescriptor{}, ErrOperationNotRegistered
@@ -37,10 +39,12 @@ func (r *Registry) ResolveOperation(provider types.ProviderType, operationName t
 	}
 }
 
+// resolveOperationByName resolves an operation descriptor by name with optional kind constraint
 func resolveOperationByName(descriptors []types.OperationDescriptor, operationName types.OperationName, operationKind types.OperationKind) (types.OperationDescriptor, error) {
 	matches := lo.Filter(descriptors, func(descriptor types.OperationDescriptor, _ int) bool {
 		return descriptor.Name == operationName
 	})
+
 	switch len(matches) {
 	case 0:
 		return types.OperationDescriptor{}, ErrOperationNotRegistered

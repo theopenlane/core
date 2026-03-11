@@ -1,2 +1,4 @@
-// Package activation is an intentionally separate package from keymaker / keystore that keeps roles between the packages tidy by focusing on activation-specific logic for non-oauth / OIDC providers
+// Package activation coordinates non-OAuth provider configuration and health validation.
+// It is intentionally separate from keymaker and keystore to keep roles between packages
+// tidy by focusing on activation-specific logic for non-OAuth / OIDC providers.
 package activation

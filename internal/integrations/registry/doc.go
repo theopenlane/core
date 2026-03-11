@@ -1,2 +1,2 @@
-// Package registry wires provider specifications into runtime provider instances
+// Package registry loads provider specs and builds the integration provider registry.
 package registry
