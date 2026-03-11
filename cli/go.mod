@@ -24,7 +24,7 @@ require (
 	github.com/theopenlane/iam v0.26.0
 	github.com/theopenlane/utils v0.7.0
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/term v0.40.0
+	golang.org/x/term v0.41.0
 )
 
 require (
@@ -103,7 +103,7 @@ require (
 	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
