@@ -36,9 +36,10 @@ func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {
 
 	ids, err := RegisterGalaTrustCenterCacheListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, 9)
+	require.Len(t, ids, 10)
 
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenterDoc), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenterFAQ), ent.OpCreate.String()))
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenter), eventqueue.SoftDeleteOne))
 }
 
