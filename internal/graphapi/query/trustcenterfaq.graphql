@@ -123,10 +123,15 @@ query GetTrustCenterFAQByID($trustCenterFAQId: ID!) {
     createdBy
     displayOrder
     id
+    noteID
     referenceLink
     trustCenterID
     updatedAt
     updatedBy
+    note {
+      text
+      title
+    }
   }
 }
 

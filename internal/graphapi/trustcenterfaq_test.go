@@ -167,7 +167,7 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note1 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	note1 := (&NoteBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser.UserCtx, t)
 
 	createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note1.ID,
@@ -180,7 +180,7 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 
 	// create faq for a different org
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	note2 := (&NoteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	note2 := (&NoteBuilder{client: suite.client, TrustCenterID: trustCenter2.ID}).MustNew(testUser2.UserCtx, t)
 
 	createResp2, err := suite.client.api.CreateTrustCenterFaq(testUser2.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note2.ID,

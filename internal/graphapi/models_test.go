@@ -337,9 +337,10 @@ type NoteBuilder struct {
 	client *client
 
 	// Fields
-	Text    string
-	TaskID  string
-	FileIDs []string
+	Text           string
+	TaskID         string
+	FileIDs        []string
+	TrustCenterID  string
 }
 
 type ControlImplementationBuilder struct {
@@ -1511,6 +1512,10 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 
 	if len(n.FileIDs) > 0 {
 		mutation.AddFileIDs(n.FileIDs...)
+	}
+
+	if n.TrustCenterID != "" {
+		mutation.SetTrustCenterID(n.TrustCenterID)
 	}
 
 	note, err := mutation.Save(ctx)
