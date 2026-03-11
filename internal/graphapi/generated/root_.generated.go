@@ -119382,6 +119382,7 @@ Properties by which TrustCenterFAQ connections can be ordered.
 enum TrustCenterFAQOrderField {
   created_at
   updated_at
+  DISPLAY_ORDER
 }
 """
 TrustCenterFAQWhereInput is used for filtering TrustCenterFAQ objects.
