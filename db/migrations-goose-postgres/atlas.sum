@@ -1,4 +1,4 @@
-h1:YtZkBOsevB5Mw7WI9ICA2wfEtB+AvMAIDXl6OkOuXWQ=
+h1:u158SuwZYVcHu8XieU+pNJx1LmI/FEjDj661CZypDng=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -64,3 +64,4 @@ h1:YtZkBOsevB5Mw7WI9ICA2wfEtB+AvMAIDXl6OkOuXWQ=
 20260302211224_identity_holder_files.sql h1:xs7eAHKLJkDx/o7SoKlD0h7249readQgt9ivcYmZ+C4=
 20260302220404_control_entities.sql h1:CBvVyquZnA6NFkwlZhRqr3g6gqxxtmBz3axTgX30fFM=
 20260303182437_onboarding_demo.sql h1:mvwLcL4wHwTvFkCKpypuude0JfSuFKkhaDu5DQLmA1g=
+20260311172456_workflow_def_groups.sql h1:l5NvWdsBNOLSzq20h33EuOudh3K9SReH9ecceUNXCIU=
