@@ -46,7 +46,7 @@ func (h *GroupHandler) Create(r *http.Request, attributes scim.ResourceAttribute
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -84,7 +84,7 @@ func (h *GroupHandler) Create(r *http.Request, attributes scim.ResourceAttribute
 		return scim.Resource{}, fmt.Errorf("failed to reload group: %w", err)
 	}
 
-	return h.toSCIMResource(ctx, entGroup, orgID)
+	return h.toSCIMResource(entGroup)
 }
 
 // Get returns the resource corresponding with the given identifier.
@@ -97,7 +97,7 @@ func (h *GroupHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -110,7 +110,7 @@ func (h *GroupHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 		return scim.Resource{}, fmt.Errorf("failed to get group: %w", err)
 	}
 
-	return h.toSCIMResource(ctx, entGroup, orgID)
+	return h.toSCIMResource(entGroup)
 }
 
 // GetAll returns a paginated list of resources.
@@ -123,7 +123,7 @@ func (h *GroupHandler) GetAll(r *http.Request, params scim.ListRequestParams) (s
 		return scim.Page{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Page{}, err
 	}
 
@@ -134,10 +134,7 @@ func (h *GroupHandler) GetAll(r *http.Request, params scim.ListRequestParams) (s
 		return scim.Page{}, fmt.Errorf("failed to count groups: %w", err)
 	}
 
-	offset := params.StartIndex - 1
-	if offset < 0 {
-		offset = 0
-	}
+	offset := max(params.StartIndex-1, 0)
 
 	count := params.Count
 	if count <= 0 {
@@ -151,7 +148,7 @@ func (h *GroupHandler) GetAll(r *http.Request, params scim.ListRequestParams) (s
 
 	resources := make([]scim.Resource, 0, len(groups))
 	for _, g := range groups {
-		resource, err := h.toSCIMResource(ctx, g, orgID)
+		resource, err := h.toSCIMResource(g)
 		if err != nil {
 			return scim.Page{}, err
 		}
@@ -180,7 +177,7 @@ func (h *GroupHandler) Replace(r *http.Request, id string, attributes scim.Resou
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -229,7 +226,7 @@ func (h *GroupHandler) Replace(r *http.Request, id string, attributes scim.Resou
 		return scim.Resource{}, fmt.Errorf("failed to reload group: %w", err)
 	}
 
-	return h.toSCIMResource(ctx, updatedGroup, orgID)
+	return h.toSCIMResource(updatedGroup)
 }
 
 // Delete removes the resource with corresponding ID.
@@ -247,7 +244,7 @@ func (h *GroupHandler) Delete(r *http.Request, id string) error {
 		return ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return err
 	}
 
@@ -280,7 +277,7 @@ func (h *GroupHandler) Patch(r *http.Request, id string, operations []scim.Patch
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -326,7 +323,7 @@ func (h *GroupHandler) Patch(r *http.Request, id string, operations []scim.Patch
 		return scim.Resource{}, fmt.Errorf("failed to reload group: %w", err)
 	}
 
-	return h.toSCIMResource(ctx, entGroup, orgID)
+	return h.toSCIMResource(entGroup)
 }
 
 // applyReplaceOperation applies a SCIM PATCH replace operation to a group
@@ -516,7 +513,7 @@ func (h *GroupHandler) clearGroupMembers(ctx context.Context, groupID string) er
 }
 
 // toSCIMResource converts an ent Group entity to a SCIM Resource representation
-func (h *GroupHandler) toSCIMResource(_ any, entGroup *generated.Group, _ string) (scim.Resource, error) {
+func (h *GroupHandler) toSCIMResource(entGroup *generated.Group) (scim.Resource, error) {
 	members := make([]map[string]any, 0)
 	if entGroup.Edges.Members != nil {
 		groupMembers := entGroup.Edges.Members

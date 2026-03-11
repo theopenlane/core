@@ -7,69 +7,70 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/activation"
+	"github.com/theopenlane/core/internal/integrations/providers/catalog"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 )
 
-// Runtime holds the fully wired integrations runtime via a dependency injector
-// Use typed accessor methods for common components, or Injector() for extensibility
+// Runtime holds the fully wired integrations runtime via a dependency injector.
+// Use typed accessor methods for common components, or Injector() for extensibility.
 type Runtime struct {
 	injector do.Injector
 }
 
 // Injector returns the underlying dependency injector for external service registration
-// and invocation. Callers may register additional services or invoke registered ones
+// and invocation. Callers may register additional services or invoke registered ones.
 func (r *Runtime) Injector() do.Injector {
 	return r.injector
 }
 
-// Registry returns the provider registry
+// Registry returns the provider registry.
 func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
 }
 
-// Store returns the credential and integration record store
+// Store returns the credential and integration record store.
 func (r *Runtime) Store() *keystore.Store {
 	return do.MustInvoke[*keystore.Store](r.injector)
 }
 
-// Broker returns the credential minting coordinator
+// Broker returns the credential minting coordinator.
 func (r *Runtime) Broker() *keystore.Broker {
 	return do.MustInvoke[*keystore.Broker](r.injector)
 }
 
-// Clients returns the integration client pool manager
+// Clients returns the integration client pool manager.
 func (r *Runtime) Clients() *keystore.ClientPoolManager {
 	return do.MustInvoke[*keystore.ClientPoolManager](r.injector)
 }
 
-// Operations returns the integration operation manager
+// Operations returns the integration operation manager.
 func (r *Runtime) Operations() *keystore.OperationManager {
 	return do.MustInvoke[*keystore.OperationManager](r.injector)
 }
 
-// Keymaker returns the OAuth keymaker service
+// Keymaker returns the OAuth keymaker service.
 func (r *Runtime) Keymaker() *keymaker.Service {
 	return do.MustInvoke[*keymaker.Service](r.injector)
 }
 
-// Activation returns the integration activation service
+// Activation returns the integration activation service.
 func (r *Runtime) Activation() *activation.Service {
 	return do.MustInvoke[*activation.Service](r.injector)
 }
 
-// SuccessRedirectURL returns the global fallback redirect URL used after successful provider authentication
+// SuccessRedirectURL returns the global fallback redirect URL used after successful provider authentication.
 func (r *Runtime) SuccessRedirectURL() string {
 	return do.MustInvoke[successRedirectURL](r.injector).value
 }
 
-// successRedirectURL is an unexported wrapper so the string value can be registered in the DI container
+// successRedirectURL is an unexported wrapper so the string value can be registered in the DI container.
 type successRedirectURL struct{ value string }
 
 // New constructs the integrations runtime, building the provider registry from
-// ProviderSpecs and wiring all dependent components via the injector
+// ProviderSpecs and wiring all dependent components via the injector.
 func New(cfg Config) (*Runtime, error) {
 	if cfg.DB == nil {
 		return nil, ErrDBClientRequired
@@ -85,7 +86,12 @@ func New(cfg Config) (*Runtime, error) {
 			return cfg.Registry, nil
 		}
 
-		return registry.NewRegistry(context.Background(), cfg.ProviderSpecs)
+		builders := cfg.Builders
+		if len(builders) == 0 {
+			builders = catalog.Builders(catalog.Config{})
+		}
+
+		return registry.NewRegistry(context.Background(), builders)
 	})
 
 	do.Provide(i, func(i do.Injector) (*keystore.Store, error) {
@@ -140,11 +146,10 @@ func New(cfg Config) (*Runtime, error) {
 	})
 
 	do.Provide(i, func(i do.Injector) (types.MappingIndex, error) {
-
 		return do.MustInvoke[*registry.Registry](i), nil
 	})
 
-	// Eagerly invoke all services so initialization errors surface at startup
+	// Eagerly invoke all services so initialization errors surface at startup.
 	if _, err := do.Invoke[*registry.Registry](i); err != nil {
 		return nil, err
 	}
@@ -173,7 +178,7 @@ func New(cfg Config) (*Runtime, error) {
 	return &Runtime{injector: i}, nil
 }
 
-// NewFromRegistry builds a minimal runtime with only a pre-built registry registered
+// NewFromRegistry builds a minimal runtime with only a pre-built registry registered.
 func NewFromRegistry(reg *registry.Registry) *Runtime {
 	i := do.New()
 

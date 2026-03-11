@@ -7,14 +7,13 @@ import (
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
 
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
 	awsAuditAssessmentsOp types.OperationName = "audit_manager.assessments.list"
+	awsAuditListMaxOne    int32               = 1
 )
 
 type awsAuditManagerDetails struct {
@@ -23,7 +22,7 @@ type awsAuditManagerDetails struct {
 	AccountID string `json:"accountId,omitempty"`
 }
 
-// awsAuditManagerOperations lists the AWS Audit Manager operations supported by this provider.
+// awsAuditManagerOperations lists the AWS Audit Manager operations supported by this provider
 func awsAuditManagerOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
@@ -36,7 +35,7 @@ func awsAuditManagerOperations() []types.OperationDescriptor {
 	}
 }
 
-// runAWSAuditAssessments validates AWS Audit Manager access via ListAssessments.
+// runAWSAuditAssessments validates AWS Audit Manager access via ListAssessments
 func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, meta, err := resolveAuditManagerClient(ctx, input)
 	if err != nil {
@@ -44,10 +43,10 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 	}
 
 	_, err = client.ListAssessments(ctx, &auditmanager.ListAssessmentsInput{
-		MaxResults: awssdk.Int32(1),
+		MaxResults: awssdk.Int32(awsAuditListMaxOne),
 	})
 	if err != nil {
-		return operations.OperationFailure("AWS Audit Manager list assessments failed", err, awsAuditManagerDetails{
+		return providerkit.OperationFailure("AWS Audit Manager list assessments failed", err, awsAuditManagerDetails{
 			Region: meta.Region,
 		})
 	}
@@ -56,6 +55,7 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 		RoleArn: meta.RoleARN,
 		Region:  meta.Region,
 	}
+
 	if meta.AccountID != "" {
 		details.AccountID = meta.AccountID
 	}
@@ -65,20 +65,5 @@ func runAWSAuditAssessments(ctx context.Context, input types.OperationInput) (ty
 		summary = fmt.Sprintf("AWS Audit Manager reachable for account %s", meta.AccountID)
 	}
 
-	return operations.OperationSuccess(summary, details), nil
-}
-
-// newAuditManagerClient wraps auditmanager.NewFromConfig for use with generic helpers
-func newAuditManagerClient(cfg awssdk.Config) *auditmanager.Client {
-	return auditmanager.NewFromConfig(cfg)
-}
-
-// resolveAuditManagerClient returns a pooled client when available or builds one on demand.
-func resolveAuditManagerClient(ctx context.Context, input types.OperationInput) (*auditmanager.Client, awskit.AWSMetadata, error) {
-	return resolveAWSClient(ctx, input, newAuditManagerClient)
-}
-
-// buildAuditManagerClient constructs an Audit Manager client from the stored credential payload.
-func buildAuditManagerClient(ctx context.Context, payload models.CredentialSet) (*auditmanager.Client, awskit.AWSMetadata, error) {
-	return buildAWSClient(ctx, payload, newAuditManagerClient)
+	return providerkit.OperationSuccess(summary, details), nil
 }

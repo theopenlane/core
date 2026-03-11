@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/models"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -261,13 +261,13 @@ func (_c *HushHistoryCreate) SetNillableSecretValue(v *string) *HushHistoryCreat
 }
 
 // SetCredentialSet sets the "credential_set" field.
-func (_c *HushHistoryCreate) SetCredentialSet(v models.CredentialSet) *HushHistoryCreate {
+func (_c *HushHistoryCreate) SetCredentialSet(v integrationtypes.CredentialSet) *HushHistoryCreate {
 	_c.mutation.SetCredentialSet(v)
 	return _c
 }
 
 // SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
-func (_c *HushHistoryCreate) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryCreate {
+func (_c *HushHistoryCreate) SetNillableCredentialSet(v *integrationtypes.CredentialSet) *HushHistoryCreate {
 	if v != nil {
 		_c.SetCredentialSet(*v)
 	}

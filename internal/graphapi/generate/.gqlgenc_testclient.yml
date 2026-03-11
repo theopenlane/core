@@ -57,7 +57,7 @@ models:
     model: github.com/theopenlane/core/common/models.AuditLogOrderField
   CredentialSet:
     model:
-      - github.com/theopenlane/core/common/models.CredentialSet
+      - github.com/theopenlane/core/internal/integrations/types.CredentialSet
   WorkflowDefinitionDocument:
     model:
       - github.com/theopenlane/core/common/models.WorkflowDefinitionDocument

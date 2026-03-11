@@ -7,20 +7,19 @@ import (
 
 	"github.com/shurcooL/githubv4"
 
-	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // githubOrgRepoOperationConfig captures GraphQL organization repository collection settings.
 type githubOrgRepoOperationConfig struct {
-	// Pagination controls page sizing for GraphQL calls.
-	operations.Pagination
-	// PayloadOptions controls payload inclusion.
-	operations.PayloadOptions
+	// Pagination controls page sizing for GraphQL calls
+	providerkit.Pagination
+	// PayloadOptions controls payload inclusion
+	providerkit.PayloadOptions
 
-	// Organization is the GitHub organization login to query.
+	// Organization is the GitHub organization login to query
 	Organization types.TrimmedString `json:"organization" jsonschema:"description=GitHub organization login used to collect repositories."`
 }
 
@@ -52,14 +51,15 @@ func runGitHubOrganizationReposOperation(ctx context.Context, input types.Operat
 	}
 
 	pageSize := clampPerPage(config.EffectivePageSize(maxPerPage))
+
 	repositories, err := listGitHubOrganizationRepositories(ctx, client, config.Organization, pageSize)
 	if err != nil {
-		return operations.OperationFailure("GitHub organization repository collection failed", err, githubOrganizationFailureDetails{
+		return providerkit.OperationFailure("GitHub organization repository collection failed", err, githubOrganizationFailureDetails{
 			Organization: config.Organization.String(),
 		})
 	}
 
-	sampleCount := min(len(repositories), operations.DefaultSampleSize)
+	sampleCount := min(len(repositories), providerkit.DefaultSampleSize)
 	samples := make([]githubOrganizationRepository, sampleCount)
 	copy(samples, repositories[:sampleCount])
 
@@ -68,68 +68,69 @@ func runGitHubOrganizationReposOperation(ctx context.Context, input types.Operat
 		Count:        len(repositories),
 		Samples:      samples,
 	}
+
 	if config.IncludePayloads {
 		details.Repositories = repositories
 	}
 
-	return operations.OperationSuccess(fmt.Sprintf("Collected %d repositories for organization %s", len(repositories), config.Organization.String()), details), nil
+	return providerkit.OperationSuccess(fmt.Sprintf("Collected %d repositories for organization %s", len(repositories), config.Organization.String()), details), nil
 }
 
 // githubOrganizationRepository stores normalized GraphQL repository metadata.
 type githubOrganizationRepository struct {
-	// ID is the repository node identifier.
+	// ID is the repository node identifier
 	ID string
-	// Name is the repository short name.
+	// Name is the repository short name
 	Name string
-	// NameWithOwner is the owner/name identifier.
+	// NameWithOwner is the owner/name identifier
 	NameWithOwner string
-	// Description is the repository description.
+	// Description is the repository description
 	Description string
-	// URL is the repository URL.
+	// URL is the repository URL
 	URL string
-	// Visibility is the repository visibility enum value.
+	// Visibility is the repository visibility enum value
 	Visibility string
-	// IsPrivate indicates private visibility.
+	// IsPrivate indicates private visibility
 	IsPrivate bool
-	// IsArchived indicates archived status.
+	// IsArchived indicates archived status
 	IsArchived bool
-	// IsFork indicates fork status.
+	// IsFork indicates fork status
 	IsFork bool
-	// DefaultBranch is the default branch name when available.
+	// DefaultBranch is the default branch name when available
 	DefaultBranch string
-	// PushedAt is the latest push timestamp.
+	// PushedAt is the latest push timestamp
 	PushedAt time.Time
-	// UpdatedAt is the latest update timestamp.
+	// UpdatedAt is the latest update timestamp
 	UpdatedAt time.Time
 }
 
 // githubOrganizationRepoNode captures repository fields returned by GraphQL.
 type githubOrganizationRepoNode struct {
-	// ID is the node ID.
+	// ID is the node ID
 	ID string
-	// Name is the short repository name.
+	// Name is the short repository name
 	Name string
-	// NameWithOwner is the full owner/name value.
+	// NameWithOwner is the full owner/name value
 	NameWithOwner string
-	// Description is the repository description.
+	// Description is the repository description
 	Description string
-	// URL is the repository URL.
+	// URL is the repository URL
 	URL string
-	// Visibility is the repository visibility enum.
+	// Visibility is the repository visibility enum
 	Visibility string
-	// IsPrivate indicates private visibility.
+	// IsPrivate indicates private visibility
 	IsPrivate bool
-	// IsArchived indicates archived status.
+	// IsArchived indicates archived status
 	IsArchived bool
-	// IsFork indicates fork status.
+	// IsFork indicates fork status
 	IsFork bool
-	// UpdatedAt reports the latest update timestamp.
+	// UpdatedAt reports the latest update timestamp
 	UpdatedAt time.Time
-	// PushedAt reports the latest push timestamp.
+	// PushedAt reports the latest push timestamp
 	PushedAt time.Time
-	// DefaultBranchRef contains default branch metadata.
+	// DefaultBranchRef contains default branch metadata
 	DefaultBranchRef *struct {
-		// Name is the default branch name.
+		// Name is the default branch name
 		Name string
 	} `graphql:"defaultBranchRef"`
 }
@@ -206,7 +207,7 @@ func githubGraphQLClientForOperation(ctx context.Context, input types.OperationI
 		return client, nil
 	}
 
-	token, err := auth.OAuthTokenFromPayload(input.Credential)
+	token, err := oauthTokenFromCredential(input.Credential)
 	if err != nil {
 		return nil, err
 	}

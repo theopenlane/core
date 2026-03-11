@@ -9,7 +9,7 @@ import (
 	gh "github.com/google/go-github/v83/github"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -59,15 +59,15 @@ type githubVulnerabilityOperationConfig struct {
 }
 
 var (
-	githubRepoConfigSchema          = operations.SchemaFrom[githubRepoOperationConfig]()
-	githubOrgRepoConfigSchema       = operations.SchemaFrom[githubOrgRepoOperationConfig]()
-	githubVulnerabilityConfigSchema = operations.SchemaFrom[githubVulnerabilityOperationConfig]()
+	githubRepoConfigSchema          = providerkit.SchemaFrom[githubRepoOperationConfig]()
+	githubOrgRepoConfigSchema       = providerkit.SchemaFrom[githubOrgRepoOperationConfig]()
+	githubVulnerabilityConfigSchema = providerkit.SchemaFrom[githubVulnerabilityOperationConfig]()
 )
 
-// githubOperations returns the GitHub operations supported by this provider
+// githubOperations returns the GitHub operations supported by this provider.
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(githubOperationHealth, "Validate GitHub OAuth token by calling the /user endpoint.", ClientGitHubAPI, runGitHubHealthOperation),
+		providerkit.HealthOperation(githubOperationHealth, "Validate GitHub OAuth token by calling the /user endpoint.", ClientGitHubAPI, runGitHubHealthOperation),
 		{
 			Name:         githubOperationRepos,
 			Kind:         types.OperationKindCollectFindings,
@@ -86,7 +86,7 @@ func githubOperations() []types.OperationDescriptor {
 			ConfigSchema: githubVulnerabilityConfigSchema,
 			Ingest: []types.IngestContract{
 				{
-					Schema:         types.MappingSchemaVulnerability,
+					Schema:         mappingSchemaVulnerability,
 					EnsurePayloads: true,
 				},
 			},
@@ -94,10 +94,10 @@ func githubOperations() []types.OperationDescriptor {
 	}
 }
 
-// githubAppOperations returns the GitHub App operations supported by this provider
+// githubAppOperations returns the GitHub App operations supported by this provider.
 func githubAppOperations(baseURL string) []types.OperationDescriptor {
 	return []types.OperationDescriptor{
-		operations.HealthOperation(
+		providerkit.HealthOperation(
 			githubOperationHealth,
 			"Validate GitHub App installation token by calling the installation repositories endpoint.",
 			ClientGitHubAPI,
@@ -113,7 +113,7 @@ func githubAppOperations(baseURL string) []types.OperationDescriptor {
 			ConfigSchema: githubVulnerabilityConfigSchema,
 			Ingest: []types.IngestContract{
 				{
-					Schema:         types.MappingSchemaVulnerability,
+					Schema:         mappingSchemaVulnerability,
 					EnsurePayloads: true,
 				},
 			},
@@ -121,7 +121,7 @@ func githubAppOperations(baseURL string) []types.OperationDescriptor {
 	}
 }
 
-// githubOrganizationRepoOperationDescriptor builds the shared org repository GraphQL descriptor
+// githubOrganizationRepoOperationDescriptor builds the shared org repository GraphQL descriptor.
 func githubOrganizationRepoOperationDescriptor() types.OperationDescriptor {
 	return types.OperationDescriptor{
 		Name:         githubOperationOrgRepos,
@@ -155,7 +155,7 @@ type githubRepoCollectionDetails struct {
 	Samples []githubRepoSample `json:"samples"`
 }
 
-// runGitHubHealthOperation validates GitHub OAuth credentials
+// runGitHubHealthOperation validates GitHub OAuth credentials.
 func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, err := githubRESTClientForOperation(ctx, input)
 	if err != nil {
@@ -164,7 +164,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 
 	user, _, err := client.Users.Get(ctx, "")
 	if err != nil {
-		return operations.OperationFailure("GitHub user lookup failed", normalizeGitHubAPIError(err), nil)
+		return providerkit.OperationFailure("GitHub user lookup failed", normalizeGitHubAPIError(err), nil)
 	}
 
 	login := user.GetLogin()
@@ -174,10 +174,10 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 		Name:  user.GetName(),
 	}
 
-	return operations.OperationSuccess(fmt.Sprintf("GitHub token valid for %s", login), details), nil
+	return providerkit.OperationSuccess(fmt.Sprintf("GitHub token valid for %s", login), details), nil
 }
 
-// runGitHubAppHealthOperation validates GitHub App installation tokens
+// runGitHubAppHealthOperation validates GitHub App installation tokens.
 func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 		client, err := githubRESTClientForOperationWithBaseURL(ctx, input, baseURL)
@@ -187,7 +187,7 @@ func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 
 		repositories, _, err := client.Apps.ListRepos(ctx, &gh.ListOptions{Page: 1, PerPage: 1})
 		if err != nil {
-			return operations.OperationFailure("GitHub App installation lookup failed", normalizeGitHubAPIError(err), nil)
+			return providerkit.OperationFailure("GitHub App installation lookup failed", normalizeGitHubAPIError(err), nil)
 		}
 
 		count := 0
@@ -198,11 +198,11 @@ func runGitHubAppHealthOperation(baseURL string) types.OperationFunc {
 			}
 		}
 
-		return operations.OperationSuccess(fmt.Sprintf("GitHub App token valid for %d repositories", count), githubAppHealthDetails{Count: count}), nil
+		return providerkit.OperationSuccess(fmt.Sprintf("GitHub App token valid for %d repositories", count), githubAppHealthDetails{Count: count}), nil
 	}
 }
 
-// runGitHubRepoOperation lists repositories for the authenticated account
+// runGitHubRepoOperation lists repositories for the authenticated account.
 func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, err := githubRESTClientForOperation(ctx, input)
 	if err != nil {
@@ -215,16 +215,16 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}
 
 	config := githubVulnerabilityConfig{
-		Pagination: operations.Pagination{PerPage: repoConfig.PerPage},
+		Pagination: providerkit.Pagination{PerPage: repoConfig.PerPage},
 		Visibility: repoConfig.Visibility,
 	}
 
 	repos, err := listGitHubReposForProvider(ctx, client, input.Provider, config)
 	if err != nil {
-		return operations.OperationFailure("GitHub repository collection failed", err, nil)
+		return providerkit.OperationFailure("GitHub repository collection failed", err, nil)
 	}
 
-	sampleSize := min(len(repos), operations.DefaultSampleSize)
+	sampleSize := min(len(repos), providerkit.DefaultSampleSize)
 	samples := lo.Map(repos[:sampleSize], func(repo *gh.Repository, _ int) githubRepoSample {
 		if repo == nil {
 			return githubRepoSample{}
@@ -238,7 +238,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		}
 	})
 
-	return operations.OperationSuccess(fmt.Sprintf("Collected %d repositories", len(repos)), githubRepoCollectionDetails{
+	return providerkit.OperationSuccess(fmt.Sprintf("Collected %d repositories", len(repos)), githubRepoCollectionDetails{
 		Count:   len(repos),
 		Samples: samples,
 	}), nil
@@ -268,15 +268,14 @@ func normalizeGitHubAPIError(err error) error {
 	return err
 }
 
-// clampPerPage bounds the per-page value for GitHub API requests
+// clampPerPage bounds the per-page value for GitHub API requests.
 func clampPerPage(value int) int {
-	if value <= 0 {
+	switch {
+	case value <= 0:
 		return defaultPerPage
-	}
-
-	if value > maxPerPage {
+	case value > maxPerPage:
 		return maxPerPage
+	default:
+		return value
 	}
-
-	return value
 }

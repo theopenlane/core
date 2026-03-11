@@ -23,26 +23,20 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
-	"github.com/theopenlane/core/internal/integrations/state"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
 // defaultGitHubAppSpec returns a fully-configured GitHub App provider spec for flow tests.
-func defaultGitHubAppSpec() integrationconfig.ProviderSpec {
-	return integrationconfig.ProviderSpec{
-		Name:     string(github.TypeGitHubApp),
-		Active:   lo.ToPtr(true),
-		AuthType: types.AuthKindGitHubApp,
-		GitHubApp: &integrationconfig.GitHubAppSpec{
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
+func defaultGitHubAppSpec() integrationspec.ProviderSpec {
+	return integrationspec.ProviderSpec{
+		Name:           string(github.TypeGitHubApp),
+		Active:         lo.ToPtr(true),
+		AuthType:       types.AuthKindGitHubApp,
+		ProviderConfig: json.RawMessage(`{"appid":"123","appslug":"openlane","privatekey":"private-key","webhooksecret":"secret"}`),
 	}
 }
 
@@ -60,8 +54,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetKind(string(github.TypeGitHubApp)).
-		SetProviderState(func() state.IntegrationProviderState {
-			doc := state.IntegrationProviderState{}
+		SetProviderState(func() types.IntegrationProviderState {
+			doc := types.IntegrationProviderState{}
 			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
@@ -112,8 +106,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetKind(string(github.TypeGitHubApp)).
-		SetProviderState(func() state.IntegrationProviderState {
-			doc := state.IntegrationProviderState{}
+		SetProviderState(func() types.IntegrationProviderState {
+			doc := types.IntegrationProviderState{}
 			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
@@ -198,8 +192,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetKind(string(github.TypeGitHubApp)).
-		SetProviderState(func() state.IntegrationProviderState {
-			doc := state.IntegrationProviderState{}
+		SetProviderState(func() types.IntegrationProviderState {
+			doc := types.IntegrationProviderState{}
 			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
@@ -256,8 +250,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstal
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetKind(string(github.TypeGitHubApp)).
-		SetProviderState(func() state.IntegrationProviderState {
-			doc := state.IntegrationProviderState{}
+		SetProviderState(func() types.IntegrationProviderState {
+			doc := types.IntegrationProviderState{}
 			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
@@ -303,8 +297,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
 		SetKind(string(github.TypeGitHubApp)).
-		SetProviderState(func() state.IntegrationProviderState {
-			doc := state.IntegrationProviderState{}
+		SetProviderState(func() types.IntegrationProviderState {
+			doc := types.IntegrationProviderState{}
 			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc

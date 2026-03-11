@@ -1,2 +1,3 @@
-// Package okta implements the okta integration provider.
+// Package okta collects Okta tenant and sign-on policy metadata for identity
+// posture and access governance analysis.
 package okta

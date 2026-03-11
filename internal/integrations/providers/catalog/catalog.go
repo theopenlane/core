@@ -3,6 +3,8 @@ package catalog
 import (
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/aws"
+	"github.com/theopenlane/core/internal/integrations/providers/awsauditmanager"
+	"github.com/theopenlane/core/internal/integrations/providers/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/providers/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/providers/azuresecuritycenter"
 	"github.com/theopenlane/core/internal/integrations/providers/buildkite"
@@ -13,26 +15,31 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providers/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/providers/oidcgeneric"
 	"github.com/theopenlane/core/internal/integrations/providers/okta"
+	"github.com/theopenlane/core/internal/integrations/providers/scim"
 	"github.com/theopenlane/core/internal/integrations/providers/slack"
 	"github.com/theopenlane/core/internal/integrations/providers/vercel"
 )
 
-// Builders returns the default provider builders supported by the system
-func Builders() []providers.Builder {
+// Builders returns the provider builders for all supported providers, applying
+// operator-level configuration from cfg to providers that require it.
+func Builders(cfg Config) []providers.Builder {
 	return []providers.Builder{
 		aws.Builder(),
-		azureentraid.Builder(),
-		azuresecuritycenter.Builder(),
+		awsauditmanager.Builder(),
+		awssecurityhub.Builder(),
+		azureentraid.Builder(cfg.AzureEntraID),
+		azuresecuritycenter.Builder(cfg.AzureSecurityCenter),
 		buildkite.Builder(),
 		cloudflare.Builder(),
-		gcpscc.Builder(),
-		github.Builder(),
-		github.AppBuilder(),
-		googleworkspace.Builder(),
-		microsoftteams.Builder(),
-		oidcgeneric.Builder(),
+		gcpscc.Builder(cfg.GCPSCC),
+		github.Builder(cfg.GitHub),
+		github.AppBuilder(cfg.GitHubApp),
+		googleworkspace.Builder(cfg.GoogleWorkspace),
+		microsoftteams.Builder(cfg.MicrosoftTeams),
+		oidcgeneric.Builder(cfg.OIDCGeneric),
 		okta.Builder(),
-		slack.Builder(),
+		scim.Builder(),
+		slack.Builder(cfg.Slack),
 		vercel.Builder(),
 	}
 }

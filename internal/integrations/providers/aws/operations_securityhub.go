@@ -12,9 +12,9 @@ import (
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	awskit "github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/providers/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -51,9 +51,9 @@ type securityHubFailureDetails struct {
 	Region string `json:"region,omitempty"`
 }
 
-var securityHubFindingsSchema = operations.SchemaFrom[securityHubFindingsConfig]()
+var securityHubFindingsSchema = providerkit.SchemaFrom[securityHubFindingsConfig]()
 
-// awsSecurityHubOperations lists the AWS Security Hub operations supported by this provider.
+// awsSecurityHubOperations lists the AWS Security Hub operations supported by this provider
 func awsSecurityHubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
 		{
@@ -65,7 +65,7 @@ func awsSecurityHubOperations() []types.OperationDescriptor {
 			ConfigSchema: securityHubFindingsSchema,
 			Ingest: []types.IngestContract{
 				{
-					Schema:         types.MappingSchemaVulnerability,
+					Schema:         types.MappingSchema(integrationgenerated.IntegrationMappingSchemaVulnerability),
 					EnsurePayloads: true,
 				},
 			},
@@ -73,7 +73,7 @@ func awsSecurityHubOperations() []types.OperationDescriptor {
 	}
 }
 
-// runAWSSecurityHubFindings collects Security Hub findings for ingestion.
+// runAWSSecurityHubFindings collects Security Hub findings for ingestion
 func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
 	client, meta, err := resolveSecurityHubClient(ctx, input)
 	if err != nil {
@@ -89,6 +89,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 	if pageSize <= 0 {
 		pageSize = awsSecurityHubDefaultPageSize
 	}
+
 	if pageSize > awsSecurityHubMaxPageSize {
 		pageSize = awsSecurityHubMaxPageSize
 	}
@@ -100,7 +101,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 
 	filters := securityHubFiltersFromMetadata(meta)
 
-	fetch := func(ctx context.Context, pageToken string) (operations.PageResult[securityhubtypes.AwsSecurityFinding], error) {
+	fetch := func(ctx context.Context, pageToken string) (providerkit.PageResult[securityhubtypes.AwsSecurityFinding], error) {
 		var nextToken *string
 		if pageToken != "" {
 			nextToken = &pageToken
@@ -112,10 +113,10 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			Filters:    filters,
 		})
 		if err != nil {
-			return operations.PageResult[securityhubtypes.AwsSecurityFinding]{}, err
+			return providerkit.PageResult[securityhubtypes.AwsSecurityFinding]{}, err
 		}
 
-		result := operations.PageResult[securityhubtypes.AwsSecurityFinding]{Items: resp.Findings}
+		result := providerkit.PageResult[securityhubtypes.AwsSecurityFinding]{Items: resp.Findings}
 		if resp.NextToken != nil && *resp.NextToken != "" {
 			result.NextToken = *resp.NextToken
 		}
@@ -123,9 +124,9 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 		return result, nil
 	}
 
-	allFindings, err := operations.CollectAll(ctx, fetch, 0)
+	allFindings, err := providerkit.CollectAll(ctx, fetch, 0)
 	if err != nil {
-		return operations.OperationFailure("AWS Security Hub findings fetch failed", err, securityHubFailureDetails{
+		return providerkit.OperationFailure("AWS Security Hub findings fetch failed", err, securityHubFailureDetails{
 			Region: meta.Region,
 		})
 	}
@@ -165,7 +166,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 
 		payload, err := json.Marshal(finding)
 		if err != nil {
-			return operations.OperationFailure("AWS Security Hub finding serialization failed", err, securityHubFailureDetails{
+			return providerkit.OperationFailure("AWS Security Hub finding serialization failed", err, securityHubFailureDetails{
 				Region: meta.Region,
 			})
 		}
@@ -175,6 +176,7 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			if resource.Id == nil || *resource.Id == "" {
 				continue
 			}
+
 			resourceID = *resource.Id
 			break
 		}
@@ -194,32 +196,18 @@ func runAWSSecurityHubFindings(ctx context.Context, input types.OperationInput) 
 			awsSecurityHubAlertTypeFinding: total,
 		},
 	}
+
 	if cfg.IncludePayloads {
 		details.Alerts = envelopes
 	}
 
-	return operations.OperationSuccess(fmt.Sprintf("Collected %d Security Hub findings", total), details), nil
+	return providerkit.OperationSuccess(fmt.Sprintf("Collected %d Security Hub findings", total), details), nil
 }
 
-// newSecurityHubClient wraps securityhub.NewFromConfig for use with generic helpers
-func newSecurityHubClient(cfg awssdk.Config) *securityhub.Client {
-	return securityhub.NewFromConfig(cfg)
-}
-
-// resolveSecurityHubClient returns a pooled client when supplied or builds one on demand.
-func resolveSecurityHubClient(ctx context.Context, input types.OperationInput) (*securityhub.Client, awskit.AWSMetadata, error) {
-	return resolveAWSClient(ctx, input, newSecurityHubClient)
-}
-
-// buildSecurityHubClient builds a Security Hub client from stored credentials.
-func buildSecurityHubClient(ctx context.Context, payload models.CredentialSet) (*securityhub.Client, awskit.AWSMetadata, error) {
-	return buildAWSClient(ctx, payload, newSecurityHubClient)
-}
-
-func securityHubFiltersFromMetadata(meta awskit.AWSMetadata) *securityhubtypes.AwsSecurityFindingFilters {
+func securityHubFiltersFromMetadata(meta awskit.Metadata) *securityhubtypes.AwsSecurityFindingFilters {
 	var filters securityhubtypes.AwsSecurityFindingFilters
 
-	if meta.AccountScope == awskit.AWSAccountScopeSpecific {
+	if meta.AccountScope == awskit.AccountScopeSpecific {
 		filters.AwsAccountId = toSecurityHubStringFilters(meta.AccountIDs)
 	}
 
@@ -237,13 +225,16 @@ func toSecurityHubStringFilters(values []string) []securityhubtypes.StringFilter
 		if value == "" {
 			return securityhubtypes.StringFilter{}, false
 		}
+
 		return securityhubtypes.StringFilter{
 			Comparison: securityhubtypes.StringFilterComparisonEquals,
 			Value:      awssdk.String(value),
 		}, true
 	})
+
 	if len(filters) == 0 {
 		return nil
 	}
+
 	return filters
 }

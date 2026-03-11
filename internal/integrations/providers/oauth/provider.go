@@ -9,97 +9,109 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/common/models"
-	integrationauth "github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/config"
+	iamauth "github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
-	iamauth "github.com/theopenlane/iam/auth"
 )
 
 const (
+	// stateLength is the byte length used when generating a random OAuth state value
 	stateLength = 32
 )
 
-// Provider implements the types.Provider interface using Zitadel's relying party helpers
+// Provider implements types.Provider for OAuth2 and OIDC flows using Zitadel's relying party helpers
 type Provider struct {
 	// BaseProvider holds shared provider metadata
 	providers.BaseProvider
-	spec         config.ProviderSpec
-	oauthConfig  *oauth2.Config
+	// spec is the full provider spec used to construct this instance
+	spec spec.ProviderSpec
+	// oauthConfig is the golang.org/x/oauth2 config built from the spec
+	oauthConfig *oauth2.Config
+	// relyingParty is the Zitadel RP instance used for auth URL generation and code exchange
 	relyingParty rp.RelyingParty
-	authParams   map[string]string
-	tokenParams  map[string]string
+	// authParams holds extra parameters appended to authorization requests
+	authParams map[string]string
+	// tokenParams holds extra parameters appended to token exchange requests
+	tokenParams map[string]string
 }
 
-// ProviderOption customizes OAuth provider construction.
-type ProviderOption func(*Provider)
+// Option customizes OAuth provider construction
+type Option func(*Provider)
 
-// WithClientDescriptors registers client descriptors for pooling.
-func WithClientDescriptors(descriptors []types.ClientDescriptor) ProviderOption {
+// WithClientDescriptors registers client descriptors on the provider for downstream pooling
+func WithClientDescriptors(descriptors []types.ClientDescriptor) Option {
 	return func(p *Provider) {
 		p.Clients = providerkit.SanitizeClientDescriptors(p.Type(), descriptors)
 	}
 }
 
-// New constructs a Provider from the supplied spec
-func New(spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
-	if spec.OAuth == nil {
-		return nil, providers.ErrSpecOAuthRequired
+// WithOperations registers operation descriptors on the provider
+func WithOperations(descriptors []types.OperationDescriptor) Option {
+	return func(p *Provider) {
+		p.Ops = providerkit.SanitizeOperationDescriptors(p.Type(), descriptors)
 	}
-	authKind := spec.AuthType.Normalize()
-	if !authKind.SupportsInteractiveFlow() {
+}
+
+// New constructs a Provider from the supplied spec, applying any options
+func New(s spec.ProviderSpec, options ...Option) (*Provider, error) {
+	if s.OAuth == nil {
+		return nil, ErrSpecOAuthRequired
+	}
+
+	if !s.AuthType.Normalize().SupportsInteractiveFlow() {
 		return nil, ErrAuthTypeMismatch
 	}
 
 	cfg := &oauth2.Config{
-		ClientID:     spec.OAuth.ClientID,
-		ClientSecret: spec.OAuth.ClientSecret,
+		ClientID:     s.OAuth.ClientID,
+		ClientSecret: s.OAuth.ClientSecret,
 		Endpoint: oauth2.Endpoint{
-			AuthURL:  spec.OAuth.AuthURL,
-			TokenURL: spec.OAuth.TokenURL,
+			AuthURL:  s.OAuth.AuthURL,
+			TokenURL: s.OAuth.TokenURL,
 		},
-		RedirectURL: spec.OAuth.RedirectURI,
-		Scopes:      spec.OAuth.Scopes,
+		RedirectURL: s.OAuth.RedirectURI,
+		Scopes:      s.OAuth.Scopes,
 	}
 
 	var rpOpts []rp.Option
-	if spec.OAuth.UsePKCE {
+	if s.OAuth.UsePKCE {
 		rpOpts = append(rpOpts, rp.WithPKCE(nil))
 	}
 
 	rparty, err := rp.NewRelyingPartyOAuth(cfg, rpOpts...)
 	if err != nil {
-		return nil, providers.ErrRelyingPartyInit
+		return nil, ErrRelyingPartyInit
 	}
 
 	caps := types.ProviderCapabilities{
 		SupportsRefreshTokens: true,
 		SupportsClientPooling: true,
-		SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
+		SupportsMetadataForm:  len(s.CredentialsSchema) > 0,
 	}
 
-	provider := &Provider{
-		BaseProvider: providers.NewBaseProvider(spec.ProviderType(), caps, nil, nil),
-		spec:         spec,
+	p := &Provider{
+		BaseProvider: providers.NewBaseProvider(s.ProviderType(), caps, nil, nil),
+		spec:         s,
 		oauthConfig:  cfg,
 		relyingParty: rparty,
-		authParams:   maps.Clone(spec.OAuth.AuthParams),
-		tokenParams:  maps.Clone(spec.OAuth.TokenParams),
+		authParams:   maps.Clone(s.OAuth.AuthParams),
+		tokenParams:  maps.Clone(s.OAuth.TokenParams),
 	}
 
 	for _, opt := range options {
 		if opt != nil {
-			opt(provider)
+			opt(p)
 		}
 	}
 
-	return provider, nil
+	return p, nil
 }
 
-// BeginAuth starts an OAuth authorization flow
+// BeginAuth starts an OAuth authorization flow, returning a Session the caller can redirect to
 func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
 	scopes := p.spec.OAuth.Scopes
 	if len(input.Scopes) > 0 {
@@ -107,68 +119,79 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 	}
 
 	state := input.State
-
 	if state == "" {
 		generated, err := iamauth.GenerateOAuthState(stateLength)
 		if err != nil {
-			return nil, providers.ErrStateGeneration
+			return nil, ErrStateGeneration
 		}
 
 		state = generated
 	}
 
-	authOpts := buildAuthURLOpts(scopes, p.authParams)
+	authURL := rp.AuthURL(state, p.relyingParty, buildAuthURLOpts(scopes, p.authParams)...)
 
-	authURL := rp.AuthURL(state, p.relyingParty, authOpts...)
-
-	session := &Session{
+	return &Session{
 		provider: p,
 		state:    state,
 		authURL:  authURL,
-	}
-	return session, nil
+	}, nil
 }
 
-// Mint refreshes an access token using the stored credential set.
-func (p *Provider) Mint(ctx context.Context, subject types.CredentialMintRequest) (models.CredentialSet, error) {
-	if subject.Credential.OAuthAccessToken == "" && subject.Credential.OAuthRefreshToken == "" {
-		return models.CredentialSet{}, providers.ErrTokenUnavailable
+// Mint refreshes an access token using the stored credential
+func (p *Provider) Mint(ctx context.Context, req types.CredentialMintRequest) (types.CredentialSet, error) {
+	if req.Credential.OAuthAccessToken == "" && req.Credential.OAuthRefreshToken == "" {
+		return types.CredentialSet{}, ErrTokenUnavailable
 	}
 
 	token := &oauth2.Token{
-		AccessToken:  subject.Credential.OAuthAccessToken,
-		RefreshToken: subject.Credential.OAuthRefreshToken,
-		TokenType:    subject.Credential.OAuthTokenType,
-	}
-	if subject.Credential.OAuthExpiry != nil {
-		token.Expiry = subject.Credential.OAuthExpiry.UTC()
+		AccessToken:  req.Credential.OAuthAccessToken,
+		RefreshToken: req.Credential.OAuthRefreshToken,
+		TokenType:    req.Credential.OAuthTokenType,
 	}
 
-	tokenSource := p.oauthConfig.TokenSource(ctx, token)
-	freshToken, err := tokenSource.Token()
+	if req.Credential.OAuthExpiry != nil {
+		token.Expiry = req.Credential.OAuthExpiry.UTC()
+	}
+
+	fresh, err := p.oauthConfig.TokenSource(ctx, token).Token()
 	if err != nil {
-		return models.CredentialSet{}, providers.ErrTokenRefresh
+		return types.CredentialSet{}, ErrTokenRefresh
 	}
 
 	var claims *oidc.IDTokenClaims
-	if len(subject.Credential.Claims) > 0 {
+	if len(req.Credential.Claims) > 0 {
 		var decoded oidc.IDTokenClaims
-		if err := jsonx.RoundTrip(subject.Credential.Claims, &decoded); err == nil {
+		if err := jsonx.RoundTrip(req.Credential.Claims, &decoded); err == nil {
 			claims = &decoded
 		}
 	}
 
-	credential, err := integrationauth.BuildOAuthCredentialSet(freshToken, claims)
-	if err != nil {
-		return models.CredentialSet{}, err
-	}
-
-	return credential, nil
+	return buildCredentialSet(fresh, claims)
 }
 
-// WithOperations configures provider-managed operations.
-func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
-	return func(p *Provider) {
-		p.Ops = providerkit.SanitizeOperationDescriptors(p.Type(), descriptors)
+// buildCredentialSet constructs a types.CredentialSet from an oauth2 token and optional OIDC claims
+func buildCredentialSet(token *oauth2.Token, claims *oidc.IDTokenClaims) (types.CredentialSet, error) {
+	cs := types.CredentialSet{}
+
+	if token != nil {
+		cs.OAuthAccessToken = token.AccessToken
+		cs.OAuthRefreshToken = token.RefreshToken
+		cs.OAuthTokenType = token.TokenType
+
+		if !token.Expiry.IsZero() {
+			exp := token.Expiry.UTC()
+			cs.OAuthExpiry = &exp
+		}
 	}
+
+	if claims != nil {
+		claimsMap, err := jsonx.ToMap(claims)
+		if err != nil {
+			return types.CredentialSet{}, ErrClaimsEncode
+		}
+
+		cs.Claims = claimsMap
+	}
+
+	return cs, nil
 }

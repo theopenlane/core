@@ -6,12 +6,10 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	integrationstate "github.com/theopenlane/core/internal/integrations/state"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -37,13 +35,13 @@ func NewStore(db *ent.Client) (*Store, error) {
 }
 
 // SaveCredential upserts credentials for the given org/provider pair.
-func (s *Store) SaveCredential(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error) {
+func (s *Store) SaveCredential(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet) (types.CredentialSet, error) {
 	if provider == types.ProviderUnknown {
-		return models.CredentialSet{}, ErrProviderRequired
+		return types.CredentialSet{}, ErrProviderRequired
 	}
 
 	if orgID == "" {
-		return models.CredentialSet{}, ErrOrgIDRequired
+		return types.CredentialSet{}, ErrOrgIDRequired
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -52,16 +50,16 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, provider types
 	integrationRecord, err := s.ensureIntegration(systemCtx, orgID, provider)
 	if err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure integration record")
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	return s.saveCredentialForIntegrationRecord(systemCtx, orgID, provider, authKind, credential, integrationRecord)
 }
 
 // SaveCredentialForIntegration upserts credentials for a specific integration record.
-func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet) (models.CredentialSet, error) {
+func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet) (types.CredentialSet, error) {
 	if provider == types.ProviderUnknown {
-		return models.CredentialSet{}, ErrProviderRequired
+		return types.CredentialSet{}, ErrProviderRequired
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -70,7 +68,7 @@ func (s *Store) SaveCredentialForIntegration(ctx context.Context, orgID string, 
 	integrationRecord, err := s.integrationByID(systemCtx, orgID, provider, integrationID, false, false)
 	if err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to load integration record for credential save")
-		return models.CredentialSet{}, err
+		return types.CredentialSet{}, err
 	}
 
 	return s.saveCredentialForIntegrationRecord(systemCtx, orgID, provider, authKind, credential, integrationRecord)
@@ -82,31 +80,31 @@ func (s *Store) EnsureIntegration(ctx context.Context, orgID string, provider ty
 }
 
 // LoadCredential retrieves credentials and metadata for the given org/provider pair.
-func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types.ProviderType) (models.CredentialSet, types.AuthKind, *integrationstate.IntegrationProviderState, error) {
+func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialSet, types.AuthKind, *types.IntegrationProviderState, error) {
 	if provider == types.ProviderUnknown {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, ErrProviderRequired
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, ErrProviderRequired
 	}
 
 	if orgID == "" {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, ErrOrgIDRequired
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, ErrOrgIDRequired
 	}
 
 	integrationRecord, found, err := s.providerIntegration(ctx, orgID, provider, true)
 	if err != nil {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, err
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, err
 	}
 	if !found {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, ErrCredentialNotFound
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, ErrCredentialNotFound
 	}
 
 	return s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
 }
 
 // LoadCredentialForIntegration retrieves credentials and metadata for a specific integration record.
-func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (models.CredentialSet, types.AuthKind, *integrationstate.IntegrationProviderState, error) {
+func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialSet, types.AuthKind, *types.IntegrationProviderState, error) {
 	integrationRecord, err := s.integrationByID(ctx, orgID, provider, integrationID, true, true)
 	if err != nil {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, err
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, err
 	}
 
 	return s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
@@ -114,10 +112,10 @@ func (s *Store) LoadCredentialForIntegration(ctx context.Context, orgID string, 
 
 // loadCredentialForIntegrationRecord attempts to load credentials for the given integration record.
 // It returns found=false when no persisted secret exists.
-func (s *Store) loadCredentialForIntegrationRecord(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (models.CredentialSet, types.AuthKind, *integrationstate.IntegrationProviderState, bool, error) {
+func (s *Store) loadCredentialForIntegrationRecord(ctx context.Context, orgID string, provider types.ProviderType, integrationID string) (types.CredentialSet, types.AuthKind, *types.IntegrationProviderState, bool, error) {
 	integrationRecord, err := s.integrationByID(ctx, orgID, provider, integrationID, true, true)
 	if err != nil {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, false, err
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, false, err
 	}
 
 	credential, authKind, providerState, err := s.loadCredentialFromIntegrationRecord(provider, integrationRecord)
@@ -125,12 +123,12 @@ func (s *Store) loadCredentialForIntegrationRecord(ctx context.Context, orgID st
 		return credential, authKind, providerState, true, nil
 	}
 	if !errors.Is(err, ErrCredentialNotFound) {
-		return models.CredentialSet{}, types.AuthKindUnknown, nil, false, err
+		return types.CredentialSet{}, types.AuthKindUnknown, nil, false, err
 	}
 
 	state := integrationRecord.ProviderState
 
-	return models.CredentialSet{}, types.AuthKindUnknown, &state, false, nil
+	return types.CredentialSet{}, types.AuthKindUnknown, &state, false, nil
 }
 
 // DeleteIntegration removes the integration and associated secrets for the given org.
@@ -191,7 +189,7 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 	return record, nil
 }
 
-func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential models.CredentialSet, integrationRecord *ent.Integration) (models.CredentialSet, error) {
+func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet, integrationRecord *ent.Integration) (types.CredentialSet, error) {
 	secretName := string(provider)
 	envelope := types.CloneCredentialSet(credential)
 	normalizedKind := normalizeCredentialAuthKind(authKind, envelope)
@@ -209,7 +207,7 @@ func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID st
 	if err != nil {
 		if !ent.IsNotFound(err) {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to query existing credential")
-			return models.CredentialSet{}, err
+			return types.CredentialSet{}, err
 		}
 
 		createErr := s.db.Hush.Create().
@@ -222,7 +220,7 @@ func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID st
 			Exec(ctx)
 		if createErr != nil {
 			logx.FromContext(ctx).Error().Err(createErr).Msg("failed to create credential record")
-			return models.CredentialSet{}, createErr
+			return types.CredentialSet{}, createErr
 		}
 	} else {
 		updateErr := existing.Update().
@@ -231,14 +229,14 @@ func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID st
 			Exec(ctx)
 		if updateErr != nil {
 			logx.FromContext(ctx).Error().Err(updateErr).Msg("failed to update credential record")
-			return models.CredentialSet{}, updateErr
+			return types.CredentialSet{}, updateErr
 		}
 	}
 
 	return types.CloneCredentialSet(envelope), nil
 }
 
-func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType, integrationRecord *ent.Integration) (models.CredentialSet, types.AuthKind, *integrationstate.IntegrationProviderState, error) {
+func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType, integrationRecord *ent.Integration) (types.CredentialSet, types.AuthKind, *types.IntegrationProviderState, error) {
 	secretName := string(provider)
 	for _, secret := range integrationRecord.Edges.Secrets {
 		if secret.SecretName != secretName {
@@ -251,7 +249,7 @@ func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType,
 		return credential, types.AuthKindFromString(secret.Kind), &state, nil
 	}
 
-	return models.CredentialSet{}, types.AuthKindUnknown, nil, ErrCredentialNotFound
+	return types.CredentialSet{}, types.AuthKindUnknown, nil, ErrCredentialNotFound
 }
 
 // providerIntegrations returns up to two integrations for owner/provider.
@@ -314,7 +312,7 @@ func (s *Store) integrationByID(ctx context.Context, orgID string, provider type
 	return record, nil
 }
 
-func normalizeCredentialAuthKind(kind types.AuthKind, credential models.CredentialSet) types.AuthKind {
+func normalizeCredentialAuthKind(kind types.AuthKind, credential types.CredentialSet) types.AuthKind {
 	normalized := kind.Normalize()
 	if normalized != types.AuthKindUnknown {
 		return normalized

@@ -1,2 +1,2 @@
-// Package catalog exposes the list of default provider builders
+// Package catalog registers all known provider builders for the integrationsv2 layer.
 package catalog

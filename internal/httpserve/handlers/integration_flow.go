@@ -17,13 +17,12 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/config"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
@@ -88,7 +87,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	scopes := config.MergeRequestedScopes(spec, in.Scopes)
+	scopes := mergeRequestedScopes(spec, in.Scopes)
 
 	begin, err := h.IntegrationRuntime.Keymaker().BeginAuthorization(userCtx, keymaker.BeginRequest{
 		OrgID:         caller.OrganizationID,
@@ -260,7 +259,7 @@ func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) st
 }
 
 // RefreshIntegrationToken refreshes an expired OAuth token if refresh token is available.
-func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string, integrationID string) (*openapi.IntegrationToken, error) {
+func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string, integrationID string) (*IntegrationTokenResponse, error) {
 	providerType, err := parseProviderType(provider)
 	if err != nil {
 		return nil, err
@@ -269,7 +268,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 		return nil, err
 	}
 
-	var payload models.CredentialSet
+	var payload types.CredentialSet
 	if integrationID != "" {
 		payload, err = h.IntegrationRuntime.Broker().MintForIntegration(ctx, orgID, providerType, integrationID)
 	} else {
@@ -284,7 +283,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 
 // RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens.
 func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleRefreshIntegrationTokenRequest, openapi.IntegrationTokenResponse{}, openapiCtx.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleRefreshIntegrationTokenRequest, IntegrationTokenResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -305,17 +304,12 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		}
 	}
 
-	out := openapi.IntegrationTokenResponse{
-		Reply:     rout.Reply{Success: true},
-		Provider:  in.Provider,
-		Token:     tokenData,
-		ExpiresAt: tokenData.ExpiresAt,
-	}
+	tokenData.Reply = rout.Reply{Success: true}
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, tokenData)
 }
 
-func integrationTokenFromPayload(provider string, payload models.CredentialSet) (*openapi.IntegrationToken, error) {
+func integrationTokenFromPayload(provider string, payload types.CredentialSet) (*IntegrationTokenResponse, error) {
 	if payload.OAuthAccessToken == "" {
 		return nil, wrapTokenError("find access", provider, keystore.ErrCredentialNotFound)
 	}
@@ -326,13 +320,10 @@ func integrationTokenFromPayload(provider string, payload models.CredentialSet) 
 		expiresAt = &expiry
 	}
 
-	return &openapi.IntegrationToken{
-		Provider:         provider,
-		AccessToken:      payload.OAuthAccessToken,
-		ExpiresAt:        expiresAt,
-		ProviderUserID:   "",
-		ProviderUsername: "",
-		ProviderEmail:    "",
+	return &IntegrationTokenResponse{
+		Provider:    provider,
+		AccessToken: payload.OAuthAccessToken,
+		ExpiresAt:   expiresAt,
 	}, nil
 }
 
@@ -378,6 +369,36 @@ func (h *Handler) resolveOAuthIntegrationID(ctx context.Context, orgID string, p
 	}
 
 	return record.ID, nil
+}
+
+// mergeRequestedScopes combines the provider's default scopes with any caller-requested scopes,
+// deduplicating by lowercase value. Provider defaults are listed first.
+func mergeRequestedScopes(provSpec integrationspec.ProviderSpec, requested []string) []string {
+	seen := map[string]struct{}{}
+	result := make([]string, 0)
+
+	add := func(scopes []string) {
+		for _, scope := range scopes {
+			trimmed := strings.TrimSpace(scope)
+			if trimmed == "" {
+				continue
+			}
+			lower := strings.ToLower(trimmed)
+			if _, ok := seen[lower]; ok {
+				continue
+			}
+			seen[lower] = struct{}{}
+			result = append(result, trimmed)
+		}
+	}
+
+	if provSpec.OAuth != nil {
+		add(provSpec.OAuth.Scopes)
+	}
+
+	add(requested)
+
+	return result
 }
 
 // getOauthCookieConfig returns the cookie configuration for OAuth cookies.

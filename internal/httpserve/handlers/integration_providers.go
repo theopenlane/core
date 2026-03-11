@@ -2,16 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"sort"
-	"strings"
-
-	"github.com/samber/lo"
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -22,19 +17,18 @@ import (
 func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
 	reg := h.IntegrationRuntime.Registry()
 	catalog := reg.ProviderMetadataCatalog()
-	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
+	result := make([]types.IntegrationProviderMetadata, 0, len(catalog))
 
 	for providerType, meta := range catalog {
-		spec, ok := reg.Config(providerType)
+		providerSpec, ok := reg.Config(providerType)
 		if !ok {
 			continue
 		}
 
-		entry := buildIntegrationProviderMetadata(providerType, spec, meta, reg)
-		result = append(result, entry)
+		result = append(result, buildIntegrationProviderMetadata(providerType, providerSpec, meta, reg))
 	}
 
-	resp := openapi.IntegrationProvidersResponse{
+	resp := IntegrationProvidersResponse{
 		Reply:     rout.Reply{Success: true},
 		Schema:    keystore.Schema(),
 		Providers: result,
@@ -43,109 +37,28 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 	return h.Success(ctx, resp)
 }
 
-func defaultProviderName(provider types.ProviderType, fallback string) string {
-	if strings.TrimSpace(fallback) != "" {
-		return fallback
-	}
-
-	if provider == types.ProviderUnknown {
-		return ""
-	}
-
-	return strings.ToLower(string(provider))
-}
-
-func providerTags(spec config.ProviderSpec) []string {
-	if len(spec.Tags) > 0 {
-		return append([]string{}, spec.Tags...)
-	}
-
-	keys := lo.Keys(spec.Labels)
-	sort.Strings(keys)
-
-	tags := lo.FilterMap(keys, func(key string, _ int) (string, bool) {
-		value := strings.TrimSpace(spec.Labels[key])
-		return value, value != ""
-	})
-	if category := strings.TrimSpace(spec.Category); category != "" {
-		tags = append([]string{category}, tags...)
-	}
-	tags = lo.Uniq(tags)
-
-	if len(tags) == 0 {
+// environmentCredentials returns the provider-specific operator config as raw JSON for API responses.
+// Returns nil when the spec carries no provider config.
+func environmentCredentials(providerSpec spec.ProviderSpec) json.RawMessage {
+	if len(providerSpec.ProviderConfig) == 0 {
 		return nil
 	}
 
-	return tags
+	return jsonx.CloneRawMessage(providerSpec.ProviderConfig)
 }
 
-// environmentCredentials marshals the operator-configured credential attributes from the
-// provider spec that are merged with tenant-supplied inputs at runtime. Returns nil when
-// the spec carries no environment credential configuration.
-func environmentCredentials(spec config.ProviderSpec) json.RawMessage {
-	switch {
-	case spec.GitHubApp != nil:
-		b, err := json.Marshal(spec.GitHubApp)
-		if err != nil {
-			return nil
-		}
-		return b
-	case spec.GoogleWorkloadIdentity != nil:
-		b, err := json.Marshal(spec.GoogleWorkloadIdentity)
-		if err != nil {
-			return nil
-		}
-		return b
-	default:
-		return nil
-	}
-}
-
-// buildIntegrationProviderMetadata constructs provider metadata for API responses
-func buildIntegrationProviderMetadata(providerType types.ProviderType, spec config.ProviderSpec, meta types.ProviderConfig, reg *registry.Registry) openapi.IntegrationProviderMetadata {
-	entry := openapi.IntegrationProviderMetadata{
-		Name:                   defaultProviderName(providerType, spec.Name),
-		DisplayName:            meta.DisplayName,
-		Category:               meta.Category,
-		Description:            meta.Description,
-		AuthType:               meta.Auth,
-		AuthStartPath:          spec.AuthStartPath,
-		AuthCallbackPath:       spec.AuthCallbackPath,
-		Active:                 lo.FromPtr(spec.Active),
-		Visible:                lo.FromPtr(spec.Visible),
-		Tags:                   providerTags(spec),
-		LogoURL:                meta.LogoURL,
-		DocsURL:                meta.DocsURL,
-		Persistence:            spec.Persistence,
-		Labels:                 spec.Labels,
-		EnvironmentCredentials: environmentCredentials(spec),
-		CredentialsSchema: func() json.RawMessage {
-			if len(meta.Schema) > 0 {
-				return jsonx.CloneRawMessage(meta.Schema)
-			}
-
-			return jsonx.CloneRawMessage(spec.CredentialsSchema)
-		}(),
-	}
-
-	if spec.SupportsInteractiveAuthFlow() {
-		entry.OAuth = &openapi.IntegrationOAuthMetadata{
-			ClientID:    spec.OAuth.ClientID,
-			AuthURL:     spec.OAuth.AuthURL,
-			TokenURL:    spec.OAuth.TokenURL,
-			RedirectURI: spec.OAuth.RedirectURI,
-			Scopes:      append([]string{}, spec.OAuth.Scopes...),
-			UsePKCE:     spec.OAuth.UsePKCE,
-			AuthParams:  spec.OAuth.AuthParams,
-			TokenParams: spec.OAuth.TokenParams,
-		}
-	}
+// buildIntegrationProviderMetadata constructs provider metadata for API responses.
+// It starts from the pre-built catalog metadata and augments it with environment credentials
+// and operation descriptors derived from the live registry.
+func buildIntegrationProviderMetadata(providerType types.ProviderType, providerSpec spec.ProviderSpec, meta types.IntegrationProviderMetadata, reg *registry.Registry) types.IntegrationProviderMetadata {
+	entry := meta
+	entry.EnvironmentCredentials = environmentCredentials(providerSpec)
 
 	if reg != nil {
 		if descriptors := reg.OperationDescriptors(providerType); len(descriptors) > 0 {
-			entry.Operations = make([]openapi.IntegrationOperationMetadata, 0, len(descriptors))
+			entry.Operations = make([]types.OperationMetadata, 0, len(descriptors))
 			for _, descriptor := range descriptors {
-				entry.Operations = append(entry.Operations, openapi.IntegrationOperationMetadata{
+				entry.Operations = append(entry.Operations, types.OperationMetadata{
 					Name:         string(descriptor.Name),
 					Kind:         string(descriptor.Kind),
 					Description:  descriptor.Description,

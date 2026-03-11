@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
@@ -30,4 +31,14 @@ func ValidateSSOEnforced(ctx context.Context, orgID string) error {
 	}
 
 	return nil
+}
+
+// ValidateSCIMMode enforces SSO when the provision mode creates real User entities.
+// Directory-only mode skips SSO enforcement since no logins are provisioned
+func ValidateSCIMMode(ctx context.Context, orgID string, mode enums.SCIMProvisionMode) error {
+	if mode == enums.SCIMProvisionModeDirectory {
+		return nil
+	}
+
+	return ValidateSSOEnforced(ctx, orgID)
 }

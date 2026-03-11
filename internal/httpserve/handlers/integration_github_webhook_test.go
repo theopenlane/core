@@ -21,8 +21,8 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -34,17 +34,12 @@ func githubWebhookSignature(secret string, payload []byte) string {
 }
 
 // fullGitHubAppSpec returns a ProviderSpec with all required GitHub App fields populated.
-func fullGitHubAppSpec() integrationconfig.ProviderSpec {
-	return integrationconfig.ProviderSpec{
+func fullGitHubAppSpec() integrationspec.ProviderSpec {
+	return integrationspec.ProviderSpec{
 		Name:     string(githubprovider.TypeGitHubApp),
 		Active:   lo.ToPtr(true),
 		AuthType: types.AuthKindGitHubApp,
-		GitHubApp: &integrationconfig.GitHubAppSpec{
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    "private-key",
-			WebhookSecret: "secret",
-		},
+		ProviderConfig: json.RawMessage(`{"appid":"123","appslug":"openlane","privatekey":"private-key","webhooksecret":"secret"}`),
 	}
 }
 

@@ -9,13 +9,14 @@ import (
 
 var emptyJSONObject = json.RawMessage(`{}`)
 
-// OperationConfigValidationError captures JSON schema validation details.
-type OperationConfigValidationError struct {
+// ConfigValidationError captures JSON schema validation details
+type ConfigValidationError struct {
+	// Issues contains the validation error messages
 	Issues []string
 }
 
-// Error formats operation config validation failures.
-func (e *OperationConfigValidationError) Error() string {
+// Error formats operation config validation failures
+func (e *ConfigValidationError) Error() string {
 	if e == nil || len(e.Issues) == 0 {
 		return ErrOperationConfigInvalid.Error()
 	}
@@ -23,12 +24,12 @@ func (e *OperationConfigValidationError) Error() string {
 	return ErrOperationConfigInvalid.Error() + ": " + strings.Join(e.Issues, "; ")
 }
 
-// Unwrap enables errors.Is(err, ErrOperationConfigInvalid).
-func (e *OperationConfigValidationError) Unwrap() error {
+// Unwrap enables errors.Is(err, ErrOperationConfigInvalid)
+func (e *ConfigValidationError) Unwrap() error {
 	return ErrOperationConfigInvalid
 }
 
-// ValidateConfig validates operation config against a descriptor-provided JSON schema.
+// ValidateConfig validates operation config against a descriptor-provided JSON schema
 func ValidateConfig(schema json.RawMessage, config json.RawMessage) error {
 	if len(schema) == 0 {
 		return nil
@@ -48,7 +49,7 @@ func ValidateConfig(schema json.RawMessage, config json.RawMessage) error {
 		return nil
 	}
 
-	return &OperationConfigValidationError{
+	return &ConfigValidationError{
 		Issues: jsonx.ValidationErrorStrings(result),
 	}
 }

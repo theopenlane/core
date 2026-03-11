@@ -1,3 +1,5 @@
+//go:build test
+
 package handlers_test
 
 import (
@@ -13,9 +15,9 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/integrations/config"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -27,7 +29,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	op.OperationID = "ConfigureIntegrationProviderSuccess"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
@@ -35,15 +37,18 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	payload := models.IntegrationConfigRequest{
-		ProjectID:           "sample-project",
-		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
-		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	credFields := map[string]any{
+		"projectId":           "sample-project",
+		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
+		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
-		Body:                    payload,
+	credJSON, err := json.Marshal(credFields)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "gcpscc",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 
@@ -56,7 +61,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.IntegrationConfigResponse
+	var resp handlers.IntegrationConfigResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, "gcpscc", resp.Provider)
@@ -83,7 +88,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	op.OperationID = "ConfigureIntegrationProviderInvalid"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
@@ -91,13 +96,17 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	payload := models.IntegrationConfigRequest{
-		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
+	// missing required projectId field
+	credFields := map[string]any{
+		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
 	}
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
-		Body:                    payload,
+	credJSON, err := json.Marshal(credFields)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "gcpscc",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 
@@ -126,7 +135,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider()
 	op.OperationID = "ConfigureIntegrationProviderMissingProvider"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
@@ -134,15 +143,18 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider()
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	payload := models.IntegrationConfigRequest{
-		ProjectID:           "sample-project",
-		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
-		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	credFields := map[string]any{
+		"projectId":           "sample-project",
+		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
+		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: ""},
-		Body:                    payload,
+	credJSON, err := json.Marshal(credFields)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 
@@ -163,7 +175,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnknownProvider()
 	op.OperationID = "ConfigureIntegrationProviderUnknown"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
@@ -171,15 +183,18 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnknownProvider()
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	payload := models.IntegrationConfigRequest{
-		ProjectID:           "sample-project",
-		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
-		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	credFields := map[string]any{
+		"projectId":           "sample-project",
+		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
+		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "unknown_provider"},
-		Body:                    payload,
+	credJSON, err := json.Marshal(credFields)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "unknown_provider",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 
@@ -200,7 +215,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderEmptyPayload() {
 	op.OperationID = "ConfigureIntegrationProviderEmpty"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
@@ -208,9 +223,9 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderEmptyPayload() {
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
-		Body:                    models.IntegrationConfigRequest{},
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "gcpscc",
+		Body:     handlers.IntegrationConfigBody(`{}`),
 	})
 	require.NoError(t, err)
 
@@ -231,20 +246,23 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	op.OperationID = "ConfigureIntegrationProviderUnauthorized"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
 
-	payload := models.IntegrationConfigRequest{
-		ProjectID:           "sample-project",
-		ServiceAccountEmail: "svc@example.iam.gserviceaccount.com",
-		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	credFields := map[string]any{
+		"projectId":           "sample-project",
+		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
+		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
-		Body:                    payload,
+	credJSON, err := json.Marshal(credFields)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "gcpscc",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 
@@ -264,7 +282,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	op.OperationID = "ConfigureIntegrationProviderUpdate"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]config.ProviderSpec{
+	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
 		types.ProviderType("gcpscc"): gcpSCCSpec(),
 	})
 	defer restore()
@@ -272,15 +290,18 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	initialPayload := models.IntegrationConfigRequest{
-		ProjectID:           "initial-project",
-		ServiceAccountEmail: "initial@example.iam.gserviceaccount.com",
-		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	initialFields := map[string]any{
+		"projectId":           "initial-project",
+		"serviceAccountEmail": "initial@example.iam.gserviceaccount.com",
+		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
-	body, err := json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
-		Body:                    initialPayload,
+	credJSON, err := json.Marshal(initialFields)
+	require.NoError(t, err)
+
+	body, err := json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "gcpscc",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 
@@ -292,15 +313,18 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	suite.e.ServeHTTP(rec, req)
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	updatedPayload := models.IntegrationConfigRequest{
-		ProjectID:           "updated-project",
-		ServiceAccountEmail: "updated@example.iam.gserviceaccount.com",
-		Audience:            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	updatedFields := map[string]any{
+		"projectId":           "updated-project",
+		"serviceAccountEmail": "updated@example.iam.gserviceaccount.com",
+		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
 	}
 
-	body, err = json.Marshal(models.IntegrationConfigPayload{
-		IntegrationConfigParams: models.IntegrationConfigParams{Provider: "gcpscc"},
-		Body:                    updatedPayload,
+	credJSON, err = json.Marshal(updatedFields)
+	require.NoError(t, err)
+
+	body, err = json.Marshal(handlers.IntegrationConfigPayload{
+		Provider: "gcpscc",
+		Body:     handlers.IntegrationConfigBody(credJSON),
 	})
 	require.NoError(t, err)
 

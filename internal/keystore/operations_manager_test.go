@@ -6,7 +6,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/core/common/models"
 	integrationops "github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -16,7 +15,7 @@ func TestOperationManagerRunUsesStoredCredential(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := models.CredentialSet{APIToken: "stored"}
+	payload := types.CredentialSet{APIToken: "stored"}
 
 	source := &credentialSourceStub{getPayload: payload}
 
@@ -59,7 +58,7 @@ func TestOperationManagerRunValidatesConfigSchema(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	source := &credentialSourceStub{getPayload: models.CredentialSet{APIToken: "stored"}}
+	source := &credentialSourceStub{getPayload: types.CredentialSet{APIToken: "stored"}}
 
 	descriptor := types.OperationDescriptor{
 		Provider:     provider,
@@ -93,15 +92,15 @@ func TestOperationManagerRunForceRefresh(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	stored := models.CredentialSet{APIToken: "stored"}
-	minted := models.CredentialSet{APIToken: "minted"}
+	stored := types.CredentialSet{APIToken: "stored"}
+	minted := types.CredentialSet{APIToken: "minted"}
 
 	source := &credentialSourceStub{
 		getPayload:  stored,
 		mintPayload: minted,
 	}
 
-	var captured models.CredentialSet
+	var captured types.CredentialSet
 	descriptor := types.OperationDescriptor{
 		Provider: provider,
 		Name:     types.OperationName("refresh"),
@@ -142,8 +141,8 @@ func TestOperationManagerRunUsesIntegrationScopedCredential(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		getPayload:               models.CredentialSet{APIToken: "default"},
-		getForIntegrationPayload: models.CredentialSet{APIToken: "scoped"},
+		getPayload:               types.CredentialSet{APIToken: "default"},
+		getForIntegrationPayload: types.CredentialSet{APIToken: "scoped"},
 	}
 
 	var captured types.OperationInput
@@ -187,11 +186,11 @@ func TestOperationManagerRunForceRefreshUsesIntegrationScopedMint(t *testing.T) 
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		mintPayload:               models.CredentialSet{APIToken: "default"},
-		mintForIntegrationPayload: models.CredentialSet{APIToken: "scoped-minted"},
+		mintPayload:               types.CredentialSet{APIToken: "default"},
+		mintForIntegrationPayload: types.CredentialSet{APIToken: "scoped-minted"},
 	}
 
-	var captured models.CredentialSet
+	var captured types.CredentialSet
 	descriptor := types.OperationDescriptor{
 		Provider: provider,
 		Name:     types.OperationName("refresh"),
@@ -233,7 +232,7 @@ func TestOperationManagerRunRequiresClientManager(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		getPayload: models.CredentialSet{APIToken: "token"},
+		getPayload: types.CredentialSet{APIToken: "token"},
 	}
 
 	descriptor := types.OperationDescriptor{
@@ -265,15 +264,15 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		getPayload:  models.CredentialSet{APIToken: "stored"},
-		mintPayload: models.CredentialSet{APIToken: "minted"},
+		getPayload:  types.CredentialSet{APIToken: "stored"},
+		mintPayload: types.CredentialSet{APIToken: "minted"},
 	}
 
 	var builderRegion any
 	clientDescriptor := types.ClientDescriptor{
 		Provider: provider,
 		Name:     types.ClientName("rest"),
-		Build: func(_ context.Context, payload models.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
+		Build: func(_ context.Context, payload types.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			if payload.APIToken == "" {
 				t.Fatalf("expected credential payload")
 			}
@@ -359,8 +358,8 @@ func TestOperationManagerRunWithCredentialUsesProvidedCredential(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	stored := models.CredentialSet{APIToken: "stored"}
-	provided := models.CredentialSet{APIToken: "provided"}
+	stored := types.CredentialSet{APIToken: "stored"}
+	provided := types.CredentialSet{APIToken: "provided"}
 
 	source := &credentialSourceStub{getPayload: stored, mintPayload: stored}
 
@@ -404,7 +403,7 @@ func TestOperationManagerRunWithCredentialValidatesRequest(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{}
-	payload := models.CredentialSet{}
+	payload := types.CredentialSet{}
 
 	manager, err := NewOperationManager(source, nil)
 	if err != nil {

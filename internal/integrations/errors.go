@@ -5,11 +5,10 @@ import (
 )
 
 var (
-
 	// ErrKeystoreRequired indicates the keystore dependency is missing.
 	ErrKeystoreRequired = errors.New("integrations: keystore required")
-	// ErrAuthStateStoreRequired indicates the authorization state store dependency is missing.
-	ErrAuthStateStoreRequired = errors.New("integrations: auth state store required")
+	// ErrSessionStoreRequired indicates the session store dependency is missing.
+	ErrSessionStoreRequired = errors.New("integrations: session store required")
 	// ErrProviderNotFound signals the requested provider does not exist in the registry.
 	ErrProviderNotFound = errors.New("integrations: provider not found")
 	// ErrProviderConfigNotFound signals the requested provider config metadata is unavailable.
@@ -32,8 +31,10 @@ var (
 	ErrAuthorizationStateNotFound = errors.New("integrations: authorization state not found")
 	// ErrAuthorizationStateExpired indicates the stored session has expired.
 	ErrAuthorizationStateExpired = errors.New("integrations: authorization state expired")
-	// ErrAuthorizationStateStoreFull indicates the in-memory authorization state store is at capacity.
-	ErrAuthorizationStateStoreFull = errors.New("integrations: authorization state store full")
 	// ErrAuthSessionInvalid indicates the stored auth session reference is invalid.
 	ErrAuthSessionInvalid = errors.New("integrations: auth session invalid")
+	// ErrAuthStateStoreRequired indicates the auth state store dependency is missing.
+	ErrAuthStateStoreRequired = errors.New("integrations: auth state store required")
+	// ErrAuthorizationStateStoreFull indicates the auth state store has reached capacity.
+	ErrAuthorizationStateStoreFull = errors.New("integrations: authorization state store full")
 )

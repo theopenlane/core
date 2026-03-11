@@ -8,6 +8,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/common/models"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -70,7 +71,7 @@ func (Hush) Fields() []ent.Field {
 			).
 			Optional().
 			Immutable(),
-		field.JSON("credential_set", models.CredentialSet{}).
+		field.JSON("credential_set", integrationtypes.CredentialSet{}).
 			Comment("a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.").
 			Optional().
 			Annotations(

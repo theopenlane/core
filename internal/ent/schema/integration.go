@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	openapi "github.com/theopenlane/core/common/openapi"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -75,21 +75,21 @@ func (Integration) Fields() []ent.Field {
 			Optional().
 			NotEmpty().
 			Immutable(),
-		field.JSON("provider_metadata", openapi.IntegrationProviderMetadata{}).
+		field.JSON("provider_metadata", integrationtypes.IntegrationProviderMetadata{}).
 			Comment("cached provider metadata for UI and registry access").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.JSON("config", openapi.IntegrationConfig{}).
+		field.JSON("config", integrationtypes.IntegrationConfig{}).
 			Comment("runtime configuration for operations, scheduling, and mappings").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.JSON("provider_state", openapi.IntegrationProviderState{}).
+		field.JSON("provider_state", integrationtypes.IntegrationProviderState{}).
 			Comment("provider-specific integration state captured during auth/config").
 			Optional().
 			Annotations(

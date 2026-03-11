@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -29,7 +28,7 @@ type integrationOperationQueueDetails struct {
 // RunIntegrationOperation queues provider operations for async execution.
 // Health checks are executed inline to return immediate validation status to callers.
 func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationOperationPayload, openapi.IntegrationOperationResponse{}, openapiCtx.Registry)
+	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationOperationPayload, IntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -74,7 +73,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 
-		out := openapi.IntegrationOperationResponse{
+		out := IntegrationOperationResponse{
 			Reply:     rout.Reply{Success: result.Status == types.OperationStatusOK},
 			Provider:  string(providerType),
 			Operation: string(operationName),
@@ -124,7 +123,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
-	out := openapi.IntegrationOperationResponse{
+	out := IntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
 		Provider:  string(providerType),
 		Operation: string(operationName),

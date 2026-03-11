@@ -14,14 +14,14 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -151,8 +151,8 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
-	ghSpec, _ := h.gitHubAppSpec()
-	installationPayload := githubAppInstallationPayload{AppID: ghSpec.GitHubApp.AppID, InstallationID: in.InstallationID}
+	appCfg, _ := h.gitHubAppConfig()
+	installationPayload := githubAppInstallationPayload{AppID: appCfg.AppID, InstallationID: in.InstallationID}
 	if err := h.verifyGitHubAppInstallation(reqCtx, orgID, installationPayload); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("org_id", orgID).Str("installation_id", in.InstallationID).Msg("github app installation verification failed")
 
@@ -193,22 +193,39 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 }
 
 // gitHubAppSpec looks up the GitHub App provider spec from the registry.
-func (h *Handler) gitHubAppSpec() (integrationconfig.ProviderSpec, bool) {
-	spec, ok := h.IntegrationRuntime.Registry().Config(github.TypeGitHubApp)
+func (h *Handler) gitHubAppSpec() (integrationspec.ProviderSpec, bool) {
+	return h.IntegrationRuntime.Registry().Config(github.TypeGitHubApp)
+}
 
-	return spec, ok
+// gitHubAppConfig decodes the operator-level GitHub App config from the provider spec.
+func (h *Handler) gitHubAppConfig() (github.AppConfig, bool) {
+	provSpec, ok := h.gitHubAppSpec()
+	if !ok {
+		return github.AppConfig{}, false
+	}
+
+	var cfg github.AppConfig
+	if err := jsonx.UnmarshalIfPresent(provSpec.ProviderConfig, &cfg); err != nil {
+		return github.AppConfig{}, false
+	}
+
+	return cfg, true
 }
 
 // validateGitHubAppConfig ensures the GitHub App provider is active and all required
 // operator credentials are present in the provider spec.
 func (h *Handler) validateGitHubAppConfig() error {
-	spec, ok := h.gitHubAppSpec()
-	if !ok || spec.Active == nil || !*spec.Active || spec.GitHubApp == nil {
+	provSpec, ok := h.gitHubAppSpec()
+	if !ok || provSpec.Active == nil || !*provSpec.Active {
 		return ErrProviderDisabled
 	}
 
-	s := spec.GitHubApp
-	if s.AppSlug == "" || s.AppID == "" || s.PrivateKey == "" || s.WebhookSecret == "" {
+	appCfg, ok := h.gitHubAppConfig()
+	if !ok {
+		return ErrProviderDisabled
+	}
+
+	if appCfg.AppSlug == "" || appCfg.AppID == "" || appCfg.PrivateKey == "" || appCfg.WebhookSecret == "" {
 		return errGitHubAppNotConfigured
 	}
 
@@ -217,12 +234,12 @@ func (h *Handler) validateGitHubAppConfig() error {
 
 // githubAppInstallURL builds the GitHub App installation URL including the state parameter
 func (h *Handler) githubAppInstallURL(state string) (string, error) {
-	spec, ok := h.gitHubAppSpec()
-	if !ok || spec.GitHubApp == nil || spec.GitHubApp.AppSlug == "" {
+	appCfg, ok := h.gitHubAppConfig()
+	if !ok || appCfg.AppSlug == "" {
 		return "", rout.MissingField("appSlug")
 	}
 
-	slug := spec.GitHubApp.AppSlug
+	slug := appCfg.AppSlug
 
 	u := url.URL{
 		Scheme: "https",
@@ -260,7 +277,7 @@ func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string,
 		return err
 	}
 
-	credential := models.CredentialSet{
+	credential := types.CredentialSet{
 		ProviderData: providerData,
 	}
 

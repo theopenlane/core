@@ -13,29 +13,21 @@ type mappingKey struct {
 	variant  string
 }
 
-// providerSchemaKey identifies whether any mapping exists for a provider and schema pair
-type providerSchemaKey struct {
-	provider types.ProviderType
-	schema   types.MappingSchema
-}
-
 // mappingCatalog stores provider default mappings in a typed lookup index
 type mappingCatalog struct {
-	byKey              map[mappingKey]types.MappingSpec
-	supportsByProvider map[providerSchemaKey]struct{}
+	byKey map[mappingKey]types.MappingOverride
 }
 
 // newMappingCatalog builds an empty provider mapping catalog
 func newMappingCatalog() *mappingCatalog {
 	return &mappingCatalog{
-		byKey:              map[mappingKey]types.MappingSpec{},
-		supportsByProvider: map[providerSchemaKey]struct{}{},
+		byKey: map[mappingKey]types.MappingOverride{},
 	}
 }
 
 // register records one provider mapping in the catalog
-func (c *mappingCatalog) register(provider types.ProviderType, schema types.MappingSchema, variant string, spec types.MappingSpec) {
-	normalizedSchema := types.NormalizeMappingSchema(schema)
+func (c *mappingCatalog) register(provider types.ProviderType, schema types.MappingSchema, variant string, override types.MappingOverride) {
+	normalizedSchema := normalizeMappingSchema(schema)
 	if provider == types.ProviderUnknown || normalizedSchema == "" {
 		return
 	}
@@ -45,11 +37,8 @@ func (c *mappingCatalog) register(provider types.ProviderType, schema types.Mapp
 		schema:   normalizedSchema,
 		variant:  strings.TrimSpace(variant),
 	}
-	c.byKey[key] = spec
-	c.supportsByProvider[providerSchemaKey{
-		provider: provider,
-		schema:   normalizedSchema,
-	}] = struct{}{}
+
+	c.byKey[key] = override
 }
 
 // registerProvider records all mappings published by one provider
@@ -63,39 +52,39 @@ func (c *mappingCatalog) registerProvider(provider types.ProviderType, mappings 
 	}
 }
 
-// supports reports whether any mapping exists for provider and schema
-func (c *mappingCatalog) supports(provider types.ProviderType, schema types.MappingSchema) bool {
-	_, ok := c.supportsByProvider[providerSchemaKey{
-		provider: provider,
-		schema:   types.NormalizeMappingSchema(schema),
-	}]
-
-	return ok
-}
-
-// resolve returns a mapping for provider/schema/variant, falling back to empty-variant default
-func (c *mappingCatalog) resolve(provider types.ProviderType, schema types.MappingSchema, variant string) (types.MappingSpec, bool) {
-	normalizedSchema := types.NormalizeMappingSchema(schema)
+// resolve returns a mapping override for provider/schema/variant, falling back to empty-variant default
+func (c *mappingCatalog) resolve(provider types.ProviderType, schema types.MappingSchema, variant string) (types.MappingOverride, bool) {
+	normalizedSchema := normalizeMappingSchema(schema)
 	if normalizedSchema == "" || provider == types.ProviderUnknown {
-		return types.MappingSpec{}, false
+		return types.MappingOverride{}, false
 	}
 
 	normalizedVariant := strings.TrimSpace(variant)
 	if normalizedVariant != "" {
-		if spec, ok := c.byKey[mappingKey{
+		if override, ok := c.byKey[mappingKey{
 			provider: provider,
 			schema:   normalizedSchema,
 			variant:  normalizedVariant,
 		}]; ok {
-			return spec, true
+			return override, true
 		}
 	}
 
-	spec, ok := c.byKey[mappingKey{
+	override, ok := c.byKey[mappingKey{
 		provider: provider,
 		schema:   normalizedSchema,
 		variant:  "",
 	}]
 
-	return spec, ok
+	return override, ok
+}
+
+// normalizeMappingSchema trims whitespace from a schema name and returns the result
+func normalizeMappingSchema(schema types.MappingSchema) types.MappingSchema {
+	value := strings.TrimSpace(string(schema))
+	if value == "" {
+		return ""
+	}
+
+	return types.MappingSchema(value)
 }

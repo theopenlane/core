@@ -92,7 +92,7 @@ func (h *UserHandler) Create(r *http.Request, attributes scim.ResourceAttributes
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -162,7 +162,7 @@ func (h *UserHandler) Create(r *http.Request, attributes scim.ResourceAttributes
 		entUser = updatedUser
 	}
 
-	return h.toSCIMResource(ctx, entUser, orgID)
+	return h.toSCIMResource(entUser)
 }
 
 // Get returns the resource corresponding with the given identifier.
@@ -175,7 +175,7 @@ func (h *UserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -188,7 +188,7 @@ func (h *UserHandler) Get(r *http.Request, id string) (scim.Resource, error) {
 		return scim.Resource{}, fmt.Errorf("failed to get user: %w", err)
 	}
 
-	return h.toSCIMResource(ctx, entUser, orgID)
+	return h.toSCIMResource(entUser)
 }
 
 // GetAll returns a paginated list of resources.
@@ -201,7 +201,7 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 		return scim.Page{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Page{}, err
 	}
 
@@ -212,10 +212,7 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 		return scim.Page{}, fmt.Errorf("failed to count users: %w", err)
 	}
 
-	offset := params.StartIndex - 1
-	if offset < 0 {
-		offset = 0
-	}
+	offset := max(params.StartIndex-1, 0)
 
 	count := params.Count
 	if count <= 0 {
@@ -230,7 +227,7 @@ func (h *UserHandler) GetAll(r *http.Request, params scim.ListRequestParams) (sc
 	resources := make([]scim.Resource, 0, len(users))
 
 	for _, u := range users {
-		resource, err := h.toSCIMResource(ctx, u, orgID)
+		resource, err := h.toSCIMResource(u)
 		if err != nil {
 			return scim.Page{}, err
 		}
@@ -254,7 +251,7 @@ func (h *UserHandler) Replace(r *http.Request, id string, attributes scim.Resour
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -323,7 +320,7 @@ func (h *UserHandler) Replace(r *http.Request, id string, attributes scim.Resour
 		return scim.Resource{}, HandleEntError(err, "failed to update user", fmt.Sprintf("User with email %s already exists", ua.Email))
 	}
 
-	return h.toSCIMResource(ctx, updatedUser, orgID)
+	return h.toSCIMResource(updatedUser)
 }
 
 // Delete removes the resource with corresponding ID.
@@ -336,7 +333,7 @@ func (h *UserHandler) Delete(r *http.Request, id string) error {
 		return ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return err
 	}
 
@@ -367,7 +364,7 @@ func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchO
 		return scim.Resource{}, ErrOrgNotFound
 	}
 
-	if err := ValidateSSOEnforced(ctx, orgID); err != nil {
+	if err := ValidateSCIMMode(ctx, orgID, ProvisionModeFromContext(ctx)); err != nil {
 		return scim.Resource{}, err
 	}
 
@@ -403,7 +400,7 @@ func (h *UserHandler) Patch(r *http.Request, id string, operations []scim.PatchO
 		}
 	}
 
-	return h.toSCIMResource(ctx, entUser, orgID)
+	return h.toSCIMResource(entUser)
 }
 
 func (h *UserHandler) applyPatchOperation(update *generated.UserUpdateOne, op scim.PatchOperation, modified *bool) error {
@@ -530,7 +527,7 @@ func (h *UserHandler) applyRemoveOperation(update *generated.UserUpdateOne, op s
 }
 
 // toSCIMResource converts an ent User entity to a SCIM Resource representation
-func (h *UserHandler) toSCIMResource(_ any, entUser *generated.User, _ string) (scim.Resource, error) {
+func (h *UserHandler) toSCIMResource(entUser *generated.User) (scim.Resource, error) {
 	firstName := entUser.FirstName
 
 	lastName := entUser.LastName

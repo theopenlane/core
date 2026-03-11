@@ -7,6 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/models"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -260,13 +261,13 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	return ret
 }
 
-func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx context.Context, v any) (models.CredentialSet, error) {
-	var res models.CredentialSet
+func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋintegrationsᚋtypesᚐCredentialSet(ctx context.Context, v any) (integrationtypes.CredentialSet, error) {
+	var res integrationtypes.CredentialSet
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v models.CredentialSet) graphql.Marshaler {
+func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋintegrationsᚋtypesᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v integrationtypes.CredentialSet) graphql.Marshaler {
 	return v
 }
 

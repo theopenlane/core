@@ -6,8 +6,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -60,7 +58,7 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	writer := &fakeCredentialWriter{}
 	runner := &fakeOperationRunner{status: types.OperationStatusOK}
 	minter := &fakePayloadMinter{
-		returnPayload: &models.CredentialSet{OAuthAccessToken: "minted-token"},
+		returnPayload: &types.CredentialSet{OAuthAccessToken: "minted-token"},
 	}
 
 	svc := mustNewService(t, writer, runner, minter)
@@ -68,6 +66,7 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	result, err := svc.Configure(ctx, ConfigureRequest{
 		OrgID:        "org-1",
 		Provider:     provider,
+		AuthKind:     types.AuthKindAPIKey,
 		ProviderData: json.RawMessage(`{"key":"value"}`),
 		Validate:     true,
 	})
@@ -83,8 +82,8 @@ func TestConfigurePersistsOnHealthSuccess(t *testing.T) {
 	if result.HealthResult.Status != types.OperationStatusOK {
 		t.Fatalf("expected health status ok, got %s", result.HealthResult.Status)
 	}
-	if writer.lastAuthKind != types.AuthKindOAuth2 {
-		t.Fatalf("expected minted credential to be persisted as oauth2, got kind %s", writer.lastAuthKind)
+	if writer.lastAuthKind != types.AuthKindAPIKey {
+		t.Fatalf("expected persisted auth kind apikey, got %s", writer.lastAuthKind)
 	}
 }
 
@@ -191,7 +190,7 @@ func TestConfigureRequiresOrgID(t *testing.T) {
 		Provider: provider,
 		Validate: true,
 	})
-	if !errors.Is(err, integrations.ErrOrgIDRequired) {
+	if !errors.Is(err, ErrOrgIDRequired) {
 		t.Fatalf("expected ErrOrgIDRequired, got %v", err)
 	}
 }
@@ -207,12 +206,12 @@ func TestConfigureRequiresProvider(t *testing.T) {
 		OrgID:    "org-1",
 		Validate: true,
 	})
-	if !errors.Is(err, types.ErrProviderTypeRequired) {
-		t.Fatalf("expected ErrProviderTypeRequired, got %v", err)
+	if !errors.Is(err, ErrProviderRequired) {
+		t.Fatalf("expected ErrProviderRequired, got %v", err)
 	}
 }
 
-// mustNewService constructs a Service for tests, panicking on error
+// mustNewService constructs a Service for tests, failing on error.
 func mustNewService(t *testing.T, writer CredentialWriter, runner HealthValidator, minter CredentialMinter) *Service {
 	t.Helper()
 
@@ -224,17 +223,17 @@ func mustNewService(t *testing.T, writer CredentialWriter, runner HealthValidato
 	return svc
 }
 
-// fakeCredentialWriter records credential saves
+// fakeCredentialWriter records credential saves.
 type fakeCredentialWriter struct {
 	saveCount    int
-	lastPayload  models.CredentialSet
+	lastPayload  types.CredentialSet
 	lastAuthKind types.AuthKind
 	saveErr      error
 }
 
-func (f *fakeCredentialWriter) SaveCredential(_ context.Context, _ string, _ types.ProviderType, authKind types.AuthKind, payload models.CredentialSet) (models.CredentialSet, error) {
+func (f *fakeCredentialWriter) SaveCredential(_ context.Context, _ string, _ types.ProviderType, authKind types.AuthKind, payload types.CredentialSet) (types.CredentialSet, error) {
 	if f.saveErr != nil {
-		return models.CredentialSet{}, f.saveErr
+		return types.CredentialSet{}, f.saveErr
 	}
 	f.saveCount++
 	f.lastAuthKind = authKind
@@ -249,7 +248,7 @@ type fakeOperationRunner struct {
 	runErr         error
 }
 
-func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string, _ types.ProviderType, _ models.CredentialSet) (types.OperationResult, error) {
+func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string, _ types.ProviderType, _ types.CredentialSet) (types.OperationResult, error) {
 	f.validateCalled = true
 	if f.runErr != nil {
 		return types.OperationResult{}, f.runErr
@@ -257,17 +256,17 @@ func (f *fakeOperationRunner) ValidateProviderHealth(_ context.Context, _ string
 	return types.OperationResult{Status: f.status}, nil
 }
 
-// fakePayloadMinter records mint calls and returns the subject credential unmodified
+// fakePayloadMinter records mint calls and returns the subject credential unmodified.
 type fakePayloadMinter struct {
 	lastRequest   types.CredentialMintRequest
-	returnPayload *models.CredentialSet
+	returnPayload *types.CredentialSet
 	mintErr       error
 }
 
-func (f *fakePayloadMinter) MintCredential(_ context.Context, request types.CredentialMintRequest) (models.CredentialSet, error) {
+func (f *fakePayloadMinter) MintCredential(_ context.Context, request types.CredentialMintRequest) (types.CredentialSet, error) {
 	f.lastRequest = request
 	if f.mintErr != nil {
-		return models.CredentialSet{}, f.mintErr
+		return types.CredentialSet{}, f.mintErr
 	}
 	if f.returnPayload != nil {
 		return *f.returnPayload, nil

@@ -31,7 +31,6 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	credentialmodels "github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -40,7 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/config"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
@@ -390,13 +389,13 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 
 func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) {
 	providerType := types.ProviderType("github")
-	spec := config.ProviderSpec{
+	spec := integrationspec.ProviderSpec{
 		Name:        "github",
 		DisplayName: "GitHub",
 		Category:    "code",
 		AuthType:    types.AuthKindOAuth2,
 		Active:      lo.ToPtr(true),
-		OAuth: &config.OAuthSpec{
+		OAuth: &integrationspec.OAuthSpec{
 			ClientID:     "test-client",
 			ClientSecret: "test-secret",
 			AuthURL:      "https://example.com/oauth/authorize",
@@ -408,7 +407,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 
 	builder := providers.BuilderFunc{
 		ProviderType: providerType,
-		BuildFunc: func(context.Context, config.ProviderSpec) (providers.Provider, error) {
+		BuildFunc: func(context.Context, integrationspec.ProviderSpec) (types.Provider, error) {
 			return &testOAuthProvider{provider: providerType}, nil
 		},
 	}
@@ -458,9 +457,9 @@ func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext
 	}, nil
 }
 
-func (p *testOAuthProvider) Mint(_ context.Context, _ types.CredentialMintRequest) (credentialmodels.CredentialSet, error) {
+func (p *testOAuthProvider) Mint(_ context.Context, _ types.CredentialMintRequest) (types.CredentialSet, error) {
 	expiry := time.Now().Add(time.Hour)
-	return credentialmodels.CredentialSet{
+	return types.CredentialSet{
 		OAuthAccessToken:  "minted-access-token",
 		OAuthRefreshToken: "minted-refresh-token",
 		OAuthExpiry:       &expiry,
@@ -485,9 +484,9 @@ func (s *testAuthSession) AuthURL() string {
 	return s.authURL
 }
 
-func (s *testAuthSession) Finish(context.Context, string) (credentialmodels.CredentialSet, error) {
+func (s *testAuthSession) Finish(context.Context, string) (types.CredentialSet, error) {
 	expiry := time.Now().Add(time.Hour)
-	return credentialmodels.CredentialSet{
+	return types.CredentialSet{
 		OAuthAccessToken:  "test-access-token",
 		OAuthRefreshToken: "test-refresh-token",
 		OAuthExpiry:       &expiry,

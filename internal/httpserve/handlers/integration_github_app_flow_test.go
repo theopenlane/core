@@ -20,8 +20,8 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -62,7 +62,16 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 
 	privateKey := testRSAPrivateKeyPEM(t)
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, integrationconfig.ProviderSpec{
+	appCfgJSON, err := json.Marshal(github.AppConfig{
+		BaseURL:       mockGitHubAPI.URL + "/api/v3",
+		AppID:         "123",
+		AppSlug:       "openlane",
+		PrivateKey:    privateKey,
+		WebhookSecret: "secret",
+	})
+	require.NoError(t, err)
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, integrationspec.ProviderSpec{
 		Name:               string(github.TypeGitHubApp),
 		DisplayName:        "GitHub App",
 		Category:           "code",
@@ -70,13 +79,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 		Active:             lo.ToPtr(true),
 		Visible:            lo.ToPtr(true),
 		SuccessRedirectURL: "https://console.openlane.io/integrations",
-		GitHubApp: &integrationconfig.GitHubAppSpec{
-			BaseURL:       mockGitHubAPI.URL + "/api/v3",
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    privateKey,
-			WebhookSecret: "secret",
-		},
+		ProviderConfig:     appCfgJSON,
 	})
 	defer restore()
 
@@ -148,7 +151,16 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	defer mockGitHubAPI.Close()
 
 	privateKey := testRSAPrivateKeyPEM(t)
-	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, integrationconfig.ProviderSpec{
+	appCfgJSON2, err := json.Marshal(github.AppConfig{
+		BaseURL:       mockGitHubAPI.URL + "/api/v3",
+		AppID:         "123",
+		AppSlug:       "openlane",
+		PrivateKey:    privateKey,
+		WebhookSecret: "secret",
+	})
+	require.NoError(t, err)
+
+	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, integrationspec.ProviderSpec{
 		Name:               string(github.TypeGitHubApp),
 		DisplayName:        "GitHub App",
 		Category:           "code",
@@ -156,13 +168,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 		Active:             lo.ToPtr(true),
 		Visible:            lo.ToPtr(true),
 		SuccessRedirectURL: "https://console.openlane.io/integrations",
-		GitHubApp: &integrationconfig.GitHubAppSpec{
-			BaseURL:       mockGitHubAPI.URL + "/api/v3",
-			AppID:         "123",
-			AppSlug:       "openlane",
-			PrivateKey:    privateKey,
-			WebhookSecret: "secret",
-		},
+		ProviderConfig:     appCfgJSON2,
 	})
 	defer restoreRuntime()
 

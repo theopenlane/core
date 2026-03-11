@@ -1,5 +1,3 @@
-// Package types centralizes shared enums, credential payloads, and provider
-// interfaces used across the integrations stack (keystore, keymaker, registry).
-// Keeping these definitions in a dedicated package ensures every layer reuses
-// the same strongly typed contracts instead of redefining structs.
-package types //nolint:revive
+// Package types defines the core domain types for the integrationsv2 subsystem;
+// it is the foundational package imported by all other integrationsv2 subpackages
+package types

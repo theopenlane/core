@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -36,7 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/integrations/state"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -360,13 +359,13 @@ func (_u *IntegrationUpdate) ClearIntegrationType() *IntegrationUpdate {
 }
 
 // SetProviderMetadata sets the "provider_metadata" field.
-func (_u *IntegrationUpdate) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetProviderMetadata(v integrationtypes.IntegrationProviderMetadata) *IntegrationUpdate {
 	_u.mutation.SetProviderMetadata(v)
 	return _u
 }
 
 // SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
-func (_u *IntegrationUpdate) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetNillableProviderMetadata(v *integrationtypes.IntegrationProviderMetadata) *IntegrationUpdate {
 	if v != nil {
 		_u.SetProviderMetadata(*v)
 	}
@@ -380,13 +379,13 @@ func (_u *IntegrationUpdate) ClearProviderMetadata() *IntegrationUpdate {
 }
 
 // SetConfig sets the "config" field.
-func (_u *IntegrationUpdate) SetConfig(v openapi.IntegrationConfig) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetConfig(v integrationtypes.IntegrationConfig) *IntegrationUpdate {
 	_u.mutation.SetConfig(v)
 	return _u
 }
 
 // SetNillableConfig sets the "config" field if the given value is not nil.
-func (_u *IntegrationUpdate) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetNillableConfig(v *integrationtypes.IntegrationConfig) *IntegrationUpdate {
 	if v != nil {
 		_u.SetConfig(*v)
 	}
@@ -400,13 +399,13 @@ func (_u *IntegrationUpdate) ClearConfig() *IntegrationUpdate {
 }
 
 // SetProviderState sets the "provider_state" field.
-func (_u *IntegrationUpdate) SetProviderState(v state.IntegrationProviderState) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetProviderState(v integrationtypes.IntegrationProviderState) *IntegrationUpdate {
 	_u.mutation.SetProviderState(v)
 	return _u
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_u *IntegrationUpdate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetNillableProviderState(v *integrationtypes.IntegrationProviderState) *IntegrationUpdate {
 	if v != nil {
 		_u.SetProviderState(*v)
 	}
@@ -2730,13 +2729,13 @@ func (_u *IntegrationUpdateOne) ClearIntegrationType() *IntegrationUpdateOne {
 }
 
 // SetProviderMetadata sets the "provider_metadata" field.
-func (_u *IntegrationUpdateOne) SetProviderMetadata(v openapi.IntegrationProviderMetadata) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetProviderMetadata(v integrationtypes.IntegrationProviderMetadata) *IntegrationUpdateOne {
 	_u.mutation.SetProviderMetadata(v)
 	return _u
 }
 
 // SetNillableProviderMetadata sets the "provider_metadata" field if the given value is not nil.
-func (_u *IntegrationUpdateOne) SetNillableProviderMetadata(v *openapi.IntegrationProviderMetadata) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetNillableProviderMetadata(v *integrationtypes.IntegrationProviderMetadata) *IntegrationUpdateOne {
 	if v != nil {
 		_u.SetProviderMetadata(*v)
 	}
@@ -2750,13 +2749,13 @@ func (_u *IntegrationUpdateOne) ClearProviderMetadata() *IntegrationUpdateOne {
 }
 
 // SetConfig sets the "config" field.
-func (_u *IntegrationUpdateOne) SetConfig(v openapi.IntegrationConfig) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetConfig(v integrationtypes.IntegrationConfig) *IntegrationUpdateOne {
 	_u.mutation.SetConfig(v)
 	return _u
 }
 
 // SetNillableConfig sets the "config" field if the given value is not nil.
-func (_u *IntegrationUpdateOne) SetNillableConfig(v *openapi.IntegrationConfig) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetNillableConfig(v *integrationtypes.IntegrationConfig) *IntegrationUpdateOne {
 	if v != nil {
 		_u.SetConfig(*v)
 	}
@@ -2770,13 +2769,13 @@ func (_u *IntegrationUpdateOne) ClearConfig() *IntegrationUpdateOne {
 }
 
 // SetProviderState sets the "provider_state" field.
-func (_u *IntegrationUpdateOne) SetProviderState(v state.IntegrationProviderState) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetProviderState(v integrationtypes.IntegrationProviderState) *IntegrationUpdateOne {
 	_u.mutation.SetProviderState(v)
 	return _u
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_u *IntegrationUpdateOne) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetNillableProviderState(v *integrationtypes.IntegrationProviderState) *IntegrationUpdateOne {
 	if v != nil {
 		_u.SetProviderState(*v)
 	}
