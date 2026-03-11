@@ -6,7 +6,7 @@ import "io"
 type EvidenceStatus string
 
 var (
-	// EvidenceStatusDraft indecates the in draft.
+	// EvidenceStatusDraft indicates the in draft.
 	EvidenceStatusDraft EvidenceStatus = "DRAFT"
 	// EvidenceStatusSubmitted indicates the submitted.
 	EvidenceStatusSubmitted EvidenceStatus = "SUBMITTED"
