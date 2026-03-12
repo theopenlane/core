@@ -87,6 +87,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -248,6 +249,7 @@ func checkColumn(t, c string) error {
 			remediation.Table:                remediation.ValidColumn,
 			review.Table:                     review.ValidColumn,
 			risk.Table:                       risk.ValidColumn,
+			sladefinition.Table:              sladefinition.ValidColumn,
 			scan.Table:                       scan.ValidColumn,
 			scheduledjob.Table:               scheduledjob.ValidColumn,
 			scheduledjobrun.Table:            scheduledjobrun.ValidColumn,

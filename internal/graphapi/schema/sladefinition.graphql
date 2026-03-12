@@ -1,0 +1,158 @@
+extend type Query {
+    """
+    Look up slaDefinition by ID
+    """
+     slaDefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+    ):  SLADefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new slaDefinition
+    """
+    createSLADefinition(
+        """
+        values of the slaDefinition
+        """
+        input: CreateSLADefinitionInput!
+    ): SLADefinitionCreatePayload!
+    """
+    Create multiple new slaDefinitions
+    """
+    createBulkSLADefinition(
+        """
+        values of the slaDefinition
+        """
+        input: [CreateSLADefinitionInput!]
+    ): SLADefinitionBulkCreatePayload!
+    """
+    Create multiple new slaDefinitions via file upload
+    """
+    createBulkCSVSLADefinition(
+        """
+        csv file containing values of the slaDefinition
+        """
+        input: Upload!
+    ): SLADefinitionBulkCreatePayload!
+    """
+    Update multiple existing slaDefinitions
+    """
+    updateBulkSLADefinition(
+        """
+        IDs of the slaDefinitions to update
+        """
+        ids: [ID!]!
+        """
+        values to update the slaDefinitions with
+        """
+        input: UpdateSLADefinitionInput!
+    ): SLADefinitionBulkUpdatePayload!
+    """
+    Update multiple existing slaDefinitions via file upload
+    """
+    updateBulkCSVSLADefinition(
+        """
+        csv file containing values of the slaDefinition, must include ID column
+        """
+        input: Upload!
+    ): SLADefinitionBulkUpdatePayload!
+    """
+    Update an existing slaDefinition
+    """
+    updateSLADefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+        """
+        New values for the slaDefinition
+        """
+        input: UpdateSLADefinitionInput!
+    ): SLADefinitionUpdatePayload!
+    """
+    Delete an existing slaDefinition
+    """
+    deleteSLADefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+    ): SLADefinitionDeletePayload!
+    """
+    Delete multiple slaDefinitions
+    """
+    deleteBulkSLADefinition(
+        """
+        IDs of the slaDefinitions to delete
+        """
+        ids: [ID!]!
+    ): SLADefinitionBulkDeletePayload!
+}
+
+"""
+Return response for createSLADefinition mutation
+"""
+type SLADefinitionCreatePayload {
+    """
+    Created slaDefinition
+    """
+    slaDefinition: SLADefinition!
+}
+
+"""
+Return response for updateSLADefinition mutation
+"""
+type SLADefinitionUpdatePayload {
+    """
+    Updated slaDefinition
+    """
+    slaDefinition: SLADefinition!
+}
+
+"""
+Return response for deleteSLADefinition mutation
+"""
+type SLADefinitionDeletePayload {
+    """
+    Deleted slaDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSLADefinition mutation
+"""
+type SLADefinitionBulkCreatePayload {
+    """
+    Created slaDefinitions
+    """
+    slaDefinitions: [SLADefinition!]
+}
+
+"""
+Return response for updateBulkSLADefinition mutation
+"""
+type SLADefinitionBulkUpdatePayload {
+    """
+    Updated slaDefinitions
+    """
+    slaDefinitions: [SLADefinition!]
+    """
+    IDs of the updated slaDefinitions
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkSLADefinition mutation
+"""
+type SLADefinitionBulkDeletePayload {
+    """
+    Deleted slaDefinition IDs
+    """
+    deletedIDs: [ID!]!
+}

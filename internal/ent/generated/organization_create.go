@@ -76,6 +76,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -1595,6 +1596,21 @@ func (_c *OrganizationCreate) AddScans(v ...*Scan) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddScanIDs(ids...)
+}
+
+// AddSLADefinitionIDs adds the "sla_definitions" edge to the SLADefinition entity by IDs.
+func (_c *OrganizationCreate) AddSLADefinitionIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSLADefinitionIDs(ids...)
+	return _c
+}
+
+// AddSLADefinitions adds the "sla_definitions" edges to the SLADefinition entity.
+func (_c *OrganizationCreate) AddSLADefinitions(v ...*SLADefinition) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSLADefinitionIDs(ids...)
 }
 
 // AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
@@ -3608,6 +3624,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SLADefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

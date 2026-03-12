@@ -107,11 +107,12 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	NormalizeSchemaType("ProgramMembership"): makeCreateEntry[generated.CreateProgramMembershipInput](func(client *generated.Client) *generated.ProgramMembershipCreate {
 		return client.ProgramMembership.Create()
 	}),
-	NormalizeSchemaType("Remediation"):  makeCreateEntry[generated.CreateRemediationInput](func(client *generated.Client) *generated.RemediationCreate { return client.Remediation.Create() }),
-	NormalizeSchemaType("Review"):       makeCreateEntry[generated.CreateReviewInput](func(client *generated.Client) *generated.ReviewCreate { return client.Review.Create() }),
-	NormalizeSchemaType("Risk"):         makeCreateEntry[generated.CreateRiskInput](func(client *generated.Client) *generated.RiskCreate { return client.Risk.Create() }),
-	NormalizeSchemaType("Scan"):         makeCreateEntry[generated.CreateScanInput](func(client *generated.Client) *generated.ScanCreate { return client.Scan.Create() }),
-	NormalizeSchemaType("ScheduledJob"): makeCreateEntry[generated.CreateScheduledJobInput](func(client *generated.Client) *generated.ScheduledJobCreate { return client.ScheduledJob.Create() }),
+	NormalizeSchemaType("Remediation"):   makeCreateEntry[generated.CreateRemediationInput](func(client *generated.Client) *generated.RemediationCreate { return client.Remediation.Create() }),
+	NormalizeSchemaType("Review"):        makeCreateEntry[generated.CreateReviewInput](func(client *generated.Client) *generated.ReviewCreate { return client.Review.Create() }),
+	NormalizeSchemaType("Risk"):          makeCreateEntry[generated.CreateRiskInput](func(client *generated.Client) *generated.RiskCreate { return client.Risk.Create() }),
+	NormalizeSchemaType("SLADefinition"): makeCreateEntry[generated.CreateSLADefinitionInput](func(client *generated.Client) *generated.SLADefinitionCreate { return client.SLADefinition.Create() }),
+	NormalizeSchemaType("Scan"):          makeCreateEntry[generated.CreateScanInput](func(client *generated.Client) *generated.ScanCreate { return client.Scan.Create() }),
+	NormalizeSchemaType("ScheduledJob"):  makeCreateEntry[generated.CreateScheduledJobInput](func(client *generated.Client) *generated.ScheduledJobCreate { return client.ScheduledJob.Create() }),
 	NormalizeSchemaType("ScheduledJobRun"): makeCreateEntry[generated.CreateScheduledJobRunInput](func(client *generated.Client) *generated.ScheduledJobRunCreate {
 		return client.ScheduledJobRun.Create()
 	}),

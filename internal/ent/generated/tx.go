@@ -156,6 +156,8 @@ type Tx struct {
 	Review *ReviewClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
+	// SLADefinition is the client for interacting with the SLADefinition builders.
+	SLADefinition *SLADefinitionClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
 	// ScheduledJob is the client for interacting with the ScheduledJob builders.
@@ -423,6 +425,7 @@ func (tx *Tx) init() {
 	tx.Remediation = NewRemediationClient(tx.config)
 	tx.Review = NewReviewClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
+	tx.SLADefinition = NewSLADefinitionClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
 	tx.ScheduledJob = NewScheduledJobClient(tx.config)
 	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)

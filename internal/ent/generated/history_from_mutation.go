@@ -8924,6 +8924,22 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if findingSeverityLevelName, exists := m.FindingSeverityLevelName(); exists {
+		create = create.SetFindingSeverityLevelName(findingSeverityLevelName)
+	}
+
+	if findingSeverityLevelID, exists := m.FindingSeverityLevelID(); exists {
+		create = create.SetFindingSeverityLevelID(findingSeverityLevelID)
+	}
+
+	if findingStatusName, exists := m.FindingStatusName(); exists {
+		create = create.SetFindingStatusName(findingStatusName)
+	}
+
+	if findingStatusID, exists := m.FindingStatusID(); exists {
+		create = create.SetFindingStatusID(findingStatusID)
+	}
+
 	if externalID, exists := m.ExternalID(); exists {
 		create = create.SetExternalID(externalID)
 	}
@@ -9044,8 +9060,8 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRemediationSLA(remediationSLA)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
+	if statusDescription, exists := m.StatusDescription(); exists {
+		create = create.SetStatusDescription(statusDescription)
 	}
 
 	if eventTime, exists := m.EventTime(); exists {
@@ -9197,6 +9213,30 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(scopeID)
 		} else {
 			create = create.SetScopeID(finding.ScopeID)
+		}
+
+		if findingSeverityLevelName, exists := m.FindingSeverityLevelName(); exists {
+			create = create.SetFindingSeverityLevelName(findingSeverityLevelName)
+		} else {
+			create = create.SetFindingSeverityLevelName(finding.FindingSeverityLevelName)
+		}
+
+		if findingSeverityLevelID, exists := m.FindingSeverityLevelID(); exists {
+			create = create.SetFindingSeverityLevelID(findingSeverityLevelID)
+		} else {
+			create = create.SetFindingSeverityLevelID(finding.FindingSeverityLevelID)
+		}
+
+		if findingStatusName, exists := m.FindingStatusName(); exists {
+			create = create.SetFindingStatusName(findingStatusName)
+		} else {
+			create = create.SetFindingStatusName(finding.FindingStatusName)
+		}
+
+		if findingStatusID, exists := m.FindingStatusID(); exists {
+			create = create.SetFindingStatusID(findingStatusID)
+		} else {
+			create = create.SetFindingStatusID(finding.FindingStatusID)
 		}
 
 		if externalID, exists := m.ExternalID(); exists {
@@ -9379,10 +9419,10 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRemediationSLA(finding.RemediationSLA)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
+		if statusDescription, exists := m.StatusDescription(); exists {
+			create = create.SetStatusDescription(statusDescription)
 		} else {
-			create = create.SetStatus(finding.Status)
+			create = create.SetStatusDescription(finding.StatusDescription)
 		}
 
 		if eventTime, exists := m.EventTime(); exists {
@@ -9472,6 +9512,10 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(finding.EnvironmentID).
 			SetScopeName(finding.ScopeName).
 			SetScopeID(finding.ScopeID).
+			SetFindingSeverityLevelName(finding.FindingSeverityLevelName).
+			SetFindingSeverityLevelID(finding.FindingSeverityLevelID).
+			SetFindingStatusName(finding.FindingStatusName).
+			SetFindingStatusID(finding.FindingStatusID).
 			SetExternalID(finding.ExternalID).
 			SetExternalOwnerID(finding.ExternalOwnerID).
 			SetSource(finding.Source).
@@ -9502,7 +9546,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTargetDetails(finding.TargetDetails).
 			SetVector(finding.Vector).
 			SetRemediationSLA(finding.RemediationSLA).
-			SetStatus(finding.Status).
+			SetStatusDescription(finding.StatusDescription).
 			SetNillableEventTime(finding.EventTime).
 			SetNillableReportedAt(finding.ReportedAt).
 			SetNillableSourceUpdatedAt(finding.SourceUpdatedAt).
@@ -18462,6 +18506,229 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.SLADefinitionHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if slaDefinitionSeverityLevelName, exists := m.SLADefinitionSeverityLevelName(); exists {
+		create = create.SetSLADefinitionSeverityLevelName(slaDefinitionSeverityLevelName)
+	}
+
+	if slaDefinitionSeverityLevelID, exists := m.SLADefinitionSeverityLevelID(); exists {
+		create = create.SetSLADefinitionSeverityLevelID(slaDefinitionSeverityLevelID)
+	}
+
+	if slaDays, exists := m.SLADays(); exists {
+		create = create.SetSLADays(slaDays)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		sladefinition, err := client.SLADefinition.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.SLADefinitionHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(sladefinition.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(sladefinition.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(sladefinition.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(sladefinition.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(sladefinition.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(sladefinition.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(sladefinition.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(sladefinition.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(sladefinition.OwnerID)
+		}
+
+		if slaDefinitionSeverityLevelName, exists := m.SLADefinitionSeverityLevelName(); exists {
+			create = create.SetSLADefinitionSeverityLevelName(slaDefinitionSeverityLevelName)
+		} else {
+			create = create.SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName)
+		}
+
+		if slaDefinitionSeverityLevelID, exists := m.SLADefinitionSeverityLevelID(); exists {
+			create = create.SetSLADefinitionSeverityLevelID(slaDefinitionSeverityLevelID)
+		} else {
+			create = create.SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID)
+		}
+
+		if slaDays, exists := m.SLADays(); exists {
+			create = create.SetSLADays(slaDays)
+		} else {
+			create = create.SetSLADays(sladefinition.SLADays)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		sladefinition, err := client.SLADefinition.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.SLADefinitionHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(sladefinition.CreatedAt).
+			SetUpdatedAt(sladefinition.UpdatedAt).
+			SetCreatedBy(sladefinition.CreatedBy).
+			SetUpdatedBy(sladefinition.UpdatedBy).
+			SetDeletedAt(sladefinition.DeletedAt).
+			SetDeletedBy(sladefinition.DeletedBy).
+			SetDisplayID(sladefinition.DisplayID).
+			SetTags(sladefinition.Tags).
+			SetOwnerID(sladefinition.OwnerID).
+			SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName).
+			SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID).
+			SetSLADays(sladefinition.SLADays).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -24495,6 +24762,22 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetScopeID(scopeID)
 	}
 
+	if vulnerabilitySeverityLevelName, exists := m.VulnerabilitySeverityLevelName(); exists {
+		create = create.SetVulnerabilitySeverityLevelName(vulnerabilitySeverityLevelName)
+	}
+
+	if vulnerabilitySeverityLevelID, exists := m.VulnerabilitySeverityLevelID(); exists {
+		create = create.SetVulnerabilitySeverityLevelID(vulnerabilitySeverityLevelID)
+	}
+
+	if vulnerabilityStatusName, exists := m.VulnerabilityStatusName(); exists {
+		create = create.SetVulnerabilityStatusName(vulnerabilityStatusName)
+	}
+
+	if vulnerabilityStatusID, exists := m.VulnerabilityStatusID(); exists {
+		create = create.SetVulnerabilityStatusID(vulnerabilityStatusID)
+	}
+
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
 		create = create.SetExternalOwnerID(externalOwnerID)
 	}
@@ -24539,8 +24822,8 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetPriority(priority)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
+	if statusDescription, exists := m.StatusDescription(); exists {
+		create = create.SetStatusDescription(statusDescription)
 	}
 
 	if summary, exists := m.Summary(); exists {
@@ -24738,6 +25021,30 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetScopeID(vulnerability.ScopeID)
 		}
 
+		if vulnerabilitySeverityLevelName, exists := m.VulnerabilitySeverityLevelName(); exists {
+			create = create.SetVulnerabilitySeverityLevelName(vulnerabilitySeverityLevelName)
+		} else {
+			create = create.SetVulnerabilitySeverityLevelName(vulnerability.VulnerabilitySeverityLevelName)
+		}
+
+		if vulnerabilitySeverityLevelID, exists := m.VulnerabilitySeverityLevelID(); exists {
+			create = create.SetVulnerabilitySeverityLevelID(vulnerabilitySeverityLevelID)
+		} else {
+			create = create.SetVulnerabilitySeverityLevelID(vulnerability.VulnerabilitySeverityLevelID)
+		}
+
+		if vulnerabilityStatusName, exists := m.VulnerabilityStatusName(); exists {
+			create = create.SetVulnerabilityStatusName(vulnerabilityStatusName)
+		} else {
+			create = create.SetVulnerabilityStatusName(vulnerability.VulnerabilityStatusName)
+		}
+
+		if vulnerabilityStatusID, exists := m.VulnerabilityStatusID(); exists {
+			create = create.SetVulnerabilityStatusID(vulnerabilityStatusID)
+		} else {
+			create = create.SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID)
+		}
+
 		if externalOwnerID, exists := m.ExternalOwnerID(); exists {
 			create = create.SetExternalOwnerID(externalOwnerID)
 		} else {
@@ -24804,10 +25111,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetPriority(vulnerability.Priority)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
+		if statusDescription, exists := m.StatusDescription(); exists {
+			create = create.SetStatusDescription(statusDescription)
 		} else {
-			create = create.SetStatus(vulnerability.Status)
+			create = create.SetStatusDescription(vulnerability.StatusDescription)
 		}
 
 		if summary, exists := m.Summary(); exists {
@@ -24963,6 +25270,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetEnvironmentID(vulnerability.EnvironmentID).
 			SetScopeName(vulnerability.ScopeName).
 			SetScopeID(vulnerability.ScopeID).
+			SetVulnerabilitySeverityLevelName(vulnerability.VulnerabilitySeverityLevelName).
+			SetVulnerabilitySeverityLevelID(vulnerability.VulnerabilitySeverityLevelID).
+			SetVulnerabilityStatusName(vulnerability.VulnerabilityStatusName).
+			SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
 			SetExternalID(vulnerability.ExternalID).
 			SetCveID(vulnerability.CveID).
@@ -24974,7 +25285,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetImpact(vulnerability.Impact).
 			SetExploitability(vulnerability.Exploitability).
 			SetPriority(vulnerability.Priority).
-			SetStatus(vulnerability.Status).
+			SetStatusDescription(vulnerability.StatusDescription).
 			SetSummary(vulnerability.Summary).
 			SetDescription(vulnerability.Description).
 			SetVector(vulnerability.Vector).

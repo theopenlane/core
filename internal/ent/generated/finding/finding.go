@@ -47,6 +47,14 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldFindingSeverityLevelName holds the string denoting the finding_severity_level_name field in the database.
+	FieldFindingSeverityLevelName = "finding_severity_level_name"
+	// FieldFindingSeverityLevelID holds the string denoting the finding_severity_level_id field in the database.
+	FieldFindingSeverityLevelID = "finding_severity_level_id"
+	// FieldFindingStatusName holds the string denoting the finding_status_name field in the database.
+	FieldFindingStatusName = "finding_status_name"
+	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
+	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -107,8 +115,8 @@ const (
 	FieldVector = "vector"
 	// FieldRemediationSLA holds the string denoting the remediation_sla field in the database.
 	FieldRemediationSLA = "remediation_sla"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
+	// FieldStatusDescription holds the string denoting the status_description field in the database.
+	FieldStatusDescription = "status_description"
 	// FieldEventTime holds the string denoting the event_time field in the database.
 	FieldEventTime = "event_time"
 	// FieldReportedAt holds the string denoting the reported_at field in the database.
@@ -133,6 +141,10 @@ const (
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
 	EdgeScope = "scope"
+	// EdgeFindingSeverityLevel holds the string denoting the finding_severity_level edge name in mutations.
+	EdgeFindingSeverityLevel = "finding_severity_level"
+	// EdgeFindingStatus holds the string denoting the finding_status edge name in mutations.
+	EdgeFindingStatus = "finding_status"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
@@ -215,6 +227,20 @@ const (
 	ScopeInverseTable = "custom_type_enums"
 	// ScopeColumn is the table column denoting the scope relation/edge.
 	ScopeColumn = "scope_id"
+	// FindingSeverityLevelTable is the table that holds the finding_severity_level relation/edge.
+	FindingSeverityLevelTable = "findings"
+	// FindingSeverityLevelInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	FindingSeverityLevelInverseTable = "custom_type_enums"
+	// FindingSeverityLevelColumn is the table column denoting the finding_severity_level relation/edge.
+	FindingSeverityLevelColumn = "finding_severity_level_id"
+	// FindingStatusTable is the table that holds the finding_status relation/edge.
+	FindingStatusTable = "findings"
+	// FindingStatusInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	FindingStatusInverseTable = "custom_type_enums"
+	// FindingStatusColumn is the table column denoting the finding_status relation/edge.
+	FindingStatusColumn = "finding_status_id"
 	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
 	IntegrationsTable = "integration_findings"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -359,6 +385,10 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldFindingSeverityLevelName,
+	FieldFindingSeverityLevelID,
+	FieldFindingStatusName,
+	FieldFindingStatusID,
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldSource,
@@ -389,7 +419,7 @@ var Columns = []string{
 	FieldTargetDetails,
 	FieldVector,
 	FieldRemediationSLA,
-	FieldStatus,
+	FieldStatusDescription,
 	FieldEventTime,
 	FieldReportedAt,
 	FieldSourceUpdatedAt,
@@ -445,7 +475,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [15]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -557,6 +587,26 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByFindingSeverityLevelName orders the results by the finding_severity_level_name field.
+func ByFindingSeverityLevelName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingSeverityLevelName, opts...).ToFunc()
+}
+
+// ByFindingSeverityLevelID orders the results by the finding_severity_level_id field.
+func ByFindingSeverityLevelID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingSeverityLevelID, opts...).ToFunc()
+}
+
+// ByFindingStatusName orders the results by the finding_status_name field.
+func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingStatusName, opts...).ToFunc()
+}
+
+// ByFindingStatusID orders the results by the finding_status_id field.
+func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingStatusID, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.
@@ -684,9 +734,9 @@ func ByRemediationSLA(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemediationSLA, opts...).ToFunc()
 }
 
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+// ByStatusDescription orders the results by the status_description field.
+func ByStatusDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatusDescription, opts...).ToFunc()
 }
 
 // ByEventTime orders the results by the event_time field.
@@ -769,6 +819,20 @@ func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFindingSeverityLevelField orders the results by finding_severity_level field.
+func ByFindingSeverityLevelField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingSeverityLevelStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFindingStatusField orders the results by finding_status field.
+func ByFindingStatusField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingStatusStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1077,6 +1141,20 @@ func newScopeStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScopeInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
+func newFindingSeverityLevelStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingSeverityLevelInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FindingSeverityLevelTable, FindingSeverityLevelColumn),
+	)
+}
+func newFindingStatusStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingStatusInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FindingStatusTable, FindingStatusColumn),
 	)
 }
 func newIntegrationsStep() *sqlgraph.Step {

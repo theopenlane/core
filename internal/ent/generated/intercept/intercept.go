@@ -84,6 +84,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -2115,6 +2116,33 @@ func (f TraverseRisk) Traverse(ctx context.Context, q generated.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *generated.RiskQuery", q)
 }
 
+// The SLADefinitionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SLADefinitionFunc func(context.Context, *generated.SLADefinitionQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SLADefinitionFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SLADefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SLADefinitionQuery", q)
+}
+
+// The TraverseSLADefinition type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSLADefinition func(context.Context, *generated.SLADefinitionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSLADefinition) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSLADefinition) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SLADefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SLADefinitionQuery", q)
+}
+
 // The ScanFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ScanFunc func(context.Context, *generated.ScanQuery) (generated.Value, error)
 
@@ -3126,6 +3154,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ReviewQuery, predicate.Review, review.OrderOption]{typ: generated.TypeReview, tq: q}, nil
 	case *generated.RiskQuery:
 		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
+	case *generated.SLADefinitionQuery:
+		return &query[*generated.SLADefinitionQuery, predicate.SLADefinition, sladefinition.OrderOption]{typ: generated.TypeSLADefinition, tq: q}, nil
 	case *generated.ScanQuery:
 		return &query[*generated.ScanQuery, predicate.Scan, scan.OrderOption]{typ: generated.TypeScan, tq: q}, nil
 	case *generated.ScheduledJobQuery:
