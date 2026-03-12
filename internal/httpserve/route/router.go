@@ -330,6 +330,8 @@ type Config struct {
 	Handler func(echo.Context, *handlers.OpenAPIContext) error
 	// SimpleHandler is used for routes without OpenAPI context.
 	SimpleHandler func(echo.Context) error // For handlers that don't need OpenAPI context
+	// ExcludeFromOAS skips publishing this route in the OpenAPI specification.
+	ExcludeFromOAS bool
 }
 
 // registrationContext is a special echo.Context implementation used during OpenAPI registration
@@ -436,9 +438,11 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 		return err
 	}
 
-	// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
-	openAPIPath := convertEchoPathToOpenAPI("/v1" + config.Path)
-	r.OAS.AddOperation(openAPIPath, config.Method, operation)
+	if !config.ExcludeFromOAS {
+		// Add operation to OpenAPI schema (convert Echo path syntax to OpenAPI syntax)
+		openAPIPath := convertEchoPathToOpenAPI("/v1" + config.Path)
+		r.OAS.AddOperation(openAPIPath, config.Method, operation)
+	}
 
 	return nil
 }

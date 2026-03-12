@@ -155,7 +155,7 @@ func (b *Broker) Mint(ctx context.Context, orgID string, provider types.Provider
 		return types.CredentialSet{}, err
 	}
 
-	resolvedKind := normalizeMintedAuthKind(stored.authKind, minted)
+	resolvedKind := b.resolveAuthKind(provider, stored.authKind)
 
 	persisted, err := b.store.SaveCredential(ctx, orgID, provider, resolvedKind, minted)
 	if err != nil {
@@ -194,7 +194,7 @@ func (b *Broker) MintForIntegration(ctx context.Context, orgID string, provider 
 		return types.CredentialSet{}, err
 	}
 
-	resolvedKind := normalizeMintedAuthKind(stored.authKind, minted)
+	resolvedKind := b.resolveAuthKind(provider, stored.authKind)
 
 	if providerInstance.Capabilities().EnvironmentCredentials || !persistedCredential {
 		b.setCached(orgID, provider, integrationID, credentialSnapshot{
@@ -361,13 +361,18 @@ func cacheExpiry(credential types.CredentialSet, now func() time.Time) time.Time
 	return now().Add(nonExpiringCredentialTTL)
 }
 
-func normalizeMintedAuthKind(storedKind types.AuthKind, credential types.CredentialSet) types.AuthKind {
-	normalized := storedKind.Normalize()
-	if normalized != types.AuthKindUnknown {
+// resolveAuthKind returns the auth kind for the given provider, preferring the stored kind
+// and falling back to the provider's declared auth type from the registry spec.
+func (b *Broker) resolveAuthKind(provider types.ProviderType, storedKind types.AuthKind) types.AuthKind {
+	if normalized := storedKind.Normalize(); normalized != types.AuthKindUnknown {
 		return normalized
 	}
 
-	return types.InferAuthKind(credential)
+	if provSpec, ok := b.registry.Config(provider); ok {
+		return provSpec.AuthType.Normalize()
+	}
+
+	return types.AuthKindUnknown
 }
 
 func cloneProviderState(state *types.IntegrationProviderState) *types.IntegrationProviderState {

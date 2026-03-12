@@ -2,6 +2,7 @@ package providerkit
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"maps"
 	"net/http"
@@ -153,7 +154,7 @@ func httpJSON(ctx context.Context, method string, endpoint string, bearer string
 		options = append(options, httpsling.HeadersFromMap(headers))
 	}
 
-	resp, err := defaultHTTPRequester.ReceiveWithContext(ctx, out, options...)
+	resp, err := defaultHTTPRequester.SendWithContext(ctx, options...)
 	if err != nil {
 		return err
 	}
@@ -164,7 +165,11 @@ func httpJSON(ctx context.Context, method string, endpoint string, bearer string
 		return buildHTTPRequestError(resp, endpoint)
 	}
 
-	return nil
+	if out == nil {
+		return nil
+	}
+
+	return json.NewDecoder(resp.Body).Decode(out)
 }
 
 func buildHTTPRequestError(resp *http.Response, endpoint string) error {

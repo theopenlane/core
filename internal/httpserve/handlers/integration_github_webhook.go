@@ -27,11 +27,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/ingest"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -208,13 +207,13 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.BadRequest(ctx, ErrGitHubWebhookEventHeaderMissing, openapi)
 	}
 
-	ghSpec, _ := h.gitHubAppSpec()
-	webhookSecret := ghSpec.GitHubApp.WebhookSecret
-	if webhookSecret == "" {
+	appCfg, ok := h.gitHubAppConfig()
+	if !ok || appCfg.WebhookSecret == "" {
 		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "missing_webhook_secret")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
+	webhookSecret := appCfg.WebhookSecret
 
 	if !validateGitHubWebhookSignature(webhookSecret, req.Header.Get(githubWebhookSignatureHeader), payload) {
 		recordGitHubWebhookResponse(eventType, http.StatusBadRequest, "invalid_signature")
@@ -311,19 +310,15 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	}
 
 	if h.Gala != nil {
-		topic, ok := ingest.RequestedTopicForSchema(integrationgenerated.IntegrationMappingSchemaVulnerability)
-		if !ok {
-			logx.FromContext(req.Context()).Warn().Msg("failed to resolve ingest topic for schema")
-		} else {
-			receipt := h.Gala.EmitWithHeaders(req.Context(), topic.Name, ingest.RequestedPayload{
-				IntegrationID: integrationRecord.ID,
-				Schema:        integrationgenerated.IntegrationMappingSchemaVulnerability,
-				Operation:     string(types.OperationVulnerabilitiesCollect),
-				Envelopes:     alerts,
-			}, gala.Headers{})
-			if receipt.Err != nil {
-				logx.FromContext(req.Context()).Warn().Err(receipt.Err).Msg("failed to emit integration ingest event")
-			}
+		opEnvelope := integrations.NewIntegrationOperationEnvelope(integrations.IntegrationOperationRequestedPayload{
+			OrgID:     integrationRecord.OwnerID,
+			Provider:  string(github.TypeGitHubApp),
+			Operation: string(types.OperationVulnerabilitiesCollect),
+			RunType:   enums.IntegrationRunTypeWebhook,
+		})
+		receipt := h.Gala.EmitWithHeaders(req.Context(), integrations.IntegrationOperationRequestedTopic.Name, opEnvelope, opEnvelope.Headers())
+		if receipt.Err != nil {
+			logx.FromContext(req.Context()).Warn().Err(receipt.Err).Msg("failed to emit integration ingest event")
 		}
 	}
 

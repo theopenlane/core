@@ -16,8 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
-	"github.com/theopenlane/core/internal/integrations/targetresolver"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
@@ -52,9 +50,9 @@ type WorkflowEngine struct {
 	// proposalManager handles workflow proposal operations
 	proposalManager *ProposalManager
 	// scopeEvaluator evaluates CEL scope conditions for integration actions; initialized by SetIntegrationDeps
-	scopeEvaluator integrationscope.ConditionEvaluator
+	scopeEvaluator *IntegrationScopeEvaluator
 	// integrationResolver resolves integration targets; initialized by SetIntegrationDeps
-	integrationResolver *targetresolver.Resolver
+	integrationResolver *integrationEntResolver
 }
 
 // NewWorkflowEngine creates a new workflow engine using the provided configuration options

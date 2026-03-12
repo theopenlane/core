@@ -56,7 +56,7 @@ type Resolver struct {
 // integrationMetadataSource exposes provider metadata needed by workflow metadata resolvers
 type integrationMetadataSource interface {
 	// ProviderMetadataCatalog returns provider metadata catalog
-	ProviderMetadataCatalog() map[integrationtypes.ProviderType]integrationtypes.ProviderConfig
+	ProviderMetadataCatalog() map[integrationtypes.ProviderType]integrationtypes.IntegrationProviderMetadata
 	// OperationDescriptors returns operation descriptors for a provider
 	OperationDescriptors(provider integrationtypes.ProviderType) []integrationtypes.OperationDescriptor
 }

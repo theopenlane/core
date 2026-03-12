@@ -35,8 +35,8 @@ func TestBrokerGetCachedPurgesExpiredEntries(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected valid cache hit")
 	}
-	if payload.credential.APIToken != "valid" {
-		t.Fatalf("expected valid cached payload, got %q", payload.credential.APIToken)
+	if payload.credential.OAuthAccessToken != "valid" {
+		t.Fatalf("expected valid cached payload, got %q", payload.credential.OAuthAccessToken)
 	}
 
 	if len(broker.cache) != 1 {
@@ -80,7 +80,6 @@ func TestBrokerSetCachedEvictsOldestWhenCapacityReached(t *testing.T) {
 
 func credentialWithExpiry(expiry time.Time, token string) types.CredentialSet {
 	payload := types.CredentialSet{
-		APIToken:         token,
 		OAuthAccessToken: token,
 	}
 	payload.OAuthExpiry = &expiry

@@ -41,6 +41,14 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerCreate() {
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(ctx)
 	suite.Require().NoError(err)
 
+	// Create a SCIM integration for the org so the route middleware can resolve it
+	scimInteg, err := suite.db.Integration.Create().
+		SetOwnerID(scimTestUser.OrganizationID).
+		SetName("SCIM").
+		SetKind("scim").
+		Save(ctx)
+	suite.Require().NoError(err)
+
 	// Register SCIM routes
 	suite.router.Handler = suite.h
 	err = route.RegisterRoutes(suite.router)
@@ -92,7 +100,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerCreate() {
 			payload, err := json.Marshal(body)
 			suite.Require().NoError(err)
 
-			req := httptest.NewRequest(http.MethodPost, "/scim/v2/Users", bytes.NewReader(payload))
+			req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/scim/%s/v2/Users", scimInteg.ID), bytes.NewReader(payload))
 			req.Header.Set("Content-Type", "application/scim+json")
 			req.Header.Set("Accept", "application/scim+json")
 
@@ -188,6 +196,14 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(ctx)
 	suite.Require().NoError(err)
 
+	// Create a SCIM integration for the org so the route middleware can resolve it
+	scimInteg, err := suite.db.Integration.Create().
+		SetOwnerID(scimTestUser.OrganizationID).
+		SetName("SCIM").
+		SetKind("scim").
+		Save(ctx)
+	suite.Require().NoError(err)
+
 	// Register SCIM routes
 	suite.router.Handler = suite.h
 	err = route.RegisterRoutes(suite.router)
@@ -206,7 +222,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 	payload, err := json.Marshal(createBody)
 	suite.Require().NoError(err)
 
-	req := httptest.NewRequest(http.MethodPost, "/scim/v2/Users", bytes.NewReader(payload))
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/scim/%s/v2/Users", scimInteg.ID), bytes.NewReader(payload))
 	req.Header.Set("Content-Type", "application/scim+json")
 	req.Header.Set("Accept", "application/scim+json")
 
@@ -231,7 +247,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 	payload, err = json.Marshal(patchBody)
 	suite.Require().NoError(err)
 
-	req = httptest.NewRequest(http.MethodPatch, fmt.Sprintf("/scim/v2/Users/%s", userID), bytes.NewReader(payload))
+	req = httptest.NewRequest(http.MethodPatch, fmt.Sprintf("/scim/%s/v2/Users/%s", scimInteg.ID, userID), bytes.NewReader(payload))
 	req.Header.Set("Content-Type", "application/scim+json")
 	req.Header.Set("Accept", "application/scim+json")
 
@@ -251,7 +267,7 @@ func (suite *HandlerTestSuite) TestSCIMUserHandlerPatchActiveToggle() {
 	payload, err = json.Marshal(patchBody)
 	suite.Require().NoError(err)
 
-	req = httptest.NewRequest(http.MethodPatch, fmt.Sprintf("/scim/v2/Users/%s", userID), bytes.NewReader(payload))
+	req = httptest.NewRequest(http.MethodPatch, fmt.Sprintf("/scim/%s/v2/Users/%s", scimInteg.ID, userID), bytes.NewReader(payload))
 	req.Header.Set("Content-Type", "application/scim+json")
 	req.Header.Set("Accept", "application/scim+json")
 
@@ -281,6 +297,14 @@ func (suite *HandlerTestSuite) TestSCIMGroupHandlerCreateDeduplicatesMembers() {
 	setting, err := org.Setting(ctx)
 	suite.Require().NoError(err)
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetIdentityProviderLoginEnforced(true).Exec(ctx)
+	suite.Require().NoError(err)
+
+	// Create a SCIM integration for the org so the route middleware can resolve it
+	scimInteg, err := suite.db.Integration.Create().
+		SetOwnerID(scimTestUser.OrganizationID).
+		SetName("SCIM").
+		SetKind("scim").
+		Save(ctx)
 	suite.Require().NoError(err)
 
 	// Register SCIM routes
@@ -313,7 +337,7 @@ func (suite *HandlerTestSuite) TestSCIMGroupHandlerCreateDeduplicatesMembers() {
 	payload, err := json.Marshal(body)
 	suite.Require().NoError(err)
 
-	req := httptest.NewRequest(http.MethodPost, "/scim/v2/Groups", bytes.NewReader(payload))
+	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/scim/%s/v2/Groups", scimInteg.ID), bytes.NewReader(payload))
 	req.Header.Set("Content-Type", "application/scim+json")
 	req.Header.Set("Accept", "application/scim+json")
 

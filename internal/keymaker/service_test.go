@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -128,7 +127,8 @@ func TestService_CompleteAuthorizationExpired(t *testing.T) {
 }
 
 type fakeResolver struct {
-	provider providers.Provider
+	provider types.Provider
+	authKind types.AuthKind
 }
 
 func (r fakeResolver) Provider(pt types.ProviderType) (types.Provider, bool) {
@@ -139,6 +139,10 @@ func (r fakeResolver) Provider(pt types.ProviderType) (types.Provider, bool) {
 		return nil, false
 	}
 	return r.provider, true
+}
+
+func (r fakeResolver) ProviderAuthKind(_ types.ProviderType) types.AuthKind {
+	return r.authKind
 }
 
 type fakeKeystore struct {

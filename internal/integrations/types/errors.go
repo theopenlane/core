@@ -13,4 +13,6 @@ var (
 	ErrIngestOperationRequired = errors.New("ingest: operation required")
 	// ErrProviderStateDecode is returned when provider state decoding fails
 	ErrProviderStateDecode = errors.New("integration state provider decode failed")
+	// ErrProviderTypeRequired is returned when a required provider type is missing or unknown
+	ErrProviderTypeRequired = errors.New("integrations: provider type required")
 )

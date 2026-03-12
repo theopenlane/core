@@ -192,7 +192,7 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 func (s *Store) saveCredentialForIntegrationRecord(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet, integrationRecord *ent.Integration) (types.CredentialSet, error) {
 	secretName := string(provider)
 	envelope := types.CloneCredentialSet(credential)
-	normalizedKind := normalizeCredentialAuthKind(authKind, envelope)
+	normalizedKind := normalizeCredentialAuthKind(authKind)
 
 	existing, err := s.db.Hush.Query().
 		Where(
@@ -246,7 +246,7 @@ func (s *Store) loadCredentialFromIntegrationRecord(provider types.ProviderType,
 		credential := types.CloneCredentialSet(secret.CredentialSet)
 		state := integrationRecord.ProviderState
 
-		return credential, types.AuthKindFromString(secret.Kind), &state, nil
+		return credential, types.AuthKind(secret.Kind).Normalize(), &state, nil
 	}
 
 	return types.CredentialSet{}, types.AuthKindUnknown, nil, ErrCredentialNotFound
@@ -312,11 +312,6 @@ func (s *Store) integrationByID(ctx context.Context, orgID string, provider type
 	return record, nil
 }
 
-func normalizeCredentialAuthKind(kind types.AuthKind, credential types.CredentialSet) types.AuthKind {
-	normalized := kind.Normalize()
-	if normalized != types.AuthKindUnknown {
-		return normalized
-	}
-
-	return types.InferAuthKind(credential)
+func normalizeCredentialAuthKind(kind types.AuthKind) types.AuthKind {
+	return kind.Normalize()
 }

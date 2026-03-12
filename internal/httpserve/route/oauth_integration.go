@@ -59,15 +59,16 @@ func registerRefreshIntegrationTokenHandler(router *Router) error {
 
 func registerIntegrationConfigHandler(router *Router) error {
 	config := Config{
-		Path:        "/integrations/:provider/config",
-		Method:      http.MethodPost,
-		Name:        "ConfigureIntegrationProvider",
-		Description: "Persist integration credentials or configuration",
-		Tags:        []string{"integrations"},
-		OperationID: "ConfigureIntegrationProvider",
-		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *authenticatedEndpoint,
-		Handler:     router.Handler.ConfigureIntegrationProvider,
+		Path:           "/integrations/:provider/config",
+		Method:         http.MethodPost,
+		Name:           "ConfigureIntegrationProvider",
+		Description:    "Persist integration credentials or configuration",
+		Tags:           []string{"integrations"},
+		OperationID:    "ConfigureIntegrationProvider",
+		Security:       handlers.AllSecurityRequirements(),
+		Middlewares:    *authenticatedEndpoint,
+		Handler:        router.Handler.ConfigureIntegrationProvider,
+		ExcludeFromOAS: true,
 	}
 
 	return router.AddV1HandlerRoute(config)

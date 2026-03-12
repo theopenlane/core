@@ -1,8 +1,26 @@
 package types
 
-// MappingSchema identifies a normalized ingest schema (e.g. Vulnerability);
-// constants for valid schema values come from generated code and are not defined here
+// MappingSchema identifies a normalized ingest schema (e.g. Vulnerability)
 type MappingSchema string
+
+const (
+	// MappingSchemaVulnerability is the normalized schema name for vulnerability records
+	MappingSchemaVulnerability MappingSchema = "Vulnerability"
+	// MappingSchemaDirectoryAccount is the normalized schema name for directory account records
+	MappingSchemaDirectoryAccount MappingSchema = "DirectoryAccount"
+	// MappingSchemaDirectoryGroup is the normalized schema name for directory group records
+	MappingSchemaDirectoryGroup MappingSchema = "DirectoryGroup"
+	// MappingSchemaDirectoryMembership is the normalized schema name for directory membership records
+	MappingSchemaDirectoryMembership MappingSchema = "DirectoryMembership"
+	// MappingSchemaAsset is the normalized schema name for asset records
+	MappingSchemaAsset MappingSchema = "Asset"
+	// MappingSchemaContact is the normalized schema name for contact records
+	MappingSchemaContact MappingSchema = "Contact"
+	// MappingSchemaEntity is the normalized schema name for entity records
+	MappingSchemaEntity MappingSchema = "Entity"
+	// MappingSchemaRisk is the normalized schema name for risk records
+	MappingSchemaRisk MappingSchema = "Risk"
+)
 
 // MappingOverride is a unified replacement for both types.MappingSpec and
 // common/openapi.IntegrationMappingOverride; it holds user-configurable CEL

@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -39,10 +40,10 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/objects"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -457,9 +458,9 @@ func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext
 	}, nil
 }
 
-func (p *testOAuthProvider) Mint(_ context.Context, _ types.CredentialMintRequest) (types.CredentialSet, error) {
+func (p *testOAuthProvider) Mint(_ context.Context, _ types.CredentialMintRequest) (models.CredentialSet, error) {
 	expiry := time.Now().Add(time.Hour)
-	return types.CredentialSet{
+	return models.CredentialSet{
 		OAuthAccessToken:  "minted-access-token",
 		OAuthRefreshToken: "minted-refresh-token",
 		OAuthExpiry:       &expiry,
@@ -484,9 +485,9 @@ func (s *testAuthSession) AuthURL() string {
 	return s.authURL
 }
 
-func (s *testAuthSession) Finish(context.Context, string) (types.CredentialSet, error) {
+func (s *testAuthSession) Finish(context.Context, string) (models.CredentialSet, error) {
 	expiry := time.Now().Add(time.Hour)
-	return types.CredentialSet{
+	return models.CredentialSet{
 		OAuthAccessToken:  "test-access-token",
 		OAuthRefreshToken: "test-refresh-token",
 		OAuthExpiry:       &expiry,

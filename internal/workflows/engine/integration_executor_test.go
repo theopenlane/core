@@ -9,7 +9,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -63,7 +62,7 @@ func TestIntegrationRunOperationKind(t *testing.T) {
 }
 
 func TestEvaluateIntegrationScope(t *testing.T) {
-	evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+	evaluator, err := NewIntegrationScopeEvaluator()
 	if err != nil {
 		t.Fatalf("failed to create scope evaluator: %v", err)
 	}
@@ -96,8 +95,8 @@ func TestEvaluateIntegrationScope(t *testing.T) {
 		OrgID:           "org_123",
 		ScopeExpression: "provider =",
 	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
-	if !errors.Is(err, integrationscope.ErrScopeCompilationFailed) {
-		t.Fatalf("expected ErrScopeCompilationFailed, got %v", err)
+	if !errors.Is(err, ErrCELCompilationFailed) {
+		t.Fatalf("expected ErrCELCompilationFailed, got %v", err)
 	}
 }
 

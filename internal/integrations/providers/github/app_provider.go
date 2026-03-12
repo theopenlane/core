@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"strconv"
@@ -213,7 +212,7 @@ func (p *appProvider) Mint(ctx context.Context, subject types.CredentialMintRequ
 	return credential, nil
 }
 
-func (p *appProvider) resolveMintInputs(credential types.CredentialSet, providerState json.RawMessage) (string, string, string, error) {
+func (p *appProvider) resolveMintInputs(credential types.CredentialSet, providerState *types.IntegrationProviderState) (string, string, string, error) {
 	installationID, err := githubAppInstallationIDFromCredential(credential, providerState)
 	if err != nil {
 		return "", "", "", err
@@ -243,27 +242,16 @@ func githubAppProviderDataFromCredential(credential types.CredentialSet) (github
 
 // resolveInstallationID returns the installation ID from the already-decoded provider data,
 // falling back to the provider state when the credential does not carry it directly.
-func resolveInstallationID(decoded githubAppProviderData, providerState json.RawMessage) (string, error) {
+func resolveInstallationID(decoded githubAppProviderData, providerState *types.IntegrationProviderState) (string, error) {
 	if decoded.InstallationID != "" {
 		return decoded.InstallationID, nil
 	}
 
-	if len(providerState) == 0 {
+	if providerState == nil {
 		return "", ErrInstallationIDMissing
 	}
 
-	// Decode provider state — try {"providers": {"githubapp": {...}}} format
-	type providerStateEnvelope struct {
-		Providers map[string]json.RawMessage `json:"providers"`
-	}
-
-	var envelope providerStateEnvelope
-
-	var stateRaw json.RawMessage
-	if err := jsonx.UnmarshalIfPresent(providerState, &envelope); err == nil {
-		stateRaw = envelope.Providers[string(TypeGitHubApp)]
-	}
-
+	stateRaw := providerState.ProviderData(string(TypeGitHubApp))
 	if len(stateRaw) == 0 {
 		return "", ErrInstallationIDMissing
 	}
@@ -280,7 +268,7 @@ func resolveInstallationID(decoded githubAppProviderData, providerState json.Raw
 	return stateDecoded.InstallationID, nil
 }
 
-func githubAppInstallationIDFromCredential(credential types.CredentialSet, providerState json.RawMessage) (string, error) {
+func githubAppInstallationIDFromCredential(credential types.CredentialSet, providerState *types.IntegrationProviderState) (string, error) {
 	decoded, err := githubAppProviderDataFromCredential(credential)
 	if err != nil {
 		return "", err

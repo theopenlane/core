@@ -18,6 +18,8 @@ const defaultSessionTTL = 15 * time.Minute
 // ProviderResolver exposes provider lookups. registry.Registry satisfies this interface
 type ProviderResolver interface {
 	Provider(provider types.ProviderType) (types.Provider, bool)
+	// ProviderAuthKind returns the declared auth kind for the given provider type
+	ProviderAuthKind(provider types.ProviderType) types.AuthKind
 }
 
 // CredentialWriter persists credential payloads produced during activation
@@ -214,7 +216,7 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 		return CompleteResult{}, fmt.Errorf("keymaker: finish auth: %w", err)
 	}
 
-	authKind := types.InferAuthKind(credential)
+	authKind := s.providers.ProviderAuthKind(authState.Provider)
 
 	saveFn := func() (types.CredentialSet, error) {
 		if authState.IntegrationID != "" {

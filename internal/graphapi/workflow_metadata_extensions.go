@@ -6,22 +6,21 @@ import (
 	"slices"
 
 	"github.com/theopenlane/core/common/enums"
-	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // integrationScopeVariableNames lists CEL variables exposed to integration scope expressions
 var integrationScopeVariableNames = []string{
-	integrationscope.VariablePayload,
-	integrationscope.VariableResource,
-	integrationscope.VariableProvider,
-	integrationscope.VariableOperation,
-	integrationscope.VariableConfig,
-	integrationscope.VariableIntegrationConfig,
-	integrationscope.VariableProviderState,
-	integrationscope.VariableOrgID,
-	integrationscope.VariableIntegrationID,
+	integrationtypes.ScopeVariablePayload,
+	integrationtypes.ScopeVariableResource,
+	integrationtypes.ScopeVariableProvider,
+	integrationtypes.ScopeVariableOperation,
+	integrationtypes.ScopeVariableConfig,
+	integrationtypes.ScopeVariableIntegrationConfig,
+	integrationtypes.ScopeVariableProviderState,
+	integrationtypes.ScopeVariableOrgID,
+	integrationtypes.ScopeVariableIntegrationID,
 }
 
 // workflowMetadataExtensionsDocument is the serialized shape for workflow metadata extensions
@@ -127,8 +126,8 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 			Provider:          string(provider),
 			DisplayName:       meta.DisplayName,
 			Category:          meta.Category,
-			AuthKind:          string(meta.Auth),
-			CredentialsSchema: jsonx.CloneRawMessage(meta.Schema),
+			AuthKind:          string(meta.AuthType),
+			CredentialsSchema: jsonx.CloneRawMessage(meta.CredentialsSchema),
 		}
 
 		descriptors := source.OperationDescriptors(provider)
