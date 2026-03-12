@@ -18,7 +18,7 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialSet{AccessKeyID: "ak-1"}
+	payload := types.CredentialSet{OAuthAccessToken: "ak-1"}
 
 	source := &credentialSourceStub{getPayload: payload}
 
@@ -28,10 +28,10 @@ func TestClientPoolManagerGetReusesClients(t *testing.T) {
 		Name:     types.ClientName("rest"),
 		Build: func(_ context.Context, cred types.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			buildCount.Add(1)
-			if cred.AccessKeyID == "" {
+			if cred.OAuthAccessToken == "" {
 				t.Fatalf("expected credential payload in builder")
 			}
-			return types.NewClientInstance(&pooledClient{id: cred.AccessKeyID}), nil
+			return types.NewClientInstance(&pooledClient{id: cred.OAuthAccessToken}), nil
 		},
 	}
 
@@ -77,7 +77,7 @@ func TestClientPoolManagerRegisterDescriptorValidation(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialSet{APIToken: "token"}
+	payload := types.CredentialSet{OAuthAccessToken: "token"}
 
 	manager, err := NewClientPoolManager(&credentialSourceStub{getPayload: payload}, nil)
 	if err != nil {
@@ -134,7 +134,7 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialSet{APIToken: "direct-token"}
+	payload := types.CredentialSet{OAuthAccessToken: "direct-token"}
 
 	var captured types.CredentialSet
 	var capturedConfig json.RawMessage
@@ -144,7 +144,7 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 		Build: func(_ context.Context, cred types.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
 			captured = cred
 			capturedConfig = config
-			return types.NewClientInstance(&pooledClient{id: cred.APIToken}), nil
+			return types.NewClientInstance(&pooledClient{id: cred.OAuthAccessToken}), nil
 		},
 	}
 
@@ -163,11 +163,11 @@ func TestClientPoolManagerBuildFromPayload(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected *pooledClient, got %T", result)
 	}
-	if client.id != payload.APIToken {
+	if client.id != payload.OAuthAccessToken {
 		t.Fatalf("expected client built from provided payload, got %s", client.id)
 	}
-	if captured.APIToken != payload.APIToken {
-		t.Fatalf("expected builder to receive provided payload, got %s", captured.APIToken)
+	if captured.OAuthAccessToken != payload.OAuthAccessToken {
+		t.Fatalf("expected builder to receive provided payload, got %s", captured.OAuthAccessToken)
 	}
 
 	var decodedConfig map[string]any

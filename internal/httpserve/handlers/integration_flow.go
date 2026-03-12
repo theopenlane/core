@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -268,7 +269,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 		return nil, err
 	}
 
-	var payload types.CredentialSet
+	var payload models.CredentialSet
 	if integrationID != "" {
 		payload, err = h.IntegrationRuntime.Broker().MintForIntegration(ctx, orgID, providerType, integrationID)
 	} else {
@@ -309,7 +310,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	return h.Success(ctx, tokenData)
 }
 
-func integrationTokenFromPayload(provider string, payload types.CredentialSet) (*IntegrationTokenResponse, error) {
+func integrationTokenFromPayload(provider string, payload models.CredentialSet) (*IntegrationTokenResponse, error) {
 	if payload.OAuthAccessToken == "" {
 		return nil, wrapTokenError("find access", provider, keystore.ErrCredentialNotFound)
 	}

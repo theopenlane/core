@@ -112,6 +112,17 @@ func (r *Registry) Config(provider types.ProviderType) (spec.ProviderSpec, bool)
 	return providerSpec, ok
 }
 
+// ProviderAuthKind returns the declared auth kind for the given provider type.
+// Returns AuthKindUnknown when the provider is not registered.
+func (r *Registry) ProviderAuthKind(provider types.ProviderType) types.AuthKind {
+	providerSpec, ok := r.configs[provider]
+	if !ok {
+		return types.AuthKindUnknown
+	}
+
+	return providerSpec.AuthType.Normalize()
+}
+
 // ProviderMetadataCatalog returns a copy of all provider metadata entries
 func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.IntegrationProviderMetadata {
 	return lo.MapEntries(r.configs, func(key types.ProviderType, providerSpec spec.ProviderSpec) (types.ProviderType, types.IntegrationProviderMetadata) {

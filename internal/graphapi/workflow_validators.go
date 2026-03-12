@@ -3,7 +3,6 @@ package graphapi
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/url"
 	"sort"
@@ -16,8 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )
 
@@ -334,16 +333,12 @@ func validateIntegrationActionParams(params json.RawMessage) error {
 		return ErrIntegrationScopeExpressionRequired
 	}
 	if input.ScopeExpression != "" {
-		evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+		evaluator, err := engine.NewIntegrationScopeEvaluator()
 		if err != nil {
 			return ErrIntegrationScopeEvaluatorInit
 		}
 
 		if err := evaluator.Validate(input.ScopeExpression); err != nil {
-			if errors.Is(err, integrationscope.ErrScopeCompilationFailed) || errors.Is(err, integrationscope.ErrScopeProgramCreationFailed) || errors.Is(err, integrationscope.ErrScopeExpressionRequired) {
-				return ErrIntegrationScopeExpressionInvalid
-			}
-
 			return ErrIntegrationScopeExpressionInvalid
 		}
 	}

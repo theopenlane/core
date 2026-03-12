@@ -19,7 +19,8 @@ import (
 	"github.com/theopenlane/utils/envparse"
 
 	"github.com/theopenlane/core/config"
-	integrationconfig "github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providers/catalog"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 
@@ -255,54 +256,18 @@ func buildDefaultConfig() *config.Config {
 // with a koanf tag are initialized — read-only metadata fields (credentialsSchema, display names, etc.)
 // are excluded because they carry no koanf tag and are not operator-configurable.
 func initializeIntegrationProviders(cfg *config.Config) {
-	loader := integrationconfig.NewFSLoader(integrationconfig.ProvidersFS, "providers")
-
-	specs, err := loader.Load()
-	if err != nil {
-		panic(fmt.Errorf("failed to load integration provider specs: %w", err))
-	}
+	builders := catalog.Builders(catalog.Config{})
 
 	if cfg.IntegrationProviders == nil {
-		cfg.IntegrationProviders = make(map[string]integrationconfig.ProviderSpec, len(specs))
+		cfg.IntegrationProviders = make(map[string]integrationspec.ProviderSpec, len(builders))
 	}
 
-	for _, spec := range specs {
-		if _, exists := cfg.IntegrationProviders[spec.Name]; !exists {
-			cfg.IntegrationProviders[spec.Name] = providerStubFromSpec(spec)
+	for _, builder := range builders {
+		provSpec := builder.Spec()
+		if _, exists := cfg.IntegrationProviders[provSpec.Name]; !exists {
+			cfg.IntegrationProviders[provSpec.Name] = integrationspec.ProviderStubFromSpec(provSpec)
 		}
 	}
-}
-
-// providerStubFromSpec builds a minimal ProviderSpec containing only the operator-configurable
-// sub-specs. It reflects over the loaded spec and initializes any pointer-to-struct field that
-// has a koanf tag and is non-nil in the source, so the schema generator descends into it without
-// pulling in read-only metadata (credentialsSchema, display names, categories, etc.).
-func providerStubFromSpec(spec integrationconfig.ProviderSpec) integrationconfig.ProviderSpec {
-	stub := integrationconfig.ProviderSpec{}
-
-	specType := reflect.TypeOf(spec)
-	specVal := reflect.ValueOf(spec)
-	stubVal := reflect.ValueOf(&stub).Elem()
-
-	for i := range specType.NumField() {
-		field := specType.Field(i)
-
-		if _, hasKoanf := field.Tag.Lookup("koanf"); !hasKoanf {
-			continue
-		}
-
-		fieldVal := specVal.Field(i)
-		if fieldVal.Kind() != reflect.Ptr || fieldVal.IsNil() {
-			continue
-		}
-
-		stubField := stubVal.Field(i)
-		if stubField.CanSet() {
-			stubField.Set(reflect.New(fieldVal.Type().Elem()))
-		}
-	}
-
-	return stub
 }
 
 // initializeStripeWebhookSecrets ensures the stripe webhook secrets map includes entries for the current and discard API versions

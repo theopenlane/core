@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"strings"
+
+	"github.com/theopenlane/utils/contextx"
 )
 
 // ProviderType is a strongly typed identifier for an integration provider
@@ -170,9 +172,8 @@ type CredentialMintRequest struct {
 	IntegrationID string
 	// Credential contains the previously stored credential fields
 	Credential CredentialSet
-	// ProviderState carries optional provider state from the integration record.
-	// This will become *state.IntegrationProviderState once the state subpackage is created
-	ProviderState json.RawMessage
+	// ProviderState carries optional provider state from the integration record
+	ProviderState *IntegrationProviderState
 	// Attributes carries additional provider-specific attributes
 	Attributes map[string]string
 	// Scopes optionally override scopes for the mint call
@@ -257,6 +258,19 @@ type OperationMetadata struct {
 	Client string `json:"client,omitempty"`
 	// ConfigSchema defines the JSON schema for operation configuration
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
+}
+
+// integrationExecutionContextKey is the package-level context key for IntegrationExecutionContext
+var integrationExecutionContextKey = contextx.NewKey[IntegrationExecutionContext]()
+
+// IntegrationExecutionContextKey returns the context key for IntegrationExecutionContext
+func IntegrationExecutionContextKey() contextx.Key[IntegrationExecutionContext] {
+	return integrationExecutionContextKey
+}
+
+// WithIntegrationExecutionContext stores an IntegrationExecutionContext in ctx
+func WithIntegrationExecutionContext(ctx context.Context, exec IntegrationExecutionContext) context.Context {
+	return integrationExecutionContextKey.Set(ctx, exec)
 }
 
 // IntegrationExecutionContext captures durable integration runtime metadata;

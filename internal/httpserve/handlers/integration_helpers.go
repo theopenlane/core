@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/integrations/targetresolver"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -58,28 +57,39 @@ func integrationHTTPStatus(err error) int {
 	switch {
 	case errors.Is(err, ErrIntegrationNotFound):
 		return http.StatusNotFound
-	case errors.Is(err, ErrInvalidState),
-		errors.Is(err, ErrInvalidStateFormat),
-		errors.Is(err, ErrMissingCode),
-		errors.Is(err, ErrIntegrationIDRequired),
-		errors.Is(err, ErrInvalidProvider),
-		errors.Is(err, ErrProviderDisabled),
-		errors.Is(err, ErrUnsupportedAuthType),
-		errors.Is(err, ErrExchangeAuthCode),
-		errors.Is(err, ErrValidateToken),
-		errors.Is(err, keystore.ErrProviderNotRegistered),
-		errors.Is(err, keystore.ErrOperationNotRegistered),
-		errors.Is(err, keystore.ErrCredentialNotFound),
-		errors.Is(err, keystore.ErrIntegrationAmbiguous),
-		errors.Is(err, activation.ErrHealthCheckFailed),
-		errors.Is(err, engine.ErrIntegrationProviderRequired),
-		errors.Is(err, engine.ErrIntegrationOperationCriteriaRequired),
-		errors.Is(err, engine.ErrIntegrationScopeConditionFalse),
-		errors.Is(err, targetresolver.ErrResolverProviderRequired),
-		errors.Is(err, targetresolver.ErrResolverProviderUnknown),
-		errors.Is(err, targetresolver.ErrResolverProviderMismatch),
-		errors.Is(err, targetresolver.ErrResolverIntegrationNotFound),
-		errors.Is(err, targetresolver.ErrResolverIntegrationAmbiguous):
+	case errors.Is(err, ErrInvalidState):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrInvalidStateFormat):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrMissingCode):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrIntegrationIDRequired):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrInvalidProvider):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrProviderDisabled):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrUnsupportedAuthType):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrExchangeAuthCode):
+		return http.StatusBadRequest
+	case errors.Is(err, ErrValidateToken):
+		return http.StatusBadRequest
+	case errors.Is(err, keystore.ErrProviderNotRegistered):
+		return http.StatusBadRequest
+	case errors.Is(err, keystore.ErrOperationNotRegistered):
+		return http.StatusBadRequest
+	case errors.Is(err, keystore.ErrCredentialNotFound):
+		return http.StatusBadRequest
+	case errors.Is(err, keystore.ErrIntegrationAmbiguous):
+		return http.StatusBadRequest
+	case errors.Is(err, activation.ErrHealthCheckFailed):
+		return http.StatusBadRequest
+	case errors.Is(err, engine.ErrIntegrationProviderRequired):
+		return http.StatusBadRequest
+	case errors.Is(err, engine.ErrIntegrationOperationCriteriaRequired):
+		return http.StatusBadRequest
+	case errors.Is(err, engine.ErrIntegrationScopeConditionFalse):
 		return http.StatusBadRequest
 	default:
 		return http.StatusInternalServerError
@@ -176,7 +186,7 @@ func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integra
 
 	meta, ok := reg.ProviderMetadataCatalog()[provider]
 	if !ok {
-		meta = spec.ToProviderConfig()
+		meta = spec.ToProviderMetadata()
 	}
 
 	entry := buildIntegrationProviderMetadata(provider, spec, meta, reg)

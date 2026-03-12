@@ -35,6 +35,7 @@ func (b *IntegrationConfigBody) UnmarshalJSON(data []byte) error {
 	return (*json.RawMessage)(b).UnmarshalJSON(data)
 }
 
+
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
 type IntegrationConfigPayload struct {
 	// Provider is the provider key.

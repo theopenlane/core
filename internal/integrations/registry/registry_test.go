@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/integrations/providers/catalog"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -23,7 +24,7 @@ func TestNewRegistry(t *testing.T) {
 func TestRegistry_Provider(t *testing.T) {
 	ctx := context.Background()
 
-	r, err := registry.NewRegistry(ctx, nil)
+	r, err := registry.NewRegistry(ctx, catalog.Builders(catalog.Config{}))
 	require.NoError(t, err)
 
 	_, ok := r.Provider(types.ProviderType("github"))
@@ -36,7 +37,7 @@ func TestRegistry_Provider(t *testing.T) {
 func TestRegistry_Config(t *testing.T) {
 	ctx := context.Background()
 
-	r, err := registry.NewRegistry(ctx, nil)
+	r, err := registry.NewRegistry(ctx, catalog.Builders(catalog.Config{}))
 	require.NoError(t, err)
 
 	providerSpec, ok := r.Config(types.ProviderType("slack"))
@@ -47,11 +48,11 @@ func TestRegistry_Config(t *testing.T) {
 func TestRegistry_ProviderMetadataCatalog(t *testing.T) {
 	ctx := context.Background()
 
-	r, err := registry.NewRegistry(ctx, nil)
+	r, err := registry.NewRegistry(ctx, catalog.Builders(catalog.Config{}))
 	require.NoError(t, err)
 
-	catalog := r.ProviderMetadataCatalog()
-	assert.NotEmpty(t, catalog)
+	providerCatalog := r.ProviderMetadataCatalog()
+	assert.NotEmpty(t, providerCatalog)
 }
 
 func TestRegistry_MintCredential_ProviderNotFound(t *testing.T) {

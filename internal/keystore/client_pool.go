@@ -301,16 +301,6 @@ func credentialVersion(payload types.CredentialSet) string {
 
 	builder := helpers.NewHashBuilder()
 	builder.WriteStrings(
-		payload.AccessKeyID,
-		payload.SecretAccessKey,
-		payload.SessionToken,
-		payload.ClientID,
-		payload.ClientSecret,
-		payload.ServiceAccountKey,
-		payload.SubjectToken,
-		payload.ProjectID,
-		payload.AccountID,
-		payload.APIToken,
 		payload.OAuthAccessToken,
 		payload.OAuthRefreshToken,
 		payload.OAuthTokenType,

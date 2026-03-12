@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -10,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
 	"github.com/theopenlane/core/internal/integrations/activation"
-	intauth "github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -61,7 +61,12 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	if key, ok := attrs["serviceAccountKey"].(string); ok {
-		attrs["serviceAccountKey"] = intauth.NormalizeServiceAccountKey(key)
+		trimmed := strings.TrimSpace(key)
+		var decoded string
+		if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
+			trimmed = strings.TrimSpace(decoded)
+		}
+		attrs["serviceAccountKey"] = trimmed
 	}
 
 	result, err := jsonx.ValidateSchema(spec.CredentialsSchema, attrs)

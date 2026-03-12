@@ -3,8 +3,8 @@ package graphapi
 import (
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
 func validateCreateHushInput(input generated.CreateHushInput) error {
@@ -32,7 +32,7 @@ func redactHushCredentialSet(value *generated.Hush) {
 		return
 	}
 
-	value.CredentialSet = integrationtypes.CredentialSet{}
+	value.CredentialSet = models.CredentialSet{}
 }
 
 func redactHushConnection(conn *generated.HushConnection) {

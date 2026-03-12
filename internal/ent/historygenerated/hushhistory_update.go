@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -221,13 +221,13 @@ func (_u *HushHistoryUpdate) ClearKind() *HushHistoryUpdate {
 }
 
 // SetCredentialSet sets the "credential_set" field.
-func (_u *HushHistoryUpdate) SetCredentialSet(v integrationtypes.CredentialSet) *HushHistoryUpdate {
+func (_u *HushHistoryUpdate) SetCredentialSet(v models.CredentialSet) *HushHistoryUpdate {
 	_u.mutation.SetCredentialSet(v)
 	return _u
 }
 
 // SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableCredentialSet(v *integrationtypes.CredentialSet) *HushHistoryUpdate {
+func (_u *HushHistoryUpdate) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryUpdate {
 	if v != nil {
 		_u.SetCredentialSet(*v)
 	}
@@ -664,13 +664,13 @@ func (_u *HushHistoryUpdateOne) ClearKind() *HushHistoryUpdateOne {
 }
 
 // SetCredentialSet sets the "credential_set" field.
-func (_u *HushHistoryUpdateOne) SetCredentialSet(v integrationtypes.CredentialSet) *HushHistoryUpdateOne {
+func (_u *HushHistoryUpdateOne) SetCredentialSet(v models.CredentialSet) *HushHistoryUpdateOne {
 	_u.mutation.SetCredentialSet(v)
 	return _u
 }
 
 // SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableCredentialSet(v *integrationtypes.CredentialSet) *HushHistoryUpdateOne {
+func (_u *HushHistoryUpdateOne) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryUpdateOne {
 	if v != nil {
 		_u.SetCredentialSet(*v)
 	}

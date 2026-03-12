@@ -14,11 +14,12 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/providers/github"
+	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -277,7 +278,7 @@ func (h *Handler) verifyGitHubAppInstallation(ctx context.Context, orgID string,
 		return err
 	}
 
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		ProviderData: providerData,
 	}
 

@@ -17,10 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/ingest"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	integrationscope "github.com/theopenlane/core/internal/integrations/scope"
-	"github.com/theopenlane/core/internal/integrations/targetresolver"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -142,19 +140,9 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 	if deps.Registry != nil {
 		e.integrationRegistry = deps.Registry
 
-		source, err := targetresolver.NewEntSource(e.client)
-		if err != nil {
-			return err
-		}
+		e.integrationResolver = newIntegrationEntResolver(e.client)
 
-		resolver, err := targetresolver.NewResolver(source)
-		if err != nil {
-			return err
-		}
-
-		e.integrationResolver = resolver
-
-		evaluator, err := integrationscope.NewEvaluator(integrationscope.DefaultEvaluatorConfig())
+		evaluator, err := NewIntegrationScopeEvaluator()
 		if err != nil {
 			return err
 		}
@@ -232,7 +220,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		return IntegrationQueueResult{}, ErrIntegrationRegistryRequired
 	}
 
-	criteria := targetresolver.ResolveCriteria{OwnerID: orgID}
+	criteria := integrationResolveCriteria{OwnerID: orgID}
 
 	var integrationRecord *ent.Integration
 	var operationDescriptor types.OperationDescriptor
@@ -279,7 +267,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		operationKind = operationDescriptor.Kind
 	}
 
-	operationConfig, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), req.Config)
+	operationConfig, err := operations.ResolveOperationConfig(integrationRecord.Config, string(operationName), req.Config)
 	if err != nil {
 		return IntegrationQueueResult{}, err
 	}
@@ -296,7 +284,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}
 
 	if shouldEnsurePayloads(operationDescriptor.Ingest) {
-		operationConfig = operations.EnsureIncludePayloads(operationConfig)
+		operationConfig = providerkit.EnsureIncludePayloads(operationConfig)
 	}
 
 	runType := req.RunType
@@ -508,7 +496,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 		}
 	}
 	if shouldEnsurePayloads(ingestContracts) {
-		operationConfig = operations.EnsureIncludePayloads(operationConfig)
+		operationConfig = providerkit.EnsureIncludePayloads(operationConfig)
 	}
 
 	baseOperationCtx := types.WithIntegrationExecutionContext(systemCtx, types.IntegrationExecutionContext{
@@ -553,23 +541,30 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 			errorText = err.Error()
 		} else {
 			for _, batch := range ingestBatches {
-				ingestFn, ok := ingest.HandlerForSchema(batch.Schema)
-				if !ok || ingestFn == nil {
+				var ingestFn types.IngestFunc
+				for _, contract := range ingestContracts {
+					if contract.Schema == batch.Schema {
+						ingestFn = contract.Fn
+						break
+					}
+				}
+
+				if ingestFn == nil {
 					runStatus = enums.IntegrationRunStatusFailed
 					errorText = fmt.Errorf("%w: schema=%s", ErrIntegrationAlertPayloadsMissing, batch.Schema).Error()
 					break
 				}
 
-				ingestResult, ingestErr := ingestFn(operationCtx, ingest.IngestRequest{
-					OrgID:             run.OwnerID,
-					IntegrationID:     integrationRecord.ID,
-					Provider:          provider,
-					Operation:         operationName,
-					IntegrationConfig: integrationRecord.Config,
-					ProviderState:     integrationRecord.ProviderState,
-					OperationConfig:   operationConfig,
-					MappingIndex:      e.integrationMappingIndex,
-					Envelopes:         batch.Envelopes,
+				ingestResult, ingestErr := ingestFn(operationCtx, types.IngestRequest{
+					OrgID:         run.OwnerID,
+					IntegrationID: integrationRecord.ID,
+					Provider:      provider,
+					Operation:     operationName,
+					Config:        integrationRecord.Config,
+					ProviderState: integrationRecord.ProviderState,
+					OperationConfig: operationConfig,
+					MappingIndex:  e.integrationMappingIndex,
+					Envelopes:     batch.Envelopes,
 				})
 
 				metricsDoc = appendIngestMetrics(metricsDoc, batch.Schema, ingestResult)
@@ -611,7 +606,7 @@ func (e *WorkflowEngine) handleIntegrationOperationRequested(ctx gala.HandlerCon
 }
 
 // evaluateIntegrationScope evaluates optional scope expressions before queueing integration runs
-func evaluateIntegrationScope(ctx context.Context, evaluator integrationscope.ConditionEvaluator, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig json.RawMessage, scopePayload json.RawMessage) (bool, error) {
+func evaluateIntegrationScope(ctx context.Context, evaluator *IntegrationScopeEvaluator, req IntegrationQueueRequest, integrationRecord *ent.Integration, provider types.ProviderType, operationName types.OperationName, operationConfig json.RawMessage, scopePayload json.RawMessage) (bool, error) {
 	if evaluator == nil || req.ScopeExpression == "" {
 		return true, nil
 	}
@@ -626,7 +621,7 @@ func evaluateIntegrationScope(ctx context.Context, evaluator integrationscope.Co
 		return false, err
 	}
 
-	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, integrationscope.ScopeVars{
+	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, types.ScopeVars{
 		Payload:           scopePayload,
 		Resource:          req.ScopeResource,
 		Provider:          provider,
@@ -719,13 +714,13 @@ func extractIngestBatches(details json.RawMessage, contracts []types.IngestContr
 	}
 
 	contractIndex := lo.SliceToMap(contracts, func(contract types.IngestContract) (types.MappingSchema, struct{}) {
-		return types.NormalizeMappingSchema(contract.Schema), struct{}{}
+		return contract.Schema, struct{}{}
 	})
 
 	if len(payload.IngestBatches) > 0 {
 		out := make([]ingestBatch, 0, len(payload.IngestBatches))
 		for _, batch := range payload.IngestBatches {
-			schema := types.NormalizeMappingSchema(batch.Schema)
+			schema := batch.Schema
 			if schema == "" {
 				return nil, fmt.Errorf("%w: empty ingest schema", ErrIntegrationAlertPayloadsMissing)
 			}
@@ -753,7 +748,7 @@ func extractIngestBatches(details json.RawMessage, contracts []types.IngestContr
 	var envelopes []types.AlertEnvelope
 	if err := jsonx.RoundTrip(payload.Alerts, &envelopes); err == nil {
 		return []ingestBatch{{
-			Schema:    types.NormalizeMappingSchema(contracts[0].Schema),
+			Schema:    contracts[0].Schema,
 			Envelopes: envelopes,
 		}}, nil
 	}
@@ -764,7 +759,7 @@ func extractIngestBatches(details json.RawMessage, contracts []types.IngestContr
 	}
 
 	return []ingestBatch{{
-		Schema:    types.NormalizeMappingSchema(contracts[0].Schema),
+		Schema:    contracts[0].Schema,
 		Envelopes: []types.AlertEnvelope{envelope},
 	}}, nil
 }
@@ -816,9 +811,8 @@ func encodeIntegrationRunMetrics(metrics integrationRunMetrics) map[string]any {
 }
 
 // appendIngestMetrics attaches ingest results for one schema to integration run metrics.
-func appendIngestMetrics(metrics integrationRunMetrics, schema types.MappingSchema, result ingest.IngestResult) integrationRunMetrics {
-	normalizedSchema := types.NormalizeMappingSchema(schema)
-	if normalizedSchema == "" {
+func appendIngestMetrics(metrics integrationRunMetrics, schema types.MappingSchema, result types.IngestResult) integrationRunMetrics {
+	if schema == "" {
 		return metrics
 	}
 
@@ -827,14 +821,14 @@ func appendIngestMetrics(metrics integrationRunMetrics, schema types.MappingSche
 		if metrics.IngestSummaries == nil {
 			metrics.IngestSummaries = map[string]json.RawMessage{}
 		}
-		metrics.IngestSummaries[string(normalizedSchema)] = raw
+		metrics.IngestSummaries[string(schema)] = raw
 	}
 
 	if len(result.Errors) > 0 {
 		if metrics.IngestErrors == nil {
 			metrics.IngestErrors = map[string][]string{}
 		}
-		metrics.IngestErrors[string(normalizedSchema)] = append([]string(nil), result.Errors...)
+		metrics.IngestErrors[string(schema)] = append([]string(nil), result.Errors...)
 	}
 
 	return metrics

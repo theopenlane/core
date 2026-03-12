@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/operations"
 	teamsprovider "github.com/theopenlane/core/internal/integrations/providers/microsoftteams"
 	slackprovider "github.com/theopenlane/core/internal/integrations/providers/slack"
-	"github.com/theopenlane/core/internal/integrations/targetresolver"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -266,7 +265,7 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 		}
 
 		if selection.Integration != nil {
-			merged, err := operations.ResolveOperationConfig(&selection.Integration.Config, string(selection.Operation.Name), config)
+			merged, err := operations.ResolveOperationConfig(selection.Integration.Config, string(selection.Operation.Name), config)
 			if err != nil {
 				return err
 			}
@@ -322,7 +321,7 @@ func (e *WorkflowEngine) dispatchUserNotification(ctx context.Context, ownerID, 
 	}
 
 	if integrationRecord != nil {
-		merged, err := operations.ResolveOperationConfig(&integrationRecord.Config, string(operationName), config)
+		merged, err := operations.ResolveOperationConfig(integrationRecord.Config, string(operationName), config)
 		if err != nil {
 			return err
 		}
@@ -375,17 +374,7 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 		return notificationExecutionTarget{}, err
 	}
 
-	source, err := targetresolver.NewEntSource(e.client)
-	if err != nil {
-		return notificationExecutionTarget{}, err
-	}
-
-	resolver, err := targetresolver.NewResolver(source)
-	if err != nil {
-		return notificationExecutionTarget{}, err
-	}
-
-	criteria := targetresolver.ResolveCriteria{
+	criteria := integrationResolveCriteria{
 		OwnerID:  ownerID,
 		Provider: mo.Some(provider),
 	}
@@ -394,7 +383,7 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 		criteria.IntegrationID = mo.Some(template.IntegrationID)
 	}
 
-	result, err := resolver.Resolve(workflows.AllowContext(ctx), criteria)
+	result, err := e.integrationResolver.Resolve(workflows.AllowContext(ctx), criteria)
 	if err != nil {
 		return notificationExecutionTarget{}, err
 	}

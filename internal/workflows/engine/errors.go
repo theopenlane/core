@@ -5,6 +5,8 @@ import "errors"
 var (
 	// ErrInstanceNotFound is returned when a workflow instance cannot be found
 	ErrInstanceNotFound = errors.New("workflow instance not found")
+	// ErrScopeExpressionRequired is returned when a scope expression is required but empty
+	ErrScopeExpressionRequired = errors.New("scope expression is required")
 	// ErrAssignmentNotFound is returned when a workflow assignment cannot be found
 	ErrAssignmentNotFound = errors.New("workflow assignment not found")
 	// ErrInvalidState is returned when a workflow instance is in an invalid state for the operation

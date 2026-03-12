@@ -14,7 +14,8 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/common/models"
+	openmodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -39,7 +40,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.DeleteIntegrationResponse
+	var resp openmodels.DeleteIntegrationResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, integrationID, resp.DeletedID)
@@ -77,7 +78,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.Context, orgID string, provider types.ProviderType) string {
 	t.Helper()
 
-	payload := types.CredentialSet{
+	payload := models.CredentialSet{
 		ProviderData: json.RawMessage(`{"token":"secret"}`),
 	}
 
@@ -148,7 +149,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationWithExplicitID() {
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
-	var resp models.DeleteIntegrationResponse
+	var resp openmodels.DeleteIntegrationResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.Equal(t, integrationID, resp.DeletedID)

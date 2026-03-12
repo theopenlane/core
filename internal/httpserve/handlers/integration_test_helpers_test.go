@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -18,7 +19,10 @@ import (
 
 // decodeGitHubAppConfig decodes a github.AppConfig from a spec's ProviderConfig field.
 // Returns a zero-value AppConfig if ProviderConfig is empty or decoding fails.
-func decodeGitHubAppConfig(t interface{ Helper(); Fatal(...any) }, provSpec spec.ProviderSpec) githubprovider.AppConfig {
+func decodeGitHubAppConfig(t interface {
+	Helper()
+	Fatal(...any)
+}, provSpec spec.ProviderSpec) githubprovider.AppConfig {
 	t.Helper()
 	var cfg githubprovider.AppConfig
 	if err := jsonx.UnmarshalIfPresent(provSpec.ProviderConfig, &cfg); err != nil {
@@ -96,8 +100,8 @@ func (p *testProvider) BeginAuth(context.Context, types.AuthContext) (types.Auth
 	return nil, nil
 }
 
-func (p *testProvider) Mint(context.Context, types.CredentialMintRequest) (types.CredentialSet, error) {
-	return types.CredentialSet{}, nil
+func (p *testProvider) Mint(context.Context, types.CredentialMintRequest) (models.CredentialSet, error) {
+	return models.CredentialSet{}, nil
 }
 
 func (p *testProvider) Operations() []types.OperationDescriptor {

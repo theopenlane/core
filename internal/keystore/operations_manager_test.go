@@ -15,7 +15,7 @@ func TestOperationManagerRunUsesStoredCredential(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	payload := types.CredentialSet{APIToken: "stored"}
+	payload := types.CredentialSet{OAuthAccessToken: "stored"}
 
 	source := &credentialSourceStub{getPayload: payload}
 
@@ -46,8 +46,8 @@ func TestOperationManagerRunUsesStoredCredential(t *testing.T) {
 	if result.Status != types.OperationStatusOK {
 		t.Fatalf("expected status ok, got %s", result.Status)
 	}
-	if captured.Credential.APIToken != payload.APIToken {
-		t.Fatalf("expected stored credential, got %s", captured.Credential.APIToken)
+	if captured.Credential.OAuthAccessToken != payload.OAuthAccessToken {
+		t.Fatalf("expected stored credential, got %s", captured.Credential.OAuthAccessToken)
 	}
 	if source.getCount != 1 || source.mintCount != 0 {
 		t.Fatalf("expected one Get call, zero Mint calls; got %d/%d", source.getCount, source.mintCount)
@@ -58,7 +58,7 @@ func TestOperationManagerRunValidatesConfigSchema(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	source := &credentialSourceStub{getPayload: types.CredentialSet{APIToken: "stored"}}
+	source := &credentialSourceStub{getPayload: types.CredentialSet{OAuthAccessToken: "stored"}}
 
 	descriptor := types.OperationDescriptor{
 		Provider:     provider,
@@ -92,8 +92,8 @@ func TestOperationManagerRunForceRefresh(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	stored := types.CredentialSet{APIToken: "stored"}
-	minted := types.CredentialSet{APIToken: "minted"}
+	stored := types.CredentialSet{OAuthAccessToken: "stored"}
+	minted := types.CredentialSet{OAuthAccessToken: "minted"}
 
 	source := &credentialSourceStub{
 		getPayload:  stored,
@@ -128,8 +128,8 @@ func TestOperationManagerRunForceRefresh(t *testing.T) {
 	if source.mintCount != 1 || source.getCount != 0 {
 		t.Fatalf("expected one Mint call and zero Get calls, got %d/%d", source.mintCount, source.getCount)
 	}
-	if captured.APIToken != minted.APIToken {
-		t.Fatalf("expected minted credential, got %s", captured.APIToken)
+	if captured.OAuthAccessToken != minted.OAuthAccessToken {
+		t.Fatalf("expected minted credential, got %s", captured.OAuthAccessToken)
 	}
 	if result.Status != types.OperationStatusUnknown {
 		t.Fatalf("expected status defaulted to unknown, got %s", result.Status)
@@ -141,8 +141,8 @@ func TestOperationManagerRunUsesIntegrationScopedCredential(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		getPayload:               types.CredentialSet{APIToken: "default"},
-		getForIntegrationPayload: types.CredentialSet{APIToken: "scoped"},
+		getPayload:               types.CredentialSet{OAuthAccessToken: "default"},
+		getForIntegrationPayload: types.CredentialSet{OAuthAccessToken: "scoped"},
 	}
 
 	var captured types.OperationInput
@@ -176,8 +176,8 @@ func TestOperationManagerRunUsesIntegrationScopedCredential(t *testing.T) {
 	if source.lastGetIntegrationID != "int-1" {
 		t.Fatalf("expected integration id int-1, got %s", source.lastGetIntegrationID)
 	}
-	if captured.Credential.APIToken != "scoped" {
-		t.Fatalf("expected scoped credential payload, got %s", captured.Credential.APIToken)
+	if captured.Credential.OAuthAccessToken != "scoped" {
+		t.Fatalf("expected scoped credential payload, got %s", captured.Credential.OAuthAccessToken)
 	}
 }
 
@@ -186,8 +186,8 @@ func TestOperationManagerRunForceRefreshUsesIntegrationScopedMint(t *testing.T) 
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		mintPayload:               types.CredentialSet{APIToken: "default"},
-		mintForIntegrationPayload: types.CredentialSet{APIToken: "scoped-minted"},
+		mintPayload:               types.CredentialSet{OAuthAccessToken: "default"},
+		mintForIntegrationPayload: types.CredentialSet{OAuthAccessToken: "scoped-minted"},
 	}
 
 	var captured types.CredentialSet
@@ -222,8 +222,8 @@ func TestOperationManagerRunForceRefreshUsesIntegrationScopedMint(t *testing.T) 
 	if source.lastMintIntegrationID != "int-2" {
 		t.Fatalf("expected integration id int-2, got %s", source.lastMintIntegrationID)
 	}
-	if captured.APIToken != "scoped-minted" {
-		t.Fatalf("expected scoped minted credential, got %s", captured.APIToken)
+	if captured.OAuthAccessToken != "scoped-minted" {
+		t.Fatalf("expected scoped minted credential, got %s", captured.OAuthAccessToken)
 	}
 }
 
@@ -232,7 +232,7 @@ func TestOperationManagerRunRequiresClientManager(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		getPayload: types.CredentialSet{APIToken: "token"},
+		getPayload: types.CredentialSet{OAuthAccessToken: "token"},
 	}
 
 	descriptor := types.OperationDescriptor{
@@ -264,8 +264,8 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 
 	provider := types.ProviderType("acme")
 	source := &credentialSourceStub{
-		getPayload:  types.CredentialSet{APIToken: "stored"},
-		mintPayload: types.CredentialSet{APIToken: "minted"},
+		getPayload:  types.CredentialSet{OAuthAccessToken: "stored"},
+		mintPayload: types.CredentialSet{OAuthAccessToken: "minted"},
 	}
 
 	var builderRegion any
@@ -273,7 +273,7 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 		Provider: provider,
 		Name:     types.ClientName("rest"),
 		Build: func(_ context.Context, payload types.CredentialSet, config json.RawMessage) (types.ClientInstance, error) {
-			if payload.APIToken == "" {
+			if payload.OAuthAccessToken == "" {
 				t.Fatalf("expected credential payload")
 			}
 			decoded := map[string]any{}
@@ -281,7 +281,7 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 				_ = json.Unmarshal(config, &decoded)
 			}
 			builderRegion = decoded["region"]
-			return types.NewClientInstance(&pooledClient{id: payload.APIToken}), nil
+			return types.NewClientInstance(&pooledClient{id: payload.OAuthAccessToken}), nil
 		},
 	}
 
@@ -328,7 +328,7 @@ func TestOperationManagerRunResolvesClientAndConfig(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected pooled client type, got %T", captured.Client)
 	}
-	if client.id != source.mintPayload.APIToken {
+	if client.id != source.mintPayload.OAuthAccessToken {
 		t.Fatalf("expected client built from minted credential, got %s", client.id)
 	}
 
@@ -358,8 +358,8 @@ func TestOperationManagerRunWithCredentialUsesProvidedCredential(t *testing.T) {
 	t.Parallel()
 
 	provider := types.ProviderType("acme")
-	stored := types.CredentialSet{APIToken: "stored"}
-	provided := types.CredentialSet{APIToken: "provided"}
+	stored := types.CredentialSet{OAuthAccessToken: "stored"}
+	provided := types.CredentialSet{OAuthAccessToken: "provided"}
 
 	source := &credentialSourceStub{getPayload: stored, mintPayload: stored}
 
@@ -390,8 +390,8 @@ func TestOperationManagerRunWithCredentialUsesProvidedCredential(t *testing.T) {
 	if result.Status != types.OperationStatusOK {
 		t.Fatalf("expected status ok, got %s", result.Status)
 	}
-	if captured.Credential.APIToken != provided.APIToken {
-		t.Fatalf("expected provided credential, got %s", captured.Credential.APIToken)
+	if captured.Credential.OAuthAccessToken != provided.OAuthAccessToken {
+		t.Fatalf("expected provided credential, got %s", captured.Credential.OAuthAccessToken)
 	}
 	if source.getCount != 0 || source.mintCount != 0 {
 		t.Fatalf("expected no credential store calls; got get=%d mint=%d", source.getCount, source.mintCount)
