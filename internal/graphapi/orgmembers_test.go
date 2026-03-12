@@ -428,14 +428,16 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	// make sure the user default org is not set to the deleted org
 	suite.assertDefaultOrgUpdate(testUser.UserCtx, t, om.UserID, om.OrganizationID, false)
 
-	// test re-adding the user to the org
-	_, err = suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, testclient.CreateOrgMembershipInput{
+	// re-adding the user to the org should succeed since the org membership
+	// is deleted and the managed group is properly cleaned up
+	reAddResp, err := suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, testclient.CreateOrgMembershipInput{
 		OrganizationID: om.OrganizationID,
 		UserID:         om.UserID,
 		Role:           &om.Role,
 	})
 
-	assert.ErrorContains(t, err, "orgmembership already exists")
+	assert.NilError(t, err)
+	assert.Assert(t, reAddResp != nil)
 
 	// cant remove self from org and owners cannot be removed
 	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &testclient.OrgMembershipWhereInput{
