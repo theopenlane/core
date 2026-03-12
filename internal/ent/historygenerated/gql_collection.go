@@ -5828,6 +5828,11 @@ func (_q *GroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, grouphistory.FieldLogoURL)
 				fieldSeen[grouphistory.FieldLogoURL] = struct{}{}
 			}
+		case "avatarLocalFileID":
+			if _, ok := fieldSeen[grouphistory.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, grouphistory.FieldAvatarLocalFileID)
+				fieldSeen[grouphistory.FieldAvatarLocalFileID] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[grouphistory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, grouphistory.FieldDisplayName)

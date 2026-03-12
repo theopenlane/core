@@ -235,7 +235,6 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 
 	_, err = m.Client().Group.Delete().
 		Where(
-			group.CreatedBy(userID),
 			group.IsManaged(true),
 			group.OwnerID(orgID),
 			group.Name(getUserGroupName(user.DisplayName, user.ID)),
@@ -283,11 +282,20 @@ func createUserManagedGroup(ctx context.Context, m *generated.OrgMembershipMutat
 		Tags:        tags,
 	}
 
-	group, err := m.Client().Group.Create().
+	groupCreate := m.Client().Group.Create().
 		SetInput(groupInput).
 		SetIsManaged(true).
-		SetOwnerID(member.OrgID).
-		Save(allowCtx)
+		SetOwnerID(member.OrgID)
+
+	if dbUser.AvatarRemoteURL != nil && *dbUser.AvatarRemoteURL != "" {
+		groupCreate.SetGravatarLogoURL(*dbUser.AvatarRemoteURL)
+	}
+
+	if dbUser.AvatarLocalFileID != nil && *dbUser.AvatarLocalFileID != "" {
+		groupCreate.SetAvatarLocalFileID(*dbUser.AvatarLocalFileID)
+	}
+
+	group, err := groupCreate.Save(allowCtx)
 	if err != nil {
 		logx.FromContext(allowCtx).Error().Err(err).Msg("error creating user managed group")
 		return err

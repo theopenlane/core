@@ -1,4 +1,4 @@
-h1:LikoweVBExLLmzrMhkapDXDr8WtVoukZN753aMeN8Cs=
+h1:wjymg7zOlUiv2NibvbGTh4kjSuEXjSkA/LD986HI7tI=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -64,3 +64,6 @@ h1:LikoweVBExLLmzrMhkapDXDr8WtVoukZN753aMeN8Cs=
 20260302211158_identity_holder_files.sql h1:Oeg7esrmxpXiHmIRqLlMQFeoUtdonS9rKQGL0OPvwB8=
 20260302220341_control_entities.sql h1:PxVVxSJ4oqqPa/eSmf96g1K4Z5Uz2HmzpS4+r14nIOU=
 20260303182417_onboarding_demo.sql h1:dya/+xQkrRo8WRHfO9f9QtOHoEFiuc+45LkSQ0zt2jY=
+20260311172446_workflow_def_groups.sql h1:nAR/ZLxj8Pj7Y9d45lowHXJJB8mM67cuqnt7dMrgVRQ=
+20260311180522_managed_group_avatar.sql h1:XsasIUjltSuMdkoKSN+0ArqC4veVKR+Xw4raX/3D8+w=
+20260311180534_managed_group_avatar_history.sql h1:Ehwb9NpGzvWUEx4i4dSLi5xLAeGXIRhor71tf6MktdQ=

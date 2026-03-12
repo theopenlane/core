@@ -124,6 +124,9 @@ coreConfiguration:
     trustcentercnametarget: ""  # @schema type:string
     # -- TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
     trustcenterpreviewzoneid: ""  # @schema type:string
+    # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
+    # Unread notifications are always pulled regardless of this setting
+    notificationlookbackdays: 30  # @schema type:integer; default:30
   # -- EntConfig contains the ent configuration used by the ent middleware
   entconfig:
     # -- EntityTypes is the list of entity types to create by default for the organization

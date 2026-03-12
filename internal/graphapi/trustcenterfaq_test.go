@@ -167,24 +167,26 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note1 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
-		NoteID:        note1.ID,
 		TrustCenterID: &trustCenter.ID,
 		ReferenceLink: lo.ToPtr("https://example.com/faq"),
 		DisplayOrder:  lo.ToPtr(int64(1)),
+		CreateNote: &testclient.CreateNoteInput{
+			Text: "faq note for trust center",
+		},
 	})
 	assert.NilError(t, err)
 	tcFAQ := createResp.CreateTrustCenterFaq.TrustCenterFaq
 
 	// create faq for a different org
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	note2 := (&NoteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	createResp2, err := suite.client.api.CreateTrustCenterFaq(testUser2.UserCtx, testclient.CreateTrustCenterFAQInput{
-		NoteID:        note2.ID,
 		TrustCenterID: &trustCenter2.ID,
+		CreateNote: &testclient.CreateNoteInput{
+			Text: "faq note for trust center 2",
+		},
 	})
 	assert.NilError(t, err)
 	tcFAQ2 := createResp2.CreateTrustCenterFaq.TrustCenterFaq

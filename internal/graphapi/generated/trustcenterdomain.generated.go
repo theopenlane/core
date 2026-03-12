@@ -98,6 +98,10 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 
 func (ec *executionContext) unmarshalInputCreateTrustCenterDomainInput(ctx context.Context, obj any) (model.CreateTrustCenterDomainInput, error) {
 	var it model.CreateTrustCenterDomainInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

@@ -285,7 +285,8 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
-			WithAuthOptions(getAuthOptions(s)...)
+			WithAuthOptions(getAuthOptions(s)...).
+			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

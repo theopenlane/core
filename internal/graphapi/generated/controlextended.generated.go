@@ -740,6 +740,10 @@ func (ec *executionContext) fieldContext_ControlGroupEdge_node(_ context.Context
 
 func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context, obj any) (model.CloneControlInput, error) {
 	var it model.CloneControlInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -815,6 +819,10 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 
 func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Context, obj any) (model.CloneControlUploadInput, error) {
 	var it model.CloneControlUploadInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -918,6 +926,10 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 
 func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Context, obj any) (model.ControlCategoryOrder, error) {
 	var it model.ControlCategoryOrder
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -955,6 +967,10 @@ func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Conte
 
 func (ec *executionContext) unmarshalInputControlDiffInput(ctx context.Context, obj any) (model.ControlDiffInput, error) {
 	var it model.ControlDiffInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

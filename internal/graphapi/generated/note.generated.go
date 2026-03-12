@@ -62,6 +62,10 @@ func (ec *executionContext) fieldContext_NoteDeletePayload_deletedID(_ context.C
 
 func (ec *executionContext) unmarshalInputUpdateDiscussionsInput(ctx context.Context, obj any) (model.UpdateDiscussionsInput, error) {
 	var it model.UpdateDiscussionsInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

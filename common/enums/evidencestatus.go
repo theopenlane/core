@@ -6,6 +6,8 @@ import "io"
 type EvidenceStatus string
 
 var (
+	// EvidenceStatusDraft indicates the in draft.
+	EvidenceStatusDraft EvidenceStatus = "DRAFT"
 	// EvidenceStatusSubmitted indicates the submitted.
 	EvidenceStatusSubmitted EvidenceStatus = "SUBMITTED"
 	// EvidenceStatusReadyForAuditor indicates the ready for auditor.
@@ -25,6 +27,7 @@ var (
 )
 
 var evidenceStatusValues = []EvidenceStatus{
+	EvidenceStatusDraft,
 	EvidenceStatusSubmitted,
 	EvidenceStatusReadyForAuditor,
 	EvidenceStatusAuditorApproved,

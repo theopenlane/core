@@ -229,6 +229,20 @@ func (_c *GroupHistoryCreate) SetNillableLogoURL(v *string) *GroupHistoryCreate 
 	return _c
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (_c *GroupHistoryCreate) SetAvatarLocalFileID(v string) *GroupHistoryCreate {
+	_c.mutation.SetAvatarLocalFileID(v)
+	return _c
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (_c *GroupHistoryCreate) SetNillableAvatarLocalFileID(v *string) *GroupHistoryCreate {
+	if v != nil {
+		_c.SetAvatarLocalFileID(*v)
+	}
+	return _c
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_c *GroupHistoryCreate) SetDisplayName(v string) *GroupHistoryCreate {
 	_c.mutation.SetDisplayName(v)
@@ -556,6 +570,10 @@ func (_c *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.LogoURL(); ok {
 		_spec.SetField(grouphistory.FieldLogoURL, field.TypeString, value)
 		_node.LogoURL = value
+	}
+	if value, ok := _c.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
+		_node.AvatarLocalFileID = &value
 	}
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)

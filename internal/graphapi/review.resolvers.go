@@ -48,6 +48,15 @@ func (r *mutationResolver) CreateBulkReview(ctx context.Context, input []*genera
 	return r.bulkCreateReview(ctx, input)
 }
 
+// DeleteBulkReview is the resolver for the deleteBulkReview field.
+func (r *mutationResolver) DeleteBulkReview(ctx context.Context, ids []string) (*model.ReviewBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteReview(ctx, ids)
+}
+
 // CreateBulkCSVReview is the resolver for the createBulkCSVReview field.
 func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkCreatePayload, error) {
 	data, err := common.UnmarshalBulkData[csvgenerated.ReviewCSVInput](input)
@@ -87,7 +96,7 @@ func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphq
 }
 
 // UpdateReview is the resolver for the updateReview field.
-func (r *mutationResolver) UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput) (*model.ReviewUpdatePayload, error) {
+func (r *mutationResolver) UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Review.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
