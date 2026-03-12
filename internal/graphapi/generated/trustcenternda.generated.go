@@ -284,6 +284,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDAUpdatePayload_template(_ 
 
 func (ec *executionContext) unmarshalInputCreateTrustCenterNDAInput(ctx context.Context, obj any) (model.CreateTrustCenterNDAInput, error) {
 	var it model.CreateTrustCenterNDAInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
@@ -310,6 +314,10 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDAInput(ctx context.
 
 func (ec *executionContext) unmarshalInputSubmitTrustCenterNDAResponseInput(ctx context.Context, obj any) (model.SubmitTrustCenterNDAResponseInput, error) {
 	var it model.SubmitTrustCenterNDAResponseInput
+	if obj == nil {
+		return it, nil
+	}
+
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v

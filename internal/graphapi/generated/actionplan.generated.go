@@ -218,10 +218,10 @@ type MutationResolver interface {
 	CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload) (*model.FindingControlBulkCreatePayload, error)
 	UpdateFindingControl(ctx context.Context, id string, input generated.UpdateFindingControlInput) (*model.FindingControlUpdatePayload, error)
 	DeleteFindingControl(ctx context.Context, id string) (*model.FindingControlDeletePayload, error)
-	CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error)
+	CreateGroup(ctx context.Context, input generated.CreateGroupInput, avatarFile *graphql.Upload) (*model.GroupCreatePayload, error)
 	CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error)
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error)
-	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error)
+	UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload) (*model.GroupUpdatePayload, error)
 	DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error)
 	DeleteBulkGroup(ctx context.Context, ids []string) (*model.GroupBulkDeletePayload, error)
 	UpdateBulkGroup(ctx context.Context, ids []string, input generated.UpdateGroupInput) (*model.GroupBulkUpdatePayload, error)
@@ -416,8 +416,9 @@ type MutationResolver interface {
 	DeleteBulkRemediation(ctx context.Context, ids []string) (*model.RemediationBulkDeletePayload, error)
 	CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewCreatePayload, error)
 	CreateBulkReview(ctx context.Context, input []*generated.CreateReviewInput) (*model.ReviewBulkCreatePayload, error)
+	DeleteBulkReview(ctx context.Context, ids []string) (*model.ReviewBulkDeletePayload, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkCreatePayload, error)
-	UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput) (*model.ReviewUpdatePayload, error)
+	UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewUpdatePayload, error)
 	DeleteReview(ctx context.Context, id string) (*model.ReviewDeletePayload, error)
 	UpdateBulkReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error)
 	UpdateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkUpdatePayload, error)
@@ -2628,6 +2629,11 @@ func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg1
 	return args, nil
 }
 
@@ -3832,6 +3838,17 @@ func (ec *executionContext) field_Mutation_deleteBulkProgram_args(ctx context.Co
 }
 
 func (ec *executionContext) field_Mutation_deleteBulkRemediation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkReview_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
@@ -6997,6 +7014,11 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["avatarFile"] = arg2
 	return args, nil
 }
 
@@ -7432,6 +7454,11 @@ func (ec *executionContext) field_Mutation_updateReview_args(ctx context.Context
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "reviewFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["reviewFiles"] = arg2
 	return args, nil
 }
 
@@ -17915,7 +17942,7 @@ func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_createGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput))
+			return ec.Resolvers.Mutation().CreateGroup(ctx, fc.Args["input"].(generated.CreateGroupInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload,
@@ -18050,7 +18077,7 @@ func (ec *executionContext) _Mutation_updateGroup(ctx context.Context, field gra
 		ec.fieldContext_Mutation_updateGroup,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput))
+			return ec.Resolvers.Mutation().UpdateGroup(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateGroupInput), fc.Args["avatarFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload,
@@ -26895,6 +26922,51 @@ func (ec *executionContext) fieldContext_Mutation_createBulkReview(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_deleteBulkReview(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_deleteBulkReview,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteBulkReview(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		ec.marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBulkReview(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "deletedIDs":
+				return ec.fieldContext_ReviewBulkDeletePayload_deletedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ReviewBulkDeletePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkReview_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createBulkCSVReview(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -26948,7 +27020,7 @@ func (ec *executionContext) _Mutation_updateReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateReview(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateReviewInput))
+			return ec.Resolvers.Mutation().UpdateReview(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateReviewInput), fc.Args["reviewFiles"].([]*graphql.Upload))
 		},
 		nil,
 		ec.marshalNReviewUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload,
@@ -38422,6 +38494,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createBulkReview":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createBulkReview(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkReview":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkReview(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

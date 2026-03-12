@@ -1196,6 +1196,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldIsManaged:         {Type: field.TypeBool, Column: grouphistory.FieldIsManaged},
 			grouphistory.FieldGravatarLogoURL:   {Type: field.TypeString, Column: grouphistory.FieldGravatarLogoURL},
 			grouphistory.FieldLogoURL:           {Type: field.TypeString, Column: grouphistory.FieldLogoURL},
+			grouphistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: grouphistory.FieldAvatarLocalFileID},
 			grouphistory.FieldDisplayName:       {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
 			grouphistory.FieldOscalRole:         {Type: field.TypeString, Column: grouphistory.FieldOscalRole},
 			grouphistory.FieldOscalPartyUUID:    {Type: field.TypeString, Column: grouphistory.FieldOscalPartyUUID},
@@ -8016,6 +8017,11 @@ func (f *GroupHistoryFilter) WhereGravatarLogoURL(p entql.StringP) {
 // WhereLogoURL applies the entql string predicate on the logo_url field.
 func (f *GroupHistoryFilter) WhereLogoURL(p entql.StringP) {
 	f.Where(p.Field(grouphistory.FieldLogoURL))
+}
+
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *GroupHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(grouphistory.FieldAvatarLocalFileID))
 }
 
 // WhereDisplayName applies the entql string predicate on the display_name field.

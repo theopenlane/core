@@ -9824,6 +9824,10 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetLogoURL(logoURL)
 	}
 
+	if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+		create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+	}
+
 	if displayName, exists := m.DisplayName(); exists {
 		create = create.SetDisplayName(displayName)
 	}
@@ -9971,6 +9975,12 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetLogoURL(group.LogoURL)
 		}
 
+		if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+			create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+		} else {
+			create = create.SetNillableAvatarLocalFileID(group.AvatarLocalFileID)
+		}
+
 		if displayName, exists := m.DisplayName(); exists {
 			create = create.SetDisplayName(displayName)
 		} else {
@@ -10068,6 +10078,7 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsManaged(group.IsManaged).
 			SetGravatarLogoURL(group.GravatarLogoURL).
 			SetLogoURL(group.LogoURL).
+			SetNillableAvatarLocalFileID(group.AvatarLocalFileID).
 			SetDisplayName(group.DisplayName).
 			SetNillableOscalRole(group.OscalRole).
 			SetNillableOscalPartyUUID(group.OscalPartyUUID).

@@ -6913,6 +6913,7 @@ type CreateGroupInput struct {
 	SettingID                            *string                  `json:"settingID,omitempty"`
 	EventIDs                             []string                 `json:"eventIDs,omitempty"`
 	IntegrationIDs                       []string                 `json:"integrationIDs,omitempty"`
+	AvatarFileID                         *string                  `json:"avatarFileID,omitempty"`
 	FileIDs                              []string                 `json:"fileIDs,omitempty"`
 	TaskIDs                              []string                 `json:"taskIDs,omitempty"`
 	CampaignIDs                          []string                 `json:"campaignIDs,omitempty"`
@@ -17090,6 +17091,8 @@ type Group struct {
 	GravatarLogoURL *string `json:"gravatarLogoURL,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
+	// The group's local avatar file id, takes precedence over the gravatar logo URL
+	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"displayName"`
 	// OSCAL role identifier used for role-based responsibility mapping
@@ -17149,6 +17152,7 @@ type Group struct {
 	Users                              *UserConnection                  `json:"users"`
 	Events                             *EventConnection                 `json:"events"`
 	Integrations                       *IntegrationConnection           `json:"integrations"`
+	AvatarFile                         *File                            `json:"avatarFile,omitempty"`
 	Files                              *FileConnection                  `json:"files"`
 	Tasks                              *TaskConnection                  `json:"tasks"`
 	Campaigns                          *CampaignConnection              `json:"campaigns"`
@@ -17805,6 +17809,22 @@ type GroupWhereInput struct {
 	IsManagedNeq    *bool `json:"isManagedNEQ,omitempty"`
 	IsManagedIsNil  *bool `json:"isManagedIsNil,omitempty"`
 	IsManagedNotNil *bool `json:"isManagedNotNil,omitempty"`
+	// avatar_local_file_id field predicates
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIdgt           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIdgte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIdlt           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIdlte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        *bool    `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       *bool    `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
@@ -18033,6 +18053,9 @@ type GroupWhereInput struct {
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
+	// avatar_file edge predicates
+	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
+	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -28691,6 +28714,12 @@ func (Review) IsNode() {}
 type ReviewBulkCreatePayload struct {
 	// Created reviews
 	Reviews []*Review `json:"reviews,omitempty"`
+}
+
+// Return response for deleteBulkReview mutation
+type ReviewBulkDeletePayload struct {
+	// Deleted trustCenterNDARequest IDs
+	DeletedIDs []string `json:"deletedIDs"`
 }
 
 // Return response for updateBulkReview mutation
@@ -39482,6 +39511,8 @@ type UpdateGroupInput struct {
 	AddIntegrationIDs                          []string                      `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs                       []string                      `json:"removeIntegrationIDs,omitempty"`
 	ClearIntegrations                          *bool                         `json:"clearIntegrations,omitempty"`
+	AvatarFileID                               *string                       `json:"avatarFileID,omitempty"`
+	ClearAvatarFile                            *bool                         `json:"clearAvatarFile,omitempty"`
 	AddFileIDs                                 []string                      `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                              []string                      `json:"removeFileIDs,omitempty"`
 	ClearFiles                                 *bool                         `json:"clearFiles,omitempty"`
@@ -51956,18 +51987,20 @@ func (e TrustCenterEntityOrderField) MarshalJSON() ([]byte, error) {
 type TrustCenterFAQOrderField string
 
 const (
-	TrustCenterFAQOrderFieldCreatedAt TrustCenterFAQOrderField = "created_at"
-	TrustCenterFAQOrderFieldUpdatedAt TrustCenterFAQOrderField = "updated_at"
+	TrustCenterFAQOrderFieldCreatedAt    TrustCenterFAQOrderField = "created_at"
+	TrustCenterFAQOrderFieldUpdatedAt    TrustCenterFAQOrderField = "updated_at"
+	TrustCenterFAQOrderFieldDisplayOrder TrustCenterFAQOrderField = "DISPLAY_ORDER"
 )
 
 var AllTrustCenterFAQOrderField = []TrustCenterFAQOrderField{
 	TrustCenterFAQOrderFieldCreatedAt,
 	TrustCenterFAQOrderFieldUpdatedAt,
+	TrustCenterFAQOrderFieldDisplayOrder,
 }
 
 func (e TrustCenterFAQOrderField) IsValid() bool {
 	switch e {
-	case TrustCenterFAQOrderFieldCreatedAt, TrustCenterFAQOrderFieldUpdatedAt:
+	case TrustCenterFAQOrderFieldCreatedAt, TrustCenterFAQOrderFieldUpdatedAt, TrustCenterFAQOrderFieldDisplayOrder:
 		return true
 	}
 	return false

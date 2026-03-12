@@ -91,6 +91,13 @@ func (Group) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.String("avatar_local_file_id").
+			Comment("The group's local avatar file id, takes precedence over the gravatar logo URL").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 		field.String("display_name").
 			Comment("The group's displayed 'friendly' name").
 			MaxLen(nameMaxLen).
@@ -173,6 +180,12 @@ func (g Group) Edges() []ent.Edge {
 			Through("members", GroupMembership.Type),
 		defaultEdgeToWithPagination(g, Event{}),
 		defaultEdgeToWithPagination(g, Integration{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: g,
+			name:       "avatar_file",
+			t:          File.Type,
+			field:      "avatar_local_file_id",
+		}),
 		defaultEdgeToWithPagination(g, File{}),
 		defaultEdgeToWithPagination(g, Task{}),
 		defaultEdgeFromWithPagination(g, Campaign{}),

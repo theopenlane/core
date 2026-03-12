@@ -10441,6 +10441,7 @@ type CreateGroupInput struct {
 	SettingID                            *string
 	EventIDs                             []string
 	IntegrationIDs                       []string
+	AvatarFileID                         *string
 	FileIDs                              []string
 	TaskIDs                              []string
 	CampaignIDs                          []string
@@ -10608,6 +10609,9 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
+	}
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -10779,6 +10783,8 @@ type UpdateGroupInput struct {
 	ClearIntegrations                          bool
 	AddIntegrationIDs                          []string
 	RemoveIntegrationIDs                       []string
+	ClearAvatarFile                            bool
+	AvatarFileID                               *string
 	ClearFiles                                 bool
 	AddFileIDs                                 []string
 	RemoveFileIDs                              []string
@@ -11238,6 +11244,12 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
+	}
+	if i.ClearAvatarFile {
+		m.ClearAvatarFile()
+	}
+	if v := i.AvatarFileID; v != nil {
+		m.SetAvatarFileID(*v)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()

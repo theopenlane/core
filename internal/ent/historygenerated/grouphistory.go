@@ -55,6 +55,8 @@ type GroupHistory struct {
 	GravatarLogoURL string `json:"gravatar_logo_url,omitempty"`
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL string `json:"logo_url,omitempty"`
+	// The group's local avatar file id, takes precedence over the gravatar logo URL
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
 	// The group's displayed 'friendly' name
 	DisplayName string `json:"display_name,omitempty"`
 	// OSCAL role identifier used for role-based responsibility mapping
@@ -85,7 +87,7 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case grouphistory.FieldIsManaged, grouphistory.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName, grouphistory.FieldOscalRole, grouphistory.FieldOscalPartyUUID, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
+		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldDisplayID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldAvatarLocalFileID, grouphistory.FieldDisplayName, grouphistory.FieldOscalRole, grouphistory.FieldOscalPartyUUID, grouphistory.FieldScimExternalID, grouphistory.FieldScimDisplayName, grouphistory.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -213,6 +215,13 @@ func (_m *GroupHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field logo_url", values[i])
 			} else if value.Valid {
 				_m.LogoURL = value.String
+			}
+		case grouphistory.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				_m.AvatarLocalFileID = new(string)
+				*_m.AvatarLocalFileID = value.String
 			}
 		case grouphistory.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -355,6 +364,11 @@ func (_m *GroupHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("logo_url=")
 	builder.WriteString(_m.LogoURL)
+	builder.WriteString(", ")
+	if v := _m.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(_m.DisplayName)

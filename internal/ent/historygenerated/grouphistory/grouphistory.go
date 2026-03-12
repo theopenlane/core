@@ -53,6 +53,8 @@ const (
 	FieldGravatarLogoURL = "gravatar_logo_url"
 	// FieldLogoURL holds the string denoting the logo_url field in the database.
 	FieldLogoURL = "logo_url"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldOscalRole holds the string denoting the oscal_role field in the database.
@@ -93,6 +95,7 @@ var Columns = []string{
 	FieldIsManaged,
 	FieldGravatarLogoURL,
 	FieldLogoURL,
+	FieldAvatarLocalFileID,
 	FieldDisplayName,
 	FieldOscalRole,
 	FieldOscalPartyUUID,
@@ -238,6 +241,11 @@ func ByGravatarLogoURL(opts ...sql.OrderTermOption) OrderOption {
 // ByLogoURL orders the results by the logo_url field.
 func ByLogoURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoURL, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
 }
 
 // ByDisplayName orders the results by the display_name field.

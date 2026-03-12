@@ -3173,13 +3173,13 @@ func init() {
 	// group.LogoURLValidator is a validator for the "logo_url" field. It is called by the builders before save.
 	group.LogoURLValidator = groupDescLogoURL.Validators[0].(func(string) error)
 	// groupDescDisplayName is the schema descriptor for display_name field.
-	groupDescDisplayName := groupFields[5].Descriptor()
+	groupDescDisplayName := groupFields[6].Descriptor()
 	// group.DefaultDisplayName holds the default value on creation for the display_name field.
 	group.DefaultDisplayName = groupDescDisplayName.Default.(string)
 	// group.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	group.DisplayNameValidator = groupDescDisplayName.Validators[0].(func(string) error)
 	// groupDescScimActive is the schema descriptor for scim_active field.
-	groupDescScimActive := groupFields[11].Descriptor()
+	groupDescScimActive := groupFields[12].Descriptor()
 	// group.DefaultScimActive holds the default value on creation for the scim_active field.
 	group.DefaultScimActive = groupDescScimActive.Default.(bool)
 	// groupDescID is the schema descriptor for id field.
@@ -7601,6 +7601,7 @@ func init() {
 	trustcenterfaqMixinHooks4 := trustcenterfaqMixin[4].Hooks()
 	trustcenterfaqMixinHooks5 := trustcenterfaqMixin[5].Hooks()
 	trustcenterfaqMixinHooks6 := trustcenterfaqMixin[6].Hooks()
+	trustcenterfaqHooks := schema.TrustCenterFAQ{}.Hooks()
 
 	trustcenterfaq.Hooks[1] = trustcenterfaqMixinHooks0[0]
 
@@ -7613,6 +7614,8 @@ func init() {
 	trustcenterfaq.Hooks[5] = trustcenterfaqMixinHooks6[0]
 
 	trustcenterfaq.Hooks[6] = trustcenterfaqMixinHooks6[1]
+
+	trustcenterfaq.Hooks[7] = trustcenterfaqHooks[0]
 	trustcenterfaqMixinInters1 := trustcenterfaqMixin[1].Interceptors()
 	trustcenterfaqMixinInters4 := trustcenterfaqMixin[4].Interceptors()
 	trustcenterfaqInters := schema.TrustCenterFAQ{}.Interceptors()

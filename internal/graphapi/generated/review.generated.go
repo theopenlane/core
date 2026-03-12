@@ -165,6 +165,35 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 	return fc, nil
 }
 
+func (ec *executionContext) _ReviewBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ReviewBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReviewBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ReviewBulkUpdatePayload_reviews(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -682,6 +711,45 @@ func (ec *executionContext) _ReviewBulkCreatePayload(ctx context.Context, sel as
 	return out
 }
 
+var reviewBulkDeletePayloadImplementors = []string{"ReviewBulkDeletePayload"}
+
+func (ec *executionContext) _ReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ReviewBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reviewBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReviewBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ReviewBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var reviewBulkUpdatePayloadImplementors = []string{"ReviewBulkUpdatePayload"}
 
 func (ec *executionContext) _ReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ReviewBulkUpdatePayload) graphql.Marshaler {
@@ -853,6 +921,20 @@ func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._ReviewBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNReviewBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkDeletePayload) graphql.Marshaler {
+	return ec._ReviewBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ReviewBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNReviewBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkUpdatePayload) graphql.Marshaler {

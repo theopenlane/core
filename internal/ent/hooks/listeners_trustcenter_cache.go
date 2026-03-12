@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/pkg/gala"
@@ -67,6 +68,11 @@ func RegisterGalaTrustCenterCacheListeners(registry *gala.Registry) ([]gala.List
 			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeStandard),
 			Name:   "trustcenter.cache.standard",
 			Handle: handleStandardMutationGala,
+		},
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterFAQ),
+			Name:   "trustcenter.cache.faq",
+			Handle: handleTrustCenterFAQMutationGala,
 		},
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterSetting),
@@ -202,6 +208,34 @@ func handleTrustCenterEntityMutationGala(ctx gala.HandlerContext, payload eventq
 	}
 
 	return enqueueCacheRefresh(ctx.Context, client, trustCenterID)
+}
+
+// handleTrustCenterFAQMutationGala processes TrustCenterFAQ mutations and invalidates cache.
+func handleTrustCenterFAQMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
+	if !ok {
+		return nil
+	}
+
+	id, _ := eventqueue.MutationStringValue(payload, trustcenterfaq.FieldTrustCenterID)
+	if id == "" {
+		faqID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
+		if ok && faqID != "" {
+			faq, err := client.TrustCenterFAQ.Get(ctx.Context, faqID)
+			if err != nil || faq == nil {
+				logx.FromContext(ctx.Context).Warn().Err(err).Str("faq_id", faqID).Msg("failed to query trust center faq for cache invalidation")
+				return nil
+			}
+
+			id = faq.TrustCenterID
+		}
+	}
+
+	if id == "" {
+		return nil
+	}
+
+	return enqueueCacheRefresh(ctx.Context, client, id)
 }
 
 // handleTrustCenterSubprocessorMutationGala processes TrustCenterSubprocessor mutations and invalidates cache.
