@@ -2118,6 +2118,40 @@ func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string],
 	return res, err
 }
 
+// SLADefinitions is the resolver for the slaDefinitions field.
+func (r *queryResolver) SLADefinitions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) (*generated.SLADefinitionConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SLADefinitionOrder{
+			{
+				Field:     generated.SLADefinitionOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SLADefinition.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sladefinition"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSLADefinitionOrder(orderBy),
+		generated.WithSLADefinitionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "sladefinition"})
+	}
+
+	return res, err
+}
+
 // Scans is the resolver for the scans field.
 func (r *queryResolver) Scans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) (*generated.ScanConnection, error) {
 	// set page limit if nothing was set

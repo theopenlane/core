@@ -81,6 +81,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -2945,6 +2946,8 @@ func init() {
 	findingMixinHooks7 := findingMixin[7].Hooks()
 	findingMixinHooks8 := findingMixin[8].Hooks()
 	findingMixinHooks9 := findingMixin[9].Hooks()
+	findingMixinHooks10 := findingMixin[10].Hooks()
+	findingMixinHooks11 := findingMixin[11].Hooks()
 
 	finding.Hooks[1] = findingMixinHooks0[0]
 
@@ -2969,6 +2972,10 @@ func init() {
 	finding.Hooks[11] = findingMixinHooks8[0]
 
 	finding.Hooks[12] = findingMixinHooks9[0]
+
+	finding.Hooks[13] = findingMixinHooks10[0]
+
+	finding.Hooks[14] = findingMixinHooks11[0]
 	findingMixinInters1 := findingMixin[1].Interceptors()
 	findingMixinInters5 := findingMixin[5].Interceptors()
 	finding.Interceptors[0] = findingMixinInters1[0]
@@ -6244,6 +6251,78 @@ func init() {
 	riskDescID := riskMixinFields2[0].Descriptor()
 	// risk.DefaultID holds the default value on creation for the id field.
 	risk.DefaultID = riskDescID.Default.(func() string)
+	sladefinitionMixin := schema.SLADefinition{}.Mixin()
+	sladefinition.Policy = privacy.NewPolicies(schema.SLADefinition{})
+	sladefinition.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := sladefinition.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	sladefinitionMixinHooks0 := sladefinitionMixin[0].Hooks()
+	sladefinitionMixinHooks1 := sladefinitionMixin[1].Hooks()
+	sladefinitionMixinHooks2 := sladefinitionMixin[2].Hooks()
+	sladefinitionMixinHooks3 := sladefinitionMixin[3].Hooks()
+	sladefinitionMixinHooks5 := sladefinitionMixin[5].Hooks()
+	sladefinitionMixinHooks6 := sladefinitionMixin[6].Hooks()
+
+	sladefinition.Hooks[1] = sladefinitionMixinHooks0[0]
+
+	sladefinition.Hooks[2] = sladefinitionMixinHooks1[0]
+
+	sladefinition.Hooks[3] = sladefinitionMixinHooks2[0]
+
+	sladefinition.Hooks[4] = sladefinitionMixinHooks3[0]
+
+	sladefinition.Hooks[5] = sladefinitionMixinHooks5[0]
+
+	sladefinition.Hooks[6] = sladefinitionMixinHooks6[0]
+	sladefinitionMixinInters1 := sladefinitionMixin[1].Interceptors()
+	sladefinitionMixinInters5 := sladefinitionMixin[5].Interceptors()
+	sladefinition.Interceptors[0] = sladefinitionMixinInters1[0]
+	sladefinition.Interceptors[1] = sladefinitionMixinInters5[0]
+	sladefinitionMixinFields0 := sladefinitionMixin[0].Fields()
+	_ = sladefinitionMixinFields0
+	sladefinitionMixinFields2 := sladefinitionMixin[2].Fields()
+	_ = sladefinitionMixinFields2
+	sladefinitionMixinFields3 := sladefinitionMixin[3].Fields()
+	_ = sladefinitionMixinFields3
+	sladefinitionMixinFields5 := sladefinitionMixin[5].Fields()
+	_ = sladefinitionMixinFields5
+	sladefinitionFields := schema.SLADefinition{}.Fields()
+	_ = sladefinitionFields
+	// sladefinitionDescCreatedAt is the schema descriptor for created_at field.
+	sladefinitionDescCreatedAt := sladefinitionMixinFields0[0].Descriptor()
+	// sladefinition.DefaultCreatedAt holds the default value on creation for the created_at field.
+	sladefinition.DefaultCreatedAt = sladefinitionDescCreatedAt.Default.(func() time.Time)
+	// sladefinitionDescUpdatedAt is the schema descriptor for updated_at field.
+	sladefinitionDescUpdatedAt := sladefinitionMixinFields0[1].Descriptor()
+	// sladefinition.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	sladefinition.DefaultUpdatedAt = sladefinitionDescUpdatedAt.Default.(func() time.Time)
+	// sladefinition.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	sladefinition.UpdateDefaultUpdatedAt = sladefinitionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// sladefinitionDescDisplayID is the schema descriptor for display_id field.
+	sladefinitionDescDisplayID := sladefinitionMixinFields2[1].Descriptor()
+	// sladefinition.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	sladefinition.DisplayIDValidator = sladefinitionDescDisplayID.Validators[0].(func(string) error)
+	// sladefinitionDescTags is the schema descriptor for tags field.
+	sladefinitionDescTags := sladefinitionMixinFields3[0].Descriptor()
+	// sladefinition.DefaultTags holds the default value on creation for the tags field.
+	sladefinition.DefaultTags = sladefinitionDescTags.Default.([]string)
+	// sladefinitionDescOwnerID is the schema descriptor for owner_id field.
+	sladefinitionDescOwnerID := sladefinitionMixinFields5[0].Descriptor()
+	// sladefinition.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	sladefinition.OwnerIDValidator = sladefinitionDescOwnerID.Validators[0].(func(string) error)
+	// sladefinitionDescSLADays is the schema descriptor for sla_days field.
+	sladefinitionDescSLADays := sladefinitionFields[0].Descriptor()
+	// sladefinition.SLADaysValidator is a validator for the "sla_days" field. It is called by the builders before save.
+	sladefinition.SLADaysValidator = sladefinitionDescSLADays.Validators[0].(func(int) error)
+	// sladefinitionDescID is the schema descriptor for id field.
+	sladefinitionDescID := sladefinitionMixinFields2[0].Descriptor()
+	// sladefinition.DefaultID holds the default value on creation for the id field.
+	sladefinition.DefaultID = sladefinitionDescID.Default.(func() string)
 	scanMixin := schema.Scan{}.Mixin()
 	scan.Policy = privacy.NewPolicies(schema.Scan{})
 	scan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -8335,6 +8414,8 @@ func init() {
 	vulnerabilityMixinHooks7 := vulnerabilityMixin[7].Hooks()
 	vulnerabilityMixinHooks8 := vulnerabilityMixin[8].Hooks()
 	vulnerabilityMixinHooks9 := vulnerabilityMixin[9].Hooks()
+	vulnerabilityMixinHooks10 := vulnerabilityMixin[10].Hooks()
+	vulnerabilityMixinHooks11 := vulnerabilityMixin[11].Hooks()
 
 	vulnerability.Hooks[1] = vulnerabilityMixinHooks0[0]
 
@@ -8359,6 +8440,10 @@ func init() {
 	vulnerability.Hooks[11] = vulnerabilityMixinHooks8[0]
 
 	vulnerability.Hooks[12] = vulnerabilityMixinHooks9[0]
+
+	vulnerability.Hooks[13] = vulnerabilityMixinHooks10[0]
+
+	vulnerability.Hooks[14] = vulnerabilityMixinHooks11[0]
 	vulnerabilityMixinInters1 := vulnerabilityMixin[1].Interceptors()
 	vulnerabilityMixinInters5 := vulnerabilityMixin[5].Interceptors()
 	vulnerability.Interceptors[0] = vulnerabilityMixinInters1[0]

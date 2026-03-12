@@ -251,6 +251,62 @@ func (_c *FindingCreate) SetNillableScopeID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
+func (_c *FindingCreate) SetFindingSeverityLevelName(v string) *FindingCreate {
+	_c.mutation.SetFindingSeverityLevelName(v)
+	return _c
+}
+
+// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableFindingSeverityLevelName(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetFindingSeverityLevelName(*v)
+	}
+	return _c
+}
+
+// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
+func (_c *FindingCreate) SetFindingSeverityLevelID(v string) *FindingCreate {
+	_c.mutation.SetFindingSeverityLevelID(v)
+	return _c
+}
+
+// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableFindingSeverityLevelID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetFindingSeverityLevelID(*v)
+	}
+	return _c
+}
+
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_c *FindingCreate) SetFindingStatusName(v string) *FindingCreate {
+	_c.mutation.SetFindingStatusName(v)
+	return _c
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableFindingStatusName(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetFindingStatusName(*v)
+	}
+	return _c
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_c *FindingCreate) SetFindingStatusID(v string) *FindingCreate {
+	_c.mutation.SetFindingStatusID(v)
+	return _c
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableFindingStatusID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetFindingStatusID(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
 	_c.mutation.SetExternalID(v)
@@ -787,6 +843,16 @@ func (_c *FindingCreate) SetScope(v *CustomTypeEnum) *FindingCreate {
 	return _c.SetScopeID(v.ID)
 }
 
+// SetFindingSeverityLevel sets the "finding_severity_level" edge to the CustomTypeEnum entity.
+func (_c *FindingCreate) SetFindingSeverityLevel(v *CustomTypeEnum) *FindingCreate {
+	return _c.SetFindingSeverityLevelID(v.ID)
+}
+
+// SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
+func (_c *FindingCreate) SetFindingStatus(v *CustomTypeEnum) *FindingCreate {
+	return _c.SetFindingStatusID(v.ID)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_c *FindingCreate) AddIntegrationIDs(ids ...string) *FindingCreate {
 	_c.mutation.AddIntegrationIDs(ids...)
@@ -1264,6 +1330,14 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
+	if value, ok := _c.mutation.FindingSeverityLevelName(); ok {
+		_spec.SetField(finding.FieldFindingSeverityLevelName, field.TypeString, value)
+		_node.FindingSeverityLevelName = value
+	}
+	if value, ok := _c.mutation.FindingStatusName(); ok {
+		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
+		_node.FindingStatusName = value
+	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
@@ -1515,6 +1589,42 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingSeverityLevelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingSeverityLevelTable,
+			Columns: []string{finding.FindingSeverityLevelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FindingSeverityLevelID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.FindingStatusTable,
+			Columns: []string{finding.FindingStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FindingStatusID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {

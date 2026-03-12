@@ -227,6 +227,7 @@ type SchemaConfig struct {
 	RiskViewers                        string // Risk-viewers->Group table.
 	RiskActionPlans                    string // Risk-action_plans->ActionPlan table.
 	RiskTasks                          string // Risk-tasks->Task table.
+	SLADefinition                      string // SLADefinition table.
 	Scan                               string // Scan table.
 	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
 	ScanEditors                        string // Scan-editors->Group table.

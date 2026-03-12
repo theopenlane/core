@@ -94,6 +94,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -293,6 +294,8 @@ type Client struct {
 	Review *ReviewClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
+	// SLADefinition is the client for interacting with the SLADefinition builders.
+	SLADefinition *SLADefinitionClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
 	// ScheduledJob is the client for interacting with the ScheduledJob builders.
@@ -449,6 +452,7 @@ func (c *Client) init() {
 	c.Remediation = NewRemediationClient(c.config)
 	c.Review = NewReviewClient(c.config)
 	c.Risk = NewRiskClient(c.config)
+	c.SLADefinition = NewSLADefinitionClient(c.config)
 	c.Scan = NewScanClient(c.config)
 	c.ScheduledJob = NewScheduledJobClient(c.config)
 	c.ScheduledJobRun = NewScheduledJobRunClient(c.config)
@@ -765,6 +769,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Remediation:                NewRemediationClient(cfg),
 		Review:                     NewReviewClient(cfg),
 		Risk:                       NewRiskClient(cfg),
+		SLADefinition:              NewSLADefinitionClient(cfg),
 		Scan:                       NewScanClient(cfg),
 		ScheduledJob:               NewScheduledJobClient(cfg),
 		ScheduledJobRun:            NewScheduledJobRunClient(cfg),
@@ -888,6 +893,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Remediation:                NewRemediationClient(cfg),
 		Review:                     NewReviewClient(cfg),
 		Risk:                       NewRiskClient(cfg),
+		SLADefinition:              NewSLADefinitionClient(cfg),
 		Scan:                       NewScanClient(cfg),
 		ScheduledJob:               NewScheduledJobClient(cfg),
 		ScheduledJobRun:            NewScheduledJobRunClient(cfg),
@@ -965,10 +971,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
 		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
-		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail,
-		c.TFASetting, c.TagDefinition, c.Task, c.Template, c.TrustCenter,
-		c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
+		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ScheduledJob,
+		c.ScheduledJobRun, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
+		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
+		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
 		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
 		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
 		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
@@ -999,10 +1005,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
 		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.Scan, c.ScheduledJob, c.ScheduledJobRun,
-		c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail,
-		c.TFASetting, c.TagDefinition, c.Task, c.Template, c.TrustCenter,
-		c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
+		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ScheduledJob,
+		c.ScheduledJobRun, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
+		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
+		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
 		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
 		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
 		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
@@ -1232,6 +1238,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Review.mutate(ctx, m)
 	case *RiskMutation:
 		return c.Risk.mutate(ctx, m)
+	case *SLADefinitionMutation:
+		return c.SLADefinition.mutate(ctx, m)
 	case *ScanMutation:
 		return c.Scan.mutate(ctx, m)
 	case *ScheduledJobMutation:
@@ -11462,6 +11470,44 @@ func (c *FindingClient) QueryScope(_m *Finding) *CustomTypeEnumQuery {
 	return query
 }
 
+// QueryFindingSeverityLevel queries the finding_severity_level edge of a Finding.
+func (c *FindingClient) QueryFindingSeverityLevel(_m *Finding) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingSeverityLevelTable, finding.FindingSeverityLevelColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindingStatus queries the finding_status edge of a Finding.
+func (c *FindingClient) QueryFindingStatus(_m *Finding) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingStatusTable, finding.FindingStatusColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrations queries the integrations edge of a Finding.
 func (c *FindingClient) QueryIntegrations(_m *Finding) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -21631,6 +21677,25 @@ func (c *OrganizationClient) QueryScans(_m *Organization) *ScanQuery {
 	return query
 }
 
+// QuerySLADefinitions queries the sla_definitions edge of a Organization.
+func (c *OrganizationClient) QuerySLADefinitions(_m *Organization) *SLADefinitionQuery {
+	query := (&SLADefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(sladefinition.Table, sladefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SLADefinitionsTable, organization.SLADefinitionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.SLADefinition
+		step.Edge.Schema = schemaConfig.SLADefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySubprocessors queries the subprocessors edge of a Organization.
 func (c *OrganizationClient) QuerySubprocessors(_m *Organization) *SubprocessorQuery {
 	query := (&SubprocessorClient{config: c.config}).Query()
@@ -26501,6 +26566,179 @@ func (c *RiskClient) mutate(ctx context.Context, m *RiskMutation) (Value, error)
 		return (&RiskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Risk mutation op: %q", m.Op())
+	}
+}
+
+// SLADefinitionClient is a client for the SLADefinition schema.
+type SLADefinitionClient struct {
+	config
+}
+
+// NewSLADefinitionClient returns a client for the SLADefinition from the given config.
+func NewSLADefinitionClient(c config) *SLADefinitionClient {
+	return &SLADefinitionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `sladefinition.Hooks(f(g(h())))`.
+func (c *SLADefinitionClient) Use(hooks ...Hook) {
+	c.hooks.SLADefinition = append(c.hooks.SLADefinition, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `sladefinition.Intercept(f(g(h())))`.
+func (c *SLADefinitionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SLADefinition = append(c.inters.SLADefinition, interceptors...)
+}
+
+// Create returns a builder for creating a SLADefinition entity.
+func (c *SLADefinitionClient) Create() *SLADefinitionCreate {
+	mutation := newSLADefinitionMutation(c.config, OpCreate)
+	return &SLADefinitionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SLADefinition entities.
+func (c *SLADefinitionClient) CreateBulk(builders ...*SLADefinitionCreate) *SLADefinitionCreateBulk {
+	return &SLADefinitionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SLADefinitionClient) MapCreateBulk(slice any, setFunc func(*SLADefinitionCreate, int)) *SLADefinitionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SLADefinitionCreateBulk{err: fmt.Errorf("calling to SLADefinitionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SLADefinitionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SLADefinitionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SLADefinition.
+func (c *SLADefinitionClient) Update() *SLADefinitionUpdate {
+	mutation := newSLADefinitionMutation(c.config, OpUpdate)
+	return &SLADefinitionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SLADefinitionClient) UpdateOne(_m *SLADefinition) *SLADefinitionUpdateOne {
+	mutation := newSLADefinitionMutation(c.config, OpUpdateOne, withSLADefinition(_m))
+	return &SLADefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SLADefinitionClient) UpdateOneID(id string) *SLADefinitionUpdateOne {
+	mutation := newSLADefinitionMutation(c.config, OpUpdateOne, withSLADefinitionID(id))
+	return &SLADefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SLADefinition.
+func (c *SLADefinitionClient) Delete() *SLADefinitionDelete {
+	mutation := newSLADefinitionMutation(c.config, OpDelete)
+	return &SLADefinitionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SLADefinitionClient) DeleteOne(_m *SLADefinition) *SLADefinitionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SLADefinitionClient) DeleteOneID(id string) *SLADefinitionDeleteOne {
+	builder := c.Delete().Where(sladefinition.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SLADefinitionDeleteOne{builder}
+}
+
+// Query returns a query builder for SLADefinition.
+func (c *SLADefinitionClient) Query() *SLADefinitionQuery {
+	return &SLADefinitionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSLADefinition},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SLADefinition entity by its id.
+func (c *SLADefinitionClient) Get(ctx context.Context, id string) (*SLADefinition, error) {
+	return c.Query().Where(sladefinition.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SLADefinitionClient) GetX(ctx context.Context, id string) *SLADefinition {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a SLADefinition.
+func (c *SLADefinitionClient) QueryOwner(_m *SLADefinition) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sladefinition.Table, sladefinition.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, sladefinition.OwnerTable, sladefinition.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.SLADefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySLADefinitionSeverityLevel queries the sla_definition_severity_level edge of a SLADefinition.
+func (c *SLADefinitionClient) QuerySLADefinitionSeverityLevel(_m *SLADefinition) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(sladefinition.Table, sladefinition.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, sladefinition.SLADefinitionSeverityLevelTable, sladefinition.SLADefinitionSeverityLevelColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.SLADefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SLADefinitionClient) Hooks() []Hook {
+	hooks := c.hooks.SLADefinition
+	return append(hooks[:len(hooks):len(hooks)], sladefinition.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SLADefinitionClient) Interceptors() []Interceptor {
+	inters := c.inters.SLADefinition
+	return append(inters[:len(inters):len(inters)], sladefinition.Interceptors[:]...)
+}
+
+func (c *SLADefinitionClient) mutate(ctx context.Context, m *SLADefinitionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SLADefinitionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SLADefinitionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SLADefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SLADefinitionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown SLADefinition mutation op: %q", m.Op())
 	}
 }
 
@@ -33403,6 +33641,44 @@ func (c *VulnerabilityClient) QueryScope(_m *Vulnerability) *CustomTypeEnumQuery
 	return query
 }
 
+// QueryVulnerabilitySeverityLevel queries the vulnerability_severity_level edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryVulnerabilitySeverityLevel(_m *Vulnerability) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.VulnerabilitySeverityLevelTable, vulnerability.VulnerabilitySeverityLevelColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilityStatus queries the vulnerability_status edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryVulnerabilityStatus(_m *Vulnerability) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.VulnerabilityStatusTable, vulnerability.VulnerabilityStatusColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrations queries the integrations edge of a Vulnerability.
 func (c *VulnerabilityClient) QueryIntegrations(_m *Vulnerability) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -35951,14 +36227,15 @@ type (
 		Notification, NotificationPreference, NotificationTemplate, Onboarding,
 		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
-		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
-		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
-		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, Vulnerability, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
-		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
+		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
+		SLADefinition, Scan, ScheduledJob, ScheduledJobRun, Standard, Subcontrol,
+		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
+		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
+		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -35974,14 +36251,14 @@ type (
 		Notification, NotificationPreference, NotificationTemplate, Onboarding,
 		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk, Scan,
-		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
-		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
-		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, Vulnerability, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
-		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
+		SLADefinition, Scan, ScheduledJob, ScheduledJobRun, Standard, Subcontrol,
+		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
+		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
+		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
 		WorkflowProposal []ent.Interceptor
 	}
 )

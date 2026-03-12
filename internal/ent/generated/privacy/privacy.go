@@ -1839,6 +1839,30 @@ func (f RiskMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Muta
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.RiskMutation", m)
 }
 
+// The SLADefinitionQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type SLADefinitionQueryRuleFunc func(context.Context, *generated.SLADefinitionQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f SLADefinitionQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SLADefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.SLADefinitionQuery", q)
+}
+
+// The SLADefinitionMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type SLADefinitionMutationRuleFunc func(context.Context, *generated.SLADefinitionMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f SLADefinitionMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.SLADefinitionMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.SLADefinitionMutation", m)
+}
+
 // The ScanQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ScanQueryRuleFunc func(context.Context, *generated.ScanQuery) error
@@ -2786,6 +2810,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.RiskQuery:
 		return q.Filter(), nil
+	case *generated.SLADefinitionQuery:
+		return q.Filter(), nil
 	case *generated.ScanQuery:
 		return q.Filter(), nil
 	case *generated.ScheduledJobQuery:
@@ -3000,6 +3026,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ReviewMutation:
 		return m.Filter(), nil
 	case *generated.RiskMutation:
+		return m.Filter(), nil
+	case *generated.SLADefinitionMutation:
 		return m.Filter(), nil
 	case *generated.ScanMutation:
 		return m.Filter(), nil

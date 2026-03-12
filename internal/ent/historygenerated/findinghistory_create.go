@@ -266,6 +266,62 @@ func (_c *FindingHistoryCreate) SetNillableScopeID(v *string) *FindingHistoryCre
 	return _c
 }
 
+// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
+func (_c *FindingHistoryCreate) SetFindingSeverityLevelName(v string) *FindingHistoryCreate {
+	_c.mutation.SetFindingSeverityLevelName(v)
+	return _c
+}
+
+// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableFindingSeverityLevelName(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetFindingSeverityLevelName(*v)
+	}
+	return _c
+}
+
+// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
+func (_c *FindingHistoryCreate) SetFindingSeverityLevelID(v string) *FindingHistoryCreate {
+	_c.mutation.SetFindingSeverityLevelID(v)
+	return _c
+}
+
+// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableFindingSeverityLevelID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetFindingSeverityLevelID(*v)
+	}
+	return _c
+}
+
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_c *FindingHistoryCreate) SetFindingStatusName(v string) *FindingHistoryCreate {
+	_c.mutation.SetFindingStatusName(v)
+	return _c
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableFindingStatusName(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetFindingStatusName(*v)
+	}
+	return _c
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_c *FindingHistoryCreate) SetFindingStatusID(v string) *FindingHistoryCreate {
+	_c.mutation.SetFindingStatusID(v)
+	return _c
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableFindingStatusID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetFindingStatusID(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -965,6 +1021,22 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(findinghistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.FindingSeverityLevelName(); ok {
+		_spec.SetField(findinghistory.FieldFindingSeverityLevelName, field.TypeString, value)
+		_node.FindingSeverityLevelName = value
+	}
+	if value, ok := _c.mutation.FindingSeverityLevelID(); ok {
+		_spec.SetField(findinghistory.FieldFindingSeverityLevelID, field.TypeString, value)
+		_node.FindingSeverityLevelID = value
+	}
+	if value, ok := _c.mutation.FindingStatusName(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
+		_node.FindingStatusName = value
+	}
+	if value, ok := _c.mutation.FindingStatusID(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusID, field.TypeString, value)
+		_node.FindingStatusID = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)

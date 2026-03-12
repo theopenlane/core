@@ -61,6 +61,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
@@ -5484,6 +5485,26 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldScopeID)
 				fieldSeen[findinghistory.FieldScopeID] = struct{}{}
 			}
+		case "findingSeverityLevelName":
+			if _, ok := fieldSeen[findinghistory.FieldFindingSeverityLevelName]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldFindingSeverityLevelName)
+				fieldSeen[findinghistory.FieldFindingSeverityLevelName] = struct{}{}
+			}
+		case "findingSeverityLevelID":
+			if _, ok := fieldSeen[findinghistory.FieldFindingSeverityLevelID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldFindingSeverityLevelID)
+				fieldSeen[findinghistory.FieldFindingSeverityLevelID] = struct{}{}
+			}
+		case "findingStatusName":
+			if _, ok := fieldSeen[findinghistory.FieldFindingStatusName]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldFindingStatusName)
+				fieldSeen[findinghistory.FieldFindingStatusName] = struct{}{}
+			}
+		case "findingStatusID":
+			if _, ok := fieldSeen[findinghistory.FieldFindingStatusID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldFindingStatusID)
+				fieldSeen[findinghistory.FieldFindingStatusID] = struct{}{}
+			}
 		case "externalID":
 			if _, ok := fieldSeen[findinghistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldExternalID)
@@ -10883,6 +10904,155 @@ func newRiskHistoryPaginateArgs(rv map[string]any) *riskhistoryPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *SLADefinitionHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SLADefinitionHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *SLADefinitionHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(sladefinitionhistory.Columns))
+		selectedFields = []string{sladefinitionhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldHistoryTime)
+				fieldSeen[sladefinitionhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldRef)
+				fieldSeen[sladefinitionhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldOperation)
+				fieldSeen[sladefinitionhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldCreatedAt)
+				fieldSeen[sladefinitionhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldUpdatedAt)
+				fieldSeen[sladefinitionhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldCreatedBy)
+				fieldSeen[sladefinitionhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldUpdatedBy)
+				fieldSeen[sladefinitionhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldDisplayID)
+				fieldSeen[sladefinitionhistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldTags)
+				fieldSeen[sladefinitionhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldOwnerID)
+				fieldSeen[sladefinitionhistory.FieldOwnerID] = struct{}{}
+			}
+		case "slaDefinitionSeverityLevelName":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelName]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADefinitionSeverityLevelName)
+				fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelName] = struct{}{}
+			}
+		case "slaDefinitionSeverityLevelID":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelID]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADefinitionSeverityLevelID)
+				fieldSeen[sladefinitionhistory.FieldSLADefinitionSeverityLevelID] = struct{}{}
+			}
+		case "slaDays":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldSLADays]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADays)
+				fieldSeen[sladefinitionhistory.FieldSLADays] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type sladefinitionhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []SLADefinitionHistoryPaginateOption
+}
+
+func newSLADefinitionHistoryPaginateArgs(rv map[string]any) *sladefinitionhistoryPaginateArgs {
+	args := &sladefinitionhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &SLADefinitionHistoryOrder{Field: &SLADefinitionHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithSLADefinitionHistoryOrder(order))
+			}
+		case *SLADefinitionHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithSLADefinitionHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*SLADefinitionHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithSLADefinitionHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (_q *ScanHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScanHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -14588,6 +14758,26 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldScopeID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldScopeID)
 				fieldSeen[vulnerabilityhistory.FieldScopeID] = struct{}{}
+			}
+		case "vulnerabilitySeverityLevelName":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelName]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilitySeverityLevelName)
+				fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelName] = struct{}{}
+			}
+		case "vulnerabilitySeverityLevelID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilitySeverityLevelID)
+				fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelID] = struct{}{}
+			}
+		case "vulnerabilityStatusName":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilityStatusName]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilityStatusName)
+				fieldSeen[vulnerabilityhistory.FieldVulnerabilityStatusName] = struct{}{}
+			}
+		case "vulnerabilityStatusID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilityStatusID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilityStatusID)
+				fieldSeen[vulnerabilityhistory.FieldVulnerabilityStatusID] = struct{}{}
 			}
 		case "externalOwnerID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalOwnerID]; !ok {

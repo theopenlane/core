@@ -1137,6 +1137,10 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "finding_severity_level_name", Type: field.TypeString, Nullable: true},
+		{Name: "finding_severity_level_id", Type: field.TypeString, Nullable: true},
+		{Name: "finding_status_name", Type: field.TypeString, Nullable: true},
+		{Name: "finding_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
@@ -2273,6 +2277,38 @@ var (
 			},
 		},
 	}
+	// SLADefinitionHistoryColumns holds the columns for the "sla_definition_history" table.
+	SLADefinitionHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "sla_definition_severity_level_name", Type: field.TypeString, Nullable: true},
+		{Name: "sla_definition_severity_level_id", Type: field.TypeString, Nullable: true},
+		{Name: "sla_days", Type: field.TypeInt},
+	}
+	// SLADefinitionHistoryTable holds the schema information for the "sla_definition_history" table.
+	SLADefinitionHistoryTable = &schema.Table{
+		Name:       "sla_definition_history",
+		Columns:    SLADefinitionHistoryColumns,
+		PrimaryKey: []*schema.Column{SLADefinitionHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "sladefinitionhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SLADefinitionHistoryColumns[1]},
+			},
+		},
+	}
 	// ScanHistoryColumns holds the columns for the "scan_history" table.
 	ScanHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3059,6 +3095,10 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_severity_level_name", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_severity_level_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_status_name", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "cve_id", Type: field.TypeString, Nullable: true},
@@ -3401,6 +3441,7 @@ var (
 		RemediationHistoryTable,
 		ReviewHistoryTable,
 		RiskHistoryTable,
+		SLADefinitionHistoryTable,
 		ScanHistoryTable,
 		ScheduledJobHistoryTable,
 		StandardHistoryTable,
@@ -3580,6 +3621,9 @@ func init() {
 	}
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
+	}
+	SLADefinitionHistoryTable.Annotation = &entsql.Annotation{
+		Table: "sla_definition_history",
 	}
 	ScanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scan_history",

@@ -2126,83 +2126,89 @@ type ComplexityRoot struct {
 	}
 
 	Finding struct {
-		ActionPlans        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AssessmentID       func(childComplexity int) int
-		Assets             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		BlocksProduction   func(childComplexity int) int
-		Categories         func(childComplexity int) int
-		Category           func(childComplexity int) int
-		Comments           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		ControlMappings    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
-		Controls           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		Description        func(childComplexity int) int
-		DirectoryAccounts  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
-		DisplayID          func(childComplexity int) int
-		DisplayName        func(childComplexity int) int
-		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment        func(childComplexity int) int
-		EnvironmentID      func(childComplexity int) int
-		EnvironmentName    func(childComplexity int) int
-		EventTime          func(childComplexity int) int
-		Exploitability     func(childComplexity int) int
-		ExternalID         func(childComplexity int) int
-		ExternalOwnerID    func(childComplexity int) int
-		ExternalURI        func(childComplexity int) int
-		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		FindingClass       func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		IdentityHolders    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
-		Impact             func(childComplexity int) int
-		Integrations       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalNotes      func(childComplexity int) int
-		Metadata           func(childComplexity int) int
-		NumericSeverity    func(childComplexity int) int
-		Open               func(childComplexity int) int
-		Owner              func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Priority           func(childComplexity int) int
-		Production         func(childComplexity int) int
-		Programs           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Public             func(childComplexity int) int
-		RawPayload         func(childComplexity int) int
-		Recommendation     func(childComplexity int) int
-		RecommendedActions func(childComplexity int) int
-		References         func(childComplexity int) int
-		RemediationSLA     func(childComplexity int) int
-		Remediations       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		ReportedAt         func(childComplexity int) int
-		ResourceName       func(childComplexity int) int
-		Reviews            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Risks              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Scope              func(childComplexity int) int
-		ScopeID            func(childComplexity int) int
-		ScopeName          func(childComplexity int) int
-		Score              func(childComplexity int) int
-		Severity           func(childComplexity int) int
-		Source             func(childComplexity int) int
-		SourceUpdatedAt    func(childComplexity int) int
-		State              func(childComplexity int) int
-		Status             func(childComplexity int) int
-		StepsToReproduce   func(childComplexity int) int
-		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		SystemInternalID   func(childComplexity int) int
-		SystemOwned        func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		TargetDetails      func(childComplexity int) int
-		Targets            func(childComplexity int) int
-		Tasks              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
-		Validated          func(childComplexity int) int
-		Vector             func(childComplexity int) int
-		Viewers            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Vulnerabilities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
-		WorkflowObjectRefs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssessmentID             func(childComplexity int) int
+		Assets                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BlocksProduction         func(childComplexity int) int
+		Categories               func(childComplexity int) int
+		Category                 func(childComplexity int) int
+		Comments                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		ControlMappings          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
+		Controls                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		Description              func(childComplexity int) int
+		DirectoryAccounts        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DisplayID                func(childComplexity int) int
+		DisplayName              func(childComplexity int) int
+		Editors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment              func(childComplexity int) int
+		EnvironmentID            func(childComplexity int) int
+		EnvironmentName          func(childComplexity int) int
+		EventTime                func(childComplexity int) int
+		Exploitability           func(childComplexity int) int
+		ExternalID               func(childComplexity int) int
+		ExternalOwnerID          func(childComplexity int) int
+		ExternalURI              func(childComplexity int) int
+		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		FindingClass             func(childComplexity int) int
+		FindingSeverityLevel     func(childComplexity int) int
+		FindingSeverityLevelID   func(childComplexity int) int
+		FindingSeverityLevelName func(childComplexity int) int
+		FindingStatus            func(childComplexity int) int
+		FindingStatusID          func(childComplexity int) int
+		FindingStatusName        func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		IdentityHolders          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		Impact                   func(childComplexity int) int
+		Integrations             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes            func(childComplexity int) int
+		Metadata                 func(childComplexity int) int
+		NumericSeverity          func(childComplexity int) int
+		Open                     func(childComplexity int) int
+		Owner                    func(childComplexity int) int
+		OwnerID                  func(childComplexity int) int
+		Priority                 func(childComplexity int) int
+		Production               func(childComplexity int) int
+		Programs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Public                   func(childComplexity int) int
+		RawPayload               func(childComplexity int) int
+		Recommendation           func(childComplexity int) int
+		RecommendedActions       func(childComplexity int) int
+		References               func(childComplexity int) int
+		RemediationSLA           func(childComplexity int) int
+		Remediations             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportedAt               func(childComplexity int) int
+		ResourceName             func(childComplexity int) int
+		Reviews                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                    func(childComplexity int) int
+		ScopeID                  func(childComplexity int) int
+		ScopeName                func(childComplexity int) int
+		Score                    func(childComplexity int) int
+		Severity                 func(childComplexity int) int
+		Source                   func(childComplexity int) int
+		SourceUpdatedAt          func(childComplexity int) int
+		State                    func(childComplexity int) int
+		Status                   func(childComplexity int) int
+		StepsToReproduce         func(childComplexity int) int
+		Subcontrols              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SystemInternalID         func(childComplexity int) int
+		SystemOwned              func(childComplexity int) int
+		Tags                     func(childComplexity int) int
+		TargetDetails            func(childComplexity int) int
+		Targets                  func(childComplexity int) int
+		Tasks                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
+		Validated                func(childComplexity int) int
+		Vector                   func(childComplexity int) int
+		Viewers                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Vulnerabilities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		WorkflowObjectRefs       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	FindingBulkCreatePayload struct {
@@ -3293,6 +3299,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
@@ -3356,6 +3363,7 @@ type ComplexityRoot struct {
 		CreateBulkRemediation                func(childComplexity int, input []*generated.CreateRemediationInput) int
 		CreateBulkReview                     func(childComplexity int, input []*generated.CreateReviewInput) int
 		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkSLADefinition              func(childComplexity int, input []*generated.CreateSLADefinitionInput) int
 		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
 		CreateBulkScheduledJob               func(childComplexity int, input []*generated.CreateScheduledJobInput) int
 		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
@@ -3436,6 +3444,7 @@ type ComplexityRoot struct {
 		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
 		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
+		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
@@ -3511,6 +3520,7 @@ type ComplexityRoot struct {
 		DeleteBulkRemediation                func(childComplexity int, ids []string) int
 		DeleteBulkReview                     func(childComplexity int, ids []string) int
 		DeleteBulkRisk                       func(childComplexity int, ids []string) int
+		DeleteBulkSLADefinition              func(childComplexity int, ids []string) int
 		DeleteBulkScan                       func(childComplexity int, ids []string) int
 		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
 		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
@@ -3580,6 +3590,7 @@ type ComplexityRoot struct {
 		DeleteRemediation                    func(childComplexity int, id string) int
 		DeleteReview                         func(childComplexity int, id string) int
 		DeleteRisk                           func(childComplexity int, id string) int
+		DeleteSLADefinition                  func(childComplexity int, id string) int
 		DeleteScan                           func(childComplexity int, id string) int
 		DeleteScheduledJob                   func(childComplexity int, id string) int
 		DeleteScheduledJobRun                func(childComplexity int, id string) int
@@ -3664,6 +3675,7 @@ type ComplexityRoot struct {
 		UpdateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
@@ -3712,6 +3724,7 @@ type ComplexityRoot struct {
 		UpdateBulkRemediation                func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
 		UpdateBulkReview                     func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
+		UpdateBulkSLADefinition              func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
 		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
 		UpdateBulkSubcontrol                 func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
@@ -3781,6 +3794,7 @@ type ComplexityRoot struct {
 		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload) int
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
@@ -4279,6 +4293,7 @@ type ComplexityRoot struct {
 		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		SLADefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) int
 		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ScheduledJobRuns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
@@ -5005,6 +5020,8 @@ type ComplexityRoot struct {
 		Risk                            func(childComplexity int, id string) int
 		RiskSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		SLADefinition                   func(childComplexity int, id string) int
+		SLADefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) int
 		Scan                            func(childComplexity int, id string) int
 		ScanSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
@@ -5362,6 +5379,58 @@ type ComplexityRoot struct {
 
 	RiskUpdatePayload struct {
 		Risk func(childComplexity int) int
+	}
+
+	SLADefinition struct {
+		CreatedAt                      func(childComplexity int) int
+		CreatedBy                      func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
+		ID                             func(childComplexity int) int
+		Owner                          func(childComplexity int) int
+		OwnerID                        func(childComplexity int) int
+		SLADays                        func(childComplexity int) int
+		SLADefinitionSeverityLevel     func(childComplexity int) int
+		SLADefinitionSeverityLevelID   func(childComplexity int) int
+		SLADefinitionSeverityLevelName func(childComplexity int) int
+		Tags                           func(childComplexity int) int
+		UpdatedAt                      func(childComplexity int) int
+		UpdatedBy                      func(childComplexity int) int
+	}
+
+	SLADefinitionBulkCreatePayload struct {
+		SLADefinitions func(childComplexity int) int
+	}
+
+	SLADefinitionBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	SLADefinitionBulkUpdatePayload struct {
+		SLADefinitions func(childComplexity int) int
+		UpdatedIDs     func(childComplexity int) int
+	}
+
+	SLADefinitionConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SLADefinitionCreatePayload struct {
+		SLADefinition func(childComplexity int) int
+	}
+
+	SLADefinitionDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	SLADefinitionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SLADefinitionUpdatePayload struct {
+		SLADefinition func(childComplexity int) int
 	}
 
 	Scan struct {
@@ -6833,71 +6902,77 @@ type ComplexityRoot struct {
 	}
 
 	Vulnerability struct {
-		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Blocking         func(childComplexity int) int
-		Category         func(childComplexity int) int
-		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		CveID            func(childComplexity int) int
-		Description      func(childComplexity int) int
-		DiscoveredAt     func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Environment      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		Exploitability   func(childComplexity int) int
-		ExternalID       func(childComplexity int) int
-		ExternalOwnerID  func(childComplexity int) int
-		ExternalURI      func(childComplexity int) int
-		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		Impacts          func(childComplexity int) int
-		Integrations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalNotes    func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Open             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Priority         func(childComplexity int) int
-		Production       func(childComplexity int) int
-		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Public           func(childComplexity int) int
-		PublishedAt      func(childComplexity int) int
-		RawPayload       func(childComplexity int) int
-		References       func(childComplexity int) int
-		RemediationSLA   func(childComplexity int) int
-		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Scope            func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		Score            func(childComplexity int) int
-		Severity         func(childComplexity int) int
-		Source           func(childComplexity int) int
-		SourceUpdatedAt  func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary          func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Validated        func(childComplexity int) int
-		Vector           func(childComplexity int) int
-		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ActionPlans                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Blocking                       func(childComplexity int) int
+		Category                       func(childComplexity int) int
+		Comments                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                      func(childComplexity int) int
+		CreatedBy                      func(childComplexity int) int
+		CveID                          func(childComplexity int) int
+		Description                    func(childComplexity int) int
+		DiscoveredAt                   func(childComplexity int) int
+		DisplayID                      func(childComplexity int) int
+		DisplayName                    func(childComplexity int) int
+		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Environment                    func(childComplexity int) int
+		EnvironmentID                  func(childComplexity int) int
+		EnvironmentName                func(childComplexity int) int
+		Exploitability                 func(childComplexity int) int
+		ExternalID                     func(childComplexity int) int
+		ExternalOwnerID                func(childComplexity int) int
+		ExternalURI                    func(childComplexity int) int
+		Files                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                             func(childComplexity int) int
+		Impact                         func(childComplexity int) int
+		Impacts                        func(childComplexity int) int
+		Integrations                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalNotes                  func(childComplexity int) int
+		Metadata                       func(childComplexity int) int
+		Open                           func(childComplexity int) int
+		Owner                          func(childComplexity int) int
+		OwnerID                        func(childComplexity int) int
+		Priority                       func(childComplexity int) int
+		Production                     func(childComplexity int) int
+		Programs                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Public                         func(childComplexity int) int
+		PublishedAt                    func(childComplexity int) int
+		RawPayload                     func(childComplexity int) int
+		References                     func(childComplexity int) int
+		RemediationSLA                 func(childComplexity int) int
+		Remediations                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Scope                          func(childComplexity int) int
+		ScopeID                        func(childComplexity int) int
+		ScopeName                      func(childComplexity int) int
+		Score                          func(childComplexity int) int
+		Severity                       func(childComplexity int) int
+		Source                         func(childComplexity int) int
+		SourceUpdatedAt                func(childComplexity int) int
+		Status                         func(childComplexity int) int
+		Subcontrols                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary                        func(childComplexity int) int
+		SystemInternalID               func(childComplexity int) int
+		SystemOwned                    func(childComplexity int) int
+		Tags                           func(childComplexity int) int
+		Tasks                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                      func(childComplexity int) int
+		UpdatedBy                      func(childComplexity int) int
+		Validated                      func(childComplexity int) int
+		Vector                         func(childComplexity int) int
+		Viewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		VulnerabilitySeverityLevel     func(childComplexity int) int
+		VulnerabilitySeverityLevelID   func(childComplexity int) int
+		VulnerabilitySeverityLevelName func(childComplexity int) int
+		VulnerabilityStatus            func(childComplexity int) int
+		VulnerabilityStatusID          func(childComplexity int) int
+		VulnerabilityStatusName        func(childComplexity int) int
 	}
 
 	VulnerabilityBulkCreatePayload struct {
@@ -17825,6 +17900,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Finding.FindingClass(childComplexity), true
 
+	case "Finding.findingSeverityLevel":
+		if e.ComplexityRoot.Finding.FindingSeverityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingSeverityLevel(childComplexity), true
+
+	case "Finding.findingSeverityLevelID":
+		if e.ComplexityRoot.Finding.FindingSeverityLevelID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingSeverityLevelID(childComplexity), true
+
+	case "Finding.findingSeverityLevelName":
+		if e.ComplexityRoot.Finding.FindingSeverityLevelName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingSeverityLevelName(childComplexity), true
+
+	case "Finding.findingStatus":
+		if e.ComplexityRoot.Finding.FindingStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingStatus(childComplexity), true
+
+	case "Finding.findingStatusID":
+		if e.ComplexityRoot.Finding.FindingStatusID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingStatusID(childComplexity), true
+
+	case "Finding.findingStatusName":
+		if e.ComplexityRoot.Finding.FindingStatusName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.FindingStatusName(childComplexity), true
+
 	case "Finding.id":
 		if e.ComplexityRoot.Finding.ID == nil {
 			break
@@ -23856,6 +23973,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVSLADefinition":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVSLADefinition(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVScan":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVScan == nil {
 			break
@@ -24611,6 +24740,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkRisk(childComplexity, args["input"].([]*generated.CreateRiskInput)), true
+
+	case "Mutation.createBulkSLADefinition":
+		if e.ComplexityRoot.Mutation.CreateBulkSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkSLADefinition(childComplexity, args["input"].([]*generated.CreateSLADefinitionInput)), true
 
 	case "Mutation.createBulkScan":
 		if e.ComplexityRoot.Mutation.CreateBulkScan == nil {
@@ -25572,6 +25713,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateRisk(childComplexity, args["input"].(generated.CreateRiskInput)), true
 
+	case "Mutation.createSLADefinition":
+		if e.ComplexityRoot.Mutation.CreateSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateSLADefinition(childComplexity, args["input"].(generated.CreateSLADefinitionInput)), true
+
 	case "Mutation.createScan":
 		if e.ComplexityRoot.Mutation.CreateScan == nil {
 			break
@@ -26472,6 +26625,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.DeleteBulkRisk(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkSLADefinition":
+		if e.ComplexityRoot.Mutation.DeleteBulkSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkSLADefinition(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkScan":
 		if e.ComplexityRoot.Mutation.DeleteBulkScan == nil {
 			break
@@ -27299,6 +27464,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteRisk(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteSLADefinition":
+		if e.ComplexityRoot.Mutation.DeleteSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteSLADefinition(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteScan":
 		if e.ComplexityRoot.Mutation.DeleteScan == nil {
@@ -28303,6 +28480,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.updateBulkCSVSLADefinition":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVSLADefinition(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkCSVScan":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVScan == nil {
 			break
@@ -28878,6 +29067,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkRisk(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRiskInput)), true
+
+	case "Mutation.updateBulkSLADefinition":
+		if e.ComplexityRoot.Mutation.UpdateBulkSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkSLADefinition(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSLADefinitionInput)), true
 
 	case "Mutation.updateBulkScan":
 		if e.ComplexityRoot.Mutation.UpdateBulkScan == nil {
@@ -29706,6 +29907,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateRiskComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateSLADefinition":
+		if e.ComplexityRoot.Mutation.UpdateSLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSLADefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateSLADefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateSLADefinitionInput)), true
 
 	case "Mutation.updateScan":
 		if e.ComplexityRoot.Mutation.UpdateScan == nil {
@@ -32712,6 +32925,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Organization.slaDefinitions":
+		if e.ComplexityRoot.Organization.SLADefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_slaDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.SLADefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SLADefinitionOrder), args["where"].(*generated.SLADefinitionWhereInput)), true
 
 	case "Organization.scans":
 		if e.ComplexityRoot.Organization.Scans == nil {
@@ -37796,6 +38021,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Query.slaDefinition":
+		if e.ComplexityRoot.Query.SLADefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Query_slaDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SLADefinition(childComplexity, args["id"].(string)), true
+
+	case "Query.slaDefinitions":
+		if e.ComplexityRoot.Query.SLADefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_slaDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SLADefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SLADefinitionOrder), args["where"].(*generated.SLADefinitionWhereInput)), true
+
 	case "Query.scan":
 		if e.ComplexityRoot.Query.Scan == nil {
 			break
@@ -40367,6 +40616,181 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskUpdatePayload.Risk(childComplexity), true
+
+	case "SLADefinition.createdAt":
+		if e.ComplexityRoot.SLADefinition.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.CreatedAt(childComplexity), true
+
+	case "SLADefinition.createdBy":
+		if e.ComplexityRoot.SLADefinition.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.CreatedBy(childComplexity), true
+
+	case "SLADefinition.displayID":
+		if e.ComplexityRoot.SLADefinition.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.DisplayID(childComplexity), true
+
+	case "SLADefinition.id":
+		if e.ComplexityRoot.SLADefinition.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.ID(childComplexity), true
+
+	case "SLADefinition.owner":
+		if e.ComplexityRoot.SLADefinition.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.Owner(childComplexity), true
+
+	case "SLADefinition.ownerID":
+		if e.ComplexityRoot.SLADefinition.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.OwnerID(childComplexity), true
+
+	case "SLADefinition.slaDays":
+		if e.ComplexityRoot.SLADefinition.SLADays == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADays(childComplexity), true
+
+	case "SLADefinition.slaDefinitionSeverityLevel":
+		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevel(childComplexity), true
+
+	case "SLADefinition.slaDefinitionSeverityLevelID":
+		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelID(childComplexity), true
+
+	case "SLADefinition.slaDefinitionSeverityLevelName":
+		if e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName(childComplexity), true
+
+	case "SLADefinition.tags":
+		if e.ComplexityRoot.SLADefinition.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.Tags(childComplexity), true
+
+	case "SLADefinition.updatedAt":
+		if e.ComplexityRoot.SLADefinition.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.UpdatedAt(childComplexity), true
+
+	case "SLADefinition.updatedBy":
+		if e.ComplexityRoot.SLADefinition.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.UpdatedBy(childComplexity), true
+
+	case "SLADefinitionBulkCreatePayload.slaDefinitions":
+		if e.ComplexityRoot.SLADefinitionBulkCreatePayload.SLADefinitions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkCreatePayload.SLADefinitions(childComplexity), true
+
+	case "SLADefinitionBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.SLADefinitionBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "SLADefinitionBulkUpdatePayload.slaDefinitions":
+		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.SLADefinitions == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkUpdatePayload.SLADefinitions(childComplexity), true
+
+	case "SLADefinitionBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "SLADefinitionConnection.edges":
+		if e.ComplexityRoot.SLADefinitionConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionConnection.Edges(childComplexity), true
+
+	case "SLADefinitionConnection.pageInfo":
+		if e.ComplexityRoot.SLADefinitionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionConnection.PageInfo(childComplexity), true
+
+	case "SLADefinitionConnection.totalCount":
+		if e.ComplexityRoot.SLADefinitionConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionConnection.TotalCount(childComplexity), true
+
+	case "SLADefinitionCreatePayload.slaDefinition":
+		if e.ComplexityRoot.SLADefinitionCreatePayload.SLADefinition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionCreatePayload.SLADefinition(childComplexity), true
+
+	case "SLADefinitionDeletePayload.deletedID":
+		if e.ComplexityRoot.SLADefinitionDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionDeletePayload.DeletedID(childComplexity), true
+
+	case "SLADefinitionEdge.cursor":
+		if e.ComplexityRoot.SLADefinitionEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionEdge.Cursor(childComplexity), true
+
+	case "SLADefinitionEdge.node":
+		if e.ComplexityRoot.SLADefinitionEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionEdge.Node(childComplexity), true
+
+	case "SLADefinitionUpdatePayload.slaDefinition":
+		if e.ComplexityRoot.SLADefinitionUpdatePayload.SLADefinition == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionUpdatePayload.SLADefinition(childComplexity), true
 
 	case "Scan.actionPlans":
 		if e.ComplexityRoot.Scan.ActionPlans == nil {
@@ -47693,6 +48117,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Vulnerability.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Vulnerability.vulnerabilitySeverityLevel":
+		if e.ComplexityRoot.Vulnerability.VulnerabilitySeverityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilitySeverityLevel(childComplexity), true
+
+	case "Vulnerability.vulnerabilitySeverityLevelID":
+		if e.ComplexityRoot.Vulnerability.VulnerabilitySeverityLevelID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilitySeverityLevelID(childComplexity), true
+
+	case "Vulnerability.vulnerabilitySeverityLevelName":
+		if e.ComplexityRoot.Vulnerability.VulnerabilitySeverityLevelName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilitySeverityLevelName(childComplexity), true
+
+	case "Vulnerability.vulnerabilityStatus":
+		if e.ComplexityRoot.Vulnerability.VulnerabilityStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilityStatus(childComplexity), true
+
+	case "Vulnerability.vulnerabilityStatusID":
+		if e.ComplexityRoot.Vulnerability.VulnerabilityStatusID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilityStatusID(childComplexity), true
+
+	case "Vulnerability.vulnerabilityStatusName":
+		if e.ComplexityRoot.Vulnerability.VulnerabilityStatusName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.VulnerabilityStatusName(childComplexity), true
+
 	case "VulnerabilityBulkCreatePayload.vulnerabilities":
 		if e.ComplexityRoot.VulnerabilityBulkCreatePayload.Vulnerabilities == nil {
 			break
@@ -49891,6 +50357,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateRemediationInput,
 		ec.unmarshalInputCreateReviewInput,
 		ec.unmarshalInputCreateRiskInput,
+		ec.unmarshalInputCreateSLADefinitionInput,
 		ec.unmarshalInputCreateScanInput,
 		ec.unmarshalInputCreateScheduledJobInput,
 		ec.unmarshalInputCreateScheduledJobRunInput,
@@ -50029,6 +50496,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputReviewWhereInput,
 		ec.unmarshalInputRiskOrder,
 		ec.unmarshalInputRiskWhereInput,
+		ec.unmarshalInputSLADefinitionOrder,
+		ec.unmarshalInputSLADefinitionWhereInput,
 		ec.unmarshalInputScanOrder,
 		ec.unmarshalInputScanWhereInput,
 		ec.unmarshalInputScheduledJobOrder,
@@ -50133,6 +50602,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateRemediationInput,
 		ec.unmarshalInputUpdateReviewInput,
 		ec.unmarshalInputUpdateRiskInput,
+		ec.unmarshalInputUpdateSLADefinitionInput,
 		ec.unmarshalInputUpdateScanInput,
 		ec.unmarshalInputUpdateScheduledJobInput,
 		ec.unmarshalInputUpdateScheduledJobRunInput,
@@ -65519,6 +65989,14 @@ input CreateFindingInput {
   """
   scopeName: String
   """
+  the severity_level of the finding
+  """
+  findingSeverityLevelName: String
+  """
+  the status of the finding
+  """
+  findingStatusName: String
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -65672,6 +66150,8 @@ input CreateFindingInput {
   viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
+  findingSeverityLevelID: ID
+  findingStatusID: ID
   integrationIDs: [ID!]
   vulnerabilityIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -66796,6 +67276,7 @@ input CreateOrganizationInput {
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  slaDefinitionIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
@@ -67667,6 +68148,26 @@ input CreateRiskInput {
   delegateID: ID
   commentIDs: [ID!]
   discussionIDs: [ID!]
+}
+"""
+CreateSLADefinitionInput is used for create SLADefinition object.
+Input was generated by ent.
+"""
+input CreateSLADefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int!
+  ownerID: ID
+  slaDefinitionSeverityLevelID: ID
 }
 """
 CreateScanInput is used for create Scan object.
@@ -68815,6 +69316,14 @@ input CreateVulnerabilityInput {
   """
   scopeName: String
   """
+  the severity_level of the vulnerability
+  """
+  vulnerabilitySeverityLevelName: String
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -68936,6 +69445,8 @@ input CreateVulnerabilityInput {
   viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
+  vulnerabilitySeverityLevelID: ID
+  vulnerabilityStatusID: ID
   integrationIDs: [ID!]
   findingIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -80254,6 +80765,22 @@ type Finding implements Node {
   """
   scopeID: ID
   """
+  the severity_level of the finding
+  """
+  findingSeverityLevelName: String
+  """
+  the severity_level of the finding
+  """
+  findingSeverityLevelID: ID
+  """
+  the status of the finding
+  """
+  findingStatusName: String
+  """
+  the status of the finding
+  """
+  findingStatusID: ID
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -80497,6 +81024,8 @@ type Finding implements Node {
   ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  findingSeverityLevel: CustomTypeEnum
+  findingStatus: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81639,6 +82168,78 @@ input FindingWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  finding_severity_level_name field predicates
+  """
+  findingSeverityLevelName: String
+  findingSeverityLevelNameNEQ: String
+  findingSeverityLevelNameIn: [String!]
+  findingSeverityLevelNameNotIn: [String!]
+  findingSeverityLevelNameGT: String
+  findingSeverityLevelNameGTE: String
+  findingSeverityLevelNameLT: String
+  findingSeverityLevelNameLTE: String
+  findingSeverityLevelNameContains: String
+  findingSeverityLevelNameHasPrefix: String
+  findingSeverityLevelNameHasSuffix: String
+  findingSeverityLevelNameIsNil: Boolean
+  findingSeverityLevelNameNotNil: Boolean
+  findingSeverityLevelNameEqualFold: String
+  findingSeverityLevelNameContainsFold: String
+  """
+  finding_severity_level_id field predicates
+  """
+  findingSeverityLevelID: ID
+  findingSeverityLevelIDNEQ: ID
+  findingSeverityLevelIDIn: [ID!]
+  findingSeverityLevelIDNotIn: [ID!]
+  findingSeverityLevelIDGT: ID
+  findingSeverityLevelIDGTE: ID
+  findingSeverityLevelIDLT: ID
+  findingSeverityLevelIDLTE: ID
+  findingSeverityLevelIDContains: ID
+  findingSeverityLevelIDHasPrefix: ID
+  findingSeverityLevelIDHasSuffix: ID
+  findingSeverityLevelIDIsNil: Boolean
+  findingSeverityLevelIDNotNil: Boolean
+  findingSeverityLevelIDEqualFold: ID
+  findingSeverityLevelIDContainsFold: ID
+  """
+  finding_status_name field predicates
+  """
+  findingStatusName: String
+  findingStatusNameNEQ: String
+  findingStatusNameIn: [String!]
+  findingStatusNameNotIn: [String!]
+  findingStatusNameGT: String
+  findingStatusNameGTE: String
+  findingStatusNameLT: String
+  findingStatusNameLTE: String
+  findingStatusNameContains: String
+  findingStatusNameHasPrefix: String
+  findingStatusNameHasSuffix: String
+  findingStatusNameIsNil: Boolean
+  findingStatusNameNotNil: Boolean
+  findingStatusNameEqualFold: String
+  findingStatusNameContainsFold: String
+  """
+  finding_status_id field predicates
+  """
+  findingStatusID: ID
+  findingStatusIDNEQ: ID
+  findingStatusIDIn: [ID!]
+  findingStatusIDNotIn: [ID!]
+  findingStatusIDGT: ID
+  findingStatusIDGTE: ID
+  findingStatusIDLT: ID
+  findingStatusIDLTE: ID
+  findingStatusIDContains: ID
+  findingStatusIDHasPrefix: ID
+  findingStatusIDHasSuffix: ID
+  findingStatusIDIsNil: Boolean
+  findingStatusIDNotNil: Boolean
+  findingStatusIDEqualFold: ID
+  findingStatusIDContainsFold: ID
+  """
   external_id field predicates
   """
   externalID: String
@@ -82113,6 +82714,16 @@ input FindingWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  finding_severity_level edge predicates
+  """
+  hasFindingSeverityLevel: Boolean
+  hasFindingSeverityLevelWith: [CustomTypeEnumWhereInput!]
+  """
+  finding_status edge predicates
+  """
+  hasFindingStatus: Boolean
+  hasFindingStatusWith: [CustomTypeEnumWhereInput!]
   """
   integrations edge predicates
   """
@@ -96807,6 +97418,37 @@ type Organization implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  slaDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SLADefinitions returned from the connection.
+    """
+    orderBy: [SLADefinitionOrder!]
+
+    """
+    Filtering options for SLADefinitions returned from the connection.
+    """
+    where: SLADefinitionWhereInput
+  ): SLADefinitionConnection!
   subprocessors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98755,6 +99397,11 @@ input OrganizationWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  sla_definitions edge predicates
+  """
+  hasSLADefinitions: Boolean
+  hasSLADefinitionsWith: [SLADefinitionWhereInput!]
   """
   subprocessors edge predicates
   """
@@ -105787,6 +106434,37 @@ type Query {
     """
     where: RiskWhereInput
   ): RiskConnection!
+  slaDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SLADefinitions returned from the connection.
+    """
+    orderBy: [SLADefinitionOrder!]
+
+    """
+    Filtering options for SLADefinitions returned from the connection.
+    """
+    where: SLADefinitionWhereInput
+  ): SLADefinitionConnection!
   scans(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -110670,6 +111348,268 @@ input RiskWhereInput {
   """
   hasDiscussions: Boolean
   hasDiscussionsWith: [DiscussionWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
+type SLADefinition implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelID: ID
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int!
+  owner: Organization
+  slaDefinitionSeverityLevel: CustomTypeEnum
+}
+"""
+A connection to a list of items.
+"""
+type SLADefinitionConnection {
+  """
+  A list of edges.
+  """
+  edges: [SLADefinitionEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SLADefinitionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SLADefinition
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for SLADefinition connections
+"""
+input SLADefinitionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SLADefinitions.
+  """
+  field: SLADefinitionOrderField!
+}
+"""
+Properties by which SLADefinition connections can be ordered.
+"""
+enum SLADefinitionOrderField {
+  created_at
+  updated_at
+}
+"""
+SLADefinitionWhereInput is used for filtering SLADefinition objects.
+Input was generated by ent.
+"""
+input SLADefinitionWhereInput {
+  not: SLADefinitionWhereInput
+  and: [SLADefinitionWhereInput!]
+  or: [SLADefinitionWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  sla_definition_severity_level_name field predicates
+  """
+  slaDefinitionSeverityLevelName: String
+  slaDefinitionSeverityLevelNameNEQ: String
+  slaDefinitionSeverityLevelNameIn: [String!]
+  slaDefinitionSeverityLevelNameNotIn: [String!]
+  slaDefinitionSeverityLevelNameGT: String
+  slaDefinitionSeverityLevelNameGTE: String
+  slaDefinitionSeverityLevelNameLT: String
+  slaDefinitionSeverityLevelNameLTE: String
+  slaDefinitionSeverityLevelNameContains: String
+  slaDefinitionSeverityLevelNameHasPrefix: String
+  slaDefinitionSeverityLevelNameHasSuffix: String
+  slaDefinitionSeverityLevelNameIsNil: Boolean
+  slaDefinitionSeverityLevelNameNotNil: Boolean
+  slaDefinitionSeverityLevelNameEqualFold: String
+  slaDefinitionSeverityLevelNameContainsFold: String
+  """
+  sla_definition_severity_level_id field predicates
+  """
+  slaDefinitionSeverityLevelID: ID
+  slaDefinitionSeverityLevelIDNEQ: ID
+  slaDefinitionSeverityLevelIDIn: [ID!]
+  slaDefinitionSeverityLevelIDNotIn: [ID!]
+  slaDefinitionSeverityLevelIDGT: ID
+  slaDefinitionSeverityLevelIDGTE: ID
+  slaDefinitionSeverityLevelIDLT: ID
+  slaDefinitionSeverityLevelIDLTE: ID
+  slaDefinitionSeverityLevelIDContains: ID
+  slaDefinitionSeverityLevelIDHasPrefix: ID
+  slaDefinitionSeverityLevelIDHasSuffix: ID
+  slaDefinitionSeverityLevelIDIsNil: Boolean
+  slaDefinitionSeverityLevelIDNotNil: Boolean
+  slaDefinitionSeverityLevelIDEqualFold: ID
+  slaDefinitionSeverityLevelIDContainsFold: ID
+  """
+  sla_days field predicates
+  """
+  slaDays: Int
+  slaDaysNEQ: Int
+  slaDaysIn: [Int!]
+  slaDaysNotIn: [Int!]
+  slaDaysGT: Int
+  slaDaysGTE: Int
+  slaDaysLT: Int
+  slaDaysLTE: Int
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  sla_definition_severity_level edge predicates
+  """
+  hasSLADefinitionSeverityLevel: Boolean
+  hasSLADefinitionSeverityLevelWith: [CustomTypeEnumWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -124690,6 +125630,16 @@ input UpdateFindingInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the severity_level of the finding
+  """
+  findingSeverityLevelName: String
+  clearFindingSeverityLevelName: Boolean
+  """
+  the status of the finding
+  """
+  findingStatusName: String
+  clearFindingStatusName: Boolean
+  """
   external identifier from the integration source for the finding
   """
   externalID: String
@@ -124891,6 +125841,10 @@ input UpdateFindingInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  findingSeverityLevelID: ID
+  clearFindingSeverityLevel: Boolean
+  findingStatusID: ID
+  clearFindingStatus: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -126485,6 +127439,9 @@ input UpdateOrganizationInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addSLADefinitionIDs: [ID!]
+  removeSLADefinitionIDs: [ID!]
+  clearSLADefinitions: Boolean
   addSubprocessorIDs: [ID!]
   removeSubprocessorIDs: [ID!]
   clearSubprocessors: Boolean
@@ -127814,6 +128771,31 @@ input UpdateRiskInput {
   addDiscussionIDs: [ID!]
   removeDiscussionIDs: [ID!]
   clearDiscussions: Boolean
+}
+"""
+UpdateSLADefinitionInput is used for update SLADefinition object.
+Input was generated by ent.
+"""
+input UpdateSLADefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the severity_level of the sla_definition
+  """
+  slaDefinitionSeverityLevelName: String
+  clearSLADefinitionSeverityLevelName: Boolean
+  """
+  remediation service level agreement in days for the severity level
+  """
+  slaDays: Int
+  ownerID: ID
+  clearOwner: Boolean
+  slaDefinitionSeverityLevelID: ID
+  clearSLADefinitionSeverityLevel: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -129398,6 +130380,16 @@ input UpdateVulnerabilityInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the severity_level of the vulnerability
+  """
+  vulnerabilitySeverityLevelName: String
+  clearVulnerabilitySeverityLevelName: Boolean
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  clearVulnerabilityStatusName: Boolean
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -129556,6 +130548,10 @@ input UpdateVulnerabilityInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  vulnerabilitySeverityLevelID: ID
+  clearVulnerabilitySeverityLevel: Boolean
+  vulnerabilityStatusID: ID
+  clearVulnerabilityStatus: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -131269,6 +132265,22 @@ type Vulnerability implements Node {
   """
   scopeID: ID
   """
+  the severity_level of the vulnerability
+  """
+  vulnerabilitySeverityLevelName: String
+  """
+  the severity_level of the vulnerability
+  """
+  vulnerabilitySeverityLevelID: ID
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusName: String
+  """
+  the status of the vulnerability
+  """
+  vulnerabilityStatusID: ID
+  """
   owner of the vulnerability
   """
   externalOwnerID: String
@@ -131480,6 +132492,8 @@ type Vulnerability implements Node {
   ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  vulnerabilitySeverityLevel: CustomTypeEnum
+  vulnerabilityStatus: CustomTypeEnum
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -132234,6 +133248,78 @@ input VulnerabilityWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  vulnerability_severity_level_name field predicates
+  """
+  vulnerabilitySeverityLevelName: String
+  vulnerabilitySeverityLevelNameNEQ: String
+  vulnerabilitySeverityLevelNameIn: [String!]
+  vulnerabilitySeverityLevelNameNotIn: [String!]
+  vulnerabilitySeverityLevelNameGT: String
+  vulnerabilitySeverityLevelNameGTE: String
+  vulnerabilitySeverityLevelNameLT: String
+  vulnerabilitySeverityLevelNameLTE: String
+  vulnerabilitySeverityLevelNameContains: String
+  vulnerabilitySeverityLevelNameHasPrefix: String
+  vulnerabilitySeverityLevelNameHasSuffix: String
+  vulnerabilitySeverityLevelNameIsNil: Boolean
+  vulnerabilitySeverityLevelNameNotNil: Boolean
+  vulnerabilitySeverityLevelNameEqualFold: String
+  vulnerabilitySeverityLevelNameContainsFold: String
+  """
+  vulnerability_severity_level_id field predicates
+  """
+  vulnerabilitySeverityLevelID: ID
+  vulnerabilitySeverityLevelIDNEQ: ID
+  vulnerabilitySeverityLevelIDIn: [ID!]
+  vulnerabilitySeverityLevelIDNotIn: [ID!]
+  vulnerabilitySeverityLevelIDGT: ID
+  vulnerabilitySeverityLevelIDGTE: ID
+  vulnerabilitySeverityLevelIDLT: ID
+  vulnerabilitySeverityLevelIDLTE: ID
+  vulnerabilitySeverityLevelIDContains: ID
+  vulnerabilitySeverityLevelIDHasPrefix: ID
+  vulnerabilitySeverityLevelIDHasSuffix: ID
+  vulnerabilitySeverityLevelIDIsNil: Boolean
+  vulnerabilitySeverityLevelIDNotNil: Boolean
+  vulnerabilitySeverityLevelIDEqualFold: ID
+  vulnerabilitySeverityLevelIDContainsFold: ID
+  """
+  vulnerability_status_name field predicates
+  """
+  vulnerabilityStatusName: String
+  vulnerabilityStatusNameNEQ: String
+  vulnerabilityStatusNameIn: [String!]
+  vulnerabilityStatusNameNotIn: [String!]
+  vulnerabilityStatusNameGT: String
+  vulnerabilityStatusNameGTE: String
+  vulnerabilityStatusNameLT: String
+  vulnerabilityStatusNameLTE: String
+  vulnerabilityStatusNameContains: String
+  vulnerabilityStatusNameHasPrefix: String
+  vulnerabilityStatusNameHasSuffix: String
+  vulnerabilityStatusNameIsNil: Boolean
+  vulnerabilityStatusNameNotNil: Boolean
+  vulnerabilityStatusNameEqualFold: String
+  vulnerabilityStatusNameContainsFold: String
+  """
+  vulnerability_status_id field predicates
+  """
+  vulnerabilityStatusID: ID
+  vulnerabilityStatusIDNEQ: ID
+  vulnerabilityStatusIDIn: [ID!]
+  vulnerabilityStatusIDNotIn: [ID!]
+  vulnerabilityStatusIDGT: ID
+  vulnerabilityStatusIDGTE: ID
+  vulnerabilityStatusIDLT: ID
+  vulnerabilityStatusIDLTE: ID
+  vulnerabilityStatusIDContains: ID
+  vulnerabilityStatusIDHasPrefix: ID
+  vulnerabilityStatusIDHasSuffix: ID
+  vulnerabilityStatusIDIsNil: Boolean
+  vulnerabilityStatusIDNotNil: Boolean
+  vulnerabilityStatusIDEqualFold: ID
+  vulnerabilityStatusIDContainsFold: ID
+  """
   external_owner_id field predicates
   """
   externalOwnerID: String
@@ -132621,6 +133707,16 @@ input VulnerabilityWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  vulnerability_severity_level edge predicates
+  """
+  hasVulnerabilitySeverityLevel: Boolean
+  hasVulnerabilitySeverityLevelWith: [CustomTypeEnumWhereInput!]
+  """
+  vulnerability_status edge predicates
+  """
+  hasVulnerabilityStatus: Boolean
+  hasVulnerabilityStatusWith: [CustomTypeEnumWhereInput!]
   """
   integrations edge predicates
   """
@@ -143693,6 +144789,165 @@ extend type SearchResults{
   searchContext: [SearchContext!]
 }
 
+`, BuiltIn: false},
+	{Name: "../schema/sladefinition.graphql", Input: `extend type Query {
+    """
+    Look up slaDefinition by ID
+    """
+     slaDefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+    ):  SLADefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new slaDefinition
+    """
+    createSLADefinition(
+        """
+        values of the slaDefinition
+        """
+        input: CreateSLADefinitionInput!
+    ): SLADefinitionCreatePayload!
+    """
+    Create multiple new slaDefinitions
+    """
+    createBulkSLADefinition(
+        """
+        values of the slaDefinition
+        """
+        input: [CreateSLADefinitionInput!]
+    ): SLADefinitionBulkCreatePayload!
+    """
+    Create multiple new slaDefinitions via file upload
+    """
+    createBulkCSVSLADefinition(
+        """
+        csv file containing values of the slaDefinition
+        """
+        input: Upload!
+    ): SLADefinitionBulkCreatePayload!
+    """
+    Update multiple existing slaDefinitions
+    """
+    updateBulkSLADefinition(
+        """
+        IDs of the slaDefinitions to update
+        """
+        ids: [ID!]!
+        """
+        values to update the slaDefinitions with
+        """
+        input: UpdateSLADefinitionInput!
+    ): SLADefinitionBulkUpdatePayload!
+    """
+    Update multiple existing slaDefinitions via file upload
+    """
+    updateBulkCSVSLADefinition(
+        """
+        csv file containing values of the slaDefinition, must include ID column
+        """
+        input: Upload!
+    ): SLADefinitionBulkUpdatePayload!
+    """
+    Update an existing slaDefinition
+    """
+    updateSLADefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+        """
+        New values for the slaDefinition
+        """
+        input: UpdateSLADefinitionInput!
+    ): SLADefinitionUpdatePayload!
+    """
+    Delete an existing slaDefinition
+    """
+    deleteSLADefinition(
+        """
+        ID of the slaDefinition
+        """
+        id: ID!
+    ): SLADefinitionDeletePayload!
+    """
+    Delete multiple slaDefinitions
+    """
+    deleteBulkSLADefinition(
+        """
+        IDs of the slaDefinitions to delete
+        """
+        ids: [ID!]!
+    ): SLADefinitionBulkDeletePayload!
+}
+
+"""
+Return response for createSLADefinition mutation
+"""
+type SLADefinitionCreatePayload {
+    """
+    Created slaDefinition
+    """
+    slaDefinition: SLADefinition!
+}
+
+"""
+Return response for updateSLADefinition mutation
+"""
+type SLADefinitionUpdatePayload {
+    """
+    Updated slaDefinition
+    """
+    slaDefinition: SLADefinition!
+}
+
+"""
+Return response for deleteSLADefinition mutation
+"""
+type SLADefinitionDeletePayload {
+    """
+    Deleted slaDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSLADefinition mutation
+"""
+type SLADefinitionBulkCreatePayload {
+    """
+    Created slaDefinitions
+    """
+    slaDefinitions: [SLADefinition!]
+}
+
+"""
+Return response for updateBulkSLADefinition mutation
+"""
+type SLADefinitionBulkUpdatePayload {
+    """
+    Updated slaDefinitions
+    """
+    slaDefinitions: [SLADefinition!]
+    """
+    IDs of the updated slaDefinitions
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkSLADefinition mutation
+"""
+type SLADefinitionBulkDeletePayload {
+    """
+    Deleted slaDefinition IDs
+    """
+    deletedIDs: [ID!]!
+}
 `, BuiltIn: false},
 	{Name: "../schema/standard.graphql", Input: `extend type Query {
     """

@@ -153,6 +153,26 @@ func ScopeID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldScopeID, v))
 }
 
+// FindingSeverityLevelName applies equality check predicate on the "finding_severity_level_name" field. It's identical to FindingSeverityLevelNameEQ.
+func FindingSeverityLevelName(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelID applies equality check predicate on the "finding_severity_level_id" field. It's identical to FindingSeverityLevelIDEQ.
+func FindingSeverityLevelID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingSeverityLevelID, v))
+}
+
+// FindingStatusName applies equality check predicate on the "finding_status_name" field. It's identical to FindingStatusNameEQ.
+func FindingStatusName(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusID applies equality check predicate on the "finding_status_id" field. It's identical to FindingStatusIDEQ.
+func FindingStatusID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusID, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldExternalID, v))
@@ -1431,6 +1451,306 @@ func ScopeIDEqualFold(v string) predicate.FindingHistory {
 // ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
 func ScopeIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// FindingSeverityLevelNameEQ applies the EQ predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameNEQ applies the NEQ predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameIn applies the In predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldFindingSeverityLevelName, vs...))
+}
+
+// FindingSeverityLevelNameNotIn applies the NotIn predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldFindingSeverityLevelName, vs...))
+}
+
+// FindingSeverityLevelNameGT applies the GT predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameGTE applies the GTE predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameLT applies the LT predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameLTE applies the LTE predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameContains applies the Contains predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameHasPrefix applies the HasPrefix predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameHasSuffix applies the HasSuffix predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameIsNil applies the IsNil predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldFindingSeverityLevelName))
+}
+
+// FindingSeverityLevelNameNotNil applies the NotNil predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldFindingSeverityLevelName))
+}
+
+// FindingSeverityLevelNameEqualFold applies the EqualFold predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameContainsFold applies the ContainsFold predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelIDEQ applies the EQ predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDNEQ applies the NEQ predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDIn applies the In predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldFindingSeverityLevelID, vs...))
+}
+
+// FindingSeverityLevelIDNotIn applies the NotIn predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldFindingSeverityLevelID, vs...))
+}
+
+// FindingSeverityLevelIDGT applies the GT predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDGTE applies the GTE predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDLT applies the LT predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDLTE applies the LTE predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDContains applies the Contains predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDHasPrefix applies the HasPrefix predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDHasSuffix applies the HasSuffix predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDIsNil applies the IsNil predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldFindingSeverityLevelID))
+}
+
+// FindingSeverityLevelIDNotNil applies the NotNil predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldFindingSeverityLevelID))
+}
+
+// FindingSeverityLevelIDEqualFold applies the EqualFold predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDContainsFold applies the ContainsFold predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingSeverityLevelID, v))
+}
+
+// FindingStatusNameEQ applies the EQ predicate on the "finding_status_name" field.
+func FindingStatusNameEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameNEQ applies the NEQ predicate on the "finding_status_name" field.
+func FindingStatusNameNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameIn applies the In predicate on the "finding_status_name" field.
+func FindingStatusNameIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldFindingStatusName, vs...))
+}
+
+// FindingStatusNameNotIn applies the NotIn predicate on the "finding_status_name" field.
+func FindingStatusNameNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldFindingStatusName, vs...))
+}
+
+// FindingStatusNameGT applies the GT predicate on the "finding_status_name" field.
+func FindingStatusNameGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameGTE applies the GTE predicate on the "finding_status_name" field.
+func FindingStatusNameGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameLT applies the LT predicate on the "finding_status_name" field.
+func FindingStatusNameLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameLTE applies the LTE predicate on the "finding_status_name" field.
+func FindingStatusNameLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameContains applies the Contains predicate on the "finding_status_name" field.
+func FindingStatusNameContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameHasPrefix applies the HasPrefix predicate on the "finding_status_name" field.
+func FindingStatusNameHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameHasSuffix applies the HasSuffix predicate on the "finding_status_name" field.
+func FindingStatusNameHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameIsNil applies the IsNil predicate on the "finding_status_name" field.
+func FindingStatusNameIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldFindingStatusName))
+}
+
+// FindingStatusNameNotNil applies the NotNil predicate on the "finding_status_name" field.
+func FindingStatusNameNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldFindingStatusName))
+}
+
+// FindingStatusNameEqualFold applies the EqualFold predicate on the "finding_status_name" field.
+func FindingStatusNameEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameContainsFold applies the ContainsFold predicate on the "finding_status_name" field.
+func FindingStatusNameContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingStatusName, v))
+}
+
+// FindingStatusIDEQ applies the EQ predicate on the "finding_status_id" field.
+func FindingStatusIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDNEQ applies the NEQ predicate on the "finding_status_id" field.
+func FindingStatusIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDIn applies the In predicate on the "finding_status_id" field.
+func FindingStatusIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldFindingStatusID, vs...))
+}
+
+// FindingStatusIDNotIn applies the NotIn predicate on the "finding_status_id" field.
+func FindingStatusIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldFindingStatusID, vs...))
+}
+
+// FindingStatusIDGT applies the GT predicate on the "finding_status_id" field.
+func FindingStatusIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDGTE applies the GTE predicate on the "finding_status_id" field.
+func FindingStatusIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDLT applies the LT predicate on the "finding_status_id" field.
+func FindingStatusIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDLTE applies the LTE predicate on the "finding_status_id" field.
+func FindingStatusIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDContains applies the Contains predicate on the "finding_status_id" field.
+func FindingStatusIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDHasPrefix applies the HasPrefix predicate on the "finding_status_id" field.
+func FindingStatusIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDHasSuffix applies the HasSuffix predicate on the "finding_status_id" field.
+func FindingStatusIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDIsNil applies the IsNil predicate on the "finding_status_id" field.
+func FindingStatusIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldFindingStatusID))
+}
+
+// FindingStatusIDNotNil applies the NotNil predicate on the "finding_status_id" field.
+func FindingStatusIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldFindingStatusID))
+}
+
+// FindingStatusIDEqualFold applies the EqualFold predicate on the "finding_status_id" field.
+func FindingStatusIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDContainsFold applies the ContainsFold predicate on the "finding_status_id" field.
+func FindingStatusIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldFindingStatusID, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

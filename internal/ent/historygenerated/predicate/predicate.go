@@ -158,6 +158,9 @@ type ReviewHistory func(*sql.Selector)
 // RiskHistory is the predicate function for riskhistory builders.
 type RiskHistory func(*sql.Selector)
 
+// SLADefinitionHistory is the predicate function for sladefinitionhistory builders.
+type SLADefinitionHistory func(*sql.Selector)
+
 // ScanHistory is the predicate function for scanhistory builders.
 type ScanHistory func(*sql.Selector)
 

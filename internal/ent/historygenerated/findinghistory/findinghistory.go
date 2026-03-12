@@ -57,6 +57,14 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldFindingSeverityLevelName holds the string denoting the finding_severity_level_name field in the database.
+	FieldFindingSeverityLevelName = "finding_severity_level_name"
+	// FieldFindingSeverityLevelID holds the string denoting the finding_severity_level_id field in the database.
+	FieldFindingSeverityLevelID = "finding_severity_level_id"
+	// FieldFindingStatusName holds the string denoting the finding_status_name field in the database.
+	FieldFindingStatusName = "finding_status_name"
+	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
+	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -157,6 +165,10 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldFindingSeverityLevelName,
+	FieldFindingSeverityLevelID,
+	FieldFindingStatusName,
+	FieldFindingStatusID,
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldSource,
@@ -347,6 +359,26 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByFindingSeverityLevelName orders the results by the finding_severity_level_name field.
+func ByFindingSeverityLevelName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingSeverityLevelName, opts...).ToFunc()
+}
+
+// ByFindingSeverityLevelID orders the results by the finding_severity_level_id field.
+func ByFindingSeverityLevelID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingSeverityLevelID, opts...).ToFunc()
+}
+
+// ByFindingStatusName orders the results by the finding_status_name field.
+func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingStatusName, opts...).ToFunc()
+}
+
+// ByFindingStatusID orders the results by the finding_status_id field.
+func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFindingStatusID, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.

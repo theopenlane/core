@@ -76,6 +76,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -940,6 +941,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).SLADefinition.Query().Where((sladefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if sladefinitionCount, err := FromContext(ctx).SLADefinition.Delete().Where(sladefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", sladefinitionCount).Msg("error deleting sladefinition")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).Subprocessor.Query().Where((subprocessor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subprocessorCount, err := FromContext(ctx).Subprocessor.Delete().Where(subprocessor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", subprocessorCount).Msg("error deleting subprocessor")
@@ -1181,6 +1189,12 @@ func ReviewEdgeCleanup(ctx context.Context, id string) error {
 
 func RiskEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge")))
+
+	return nil
+}
+
+func SLADefinitionEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup sladefinition edge")))
 
 	return nil
 }

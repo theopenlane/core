@@ -68,6 +68,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
@@ -21375,6 +21376,338 @@ func (_m *RiskHistory) ToEdge(order *RiskHistoryOrder) *RiskHistoryEdge {
 		order = DefaultRiskHistoryOrder
 	}
 	return &RiskHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// SLADefinitionHistoryEdge is the edge representation of SLADefinitionHistory.
+type SLADefinitionHistoryEdge struct {
+	Node   *SLADefinitionHistory `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// SLADefinitionHistoryConnection is the connection containing edges to SLADefinitionHistory.
+type SLADefinitionHistoryConnection struct {
+	Edges      []*SLADefinitionHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *SLADefinitionHistoryConnection) build(nodes []*SLADefinitionHistory, pager *sladefinitionhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SLADefinitionHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SLADefinitionHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SLADefinitionHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SLADefinitionHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SLADefinitionHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SLADefinitionHistoryPaginateOption enables pagination customization.
+type SLADefinitionHistoryPaginateOption func(*sladefinitionhistoryPager) error
+
+// WithSLADefinitionHistoryOrder configures pagination ordering.
+func WithSLADefinitionHistoryOrder(order *SLADefinitionHistoryOrder) SLADefinitionHistoryPaginateOption {
+	if order == nil {
+		order = DefaultSLADefinitionHistoryOrder
+	}
+	o := *order
+	return func(pager *sladefinitionhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultSLADefinitionHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithSLADefinitionHistoryFilter configures pagination filter.
+func WithSLADefinitionHistoryFilter(filter func(*SLADefinitionHistoryQuery) (*SLADefinitionHistoryQuery, error)) SLADefinitionHistoryPaginateOption {
+	return func(pager *sladefinitionhistoryPager) error {
+		if filter == nil {
+			return errors.New("SLADefinitionHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type sladefinitionhistoryPager struct {
+	reverse bool
+	order   *SLADefinitionHistoryOrder
+	filter  func(*SLADefinitionHistoryQuery) (*SLADefinitionHistoryQuery, error)
+}
+
+func newSLADefinitionHistoryPager(opts []SLADefinitionHistoryPaginateOption, reverse bool) (*sladefinitionhistoryPager, error) {
+	pager := &sladefinitionhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultSLADefinitionHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *sladefinitionhistoryPager) applyFilter(query *SLADefinitionHistoryQuery) (*SLADefinitionHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *sladefinitionhistoryPager) toCursor(_m *SLADefinitionHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *sladefinitionhistoryPager) applyCursors(query *SLADefinitionHistoryQuery, after, before *Cursor) (*SLADefinitionHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultSLADefinitionHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *sladefinitionhistoryPager) applyOrder(query *SLADefinitionHistoryQuery) *SLADefinitionHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultSLADefinitionHistoryOrder.Field {
+		query = query.Order(DefaultSLADefinitionHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *sladefinitionhistoryPager) orderExpr(query *SLADefinitionHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultSLADefinitionHistoryOrder.Field {
+			b.Comma().Ident(DefaultSLADefinitionHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SLADefinitionHistory.
+func (_m *SLADefinitionHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SLADefinitionHistoryPaginateOption,
+) (*SLADefinitionHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSLADefinitionHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &SLADefinitionHistoryConnection{Edges: []*SLADefinitionHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SLADefinitionHistoryOrderFieldHistoryTime orders SLADefinitionHistory by history_time.
+	SLADefinitionHistoryOrderFieldHistoryTime = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: sladefinitionhistory.FieldHistoryTime,
+		toTerm: sladefinitionhistory.ByHistoryTime,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// SLADefinitionHistoryOrderFieldCreatedAt orders SLADefinitionHistory by created_at.
+	SLADefinitionHistoryOrderFieldCreatedAt = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: sladefinitionhistory.FieldCreatedAt,
+		toTerm: sladefinitionhistory.ByCreatedAt,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// SLADefinitionHistoryOrderFieldUpdatedAt orders SLADefinitionHistory by updated_at.
+	SLADefinitionHistoryOrderFieldUpdatedAt = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: sladefinitionhistory.FieldUpdatedAt,
+		toTerm: sladefinitionhistory.ByUpdatedAt,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SLADefinitionHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case SLADefinitionHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case SLADefinitionHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SLADefinitionHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SLADefinitionHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SLADefinitionHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SLADefinitionHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *SLADefinitionHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *SLADefinitionHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SLADefinitionHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid SLADefinitionHistoryOrderField", str)
+	}
+	return nil
+}
+
+// SLADefinitionHistoryOrderField defines the ordering field of SLADefinitionHistory.
+type SLADefinitionHistoryOrderField struct {
+	// Value extracts the ordering value from the given SLADefinitionHistory.
+	Value    func(*SLADefinitionHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) sladefinitionhistory.OrderOption
+	toCursor func(*SLADefinitionHistory) Cursor
+}
+
+// SLADefinitionHistoryOrder defines the ordering of SLADefinitionHistory.
+type SLADefinitionHistoryOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *SLADefinitionHistoryOrderField `json:"field"`
+}
+
+// DefaultSLADefinitionHistoryOrder is the default ordering of SLADefinitionHistory.
+var DefaultSLADefinitionHistoryOrder = &SLADefinitionHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: sladefinitionhistory.FieldID,
+		toTerm: sladefinitionhistory.ByID,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts SLADefinitionHistory into SLADefinitionHistoryEdge.
+func (_m *SLADefinitionHistory) ToEdge(order *SLADefinitionHistoryOrder) *SLADefinitionHistoryEdge {
+	if order == nil {
+		order = DefaultSLADefinitionHistoryOrder
+	}
+	return &SLADefinitionHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

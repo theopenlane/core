@@ -63,6 +63,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
@@ -1495,6 +1496,33 @@ func (f TraverseRiskHistory) Traverse(ctx context.Context, q historygenerated.Qu
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.RiskHistoryQuery", q)
 }
 
+// The SLADefinitionHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SLADefinitionHistoryFunc func(context.Context, *historygenerated.SLADefinitionHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SLADefinitionHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.SLADefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.SLADefinitionHistoryQuery", q)
+}
+
+// The TraverseSLADefinitionHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSLADefinitionHistory func(context.Context, *historygenerated.SLADefinitionHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSLADefinitionHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSLADefinitionHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.SLADefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SLADefinitionHistoryQuery", q)
+}
+
 // The ScanHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ScanHistoryFunc func(context.Context, *historygenerated.ScanHistoryQuery) (historygenerated.Value, error)
 
@@ -2300,6 +2328,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.ReviewHistoryQuery, predicate.ReviewHistory, reviewhistory.OrderOption]{typ: historygenerated.TypeReviewHistory, tq: q}, nil
 	case *historygenerated.RiskHistoryQuery:
 		return &query[*historygenerated.RiskHistoryQuery, predicate.RiskHistory, riskhistory.OrderOption]{typ: historygenerated.TypeRiskHistory, tq: q}, nil
+	case *historygenerated.SLADefinitionHistoryQuery:
+		return &query[*historygenerated.SLADefinitionHistoryQuery, predicate.SLADefinitionHistory, sladefinitionhistory.OrderOption]{typ: historygenerated.TypeSLADefinitionHistory, tq: q}, nil
 	case *historygenerated.ScanHistoryQuery:
 		return &query[*historygenerated.ScanHistoryQuery, predicate.ScanHistory, scanhistory.OrderOption]{typ: historygenerated.TypeScanHistory, tq: q}, nil
 	case *historygenerated.ScheduledJobHistoryQuery:

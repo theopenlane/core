@@ -245,6 +245,86 @@ func (_u *FindingHistoryUpdate) ClearScopeID() *FindingHistoryUpdate {
 	return _u
 }
 
+// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
+func (_u *FindingHistoryUpdate) SetFindingSeverityLevelName(v string) *FindingHistoryUpdate {
+	_u.mutation.SetFindingSeverityLevelName(v)
+	return _u
+}
+
+// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableFindingSeverityLevelName(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetFindingSeverityLevelName(*v)
+	}
+	return _u
+}
+
+// ClearFindingSeverityLevelName clears the value of the "finding_severity_level_name" field.
+func (_u *FindingHistoryUpdate) ClearFindingSeverityLevelName() *FindingHistoryUpdate {
+	_u.mutation.ClearFindingSeverityLevelName()
+	return _u
+}
+
+// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
+func (_u *FindingHistoryUpdate) SetFindingSeverityLevelID(v string) *FindingHistoryUpdate {
+	_u.mutation.SetFindingSeverityLevelID(v)
+	return _u
+}
+
+// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableFindingSeverityLevelID(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetFindingSeverityLevelID(*v)
+	}
+	return _u
+}
+
+// ClearFindingSeverityLevelID clears the value of the "finding_severity_level_id" field.
+func (_u *FindingHistoryUpdate) ClearFindingSeverityLevelID() *FindingHistoryUpdate {
+	_u.mutation.ClearFindingSeverityLevelID()
+	return _u
+}
+
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_u *FindingHistoryUpdate) SetFindingStatusName(v string) *FindingHistoryUpdate {
+	_u.mutation.SetFindingStatusName(v)
+	return _u
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableFindingStatusName(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetFindingStatusName(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusName clears the value of the "finding_status_name" field.
+func (_u *FindingHistoryUpdate) ClearFindingStatusName() *FindingHistoryUpdate {
+	_u.mutation.ClearFindingStatusName()
+	return _u
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_u *FindingHistoryUpdate) SetFindingStatusID(v string) *FindingHistoryUpdate {
+	_u.mutation.SetFindingStatusID(v)
+	return _u
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableFindingStatusID(v *string) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetFindingStatusID(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusID clears the value of the "finding_status_id" field.
+func (_u *FindingHistoryUpdate) ClearFindingStatusID() *FindingHistoryUpdate {
+	_u.mutation.ClearFindingStatusID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *FindingHistoryUpdate) SetExternalID(v string) *FindingHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1136,6 +1216,30 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(findinghistory.FieldScopeID, field.TypeString)
 	}
+	if value, ok := _u.mutation.FindingSeverityLevelName(); ok {
+		_spec.SetField(findinghistory.FieldFindingSeverityLevelName, field.TypeString, value)
+	}
+	if _u.mutation.FindingSeverityLevelNameCleared() {
+		_spec.ClearField(findinghistory.FieldFindingSeverityLevelName, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingSeverityLevelID(); ok {
+		_spec.SetField(findinghistory.FieldFindingSeverityLevelID, field.TypeString, value)
+	}
+	if _u.mutation.FindingSeverityLevelIDCleared() {
+		_spec.ClearField(findinghistory.FieldFindingSeverityLevelID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingStatusName(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusNameCleared() {
+		_spec.ClearField(findinghistory.FieldFindingStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingStatusID(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusID, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusIDCleared() {
+		_spec.ClearField(findinghistory.FieldFindingStatusID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
 	}
@@ -1624,6 +1728,86 @@ func (_u *FindingHistoryUpdateOne) SetNillableScopeID(v *string) *FindingHistory
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *FindingHistoryUpdateOne) ClearScopeID() *FindingHistoryUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
+func (_u *FindingHistoryUpdateOne) SetFindingSeverityLevelName(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetFindingSeverityLevelName(v)
+	return _u
+}
+
+// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableFindingSeverityLevelName(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetFindingSeverityLevelName(*v)
+	}
+	return _u
+}
+
+// ClearFindingSeverityLevelName clears the value of the "finding_severity_level_name" field.
+func (_u *FindingHistoryUpdateOne) ClearFindingSeverityLevelName() *FindingHistoryUpdateOne {
+	_u.mutation.ClearFindingSeverityLevelName()
+	return _u
+}
+
+// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
+func (_u *FindingHistoryUpdateOne) SetFindingSeverityLevelID(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetFindingSeverityLevelID(v)
+	return _u
+}
+
+// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableFindingSeverityLevelID(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetFindingSeverityLevelID(*v)
+	}
+	return _u
+}
+
+// ClearFindingSeverityLevelID clears the value of the "finding_severity_level_id" field.
+func (_u *FindingHistoryUpdateOne) ClearFindingSeverityLevelID() *FindingHistoryUpdateOne {
+	_u.mutation.ClearFindingSeverityLevelID()
+	return _u
+}
+
+// SetFindingStatusName sets the "finding_status_name" field.
+func (_u *FindingHistoryUpdateOne) SetFindingStatusName(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetFindingStatusName(v)
+	return _u
+}
+
+// SetNillableFindingStatusName sets the "finding_status_name" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableFindingStatusName(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetFindingStatusName(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusName clears the value of the "finding_status_name" field.
+func (_u *FindingHistoryUpdateOne) ClearFindingStatusName() *FindingHistoryUpdateOne {
+	_u.mutation.ClearFindingStatusName()
+	return _u
+}
+
+// SetFindingStatusID sets the "finding_status_id" field.
+func (_u *FindingHistoryUpdateOne) SetFindingStatusID(v string) *FindingHistoryUpdateOne {
+	_u.mutation.SetFindingStatusID(v)
+	return _u
+}
+
+// SetNillableFindingStatusID sets the "finding_status_id" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableFindingStatusID(v *string) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetFindingStatusID(*v)
+	}
+	return _u
+}
+
+// ClearFindingStatusID clears the value of the "finding_status_id" field.
+func (_u *FindingHistoryUpdateOne) ClearFindingStatusID() *FindingHistoryUpdateOne {
+	_u.mutation.ClearFindingStatusID()
 	return _u
 }
 
@@ -2547,6 +2731,30 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(findinghistory.FieldScopeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingSeverityLevelName(); ok {
+		_spec.SetField(findinghistory.FieldFindingSeverityLevelName, field.TypeString, value)
+	}
+	if _u.mutation.FindingSeverityLevelNameCleared() {
+		_spec.ClearField(findinghistory.FieldFindingSeverityLevelName, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingSeverityLevelID(); ok {
+		_spec.SetField(findinghistory.FieldFindingSeverityLevelID, field.TypeString, value)
+	}
+	if _u.mutation.FindingSeverityLevelIDCleared() {
+		_spec.ClearField(findinghistory.FieldFindingSeverityLevelID, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingStatusName(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusNameCleared() {
+		_spec.ClearField(findinghistory.FieldFindingStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.FindingStatusID(); ok {
+		_spec.SetField(findinghistory.FieldFindingStatusID, field.TypeString, value)
+	}
+	if _u.mutation.FindingStatusIDCleared() {
+		_spec.ClearField(findinghistory.FieldFindingStatusID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)

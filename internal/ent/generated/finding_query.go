@@ -55,6 +55,8 @@ type FindingQuery struct {
 	withViewers                 *GroupQuery
 	withEnvironment             *CustomTypeEnumQuery
 	withScope                   *CustomTypeEnumQuery
+	withFindingSeverityLevel    *CustomTypeEnumQuery
+	withFindingStatus           *CustomTypeEnumQuery
 	withIntegrations            *IntegrationQuery
 	withVulnerabilities         *VulnerabilityQuery
 	withActionPlans             *ActionPlanQuery
@@ -275,6 +277,56 @@ func (_q *FindingQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.ScopeTable, finding.ScopeColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindingSeverityLevel chains the current query on the "finding_severity_level" edge.
+func (_q *FindingQuery) QueryFindingSeverityLevel() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingSeverityLevelTable, finding.FindingSeverityLevelColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindingStatus chains the current query on the "finding_status" edge.
+func (_q *FindingQuery) QueryFindingStatus() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingStatusTable, finding.FindingStatusColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -947,36 +999,38 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		return nil
 	}
 	return &FindingQuery{
-		config:                 _q.config,
-		ctx:                    _q.ctx.Clone(),
-		order:                  append([]finding.OrderOption{}, _q.order...),
-		inters:                 append([]Interceptor{}, _q.inters...),
-		predicates:             append([]predicate.Finding{}, _q.predicates...),
-		withOwner:              _q.withOwner.Clone(),
-		withBlockedGroups:      _q.withBlockedGroups.Clone(),
-		withEditors:            _q.withEditors.Clone(),
-		withViewers:            _q.withViewers.Clone(),
-		withEnvironment:        _q.withEnvironment.Clone(),
-		withScope:              _q.withScope.Clone(),
-		withIntegrations:       _q.withIntegrations.Clone(),
-		withVulnerabilities:    _q.withVulnerabilities.Clone(),
-		withActionPlans:        _q.withActionPlans.Clone(),
-		withControls:           _q.withControls.Clone(),
-		withSubcontrols:        _q.withSubcontrols.Clone(),
-		withRisks:              _q.withRisks.Clone(),
-		withPrograms:           _q.withPrograms.Clone(),
-		withAssets:             _q.withAssets.Clone(),
-		withEntities:           _q.withEntities.Clone(),
-		withScans:              _q.withScans.Clone(),
-		withTasks:              _q.withTasks.Clone(),
-		withDirectoryAccounts:  _q.withDirectoryAccounts.Clone(),
-		withIdentityHolders:    _q.withIdentityHolders.Clone(),
-		withRemediations:       _q.withRemediations.Clone(),
-		withReviews:            _q.withReviews.Clone(),
-		withComments:           _q.withComments.Clone(),
-		withFiles:              _q.withFiles.Clone(),
-		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
-		withControlMappings:    _q.withControlMappings.Clone(),
+		config:                   _q.config,
+		ctx:                      _q.ctx.Clone(),
+		order:                    append([]finding.OrderOption{}, _q.order...),
+		inters:                   append([]Interceptor{}, _q.inters...),
+		predicates:               append([]predicate.Finding{}, _q.predicates...),
+		withOwner:                _q.withOwner.Clone(),
+		withBlockedGroups:        _q.withBlockedGroups.Clone(),
+		withEditors:              _q.withEditors.Clone(),
+		withViewers:              _q.withViewers.Clone(),
+		withEnvironment:          _q.withEnvironment.Clone(),
+		withScope:                _q.withScope.Clone(),
+		withFindingSeverityLevel: _q.withFindingSeverityLevel.Clone(),
+		withFindingStatus:        _q.withFindingStatus.Clone(),
+		withIntegrations:         _q.withIntegrations.Clone(),
+		withVulnerabilities:      _q.withVulnerabilities.Clone(),
+		withActionPlans:          _q.withActionPlans.Clone(),
+		withControls:             _q.withControls.Clone(),
+		withSubcontrols:          _q.withSubcontrols.Clone(),
+		withRisks:                _q.withRisks.Clone(),
+		withPrograms:             _q.withPrograms.Clone(),
+		withAssets:               _q.withAssets.Clone(),
+		withEntities:             _q.withEntities.Clone(),
+		withScans:                _q.withScans.Clone(),
+		withTasks:                _q.withTasks.Clone(),
+		withDirectoryAccounts:    _q.withDirectoryAccounts.Clone(),
+		withIdentityHolders:      _q.withIdentityHolders.Clone(),
+		withRemediations:         _q.withRemediations.Clone(),
+		withReviews:              _q.withReviews.Clone(),
+		withComments:             _q.withComments.Clone(),
+		withFiles:                _q.withFiles.Clone(),
+		withWorkflowObjectRefs:   _q.withWorkflowObjectRefs.Clone(),
+		withControlMappings:      _q.withControlMappings.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1047,6 +1101,28 @@ func (_q *FindingQuery) WithScope(opts ...func(*CustomTypeEnumQuery)) *FindingQu
 		opt(query)
 	}
 	_q.withScope = query
+	return _q
+}
+
+// WithFindingSeverityLevel tells the query-builder to eager-load the nodes that are connected to
+// the "finding_severity_level" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithFindingSeverityLevel(opts ...func(*CustomTypeEnumQuery)) *FindingQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindingSeverityLevel = query
+	return _q
+}
+
+// WithFindingStatus tells the query-builder to eager-load the nodes that are connected to
+// the "finding_status" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithFindingStatus(opts ...func(*CustomTypeEnumQuery)) *FindingQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindingStatus = query
 	return _q
 }
 
@@ -1344,13 +1420,15 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		nodes       = []*Finding{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [25]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
+			_q.withFindingSeverityLevel != nil,
+			_q.withFindingStatus != nil,
 			_q.withIntegrations != nil,
 			_q.withVulnerabilities != nil,
 			_q.withActionPlans != nil,
@@ -1434,6 +1512,18 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	if query := _q.withScope; query != nil {
 		if err := _q.loadScope(ctx, query, nodes, nil,
 			func(n *Finding, e *CustomTypeEnum) { n.Edges.Scope = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindingSeverityLevel; query != nil {
+		if err := _q.loadFindingSeverityLevel(ctx, query, nodes, nil,
+			func(n *Finding, e *CustomTypeEnum) { n.Edges.FindingSeverityLevel = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindingStatus; query != nil {
+		if err := _q.loadFindingStatus(ctx, query, nodes, nil,
+			func(n *Finding, e *CustomTypeEnum) { n.Edges.FindingStatus = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1909,6 +1999,64 @@ func (_q *FindingQuery) loadScope(ctx context.Context, query *CustomTypeEnumQuer
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "scope_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadFindingSeverityLevel(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].FindingSeverityLevelID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "finding_severity_level_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadFindingStatus(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].FindingStatusID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "finding_status_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2698,6 +2846,12 @@ func (_q *FindingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withScope != nil {
 			_spec.Node.AddColumnOnce(finding.FieldScopeID)
+		}
+		if _q.withFindingSeverityLevel != nil {
+			_spec.Node.AddColumnOnce(finding.FieldFindingSeverityLevelID)
+		}
+		if _q.withFindingStatus != nil {
+			_spec.Node.AddColumnOnce(finding.FieldFindingStatusID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

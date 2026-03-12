@@ -1313,6 +1313,30 @@ func (f RiskHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m history
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.RiskHistoryMutation", m)
 }
 
+// The SLADefinitionHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type SLADefinitionHistoryQueryRuleFunc func(context.Context, *historygenerated.SLADefinitionHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f SLADefinitionHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.SLADefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.SLADefinitionHistoryQuery", q)
+}
+
+// The SLADefinitionHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type SLADefinitionHistoryMutationRuleFunc func(context.Context, *historygenerated.SLADefinitionHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f SLADefinitionHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.SLADefinitionHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.SLADefinitionHistoryMutation", m)
+}
+
 // The ScanHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ScanHistoryQueryRuleFunc func(context.Context, *historygenerated.ScanHistoryQuery) error
@@ -2072,6 +2096,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.RiskHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.SLADefinitionHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.ScanHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.ScheduledJobHistoryQuery:
@@ -2230,6 +2256,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.ReviewHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.RiskHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.SLADefinitionHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.ScanHistoryMutation:
 		return m.Filter(), nil
