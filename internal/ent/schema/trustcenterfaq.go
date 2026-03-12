@@ -66,6 +66,7 @@ func (TrustCenterFAQ) Fields() []ent.Field {
 		field.Int("display_order").
 			Comment("display order of the FAQ").
 			Default(0).
+			Annotations(entgql.OrderField("DISPLAY_ORDER")).
 			Optional(),
 	}
 }

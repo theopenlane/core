@@ -25852,6 +25852,20 @@ var (
 			}
 		},
 	}
+	// TrustCenterFAQHistoryOrderFieldDisplayOrder orders TrustCenterFAQHistory by display_order.
+	TrustCenterFAQHistoryOrderFieldDisplayOrder = &TrustCenterFAQHistoryOrderField{
+		Value: func(_m *TrustCenterFAQHistory) (ent.Value, error) {
+			return _m.DisplayOrder, nil
+		},
+		column: trustcenterfaqhistory.FieldDisplayOrder,
+		toTerm: trustcenterfaqhistory.ByDisplayOrder,
+		toCursor: func(_m *TrustCenterFAQHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayOrder,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -25864,6 +25878,8 @@ func (f TrustCenterFAQHistoryOrderField) String() string {
 		str = "created_at"
 	case TrustCenterFAQHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TrustCenterFAQHistoryOrderFieldDisplayOrder.column:
+		str = "DISPLAY_ORDER"
 	}
 	return str
 }
@@ -25886,6 +25902,8 @@ func (f *TrustCenterFAQHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TrustCenterFAQHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TrustCenterFAQHistoryOrderFieldUpdatedAt
+	case "DISPLAY_ORDER":
+		*f = *TrustCenterFAQHistoryOrderFieldDisplayOrder
 	default:
 		return fmt.Errorf("%s is not a valid TrustCenterFAQHistoryOrderField", str)
 	}

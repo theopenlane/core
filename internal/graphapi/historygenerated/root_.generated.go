@@ -55263,6 +55263,7 @@ enum TrustCenterFAQHistoryOrderField {
   history_time
   created_at
   updated_at
+  DISPLAY_ORDER
 }
 """
 TrustCenterFAQHistoryWhereInput is used for filtering TrustCenterFAQHistory objects.

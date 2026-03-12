@@ -51987,18 +51987,20 @@ func (e TrustCenterEntityOrderField) MarshalJSON() ([]byte, error) {
 type TrustCenterFAQOrderField string
 
 const (
-	TrustCenterFAQOrderFieldCreatedAt TrustCenterFAQOrderField = "created_at"
-	TrustCenterFAQOrderFieldUpdatedAt TrustCenterFAQOrderField = "updated_at"
+	TrustCenterFAQOrderFieldCreatedAt    TrustCenterFAQOrderField = "created_at"
+	TrustCenterFAQOrderFieldUpdatedAt    TrustCenterFAQOrderField = "updated_at"
+	TrustCenterFAQOrderFieldDisplayOrder TrustCenterFAQOrderField = "DISPLAY_ORDER"
 )
 
 var AllTrustCenterFAQOrderField = []TrustCenterFAQOrderField{
 	TrustCenterFAQOrderFieldCreatedAt,
 	TrustCenterFAQOrderFieldUpdatedAt,
+	TrustCenterFAQOrderFieldDisplayOrder,
 }
 
 func (e TrustCenterFAQOrderField) IsValid() bool {
 	switch e {
-	case TrustCenterFAQOrderFieldCreatedAt, TrustCenterFAQOrderFieldUpdatedAt:
+	case TrustCenterFAQOrderFieldCreatedAt, TrustCenterFAQOrderFieldUpdatedAt, TrustCenterFAQOrderFieldDisplayOrder:
 		return true
 	}
 	return false
