@@ -106,6 +106,26 @@ func (_u *EmailTemplateHistoryUpdate) ClearDeletedBy() *EmailTemplateHistoryUpda
 	return _u
 }
 
+// SetRevision sets the "revision" field.
+func (_u *EmailTemplateHistoryUpdate) SetRevision(v string) *EmailTemplateHistoryUpdate {
+	_u.mutation.SetRevision(v)
+	return _u
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_u *EmailTemplateHistoryUpdate) SetNillableRevision(v *string) *EmailTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetRevision(*v)
+	}
+	return _u
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (_u *EmailTemplateHistoryUpdate) ClearRevision() *EmailTemplateHistoryUpdate {
+	_u.mutation.ClearRevision()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *EmailTemplateHistoryUpdate) SetInternalNotes(v string) *EmailTemplateHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -373,6 +393,38 @@ func (_u *EmailTemplateHistoryUpdate) AddVersion(v int) *EmailTemplateHistoryUpd
 	return _u
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_u *EmailTemplateHistoryUpdate) SetTemplateContext(v enums.TemplateContext) *EmailTemplateHistoryUpdate {
+	_u.mutation.SetTemplateContext(v)
+	return _u
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_u *EmailTemplateHistoryUpdate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTemplateContext(*v)
+	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *EmailTemplateHistoryUpdate) ClearTemplateContext() *EmailTemplateHistoryUpdate {
+	_u.mutation.ClearTemplateContext()
+	return _u
+}
+
+// SetDefaults sets the "defaults" field.
+func (_u *EmailTemplateHistoryUpdate) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryUpdate {
+	_u.mutation.SetDefaults(v)
+	return _u
+}
+
+// ClearDefaults clears the value of the "defaults" field.
+func (_u *EmailTemplateHistoryUpdate) ClearDefaults() *EmailTemplateHistoryUpdate {
+	_u.mutation.ClearDefaults()
+	return _u
+}
+
 // SetEmailBrandingID sets the "email_branding_id" field.
 func (_u *EmailTemplateHistoryUpdate) SetEmailBrandingID(v string) *EmailTemplateHistoryUpdate {
 	_u.mutation.SetEmailBrandingID(v)
@@ -507,6 +559,11 @@ func (_u *EmailTemplateHistoryUpdate) check() error {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`historygenerated: validator failed for field "EmailTemplateHistory.format": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TemplateContext(); ok {
+		if err := emailtemplatehistory.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`historygenerated: validator failed for field "EmailTemplateHistory.template_context": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -560,6 +617,12 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Revision(); ok {
+		_spec.SetField(emailtemplatehistory.FieldRevision, field.TypeString, value)
+	}
+	if _u.mutation.RevisionCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldRevision, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldOwnerID, field.TypeString)
@@ -647,6 +710,18 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.AddedVersion(); ok {
 		_spec.AddField(emailtemplatehistory.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.TemplateContext(); ok {
+		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.Defaults(); ok {
+		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)
+	}
+	if _u.mutation.DefaultsCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldDefaults, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.EmailBrandingID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString, value)
@@ -765,6 +840,26 @@ func (_u *EmailTemplateHistoryUpdateOne) SetNillableDeletedBy(v *string) *EmailT
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *EmailTemplateHistoryUpdateOne) ClearDeletedBy() *EmailTemplateHistoryUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetRevision sets the "revision" field.
+func (_u *EmailTemplateHistoryUpdateOne) SetRevision(v string) *EmailTemplateHistoryUpdateOne {
+	_u.mutation.SetRevision(v)
+	return _u
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_u *EmailTemplateHistoryUpdateOne) SetNillableRevision(v *string) *EmailTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetRevision(*v)
+	}
+	return _u
+}
+
+// ClearRevision clears the value of the "revision" field.
+func (_u *EmailTemplateHistoryUpdateOne) ClearRevision() *EmailTemplateHistoryUpdateOne {
+	_u.mutation.ClearRevision()
 	return _u
 }
 
@@ -1035,6 +1130,38 @@ func (_u *EmailTemplateHistoryUpdateOne) AddVersion(v int) *EmailTemplateHistory
 	return _u
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_u *EmailTemplateHistoryUpdateOne) SetTemplateContext(v enums.TemplateContext) *EmailTemplateHistoryUpdateOne {
+	_u.mutation.SetTemplateContext(v)
+	return _u
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_u *EmailTemplateHistoryUpdateOne) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTemplateContext(*v)
+	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *EmailTemplateHistoryUpdateOne) ClearTemplateContext() *EmailTemplateHistoryUpdateOne {
+	_u.mutation.ClearTemplateContext()
+	return _u
+}
+
+// SetDefaults sets the "defaults" field.
+func (_u *EmailTemplateHistoryUpdateOne) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryUpdateOne {
+	_u.mutation.SetDefaults(v)
+	return _u
+}
+
+// ClearDefaults clears the value of the "defaults" field.
+func (_u *EmailTemplateHistoryUpdateOne) ClearDefaults() *EmailTemplateHistoryUpdateOne {
+	_u.mutation.ClearDefaults()
+	return _u
+}
+
 // SetEmailBrandingID sets the "email_branding_id" field.
 func (_u *EmailTemplateHistoryUpdateOne) SetEmailBrandingID(v string) *EmailTemplateHistoryUpdateOne {
 	_u.mutation.SetEmailBrandingID(v)
@@ -1182,6 +1309,11 @@ func (_u *EmailTemplateHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`historygenerated: validator failed for field "EmailTemplateHistory.format": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TemplateContext(); ok {
+		if err := emailtemplatehistory.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`historygenerated: validator failed for field "EmailTemplateHistory.template_context": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1252,6 +1384,12 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Revision(); ok {
+		_spec.SetField(emailtemplatehistory.FieldRevision, field.TypeString, value)
+	}
+	if _u.mutation.RevisionCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldRevision, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldOwnerID, field.TypeString)
@@ -1339,6 +1477,18 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if value, ok := _u.mutation.AddedVersion(); ok {
 		_spec.AddField(emailtemplatehistory.FieldVersion, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.TemplateContext(); ok {
+		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.Defaults(); ok {
+		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)
+	}
+	if _u.mutation.DefaultsCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldDefaults, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.EmailBrandingID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString, value)

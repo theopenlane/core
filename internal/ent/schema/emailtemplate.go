@@ -128,6 +128,12 @@ func (EmailTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("TEMPLATE_CONTEXT"),
 			),
+		field.JSON("defaults", map[string]any{}).
+			Comment("static variable values merged as base layer at render time; call-site data takes precedence").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.String("email_branding_id").
 			Comment("email branding configuration to apply for this template").
 			Optional(),

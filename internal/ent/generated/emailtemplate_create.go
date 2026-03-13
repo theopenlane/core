@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -108,6 +109,20 @@ func (_c *EmailTemplateCreate) SetDeletedBy(v string) *EmailTemplateCreate {
 func (_c *EmailTemplateCreate) SetNillableDeletedBy(v *string) *EmailTemplateCreate {
 	if v != nil {
 		_c.SetDeletedBy(*v)
+	}
+	return _c
+}
+
+// SetRevision sets the "revision" field.
+func (_c *EmailTemplateCreate) SetRevision(v string) *EmailTemplateCreate {
+	_c.mutation.SetRevision(v)
+	return _c
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableRevision(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetRevision(*v)
 	}
 	return _c
 }
@@ -324,6 +339,26 @@ func (_c *EmailTemplateCreate) SetNillableVersion(v *int) *EmailTemplateCreate {
 	return _c
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_c *EmailTemplateCreate) SetTemplateContext(v enums.TemplateContext) *EmailTemplateCreate {
+	_c.mutation.SetTemplateContext(v)
+	return _c
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetTemplateContext(*v)
+	}
+	return _c
+}
+
+// SetDefaults sets the "defaults" field.
+func (_c *EmailTemplateCreate) SetDefaults(v map[string]interface{}) *EmailTemplateCreate {
+	_c.mutation.SetDefaults(v)
+	return _c
+}
+
 // SetEmailBrandingID sets the "email_branding_id" field.
 func (_c *EmailTemplateCreate) SetEmailBrandingID(v string) *EmailTemplateCreate {
 	_c.mutation.SetEmailBrandingID(v)
@@ -449,6 +484,21 @@ func (_c *EmailTemplateCreate) AddNotificationTemplates(v ...*NotificationTempla
 	return _c.AddNotificationTemplateIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (_c *EmailTemplateCreate) AddFileIDs(ids ...string) *EmailTemplateCreate {
+	_c.mutation.AddFileIDs(ids...)
+	return _c
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (_c *EmailTemplateCreate) AddFiles(v ...*File) *EmailTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFileIDs(ids...)
+}
+
 // Mutation returns the EmailTemplateMutation object of the builder.
 func (_c *EmailTemplateCreate) Mutation() *EmailTemplateMutation {
 	return _c.mutation
@@ -500,6 +550,10 @@ func (_c *EmailTemplateCreate) defaults() error {
 		v := emailtemplate.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.Revision(); !ok {
+		v := emailtemplate.DefaultRevision
+		_c.mutation.SetRevision(v)
+	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := emailtemplate.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -532,6 +586,11 @@ func (_c *EmailTemplateCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *EmailTemplateCreate) check() error {
+	if v, ok := _c.mutation.Revision(); ok {
+		if err := emailtemplate.RevisionValidator(v); err != nil {
+			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.revision": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := emailtemplate.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.owner_id": %w`, err)}
@@ -569,6 +628,11 @@ func (_c *EmailTemplateCreate) check() error {
 	}
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`generated: missing required field "EmailTemplate.version"`)}
+	}
+	if v, ok := _c.mutation.TemplateContext(); ok {
+		if err := emailtemplate.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.template_context": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -629,6 +693,10 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(emailtemplate.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := _c.mutation.Revision(); ok {
+		_spec.SetField(emailtemplate.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(emailtemplate.FieldSystemOwned, field.TypeBool, value)
@@ -697,6 +765,14 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(emailtemplate.FieldVersion, field.TypeInt, value)
 		_node.Version = value
+	}
+	if value, ok := _c.mutation.TemplateContext(); ok {
+		_spec.SetField(emailtemplate.FieldTemplateContext, field.TypeEnum, value)
+		_node.TemplateContext = value
+	}
+	if value, ok := _c.mutation.Defaults(); ok {
+		_spec.SetField(emailtemplate.FieldDefaults, field.TypeJSON, value)
+		_node.Defaults = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -817,6 +893,23 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 			},
 		}
 		edge.Schema = _c.schemaConfig.NotificationTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

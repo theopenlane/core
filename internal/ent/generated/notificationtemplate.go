@@ -35,6 +35,8 @@ type NotificationTemplate struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -81,6 +83,10 @@ type NotificationTemplate struct {
 	Active bool `json:"active,omitempty"`
 	// template version
 	Version int `json:"version,omitempty"`
+	// runtime data context defining available variable keys for this template
+	TemplateContext enums.TemplateContext `json:"template_context,omitempty"`
+	// static variable values merged as base layer at render time; call-site data takes precedence
+	Defaults map[string]interface{} `json:"defaults,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationTemplateQuery when eager-loading is set.
 	Edges        NotificationTemplateEdges `json:"edges"`
@@ -166,13 +172,13 @@ func (*NotificationTemplate) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case notificationtemplate.FieldBlocks, notificationtemplate.FieldJsonconfig, notificationtemplate.FieldUischema, notificationtemplate.FieldMetadata:
+		case notificationtemplate.FieldBlocks, notificationtemplate.FieldJsonconfig, notificationtemplate.FieldUischema, notificationtemplate.FieldMetadata, notificationtemplate.FieldDefaults:
 			values[i] = new([]byte)
 		case notificationtemplate.FieldSystemOwned, notificationtemplate.FieldActive:
 			values[i] = new(sql.NullBool)
 		case notificationtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case notificationtemplate.FieldID, notificationtemplate.FieldCreatedBy, notificationtemplate.FieldUpdatedBy, notificationtemplate.FieldDeletedBy, notificationtemplate.FieldOwnerID, notificationtemplate.FieldInternalNotes, notificationtemplate.FieldSystemInternalID, notificationtemplate.FieldKey, notificationtemplate.FieldName, notificationtemplate.FieldDescription, notificationtemplate.FieldChannel, notificationtemplate.FieldFormat, notificationtemplate.FieldLocale, notificationtemplate.FieldTopicPattern, notificationtemplate.FieldIntegrationID, notificationtemplate.FieldWorkflowDefinitionID, notificationtemplate.FieldEmailTemplateID, notificationtemplate.FieldTitleTemplate, notificationtemplate.FieldSubjectTemplate, notificationtemplate.FieldBodyTemplate:
+		case notificationtemplate.FieldID, notificationtemplate.FieldCreatedBy, notificationtemplate.FieldUpdatedBy, notificationtemplate.FieldDeletedBy, notificationtemplate.FieldRevision, notificationtemplate.FieldOwnerID, notificationtemplate.FieldInternalNotes, notificationtemplate.FieldSystemInternalID, notificationtemplate.FieldKey, notificationtemplate.FieldName, notificationtemplate.FieldDescription, notificationtemplate.FieldChannel, notificationtemplate.FieldFormat, notificationtemplate.FieldLocale, notificationtemplate.FieldTopicPattern, notificationtemplate.FieldIntegrationID, notificationtemplate.FieldWorkflowDefinitionID, notificationtemplate.FieldEmailTemplateID, notificationtemplate.FieldTitleTemplate, notificationtemplate.FieldSubjectTemplate, notificationtemplate.FieldBodyTemplate, notificationtemplate.FieldTemplateContext:
 			values[i] = new(sql.NullString)
 		case notificationtemplate.FieldCreatedAt, notificationtemplate.FieldUpdatedAt, notificationtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -232,6 +238,12 @@ func (_m *NotificationTemplate) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = value.String
+			}
+		case notificationtemplate.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				_m.Revision = value.String
 			}
 		case notificationtemplate.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -381,6 +393,20 @@ func (_m *NotificationTemplate) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.Version = int(value.Int64)
 			}
+		case notificationtemplate.FieldTemplateContext:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_context", values[i])
+			} else if value.Valid {
+				_m.TemplateContext = enums.TemplateContext(value.String)
+			}
+		case notificationtemplate.FieldDefaults:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field defaults", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Defaults); err != nil {
+					return fmt.Errorf("unmarshal field defaults: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -460,6 +486,9 @@ func (_m *NotificationTemplate) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(_m.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -532,6 +561,12 @@ func (_m *NotificationTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Version))
+	builder.WriteString(", ")
+	builder.WriteString("template_context=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TemplateContext))
+	builder.WriteString(", ")
+	builder.WriteString("defaults=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Defaults))
 	builder.WriteByte(')')
 	return builder.String()
 }

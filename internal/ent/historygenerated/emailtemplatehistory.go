@@ -40,6 +40,8 @@ type EmailTemplateHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -76,6 +78,10 @@ type EmailTemplateHistory struct {
 	Active bool `json:"active,omitempty"`
 	// template version
 	Version int `json:"version,omitempty"`
+	// runtime data context defining available variable keys for this template
+	TemplateContext enums.TemplateContext `json:"template_context,omitempty"`
+	// static variable values merged as base layer at render time; call-site data takes precedence
+	Defaults map[string]interface{} `json:"defaults,omitempty"`
 	// email branding configuration to apply for this template
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// integration used to deliver emails for this template
@@ -92,7 +98,7 @@ func (*EmailTemplateHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case emailtemplatehistory.FieldJsonconfig, emailtemplatehistory.FieldUischema, emailtemplatehistory.FieldMetadata:
+		case emailtemplatehistory.FieldJsonconfig, emailtemplatehistory.FieldUischema, emailtemplatehistory.FieldMetadata, emailtemplatehistory.FieldDefaults:
 			values[i] = new([]byte)
 		case emailtemplatehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -100,7 +106,7 @@ func (*EmailTemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldEmailBrandingID, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID:
+		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldEmailBrandingID, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID:
 			values[i] = new(sql.NullString)
 		case emailtemplatehistory.FieldHistoryTime, emailtemplatehistory.FieldCreatedAt, emailtemplatehistory.FieldUpdatedAt, emailtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -178,6 +184,12 @@ func (_m *EmailTemplateHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = value.String
+			}
+		case emailtemplatehistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				_m.Revision = value.String
 			}
 		case emailtemplatehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -295,6 +307,20 @@ func (_m *EmailTemplateHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.Version = int(value.Int64)
 			}
+		case emailtemplatehistory.FieldTemplateContext:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_context", values[i])
+			} else if value.Valid {
+				_m.TemplateContext = enums.TemplateContext(value.String)
+			}
+		case emailtemplatehistory.FieldDefaults:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field defaults", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Defaults); err != nil {
+					return fmt.Errorf("unmarshal field defaults: %w", err)
+				}
+			}
 		case emailtemplatehistory.FieldEmailBrandingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
@@ -382,6 +408,9 @@ func (_m *EmailTemplateHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(_m.Revision)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -439,6 +468,12 @@ func (_m *EmailTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Version))
+	builder.WriteString(", ")
+	builder.WriteString("template_context=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TemplateContext))
+	builder.WriteString(", ")
+	builder.WriteString("defaults=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Defaults))
 	builder.WriteString(", ")
 	builder.WriteString("email_branding_id=")
 	builder.WriteString(_m.EmailBrandingID)
