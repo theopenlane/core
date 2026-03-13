@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -120,6 +121,13 @@ func (EmailTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("VERSION"),
 			),
+		field.Enum("template_context").
+			Comment("runtime data context defining available variable keys for this template").
+			GoType(enums.TemplateContext("")).
+			Optional().
+			Annotations(
+				entgql.OrderField("TEMPLATE_CONTEXT"),
+			),
 		field.String("email_branding_id").
 			Comment("email branding configuration to apply for this template").
 			Optional(),
@@ -184,13 +192,18 @@ func (e EmailTemplate) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(e, Campaign{}),
 		defaultEdgeToWithPagination(e, NotificationTemplate{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: File{},
+		}),
 	}
 }
 
 // Mixin of the EmailTemplate.
 func (e EmailTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags: true,
+		excludeTags:     true,
+		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.EmailTemplate](e,
 				withParents(Organization{}, Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
@@ -205,6 +218,13 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 func (EmailTemplate) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
+	}
+}
+
+// Hooks of the EmailTemplate.
+func (EmailTemplate) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookEmailTemplateSanitize(),
 	}
 }
 
