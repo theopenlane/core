@@ -917,20 +917,24 @@ func init() {
 	emailtemplatehistory.DefaultUpdatedAt = emailtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
 	// emailtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	emailtemplatehistory.UpdateDefaultUpdatedAt = emailtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// emailtemplatehistoryDescRevision is the schema descriptor for revision field.
+	emailtemplatehistoryDescRevision := emailtemplatehistoryFields[10].Descriptor()
+	// emailtemplatehistory.DefaultRevision holds the default value on creation for the revision field.
+	emailtemplatehistory.DefaultRevision = emailtemplatehistoryDescRevision.Default.(string)
 	// emailtemplatehistoryDescSystemOwned is the schema descriptor for system_owned field.
-	emailtemplatehistoryDescSystemOwned := emailtemplatehistoryFields[11].Descriptor()
+	emailtemplatehistoryDescSystemOwned := emailtemplatehistoryFields[12].Descriptor()
 	// emailtemplatehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	emailtemplatehistory.DefaultSystemOwned = emailtemplatehistoryDescSystemOwned.Default.(bool)
 	// emailtemplatehistoryDescLocale is the schema descriptor for locale field.
-	emailtemplatehistoryDescLocale := emailtemplatehistoryFields[18].Descriptor()
+	emailtemplatehistoryDescLocale := emailtemplatehistoryFields[19].Descriptor()
 	// emailtemplatehistory.DefaultLocale holds the default value on creation for the locale field.
 	emailtemplatehistory.DefaultLocale = emailtemplatehistoryDescLocale.Default.(string)
 	// emailtemplatehistoryDescActive is the schema descriptor for active field.
-	emailtemplatehistoryDescActive := emailtemplatehistoryFields[26].Descriptor()
+	emailtemplatehistoryDescActive := emailtemplatehistoryFields[27].Descriptor()
 	// emailtemplatehistory.DefaultActive holds the default value on creation for the active field.
 	emailtemplatehistory.DefaultActive = emailtemplatehistoryDescActive.Default.(bool)
 	// emailtemplatehistoryDescVersion is the schema descriptor for version field.
-	emailtemplatehistoryDescVersion := emailtemplatehistoryFields[27].Descriptor()
+	emailtemplatehistoryDescVersion := emailtemplatehistoryFields[28].Descriptor()
 	// emailtemplatehistory.DefaultVersion holds the default value on creation for the version field.
 	emailtemplatehistory.DefaultVersion = emailtemplatehistoryDescVersion.Default.(int)
 	// emailtemplatehistoryDescID is the schema descriptor for id field.
@@ -1805,20 +1809,24 @@ func init() {
 	notificationtemplatehistory.DefaultUpdatedAt = notificationtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
 	// notificationtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	notificationtemplatehistory.UpdateDefaultUpdatedAt = notificationtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationtemplatehistoryDescRevision is the schema descriptor for revision field.
+	notificationtemplatehistoryDescRevision := notificationtemplatehistoryFields[10].Descriptor()
+	// notificationtemplatehistory.DefaultRevision holds the default value on creation for the revision field.
+	notificationtemplatehistory.DefaultRevision = notificationtemplatehistoryDescRevision.Default.(string)
 	// notificationtemplatehistoryDescSystemOwned is the schema descriptor for system_owned field.
-	notificationtemplatehistoryDescSystemOwned := notificationtemplatehistoryFields[11].Descriptor()
+	notificationtemplatehistoryDescSystemOwned := notificationtemplatehistoryFields[12].Descriptor()
 	// notificationtemplatehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	notificationtemplatehistory.DefaultSystemOwned = notificationtemplatehistoryDescSystemOwned.Default.(bool)
 	// notificationtemplatehistoryDescLocale is the schema descriptor for locale field.
-	notificationtemplatehistoryDescLocale := notificationtemplatehistoryFields[19].Descriptor()
+	notificationtemplatehistoryDescLocale := notificationtemplatehistoryFields[20].Descriptor()
 	// notificationtemplatehistory.DefaultLocale holds the default value on creation for the locale field.
 	notificationtemplatehistory.DefaultLocale = notificationtemplatehistoryDescLocale.Default.(string)
 	// notificationtemplatehistoryDescActive is the schema descriptor for active field.
-	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[31].Descriptor()
+	notificationtemplatehistoryDescActive := notificationtemplatehistoryFields[32].Descriptor()
 	// notificationtemplatehistory.DefaultActive holds the default value on creation for the active field.
 	notificationtemplatehistory.DefaultActive = notificationtemplatehistoryDescActive.Default.(bool)
 	// notificationtemplatehistoryDescVersion is the schema descriptor for version field.
-	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[32].Descriptor()
+	notificationtemplatehistoryDescVersion := notificationtemplatehistoryFields[33].Descriptor()
 	// notificationtemplatehistory.DefaultVersion holds the default value on creation for the version field.
 	notificationtemplatehistory.DefaultVersion = notificationtemplatehistoryDescVersion.Default.(int)
 	// notificationtemplatehistoryDescID is the schema descriptor for id field.

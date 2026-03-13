@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -71,6 +72,18 @@ type Integration struct {
 	ProviderState state.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the canonical definition identifier for the installation
+	DefinitionID string `json:"definition_id,omitempty"`
+	// the definition version recorded for this installation
+	DefinitionVersion string `json:"definition_version,omitempty"`
+	// the human-readable definition slug recorded for this installation
+	DefinitionSlug string `json:"definition_slug,omitempty"`
+	// the denormalized family label for the installation definition
+	Family string `json:"family,omitempty"`
+	// the lifecycle status of the installation
+	Status enums.IntegrationStatus `json:"status,omitempty"`
+	// snapshot of definition metadata captured on the installation
+	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IntegrationQuery when eager-loading is set.
 	Edges              IntegrationEdges `json:"edges"`
@@ -362,11 +375,11 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldProviderState, integration.FieldMetadata:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID:
+		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -549,6 +562,44 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case integration.FieldDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field definition_id", values[i])
+			} else if value.Valid {
+				_m.DefinitionID = value.String
+			}
+		case integration.FieldDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field definition_version", values[i])
+			} else if value.Valid {
+				_m.DefinitionVersion = value.String
+			}
+		case integration.FieldDefinitionSlug:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field definition_slug", values[i])
+			} else if value.Valid {
+				_m.DefinitionSlug = value.String
+			}
+		case integration.FieldFamily:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field family", values[i])
+			} else if value.Valid {
+				_m.Family = value.String
+			}
+		case integration.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = enums.IntegrationStatus(value.String)
+			}
+		case integration.FieldProviderMetadataSnapshot:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field provider_metadata_snapshot", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProviderMetadataSnapshot); err != nil {
+					return fmt.Errorf("unmarshal field provider_metadata_snapshot: %w", err)
 				}
 			}
 		case integration.ForeignKeys[0]:
@@ -786,6 +837,24 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("definition_id=")
+	builder.WriteString(_m.DefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("definition_version=")
+	builder.WriteString(_m.DefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("definition_slug=")
+	builder.WriteString(_m.DefinitionSlug)
+	builder.WriteString(", ")
+	builder.WriteString("family=")
+	builder.WriteString(_m.Family)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("provider_metadata_snapshot=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadataSnapshot))
 	builder.WriteByte(')')
 	return builder.String()
 }

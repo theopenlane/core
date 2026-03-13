@@ -36,6 +36,8 @@ type EmailTemplate struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -72,6 +74,10 @@ type EmailTemplate struct {
 	Active bool `json:"active,omitempty"`
 	// template version
 	Version int `json:"version,omitempty"`
+	// runtime data context defining available variable keys for this template
+	TemplateContext enums.TemplateContext `json:"template_context,omitempty"`
+	// static variable values merged as base layer at render time; call-site data takes precedence
+	Defaults map[string]interface{} `json:"defaults,omitempty"`
 	// email branding configuration to apply for this template
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// integration used to deliver emails for this template
@@ -102,14 +108,17 @@ type EmailTemplateEdges struct {
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// NotificationTemplates holds the value of the notification_templates edge.
 	NotificationTemplates []*NotificationTemplate `json:"notification_templates,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedCampaigns             map[string][]*Campaign
 	namedNotificationTemplates map[string][]*NotificationTemplate
+	namedFiles                 map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -185,18 +194,27 @@ func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplat
 	return nil, &NotLoadedError{edge: "notification_templates"}
 }
 
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmailTemplateEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[7] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*EmailTemplate) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case emailtemplate.FieldJsonconfig, emailtemplate.FieldUischema, emailtemplate.FieldMetadata:
+		case emailtemplate.FieldJsonconfig, emailtemplate.FieldUischema, emailtemplate.FieldMetadata, emailtemplate.FieldDefaults:
 			values[i] = new([]byte)
 		case emailtemplate.FieldSystemOwned, emailtemplate.FieldActive:
 			values[i] = new(sql.NullBool)
 		case emailtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldDeletedBy, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldEmailBrandingID, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID:
+		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldEmailBrandingID, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID:
 			values[i] = new(sql.NullString)
 		case emailtemplate.FieldCreatedAt, emailtemplate.FieldUpdatedAt, emailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -256,6 +274,12 @@ func (_m *EmailTemplate) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = value.String
+			}
+		case emailtemplate.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				_m.Revision = value.String
 			}
 		case emailtemplate.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -373,6 +397,20 @@ func (_m *EmailTemplate) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Version = int(value.Int64)
 			}
+		case emailtemplate.FieldTemplateContext:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_context", values[i])
+			} else if value.Valid {
+				_m.TemplateContext = enums.TemplateContext(value.String)
+			}
+		case emailtemplate.FieldDefaults:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field defaults", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Defaults); err != nil {
+					return fmt.Errorf("unmarshal field defaults: %w", err)
+				}
+			}
 		case emailtemplate.FieldEmailBrandingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
@@ -445,6 +483,11 @@ func (_m *EmailTemplate) QueryNotificationTemplates() *NotificationTemplateQuery
 	return NewEmailTemplateClient(_m.config).QueryNotificationTemplates(_m)
 }
 
+// QueryFiles queries the "files" edge of the EmailTemplate entity.
+func (_m *EmailTemplate) QueryFiles() *FileQuery {
+	return NewEmailTemplateClient(_m.config).QueryFiles(_m)
+}
+
 // Update returns a builder for updating this EmailTemplate.
 // Note that you need to call EmailTemplate.Unwrap() before calling this method if this EmailTemplate
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -485,6 +528,9 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
@@ -543,6 +589,12 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Version))
+	builder.WriteString(", ")
+	builder.WriteString("template_context=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TemplateContext))
+	builder.WriteString(", ")
+	builder.WriteString("defaults=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Defaults))
 	builder.WriteString(", ")
 	builder.WriteString("email_branding_id=")
 	builder.WriteString(_m.EmailBrandingID)
@@ -604,6 +656,30 @@ func (_m *EmailTemplate) appendNamedNotificationTemplates(name string, edges ...
 		_m.Edges.namedNotificationTemplates[name] = []*NotificationTemplate{}
 	} else {
 		_m.Edges.namedNotificationTemplates[name] = append(_m.Edges.namedNotificationTemplates[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *EmailTemplate) NamedFiles(name string) ([]*File, error) {
+	if _m.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *EmailTemplate) appendNamedFiles(name string, edges ...*File) {
+	if _m.Edges.namedFiles == nil {
+		_m.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFiles[name] = []*File{}
+	} else {
+		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
