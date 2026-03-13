@@ -98,7 +98,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.26.0
 	github.com/theopenlane/newman v0.2.2
-	github.com/theopenlane/riverboat v0.8.8
+	github.com/theopenlane/riverboat v0.9.7
 	github.com/theopenlane/utils v0.7.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.7.0
@@ -123,7 +123,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.7 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
@@ -131,11 +131,11 @@ require (
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf // indirect
-	github.com/slack-go/slack v0.17.3 // indirect
+	github.com/slack-go/slack v0.18.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/image v0.35.0 // indirect
+	golang.org/x/image v0.36.0 // indirect
 	golang.org/x/term v0.41.0 // indirect
 )
 
@@ -253,7 +253,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.10
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.1
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/docker/go-connections v0.6.0 // indirect
@@ -320,7 +320,7 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.67.5 // indirect
-	github.com/prometheus/procfs v0.19.2 // indirect
+	github.com/prometheus/procfs v0.20.0 // indirect
 	github.com/resend/resend-go/v3 v3.1.1
 	github.com/riverqueue/river/riverdriver v0.31.0 // indirect
 	github.com/riverqueue/river/rivershared v0.31.0 // indirect
