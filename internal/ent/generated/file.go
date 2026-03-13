@@ -85,15 +85,16 @@ type File struct {
 	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
-	Edges               FileEdges `json:"edges"`
-	export_files        *string
-	finding_files       *string
-	integration_files   *string
-	note_files          *string
-	remediation_files   *string
-	review_files        *string
-	vulnerability_files *string
-	selectValues        sql.SelectValues
+	Edges                FileEdges `json:"edges"`
+	email_template_files *string
+	export_files         *string
+	finding_files        *string
+	integration_files    *string
+	note_files           *string
+	remediation_files    *string
+	review_files         *string
+	vulnerability_files  *string
+	selectValues         sql.SelectValues
 
 	// PresignedURL is the presigned URL for the file when using s3 storage
 	PresignedURL string `json:"presignedURL,omitempty"`
@@ -368,19 +369,21 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
-		case file.ForeignKeys[0]: // export_files
+		case file.ForeignKeys[0]: // email_template_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[1]: // finding_files
+		case file.ForeignKeys[1]: // export_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[2]: // integration_files
+		case file.ForeignKeys[2]: // finding_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[3]: // note_files
+		case file.ForeignKeys[3]: // integration_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[4]: // remediation_files
+		case file.ForeignKeys[4]: // note_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[5]: // review_files
+		case file.ForeignKeys[5]: // remediation_files
 			values[i] = new(sql.NullString)
-		case file.ForeignKeys[6]: // vulnerability_files
+		case file.ForeignKeys[6]: // review_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[7]: // vulnerability_files
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -604,47 +607,54 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_template_files", values[i])
+			} else if value.Valid {
+				_m.email_template_files = new(string)
+				*_m.email_template_files = value.String
+			}
+		case file.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field export_files", values[i])
 			} else if value.Valid {
 				_m.export_files = new(string)
 				*_m.export_files = value.String
 			}
-		case file.ForeignKeys[1]:
+		case file.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_files", values[i])
 			} else if value.Valid {
 				_m.finding_files = new(string)
 				*_m.finding_files = value.String
 			}
-		case file.ForeignKeys[2]:
+		case file.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field integration_files", values[i])
 			} else if value.Valid {
 				_m.integration_files = new(string)
 				*_m.integration_files = value.String
 			}
-		case file.ForeignKeys[3]:
+		case file.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
 			} else if value.Valid {
 				_m.note_files = new(string)
 				*_m.note_files = value.String
 			}
-		case file.ForeignKeys[4]:
+		case file.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_files", values[i])
 			} else if value.Valid {
 				_m.remediation_files = new(string)
 				*_m.remediation_files = value.String
 			}
-		case file.ForeignKeys[5]:
+		case file.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_files", values[i])
 			} else if value.Valid {
 				_m.review_files = new(string)
 				*_m.review_files = value.String
 			}
-		case file.ForeignKeys[6]:
+		case file.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_files", values[i])
 			} else if value.Valid {

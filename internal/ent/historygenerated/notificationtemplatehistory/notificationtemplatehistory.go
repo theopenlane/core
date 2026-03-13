@@ -38,6 +38,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -84,6 +86,10 @@ const (
 	FieldActive = "active"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
+	// FieldTemplateContext holds the string denoting the template_context field in the database.
+	FieldTemplateContext = "template_context"
+	// FieldDefaults holds the string denoting the defaults field in the database.
+	FieldDefaults = "defaults"
 	// Table holds the table name of the notificationtemplatehistory in the database.
 	Table = "notification_template_history"
 )
@@ -100,6 +106,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldRevision,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -123,6 +130,8 @@ var Columns = []string{
 	FieldMetadata,
 	FieldActive,
 	FieldVersion,
+	FieldTemplateContext,
+	FieldDefaults,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -152,6 +161,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
 	// DefaultLocale holds the default value on creation for the "locale" field.
@@ -193,6 +204,16 @@ func FormatValidator(f enums.NotificationTemplateFormat) error {
 		return nil
 	default:
 		return fmt.Errorf("notificationtemplatehistory: invalid enum value for format field: %q", f)
+	}
+}
+
+// TemplateContextValidator is a validator for the "template_context" field enum values. It is called by the builders before save.
+func TemplateContextValidator(tc enums.TemplateContext) error {
+	switch tc.String() {
+	case "CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION":
+		return nil
+	default:
+		return fmt.Errorf("notificationtemplatehistory: invalid enum value for template_context field: %q", tc)
 	}
 }
 
@@ -247,6 +268,11 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -344,6 +370,11 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
+// ByTemplateContext orders the results by the template_context field.
+func ByTemplateContext(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateContext, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -363,4 +394,11 @@ var (
 	_ graphql.Marshaler = (*enums.NotificationTemplateFormat)(nil)
 	// enums.NotificationTemplateFormat must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.NotificationTemplateFormat)(nil)
+)
+
+var (
+	// enums.TemplateContext must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TemplateContext)(nil)
+	// enums.TemplateContext must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TemplateContext)(nil)
 )

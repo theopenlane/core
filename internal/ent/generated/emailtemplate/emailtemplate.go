@@ -30,6 +30,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldRevision holds the string denoting the revision field in the database.
+	FieldRevision = "revision"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -66,6 +68,10 @@ const (
 	FieldActive = "active"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
+	// FieldTemplateContext holds the string denoting the template_context field in the database.
+	FieldTemplateContext = "template_context"
+	// FieldDefaults holds the string denoting the defaults field in the database.
+	FieldDefaults = "defaults"
 	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
 	FieldEmailBrandingID = "email_branding_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
@@ -88,6 +94,8 @@ const (
 	EdgeCampaigns = "campaigns"
 	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
 	EdgeNotificationTemplates = "notification_templates"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
 	// Table holds the table name of the emailtemplate in the database.
 	Table = "email_templates"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -139,6 +147,13 @@ const (
 	NotificationTemplatesInverseTable = "notification_templates"
 	// NotificationTemplatesColumn is the table column denoting the notification_templates relation/edge.
 	NotificationTemplatesColumn = "email_template_id"
+	// FilesTable is the table that holds the files relation/edge.
+	FilesTable = "files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
+	// FilesColumn is the table column denoting the files relation/edge.
+	FilesColumn = "email_template_files"
 )
 
 // Columns holds all SQL columns for emailtemplate fields.
@@ -150,6 +165,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldRevision,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -168,6 +184,8 @@ var Columns = []string{
 	FieldMetadata,
 	FieldActive,
 	FieldVersion,
+	FieldTemplateContext,
+	FieldDefaults,
 	FieldEmailBrandingID,
 	FieldIntegrationID,
 	FieldWorkflowDefinitionID,
@@ -190,7 +208,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -199,6 +217,10 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultRevision holds the default value on creation for the "revision" field.
+	DefaultRevision string
+	// RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
+	RevisionValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
@@ -226,6 +248,16 @@ func FormatValidator(f enums.NotificationTemplateFormat) error {
 		return nil
 	default:
 		return fmt.Errorf("emailtemplate: invalid enum value for format field: %q", f)
+	}
+}
+
+// TemplateContextValidator is a validator for the "template_context" field enum values. It is called by the builders before save.
+func TemplateContextValidator(tc enums.TemplateContext) error {
+	switch tc.String() {
+	case "CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION":
+		return nil
+	default:
+		return fmt.Errorf("emailtemplate: invalid enum value for template_context field: %q", tc)
 	}
 }
 
@@ -265,6 +297,11 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByRevision orders the results by the revision field.
+func ByRevision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevision, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -340,6 +377,11 @@ func ByActive(opts ...sql.OrderTermOption) OrderOption {
 // ByVersion orders the results by the version field.
 func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+}
+
+// ByTemplateContext orders the results by the template_context field.
+func ByTemplateContext(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateContext, opts...).ToFunc()
 }
 
 // ByEmailBrandingID orders the results by the email_branding_id field.
@@ -424,6 +466,20 @@ func ByNotificationTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOp
 		sqlgraph.OrderByNeighborTerms(s, newNotificationTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -473,10 +529,24 @@ func newNotificationTemplatesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, NotificationTemplatesTable, NotificationTemplatesColumn),
 	)
 }
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+	)
+}
 
 var (
 	// enums.NotificationTemplateFormat must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*enums.NotificationTemplateFormat)(nil)
 	// enums.NotificationTemplateFormat must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.NotificationTemplateFormat)(nil)
+)
+
+var (
+	// enums.TemplateContext must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TemplateContext)(nil)
+	// enums.TemplateContext must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TemplateContext)(nil)
 )

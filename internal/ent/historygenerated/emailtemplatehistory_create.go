@@ -142,6 +142,20 @@ func (_c *EmailTemplateHistoryCreate) SetNillableDeletedBy(v *string) *EmailTemp
 	return _c
 }
 
+// SetRevision sets the "revision" field.
+func (_c *EmailTemplateHistoryCreate) SetRevision(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetRevision(v)
+	return _c
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableRevision(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetRevision(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *EmailTemplateHistoryCreate) SetOwnerID(v string) *EmailTemplateHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -354,6 +368,26 @@ func (_c *EmailTemplateHistoryCreate) SetNillableVersion(v *int) *EmailTemplateH
 	return _c
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_c *EmailTemplateHistoryCreate) SetTemplateContext(v enums.TemplateContext) *EmailTemplateHistoryCreate {
+	_c.mutation.SetTemplateContext(v)
+	return _c
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetTemplateContext(*v)
+	}
+	return _c
+}
+
+// SetDefaults sets the "defaults" field.
+func (_c *EmailTemplateHistoryCreate) SetDefaults(v map[string]interface{}) *EmailTemplateHistoryCreate {
+	_c.mutation.SetDefaults(v)
+	return _c
+}
+
 // SetEmailBrandingID sets the "email_branding_id" field.
 func (_c *EmailTemplateHistoryCreate) SetEmailBrandingID(v string) *EmailTemplateHistoryCreate {
 	_c.mutation.SetEmailBrandingID(v)
@@ -482,6 +516,10 @@ func (_c *EmailTemplateHistoryCreate) defaults() error {
 		v := emailtemplatehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.Revision(); !ok {
+		v := emailtemplatehistory.DefaultRevision
+		_c.mutation.SetRevision(v)
+	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := emailtemplatehistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -547,6 +585,11 @@ func (_c *EmailTemplateHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`historygenerated: missing required field "EmailTemplateHistory.version"`)}
+	}
+	if v, ok := _c.mutation.TemplateContext(); ok {
+		if err := emailtemplatehistory.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`historygenerated: validator failed for field "EmailTemplateHistory.template_context": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -620,6 +663,10 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 		_spec.SetField(emailtemplatehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.Revision(); ok {
+		_spec.SetField(emailtemplatehistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -691,6 +738,14 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(emailtemplatehistory.FieldVersion, field.TypeInt, value)
 		_node.Version = value
+	}
+	if value, ok := _c.mutation.TemplateContext(); ok {
+		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
+		_node.TemplateContext = value
+	}
+	if value, ok := _c.mutation.Defaults(); ok {
+		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)
+		_node.Defaults = value
 	}
 	if value, ok := _c.mutation.EmailBrandingID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldEmailBrandingID, field.TypeString, value)

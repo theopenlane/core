@@ -62,6 +62,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkCreatePayload_n
 				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -108,6 +110,10 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkCreatePayload_n
 				return ec.fieldContext_NotificationTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_NotificationTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
 			case "owner":
 				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
 			case "integration":
@@ -188,6 +194,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_n
 				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -234,6 +242,10 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_n
 				return ec.fieldContext_NotificationTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_NotificationTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
 			case "owner":
 				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
 			case "integration":
@@ -314,6 +326,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateCreatePayload_notif
 				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -360,6 +374,10 @@ func (ec *executionContext) fieldContext_NotificationTemplateCreatePayload_notif
 				return ec.fieldContext_NotificationTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_NotificationTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
 			case "owner":
 				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
 			case "integration":
@@ -440,6 +458,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateUpdatePayload_notif
 				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
+			case "revision":
+				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
 			case "systemOwned":
@@ -486,6 +506,10 @@ func (ec *executionContext) fieldContext_NotificationTemplateUpdatePayload_notif
 				return ec.fieldContext_NotificationTemplate_active(ctx, field)
 			case "version":
 				return ec.fieldContext_NotificationTemplate_version(ctx, field)
+			case "templateContext":
+				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
+			case "defaults":
+				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
 			case "owner":
 				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
 			case "integration":

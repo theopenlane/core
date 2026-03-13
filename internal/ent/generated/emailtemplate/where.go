@@ -98,6 +98,11 @@ func DeletedBy(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldEQ(FieldRevision, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldOwnerID, v))
@@ -561,6 +566,81 @@ func DeletedByEqualFold(v string) predicate.EmailTemplate {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1488,6 +1568,56 @@ func VersionLTE(v int) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldLTE(FieldVersion, v))
 }
 
+// TemplateContextEQ applies the EQ predicate on the "template_context" field.
+func TemplateContextEQ(v enums.TemplateContext) predicate.EmailTemplate {
+	vc := v
+	return predicate.EmailTemplate(sql.FieldEQ(FieldTemplateContext, vc))
+}
+
+// TemplateContextNEQ applies the NEQ predicate on the "template_context" field.
+func TemplateContextNEQ(v enums.TemplateContext) predicate.EmailTemplate {
+	vc := v
+	return predicate.EmailTemplate(sql.FieldNEQ(FieldTemplateContext, vc))
+}
+
+// TemplateContextIn applies the In predicate on the "template_context" field.
+func TemplateContextIn(vs ...enums.TemplateContext) predicate.EmailTemplate {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EmailTemplate(sql.FieldIn(FieldTemplateContext, v...))
+}
+
+// TemplateContextNotIn applies the NotIn predicate on the "template_context" field.
+func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.EmailTemplate {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EmailTemplate(sql.FieldNotIn(FieldTemplateContext, v...))
+}
+
+// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
+func TemplateContextIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldIsNull(FieldTemplateContext))
+}
+
+// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
+func TemplateContextNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNotNull(FieldTemplateContext))
+}
+
+// DefaultsIsNil applies the IsNil predicate on the "defaults" field.
+func DefaultsIsNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldIsNull(FieldDefaults))
+}
+
+// DefaultsNotNil applies the NotNil predicate on the "defaults" field.
+func DefaultsNotNil() predicate.EmailTemplate {
+	return predicate.EmailTemplate(sql.FieldNotNull(FieldDefaults))
+}
+
 // EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
 func EmailBrandingIDEQ(v string) predicate.EmailTemplate {
 	return predicate.EmailTemplate(sql.FieldEQ(FieldEmailBrandingID, v))
@@ -1983,6 +2113,35 @@ func HasNotificationTemplatesWith(preds ...predicate.NotificationTemplate) predi
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.NotificationTemplate
 		step.Edge.Schema = schemaConfig.NotificationTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFiles applies the HasEdge predicate on the "files" edge.
+func HasFiles() predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
+func HasFilesWith(preds ...predicate.File) predicate.EmailTemplate {
+	return predicate.EmailTemplate(func(s *sql.Selector) {
+		step := newFilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

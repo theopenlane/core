@@ -3438,6 +3438,27 @@ func (_m *EmailTemplate) NotificationTemplates(
 	return _m.QueryNotificationTemplates().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *EmailTemplate) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Entity) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

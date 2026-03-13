@@ -921,6 +921,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplate.FieldUpdatedBy:            {Type: field.TypeString, Column: emailtemplate.FieldUpdatedBy},
 			emailtemplate.FieldDeletedAt:            {Type: field.TypeTime, Column: emailtemplate.FieldDeletedAt},
 			emailtemplate.FieldDeletedBy:            {Type: field.TypeString, Column: emailtemplate.FieldDeletedBy},
+			emailtemplate.FieldRevision:             {Type: field.TypeString, Column: emailtemplate.FieldRevision},
 			emailtemplate.FieldOwnerID:              {Type: field.TypeString, Column: emailtemplate.FieldOwnerID},
 			emailtemplate.FieldSystemOwned:          {Type: field.TypeBool, Column: emailtemplate.FieldSystemOwned},
 			emailtemplate.FieldInternalNotes:        {Type: field.TypeString, Column: emailtemplate.FieldInternalNotes},
@@ -939,6 +940,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplate.FieldMetadata:             {Type: field.TypeJSON, Column: emailtemplate.FieldMetadata},
 			emailtemplate.FieldActive:               {Type: field.TypeBool, Column: emailtemplate.FieldActive},
 			emailtemplate.FieldVersion:              {Type: field.TypeInt, Column: emailtemplate.FieldVersion},
+			emailtemplate.FieldTemplateContext:      {Type: field.TypeEnum, Column: emailtemplate.FieldTemplateContext},
+			emailtemplate.FieldDefaults:             {Type: field.TypeJSON, Column: emailtemplate.FieldDefaults},
 			emailtemplate.FieldEmailBrandingID:      {Type: field.TypeString, Column: emailtemplate.FieldEmailBrandingID},
 			emailtemplate.FieldIntegrationID:        {Type: field.TypeString, Column: emailtemplate.FieldIntegrationID},
 			emailtemplate.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: emailtemplate.FieldWorkflowDefinitionID},
@@ -1522,30 +1525,36 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Integration",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			integration.FieldCreatedAt:        {Type: field.TypeTime, Column: integration.FieldCreatedAt},
-			integration.FieldUpdatedAt:        {Type: field.TypeTime, Column: integration.FieldUpdatedAt},
-			integration.FieldCreatedBy:        {Type: field.TypeString, Column: integration.FieldCreatedBy},
-			integration.FieldUpdatedBy:        {Type: field.TypeString, Column: integration.FieldUpdatedBy},
-			integration.FieldDeletedAt:        {Type: field.TypeTime, Column: integration.FieldDeletedAt},
-			integration.FieldDeletedBy:        {Type: field.TypeString, Column: integration.FieldDeletedBy},
-			integration.FieldTags:             {Type: field.TypeJSON, Column: integration.FieldTags},
-			integration.FieldOwnerID:          {Type: field.TypeString, Column: integration.FieldOwnerID},
-			integration.FieldSystemOwned:      {Type: field.TypeBool, Column: integration.FieldSystemOwned},
-			integration.FieldInternalNotes:    {Type: field.TypeString, Column: integration.FieldInternalNotes},
-			integration.FieldSystemInternalID: {Type: field.TypeString, Column: integration.FieldSystemInternalID},
-			integration.FieldEnvironmentName:  {Type: field.TypeString, Column: integration.FieldEnvironmentName},
-			integration.FieldEnvironmentID:    {Type: field.TypeString, Column: integration.FieldEnvironmentID},
-			integration.FieldScopeName:        {Type: field.TypeString, Column: integration.FieldScopeName},
-			integration.FieldScopeID:          {Type: field.TypeString, Column: integration.FieldScopeID},
-			integration.FieldName:             {Type: field.TypeString, Column: integration.FieldName},
-			integration.FieldDescription:      {Type: field.TypeString, Column: integration.FieldDescription},
-			integration.FieldKind:             {Type: field.TypeString, Column: integration.FieldKind},
-			integration.FieldIntegrationType:  {Type: field.TypeString, Column: integration.FieldIntegrationType},
-			integration.FieldPlatformID:       {Type: field.TypeString, Column: integration.FieldPlatformID},
-			integration.FieldProviderMetadata: {Type: field.TypeJSON, Column: integration.FieldProviderMetadata},
-			integration.FieldConfig:           {Type: field.TypeJSON, Column: integration.FieldConfig},
-			integration.FieldProviderState:    {Type: field.TypeJSON, Column: integration.FieldProviderState},
-			integration.FieldMetadata:         {Type: field.TypeJSON, Column: integration.FieldMetadata},
+			integration.FieldCreatedAt:                {Type: field.TypeTime, Column: integration.FieldCreatedAt},
+			integration.FieldUpdatedAt:                {Type: field.TypeTime, Column: integration.FieldUpdatedAt},
+			integration.FieldCreatedBy:                {Type: field.TypeString, Column: integration.FieldCreatedBy},
+			integration.FieldUpdatedBy:                {Type: field.TypeString, Column: integration.FieldUpdatedBy},
+			integration.FieldDeletedAt:                {Type: field.TypeTime, Column: integration.FieldDeletedAt},
+			integration.FieldDeletedBy:                {Type: field.TypeString, Column: integration.FieldDeletedBy},
+			integration.FieldTags:                     {Type: field.TypeJSON, Column: integration.FieldTags},
+			integration.FieldOwnerID:                  {Type: field.TypeString, Column: integration.FieldOwnerID},
+			integration.FieldSystemOwned:              {Type: field.TypeBool, Column: integration.FieldSystemOwned},
+			integration.FieldInternalNotes:            {Type: field.TypeString, Column: integration.FieldInternalNotes},
+			integration.FieldSystemInternalID:         {Type: field.TypeString, Column: integration.FieldSystemInternalID},
+			integration.FieldEnvironmentName:          {Type: field.TypeString, Column: integration.FieldEnvironmentName},
+			integration.FieldEnvironmentID:            {Type: field.TypeString, Column: integration.FieldEnvironmentID},
+			integration.FieldScopeName:                {Type: field.TypeString, Column: integration.FieldScopeName},
+			integration.FieldScopeID:                  {Type: field.TypeString, Column: integration.FieldScopeID},
+			integration.FieldName:                     {Type: field.TypeString, Column: integration.FieldName},
+			integration.FieldDescription:              {Type: field.TypeString, Column: integration.FieldDescription},
+			integration.FieldKind:                     {Type: field.TypeString, Column: integration.FieldKind},
+			integration.FieldIntegrationType:          {Type: field.TypeString, Column: integration.FieldIntegrationType},
+			integration.FieldPlatformID:               {Type: field.TypeString, Column: integration.FieldPlatformID},
+			integration.FieldProviderMetadata:         {Type: field.TypeJSON, Column: integration.FieldProviderMetadata},
+			integration.FieldConfig:                   {Type: field.TypeJSON, Column: integration.FieldConfig},
+			integration.FieldProviderState:            {Type: field.TypeJSON, Column: integration.FieldProviderState},
+			integration.FieldMetadata:                 {Type: field.TypeJSON, Column: integration.FieldMetadata},
+			integration.FieldDefinitionID:             {Type: field.TypeString, Column: integration.FieldDefinitionID},
+			integration.FieldDefinitionVersion:        {Type: field.TypeString, Column: integration.FieldDefinitionVersion},
+			integration.FieldDefinitionSlug:           {Type: field.TypeString, Column: integration.FieldDefinitionSlug},
+			integration.FieldFamily:                   {Type: field.TypeString, Column: integration.FieldFamily},
+			integration.FieldStatus:                   {Type: field.TypeEnum, Column: integration.FieldStatus},
+			integration.FieldProviderMetadataSnapshot: {Type: field.TypeJSON, Column: integration.FieldProviderMetadataSnapshot},
 		},
 	}
 	graph.Nodes[39] = &sqlgraph.Node{
@@ -2034,6 +2043,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notificationtemplate.FieldUpdatedBy:            {Type: field.TypeString, Column: notificationtemplate.FieldUpdatedBy},
 			notificationtemplate.FieldDeletedAt:            {Type: field.TypeTime, Column: notificationtemplate.FieldDeletedAt},
 			notificationtemplate.FieldDeletedBy:            {Type: field.TypeString, Column: notificationtemplate.FieldDeletedBy},
+			notificationtemplate.FieldRevision:             {Type: field.TypeString, Column: notificationtemplate.FieldRevision},
 			notificationtemplate.FieldOwnerID:              {Type: field.TypeString, Column: notificationtemplate.FieldOwnerID},
 			notificationtemplate.FieldSystemOwned:          {Type: field.TypeBool, Column: notificationtemplate.FieldSystemOwned},
 			notificationtemplate.FieldInternalNotes:        {Type: field.TypeString, Column: notificationtemplate.FieldInternalNotes},
@@ -2057,6 +2067,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notificationtemplate.FieldMetadata:             {Type: field.TypeJSON, Column: notificationtemplate.FieldMetadata},
 			notificationtemplate.FieldActive:               {Type: field.TypeBool, Column: notificationtemplate.FieldActive},
 			notificationtemplate.FieldVersion:              {Type: field.TypeInt, Column: notificationtemplate.FieldVersion},
+			notificationtemplate.FieldTemplateContext:      {Type: field.TypeEnum, Column: notificationtemplate.FieldTemplateContext},
+			notificationtemplate.FieldDefaults:             {Type: field.TypeJSON, Column: notificationtemplate.FieldDefaults},
 		},
 	}
 	graph.Nodes[55] = &sqlgraph.Node{
@@ -6461,6 +6473,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"EmailTemplate",
 		"NotificationTemplate",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.FilesTable,
+			Columns: []string{emailtemplate.FilesColumn},
+			Bidi:    false,
+		},
+		"EmailTemplate",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -23387,6 +23411,11 @@ func (f *EmailTemplateFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(emailtemplate.FieldDeletedBy))
 }
 
+// WhereRevision applies the entql string predicate on the revision field.
+func (f *EmailTemplateFilter) WhereRevision(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldRevision))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *EmailTemplateFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(emailtemplate.FieldOwnerID))
@@ -23475,6 +23504,16 @@ func (f *EmailTemplateFilter) WhereActive(p entql.BoolP) {
 // WhereVersion applies the entql int predicate on the version field.
 func (f *EmailTemplateFilter) WhereVersion(p entql.IntP) {
 	f.Where(p.Field(emailtemplate.FieldVersion))
+}
+
+// WhereTemplateContext applies the entql string predicate on the template_context field.
+func (f *EmailTemplateFilter) WhereTemplateContext(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldTemplateContext))
+}
+
+// WhereDefaults applies the entql json.RawMessage predicate on the defaults field.
+func (f *EmailTemplateFilter) WhereDefaults(p entql.BytesP) {
+	f.Where(p.Field(emailtemplate.FieldDefaults))
 }
 
 // WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
@@ -23589,6 +23628,20 @@ func (f *EmailTemplateFilter) WhereHasNotificationTemplates() {
 // WhereHasNotificationTemplatesWith applies a predicate to check if query has an edge notification_templates with a given conditions (other predicates).
 func (f *EmailTemplateFilter) WhereHasNotificationTemplatesWith(preds ...predicate.NotificationTemplate) {
 	f.Where(entql.HasEdgeWith("notification_templates", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *EmailTemplateFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *EmailTemplateFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -28985,6 +29038,36 @@ func (f *IntegrationFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldMetadata))
 }
 
+// WhereDefinitionID applies the entql string predicate on the definition_id field.
+func (f *IntegrationFilter) WhereDefinitionID(p entql.StringP) {
+	f.Where(p.Field(integration.FieldDefinitionID))
+}
+
+// WhereDefinitionVersion applies the entql string predicate on the definition_version field.
+func (f *IntegrationFilter) WhereDefinitionVersion(p entql.StringP) {
+	f.Where(p.Field(integration.FieldDefinitionVersion))
+}
+
+// WhereDefinitionSlug applies the entql string predicate on the definition_slug field.
+func (f *IntegrationFilter) WhereDefinitionSlug(p entql.StringP) {
+	f.Where(p.Field(integration.FieldDefinitionSlug))
+}
+
+// WhereFamily applies the entql string predicate on the family field.
+func (f *IntegrationFilter) WhereFamily(p entql.StringP) {
+	f.Where(p.Field(integration.FieldFamily))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *IntegrationFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(integration.FieldStatus))
+}
+
+// WhereProviderMetadataSnapshot applies the entql json.RawMessage predicate on the provider_metadata_snapshot field.
+func (f *IntegrationFilter) WhereProviderMetadataSnapshot(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldProviderMetadataSnapshot))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *IntegrationFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -32397,6 +32480,11 @@ func (f *NotificationTemplateFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(notificationtemplate.FieldDeletedBy))
 }
 
+// WhereRevision applies the entql string predicate on the revision field.
+func (f *NotificationTemplateFilter) WhereRevision(p entql.StringP) {
+	f.Where(p.Field(notificationtemplate.FieldRevision))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *NotificationTemplateFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(notificationtemplate.FieldOwnerID))
@@ -32510,6 +32598,16 @@ func (f *NotificationTemplateFilter) WhereActive(p entql.BoolP) {
 // WhereVersion applies the entql int predicate on the version field.
 func (f *NotificationTemplateFilter) WhereVersion(p entql.IntP) {
 	f.Where(p.Field(notificationtemplate.FieldVersion))
+}
+
+// WhereTemplateContext applies the entql string predicate on the template_context field.
+func (f *NotificationTemplateFilter) WhereTemplateContext(p entql.StringP) {
+	f.Where(p.Field(notificationtemplate.FieldTemplateContext))
+}
+
+// WhereDefaults applies the entql json.RawMessage predicate on the defaults field.
+func (f *NotificationTemplateFilter) WhereDefaults(p entql.BytesP) {
+	f.Where(p.Field(notificationtemplate.FieldDefaults))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

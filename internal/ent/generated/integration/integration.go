@@ -3,11 +3,14 @@
 package integration
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -63,6 +66,18 @@ const (
 	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldDefinitionID holds the string denoting the definition_id field in the database.
+	FieldDefinitionID = "definition_id"
+	// FieldDefinitionVersion holds the string denoting the definition_version field in the database.
+	FieldDefinitionVersion = "definition_version"
+	// FieldDefinitionSlug holds the string denoting the definition_slug field in the database.
+	FieldDefinitionSlug = "definition_slug"
+	// FieldFamily holds the string denoting the family field in the database.
+	FieldFamily = "family"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldProviderMetadataSnapshot holds the string denoting the provider_metadata_snapshot field in the database.
+	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -276,6 +291,12 @@ var Columns = []string{
 	FieldConfig,
 	FieldProviderState,
 	FieldMetadata,
+	FieldDefinitionID,
+	FieldDefinitionVersion,
+	FieldDefinitionSlug,
+	FieldFamily,
+	FieldStatus,
+	FieldProviderMetadataSnapshot,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "integrations"
@@ -353,6 +374,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.IntegrationStatus = "PENDING"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.IntegrationStatus) error {
+	switch s.String() {
+	case "PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED":
+		return nil
+	default:
+		return fmt.Errorf("integration: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Integration queries.
 type OrderOption func(*sql.Selector)
@@ -455,6 +488,31 @@ func ByIntegrationType(opts ...sql.OrderTermOption) OrderOption {
 // ByPlatformID orders the results by the platform_id field.
 func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatformID, opts...).ToFunc()
+}
+
+// ByDefinitionID orders the results by the definition_id field.
+func ByDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefinitionID, opts...).ToFunc()
+}
+
+// ByDefinitionVersion orders the results by the definition_version field.
+func ByDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefinitionVersion, opts...).ToFunc()
+}
+
+// ByDefinitionSlug orders the results by the definition_slug field.
+func ByDefinitionSlug(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDefinitionSlug, opts...).ToFunc()
+}
+
+// ByFamily orders the results by the family field.
+func ByFamily(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFamily, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -890,3 +948,10 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
+
+var (
+	// enums.IntegrationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.IntegrationStatus)(nil)
+	// enums.IntegrationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.IntegrationStatus)(nil)
+)

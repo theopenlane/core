@@ -8293,6 +8293,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateHistoryOrderFieldRevision orders EmailTemplateHistory by revision.
+	EmailTemplateHistoryOrderFieldRevision = &EmailTemplateHistoryOrderField{
+		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: emailtemplatehistory.FieldRevision,
+		toTerm: emailtemplatehistory.ByRevision,
+		toCursor: func(_m *EmailTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
 	// EmailTemplateHistoryOrderFieldKey orders EmailTemplateHistory by key.
 	EmailTemplateHistoryOrderFieldKey = &EmailTemplateHistoryOrderField{
 		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
@@ -8377,6 +8391,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateHistoryOrderFieldTemplateContext orders EmailTemplateHistory by template_context.
+	EmailTemplateHistoryOrderFieldTemplateContext = &EmailTemplateHistoryOrderField{
+		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: emailtemplatehistory.FieldTemplateContext,
+		toTerm: emailtemplatehistory.ByTemplateContext,
+		toCursor: func(_m *EmailTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -8389,6 +8417,8 @@ func (f EmailTemplateHistoryOrderField) String() string {
 		str = "created_at"
 	case EmailTemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EmailTemplateHistoryOrderFieldRevision.column:
+		str = "revision"
 	case EmailTemplateHistoryOrderFieldKey.column:
 		str = "KEY"
 	case EmailTemplateHistoryOrderFieldName.column:
@@ -8401,6 +8431,8 @@ func (f EmailTemplateHistoryOrderField) String() string {
 		str = "ACTIVE"
 	case EmailTemplateHistoryOrderFieldVersion.column:
 		str = "VERSION"
+	case EmailTemplateHistoryOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
 	}
 	return str
 }
@@ -8423,6 +8455,8 @@ func (f *EmailTemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EmailTemplateHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *EmailTemplateHistoryOrderFieldRevision
 	case "KEY":
 		*f = *EmailTemplateHistoryOrderFieldKey
 	case "NAME":
@@ -8435,6 +8469,8 @@ func (f *EmailTemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateHistoryOrderFieldActive
 	case "VERSION":
 		*f = *EmailTemplateHistoryOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *EmailTemplateHistoryOrderFieldTemplateContext
 	default:
 		return fmt.Errorf("%s is not a valid EmailTemplateHistoryOrderField", str)
 	}
@@ -13650,6 +13686,76 @@ var (
 			}
 		},
 	}
+	// IntegrationHistoryOrderFieldDefinitionID orders IntegrationHistory by definition_id.
+	IntegrationHistoryOrderFieldDefinitionID = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.DefinitionID, nil
+		},
+		column: integrationhistory.FieldDefinitionID,
+		toTerm: integrationhistory.ByDefinitionID,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionID,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldDefinitionVersion orders IntegrationHistory by definition_version.
+	IntegrationHistoryOrderFieldDefinitionVersion = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.DefinitionVersion, nil
+		},
+		column: integrationhistory.FieldDefinitionVersion,
+		toTerm: integrationhistory.ByDefinitionVersion,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionVersion,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldDefinitionSlug orders IntegrationHistory by definition_slug.
+	IntegrationHistoryOrderFieldDefinitionSlug = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.DefinitionSlug, nil
+		},
+		column: integrationhistory.FieldDefinitionSlug,
+		toTerm: integrationhistory.ByDefinitionSlug,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionSlug,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldFamily orders IntegrationHistory by family.
+	IntegrationHistoryOrderFieldFamily = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.Family, nil
+		},
+		column: integrationhistory.FieldFamily,
+		toTerm: integrationhistory.ByFamily,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Family,
+			}
+		},
+	}
+	// IntegrationHistoryOrderFieldStatus orders IntegrationHistory by status.
+	IntegrationHistoryOrderFieldStatus = &IntegrationHistoryOrderField{
+		Value: func(_m *IntegrationHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: integrationhistory.FieldStatus,
+		toTerm: integrationhistory.ByStatus,
+		toCursor: func(_m *IntegrationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -13668,6 +13774,16 @@ func (f IntegrationHistoryOrderField) String() string {
 		str = "kind"
 	case IntegrationHistoryOrderFieldIntegrationType.column:
 		str = "integration_type"
+	case IntegrationHistoryOrderFieldDefinitionID.column:
+		str = "definition_id"
+	case IntegrationHistoryOrderFieldDefinitionVersion.column:
+		str = "definition_version"
+	case IntegrationHistoryOrderFieldDefinitionSlug.column:
+		str = "definition_slug"
+	case IntegrationHistoryOrderFieldFamily.column:
+		str = "family"
+	case IntegrationHistoryOrderFieldStatus.column:
+		str = "status"
 	}
 	return str
 }
@@ -13696,6 +13812,16 @@ func (f *IntegrationHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationHistoryOrderFieldKind
 	case "integration_type":
 		*f = *IntegrationHistoryOrderFieldIntegrationType
+	case "definition_id":
+		*f = *IntegrationHistoryOrderFieldDefinitionID
+	case "definition_version":
+		*f = *IntegrationHistoryOrderFieldDefinitionVersion
+	case "definition_slug":
+		*f = *IntegrationHistoryOrderFieldDefinitionSlug
+	case "family":
+		*f = *IntegrationHistoryOrderFieldFamily
+	case "status":
+		*f = *IntegrationHistoryOrderFieldStatus
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationHistoryOrderField", str)
 	}
@@ -16570,6 +16696,20 @@ var (
 			}
 		},
 	}
+	// NotificationTemplateHistoryOrderFieldRevision orders NotificationTemplateHistory by revision.
+	NotificationTemplateHistoryOrderFieldRevision = &NotificationTemplateHistoryOrderField{
+		Value: func(_m *NotificationTemplateHistory) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: notificationtemplatehistory.FieldRevision,
+		toTerm: notificationtemplatehistory.ByRevision,
+		toCursor: func(_m *NotificationTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
 	// NotificationTemplateHistoryOrderFieldKey orders NotificationTemplateHistory by key.
 	NotificationTemplateHistoryOrderFieldKey = &NotificationTemplateHistoryOrderField{
 		Value: func(_m *NotificationTemplateHistory) (ent.Value, error) {
@@ -16682,6 +16822,20 @@ var (
 			}
 		},
 	}
+	// NotificationTemplateHistoryOrderFieldTemplateContext orders NotificationTemplateHistory by template_context.
+	NotificationTemplateHistoryOrderFieldTemplateContext = &NotificationTemplateHistoryOrderField{
+		Value: func(_m *NotificationTemplateHistory) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: notificationtemplatehistory.FieldTemplateContext,
+		toTerm: notificationtemplatehistory.ByTemplateContext,
+		toCursor: func(_m *NotificationTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -16694,6 +16848,8 @@ func (f NotificationTemplateHistoryOrderField) String() string {
 		str = "created_at"
 	case NotificationTemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case NotificationTemplateHistoryOrderFieldRevision.column:
+		str = "revision"
 	case NotificationTemplateHistoryOrderFieldKey.column:
 		str = "KEY"
 	case NotificationTemplateHistoryOrderFieldName.column:
@@ -16710,6 +16866,8 @@ func (f NotificationTemplateHistoryOrderField) String() string {
 		str = "ACTIVE"
 	case NotificationTemplateHistoryOrderFieldVersion.column:
 		str = "VERSION"
+	case NotificationTemplateHistoryOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
 	}
 	return str
 }
@@ -16732,6 +16890,8 @@ func (f *NotificationTemplateHistoryOrderField) UnmarshalGQL(v interface{}) erro
 		*f = *NotificationTemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *NotificationTemplateHistoryOrderFieldUpdatedAt
+	case "revision":
+		*f = *NotificationTemplateHistoryOrderFieldRevision
 	case "KEY":
 		*f = *NotificationTemplateHistoryOrderFieldKey
 	case "NAME":
@@ -16748,6 +16908,8 @@ func (f *NotificationTemplateHistoryOrderField) UnmarshalGQL(v interface{}) erro
 		*f = *NotificationTemplateHistoryOrderFieldActive
 	case "VERSION":
 		*f = *NotificationTemplateHistoryOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *NotificationTemplateHistoryOrderFieldTemplateContext
 	default:
 		return fmt.Errorf("%s is not a valid NotificationTemplateHistoryOrderField", str)
 	}

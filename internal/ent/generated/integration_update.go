@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
@@ -427,6 +428,112 @@ func (_u *IntegrationUpdate) SetMetadata(v map[string]interface{}) *IntegrationU
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *IntegrationUpdate) ClearMetadata() *IntegrationUpdate {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetDefinitionID sets the "definition_id" field.
+func (_u *IntegrationUpdate) SetDefinitionID(v string) *IntegrationUpdate {
+	_u.mutation.SetDefinitionID(v)
+	return _u
+}
+
+// SetNillableDefinitionID sets the "definition_id" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableDefinitionID(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearDefinitionID clears the value of the "definition_id" field.
+func (_u *IntegrationUpdate) ClearDefinitionID() *IntegrationUpdate {
+	_u.mutation.ClearDefinitionID()
+	return _u
+}
+
+// SetDefinitionVersion sets the "definition_version" field.
+func (_u *IntegrationUpdate) SetDefinitionVersion(v string) *IntegrationUpdate {
+	_u.mutation.SetDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableDefinitionVersion sets the "definition_version" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableDefinitionVersion(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearDefinitionVersion clears the value of the "definition_version" field.
+func (_u *IntegrationUpdate) ClearDefinitionVersion() *IntegrationUpdate {
+	_u.mutation.ClearDefinitionVersion()
+	return _u
+}
+
+// SetDefinitionSlug sets the "definition_slug" field.
+func (_u *IntegrationUpdate) SetDefinitionSlug(v string) *IntegrationUpdate {
+	_u.mutation.SetDefinitionSlug(v)
+	return _u
+}
+
+// SetNillableDefinitionSlug sets the "definition_slug" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableDefinitionSlug(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetDefinitionSlug(*v)
+	}
+	return _u
+}
+
+// ClearDefinitionSlug clears the value of the "definition_slug" field.
+func (_u *IntegrationUpdate) ClearDefinitionSlug() *IntegrationUpdate {
+	_u.mutation.ClearDefinitionSlug()
+	return _u
+}
+
+// SetFamily sets the "family" field.
+func (_u *IntegrationUpdate) SetFamily(v string) *IntegrationUpdate {
+	_u.mutation.SetFamily(v)
+	return _u
+}
+
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableFamily(v *string) *IntegrationUpdate {
+	if v != nil {
+		_u.SetFamily(*v)
+	}
+	return _u
+}
+
+// ClearFamily clears the value of the "family" field.
+func (_u *IntegrationUpdate) ClearFamily() *IntegrationUpdate {
+	_u.mutation.ClearFamily()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *IntegrationUpdate) SetStatus(v enums.IntegrationStatus) *IntegrationUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableStatus(v *enums.IntegrationStatus) *IntegrationUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
+func (_u *IntegrationUpdate) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationUpdate {
+	_u.mutation.SetProviderMetadataSnapshot(v)
+	return _u
+}
+
+// ClearProviderMetadataSnapshot clears the value of the "provider_metadata_snapshot" field.
+func (_u *IntegrationUpdate) ClearProviderMetadataSnapshot() *IntegrationUpdate {
+	_u.mutation.ClearProviderMetadataSnapshot()
 	return _u
 }
 
@@ -1165,6 +1272,11 @@ func (_u *IntegrationUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := integration.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Integration.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1298,6 +1410,39 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.DefinitionID(); ok {
+		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.DefinitionIDCleared() {
+		_spec.ClearField(integration.FieldDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DefinitionVersion(); ok {
+		_spec.SetField(integration.FieldDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.DefinitionVersionCleared() {
+		_spec.ClearField(integration.FieldDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.DefinitionSlug(); ok {
+		_spec.SetField(integration.FieldDefinitionSlug, field.TypeString, value)
+	}
+	if _u.mutation.DefinitionSlugCleared() {
+		_spec.ClearField(integration.FieldDefinitionSlug, field.TypeString)
+	}
+	if value, ok := _u.mutation.Family(); ok {
+		_spec.SetField(integration.FieldFamily, field.TypeString, value)
+	}
+	if _u.mutation.FamilyCleared() {
+		_spec.ClearField(integration.FieldFamily, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ProviderMetadataSnapshot(); ok {
+		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
+	}
+	if _u.mutation.ProviderMetadataSnapshotCleared() {
+		_spec.ClearField(integration.FieldProviderMetadataSnapshot, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2656,6 +2801,112 @@ func (_u *IntegrationUpdateOne) ClearMetadata() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetDefinitionID sets the "definition_id" field.
+func (_u *IntegrationUpdateOne) SetDefinitionID(v string) *IntegrationUpdateOne {
+	_u.mutation.SetDefinitionID(v)
+	return _u
+}
+
+// SetNillableDefinitionID sets the "definition_id" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableDefinitionID(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearDefinitionID clears the value of the "definition_id" field.
+func (_u *IntegrationUpdateOne) ClearDefinitionID() *IntegrationUpdateOne {
+	_u.mutation.ClearDefinitionID()
+	return _u
+}
+
+// SetDefinitionVersion sets the "definition_version" field.
+func (_u *IntegrationUpdateOne) SetDefinitionVersion(v string) *IntegrationUpdateOne {
+	_u.mutation.SetDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableDefinitionVersion sets the "definition_version" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableDefinitionVersion(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearDefinitionVersion clears the value of the "definition_version" field.
+func (_u *IntegrationUpdateOne) ClearDefinitionVersion() *IntegrationUpdateOne {
+	_u.mutation.ClearDefinitionVersion()
+	return _u
+}
+
+// SetDefinitionSlug sets the "definition_slug" field.
+func (_u *IntegrationUpdateOne) SetDefinitionSlug(v string) *IntegrationUpdateOne {
+	_u.mutation.SetDefinitionSlug(v)
+	return _u
+}
+
+// SetNillableDefinitionSlug sets the "definition_slug" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableDefinitionSlug(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetDefinitionSlug(*v)
+	}
+	return _u
+}
+
+// ClearDefinitionSlug clears the value of the "definition_slug" field.
+func (_u *IntegrationUpdateOne) ClearDefinitionSlug() *IntegrationUpdateOne {
+	_u.mutation.ClearDefinitionSlug()
+	return _u
+}
+
+// SetFamily sets the "family" field.
+func (_u *IntegrationUpdateOne) SetFamily(v string) *IntegrationUpdateOne {
+	_u.mutation.SetFamily(v)
+	return _u
+}
+
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableFamily(v *string) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetFamily(*v)
+	}
+	return _u
+}
+
+// ClearFamily clears the value of the "family" field.
+func (_u *IntegrationUpdateOne) ClearFamily() *IntegrationUpdateOne {
+	_u.mutation.ClearFamily()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *IntegrationUpdateOne) SetStatus(v enums.IntegrationStatus) *IntegrationUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableStatus(v *enums.IntegrationStatus) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
+func (_u *IntegrationUpdateOne) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationUpdateOne {
+	_u.mutation.SetProviderMetadataSnapshot(v)
+	return _u
+}
+
+// ClearProviderMetadataSnapshot clears the value of the "provider_metadata_snapshot" field.
+func (_u *IntegrationUpdateOne) ClearProviderMetadataSnapshot() *IntegrationUpdateOne {
+	_u.mutation.ClearProviderMetadataSnapshot()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -3404,6 +3655,11 @@ func (_u *IntegrationUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Integration.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := integration.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Integration.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3554,6 +3810,39 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.DefinitionID(); ok {
+		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.DefinitionIDCleared() {
+		_spec.ClearField(integration.FieldDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DefinitionVersion(); ok {
+		_spec.SetField(integration.FieldDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.DefinitionVersionCleared() {
+		_spec.ClearField(integration.FieldDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.DefinitionSlug(); ok {
+		_spec.SetField(integration.FieldDefinitionSlug, field.TypeString, value)
+	}
+	if _u.mutation.DefinitionSlugCleared() {
+		_spec.ClearField(integration.FieldDefinitionSlug, field.TypeString)
+	}
+	if value, ok := _u.mutation.Family(); ok {
+		_spec.SetField(integration.FieldFamily, field.TypeString, value)
+	}
+	if _u.mutation.FamilyCleared() {
+		_spec.ClearField(integration.FieldFamily, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ProviderMetadataSnapshot(); ok {
+		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
+	}
+	if _u.mutation.ProviderMetadataSnapshotCleared() {
+		_spec.ClearField(integration.FieldProviderMetadataSnapshot, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

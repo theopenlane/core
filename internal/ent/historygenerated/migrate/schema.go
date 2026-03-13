@@ -839,6 +839,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
@@ -857,6 +858,8 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "version", Type: field.TypeInt, Default: 1},
+		{Name: "template_context", Type: field.TypeEnum, Nullable: true, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
+		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
 		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString, Nullable: true},
@@ -1418,6 +1421,12 @@ var (
 		{Name: "config", Type: field.TypeJSON, Nullable: true},
 		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "definition_id", Type: field.TypeString, Nullable: true},
+		{Name: "definition_version", Type: field.TypeString, Nullable: true},
+		{Name: "definition_slug", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED"}, Default: "PENDING"},
+		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
 	}
 	// IntegrationHistoryTable holds the schema information for the "integration_history" table.
 	IntegrationHistoryTable = &schema.Table{
@@ -1724,6 +1733,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
@@ -1747,6 +1757,8 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "version", Type: field.TypeInt, Default: 1},
+		{Name: "template_context", Type: field.TypeEnum, Nullable: true, Enums: []string{"CAMPAIGN_RECIPIENT", "TRANSACTIONAL", "WORKFLOW_ACTION"}},
+		{Name: "defaults", Type: field.TypeJSON, Nullable: true},
 	}
 	// NotificationTemplateHistoryTable holds the schema information for the "notification_template_history" table.
 	NotificationTemplateHistoryTable = &schema.Table{

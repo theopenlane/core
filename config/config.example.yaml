@@ -471,13 +471,13 @@ subscription:
     privatestripekey: ""
     stripebillingportalsuccessurl: https://console.theopenlane.io/organization-settings/billing
     stripecancellationreturnurl: https://console.theopenlane.io/organization-settings/billing
-    stripewebhookapiversion: 2025_12_15_CLOVER
-    stripewebhookdiscardapiversion: 2025_11_17_CLOVER
+    stripewebhookapiversion: 2026_02_25_CLOVER
+    stripewebhookdiscardapiversion: 2025_12_15_CLOVER
     stripewebhookevents: null
     stripewebhooksecret: ""
     stripewebhooksecrets:
-        2025_11_17_CLOVER: ""
         2025_12_15_CLOVER: ""
+        2026_02_25_CLOVER: ""
     stripewebhookurl: https://api.theopenlane.io/stripe/webhook
 totp:
     codelength: 6

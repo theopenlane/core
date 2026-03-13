@@ -40,6 +40,8 @@ type NotificationTemplateHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+	Revision string `json:"revision,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -85,7 +87,11 @@ type NotificationTemplateHistory struct {
 	// whether the template is active
 	Active bool `json:"active,omitempty"`
 	// template version
-	Version      int `json:"version,omitempty"`
+	Version int `json:"version,omitempty"`
+	// runtime data context defining available variable keys for this template
+	TemplateContext enums.TemplateContext `json:"template_context,omitempty"`
+	// static variable values merged as base layer at render time; call-site data takes precedence
+	Defaults     map[string]interface{} `json:"defaults,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -94,7 +100,7 @@ func (*NotificationTemplateHistory) scanValues(columns []string) ([]any, error) 
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case notificationtemplatehistory.FieldBlocks, notificationtemplatehistory.FieldJsonconfig, notificationtemplatehistory.FieldUischema, notificationtemplatehistory.FieldMetadata:
+		case notificationtemplatehistory.FieldBlocks, notificationtemplatehistory.FieldJsonconfig, notificationtemplatehistory.FieldUischema, notificationtemplatehistory.FieldMetadata, notificationtemplatehistory.FieldDefaults:
 			values[i] = new([]byte)
 		case notificationtemplatehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -102,7 +108,7 @@ func (*NotificationTemplateHistory) scanValues(columns []string) ([]any, error) 
 			values[i] = new(sql.NullBool)
 		case notificationtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case notificationtemplatehistory.FieldID, notificationtemplatehistory.FieldRef, notificationtemplatehistory.FieldCreatedBy, notificationtemplatehistory.FieldUpdatedBy, notificationtemplatehistory.FieldDeletedBy, notificationtemplatehistory.FieldOwnerID, notificationtemplatehistory.FieldInternalNotes, notificationtemplatehistory.FieldSystemInternalID, notificationtemplatehistory.FieldKey, notificationtemplatehistory.FieldName, notificationtemplatehistory.FieldDescription, notificationtemplatehistory.FieldChannel, notificationtemplatehistory.FieldFormat, notificationtemplatehistory.FieldLocale, notificationtemplatehistory.FieldTopicPattern, notificationtemplatehistory.FieldIntegrationID, notificationtemplatehistory.FieldWorkflowDefinitionID, notificationtemplatehistory.FieldEmailTemplateID, notificationtemplatehistory.FieldTitleTemplate, notificationtemplatehistory.FieldSubjectTemplate, notificationtemplatehistory.FieldBodyTemplate:
+		case notificationtemplatehistory.FieldID, notificationtemplatehistory.FieldRef, notificationtemplatehistory.FieldCreatedBy, notificationtemplatehistory.FieldUpdatedBy, notificationtemplatehistory.FieldDeletedBy, notificationtemplatehistory.FieldRevision, notificationtemplatehistory.FieldOwnerID, notificationtemplatehistory.FieldInternalNotes, notificationtemplatehistory.FieldSystemInternalID, notificationtemplatehistory.FieldKey, notificationtemplatehistory.FieldName, notificationtemplatehistory.FieldDescription, notificationtemplatehistory.FieldChannel, notificationtemplatehistory.FieldFormat, notificationtemplatehistory.FieldLocale, notificationtemplatehistory.FieldTopicPattern, notificationtemplatehistory.FieldIntegrationID, notificationtemplatehistory.FieldWorkflowDefinitionID, notificationtemplatehistory.FieldEmailTemplateID, notificationtemplatehistory.FieldTitleTemplate, notificationtemplatehistory.FieldSubjectTemplate, notificationtemplatehistory.FieldBodyTemplate, notificationtemplatehistory.FieldTemplateContext:
 			values[i] = new(sql.NullString)
 		case notificationtemplatehistory.FieldHistoryTime, notificationtemplatehistory.FieldCreatedAt, notificationtemplatehistory.FieldUpdatedAt, notificationtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -180,6 +186,12 @@ func (_m *NotificationTemplateHistory) assignValues(columns []string, values []a
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = value.String
+			}
+		case notificationtemplatehistory.FieldRevision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field revision", values[i])
+			} else if value.Valid {
+				_m.Revision = value.String
 			}
 		case notificationtemplatehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -329,6 +341,20 @@ func (_m *NotificationTemplateHistory) assignValues(columns []string, values []a
 			} else if value.Valid {
 				_m.Version = int(value.Int64)
 			}
+		case notificationtemplatehistory.FieldTemplateContext:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_context", values[i])
+			} else if value.Valid {
+				_m.TemplateContext = enums.TemplateContext(value.String)
+			}
+		case notificationtemplatehistory.FieldDefaults:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field defaults", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Defaults); err != nil {
+					return fmt.Errorf("unmarshal field defaults: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -391,6 +417,9 @@ func (_m *NotificationTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("revision=")
+	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
@@ -464,6 +493,12 @@ func (_m *NotificationTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Version))
+	builder.WriteString(", ")
+	builder.WriteString("template_context=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TemplateContext))
+	builder.WriteString(", ")
+	builder.WriteString("defaults=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Defaults))
 	builder.WriteByte(')')
 	return builder.String()
 }

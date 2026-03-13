@@ -10071,6 +10071,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateOrderFieldRevision orders EmailTemplate by revision.
+	EmailTemplateOrderFieldRevision = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: emailtemplate.FieldRevision,
+		toTerm: emailtemplate.ByRevision,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
 	// EmailTemplateOrderFieldKey orders EmailTemplate by key.
 	EmailTemplateOrderFieldKey = &EmailTemplateOrderField{
 		Value: func(_m *EmailTemplate) (ent.Value, error) {
@@ -10155,6 +10169,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateOrderFieldTemplateContext orders EmailTemplate by template_context.
+	EmailTemplateOrderFieldTemplateContext = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: emailtemplate.FieldTemplateContext,
+		toTerm: emailtemplate.ByTemplateContext,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -10165,6 +10193,8 @@ func (f EmailTemplateOrderField) String() string {
 		str = "created_at"
 	case EmailTemplateOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EmailTemplateOrderFieldRevision.column:
+		str = "revision"
 	case EmailTemplateOrderFieldKey.column:
 		str = "KEY"
 	case EmailTemplateOrderFieldName.column:
@@ -10177,6 +10207,8 @@ func (f EmailTemplateOrderField) String() string {
 		str = "ACTIVE"
 	case EmailTemplateOrderFieldVersion.column:
 		str = "VERSION"
+	case EmailTemplateOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
 	}
 	return str
 }
@@ -10197,6 +10229,8 @@ func (f *EmailTemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EmailTemplateOrderFieldUpdatedAt
+	case "revision":
+		*f = *EmailTemplateOrderFieldRevision
 	case "KEY":
 		*f = *EmailTemplateOrderFieldKey
 	case "NAME":
@@ -10209,6 +10243,8 @@ func (f *EmailTemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateOrderFieldActive
 	case "VERSION":
 		*f = *EmailTemplateOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *EmailTemplateOrderFieldTemplateContext
 	default:
 		return fmt.Errorf("%s is not a valid EmailTemplateOrderField", str)
 	}
@@ -16486,6 +16522,76 @@ var (
 			}
 		},
 	}
+	// IntegrationOrderFieldDefinitionID orders Integration by definition_id.
+	IntegrationOrderFieldDefinitionID = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.DefinitionID, nil
+		},
+		column: integration.FieldDefinitionID,
+		toTerm: integration.ByDefinitionID,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionID,
+			}
+		},
+	}
+	// IntegrationOrderFieldDefinitionVersion orders Integration by definition_version.
+	IntegrationOrderFieldDefinitionVersion = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.DefinitionVersion, nil
+		},
+		column: integration.FieldDefinitionVersion,
+		toTerm: integration.ByDefinitionVersion,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionVersion,
+			}
+		},
+	}
+	// IntegrationOrderFieldDefinitionSlug orders Integration by definition_slug.
+	IntegrationOrderFieldDefinitionSlug = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.DefinitionSlug, nil
+		},
+		column: integration.FieldDefinitionSlug,
+		toTerm: integration.ByDefinitionSlug,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DefinitionSlug,
+			}
+		},
+	}
+	// IntegrationOrderFieldFamily orders Integration by family.
+	IntegrationOrderFieldFamily = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.Family, nil
+		},
+		column: integration.FieldFamily,
+		toTerm: integration.ByFamily,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Family,
+			}
+		},
+	}
+	// IntegrationOrderFieldStatus orders Integration by status.
+	IntegrationOrderFieldStatus = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: integration.FieldStatus,
+		toTerm: integration.ByStatus,
+		toCursor: func(_m *Integration) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -16502,6 +16608,16 @@ func (f IntegrationOrderField) String() string {
 		str = "kind"
 	case IntegrationOrderFieldIntegrationType.column:
 		str = "integration_type"
+	case IntegrationOrderFieldDefinitionID.column:
+		str = "definition_id"
+	case IntegrationOrderFieldDefinitionVersion.column:
+		str = "definition_version"
+	case IntegrationOrderFieldDefinitionSlug.column:
+		str = "definition_slug"
+	case IntegrationOrderFieldFamily.column:
+		str = "family"
+	case IntegrationOrderFieldStatus.column:
+		str = "status"
 	}
 	return str
 }
@@ -16528,6 +16644,16 @@ func (f *IntegrationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationOrderFieldKind
 	case "integration_type":
 		*f = *IntegrationOrderFieldIntegrationType
+	case "definition_id":
+		*f = *IntegrationOrderFieldDefinitionID
+	case "definition_version":
+		*f = *IntegrationOrderFieldDefinitionVersion
+	case "definition_slug":
+		*f = *IntegrationOrderFieldDefinitionSlug
+	case "family":
+		*f = *IntegrationOrderFieldFamily
+	case "status":
+		*f = *IntegrationOrderFieldStatus
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationOrderField", str)
 	}
@@ -21929,6 +22055,20 @@ var (
 			}
 		},
 	}
+	// NotificationTemplateOrderFieldRevision orders NotificationTemplate by revision.
+	NotificationTemplateOrderFieldRevision = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.Revision, nil
+		},
+		column: notificationtemplate.FieldRevision,
+		toTerm: notificationtemplate.ByRevision,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Revision,
+			}
+		},
+	}
 	// NotificationTemplateOrderFieldKey orders NotificationTemplate by key.
 	NotificationTemplateOrderFieldKey = &NotificationTemplateOrderField{
 		Value: func(_m *NotificationTemplate) (ent.Value, error) {
@@ -22041,6 +22181,20 @@ var (
 			}
 		},
 	}
+	// NotificationTemplateOrderFieldTemplateContext orders NotificationTemplate by template_context.
+	NotificationTemplateOrderFieldTemplateContext = &NotificationTemplateOrderField{
+		Value: func(_m *NotificationTemplate) (ent.Value, error) {
+			return _m.TemplateContext, nil
+		},
+		column: notificationtemplate.FieldTemplateContext,
+		toTerm: notificationtemplate.ByTemplateContext,
+		toCursor: func(_m *NotificationTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TemplateContext,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -22051,6 +22205,8 @@ func (f NotificationTemplateOrderField) String() string {
 		str = "created_at"
 	case NotificationTemplateOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case NotificationTemplateOrderFieldRevision.column:
+		str = "revision"
 	case NotificationTemplateOrderFieldKey.column:
 		str = "KEY"
 	case NotificationTemplateOrderFieldName.column:
@@ -22067,6 +22223,8 @@ func (f NotificationTemplateOrderField) String() string {
 		str = "ACTIVE"
 	case NotificationTemplateOrderFieldVersion.column:
 		str = "VERSION"
+	case NotificationTemplateOrderFieldTemplateContext.column:
+		str = "TEMPLATE_CONTEXT"
 	}
 	return str
 }
@@ -22087,6 +22245,8 @@ func (f *NotificationTemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *NotificationTemplateOrderFieldCreatedAt
 	case "updated_at":
 		*f = *NotificationTemplateOrderFieldUpdatedAt
+	case "revision":
+		*f = *NotificationTemplateOrderFieldRevision
 	case "KEY":
 		*f = *NotificationTemplateOrderFieldKey
 	case "NAME":
@@ -22103,6 +22263,8 @@ func (f *NotificationTemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *NotificationTemplateOrderFieldActive
 	case "VERSION":
 		*f = *NotificationTemplateOrderFieldVersion
+	case "TEMPLATE_CONTEXT":
+		*f = *NotificationTemplateOrderFieldTemplateContext
 	default:
 		return fmt.Errorf("%s is not a valid NotificationTemplateOrderField", str)
 	}

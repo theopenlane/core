@@ -700,6 +700,7 @@ func adminSearchEmailTemplates(ctx context.Context, query string, after *entgql.
 		Where(
 			emailtemplate.Or(
 				emailtemplate.ID(query),                               // search equal to ID
+				emailtemplate.RevisionContainsFold(query),             // search by Revision
 				emailtemplate.OwnerIDContainsFold(query),              // search by OwnerID
 				emailtemplate.InternalNotesContainsFold(query),        // search by InternalNotes
 				emailtemplate.SystemInternalIDContainsFold(query),     // search by SystemInternalID
@@ -1060,12 +1061,14 @@ func searchIntegrations(ctx context.Context, query string, after *entgql.Cursor[
 	request := withTransactionalMutation(ctx).Integration.Query().
 		Where(
 			integration.Or(
-				integration.ID(query),               // search equal to ID
-				integration.KindContainsFold(query), // search by Kind
-				integration.NameContainsFold(query), // search by Name
+				integration.DefinitionIDContainsFold(query),   // search by DefinitionID
+				integration.DefinitionSlugContainsFold(query), // search by DefinitionSlug
+				integration.ID(query),                         // search equal to ID
+				integration.KindContainsFold(query),           // search by Kind
+				integration.NameContainsFold(query),           // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -1083,17 +1086,21 @@ func adminSearchIntegrations(ctx context.Context, query string, after *entgql.Cu
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				integration.OwnerIDContainsFold(query),          // search by OwnerID
-				integration.InternalNotesContainsFold(query),    // search by InternalNotes
-				integration.SystemInternalIDContainsFold(query), // search by SystemInternalID
-				integration.EnvironmentNameContainsFold(query),  // search by EnvironmentName
-				integration.EnvironmentIDContainsFold(query),    // search by EnvironmentID
-				integration.ScopeNameContainsFold(query),        // search by ScopeName
-				integration.ScopeIDContainsFold(query),          // search by ScopeID
-				integration.NameContainsFold(query),             // search by Name
-				integration.KindContainsFold(query),             // search by Kind
-				integration.IntegrationTypeContainsFold(query),  // search by IntegrationType
-				integration.PlatformIDContainsFold(query),       // search by PlatformID
+				integration.OwnerIDContainsFold(query),           // search by OwnerID
+				integration.InternalNotesContainsFold(query),     // search by InternalNotes
+				integration.SystemInternalIDContainsFold(query),  // search by SystemInternalID
+				integration.EnvironmentNameContainsFold(query),   // search by EnvironmentName
+				integration.EnvironmentIDContainsFold(query),     // search by EnvironmentID
+				integration.ScopeNameContainsFold(query),         // search by ScopeName
+				integration.ScopeIDContainsFold(query),           // search by ScopeID
+				integration.NameContainsFold(query),              // search by Name
+				integration.KindContainsFold(query),              // search by Kind
+				integration.IntegrationTypeContainsFold(query),   // search by IntegrationType
+				integration.PlatformIDContainsFold(query),        // search by PlatformID
+				integration.DefinitionIDContainsFold(query),      // search by DefinitionID
+				integration.DefinitionVersionContainsFold(query), // search by DefinitionVersion
+				integration.DefinitionSlugContainsFold(query),    // search by DefinitionSlug
+				integration.FamilyContainsFold(query),            // search by Family
 			),
 		)
 
@@ -1354,6 +1361,7 @@ func adminSearchNotificationTemplates(ctx context.Context, query string, after *
 		Where(
 			notificationtemplate.Or(
 				notificationtemplate.ID(query),                               // search equal to ID
+				notificationtemplate.RevisionContainsFold(query),             // search by Revision
 				notificationtemplate.OwnerIDContainsFold(query),              // search by OwnerID
 				notificationtemplate.InternalNotesContainsFold(query),        // search by InternalNotes
 				notificationtemplate.SystemInternalIDContainsFold(query),     // search by SystemInternalID

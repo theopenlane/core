@@ -21,12 +21,12 @@ require (
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/alicebob/miniredis/v2 v2.37.0
 	github.com/alitto/pond/v2 v2.7.0
-	github.com/aws/aws-sdk-go-v2 v1.41.3
-	github.com/aws/aws-sdk-go-v2/config v1.32.11
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.11
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.6
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.8
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.96.4
+	github.com/aws/aws-sdk-go-v2 v1.41.4
+	github.com/aws/aws-sdk-go-v2/config v1.32.12
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.12
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.8
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.1.10
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.1
 	github.com/brianvoe/gofakeit/v7 v7.14.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.8.0
@@ -38,10 +38,10 @@ require (
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b
 	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/gertd/go-pluralize v0.2.1
-	github.com/getkin/kin-openapi v0.133.0
+	github.com/getkin/kin-openapi v0.134.0
 	github.com/go-jose/go-jose/v4 v4.1.3
 	github.com/go-viper/mapstructure/v2 v2.5.0
-	github.com/go-webauthn/webauthn v0.16.0
+	github.com/go-webauthn/webauthn v0.16.1
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
@@ -87,7 +87,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/stripe/stripe-go/v84 v84.1.0
+	github.com/stripe/stripe-go/v84 v84.4.1
 	github.com/theopenlane/core/common v1.0.12
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
@@ -111,7 +111,7 @@ require (
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.20.0
 	golang.org/x/text v0.35.0
-	golang.org/x/tools v0.42.0
+	golang.org/x/tools v0.43.0
 	google.golang.org/api v0.271.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
@@ -120,7 +120,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.8.0 // indirect
 	github.com/Yamashou/gqlgenc v0.33.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.0.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.0.8 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.4.0 // indirect
@@ -158,19 +158,19 @@ require (
 	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.6 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.19 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.19 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.19 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.5 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.20 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.11 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.19 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.19 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.30.12 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.16 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.41.8
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.7 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.20 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.20 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.20 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.6 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.21 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.12 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.20 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.20 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.30.13 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.17 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.41.9
 	github.com/aws/smithy-go v1.24.2 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
@@ -217,8 +217,8 @@ require (
 	github.com/morikuni/aec v1.1.0 // indirect
 	github.com/muhlemmer/gu v0.3.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
-	github.com/oasdiff/yaml v0.0.0-20250309154309-f31be36b4037 // indirect
-	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
+	github.com/oasdiff/yaml v0.0.0-20260313112342-a3ea61cb4d4c // indirect
+	github.com/oasdiff/yaml3 v0.0.0-20260224194419-61cd415a242b // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
 	github.com/olekukonko/ll v0.1.3 // indirect
 	github.com/onsi/gomega v1.38.2 // indirect
@@ -250,8 +250,8 @@ require (
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.10
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.1
+	github.com/aws/aws-sdk-go-v2/service/auditmanager v1.46.11
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.68.2
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
@@ -268,7 +268,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.22.4 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.4 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.2.1 // indirect
+	github.com/go-webauthn/x v0.2.2 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/cel-go v0.27.0
@@ -362,7 +362,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
-	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/net v0.52.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
