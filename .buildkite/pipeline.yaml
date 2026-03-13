@@ -320,7 +320,6 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
                 - "CGO_ENABLED=0"
-                - "GOMAXPROCS=16"
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - handlers only"
         agents:
@@ -357,7 +356,6 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-                - "GOMAXPROCS=16"
                 - "CGO_ENABLED=0"
         artifact_paths: ["coverage-handlers.out", "junit-handlers.xml"]
       - label: ":golang: go test - all except api"
@@ -395,7 +393,6 @@ steps:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-                - "GOMAXPROCS=16"
                 - "CGO_ENABLED=0"
         artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
       - label: ":auth0: fga model test"
