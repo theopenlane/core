@@ -56,6 +56,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
         key: "generate_config"
@@ -76,6 +77,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":construction: create draft config PR"
         key: "draft_pr_automation"
@@ -223,6 +225,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":golangci-lint: lint handlers package :lint-roller:"
         if_changed:
@@ -248,6 +251,7 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
+                - "CGO_ENABLED=0"
       - label: ":golangci-lint: lint - non-api packages :lint-roller:"
         if_changed:
           include:
@@ -275,6 +279,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
   - group: ":test_tube: Tests"
     key: "go_tests"
@@ -311,10 +316,11 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "CGO_ENABLED=0"
+                - "GOMAXPROCS=16"
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - handlers only"
         agents:
@@ -348,10 +354,11 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "GOMAXPROCS=16"
+                - "CGO_ENABLED=0"
         artifact_paths: ["coverage-handlers.out", "junit-handlers.xml"]
       - label: ":golang: go test - all except api"
         if_changed:
@@ -385,10 +392,11 @@ steps:
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "GOMAXPROCS=16"
+                - "CGO_ENABLED=0"
         artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
       - label: ":auth0: fga model test"
         if_changed:
@@ -492,7 +500,6 @@ steps:
         if_changed:
           include:
             - "**.go"
-            - go.{mod,sum}
           exclude:
             - cli/**
         cancel_on_build_failing: true
@@ -703,7 +710,6 @@ steps:
         if_changed:
           include:
             - "**.go"
-            - go.{mod,sum}
             - docker/Dockerfile
           exclude:
             - cli/**

@@ -454,7 +454,7 @@ tasks:
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI
     cmds:
-      - CGO_ENABLED=0 go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cli
+      - CGO_ENABLED=0 go build -tags cli -mod=readonly -o bin/openlane-cli ./cli
 
   go:all:
     aliases: [go]
