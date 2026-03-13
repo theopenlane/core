@@ -80,6 +80,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -194,6 +195,7 @@ type OrganizationQuery struct {
 	withTrustCenters                         *TrustCenterQuery
 	withAssets                               *AssetQuery
 	withScans                                *ScanQuery
+	withSLADefinitions                       *SLADefinitionQuery
 	withSubprocessors                        *SubprocessorQuery
 	withExports                              *ExportQuery
 	withTrustCenterWatermarkConfigs          *TrustCenterWatermarkConfigQuery
@@ -302,6 +304,7 @@ type OrganizationQuery struct {
 	withNamedTrustCenters                    map[string]*TrustCenterQuery
 	withNamedAssets                          map[string]*AssetQuery
 	withNamedScans                           map[string]*ScanQuery
+	withNamedSLADefinitions                  map[string]*SLADefinitionQuery
 	withNamedSubprocessors                   map[string]*SubprocessorQuery
 	withNamedExports                         map[string]*ExportQuery
 	withNamedTrustCenterWatermarkConfigs     map[string]*TrustCenterWatermarkConfigQuery
@@ -2439,6 +2442,31 @@ func (_q *OrganizationQuery) QueryScans() *ScanQuery {
 	return query
 }
 
+// QuerySLADefinitions chains the current query on the "sla_definitions" edge.
+func (_q *OrganizationQuery) QuerySLADefinitions() *SLADefinitionQuery {
+	query := (&SLADefinitionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(sladefinition.Table, sladefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SLADefinitionsTable, organization.SLADefinitionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.SLADefinition
+		step.Edge.Schema = schemaConfig.SLADefinition
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySubprocessors chains the current query on the "subprocessors" edge.
 func (_q *OrganizationQuery) QuerySubprocessors() *SubprocessorQuery {
 	query := (&SubprocessorClient{config: _q.config}).Query()
@@ -3364,6 +3392,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withTrustCenters:                    _q.withTrustCenters.Clone(),
 		withAssets:                          _q.withAssets.Clone(),
 		withScans:                           _q.withScans.Clone(),
+		withSLADefinitions:                  _q.withSLADefinitions.Clone(),
 		withSubprocessors:                   _q.withSubprocessors.Clone(),
 		withExports:                         _q.withExports.Clone(),
 		withTrustCenterWatermarkConfigs:     _q.withTrustCenterWatermarkConfigs.Clone(),
@@ -4310,6 +4339,17 @@ func (_q *OrganizationQuery) WithScans(opts ...func(*ScanQuery)) *OrganizationQu
 	return _q
 }
 
+// WithSLADefinitions tells the query-builder to eager-load the nodes that are connected to
+// the "sla_definitions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithSLADefinitions(opts ...func(*SLADefinitionQuery)) *OrganizationQuery {
+	query := (&SLADefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSLADefinitions = query
+	return _q
+}
+
 // WithSubprocessors tells the query-builder to eager-load the nodes that are connected to
 // the "subprocessors" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithSubprocessors(opts ...func(*SubprocessorQuery)) *OrganizationQuery {
@@ -4680,7 +4720,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [109]bool{
+		loadedTypes = [110]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4764,6 +4804,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withTrustCenters != nil,
 			_q.withAssets != nil,
 			_q.withScans != nil,
+			_q.withSLADefinitions != nil,
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
@@ -5432,6 +5473,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Scans = []*Scan{} },
 			func(n *Organization, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSLADefinitions; query != nil {
+		if err := _q.loadSLADefinitions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.SLADefinitions = []*SLADefinition{} },
+			func(n *Organization, e *SLADefinition) { n.Edges.SLADefinitions = append(n.Edges.SLADefinitions, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6200,6 +6248,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadScans(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedScans(name) },
 			func(n *Organization, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSLADefinitions {
+		if err := _q.loadSLADefinitions(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSLADefinitions(name) },
+			func(n *Organization, e *SLADefinition) { n.appendNamedSLADefinitions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -9054,6 +9109,36 @@ func (_q *OrganizationQuery) loadScans(ctx context.Context, query *ScanQuery, no
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadSLADefinitions(ctx context.Context, query *SLADefinitionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *SLADefinition)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(sladefinition.FieldOwnerID)
+	}
+	query.Where(predicate.SLADefinition(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SLADefinitionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadSubprocessors(ctx context.Context, query *SubprocessorQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Subprocessor)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -11067,6 +11152,20 @@ func (_q *OrganizationQuery) WithNamedScans(name string, opts ...func(*ScanQuery
 		_q.withNamedScans = make(map[string]*ScanQuery)
 	}
 	_q.withNamedScans[name] = query
+	return _q
+}
+
+// WithNamedSLADefinitions tells the query-builder to eager-load the nodes that are connected to the "sla_definitions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedSLADefinitions(name string, opts ...func(*SLADefinitionQuery)) *OrganizationQuery {
+	query := (&SLADefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSLADefinitions == nil {
+		_q.withNamedSLADefinitions = make(map[string]*SLADefinitionQuery)
+	}
+	_q.withNamedSLADefinitions[name] = query
 	return _q
 }
 

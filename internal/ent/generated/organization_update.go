@@ -79,6 +79,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -1576,6 +1577,21 @@ func (_u *OrganizationUpdate) AddScans(v ...*Scan) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddScanIDs(ids...)
+}
+
+// AddSLADefinitionIDs adds the "sla_definitions" edge to the SLADefinition entity by IDs.
+func (_u *OrganizationUpdate) AddSLADefinitionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddSLADefinitionIDs(ids...)
+	return _u
+}
+
+// AddSLADefinitions adds the "sla_definitions" edges to the SLADefinition entity.
+func (_u *OrganizationUpdate) AddSLADefinitions(v ...*SLADefinition) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSLADefinitionIDs(ids...)
 }
 
 // AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
@@ -3663,6 +3679,27 @@ func (_u *OrganizationUpdate) RemoveScans(v ...*Scan) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveScanIDs(ids...)
+}
+
+// ClearSLADefinitions clears all "sla_definitions" edges to the SLADefinition entity.
+func (_u *OrganizationUpdate) ClearSLADefinitions() *OrganizationUpdate {
+	_u.mutation.ClearSLADefinitions()
+	return _u
+}
+
+// RemoveSLADefinitionIDs removes the "sla_definitions" edge to SLADefinition entities by IDs.
+func (_u *OrganizationUpdate) RemoveSLADefinitionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveSLADefinitionIDs(ids...)
+	return _u
+}
+
+// RemoveSLADefinitions removes "sla_definitions" edges to SLADefinition entities.
+func (_u *OrganizationUpdate) RemoveSLADefinitions(v ...*SLADefinition) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSLADefinitionIDs(ids...)
 }
 
 // ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
@@ -8298,6 +8335,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SLADefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SLADefinition
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSLADefinitionsIDs(); len(nodes) > 0 && !_u.mutation.SLADefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SLADefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SLADefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SLADefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SubprocessorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -11032,6 +11117,21 @@ func (_u *OrganizationUpdateOne) AddScans(v ...*Scan) *OrganizationUpdateOne {
 	return _u.AddScanIDs(ids...)
 }
 
+// AddSLADefinitionIDs adds the "sla_definitions" edge to the SLADefinition entity by IDs.
+func (_u *OrganizationUpdateOne) AddSLADefinitionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddSLADefinitionIDs(ids...)
+	return _u
+}
+
+// AddSLADefinitions adds the "sla_definitions" edges to the SLADefinition entity.
+func (_u *OrganizationUpdateOne) AddSLADefinitions(v ...*SLADefinition) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSLADefinitionIDs(ids...)
+}
+
 // AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
 func (_u *OrganizationUpdateOne) AddSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddSubprocessorIDs(ids...)
@@ -13117,6 +13217,27 @@ func (_u *OrganizationUpdateOne) RemoveScans(v ...*Scan) *OrganizationUpdateOne 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveScanIDs(ids...)
+}
+
+// ClearSLADefinitions clears all "sla_definitions" edges to the SLADefinition entity.
+func (_u *OrganizationUpdateOne) ClearSLADefinitions() *OrganizationUpdateOne {
+	_u.mutation.ClearSLADefinitions()
+	return _u
+}
+
+// RemoveSLADefinitionIDs removes the "sla_definitions" edge to SLADefinition entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveSLADefinitionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveSLADefinitionIDs(ids...)
+	return _u
+}
+
+// RemoveSLADefinitions removes "sla_definitions" edges to SLADefinition entities.
+func (_u *OrganizationUpdateOne) RemoveSLADefinitions(v ...*SLADefinition) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSLADefinitionIDs(ids...)
 }
 
 // ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
@@ -17777,6 +17898,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SLADefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SLADefinition
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSLADefinitionsIDs(); len(nodes) > 0 && !_u.mutation.SLADefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SLADefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SLADefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SLADefinitionsTable,
+			Columns: []string{organization.SLADefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

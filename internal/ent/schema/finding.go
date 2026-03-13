@@ -157,8 +157,8 @@ func (Finding) Fields() []ent.Field {
 		field.Int("remediation_sla").
 			Comment("remediation service level agreement in days").
 			Optional(),
-		field.String("status").
-			Comment("lifecycle status of the finding").
+		field.String("status_description").
+			Comment("description of the lifecycle status of the finding").
 			Optional(),
 		field.Time("event_time").
 			Comment("timestamp when the finding was last observed by the source").
@@ -270,6 +270,8 @@ func (f Finding) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
+			newCustomEnumMixin(f, withEnumFieldName("severity_level")),
+			newCustomEnumMixin(f, withEnumFieldName("status"), withAutoCreate()),
 		},
 	}.getMixins(f)
 }

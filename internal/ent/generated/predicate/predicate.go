@@ -222,6 +222,9 @@ type Review func(*sql.Selector)
 // Risk is the predicate function for risk builders.
 type Risk func(*sql.Selector)
 
+// SLADefinition is the predicate function for sladefinition builders.
+type SLADefinition func(*sql.Selector)
+
 // Scan is the predicate function for scan builders.
 type Scan func(*sql.Selector)
 

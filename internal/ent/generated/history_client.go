@@ -160,6 +160,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*RiskMutation]() {
 		c.Risk.Use(hook)
 	}
+	for _, hook := range history.Hooks[*SLADefinitionMutation]() {
+		c.SLADefinition.Use(hook)
+	}
 	for _, hook := range history.Hooks[*ScanMutation]() {
 		c.Scan.Use(hook)
 	}

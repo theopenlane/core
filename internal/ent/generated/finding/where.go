@@ -143,6 +143,26 @@ func ScopeID(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldScopeID, v))
 }
 
+// FindingSeverityLevelName applies equality check predicate on the "finding_severity_level_name" field. It's identical to FindingSeverityLevelNameEQ.
+func FindingSeverityLevelName(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelID applies equality check predicate on the "finding_severity_level_id" field. It's identical to FindingSeverityLevelIDEQ.
+func FindingSeverityLevelID(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelID, v))
+}
+
+// FindingStatusName applies equality check predicate on the "finding_status_name" field. It's identical to FindingStatusNameEQ.
+func FindingStatusName(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusID applies equality check predicate on the "finding_status_id" field. It's identical to FindingStatusIDEQ.
+func FindingStatusID(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingStatusID, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldExternalID, v))
@@ -268,9 +288,9 @@ func RemediationSLA(v int) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldRemediationSLA, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldStatus, v))
+// StatusDescription applies equality check predicate on the "status_description" field. It's identical to StatusDescriptionEQ.
+func StatusDescription(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldStatusDescription, v))
 }
 
 // EventTime applies equality check predicate on the "event_time" field. It's identical to EventTimeEQ.
@@ -1286,6 +1306,306 @@ func ScopeIDEqualFold(v string) predicate.Finding {
 // ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
 func ScopeIDContainsFold(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// FindingSeverityLevelNameEQ applies the EQ predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameNEQ applies the NEQ predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameIn applies the In predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldFindingSeverityLevelName, vs...))
+}
+
+// FindingSeverityLevelNameNotIn applies the NotIn predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldFindingSeverityLevelName, vs...))
+}
+
+// FindingSeverityLevelNameGT applies the GT predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameGTE applies the GTE predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameLT applies the LT predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameLTE applies the LTE predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameContains applies the Contains predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameHasPrefix applies the HasPrefix predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameHasSuffix applies the HasSuffix predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameIsNil applies the IsNil predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldFindingSeverityLevelName))
+}
+
+// FindingSeverityLevelNameNotNil applies the NotNil predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldFindingSeverityLevelName))
+}
+
+// FindingSeverityLevelNameEqualFold applies the EqualFold predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelNameContainsFold applies the ContainsFold predicate on the "finding_severity_level_name" field.
+func FindingSeverityLevelNameContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldFindingSeverityLevelName, v))
+}
+
+// FindingSeverityLevelIDEQ applies the EQ predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDNEQ applies the NEQ predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDIn applies the In predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldFindingSeverityLevelID, vs...))
+}
+
+// FindingSeverityLevelIDNotIn applies the NotIn predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldFindingSeverityLevelID, vs...))
+}
+
+// FindingSeverityLevelIDGT applies the GT predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDGTE applies the GTE predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDLT applies the LT predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDLTE applies the LTE predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDContains applies the Contains predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDHasPrefix applies the HasPrefix predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDHasSuffix applies the HasSuffix predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDIsNil applies the IsNil predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldFindingSeverityLevelID))
+}
+
+// FindingSeverityLevelIDNotNil applies the NotNil predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldFindingSeverityLevelID))
+}
+
+// FindingSeverityLevelIDEqualFold applies the EqualFold predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldFindingSeverityLevelID, v))
+}
+
+// FindingSeverityLevelIDContainsFold applies the ContainsFold predicate on the "finding_severity_level_id" field.
+func FindingSeverityLevelIDContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldFindingSeverityLevelID, v))
+}
+
+// FindingStatusNameEQ applies the EQ predicate on the "finding_status_name" field.
+func FindingStatusNameEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameNEQ applies the NEQ predicate on the "finding_status_name" field.
+func FindingStatusNameNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameIn applies the In predicate on the "finding_status_name" field.
+func FindingStatusNameIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldFindingStatusName, vs...))
+}
+
+// FindingStatusNameNotIn applies the NotIn predicate on the "finding_status_name" field.
+func FindingStatusNameNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldFindingStatusName, vs...))
+}
+
+// FindingStatusNameGT applies the GT predicate on the "finding_status_name" field.
+func FindingStatusNameGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameGTE applies the GTE predicate on the "finding_status_name" field.
+func FindingStatusNameGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameLT applies the LT predicate on the "finding_status_name" field.
+func FindingStatusNameLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameLTE applies the LTE predicate on the "finding_status_name" field.
+func FindingStatusNameLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameContains applies the Contains predicate on the "finding_status_name" field.
+func FindingStatusNameContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameHasPrefix applies the HasPrefix predicate on the "finding_status_name" field.
+func FindingStatusNameHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameHasSuffix applies the HasSuffix predicate on the "finding_status_name" field.
+func FindingStatusNameHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameIsNil applies the IsNil predicate on the "finding_status_name" field.
+func FindingStatusNameIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldFindingStatusName))
+}
+
+// FindingStatusNameNotNil applies the NotNil predicate on the "finding_status_name" field.
+func FindingStatusNameNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldFindingStatusName))
+}
+
+// FindingStatusNameEqualFold applies the EqualFold predicate on the "finding_status_name" field.
+func FindingStatusNameEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldFindingStatusName, v))
+}
+
+// FindingStatusNameContainsFold applies the ContainsFold predicate on the "finding_status_name" field.
+func FindingStatusNameContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldFindingStatusName, v))
+}
+
+// FindingStatusIDEQ applies the EQ predicate on the "finding_status_id" field.
+func FindingStatusIDEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDNEQ applies the NEQ predicate on the "finding_status_id" field.
+func FindingStatusIDNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDIn applies the In predicate on the "finding_status_id" field.
+func FindingStatusIDIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldFindingStatusID, vs...))
+}
+
+// FindingStatusIDNotIn applies the NotIn predicate on the "finding_status_id" field.
+func FindingStatusIDNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldFindingStatusID, vs...))
+}
+
+// FindingStatusIDGT applies the GT predicate on the "finding_status_id" field.
+func FindingStatusIDGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDGTE applies the GTE predicate on the "finding_status_id" field.
+func FindingStatusIDGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDLT applies the LT predicate on the "finding_status_id" field.
+func FindingStatusIDLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDLTE applies the LTE predicate on the "finding_status_id" field.
+func FindingStatusIDLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDContains applies the Contains predicate on the "finding_status_id" field.
+func FindingStatusIDContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDHasPrefix applies the HasPrefix predicate on the "finding_status_id" field.
+func FindingStatusIDHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDHasSuffix applies the HasSuffix predicate on the "finding_status_id" field.
+func FindingStatusIDHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDIsNil applies the IsNil predicate on the "finding_status_id" field.
+func FindingStatusIDIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldFindingStatusID))
+}
+
+// FindingStatusIDNotNil applies the NotNil predicate on the "finding_status_id" field.
+func FindingStatusIDNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldFindingStatusID))
+}
+
+// FindingStatusIDEqualFold applies the EqualFold predicate on the "finding_status_id" field.
+func FindingStatusIDEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldFindingStatusID, v))
+}
+
+// FindingStatusIDContainsFold applies the ContainsFold predicate on the "finding_status_id" field.
+func FindingStatusIDContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldFindingStatusID, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
@@ -2813,79 +3133,79 @@ func RemediationSLANotNil() predicate.Finding {
 	return predicate.Finding(sql.FieldNotNull(FieldRemediationSLA))
 }
 
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldStatus, v))
+// StatusDescriptionEQ applies the EQ predicate on the "status_description" field.
+func StatusDescriptionEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEQ(FieldStatusDescription, v))
 }
 
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldNEQ(FieldStatus, v))
+// StatusDescriptionNEQ applies the NEQ predicate on the "status_description" field.
+func StatusDescriptionNEQ(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldNEQ(FieldStatusDescription, v))
 }
 
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldIn(FieldStatus, vs...))
+// StatusDescriptionIn applies the In predicate on the "status_description" field.
+func StatusDescriptionIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldIn(FieldStatusDescription, vs...))
 }
 
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldNotIn(FieldStatus, vs...))
+// StatusDescriptionNotIn applies the NotIn predicate on the "status_description" field.
+func StatusDescriptionNotIn(vs ...string) predicate.Finding {
+	return predicate.Finding(sql.FieldNotIn(FieldStatusDescription, vs...))
 }
 
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGT(FieldStatus, v))
+// StatusDescriptionGT applies the GT predicate on the "status_description" field.
+func StatusDescriptionGT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGT(FieldStatusDescription, v))
 }
 
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGTE(FieldStatus, v))
+// StatusDescriptionGTE applies the GTE predicate on the "status_description" field.
+func StatusDescriptionGTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldGTE(FieldStatusDescription, v))
 }
 
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLT(FieldStatus, v))
+// StatusDescriptionLT applies the LT predicate on the "status_description" field.
+func StatusDescriptionLT(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLT(FieldStatusDescription, v))
 }
 
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLTE(FieldStatus, v))
+// StatusDescriptionLTE applies the LTE predicate on the "status_description" field.
+func StatusDescriptionLTE(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldLTE(FieldStatusDescription, v))
 }
 
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContains(FieldStatus, v))
+// StatusDescriptionContains applies the Contains predicate on the "status_description" field.
+func StatusDescriptionContains(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContains(FieldStatusDescription, v))
 }
 
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasPrefix(FieldStatus, v))
+// StatusDescriptionHasPrefix applies the HasPrefix predicate on the "status_description" field.
+func StatusDescriptionHasPrefix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasPrefix(FieldStatusDescription, v))
 }
 
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasSuffix(FieldStatus, v))
+// StatusDescriptionHasSuffix applies the HasSuffix predicate on the "status_description" field.
+func StatusDescriptionHasSuffix(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldHasSuffix(FieldStatusDescription, v))
 }
 
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.Finding {
-	return predicate.Finding(sql.FieldIsNull(FieldStatus))
+// StatusDescriptionIsNil applies the IsNil predicate on the "status_description" field.
+func StatusDescriptionIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldStatusDescription))
 }
 
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.Finding {
-	return predicate.Finding(sql.FieldNotNull(FieldStatus))
+// StatusDescriptionNotNil applies the NotNil predicate on the "status_description" field.
+func StatusDescriptionNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldStatusDescription))
 }
 
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEqualFold(FieldStatus, v))
+// StatusDescriptionEqualFold applies the EqualFold predicate on the "status_description" field.
+func StatusDescriptionEqualFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldEqualFold(FieldStatusDescription, v))
 }
 
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContainsFold(FieldStatus, v))
+// StatusDescriptionContainsFold applies the ContainsFold predicate on the "status_description" field.
+func StatusDescriptionContainsFold(v string) predicate.Finding {
+	return predicate.Finding(sql.FieldContainsFold(FieldStatusDescription, v))
 }
 
 // EventTimeEQ applies the EQ predicate on the "event_time" field.
@@ -3296,6 +3616,64 @@ func HasScope() predicate.Finding {
 func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.Finding {
 	return predicate.Finding(func(s *sql.Selector) {
 		step := newScopeStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindingSeverityLevel applies the HasEdge predicate on the "finding_severity_level" edge.
+func HasFindingSeverityLevel() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FindingSeverityLevelTable, FindingSeverityLevelColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingSeverityLevelWith applies the HasEdge predicate on the "finding_severity_level" edge with a given conditions (other predicates).
+func HasFindingSeverityLevelWith(preds ...predicate.CustomTypeEnum) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newFindingSeverityLevelStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindingStatus applies the HasEdge predicate on the "finding_status" edge.
+func HasFindingStatus() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FindingStatusTable, FindingStatusColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingStatusWith applies the HasEdge predicate on the "finding_status" edge with a given conditions (other predicates).
+func HasFindingStatusWith(preds ...predicate.CustomTypeEnum) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newFindingStatusStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Finding

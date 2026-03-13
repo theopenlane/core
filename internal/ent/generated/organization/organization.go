@@ -215,6 +215,8 @@ const (
 	EdgeAssets = "assets"
 	// EdgeScans holds the string denoting the scans edge name in mutations.
 	EdgeScans = "scans"
+	// EdgeSLADefinitions holds the string denoting the sla_definitions edge name in mutations.
+	EdgeSLADefinitions = "sla_definitions"
 	// EdgeSubprocessors holds the string denoting the subprocessors edge name in mutations.
 	EdgeSubprocessors = "subprocessors"
 	// EdgeExports holds the string denoting the exports edge name in mutations.
@@ -836,6 +838,13 @@ const (
 	ScansInverseTable = "scans"
 	// ScansColumn is the table column denoting the scans relation/edge.
 	ScansColumn = "owner_id"
+	// SLADefinitionsTable is the table that holds the sla_definitions relation/edge.
+	SLADefinitionsTable = "sla_definitions"
+	// SLADefinitionsInverseTable is the table name for the SLADefinition entity.
+	// It exists in this package in order to avoid circular dependency with the "sladefinition" package.
+	SLADefinitionsInverseTable = "sla_definitions"
+	// SLADefinitionsColumn is the table column denoting the sla_definitions relation/edge.
+	SLADefinitionsColumn = "owner_id"
 	// SubprocessorsTable is the table that holds the subprocessors relation/edge.
 	SubprocessorsTable = "subprocessors"
 	// SubprocessorsInverseTable is the table name for the Subprocessor entity.
@@ -2333,6 +2342,20 @@ func ByScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySLADefinitionsCount orders the results by sla_definitions count.
+func BySLADefinitionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSLADefinitionsStep(), opts...)
+	}
+}
+
+// BySLADefinitions orders the results by sla_definitions terms.
+func BySLADefinitions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSLADefinitionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // BySubprocessorsCount orders the results by subprocessors count.
 func BySubprocessorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3275,6 +3298,13 @@ func newScansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+	)
+}
+func newSLADefinitionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SLADefinitionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SLADefinitionsTable, SLADefinitionsColumn),
 	)
 }
 func newSubprocessorsStep() *sqlgraph.Step {

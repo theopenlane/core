@@ -90,12 +90,16 @@ const (
 	IntegrationMappingVulnerabilitySeverity = "severity"
 	IntegrationMappingVulnerabilitySource = "source"
 	IntegrationMappingVulnerabilitySourceUpdatedAt = "sourceUpdatedAt"
-	IntegrationMappingVulnerabilityStatus = "status"
+	IntegrationMappingVulnerabilityStatusDescription = "statusDescription"
 	IntegrationMappingVulnerabilitySummary = "summary"
 	IntegrationMappingVulnerabilitySystemInternalID = "systemInternalID"
 	IntegrationMappingVulnerabilityTags = "tags"
 	IntegrationMappingVulnerabilityValidated = "validated"
 	IntegrationMappingVulnerabilityVector = "vector"
+	IntegrationMappingVulnerabilityVulnerabilitySeverityLevelID = "vulnerabilitySeverityLevelID"
+	IntegrationMappingVulnerabilityVulnerabilitySeverityLevelName = "vulnerabilitySeverityLevelName"
+	IntegrationMappingVulnerabilityVulnerabilityStatusID = "vulnerabilityStatusID"
+	IntegrationMappingVulnerabilityVulnerabilityStatusName = "vulnerabilityStatusName"
 )
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata.
@@ -572,8 +576,8 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				UpsertKey: false,
 			},
 			{
-				InputKey: "status",
-				EntField: "status",
+				InputKey: "statusDescription",
+				EntField: "status_description",
 				Type: "string",
 				Required: false,
 				UpsertKey: false,
@@ -613,6 +617,34 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				Required: false,
 				UpsertKey: false,
 			},
+			{
+				InputKey: "vulnerabilitySeverityLevelID",
+				EntField: "vulnerability_severity_level_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "vulnerabilitySeverityLevelName",
+				EntField: "vulnerability_severity_level_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "vulnerabilityStatusID",
+				EntField: "vulnerability_status_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
+				InputKey: "vulnerabilityStatusName",
+				EntField: "vulnerability_status_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
 		},
 		AllowedKeys: map[string]struct{}{
 			"blocking": {},
@@ -645,12 +677,16 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"severity": {},
 			"source": {},
 			"sourceUpdatedAt": {},
-			"status": {},
+			"statusDescription": {},
 			"summary": {},
 			"systemInternalID": {},
 			"tags": {},
 			"validated": {},
 			"vector": {},
+			"vulnerabilitySeverityLevelID": {},
+			"vulnerabilitySeverityLevelName": {},
+			"vulnerabilityStatusID": {},
+			"vulnerabilityStatusName": {},
 		},
 		RequiredKeys: []string{
 			"externalID",

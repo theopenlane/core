@@ -135,6 +135,8 @@ type CustomEnumFilter struct {
 	SchemaFieldName string
 	// AllowGlobal indicates the enum lookup should use global enums with an empty object type
 	AllowGlobal bool
+	// AutoCreate enables auto-creation of enum values that don't exist yet
+	AutoCreate bool
 }
 
 // HookCustomEnums ensures that a custom enum value exists for the given object type and field
@@ -185,12 +187,18 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 				enum, err = lookupEnum(in.ObjectType)
 			}
 			if err != nil {
-				// if the enum does not exist, return a custom error
 				if generated.IsNotFound(err) {
-					return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+					if in.AutoCreate {
+						enum, err = autoCreateCustomEnum(ctx, client, in.ObjectType, in.Field, enumValue)
+						if err != nil {
+							return nil, fmt.Errorf("failed to auto-create enum value %s: %w", enumValue, err)
+						}
+					} else {
+						return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+					}
+				} else {
+					return nil, err
 				}
-
-				return nil, err
 			}
 
 			// set the edge field on the mutation to the enum ID
@@ -201,6 +209,15 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
+}
+
+// autoCreateCustomEnum creates a new custom enum value when auto-create is enabled
+func autoCreateCustomEnum(ctx context.Context, client *generated.Client, objectType, field, value string) (*generated.CustomTypeEnum, error) {
+	return client.CustomTypeEnum.Create().
+		SetObjectType(objectType).
+		SetField(field).
+		SetName(value).
+		Save(ctx)
 }
 
 // HookCustomTypeEnumDelete checks if the enum(s) being deleted is in use by any other object.
