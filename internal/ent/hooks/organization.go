@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -365,6 +366,13 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		}
 	}
 
+	// create default SLA definitions
+	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating default SLA definitions")
+
+		return ctx, err
+	}
+
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
 		ctx, err = auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
@@ -374,6 +382,40 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	}
 
 	return ctx, nil
+}
+
+// defaultSLADefinitions maps severity levels to their default SLA days
+var defaultSLADefinitions = map[string]int{
+	"CRITICAL": 7,
+	"HIGH":     14,
+	"MEDIUM":   30,
+	"LOW":      60,
+}
+
+// createDefaultSLADefinitions creates the default SLA definitions for a new org
+func createDefaultSLADefinitions(ctx context.Context, orgID string, client *generated.Client) error {
+	existing, err := client.SLADefinition.Query().
+		Where(sladefinition.OwnerID(orgID)).
+		Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	if existing {
+		return nil
+	}
+
+	builders := make([]*generated.SLADefinitionCreate, 0, len(defaultSLADefinitions))
+
+	for level, days := range defaultSLADefinitions {
+		builders = append(builders, client.SLADefinition.Create().
+			SetOwnerID(orgID).
+			SetSLADefinitionSeverityLevelName(level).
+			SetSLADays(days),
+		)
+	}
+
+	return client.SLADefinition.CreateBulk(builders...).Exec(ctx)
 }
 
 // validateOrgDeletion ensures the organization can be deleted
