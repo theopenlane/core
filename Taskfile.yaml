@@ -441,7 +441,7 @@ tasks:
   go:build:ci:
     desc: Runs go build for the core server
     cmds:
-      - CGO_ENABLED=0 go build -mod=readonly -a -o bin/core
+      - CGO_ENABLED=0 go build -mod=readonly -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
