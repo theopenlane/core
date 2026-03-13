@@ -581,6 +581,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
                 - GOFLAGS="-buildvcs=false -gcflags=all=-l"
@@ -624,6 +625,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
+                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
               command: ["task", "go:build-cli:ci"]
