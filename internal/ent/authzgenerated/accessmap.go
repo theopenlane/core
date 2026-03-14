@@ -936,6 +936,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "notification_template",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "files": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "email_verification_token": {"owner": {
 	ObjectType:      "owner",

@@ -142,6 +142,20 @@ func (_c *NotificationTemplateHistoryCreate) SetNillableDeletedBy(v *string) *No
 	return _c
 }
 
+// SetRevision sets the "revision" field.
+func (_c *NotificationTemplateHistoryCreate) SetRevision(v string) *NotificationTemplateHistoryCreate {
+	_c.mutation.SetRevision(v)
+	return _c
+}
+
+// SetNillableRevision sets the "revision" field if the given value is not nil.
+func (_c *NotificationTemplateHistoryCreate) SetNillableRevision(v *string) *NotificationTemplateHistoryCreate {
+	if v != nil {
+		_c.SetRevision(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *NotificationTemplateHistoryCreate) SetOwnerID(v string) *NotificationTemplateHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -400,6 +414,26 @@ func (_c *NotificationTemplateHistoryCreate) SetNillableVersion(v *int) *Notific
 	return _c
 }
 
+// SetTemplateContext sets the "template_context" field.
+func (_c *NotificationTemplateHistoryCreate) SetTemplateContext(v enums.TemplateContext) *NotificationTemplateHistoryCreate {
+	_c.mutation.SetTemplateContext(v)
+	return _c
+}
+
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_c *NotificationTemplateHistoryCreate) SetNillableTemplateContext(v *enums.TemplateContext) *NotificationTemplateHistoryCreate {
+	if v != nil {
+		_c.SetTemplateContext(*v)
+	}
+	return _c
+}
+
+// SetDefaults sets the "defaults" field.
+func (_c *NotificationTemplateHistoryCreate) SetDefaults(v map[string]interface{}) *NotificationTemplateHistoryCreate {
+	_c.mutation.SetDefaults(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NotificationTemplateHistoryCreate) SetID(v string) *NotificationTemplateHistoryCreate {
 	_c.mutation.SetID(v)
@@ -471,6 +505,10 @@ func (_c *NotificationTemplateHistoryCreate) defaults() error {
 		}
 		v := notificationtemplatehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := _c.mutation.Revision(); !ok {
+		v := notificationtemplatehistory.DefaultRevision
+		_c.mutation.SetRevision(v)
 	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := notificationtemplatehistory.DefaultSystemOwned
@@ -549,6 +587,11 @@ func (_c *NotificationTemplateHistoryCreate) check() error {
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`historygenerated: missing required field "NotificationTemplateHistory.version"`)}
 	}
+	if v, ok := _c.mutation.TemplateContext(); ok {
+		if err := notificationtemplatehistory.TemplateContextValidator(v); err != nil {
+			return &ValidationError{Name: "template_context", err: fmt.Errorf(`historygenerated: validator failed for field "NotificationTemplateHistory.template_context": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -620,6 +663,10 @@ func (_c *NotificationTemplateHistoryCreate) createSpec() (*NotificationTemplate
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(notificationtemplatehistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := _c.mutation.Revision(); ok {
+		_spec.SetField(notificationtemplatehistory.FieldRevision, field.TypeString, value)
+		_node.Revision = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(notificationtemplatehistory.FieldOwnerID, field.TypeString, value)
@@ -712,6 +759,14 @@ func (_c *NotificationTemplateHistoryCreate) createSpec() (*NotificationTemplate
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(notificationtemplatehistory.FieldVersion, field.TypeInt, value)
 		_node.Version = value
+	}
+	if value, ok := _c.mutation.TemplateContext(); ok {
+		_spec.SetField(notificationtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
+		_node.TemplateContext = value
+	}
+	if value, ok := _c.mutation.Defaults(); ok {
+		_spec.SetField(notificationtemplatehistory.FieldDefaults, field.TypeJSON, value)
+		_node.Defaults = value
 	}
 	return _node, _spec
 }

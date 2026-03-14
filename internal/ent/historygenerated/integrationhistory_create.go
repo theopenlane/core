@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
@@ -371,6 +372,82 @@ func (_c *IntegrationHistoryCreate) SetMetadata(v map[string]interface{}) *Integ
 	return _c
 }
 
+// SetDefinitionID sets the "definition_id" field.
+func (_c *IntegrationHistoryCreate) SetDefinitionID(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetDefinitionID(v)
+	return _c
+}
+
+// SetNillableDefinitionID sets the "definition_id" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableDefinitionID(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetDefinitionVersion sets the "definition_version" field.
+func (_c *IntegrationHistoryCreate) SetDefinitionVersion(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableDefinitionVersion sets the "definition_version" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableDefinitionVersion(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetDefinitionSlug sets the "definition_slug" field.
+func (_c *IntegrationHistoryCreate) SetDefinitionSlug(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetDefinitionSlug(v)
+	return _c
+}
+
+// SetNillableDefinitionSlug sets the "definition_slug" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableDefinitionSlug(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetDefinitionSlug(*v)
+	}
+	return _c
+}
+
+// SetFamily sets the "family" field.
+func (_c *IntegrationHistoryCreate) SetFamily(v string) *IntegrationHistoryCreate {
+	_c.mutation.SetFamily(v)
+	return _c
+}
+
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableFamily(v *string) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetFamily(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *IntegrationHistoryCreate) SetStatus(v enums.IntegrationStatus) *IntegrationHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableStatus(v *enums.IntegrationStatus) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
+func (_c *IntegrationHistoryCreate) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationHistoryCreate {
+	_c.mutation.SetProviderMetadataSnapshot(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationHistoryCreate) SetID(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -451,6 +528,10 @@ func (_c *IntegrationHistoryCreate) defaults() error {
 		v := integrationhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := integrationhistory.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integrationhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized integrationhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -476,6 +557,14 @@ func (_c *IntegrationHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`historygenerated: missing required field "IntegrationHistory.name"`)}
+	}
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`historygenerated: missing required field "IntegrationHistory.status"`)}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := integrationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "IntegrationHistory.status": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -620,6 +709,30 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integrationhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.DefinitionID(); ok {
+		_spec.SetField(integrationhistory.FieldDefinitionID, field.TypeString, value)
+		_node.DefinitionID = value
+	}
+	if value, ok := _c.mutation.DefinitionVersion(); ok {
+		_spec.SetField(integrationhistory.FieldDefinitionVersion, field.TypeString, value)
+		_node.DefinitionVersion = value
+	}
+	if value, ok := _c.mutation.DefinitionSlug(); ok {
+		_spec.SetField(integrationhistory.FieldDefinitionSlug, field.TypeString, value)
+		_node.DefinitionSlug = value
+	}
+	if value, ok := _c.mutation.Family(); ok {
+		_spec.SetField(integrationhistory.FieldFamily, field.TypeString, value)
+		_node.Family = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(integrationhistory.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
+	}
+	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
+		_spec.SetField(integrationhistory.FieldProviderMetadataSnapshot, field.TypeJSON, value)
+		_node.ProviderMetadataSnapshot = value
 	}
 	return _node, _spec
 }

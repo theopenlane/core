@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
@@ -352,6 +353,82 @@ func (_c *IntegrationCreate) SetNillableProviderState(v *state.IntegrationProvid
 // SetMetadata sets the "metadata" field.
 func (_c *IntegrationCreate) SetMetadata(v map[string]interface{}) *IntegrationCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetDefinitionID sets the "definition_id" field.
+func (_c *IntegrationCreate) SetDefinitionID(v string) *IntegrationCreate {
+	_c.mutation.SetDefinitionID(v)
+	return _c
+}
+
+// SetNillableDefinitionID sets the "definition_id" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableDefinitionID(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetDefinitionVersion sets the "definition_version" field.
+func (_c *IntegrationCreate) SetDefinitionVersion(v string) *IntegrationCreate {
+	_c.mutation.SetDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableDefinitionVersion sets the "definition_version" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableDefinitionVersion(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetDefinitionSlug sets the "definition_slug" field.
+func (_c *IntegrationCreate) SetDefinitionSlug(v string) *IntegrationCreate {
+	_c.mutation.SetDefinitionSlug(v)
+	return _c
+}
+
+// SetNillableDefinitionSlug sets the "definition_slug" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableDefinitionSlug(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetDefinitionSlug(*v)
+	}
+	return _c
+}
+
+// SetFamily sets the "family" field.
+func (_c *IntegrationCreate) SetFamily(v string) *IntegrationCreate {
+	_c.mutation.SetFamily(v)
+	return _c
+}
+
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableFamily(v *string) *IntegrationCreate {
+	if v != nil {
+		_c.SetFamily(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *IntegrationCreate) SetStatus(v enums.IntegrationStatus) *IntegrationCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableStatus(v *enums.IntegrationStatus) *IntegrationCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
+func (_c *IntegrationCreate) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationCreate {
+	_c.mutation.SetProviderMetadataSnapshot(v)
 	return _c
 }
 
@@ -718,6 +795,10 @@ func (_c *IntegrationCreate) defaults() error {
 		v := integration.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := integration.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integration.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultID (forgotten import generated/runtime?)")
@@ -741,6 +822,14 @@ func (_c *IntegrationCreate) check() error {
 	if v, ok := _c.mutation.PlatformID(); ok {
 		if err := integration.PlatformIDValidator(v); err != nil {
 			return &ValidationError{Name: "platform_id", err: fmt.Errorf(`generated: validator failed for field "Integration.platform_id": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Status(); !ok {
+		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "Integration.status"`)}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := integration.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Integration.status": %w`, err)}
 		}
 	}
 	return nil
@@ -858,6 +947,30 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.DefinitionID(); ok {
+		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
+		_node.DefinitionID = value
+	}
+	if value, ok := _c.mutation.DefinitionVersion(); ok {
+		_spec.SetField(integration.FieldDefinitionVersion, field.TypeString, value)
+		_node.DefinitionVersion = value
+	}
+	if value, ok := _c.mutation.DefinitionSlug(); ok {
+		_spec.SetField(integration.FieldDefinitionSlug, field.TypeString, value)
+		_node.DefinitionSlug = value
+	}
+	if value, ok := _c.mutation.Family(); ok {
+		_spec.SetField(integration.FieldFamily, field.TypeString, value)
+		_node.Family = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
+	}
+	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
+		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
+		_node.ProviderMetadataSnapshot = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -41,10 +42,12 @@ type EmailTemplateQuery struct {
 	withWorkflowInstance           *WorkflowInstanceQuery
 	withCampaigns                  *CampaignQuery
 	withNotificationTemplates      *NotificationTemplateQuery
+	withFiles                      *FileQuery
 	loadTotal                      []func(context.Context, []*EmailTemplate) error
 	modifiers                      []func(*sql.Selector)
 	withNamedCampaigns             map[string]*CampaignQuery
 	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
+	withNamedFiles                 map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,6 +259,31 @@ func (_q *EmailTemplateQuery) QueryNotificationTemplates() *NotificationTemplate
 	return query
 }
 
+// QueryFiles chains the current query on the "files" edge.
+func (_q *EmailTemplateQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.FilesTable, emailtemplate.FilesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first EmailTemplate entity from the query.
 // Returns a *NotFoundError when no EmailTemplate was found.
 func (_q *EmailTemplateQuery) First(ctx context.Context) (*EmailTemplate, error) {
@@ -455,6 +483,7 @@ func (_q *EmailTemplateQuery) Clone() *EmailTemplateQuery {
 		withWorkflowInstance:      _q.withWorkflowInstance.Clone(),
 		withCampaigns:             _q.withCampaigns.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
+		withFiles:                 _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -536,6 +565,17 @@ func (_q *EmailTemplateQuery) WithNotificationTemplates(opts ...func(*Notificati
 		opt(query)
 	}
 	_q.withNotificationTemplates = query
+	return _q
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailTemplateQuery) WithFiles(opts ...func(*FileQuery)) *EmailTemplateQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFiles = query
 	return _q
 }
 
@@ -623,7 +663,7 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*EmailTemplate{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withOwner != nil,
 			_q.withEmailBranding != nil,
 			_q.withIntegration != nil,
@@ -631,6 +671,7 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			_q.withWorkflowInstance != nil,
 			_q.withCampaigns != nil,
 			_q.withNotificationTemplates != nil,
+			_q.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -702,6 +743,13 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			return nil, err
 		}
 	}
+	if query := _q.withFiles; query != nil {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *EmailTemplate) { n.Edges.Files = []*File{} },
+			func(n *EmailTemplate, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedCampaigns {
 		if err := _q.loadCampaigns(ctx, query, nodes,
 			func(n *EmailTemplate) { n.appendNamedCampaigns(name) },
@@ -713,6 +761,13 @@ func (_q *EmailTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		if err := _q.loadNotificationTemplates(ctx, query, nodes,
 			func(n *EmailTemplate) { n.appendNamedNotificationTemplates(name) },
 			func(n *EmailTemplate, e *NotificationTemplate) { n.appendNamedNotificationTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFiles {
+		if err := _q.loadFiles(ctx, query, nodes,
+			func(n *EmailTemplate) { n.appendNamedFiles(name) },
+			func(n *EmailTemplate, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -929,6 +984,37 @@ func (_q *EmailTemplateQuery) loadNotificationTemplates(ctx context.Context, que
 	}
 	return nil
 }
+func (_q *EmailTemplateQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*EmailTemplate, init func(*EmailTemplate), assign func(*EmailTemplate, *File)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*EmailTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.File(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(emailtemplate.FilesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.email_template_files
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "email_template_files" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "email_template_files" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *EmailTemplateQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1068,6 +1154,20 @@ func (_q *EmailTemplateQuery) WithNamedNotificationTemplates(name string, opts .
 		_q.withNamedNotificationTemplates = make(map[string]*NotificationTemplateQuery)
 	}
 	_q.withNamedNotificationTemplates[name] = query
+	return _q
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EmailTemplateQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *EmailTemplateQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFiles == nil {
+		_q.withNamedFiles = make(map[string]*FileQuery)
+	}
+	_q.withNamedFiles[name] = query
 	return _q
 }
 

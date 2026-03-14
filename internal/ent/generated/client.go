@@ -8538,6 +8538,25 @@ func (c *EmailTemplateClient) QueryNotificationTemplates(_m *EmailTemplate) *Not
 	return query
 }
 
+// QueryFiles queries the files edge of a EmailTemplate.
+func (c *EmailTemplateClient) QueryFiles(_m *EmailTemplate) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, emailtemplate.FilesTable, emailtemplate.FilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EmailTemplateClient) Hooks() []Hook {
 	hooks := c.hooks.EmailTemplate

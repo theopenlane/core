@@ -3,14 +3,13 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -103,6 +102,45 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.String("definition_id").
+			Comment("the canonical definition identifier for the installation").
+			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("definition_id"),
+			),
+		field.String("definition_version").
+			Comment("the definition version recorded for this installation").
+			Optional().
+			Annotations(
+				entgql.OrderField("definition_version"),
+			),
+		field.String("definition_slug").
+			Comment("the human-readable definition slug recorded for this installation").
+			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("definition_slug"),
+			),
+		field.String("family").
+			Comment("the denormalized family label for the installation definition").
+			Optional().
+			Annotations(
+				entgql.OrderField("family"),
+			),
+		field.Enum("status").
+			Comment("the lifecycle status of the installation").
+			GoType(enums.IntegrationStatus("")).
+			Default(enums.IntegrationStatusPending.String()).
+			Annotations(
+				entgql.OrderField("status"),
+			),
+		field.JSON("provider_metadata_snapshot", map[string]any{}).
+			Comment("snapshot of definition metadata captured on the installation").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 	}
 }
 
@@ -154,15 +192,6 @@ func (i Integration) Edges() []ent.Edge {
 			},
 		}),
 		defaultEdgeFromWithPagination(i, Entity{}),
-	}
-}
-
-// Indexes of the Integration
-func (Integration) Indexes() []ent.Index {
-	return []ent.Index{
-		index.Fields(ownerFieldName, "kind").
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("platform_id"),
 	}
 }
 

@@ -108,6 +108,11 @@ func DeletedBy(v string) predicate.NotificationTemplateHistory {
 	return predicate.NotificationTemplateHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// Revision applies equality check predicate on the "revision" field. It's identical to RevisionEQ.
+func Revision(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldEQ(FieldRevision, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.NotificationTemplateHistory {
 	return predicate.NotificationTemplateHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -701,6 +706,81 @@ func DeletedByEqualFold(v string) predicate.NotificationTemplateHistory {
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
 func DeletedByContainsFold(v string) predicate.NotificationTemplateHistory {
 	return predicate.NotificationTemplateHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// RevisionEQ applies the EQ predicate on the "revision" field.
+func RevisionEQ(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldEQ(FieldRevision, v))
+}
+
+// RevisionNEQ applies the NEQ predicate on the "revision" field.
+func RevisionNEQ(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldNEQ(FieldRevision, v))
+}
+
+// RevisionIn applies the In predicate on the "revision" field.
+func RevisionIn(vs ...string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldIn(FieldRevision, vs...))
+}
+
+// RevisionNotIn applies the NotIn predicate on the "revision" field.
+func RevisionNotIn(vs ...string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldNotIn(FieldRevision, vs...))
+}
+
+// RevisionGT applies the GT predicate on the "revision" field.
+func RevisionGT(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldGT(FieldRevision, v))
+}
+
+// RevisionGTE applies the GTE predicate on the "revision" field.
+func RevisionGTE(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldGTE(FieldRevision, v))
+}
+
+// RevisionLT applies the LT predicate on the "revision" field.
+func RevisionLT(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldLT(FieldRevision, v))
+}
+
+// RevisionLTE applies the LTE predicate on the "revision" field.
+func RevisionLTE(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldLTE(FieldRevision, v))
+}
+
+// RevisionContains applies the Contains predicate on the "revision" field.
+func RevisionContains(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldContains(FieldRevision, v))
+}
+
+// RevisionHasPrefix applies the HasPrefix predicate on the "revision" field.
+func RevisionHasPrefix(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldHasPrefix(FieldRevision, v))
+}
+
+// RevisionHasSuffix applies the HasSuffix predicate on the "revision" field.
+func RevisionHasSuffix(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldHasSuffix(FieldRevision, v))
+}
+
+// RevisionIsNil applies the IsNil predicate on the "revision" field.
+func RevisionIsNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldIsNull(FieldRevision))
+}
+
+// RevisionNotNil applies the NotNil predicate on the "revision" field.
+func RevisionNotNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldNotNull(FieldRevision))
+}
+
+// RevisionEqualFold applies the EqualFold predicate on the "revision" field.
+func RevisionEqualFold(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldEqualFold(FieldRevision, v))
+}
+
+// RevisionContainsFold applies the ContainsFold predicate on the "revision" field.
+func RevisionContainsFold(v string) predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldContainsFold(FieldRevision, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1881,6 +1961,56 @@ func VersionLT(v int) predicate.NotificationTemplateHistory {
 // VersionLTE applies the LTE predicate on the "version" field.
 func VersionLTE(v int) predicate.NotificationTemplateHistory {
 	return predicate.NotificationTemplateHistory(sql.FieldLTE(FieldVersion, v))
+}
+
+// TemplateContextEQ applies the EQ predicate on the "template_context" field.
+func TemplateContextEQ(v enums.TemplateContext) predicate.NotificationTemplateHistory {
+	vc := v
+	return predicate.NotificationTemplateHistory(sql.FieldEQ(FieldTemplateContext, vc))
+}
+
+// TemplateContextNEQ applies the NEQ predicate on the "template_context" field.
+func TemplateContextNEQ(v enums.TemplateContext) predicate.NotificationTemplateHistory {
+	vc := v
+	return predicate.NotificationTemplateHistory(sql.FieldNEQ(FieldTemplateContext, vc))
+}
+
+// TemplateContextIn applies the In predicate on the "template_context" field.
+func TemplateContextIn(vs ...enums.TemplateContext) predicate.NotificationTemplateHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.NotificationTemplateHistory(sql.FieldIn(FieldTemplateContext, v...))
+}
+
+// TemplateContextNotIn applies the NotIn predicate on the "template_context" field.
+func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.NotificationTemplateHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.NotificationTemplateHistory(sql.FieldNotIn(FieldTemplateContext, v...))
+}
+
+// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
+func TemplateContextIsNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldIsNull(FieldTemplateContext))
+}
+
+// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
+func TemplateContextNotNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldNotNull(FieldTemplateContext))
+}
+
+// DefaultsIsNil applies the IsNil predicate on the "defaults" field.
+func DefaultsIsNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldIsNull(FieldDefaults))
+}
+
+// DefaultsNotNil applies the NotNil predicate on the "defaults" field.
+func DefaultsNotNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldNotNull(FieldDefaults))
 }
 
 // And groups predicates with the AND operator between them.

@@ -436,12 +436,12 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - "{{ .GOOS }} {{ .GOARCH }} go build -o core"
+      - "CGO_ENABLED=0 {{ .GOOS }} {{ .GOARCH }} go build -o core"
 
   go:build:ci:
     desc: Runs go build for the core server
     cmds:
-      - go build -mod=readonly -a -o bin/core
+      - CGO_ENABLED=0 go build -mod=readonly -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
@@ -449,12 +449,12 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: Runs go build for the openlane cli
     cmds:
-      - go build -tags cli -o openlane-cli ./cli
+      - CGO_ENABLED=0 go build -tags cli -o openlane-cli ./cli
 
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI
     cmds:
-      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cli
+      - CGO_ENABLED=0 go build -tags cli -mod=readonly -o bin/openlane-cli ./cli
 
   go:all:
     aliases: [go]

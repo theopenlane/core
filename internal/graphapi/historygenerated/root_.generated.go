@@ -789,6 +789,7 @@ type ComplexityRoot struct {
 		BodyTemplate         func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
 		EmailBrandingID      func(childComplexity int) int
 		Format               func(childComplexity int) int
@@ -805,9 +806,11 @@ type ComplexityRoot struct {
 		OwnerID              func(childComplexity int) int
 		PreheaderTemplate    func(childComplexity int) int
 		Ref                  func(childComplexity int) int
+		Revision             func(childComplexity int) int
 		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
+		TemplateContext      func(childComplexity int) int
 		TextTemplate         func(childComplexity int) int
 		Uischema             func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
@@ -1296,29 +1299,35 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		IntegrationType  func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Kind             func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		PlatformID       func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		DefinitionID             func(childComplexity int) int
+		DefinitionSlug           func(childComplexity int) int
+		DefinitionVersion        func(childComplexity int) int
+		Description              func(childComplexity int) int
+		EnvironmentID            func(childComplexity int) int
+		EnvironmentName          func(childComplexity int) int
+		Family                   func(childComplexity int) int
+		HistoryTime              func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		IntegrationType          func(childComplexity int) int
+		InternalNotes            func(childComplexity int) int
+		Kind                     func(childComplexity int) int
+		Metadata                 func(childComplexity int) int
+		Name                     func(childComplexity int) int
+		Operation                func(childComplexity int) int
+		OwnerID                  func(childComplexity int) int
+		PlatformID               func(childComplexity int) int
+		ProviderMetadataSnapshot func(childComplexity int) int
+		Ref                      func(childComplexity int) int
+		ScopeID                  func(childComplexity int) int
+		ScopeName                func(childComplexity int) int
+		Status                   func(childComplexity int) int
+		SystemInternalID         func(childComplexity int) int
+		SystemOwned              func(childComplexity int) int
+		Tags                     func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	IntegrationHistoryConnection struct {
@@ -1590,6 +1599,7 @@ type ComplexityRoot struct {
 		Channel              func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		Defaults             func(childComplexity int) int
 		Description          func(childComplexity int) int
 		EmailTemplateID      func(childComplexity int) int
 		Format               func(childComplexity int) int
@@ -1605,9 +1615,11 @@ type ComplexityRoot struct {
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		Ref                  func(childComplexity int) int
+		Revision             func(childComplexity int) int
 		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
+		TemplateContext      func(childComplexity int) int
 		TitleTemplate        func(childComplexity int) int
 		TopicPattern         func(childComplexity int) int
 		Uischema             func(childComplexity int) int
@@ -7317,6 +7329,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.CreatedBy(childComplexity), true
 
+	case "EmailTemplateHistory.defaults":
+		if e.ComplexityRoot.EmailTemplateHistory.Defaults == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.Defaults(childComplexity), true
+
 	case "EmailTemplateHistory.description":
 		if e.ComplexityRoot.EmailTemplateHistory.Description == nil {
 			break
@@ -7429,6 +7448,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.Ref(childComplexity), true
 
+	case "EmailTemplateHistory.revision":
+		if e.ComplexityRoot.EmailTemplateHistory.Revision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.Revision(childComplexity), true
+
 	case "EmailTemplateHistory.subjectTemplate":
 		if e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate == nil {
 			break
@@ -7449,6 +7475,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.SystemOwned(childComplexity), true
+
+	case "EmailTemplateHistory.templateContext":
+		if e.ComplexityRoot.EmailTemplateHistory.TemplateContext == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.TemplateContext(childComplexity), true
 
 	case "EmailTemplateHistory.textTemplate":
 		if e.ComplexityRoot.EmailTemplateHistory.TextTemplate == nil {
@@ -10124,6 +10157,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IntegrationHistory.CreatedBy(childComplexity), true
 
+	case "IntegrationHistory.definitionID":
+		if e.ComplexityRoot.IntegrationHistory.DefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.DefinitionID(childComplexity), true
+
+	case "IntegrationHistory.definitionSlug":
+		if e.ComplexityRoot.IntegrationHistory.DefinitionSlug == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.DefinitionSlug(childComplexity), true
+
+	case "IntegrationHistory.definitionVersion":
+		if e.ComplexityRoot.IntegrationHistory.DefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.DefinitionVersion(childComplexity), true
+
 	case "IntegrationHistory.description":
 		if e.ComplexityRoot.IntegrationHistory.Description == nil {
 			break
@@ -10144,6 +10198,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.EnvironmentName(childComplexity), true
+
+	case "IntegrationHistory.family":
+		if e.ComplexityRoot.IntegrationHistory.Family == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.Family(childComplexity), true
 
 	case "IntegrationHistory.historyTime":
 		if e.ComplexityRoot.IntegrationHistory.HistoryTime == nil {
@@ -10215,6 +10276,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IntegrationHistory.PlatformID(childComplexity), true
 
+	case "IntegrationHistory.providerMetadataSnapshot":
+		if e.ComplexityRoot.IntegrationHistory.ProviderMetadataSnapshot == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.ProviderMetadataSnapshot(childComplexity), true
+
 	case "IntegrationHistory.ref":
 		if e.ComplexityRoot.IntegrationHistory.Ref == nil {
 			break
@@ -10235,6 +10303,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.ScopeName(childComplexity), true
+
+	case "IntegrationHistory.status":
+		if e.ComplexityRoot.IntegrationHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.Status(childComplexity), true
 
 	case "IntegrationHistory.systemInternalID":
 		if e.ComplexityRoot.IntegrationHistory.SystemInternalID == nil {
@@ -11664,6 +11739,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplateHistory.CreatedBy(childComplexity), true
 
+	case "NotificationTemplateHistory.defaults":
+		if e.ComplexityRoot.NotificationTemplateHistory.Defaults == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.Defaults(childComplexity), true
+
 	case "NotificationTemplateHistory.description":
 		if e.ComplexityRoot.NotificationTemplateHistory.Description == nil {
 			break
@@ -11769,6 +11851,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplateHistory.Ref(childComplexity), true
 
+	case "NotificationTemplateHistory.revision":
+		if e.ComplexityRoot.NotificationTemplateHistory.Revision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.Revision(childComplexity), true
+
 	case "NotificationTemplateHistory.subjectTemplate":
 		if e.ComplexityRoot.NotificationTemplateHistory.SubjectTemplate == nil {
 			break
@@ -11789,6 +11878,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NotificationTemplateHistory.SystemOwned(childComplexity), true
+
+	case "NotificationTemplateHistory.templateContext":
+		if e.ComplexityRoot.NotificationTemplateHistory.TemplateContext == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateHistory.TemplateContext(childComplexity), true
 
 	case "NotificationTemplateHistory.titleTemplate":
 		if e.ComplexityRoot.NotificationTemplateHistory.TitleTemplate == nil {
@@ -30767,6 +30863,10 @@ type EmailTemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -30838,6 +30938,14 @@ type EmailTemplateHistory implements Node {
   template version
   """
   version: Int!
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: EmailTemplateHistoryTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
   """
   email branding configuration to apply for this template
   """
@@ -30922,12 +31030,22 @@ enum EmailTemplateHistoryOrderField {
   history_time
   created_at
   updated_at
+  revision
   KEY
   NAME
   FORMAT
   LOCALE
   ACTIVE
   VERSION
+  TEMPLATE_CONTEXT
+}
+"""
+EmailTemplateHistoryTemplateContext is enum for the field template_context
+"""
+enum EmailTemplateHistoryTemplateContext @goModel(model: "github.com/theopenlane/core/common/enums.TemplateContext") {
+  CAMPAIGN_RECIPIENT
+  TRANSACTIONAL
+  WORKFLOW_ACTION
 }
 """
 EmailTemplateHistoryWhereInput is used for filtering EmailTemplateHistory objects.
@@ -31048,6 +31166,24 @@ input EmailTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
   owner_id field predicates
   """
@@ -31270,6 +31406,15 @@ input EmailTemplateHistoryWhereInput {
   versionGTE: Int
   versionLT: Int
   versionLTE: Int
+  """
+  template_context field predicates
+  """
+  templateContext: EmailTemplateHistoryTemplateContext
+  templateContextNEQ: EmailTemplateHistoryTemplateContext
+  templateContextIn: [EmailTemplateHistoryTemplateContext!]
+  templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   email_branding_id field predicates
   """
@@ -37487,6 +37632,30 @@ type IntegrationHistory implements Node {
   additional metadata about the integration
   """
   metadata: Map
+  """
+  the canonical definition identifier for the installation
+  """
+  definitionID: String
+  """
+  the definition version recorded for this installation
+  """
+  definitionVersion: String
+  """
+  the human-readable definition slug recorded for this installation
+  """
+  definitionSlug: String
+  """
+  the denormalized family label for the installation definition
+  """
+  family: String
+  """
+  the lifecycle status of the installation
+  """
+  status: IntegrationHistoryIntegrationStatus!
+  """
+  snapshot of definition metadata captured on the installation
+  """
+  providerMetadataSnapshot: Map
 }
 """
 A connection to a list of items.
@@ -37519,6 +37688,16 @@ type IntegrationHistoryEdge {
   cursor: Cursor!
 }
 """
+IntegrationHistoryIntegrationStatus is enum for the field status
+"""
+enum IntegrationHistoryIntegrationStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationStatus") {
+  PENDING
+  CONNECTED
+  ERRORED
+  DISABLED
+  DELETED
+}
+"""
 IntegrationHistoryOpType is enum for the field operation
 """
 enum IntegrationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -37549,6 +37728,11 @@ enum IntegrationHistoryOrderField {
   name
   kind
   integration_type
+  definition_id
+  definition_version
+  definition_slug
+  family
+  status
 }
 """
 IntegrationHistoryWhereInput is used for filtering IntegrationHistory objects.
@@ -37872,6 +38056,85 @@ input IntegrationHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  definition_id field predicates
+  """
+  definitionID: String
+  definitionIDNEQ: String
+  definitionIDIn: [String!]
+  definitionIDNotIn: [String!]
+  definitionIDGT: String
+  definitionIDGTE: String
+  definitionIDLT: String
+  definitionIDLTE: String
+  definitionIDContains: String
+  definitionIDHasPrefix: String
+  definitionIDHasSuffix: String
+  definitionIDIsNil: Boolean
+  definitionIDNotNil: Boolean
+  definitionIDEqualFold: String
+  definitionIDContainsFold: String
+  """
+  definition_version field predicates
+  """
+  definitionVersion: String
+  definitionVersionNEQ: String
+  definitionVersionIn: [String!]
+  definitionVersionNotIn: [String!]
+  definitionVersionGT: String
+  definitionVersionGTE: String
+  definitionVersionLT: String
+  definitionVersionLTE: String
+  definitionVersionContains: String
+  definitionVersionHasPrefix: String
+  definitionVersionHasSuffix: String
+  definitionVersionIsNil: Boolean
+  definitionVersionNotNil: Boolean
+  definitionVersionEqualFold: String
+  definitionVersionContainsFold: String
+  """
+  definition_slug field predicates
+  """
+  definitionSlug: String
+  definitionSlugNEQ: String
+  definitionSlugIn: [String!]
+  definitionSlugNotIn: [String!]
+  definitionSlugGT: String
+  definitionSlugGTE: String
+  definitionSlugLT: String
+  definitionSlugLTE: String
+  definitionSlugContains: String
+  definitionSlugHasPrefix: String
+  definitionSlugHasSuffix: String
+  definitionSlugIsNil: Boolean
+  definitionSlugNotNil: Boolean
+  definitionSlugEqualFold: String
+  definitionSlugContainsFold: String
+  """
+  family field predicates
+  """
+  family: String
+  familyNEQ: String
+  familyIn: [String!]
+  familyNotIn: [String!]
+  familyGT: String
+  familyGTE: String
+  familyLT: String
+  familyLTE: String
+  familyContains: String
+  familyHasPrefix: String
+  familyHasSuffix: String
+  familyIsNil: Boolean
+  familyNotNil: Boolean
+  familyEqualFold: String
+  familyContainsFold: String
+  """
+  status field predicates
+  """
+  status: IntegrationHistoryIntegrationStatus
+  statusNEQ: IntegrationHistoryIntegrationStatus
+  statusIn: [IntegrationHistoryIntegrationStatus!]
+  statusNotIn: [IntegrationHistoryIntegrationStatus!]
 }
 type InternalPolicyHistory implements Node {
   id: ID!
@@ -40826,6 +41089,10 @@ type NotificationTemplateHistory implements Node {
   createdBy: String
   updatedBy: String
   """
+  revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
+  """
+  revision: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -40917,6 +41184,14 @@ type NotificationTemplateHistory implements Node {
   template version
   """
   version: Int!
+  """
+  runtime data context defining available variable keys for this template
+  """
+  templateContext: NotificationTemplateHistoryTemplateContext
+  """
+  static variable values merged as base layer at render time; call-site data takes precedence
+  """
+  defaults: Map
 }
 """
 NotificationTemplateHistoryChannel is enum for the field channel
@@ -40994,6 +41269,7 @@ enum NotificationTemplateHistoryOrderField {
   history_time
   created_at
   updated_at
+  revision
   KEY
   NAME
   CHANNEL
@@ -41002,6 +41278,15 @@ enum NotificationTemplateHistoryOrderField {
   TOPIC_PATTERN
   ACTIVE
   VERSION
+  TEMPLATE_CONTEXT
+}
+"""
+NotificationTemplateHistoryTemplateContext is enum for the field template_context
+"""
+enum NotificationTemplateHistoryTemplateContext @goModel(model: "github.com/theopenlane/core/common/enums.TemplateContext") {
+  CAMPAIGN_RECIPIENT
+  TRANSACTIONAL
+  WORKFLOW_ACTION
 }
 """
 NotificationTemplateHistoryWhereInput is used for filtering NotificationTemplateHistory objects.
@@ -41122,6 +41407,24 @@ input NotificationTemplateHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: String
+  revisionNEQ: String
+  revisionIn: [String!]
+  revisionNotIn: [String!]
+  revisionGT: String
+  revisionGTE: String
+  revisionLT: String
+  revisionLTE: String
+  revisionContains: String
+  revisionHasPrefix: String
+  revisionHasSuffix: String
+  revisionIsNil: Boolean
+  revisionNotNil: Boolean
+  revisionEqualFold: String
+  revisionContainsFold: String
   """
   owner_id field predicates
   """
@@ -41403,6 +41706,15 @@ input NotificationTemplateHistoryWhereInput {
   versionGTE: Int
   versionLT: Int
   versionLTE: Int
+  """
+  template_context field predicates
+  """
+  templateContext: NotificationTemplateHistoryTemplateContext
+  templateContextNEQ: NotificationTemplateHistoryTemplateContext
+  templateContextIn: [NotificationTemplateHistoryTemplateContext!]
+  templateContextNotIn: [NotificationTemplateHistoryTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
 }
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
