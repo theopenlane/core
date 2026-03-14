@@ -139,6 +139,19 @@ func normalizeTemplateExpr(expr string) string {
 	if expr == "" {
 		return expr
 	}
+
+	if strings.HasPrefix(expr, ".") {
+		path := strings.TrimSpace(strings.TrimPrefix(expr, "."))
+		if isTemplatePath(path) {
+			root := templatePathRoot(path)
+			if _, ok := templateRootVars[root]; ok {
+				return path
+			}
+
+			return "data." + path
+		}
+	}
+
 	if isTemplateIdentifier(expr) {
 		if _, ok := templateRootVars[expr]; !ok {
 			return "data." + expr
@@ -162,6 +175,33 @@ func isTemplateIdentifier(expr string) bool {
 	}
 
 	return expr != ""
+}
+
+// isTemplatePath reports whether an expression is a dot-delimited identifier path.
+func isTemplatePath(expr string) bool {
+	if expr == "" {
+		return false
+	}
+
+	parts := strings.Split(expr, ".")
+	for _, part := range parts {
+		if !isTemplateIdentifier(part) {
+			return false
+		}
+	}
+
+	return true
+}
+
+// templatePathRoot returns the first segment in a dot-delimited expression.
+func templatePathRoot(expr string) string {
+	if expr == "" {
+		return ""
+	}
+
+	root, _, _ := strings.Cut(expr, ".")
+
+	return root
 }
 
 // isIdentifierStart reports whether r is a valid start character for an identifier

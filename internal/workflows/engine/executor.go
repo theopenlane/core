@@ -60,6 +60,8 @@ func (e *WorkflowEngine) Execute(ctx context.Context, action models.WorkflowActi
 		return e.executeIntegrationAction(ctx, action, instance, obj)
 	case enums.WorkflowActionTypeWebhook:
 		return e.executeWebhook(ctx, action, instance, obj)
+	case enums.WorkflowActionTypeSendEmail:
+		return e.executeSendEmail(ctx, action, instance, obj)
 	default:
 		return fmt.Errorf("%w: %s", ErrInvalidActionType, action.Type)
 	}
