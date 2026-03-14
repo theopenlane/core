@@ -233,7 +233,7 @@ func sendBillingEmailChangeNotifications(ctx context.Context, m *generated.Organ
 			continue
 		}
 
-		if err := sendEmail(ctx, m.Client(), "", emailruntime.TemplateKeyBillingEmailChanged,
+		if err := emailruntime.Send(ctx, m.Client(), "", emailruntime.TemplateKeyBillingEmailChanged,
 			compose.Recipient{Email: currentEmail},
 			emailruntime.NewTemplateData().
 				WithField("OrganizationName", orgName).

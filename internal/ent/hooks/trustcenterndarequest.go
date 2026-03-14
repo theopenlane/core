@@ -112,7 +112,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 
 			tx := transactionFromContext(ctx)
 
-			if err := sendEmail(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
+			if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
 				compose.Recipient{Email: request.Email},
 				overrides,
 			); err != nil {
@@ -138,7 +138,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated
 			return existing, nil
 		}
 
-		if err := sendEmail(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterAuth,
+		if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterAuth,
 			compose.Recipient{Email: existing.Email},
 			overrides,
 		); err != nil {
@@ -156,7 +156,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated
 			return existing, nil
 		}
 
-		if err := sendEmail(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
+		if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
 			compose.Recipient{Email: existing.Email},
 			overrides,
 		); err != nil {
@@ -278,7 +278,7 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 
 			tx := transactionFromContext(ctx)
 
-			if err := sendEmail(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
+			if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
 				compose.Recipient{Email: request.Email},
 				overrides,
 			); err != nil {

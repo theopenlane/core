@@ -257,7 +257,7 @@ func renderTimeHTMLSanitize(html string) string {
 
 // isGoTemplateKeyword reports whether expr is a go template directive keyword
 func isGoTemplateKeyword(expr string) bool {
-	switch strings.ToLower(expr) {
+	switch expr {
 	case "if", "else", "end", "range", "with", "template", "define", "block":
 		return true
 	default:

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -340,6 +341,13 @@ func (Campaign) Modules() []models.OrgModule {
 func (Campaign) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+	}
+}
+
+// Hooks of the Campaign
+func (Campaign) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookCampaignSendEmails(),
 	}
 }
 

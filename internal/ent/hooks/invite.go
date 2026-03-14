@@ -118,7 +118,7 @@ func HookInvite() ent.Hook {
 				return retValue, ErrInternalServerError
 			}
 
-			if err := sendEmail(ctx, m.Client(), orgID, emailruntime.TemplateKeyInvite,
+			if err := emailruntime.Send(ctx, m.Client(), orgID, emailruntime.TemplateKeyInvite,
 				compose.Recipient{Email: emailAddress},
 				emailruntime.NewTemplateData().
 					WithField("InviterName", inviterName).
@@ -318,7 +318,7 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			if err := sendEmail(ctx, m.Client(), ownerID, emailruntime.TemplateKeyInviteJoined,
+			if err := emailruntime.Send(ctx, m.Client(), ownerID, emailruntime.TemplateKeyInviteJoined,
 				compose.Recipient{Email: recipient},
 				emailruntime.NewTemplateData().
 					WithField("OrganizationName", org.DisplayName).
