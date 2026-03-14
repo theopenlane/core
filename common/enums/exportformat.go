@@ -6,13 +6,22 @@ import "io"
 type ExportFormat string
 
 var (
+	// ExportFormatMarkDown indicates the md.
+	ExportFormatMarkDown ExportFormat = "MARKDOWN"
+
+	// ExportFormatPdf indicates the pdf.
+	ExportFormatPdf ExportFormat = "PDF"
+
+	// ExportFormatDocx indicates the docx.
+	ExportFormatDocx ExportFormat = "DOCX"
+
 	// ExportFormatCsv indicates the csv.
 	ExportFormatCsv ExportFormat = "CSV"
 	// ExportFormatInvalid is used when an unknown or unsupported value is provided.
 	ExportFormatInvalid ExportFormat = "EXPORTFORMAT_INVALID"
 )
 
-var exportFormatValues = []ExportFormat{ExportFormatCsv}
+var exportFormatValues = []ExportFormat{ExportFormatCsv, ExportFormatMarkDown, ExportFormatDocx, ExportFormatPdf}
 
 // Values returns a slice of strings representing all valid ExportFormat values.
 func (ExportFormat) Values() []string { return stringValues(exportFormatValues) }
