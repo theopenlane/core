@@ -104,8 +104,13 @@ func (d *TemplateData) Build(config compose.Config, recipient compose.Recipient)
 	}
 
 	if len(urlOverrides) > 0 {
-		overrides["URLS"] = compose.BuildTemplateURLs(config, urlOverrides)
+		urls, err := compose.BuildTemplateURLs(config, urlOverrides)
+		if err != nil {
+			return nil, err
+		}
+
+		overrides["URLS"] = urls
 	}
 
-	return compose.BuildTemplateData(config, recipient, overrides), nil
+	return compose.BuildTemplateData(config, recipient, overrides)
 }
