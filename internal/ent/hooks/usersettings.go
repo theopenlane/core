@@ -142,7 +142,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			// send a welcome email to the user
 			if m.Client().Job == nil {
 				logx.FromContext(ctx).Info().Msg("no job client, skipping welcome email")
-			} else if err := sendEmail(ctx, m.Client(), "", emailruntime.TemplateKeyWelcome,
+			} else if err := emailruntime.Send(ctx, m.Client(), "", emailruntime.TemplateKeyWelcome,
 				compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
 				nil,
 			); err != nil {

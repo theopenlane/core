@@ -45,7 +45,19 @@ func ComposeFromNotificationTemplate(ctx context.Context, client *generated.Clie
 		return nil, err
 	}
 
-	rendered, err := renderTemplateEnvelope(ctx, client, notificationRecord, emailRecord, request.Data)
+	// Merge defaults as the base layer; call-site data takes highest precedence.
+	// Email template defaults form the base, notification template defaults override,
+	// and request data overrides both.
+	data := make(map[string]any, len(emailRecord.Defaults)+len(notificationRecord.Defaults)+len(request.Data))
+	maps.Copy(data, emailRecord.Defaults)
+	maps.Copy(data, notificationRecord.Defaults)
+	maps.Copy(data, request.Data)
+
+	if err := validateTemplateData(emailRecord.Jsonconfig, data); err != nil {
+		return nil, err
+	}
+
+	rendered, err := renderTemplateEnvelope(ctx, client, notificationRecord, emailRecord, data)
 	if err != nil {
 		return nil, err
 	}

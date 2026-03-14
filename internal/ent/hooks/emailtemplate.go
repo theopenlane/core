@@ -8,14 +8,25 @@ import (
 
 	"entgo.io/ent"
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
 // templateVarPattern matches dot-prefixed Go template variable references, e.g. {{ .Foo }} or {{ .User.Name }}.
 var templateVarPattern = regexp.MustCompile(`{{\s*\.([A-Za-z][A-Za-z0-9_.]*)\s*}}`)
+
+// bareTemplateVarPattern matches bare identifier Go template references without dot prefix, e.g. {{ Foo }}.
+// These are normalized at render time by normalizeGoTemplateShorthand; extracting them keeps jsonconfig
+// consistent with what the renderer will actually substitute.
+var bareTemplateVarPattern = regexp.MustCompile(`{{\s*([A-Za-z][A-Za-z0-9_]*)\s*}}`)
+
+// goTemplateKeywords is the set of Go template directive keywords excluded from variable extraction.
+var goTemplateKeywords = map[string]struct{}{
+	"if": {}, "else": {}, "end": {}, "range": {},
+	"with": {}, "template": {}, "define": {}, "block": {},
+}
 
 // tmplURLExpr matches Go template expressions of the form {{ .URLS.<Name> }}.
 // Only .URLS.* references are matched; arbitrary template expressions are left
@@ -66,29 +77,57 @@ func SanitizeBodyHTML(p *bluemonday.Policy, content string) string {
 	return sanitized
 }
 
-// extractTemplateVarNames scans the provided template strings for {{ .VarName }} references
-// and returns a deduplicated slice of top-level variable names. Dotted paths like {{ .User.Name }}
-// yield the top-level key "User" only.
-func extractTemplateVarNames(templates ...string) []string {
-	seen := map[string]struct{}{}
+// extractTemplateVarNames scans the provided template strings for {{ .VarName }} and {{ VarName }}
+// references and returns a map of top-level variable name to JSON Schema type. Dotted paths like
+// {{ .User.Name }} yield "User" with type "object". Direct references like {{ .Name }} or {{ Name }}
+// yield type "string". Bare identifier references without a dot prefix are also extracted; they are
+// normalized to dot-access at render time by normalizeGoTemplateShorthand.
+func extractTemplateVarNames(templates ...string) map[string]string {
+	vars := map[string]string{}
 
 	for _, tmpl := range templates {
+		// dot-prefixed references: {{ .Foo }} or {{ .Foo.Bar }}
 		for _, match := range templateVarPattern.FindAllStringSubmatch(tmpl, -1) {
 			if len(match) < 2 {
 				continue
 			}
 
-			top, _, _ := strings.Cut(match[1], ".")
-			seen[top] = struct{}{}
+			top, rest, found := strings.Cut(match[1], ".")
+			if found && rest != "" {
+				// dotted path → object; never downgrade if already recorded as object
+				vars[top] = "object"
+			} else if _, exists := vars[top]; !exists {
+				vars[top] = "string"
+			}
+		}
+
+		// bare identifier references: {{ Foo }} (no dot, normalized at render time)
+		for _, match := range bareTemplateVarPattern.FindAllStringSubmatch(tmpl, -1) {
+			if len(match) < 2 {
+				continue
+			}
+
+			name := match[1]
+
+			if _, isKeyword := goTemplateKeywords[name]; isKeyword {
+				continue
+			}
+
+			// don't downgrade a var already marked as object via dotted access
+			if existing, ok := vars[name]; ok && existing == "object" {
+				continue
+			}
+
+			vars[name] = "string"
 		}
 	}
 
-	return lo.Keys(seen)
+	return vars
 }
 
-// mergeTemplateVarsIntoSchema adds discovered variable names as string-typed properties
+// mergeTemplateVarsIntoSchema adds discovered variable names as typed properties
 // into a JSON Schema map. Existing properties are preserved; only absent keys are added.
-func mergeTemplateVarsIntoSchema(schema map[string]any, vars []string) map[string]any {
+func mergeTemplateVarsIntoSchema(schema map[string]any, vars map[string]string) map[string]any {
 	if schema == nil {
 		schema = map[string]any{}
 	}
@@ -102,9 +141,9 @@ func mergeTemplateVarsIntoSchema(schema map[string]any, vars []string) map[strin
 		props = map[string]any{}
 	}
 
-	for _, v := range vars {
-		if _, exists := props[v]; !exists {
-			props[v] = map[string]any{"type": "string"}
+	for name, typ := range vars {
+		if _, exists := props[name]; !exists {
+			props[name] = map[string]any{"type": typ}
 		}
 	}
 
@@ -113,9 +152,130 @@ func mergeTemplateVarsIntoSchema(schema map[string]any, vars []string) map[strin
 	return schema
 }
 
+// mergeBaseSchema merges base JSON Schema properties into an existing schema map.
+// Base properties are added only when not already present in the existing schema,
+// so user-defined or previously extracted properties always take precedence.
+func mergeBaseSchema(schema map[string]any, base map[string]any) map[string]any {
+	if len(base) == 0 {
+		return schema
+	}
+
+	if schema == nil {
+		schema = map[string]any{}
+	}
+
+	if _, ok := schema["type"]; !ok {
+		if baseType, ok := base["type"]; ok {
+			schema["type"] = baseType
+		} else {
+			schema["type"] = "object"
+		}
+	}
+
+	baseProps, _ := base["properties"].(map[string]any)
+	if len(baseProps) == 0 {
+		return schema
+	}
+
+	props, _ := schema["properties"].(map[string]any)
+	if props == nil {
+		props = map[string]any{}
+	}
+
+	for k, v := range baseProps {
+		if _, exists := props[k]; !exists {
+			props[k] = v
+		}
+	}
+
+	schema["properties"] = props
+
+	return schema
+}
+
+// HookEmailTemplateSanitize sanitizes HTML template content fields on create and update
+// for non-system-owned email templates. System-owned templates are loaded via harmonize
+// and are trusted; user-composed templates are sanitized to prevent stored XSS.
+// Body content preserves {{ .URLS.<Name> }} template expressions; subject, preheader,
+// and text fields are stripped of all HTML.
+func HookEmailTemplateSanitize() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
+			// system-owned templates are loaded via harmonize and are pre-trusted
+			if owned, exists := m.SystemOwned(); exists && owned {
+				return next.Mutate(ctx, m)
+			}
+
+			// on update operations also check the persisted value; the mutation may not re-set system_owned
+			if !m.Op().Is(ent.OpCreate) {
+				if old, err := m.OldSystemOwned(ctx); err == nil && old {
+					return next.Mutate(ctx, m)
+				}
+			}
+
+			p := EmailTemplateSanitizePolicy()
+
+			if v, exists := m.SubjectTemplate(); exists {
+				m.SetSubjectTemplate(bluemonday.StrictPolicy().Sanitize(v))
+			}
+
+			if v, exists := m.PreheaderTemplate(); exists {
+				m.SetPreheaderTemplate(bluemonday.StrictPolicy().Sanitize(v))
+			}
+
+			if v, exists := m.BodyTemplate(); exists {
+				m.SetBodyTemplate(SanitizeBodyHTML(p, v))
+			}
+
+			if v, exists := m.TextTemplate(); exists {
+				m.SetTextTemplate(bluemonday.StrictPolicy().Sanitize(v))
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+// HookPopulateJsonconfigFromTemplateContext seeds jsonconfig with the reflected JSON Schema for the
+// assigned template_context. Context schema properties form the base layer; any existing or
+// subsequently extracted properties take precedence. This hook runs after sanitization and
+// before variable extraction.
+func HookPopulateJsonconfigFromTemplateContext() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
+			templateCtx, exists := m.TemplateContext()
+			if !exists {
+				return next.Mutate(ctx, m)
+			}
+
+			contextSchema := emailruntime.TemplateContextSchema(templateCtx)
+			if len(contextSchema) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			var jsonconfig map[string]any
+
+			if v, jsExists := m.Jsonconfig(); jsExists {
+				jsonconfig = v
+			} else if !m.Op().Is(ent.OpCreate) {
+				if old, err := m.OldJsonconfig(ctx); err == nil {
+					jsonconfig = old
+				}
+			}
+
+			m.SetJsonconfig(mergeBaseSchema(jsonconfig, contextSchema))
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
 // HookExtractEmailTemplateVariables parses template content fields on create and update,
 // extracts Go template variable references, and merges them as properties into jsonconfig.
 // Existing jsonconfig properties are preserved; only newly discovered variables are added.
+// This hook runs after HookEmailTemplateSanitize and HookPopulateJsonconfigFromTemplateContext
+// so variables are extracted from stored content and merged on top of any context schema base.
+// When defaults are also set in the mutation, they are validated against the finalized schema.
 func HookExtractEmailTemplateVariables() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
@@ -138,7 +298,10 @@ func HookExtractEmailTemplateVariables() ent.Hook {
 			}
 
 			vars := extractTemplateVarNames(templates...)
-			if len(vars) == 0 {
+
+			defaults, defaultsSet := m.Defaults()
+
+			if len(vars) == 0 && !defaultsSet {
 				return next.Mutate(ctx, m)
 			}
 
@@ -152,42 +315,13 @@ func HookExtractEmailTemplateVariables() ent.Hook {
 				}
 			}
 
-			m.SetJsonconfig(mergeTemplateVarsIntoSchema(jsonconfig, vars))
+			finalSchema := mergeTemplateVarsIntoSchema(jsonconfig, vars)
+			m.SetJsonconfig(finalSchema)
 
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-// HookEmailTemplateSanitize sanitizes HTML template content fields on create and update
-// for non-system-owned email templates. System-owned templates are loaded via harmonize
-// and are trusted; user-composed templates are sanitized to prevent stored XSS.
-// Body content preserves {{ .URLS.<Name> }} template expressions; subject, preheader,
-// and text fields are stripped of all HTML.
-func HookEmailTemplateSanitize() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
-			// system-owned templates are loaded via harmonize and are pre-trusted
-			if owned, exists := m.SystemOwned(); exists && owned {
-				return next.Mutate(ctx, m)
-			}
-
-			p := EmailTemplateSanitizePolicy()
-
-			if v, exists := m.SubjectTemplate(); exists {
-				m.SetSubjectTemplate(bluemonday.StrictPolicy().Sanitize(v))
-			}
-
-			if v, exists := m.PreheaderTemplate(); exists {
-				m.SetPreheaderTemplate(bluemonday.StrictPolicy().Sanitize(v))
-			}
-
-			if v, exists := m.BodyTemplate(); exists {
-				m.SetBodyTemplate(SanitizeBodyHTML(p, v))
-			}
-
-			if v, exists := m.TextTemplate(); exists {
-				m.SetTextTemplate(bluemonday.StrictPolicy().Sanitize(v))
+			if defaultsSet && len(defaults) > 0 {
+				if valid, err := emailruntime.ValidateJSONSchema(finalSchema, defaults); err != nil || !valid {
+					return nil, ErrInvalidTemplateDefaults
+				}
 			}
 
 			return next.Mutate(ctx, m)
