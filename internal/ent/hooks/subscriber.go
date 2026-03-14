@@ -87,7 +87,7 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			if err := sendEmail(ctx, m.Client(), orgID, emailruntime.TemplateKeySubscribe,
+			if err := emailruntime.Send(ctx, m.Client(), orgID, emailruntime.TemplateKeySubscribe,
 				compose.Recipient{Email: emailAddress},
 				emailruntime.NewTemplateData().
 					WithField("OrganizationName", orgName).

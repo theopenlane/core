@@ -326,7 +326,7 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		opts = append(opts, emailruntime.WithTags(tags...))
 	}
 
-	return sendEmail(ctx, m.Client(), orgID, emailruntime.TemplateKeyQuestionnaireAuth,
+	return emailruntime.Send(ctx, m.Client(), orgID, emailruntime.TemplateKeyQuestionnaireAuth,
 		compose.Recipient{Email: emailAddress},
 		emailruntime.NewTemplateData().
 			WithField("CompanyName", orgName).

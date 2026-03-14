@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -343,6 +344,13 @@ func (Campaign) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
+	}
+}
+
+// Hooks of the Campaign
+func (Campaign) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookCampaignSendEmails(),
 	}
 }
 

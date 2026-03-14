@@ -29,4 +29,6 @@ var (
 	ErrEmailerNotConfigured = errors.New("emailer not configured on client")
 	// ErrUnsupportedTemplateURLKey is returned when a template URL key is not recognized
 	ErrUnsupportedTemplateURLKey = errors.New("unsupported template URL key")
+	// ErrCampaignNotFound is returned when a campaign cannot be found for email dispatch
+	ErrCampaignNotFound = errors.New("campaign not found")
 )

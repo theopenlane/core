@@ -11,22 +11,22 @@ import (
 
 func TestExtractTemplateVarNames_Simple(t *testing.T) {
 	vars := extractTemplateVarNames("Hello {{ .FirstName }}, welcome to {{ .CompanyName }}")
-	assert.ElementsMatch(t, []string{"FirstName", "CompanyName"}, vars)
+	assert.Equal(t, map[string]string{"FirstName": "string", "CompanyName": "string"}, vars)
 }
 
 func TestExtractTemplateVarNames_DottedPathTopLevelOnly(t *testing.T) {
 	vars := extractTemplateVarNames("{{ .User.FirstName }} from {{ .Org.Name }}")
-	assert.ElementsMatch(t, []string{"User", "Org"}, vars)
+	assert.Equal(t, map[string]string{"User": "object", "Org": "object"}, vars)
 }
 
 func TestExtractTemplateVarNames_Deduplicated(t *testing.T) {
 	vars := extractTemplateVarNames("{{ .Name }} and {{ .Name }} again")
-	assert.ElementsMatch(t, []string{"Name"}, vars)
+	assert.Equal(t, map[string]string{"Name": "string"}, vars)
 }
 
 func TestExtractTemplateVarNames_AcrossMultipleTemplates(t *testing.T) {
 	vars := extractTemplateVarNames("Subject: {{ .CompanyName }}", "<p>Hello {{ .FirstName }}</p>")
-	assert.ElementsMatch(t, []string{"CompanyName", "FirstName"}, vars)
+	assert.Equal(t, map[string]string{"CompanyName": "string", "FirstName": "string"}, vars)
 }
 
 func TestExtractTemplateVarNames_NoVars(t *testing.T) {
@@ -34,13 +34,36 @@ func TestExtractTemplateVarNames_NoVars(t *testing.T) {
 	assert.Empty(t, vars)
 }
 
-func TestExtractTemplateVarNames_URLsExtracted(t *testing.T) {
+func TestExtractTemplateVarNames_URLsExtractedAsObject(t *testing.T) {
 	vars := extractTemplateVarNames(`<a href="{{ .URLS.Verify }}">click</a>`)
-	assert.ElementsMatch(t, []string{"URLS"}, vars)
+	assert.Equal(t, map[string]string{"URLS": "object"}, vars)
+}
+
+func TestExtractTemplateVarNames_BareIdentifier(t *testing.T) {
+	vars := extractTemplateVarNames("Hello {{ FirstName }}, welcome to {{ CompanyName }}")
+	assert.Equal(t, map[string]string{"FirstName": "string", "CompanyName": "string"}, vars)
+}
+
+func TestExtractTemplateVarNames_BareIdentifierKeywordsSkipped(t *testing.T) {
+	// go template directives must not be treated as variable names
+	vars := extractTemplateVarNames("{{ if .Active }}active{{ end }}")
+	assert.Equal(t, map[string]string{"Active": "string"}, vars)
+}
+
+func TestExtractTemplateVarNames_BareIdentifierNotDowngradedByObjectAccess(t *testing.T) {
+	// dotted access (object) must take precedence over a bare reference to the same top-level name
+	vars := extractTemplateVarNames("{{ URLS }} {{ .URLS.Verify }}")
+	assert.Equal(t, map[string]string{"URLS": "object"}, vars)
+}
+
+func TestExtractTemplateVarNames_MixedDotAndBare(t *testing.T) {
+	// bare and dot-prefixed references to different vars are both collected
+	vars := extractTemplateVarNames("{{ FirstName }} {{ .CompanyName }}")
+	assert.Equal(t, map[string]string{"FirstName": "string", "CompanyName": "string"}, vars)
 }
 
 func TestMergeTemplateVarsIntoSchema_NilSchema(t *testing.T) {
-	result := mergeTemplateVarsIntoSchema(nil, []string{"SupportEmail", "CompanyName"})
+	result := mergeTemplateVarsIntoSchema(nil, map[string]string{"SupportEmail": "string", "CompanyName": "string"})
 
 	require.Equal(t, "object", result["type"])
 
@@ -58,7 +81,7 @@ func TestMergeTemplateVarsIntoSchema_PreservesExistingProperties(t *testing.T) {
 		},
 	}
 
-	result := mergeTemplateVarsIntoSchema(existing, []string{"SupportEmail", "FirstName"})
+	result := mergeTemplateVarsIntoSchema(existing, map[string]string{"SupportEmail": "string", "FirstName": "string"})
 
 	props, ok := result["properties"].(map[string]any)
 	require.True(t, ok)
@@ -73,12 +96,24 @@ func TestMergeTemplateVarsIntoSchema_PreservesExistingProperties(t *testing.T) {
 }
 
 func TestMergeTemplateVarsIntoSchema_SetsObjectType(t *testing.T) {
-	result := mergeTemplateVarsIntoSchema(map[string]any{}, []string{"Foo"})
+	result := mergeTemplateVarsIntoSchema(map[string]any{}, map[string]string{"Foo": "string"})
 	assert.Equal(t, "object", result["type"])
 }
 
 func TestMergeTemplateVarsIntoSchema_PreservesExistingType(t *testing.T) {
 	existing := map[string]any{"type": "object", "title": "My Template"}
-	result := mergeTemplateVarsIntoSchema(existing, []string{"Foo"})
+	result := mergeTemplateVarsIntoSchema(existing, map[string]string{"Foo": "string"})
 	assert.Equal(t, "My Template", result["title"])
+}
+
+func TestMergeTemplateVarsIntoSchema_ObjectTypeProperty(t *testing.T) {
+	// variables accessed via dotted paths (e.g. .URLS.Verify) must be stored as type: object
+	result := mergeTemplateVarsIntoSchema(nil, map[string]string{"URLS": "object"})
+
+	props, ok := result["properties"].(map[string]any)
+	require.True(t, ok)
+
+	urlsProp, ok := props["URLS"].(map[string]any)
+	require.True(t, ok)
+	assert.Equal(t, "object", urlsProp["type"])
 }

@@ -120,6 +120,8 @@ var (
 	ErrMissingTrustCenterID = errors.New("trust center id is required")
 	// ErrMissingFileID is returned when a file id is required but not provided
 	ErrMissingFileID = errors.New("missing file id")
+	// ErrInvalidTemplateDefaults is returned when template defaults do not satisfy the template's jsonconfig schema
+	ErrInvalidTemplateDefaults = errors.New("template defaults do not satisfy the template schema")
 	// ErrCannotSetFileOnCreate is returned when trying to set a file id on create mutations
 	ErrCannotSetFileOnCreate = errors.New("cannot set file id on create")
 	// ErrCacheRefreshFailed is returned when the cache refresh request fails
