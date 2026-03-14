@@ -1605,13 +1605,12 @@ Slack contains settings for Slack notifications
 |**SchemaVersion**|`string`|||
 |[**oauth**](#integrationprovidersadditionalpropertiesoauth)|`object`|||
 |[**UserInfo**](#integrationprovidersadditionalpropertiesuserinfo)|`object`|||
-|[**workloadidentity**](#integrationprovidersadditionalpropertiesworkloadidentity)|`object`|||
-|[**app**](#integrationprovidersadditionalpropertiesapp)|`object`|||
 |**CredentialsSchema**||||
 |[**Persistence**](#integrationprovidersadditionalpropertiespersistence)|`object`|||
 |[**Labels**](#integrationprovidersadditionalpropertieslabels)|`object`|||
 |**Metadata**||||
 |**successredirecturl**|`string`|||
+|**providerconfig**||||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1623,8 +1622,6 @@ Slack contains settings for Slack notifications
         "TokenParams": {}
     },
     "UserInfo": {},
-    "workloadidentity": {},
-    "app": {},
     "Persistence": {},
     "Labels": {}
 }
@@ -1710,41 +1707,6 @@ Slack contains settings for Slack notifications
 |**EmailPath**|`string`|||
 |**LoginPath**|`string`|||
 |**SecondaryEmailURL**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesworkloadidentity"></a>
-#### integrationproviders\.additionalProperties\.workloadidentity: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**audience**|`string`|||
-|**TargetServiceAccount**|`string`|||
-|[**Scopes**](#integrationprovidersadditionalpropertiesworkloadidentityscopes)|`string[]`|||
-|**tokenlifetime**|`integer`|||
-|**subjecttokentype**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationprovidersadditionalpropertiesworkloadidentityscopes"></a>
-##### integrationproviders\.additionalProperties\.workloadidentity\.Scopes: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationprovidersadditionalpropertiesapp"></a>
-#### integrationproviders\.additionalProperties\.app: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**BaseURL**|`string`|||
-|**TokenTTL**|`integer`|||
-|**appslug**|`string`|||
-|**appid**|`string`|||
-|**privatekey**|`string`|||
-|**webhooksecret**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationprovidersadditionalpropertiespersistence"></a>

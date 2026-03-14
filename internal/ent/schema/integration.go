@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -23,20 +22,20 @@ type Integration struct {
 	ent.Schema
 }
 
-// SchemaIntegration is the name of the Integration schema.
+// SchemaIntegration is the name of the Integration schema
 const SchemaIntegration = "integration"
 
-// Name returns the name of the Integration schema.
+// Name returns the name of the Integration schema
 func (Integration) Name() string {
 	return SchemaIntegration
 }
 
-// GetType returns the type of the Integration schema.
+// GetType returns the type of the Integration schema
 func (Integration) GetType() any {
 	return Integration.Type
 }
 
-// PluralName returns the plural name of the Integration schema.
+// PluralName returns the plural name of the Integration schema
 func (Integration) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaIntegration)
 }
@@ -57,39 +56,58 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.String("kind").
-			Comment("the kind of integration, such as github, slack, s3 etc.").
-			Optional().
+		field.String("definition_id").
+			Comment("the canonical definition identifier for the installation").
+			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
-				entgql.OrderField("kind"),
+				entgql.OrderField("definition_id"),
 			),
-		field.String("integration_type").
-			Comment("the type of integration, such as communicattion, storage, SCM, etc.").
+		field.String("definition_version").
+			Comment("the definition version recorded for this installation").
+			NotEmpty().
+			Annotations(
+				entgql.OrderField("definition_version"),
+			),
+		field.String("definition_slug").
+			Comment("the human-readable definition slug recorded for this installation").
+			NotEmpty().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("definition_slug"),
+			),
+		field.String("family").
+			Comment("the denormalized family label for the installation definition").
 			Optional().
 			Annotations(
-				entgql.OrderField("integration_type"),
+				entgql.OrderField("family"),
+			),
+		field.Enum("status").
+			Comment("the lifecycle status of the installation").
+			GoType(enums.IntegrationStatus("")).
+			Default(enums.IntegrationStatusPending.String()).
+			Annotations(
+				entgql.OrderField("status"),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this integration for downstream inventory linkage").
 			Optional().
 			NotEmpty().
 			Immutable(),
-		field.JSON("provider_metadata", integrationtypes.IntegrationProviderMetadata{}).
-			Comment("cached provider metadata for UI and registry access").
+		field.JSON("provider_metadata_snapshot", map[string]any{}).
+			Comment("snapshot of definition metadata captured on the installation").
 			Optional().
 			Annotations(
-				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.JSON("config", integrationtypes.IntegrationConfig{}).
+		field.JSON("config", map[string]any{}).
 			Comment("runtime configuration for operations, scheduling, and mappings").
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.JSON("provider_state", integrationtypes.IntegrationProviderState{}).
+		field.JSON("provider_state", map[string]any{}).
 			Comment("provider-specific integration state captured during auth/config").
 			Optional().
 			Annotations(

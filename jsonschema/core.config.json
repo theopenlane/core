@@ -125,51 +125,6 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
-    "config.GitHubAppSpec": {
-      "properties": {
-        "BaseURL": {
-          "type": "string"
-        },
-        "TokenTTL": {
-          "type": "integer"
-        },
-        "appslug": {
-          "type": "string"
-        },
-        "appid": {
-          "type": "string"
-        },
-        "privatekey": {
-          "type": "string"
-        },
-        "webhooksecret": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "config.GoogleWorkloadIdentitySpec": {
-      "properties": {
-        "audience": {
-          "type": "string"
-        },
-        "TargetServiceAccount": {
-          "type": "string"
-        },
-        "Scopes": {
-          "$ref": "#/$defs/[]string"
-        },
-        "tokenlifetime": {
-          "type": "integer"
-        },
-        "subjecttokentype": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "config.KeyWatcher": {
       "properties": {
         "enabled": {
@@ -185,54 +140,6 @@
       "type": "object",
       "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
     },
-    "config.OAuthSpec": {
-      "properties": {
-        "clientid": {
-          "type": "string"
-        },
-        "clientsecret": {
-          "type": "string"
-        },
-        "AuthURL": {
-          "type": "string"
-        },
-        "TokenURL": {
-          "type": "string"
-        },
-        "Scopes": {
-          "$ref": "#/$defs/[]string"
-        },
-        "OIDCDiscovery": {
-          "type": "string"
-        },
-        "RedirectURI": {
-          "type": "string"
-        },
-        "UsePKCE": {
-          "type": "boolean"
-        },
-        "AuthParams": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "TokenParams": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "AdditionalHosts": {
-          "$ref": "#/$defs/[]string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "config.PersistenceSpec": {
-      "properties": {
-        "StoreRefreshToken": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "config.PoolConfig": {
       "properties": {
         "maxworkers": {
@@ -243,74 +150,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "PoolConfig contains the settings for the goroutine pool"
-    },
-    "config.ProviderSpec": {
-      "properties": {
-        "Name": {
-          "type": "string"
-        },
-        "DisplayName": {
-          "type": "string"
-        },
-        "Category": {
-          "type": "string"
-        },
-        "Description": {
-          "type": "string"
-        },
-        "AuthType": {
-          "type": "string"
-        },
-        "AuthStartPath": {
-          "type": "string"
-        },
-        "AuthCallbackPath": {
-          "type": "string"
-        },
-        "Active": {
-          "type": "boolean"
-        },
-        "Visible": {
-          "type": "boolean"
-        },
-        "Tags": {
-          "$ref": "#/$defs/[]string"
-        },
-        "LogoURL": {
-          "type": "string"
-        },
-        "DocsURL": {
-          "type": "string"
-        },
-        "SchemaVersion": {
-          "type": "string"
-        },
-        "oauth": {
-          "$ref": "#/$defs/config.OAuthSpec"
-        },
-        "UserInfo": {
-          "$ref": "#/$defs/config.UserInfoSpec"
-        },
-        "workloadidentity": {
-          "$ref": "#/$defs/config.GoogleWorkloadIdentitySpec"
-        },
-        "app": {
-          "$ref": "#/$defs/config.GitHubAppSpec"
-        },
-        "CredentialsSchema": true,
-        "Persistence": {
-          "$ref": "#/$defs/config.PersistenceSpec"
-        },
-        "Labels": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "Metadata": true,
-        "successredirecturl": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
     },
     "config.Server": {
       "properties": {
@@ -459,36 +298,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "TLS settings for the server for secure connections"
-    },
-    "config.UserInfoSpec": {
-      "properties": {
-        "URL": {
-          "type": "string"
-        },
-        "Method": {
-          "type": "string"
-        },
-        "AuthStyle": {
-          "type": "string"
-        },
-        "AuthHeader": {
-          "type": "string"
-        },
-        "IDPath": {
-          "type": "string"
-        },
-        "EmailPath": {
-          "type": "string"
-        },
-        "LoginPath": {
-          "type": "string"
-        },
-        "SecondaryEmailURL": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
     },
     "cors.Config": {
       "properties": {
@@ -1016,15 +825,15 @@
       },
       "type": "object"
     },
-    "map[string]config.ProviderSpec": {
-      "additionalProperties": {
-        "$ref": "#/$defs/config.ProviderSpec"
-      },
-      "type": "object"
-    },
     "map[string]river.QueueConfig": {
       "additionalProperties": {
         "$ref": "#/$defs/river.QueueConfig"
+      },
+      "type": "object"
+    },
+    "map[string]spec.ProviderSpec": {
+      "additionalProperties": {
+        "$ref": "#/$defs/spec.ProviderSpec"
       },
       "type": "object"
     },
@@ -1377,6 +1186,147 @@
     },
     "slog.Logger": {
       "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "spec.OAuthSpec": {
+      "properties": {
+        "clientid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "AuthURL": {
+          "type": "string"
+        },
+        "TokenURL": {
+          "type": "string"
+        },
+        "Scopes": {
+          "$ref": "#/$defs/[]string"
+        },
+        "OIDCDiscovery": {
+          "type": "string"
+        },
+        "RedirectURI": {
+          "type": "string"
+        },
+        "UsePKCE": {
+          "type": "boolean"
+        },
+        "AuthParams": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "TokenParams": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "AdditionalHosts": {
+          "$ref": "#/$defs/[]string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "spec.PersistenceSpec": {
+      "properties": {
+        "StoreRefreshToken": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "spec.ProviderSpec": {
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "DisplayName": {
+          "type": "string"
+        },
+        "Category": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "AuthType": {
+          "type": "string"
+        },
+        "AuthStartPath": {
+          "type": "string"
+        },
+        "AuthCallbackPath": {
+          "type": "string"
+        },
+        "Active": {
+          "type": "boolean"
+        },
+        "Visible": {
+          "type": "boolean"
+        },
+        "Tags": {
+          "$ref": "#/$defs/[]string"
+        },
+        "LogoURL": {
+          "type": "string"
+        },
+        "DocsURL": {
+          "type": "string"
+        },
+        "SchemaVersion": {
+          "type": "string"
+        },
+        "oauth": {
+          "$ref": "#/$defs/spec.OAuthSpec"
+        },
+        "UserInfo": {
+          "$ref": "#/$defs/spec.UserInfoSpec"
+        },
+        "CredentialsSchema": true,
+        "Persistence": {
+          "$ref": "#/$defs/spec.PersistenceSpec"
+        },
+        "Labels": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "Metadata": true,
+        "successredirecturl": {
+          "type": "string"
+        },
+        "providerconfig": true
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "spec.UserInfoSpec": {
+      "properties": {
+        "URL": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "AuthStyle": {
+          "type": "string"
+        },
+        "AuthHeader": {
+          "type": "string"
+        },
+        "IDPath": {
+          "type": "string"
+        },
+        "EmailPath": {
+          "type": "string"
+        },
+        "LoginPath": {
+          "type": "string"
+        },
+        "SecondaryEmailURL": {
+          "type": "string"
+        }
+      },
       "additionalProperties": false,
       "type": "object"
     },
@@ -1982,7 +1932,7 @@
       "description": "Slack contains settings for Slack notifications"
     },
     "integrationproviders": {
-      "$ref": "#/$defs/map[string]config.ProviderSpec",
+      "$ref": "#/$defs/map[string]spec.ProviderSpec",
       "description": "IntegrationProviders contains provider spec overrides keyed by provider name."
     },
     "integrationsuccessredirecturl": {
