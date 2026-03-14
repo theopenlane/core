@@ -1,6 +1,7 @@
 package emailruntime
 
 import (
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman/compose"
 
 	"github.com/theopenlane/core/common/enums"
@@ -9,26 +10,27 @@ import (
 )
 
 // ContextData is the base template data shape shared by all contexts.
-// It embeds compose.Config (company, sender, URL fields) and adds a Recipient field.
+// It embeds compose.Config (company, sender, URL fields) and adds a Recipient field
 type ContextData struct {
 	compose.Config
-	// Recipient holds per-recipient data injected at send time.
+	// Recipient holds per-recipient data injected at send time
 	Recipient compose.Recipient `json:"Recipient" jsonschema:"required,description=Recipient information"`
 }
 
-// CampaignData holds the template data shape for the CampaignRecipient context.
-// It extends ContextData with campaign-specific metadata.
+// CampaignData holds the template for the CampaignRecipient context
 type CampaignData struct {
 	ContextData
-	// Campaign holds campaign metadata available in campaign recipient templates.
+	// Campaign holds campaign metadata available in campaign recipient templates
 	Campaign struct {
-		Name        string `json:"name"        jsonschema:"description=Name of the campaign"`
+		// Name is the campaign name and appears in the email subject by default
+		Name string `json:"name"        jsonschema:"description=Name of the campaign"`
+		// Description is a longer form field that appears in the email body by default
 		Description string `json:"description" jsonschema:"description=Campaign description"`
 	} `json:"Campaign" jsonschema:"description=Campaign metadata"`
 }
 
 // contextCatalog is the authoritative list of template data contexts.
-// JSON schemas are reflected from typed data structs once at init time.
+// JSON schemas are reflected from typed data structs once at init time
 var contextCatalog = []models.TemplateContextEntry{
 	{
 		Context:     enums.TemplateContextCampaignRecipient,
@@ -51,18 +53,19 @@ var contextCatalog = []models.TemplateContextEntry{
 }
 
 // TemplateContextSchema returns the reflected JSON Schema for the given TemplateContext,
-// suitable for storing in the jsonconfig field of a template record.
+// suitable for storing in the jsonconfig field of a template record
 func TemplateContextSchema(ctx enums.TemplateContext) map[string]any {
-	for _, entry := range contextCatalog {
-		if entry.Context == ctx {
-			return entry.Schema
-		}
+	entry, ok := lo.Find(contextCatalog, func(e models.TemplateContextEntry) bool {
+		return e.Context == ctx
+	})
+	if !ok {
+		return nil
 	}
 
-	return nil
+	return entry.Schema
 }
 
-// TemplateContextEntries returns all registered context entries.
+// TemplateContextEntries returns all registered context entries
 func TemplateContextEntries() []models.TemplateContextEntry {
 	return contextCatalog
 }

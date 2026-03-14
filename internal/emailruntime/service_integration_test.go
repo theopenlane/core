@@ -189,9 +189,7 @@ func (suite *ServiceTestSuite) createSystemNotificationTemplate(ctx context.Cont
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MissingTemplateReference() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
-
-	_, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
+	_, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
 		To:   []string{"user@example.com"},
 		From: "noreply@example.com",
 	})
@@ -204,10 +202,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MissingTempla
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MissingRecipient() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
-
-	_, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey("some_key")},
+	_, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: "some_key"},
 		From:     "noreply@example.com",
 	})
 
@@ -219,10 +215,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MissingRecipi
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MissingSender() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
-
-	_, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey("some_key")},
+	_, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: "some_key"},
 		To:       []string{"user@example.com"},
 	})
 
@@ -234,10 +228,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MissingSender
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_TemplateNotFound() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
-
-	_, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey("nonexistent_key_xyzzy")},
+	_, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: "nonexistent_key_xyzzy"},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 	})
@@ -250,7 +242,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_TemplateNotFo
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_ByKey() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_compose_by_key"
 
@@ -261,8 +252,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_ByKey() {
 	)
 	suite.createSystemNotificationTemplate(ctx, key, et.ID)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{"FirstName": "Ada"},
@@ -282,14 +273,13 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_ByKey() {
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_ByID() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_compose_by_id"
 
 	et := suite.createSystemEmailTemplate(ctx, key, "ID subject", "<p>Body</p>", "Body")
 	nt := suite.createSystemNotificationTemplate(ctx, key, et.ID)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
 		Template: emailruntime.TemplateRef{ID: nt.ID},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
@@ -306,7 +296,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_ByID() {
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_SynthesizedEmailTemplate() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_synthesized_email"
 
@@ -337,8 +326,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_SynthesizedEm
 		Save(allowCtx(ctx))
 	require.NoError(t, err)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{"Greeting": "world"},
@@ -355,7 +344,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_SynthesizedEm
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigToolingOnly() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_jsonconfig_tooling_only"
 
@@ -384,8 +372,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigToo
 	require.NoError(t, err)
 	require.NotNil(t, nt)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{},
@@ -402,14 +390,13 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigToo
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_OwnerOnlyExcludesSystemTemplates() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_owner_only_exclusion"
 
 	suite.createSystemNotificationTemplate(ctx, key, "")
 
-	_, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template:  emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	_, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template:  emailruntime.TemplateRef{Key: key},
 		OwnerID:   ulids.New().String(),
 		OwnerOnly: true,
 		To:        []string{"user@example.com"},
@@ -424,7 +411,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_OwnerOnlyExcl
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_OptionalFields() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_optional_fields"
 
@@ -443,8 +429,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_OptionalField
 	require.NoError(t, err)
 	require.NotNil(t, nt)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		ReplyTo:  "replies@example.com",
@@ -463,7 +449,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_OptionalField
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_HTMLBodyWithEmbeddedQuotes() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_html_embedded_quotes"
 
@@ -474,8 +459,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_HTMLBodyWithE
 	et := suite.createSystemEmailTemplate(ctx, key, "Subject", rawHTML, "")
 	suite.createSystemNotificationTemplate(ctx, key, et.ID)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 	})
@@ -492,7 +477,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_HTMLBodyWithE
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_HTMLBodyWithGoTemplateInAttrs() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_html_template_in_attrs"
 
@@ -503,8 +487,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_HTMLBodyWithG
 	et := suite.createSystemEmailTemplate(ctx, key, "Verify your email", rawHTML, "")
 	suite.createSystemNotificationTemplate(ctx, key, et.ID)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{"Token": "abc-123"},
@@ -521,7 +505,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_HTMLBodyWithG
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigRoundtrip() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_jsonconfig_roundtrip"
 
@@ -562,8 +545,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigRou
 	require.JSONEq(t, string(originalBytes), string(reloadedBytes))
 
 	// valid data should compose
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{"Count": 42},
@@ -572,8 +555,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigRou
 	require.Contains(t, msg.HTML, "42")
 
 	// invalid data type should still render because jsonconfig is for tooling only.
-	msg, err = svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err = emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{"Count": "not-an-int"},
@@ -588,7 +571,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_JsonconfigRou
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_NestedTemplateData() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_nested_template_data"
 
@@ -597,8 +579,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_NestedTemplat
 	et := suite.createSystemEmailTemplate(ctx, key, "Hello {{.User.FirstName}}", rawHTML, "")
 	suite.createSystemNotificationTemplate(ctx, key, et.ID)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data: map[string]any{
@@ -619,7 +601,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_NestedTemplat
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MetadataRoundtrip() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_metadata_roundtrip"
 
@@ -648,8 +629,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MetadataRound
 	require.NoError(t, err)
 	require.Equal(t, emailruntime.RenderModeRawHTML.String(), reloaded.Metadata[emailruntime.MetadataKeyRenderMode.String()])
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 	})
@@ -664,7 +645,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_MetadataRound
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_BaseTemplateAssembly() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const baseKey = "test_base_layout"
 	const customerKey = "test_base_assembly_customer"
@@ -698,8 +678,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_BaseTemplateA
 
 	suite.createSystemNotificationTemplate(ctx, customerKey, et.ID)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(customerKey)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: customerKey},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 		Data:     map[string]any{"Name": "Ada"},
@@ -717,7 +697,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_BaseTemplateA
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_DynamicAttachments() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_dynamic_attachments"
 
@@ -726,8 +705,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_DynamicAttach
 
 	attachment := newman.NewAttachment("report.pdf", []byte("pdf-content"))
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template:    emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template:    emailruntime.TemplateRef{Key: key},
 		To:          []string{"user@example.com"},
 		From:        "noreply@example.com",
 		Attachments: []*newman.Attachment{attachment},
@@ -743,7 +722,6 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_DynamicAttach
 func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_StaticAttachments() {
 	t := suite.T()
 	ctx := systemAdminCtx()
-	svc := emailruntime.NewService(suite.client)
 
 	const key = "test_static_attachments"
 
@@ -764,8 +742,8 @@ func (suite *ServiceTestSuite) TestComposeFromNotificationTemplate_StaticAttachm
 		Save(allowCtx(ctx))
 	require.NoError(t, err)
 
-	msg, err := svc.ComposeFromNotificationTemplate(ctx, emailruntime.ComposeRequest{
-		Template: emailruntime.TemplateRef{Key: emailruntime.ParseTemplateKey(key)},
+	msg, err := emailruntime.ComposeFromNotificationTemplate(ctx, suite.client, emailruntime.ComposeRequest{
+		Template: emailruntime.TemplateRef{Key: key},
 		To:       []string{"user@example.com"},
 		From:     "noreply@example.com",
 	})

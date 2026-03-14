@@ -36,6 +36,21 @@ func TestRenderTemplateTextBareIdentifiers(t *testing.T) {
 	require.Equal(t, "Review https://example.com/review for obj-123", out)
 }
 
+// TestRenderTemplateTextLeadingDotIdentifier verifies leading dot shorthand support.
+func TestRenderTemplateTextLeadingDotIdentifier(t *testing.T) {
+	eval := newTestCELEvaluator(t)
+
+	vars := map[string]any{
+		"data": map[string]any{
+			"first_name": "Ada",
+		},
+	}
+
+	out, err := renderTemplateText(context.Background(), eval, "Hello {{ .first_name }}", vars)
+	require.NoError(t, err)
+	require.Equal(t, "Hello Ada", out)
+}
+
 // TestRenderTemplateTextCELExpression verifies CEL expressions in template text
 func TestRenderTemplateTextCELExpression(t *testing.T) {
 	eval := newTestCELEvaluator(t)

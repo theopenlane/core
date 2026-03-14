@@ -3,15 +3,21 @@
 package engine_test
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
 
 	"github.com/oklog/ulid/v2"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/workflows"
@@ -224,6 +230,91 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 
 	err = wfEngine.Execute(userCtx, models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "test_notification"}, instance, obj)
 	s.NoError(err)
+}
+
+// TestExecuteSendEmail verifies SEND_EMAIL action composition and queue insertion.
+func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.Engine()
+	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
+	seedCtx := s.SeedContext(userID, orgID)
+
+	err := s.client.Job.TruncateRiverTables(context.Background())
+	s.Require().NoError(err)
+
+	templateKey := "wf-send-email-" + ulid.Make().String()
+
+	emailRecord, err := s.client.EmailTemplate.Create().
+		SetOwnerID(orgID).
+		SetKey(templateKey).
+		SetName("Workflow Send Email").
+		SetLocale("en-US").
+		SetFormat(enums.NotificationTemplateFormatHTML).
+		SetSubjectTemplate("Hello {{ FirstName }}").
+		SetBodyTemplate("<p>Hi {{ FirstName }}</p>").
+		SetTextTemplate("Hi {{ FirstName }}").
+		SetActive(true).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	_, err = s.client.NotificationTemplate.Create().
+		SetOwnerID(orgID).
+		SetKey(templateKey).
+		SetName("Workflow Send Email").
+		SetChannel(enums.ChannelEmail).
+		SetFormat(enums.NotificationTemplateFormatHTML).
+		SetTopicPattern("workflow.send_email").
+		SetEmailTemplateID(emailRecord.ID).
+		SetActive(true).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-SEND-EMAIL-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
+
+	params := workflows.SendEmailActionParams{
+		TemplateKey: templateKey,
+		To:          []string{"{{ data.recipient_email }}"},
+		From:        "noreply@example.com",
+		Data: map[string]any{
+			"recipient_email": "person@example.com",
+			"FirstName":       "Ada",
+		},
+	}
+
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeSendEmail.String(),
+		Key:    "send_email",
+		Params: paramsBytes,
+	}
+
+	err = wfEngine.Execute(userCtx, action, instance, obj)
+	s.Require().NoError(err)
+
+	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), riverpgxv5.New(s.client.Job.GetPool()), &jobs.EmailArgs{}, nil)
+	s.Require().NotNil(job)
+	s.Equal([]string{"person@example.com"}, job.Args.Message.To)
+	s.Equal("Hello Ada", job.Args.Message.Subject)
+	s.Contains(job.Args.Message.Text, "Hi Ada")
+
+	// Cleanup seed templates so tests don't conflict on key uniqueness.
+	_, err = s.client.NotificationTemplate.Delete().Where(notificationtemplate.KeyEQ(templateKey)).Exec(seedCtx)
+	s.Require().NoError(err)
+	_, err = s.client.EmailTemplate.Delete().Where(emailtemplate.KeyEQ(templateKey)).Exec(seedCtx)
+	s.Require().NoError(err)
 }
 
 // TestExecuteWebhook verifies the webhook action executor correctly calls external URLs

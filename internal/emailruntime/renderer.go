@@ -17,23 +17,23 @@ import (
 var goTemplateBareIdentifierPattern = regexp.MustCompile(`{{\s*([A-Za-z_][A-Za-z0-9_.]*)\s*}}`)
 
 // goTemplateSubmatchCount is the expected number of submatches from goTemplateBareIdentifierPattern:
-// index 0 is the full match, index 1 is the captured identifier.
+// index 0 is the full match, index 1 is the captured identifier
 const goTemplateSubmatchCount = 2
 
-// renderedTemplateEnvelope contains rendered subject and message bodies.
+// renderedTemplateEnvelope contains rendered subject and message bodies
 type renderedTemplateEnvelope struct {
-	// Subject is the final rendered email subject.
+	// Subject is the final rendered email subject
 	Subject string
-	// Preheader is the rendered preheader text.
+	// Preheader is the rendered preheader text
 	Preheader string
-	// HTML is the rendered HTML body.
+	// HTML is the rendered HTML body
 	HTML string
-	// Text is the rendered plain text body.
+	// Text is the rendered plain text body
 	Text string
 }
 
-// renderTemplateEnvelope renders notification/email templates into final message content.
-func (s *Service) renderTemplateEnvelope(ctx context.Context, notificationRecord *generated.NotificationTemplate, emailRecord *generated.EmailTemplate, data map[string]any) (*renderedTemplateEnvelope, error) {
+// renderTemplateEnvelope renders notification/email templates into final message content
+func renderTemplateEnvelope(ctx context.Context, client *generated.Client, notificationRecord *generated.NotificationTemplate, emailRecord *generated.EmailTemplate, data map[string]any) (*renderedTemplateEnvelope, error) {
 	renderMetadata := DecodeRenderMetadata(emailRecord.Metadata)
 	renderMode := renderMetadata.EffectiveRenderMode()
 
@@ -54,9 +54,10 @@ func (s *Service) renderTemplateEnvelope(ctx context.Context, notificationRecord
 	var baseTemplateContent string
 
 	if renderMode == RenderModeRawHTML && baseTemplateKey != "" {
-		baseContent, err := s.loadBaseTemplateContent(ctx, baseTemplateKey)
+		baseContent, err := loadBaseTemplateContent(ctx, client, baseTemplateKey)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("base_template_key", baseTemplateKey).Msg("failed loading base template for RAW_HTML assembly")
+
 			return nil, ErrTemplateRenderFailed
 		}
 
@@ -66,24 +67,28 @@ func (s *Service) renderTemplateEnvelope(ctx context.Context, notificationRecord
 	renderedSubject, err := renderTextTemplate("subject", subjectTemplate, "", data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("template_key", emailRecord.Key).Msg("failed rendering subject template")
+
 		return nil, ErrTemplateRenderFailed
 	}
 
 	renderedPreheader, err := renderTextTemplate("preheader", preheaderTemplate, "", data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("template_key", emailRecord.Key).Msg("failed rendering preheader template")
+
 		return nil, ErrTemplateRenderFailed
 	}
 
 	renderedHTML, err := renderHTMLTemplate(renderMode, emailRecord.Key, emailRecord.BodyTemplate, baseTemplateContent, htmlEntrypoint, data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("template_key", emailRecord.Key).Msg("failed rendering html template")
+
 		return nil, ErrTemplateRenderFailed
 	}
 
 	renderedText, err := renderTextTemplate(emailRecord.Key, emailRecord.TextTemplate, textEntrypoint, data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("template_key", emailRecord.Key).Msg("failed rendering text template")
+
 		return nil, ErrTemplateRenderFailed
 	}
 
@@ -107,7 +112,7 @@ func (s *Service) renderTemplateEnvelope(ctx context.Context, notificationRecord
 // When baseContent is non-empty and renderMode is RenderModeRawHTML, the base template is
 // parsed first and the customer content (which must define named blocks) is parsed into the
 // same template set. Execution then begins at the BaseTemplateEntrypoint named template.
-// The base template is expected to define a {{block "content" .}}{{end}} injection point.
+// The base template is expected to define a {{block "content" .}}{{end}} injection point
 func renderHTMLTemplate(renderMode RenderMode, templateName string, content string, baseContent string, entrypoint string, data map[string]any) (string, error) {
 	if content == "" {
 		return "", nil
@@ -147,7 +152,7 @@ func renderHTMLTemplate(renderMode RenderMode, templateName string, content stri
 // renderHTMLWithBase assembles a customer body template with a system base template.
 // The base template is parsed first, then the customer content (containing {{define}} blocks)
 // is added to the same template set. Execution starts at the BaseTemplateEntrypoint.
-// Customer templates must use {{define "content"}}...{{end}} to inject content into the base.
+// Customer templates must use {{define "content"}}...{{end}} to inject content into the base
 func renderHTMLWithBase(templateName string, baseContent string, customerContent string, data map[string]any) (string, error) {
 	baseContent = normalizeGoTemplateShorthand(baseContent)
 
@@ -170,7 +175,7 @@ func renderHTMLWithBase(templateName string, baseContent string, customerContent
 	return buffer.String(), nil
 }
 
-// renderTextTemplate renders a text/template payload with optional entrypoint.
+// renderTextTemplate renders a text/template payload with optional entrypoint
 func renderTextTemplate(templateName string, content string, entrypoint string, data map[string]any) (string, error) {
 	if content == "" {
 		return "", nil
@@ -201,7 +206,7 @@ func renderTextTemplate(templateName string, content string, entrypoint string, 
 	return buffer.String(), nil
 }
 
-// templateFuncMap returns rendering helper functions used by migrated template content.
+// templateFuncMap returns rendering helper functions used by migrated template content
 func templateFuncMap() htmltemplate.FuncMap {
 	return htmltemplate.FuncMap{
 		"ToUpper": strcase.UpperCamelCase,
@@ -209,7 +214,7 @@ func templateFuncMap() htmltemplate.FuncMap {
 }
 
 // normalizeGoTemplateShorthand converts bare identifier placeholders into dot-access placeholders.
-// Example: {{ FirstName }} -> {{ .FirstName }}.
+// Example: {{ FirstName }} -> {{ .FirstName }}
 func normalizeGoTemplateShorthand(content string) string {
 	if !strings.Contains(content, "{{") {
 		return content
@@ -221,7 +226,7 @@ func normalizeGoTemplateShorthand(content string) string {
 			return segment
 		}
 
-		expr := strings.TrimSpace(matches[1])
+		expr := matches[1]
 		if expr == "" || strings.HasPrefix(expr, ".") || isGoTemplateKeyword(expr) {
 			return segment
 		}
@@ -233,7 +238,7 @@ func normalizeGoTemplateShorthand(content string) string {
 // renderTimeHTMLScrubPolicy returns a bluemonday policy for sanitizing fully-rendered
 // HTML email content. At render time all Go template expressions have been resolved into
 // real values, so the policy allows standard http/https/mailto/tel href schemes without
-// the Go template expression allowance used at storage time.
+// the Go template expression allowance used at storage time
 func renderTimeHTMLScrubPolicy() *bluemonday.Policy {
 	p := bluemonday.UGCPolicy()
 	p.AllowAttrs("style").OnElements("table", "tr", "td", "th", "div", "span", "p", "a", "img")
@@ -245,14 +250,14 @@ func renderTimeHTMLScrubPolicy() *bluemonday.Policy {
 
 // renderTimeHTMLSanitize sanitizes fully-rendered HTML email content. This is the
 // render-time safety net that catches any XSS injected via template data values
-// after Go template substitution has completed.
+// after Go template substitution has completed
 func renderTimeHTMLSanitize(html string) string {
 	return renderTimeHTMLScrubPolicy().Sanitize(html)
 }
 
-// isGoTemplateKeyword reports whether expr is a go template directive keyword.
+// isGoTemplateKeyword reports whether expr is a go template directive keyword
 func isGoTemplateKeyword(expr string) bool {
-	switch strings.ToLower(strings.TrimSpace(expr)) {
+	switch strings.ToLower(expr) {
 	case "if", "else", "end", "range", "with", "template", "define", "block":
 		return true
 	default:

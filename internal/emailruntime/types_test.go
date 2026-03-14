@@ -109,9 +109,7 @@ func TestTemplateRefValidate_Conflict(t *testing.T) {
 }
 
 func TestTemplateRefValidate_KeyOnly(t *testing.T) {
-	ref := TemplateRef{
-		Key: ParseTemplateKey(" verify_email "),
-	}
+	ref := TemplateRef{Key: TemplateKeyVerifyEmail}
 
 	err := ref.Validate()
 	assert.NoError(t, err)
@@ -138,4 +136,46 @@ func TestDecodeRenderMetadata_ExplicitValues(t *testing.T) {
 	assert.Equal(t, "main", cfg.HTMLEntrypoint)
 	assert.Equal(t, "text_main", cfg.TextEntrypoint)
 	assert.Equal(t, "base-template", cfg.BaseTemplateKey)
+}
+
+func TestDecodeRenderMetadata_NonStringValueIgnored(t *testing.T) {
+	cfg := DecodeRenderMetadata(map[string]any{
+		MetadataKeyRenderMode.String(): 42, // non-string value should be ignored
+	})
+
+	assert.Equal(t, RenderModeRawHTML, cfg.EffectiveRenderMode())
+}
+
+
+func TestRenderModeString_ReturnsRawValue(t *testing.T) {
+	assert.Equal(t, "RAW_HTML", RenderModeRawHTML.String())
+	assert.Equal(t, "GO_TEMPLATE_BUNDLE", RenderModeGoTemplateBundle.String())
+}
+
+func TestRenderModeIsValid_KnownModes(t *testing.T) {
+	assert.True(t, RenderModeRawHTML.IsValid())
+	assert.True(t, RenderModeGoTemplateBundle.IsValid())
+}
+
+func TestRenderModeIsValid_Unknown(t *testing.T) {
+	assert.False(t, RenderMode("UNKNOWN").IsValid())
+	assert.False(t, RenderMode("").IsValid())
+}
+
+func TestMetadataKeyString_ReturnsRawValue(t *testing.T) {
+	assert.Equal(t, "render_mode", MetadataKeyRenderMode.String())
+}
+
+
+func TestEffectiveRenderMode_HTMLEntrypointImpliesBundle(t *testing.T) {
+	cfg := RenderMetadata{HTMLEntrypoint: "main"}
+	assert.Equal(t, RenderModeGoTemplateBundle, cfg.EffectiveRenderMode())
+}
+
+func TestEffectiveRenderMode_ExplicitModeRespected(t *testing.T) {
+	cfg := RenderMetadata{
+		Mode:          RenderModeRawHTML,
+		HTMLEntrypoint: "main",
+	}
+	assert.Equal(t, RenderModeRawHTML, cfg.EffectiveRenderMode())
 }

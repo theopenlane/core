@@ -4,8 +4,7 @@ import (
 	"context"
 	"maps"
 
-	"github.com/samber/lo"
-
+	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/workflows"
@@ -126,23 +125,19 @@ func (e *WorkflowEngine) buildNotificationTemplateVars(ctx context.Context, inst
 
 // validateNotificationTemplateData validates template data against jsonschema
 func validateNotificationTemplateData(template *generated.NotificationTemplate, data map[string]any) error {
-	if template == nil || template.Jsonconfig == nil || len(template.Jsonconfig) == 0 {
+	if template == nil {
 		return nil
 	}
 
-	result, err := jsonx.ValidateSchema(template.Jsonconfig, data)
+	valid, err := emailruntime.ValidateJSONSchema(template.Jsonconfig, data)
 	if err != nil {
 		return err
 	}
-	if result.Valid() {
+	if valid {
 		return nil
 	}
 
-	if len(result.Errors()) > 0 {
-		return ErrNotificationTemplateDataInvalid
-	}
-
-	return nil
+	return ErrNotificationTemplateDataInvalid
 }
 
 // loadNotificationTemplate loads an active notification template by id or key
@@ -155,10 +150,7 @@ func (e *WorkflowEngine) loadNotificationTemplate(ctx context.Context, ownerID s
 	query := e.client.NotificationTemplate.Query().
 		Where(
 			notificationtemplate.ActiveEQ(true),
-			notificationtemplate.Or(
-				notificationtemplate.OwnerIDEQ(ownerID),
-				notificationtemplate.SystemOwnedEQ(true),
-			),
+			notificationtemplate.OwnerIDEQ(ownerID),
 		)
 
 	if templateID != "" {
@@ -169,22 +161,15 @@ func (e *WorkflowEngine) loadNotificationTemplate(ctx context.Context, ownerID s
 		return template, err
 	}
 	if templateKey != "" {
-		templates, err := query.Where(notificationtemplate.KeyEQ(templateKey)).All(allowCtx)
+		template, err := query.Where(notificationtemplate.KeyEQ(templateKey)).First(allowCtx)
+		if generated.IsNotFound(err) {
+			return nil, ErrNotificationTemplateNotFound
+		}
 		if err != nil {
 			return nil, err
 		}
 
-		if len(templates) == 0 {
-			return nil, ErrNotificationTemplateNotFound
-		}
-
-		if found, ok := lo.Find(templates, func(t *generated.NotificationTemplate) bool {
-			return t.OwnerID == ownerID
-		}); ok {
-			return found, nil
-		}
-
-		return templates[0], nil
+		return template, nil
 	}
 
 	return nil, nil
