@@ -6,187 +6,221 @@ import (
 	"github.com/samber/do/v2"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/integrations/providers/catalog"
+	"github.com/theopenlane/core/internal/integrations/clients"
+	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
-// Runtime holds the fully wired integrations runtime via a dependency injector.
-// Use typed accessor methods for common components, or Injector() for extensibility.
-type Runtime struct {
-	injector do.Injector
+// CatalogConfig is an alias for catalog.Config so callers do not need to import both packages
+type CatalogConfig = catalog.Config
+
+// Config defines the dependencies required to build the integrationsv2 runtime
+type Config struct {
+	// DB is the Ent client used by run stores and direct installation queries
+	DB *ent.Client
+	// Gala is the event runtime used for operation dispatch and execution
+	Gala *gala.Gala
+	// Registry overrides the default empty definition registry when provided
+	Registry *registry.Registry
+	// DefinitionBuilders override the built-in catalog when provided
+	DefinitionBuilders []definition.Builder
+	// CredentialStore provides both credential read and write access for installations
+	CredentialStore types.CredentialStore
+	// CatalogConfig supplies operator-level credentials for all built-in definitions
+	CatalogConfig catalog.Config
+	// SuccessRedirectURL is the URL to redirect to after a successful integration auth flow
+	SuccessRedirectURL string
+	// SkipExecutorListeners disables automatic Gala listener registration for the executor.
+	// Set this when a workflow engine will register its own listeners that wrap the executor,
+	// to prevent double execution of operations on the same topics.
+	SkipExecutorListeners bool
 }
 
-// Injector returns the underlying dependency injector for external service registration
-// and invocation. Callers may register additional services or invoke registered ones.
+// Runtime bundles the integrationsv2 services behind a do injector
+type Runtime struct {
+	injector           do.Injector
+	successRedirectURL string
+}
+
+type serviceProviders struct {
+	config Config
+}
+
+// Injector returns the underlying dependency injector
 func (r *Runtime) Injector() do.Injector {
 	return r.injector
 }
 
-// Registry returns the provider registry.
+// Registry returns the definition registry
 func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
 }
 
-// Store returns the credential and integration record store.
-func (r *Runtime) Store() *keystore.Store {
-	return do.MustInvoke[*keystore.Store](r.injector)
+// Clients returns the client service
+func (r *Runtime) Clients() *clients.Service {
+	return do.MustInvoke[*clients.Service](r.injector)
 }
 
-// Broker returns the credential minting coordinator.
-func (r *Runtime) Broker() *keystore.Broker {
-	return do.MustInvoke[*keystore.Broker](r.injector)
+// Runs returns the operation run store
+func (r *Runtime) Runs() *operations.RunStore {
+	return do.MustInvoke[*operations.RunStore](r.injector)
 }
 
-// Clients returns the integration client pool manager.
-func (r *Runtime) Clients() *keystore.ClientPoolManager {
-	return do.MustInvoke[*keystore.ClientPoolManager](r.injector)
+// Dispatcher returns the operation dispatcher
+func (r *Runtime) Dispatcher() *operations.Dispatcher {
+	return do.MustInvoke[*operations.Dispatcher](r.injector)
 }
 
-// Operations returns the integration operation manager.
-func (r *Runtime) Operations() *keystore.OperationManager {
-	return do.MustInvoke[*keystore.OperationManager](r.injector)
+// Executor returns the operation executor
+func (r *Runtime) Executor() *operations.Executor {
+	return do.MustInvoke[*operations.Executor](r.injector)
 }
 
-// Keymaker returns the OAuth keymaker service.
+// CredentialStore returns the credential store
+func (r *Runtime) CredentialStore() types.CredentialStore {
+	return do.MustInvoke[types.CredentialStore](r.injector)
+}
+
+// Keymaker returns the keymaker service
 func (r *Runtime) Keymaker() *keymaker.Service {
 	return do.MustInvoke[*keymaker.Service](r.injector)
 }
 
-// Activation returns the integration activation service.
-func (r *Runtime) Activation() *activation.Service {
-	return do.MustInvoke[*activation.Service](r.injector)
-}
-
-// SuccessRedirectURL returns the global fallback redirect URL used after successful provider authentication.
+// SuccessRedirectURL returns the configured success redirect URL
 func (r *Runtime) SuccessRedirectURL() string {
-	return do.MustInvoke[successRedirectURL](r.injector).value
+	return r.successRedirectURL
 }
 
-// successRedirectURL is an unexported wrapper so the string value can be registered in the DI container.
-type successRedirectURL struct{ value string }
-
-// New constructs the integrations runtime, building the provider registry from
-// ProviderSpecs and wiring all dependent components via the injector.
-func New(cfg Config) (*Runtime, error) {
-	if cfg.DB == nil {
+// New wires the integrationsv2 runtime
+func New(config Config) (*Runtime, error) {
+	if config.DB == nil {
 		return nil, ErrDBClientRequired
 	}
 
-	i := do.New()
+	if config.Gala == nil {
+		return nil, ErrGalaRequired
+	}
 
-	do.ProvideValue(i, cfg.DB)
-	do.ProvideValue(i, successRedirectURL{value: cfg.SuccessRedirectURL})
+	if config.CredentialStore == nil {
+		return nil, ErrCredentialStoreRequired
+	}
 
-	do.Provide(i, func(_ do.Injector) (*registry.Registry, error) {
-		if cfg.Registry != nil {
-			return cfg.Registry, nil
+	injector := do.New()
+	services := serviceProviders{config: config}
+
+	do.ProvideValue(injector, config.DB)
+	do.ProvideValue(injector, config.Gala)
+	// Provide CredentialStore, CredentialResolver, and keymaker.CredentialWriter from the same instance
+	do.ProvideValue(injector, config.CredentialStore)
+	do.Provide(injector, func(do.Injector) (types.CredentialResolver, error) {
+		return config.CredentialStore, nil
+	})
+	do.Provide(injector, func(do.Injector) (keymaker.CredentialWriter, error) {
+		return config.CredentialStore, nil
+	})
+
+	do.Provide(injector, services.provideRegistry)
+	do.Provide(injector, services.provideClientService)
+	do.Provide(injector, services.provideRunStore)
+	do.Provide(injector, services.provideDispatcher)
+	do.Provide(injector, services.provideExecutor)
+	do.Provide(injector, services.provideKeymaker)
+
+	if _, err := do.Invoke[*registry.Registry](injector); err != nil {
+		return nil, err
+	}
+	if _, err := do.Invoke[*clients.Service](injector); err != nil {
+		return nil, err
+	}
+	if _, err := do.Invoke[*operations.RunStore](injector); err != nil {
+		return nil, err
+	}
+	if _, err := do.Invoke[*operations.Dispatcher](injector); err != nil {
+		return nil, err
+	}
+
+	executor, err := do.Invoke[*operations.Executor](injector)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := do.Invoke[*keymaker.Service](injector); err != nil {
+		return nil, err
+	}
+
+	if !config.SkipExecutorListeners {
+		if err := executor.RegisterListeners(do.MustInvoke[*gala.Gala](injector)); err != nil {
+			return nil, err
 		}
-
-		builders := cfg.Builders
-		if len(builders) == 0 {
-			builders = catalog.Builders(catalog.Config{})
-		}
-
-		return registry.NewRegistry(context.Background(), builders)
-	})
-
-	do.Provide(i, func(i do.Injector) (*keystore.Store, error) {
-		db := do.MustInvoke[*ent.Client](i)
-
-		return keystore.NewStore(db)
-	})
-
-	do.Provide(i, func(i do.Injector) (*keystore.Broker, error) {
-		store := do.MustInvoke[*keystore.Store](i)
-		reg := do.MustInvoke[*registry.Registry](i)
-
-		return keystore.NewBroker(store, reg)
-	})
-
-	do.Provide(i, func(i do.Injector) (*keystore.ClientPoolManager, error) {
-		broker := do.MustInvoke[*keystore.Broker](i)
-		reg := do.MustInvoke[*registry.Registry](i)
-
-		return keystore.NewClientPoolManager(broker, keystore.FlattenDescriptors(reg.ClientDescriptorCatalog()))
-	})
-
-	do.Provide(i, func(i do.Injector) (*keystore.OperationManager, error) {
-		broker := do.MustInvoke[*keystore.Broker](i)
-		clients := do.MustInvoke[*keystore.ClientPoolManager](i)
-		reg := do.MustInvoke[*registry.Registry](i)
-
-		return keystore.NewOperationManager(
-			broker,
-			keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog()),
-			keystore.WithOperationClients(clients),
-		)
-	})
-
-	do.Provide(i, func(i do.Injector) (*keymaker.Service, error) {
-		reg := do.MustInvoke[*registry.Registry](i)
-		store := do.MustInvoke[*keystore.Store](i)
-		authStates := cfg.AuthStateStore
-		if authStates == nil {
-			authStates = keymaker.NewInMemoryAuthStateStore()
-		}
-
-		return keymaker.NewService(reg, store, authStates, keymaker.ServiceOptions{})
-	})
-
-	do.Provide(i, func(i do.Injector) (*activation.Service, error) {
-		store := do.MustInvoke[*keystore.Store](i)
-		ops := do.MustInvoke[*keystore.OperationManager](i)
-		reg := do.MustInvoke[*registry.Registry](i)
-
-		return activation.NewService(store, ops, reg)
-	})
-
-	do.Provide(i, func(i do.Injector) (types.MappingIndex, error) {
-		return do.MustInvoke[*registry.Registry](i), nil
-	})
-
-	// Eagerly invoke all services so initialization errors surface at startup.
-	if _, err := do.Invoke[*registry.Registry](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[*keystore.Store](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[*keystore.Broker](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[*keystore.ClientPoolManager](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[*keystore.OperationManager](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[*keymaker.Service](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[*activation.Service](i); err != nil {
-		return nil, err
-	}
-	if _, err := do.Invoke[types.MappingIndex](i); err != nil {
-		return nil, err
 	}
 
-	return &Runtime{injector: i}, nil
+	return &Runtime{injector: injector, successRedirectURL: config.SuccessRedirectURL}, nil
 }
 
-// NewFromRegistry builds a minimal runtime with only a pre-built registry registered.
-func NewFromRegistry(reg *registry.Registry) *Runtime {
-	i := do.New()
+// provideRegistry builds the definition registry for the runtime
+func (p serviceProviders) provideRegistry(do.Injector) (*registry.Registry, error) {
+	registryInstance := p.config.Registry
+	if registryInstance == nil {
+		registryInstance = registry.New()
+	}
 
-	do.Provide(i, func(_ do.Injector) (*registry.Registry, error) {
-		return reg, nil
-	})
+	builders := p.config.DefinitionBuilders
+	if len(builders) == 0 {
+		builders = catalog.Builders(p.config.CatalogConfig)
+	}
 
-	do.ProvideValue(i, successRedirectURL{})
+	if err := definition.RegisterAll(context.Background(), registryInstance, builders...); err != nil {
+		return nil, err
+	}
 
-	return &Runtime{injector: i}
+	return registryInstance, nil
+}
+
+// provideClientService builds the client service for the runtime
+func (serviceProviders) provideClientService(i do.Injector) (*clients.Service, error) {
+	return clients.NewService(
+		do.MustInvoke[*registry.Registry](i),
+		do.MustInvoke[types.CredentialResolver](i),
+	)
+}
+
+// provideRunStore builds the run store for the runtime
+func (serviceProviders) provideRunStore(i do.Injector) (*operations.RunStore, error) {
+	return operations.NewRunStore(do.MustInvoke[*ent.Client](i))
+}
+
+// provideDispatcher builds the operation dispatcher for the runtime
+func (serviceProviders) provideDispatcher(i do.Injector) (*operations.Dispatcher, error) {
+	return operations.NewDispatcher(
+		do.MustInvoke[*registry.Registry](i),
+		do.MustInvoke[*ent.Client](i),
+		do.MustInvoke[*operations.RunStore](i),
+		do.MustInvoke[*gala.Gala](i),
+	)
+}
+
+// provideExecutor builds the operation executor for the runtime
+func (serviceProviders) provideExecutor(i do.Injector) (*operations.Executor, error) {
+	return operations.NewExecutor(
+		do.MustInvoke[*registry.Registry](i),
+		do.MustInvoke[*ent.Client](i),
+		do.MustInvoke[types.CredentialResolver](i),
+		do.MustInvoke[*clients.Service](i),
+		do.MustInvoke[*operations.RunStore](i),
+	)
+}
+
+// provideKeymaker builds the keymaker auth flow service for the runtime
+func (serviceProviders) provideKeymaker(i do.Injector) (*keymaker.Service, error) {
+	return keymaker.NewService(
+		do.MustInvoke[*registry.Registry](i),
+		do.MustInvoke[keymaker.CredentialWriter](i),
+		keymaker.NewInMemoryAuthStateStore(),
+		keymaker.Options{},
+	)
 }

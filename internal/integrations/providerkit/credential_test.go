@@ -1,3 +1,5 @@
+//go:build test
+
 package providerkit
 
 import (
@@ -6,18 +8,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/models"
 )
 
 func TestOAuthTokenFromCredential_Missing(t *testing.T) {
-	credential := types.CredentialSet{}
+	credential := models.CredentialSet{}
 	if _, err := OAuthTokenFromCredential(credential); !errors.Is(err, ErrOAuthTokenMissing) {
 		t.Fatalf("expected ErrOAuthTokenMissing, got %v", err)
 	}
 }
 
 func TestOAuthTokenFromCredential_EmptyAccess(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		OAuthRefreshToken: "refresh-token",
 	}
 	if _, err := OAuthTokenFromCredential(credential); !errors.Is(err, ErrAccessTokenEmpty) {
@@ -27,7 +29,7 @@ func TestOAuthTokenFromCredential_EmptyAccess(t *testing.T) {
 
 func TestOAuthTokenFromCredential_WithExpiry(t *testing.T) {
 	now := time.Now()
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		OAuthExpiry: &now,
 	}
 	if _, err := OAuthTokenFromCredential(credential); !errors.Is(err, ErrAccessTokenEmpty) {
@@ -36,7 +38,7 @@ func TestOAuthTokenFromCredential_WithExpiry(t *testing.T) {
 }
 
 func TestOAuthTokenFromCredential_Success(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		OAuthAccessToken: "access-token",
 	}
 
@@ -51,14 +53,14 @@ func TestOAuthTokenFromCredential_Success(t *testing.T) {
 }
 
 func TestAPITokenFromCredential_Missing(t *testing.T) {
-	credential := types.CredentialSet{}
+	credential := models.CredentialSet{}
 	if _, err := APITokenFromCredential(credential); !errors.Is(err, ErrAPITokenMissing) {
 		t.Fatalf("expected ErrAPITokenMissing, got %v", err)
 	}
 }
 
 func TestAPITokenFromCredential_MissingKey(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		ProviderData: json.RawMessage(`{"orgUrl":"https://example.okta.com"}`),
 	}
 	if _, err := APITokenFromCredential(credential); !errors.Is(err, ErrAPITokenMissing) {
@@ -67,7 +69,7 @@ func TestAPITokenFromCredential_MissingKey(t *testing.T) {
 }
 
 func TestAPITokenFromCredential_EmptyToken(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		ProviderData: json.RawMessage(`{"apiToken":""}`),
 	}
 	if _, err := APITokenFromCredential(credential); !errors.Is(err, ErrAPITokenMissing) {
@@ -76,7 +78,7 @@ func TestAPITokenFromCredential_EmptyToken(t *testing.T) {
 }
 
 func TestAPITokenFromCredential_WhitespaceToken(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		ProviderData: json.RawMessage(`{"apiToken":"   "}`),
 	}
 	if _, err := APITokenFromCredential(credential); !errors.Is(err, ErrAPITokenMissing) {
@@ -85,7 +87,7 @@ func TestAPITokenFromCredential_WhitespaceToken(t *testing.T) {
 }
 
 func TestAPITokenFromCredential_Success(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		ProviderData: json.RawMessage(`{"apiToken":"my-secret-token","orgUrl":"https://example.okta.com"}`),
 	}
 
@@ -100,7 +102,7 @@ func TestAPITokenFromCredential_Success(t *testing.T) {
 }
 
 func TestAPITokenFromCredential_InvalidJSON(t *testing.T) {
-	credential := types.CredentialSet{
+	credential := models.CredentialSet{
 		ProviderData: json.RawMessage(`not-json`),
 	}
 	if _, err := APITokenFromCredential(credential); !errors.Is(err, ErrAPITokenMissing) {

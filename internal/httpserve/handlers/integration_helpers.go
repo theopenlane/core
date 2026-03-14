@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
@@ -9,8 +8,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/theopenlane/core/internal/integrations/activation"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -75,15 +72,7 @@ func integrationHTTPStatus(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, ErrValidateToken):
 		return http.StatusBadRequest
-	case errors.Is(err, keystore.ErrProviderNotRegistered):
-		return http.StatusBadRequest
-	case errors.Is(err, keystore.ErrOperationNotRegistered):
-		return http.StatusBadRequest
 	case errors.Is(err, keystore.ErrCredentialNotFound):
-		return http.StatusBadRequest
-	case errors.Is(err, keystore.ErrIntegrationAmbiguous):
-		return http.StatusBadRequest
-	case errors.Is(err, activation.ErrHealthCheckFailed):
 		return http.StatusBadRequest
 	case errors.Is(err, engine.ErrIntegrationProviderRequired):
 		return http.StatusBadRequest
@@ -159,38 +148,3 @@ func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
 }
 
-// validateIntegrationProvider ensures a provider exists in the registry and is active.
-func (h *Handler) validateIntegrationProvider(provider types.ProviderType) error {
-	if provider == types.ProviderUnknown {
-		return ErrInvalidProvider
-	}
-
-	spec, ok := h.IntegrationRuntime.Registry().Config(provider)
-	if !ok {
-		return ErrInvalidProvider
-	}
-	if spec.Active == nil || !*spec.Active {
-		return ErrProviderDisabled
-	}
-
-	return nil
-}
-
-func (h *Handler) updateIntegrationProviderMetadata(ctx context.Context, integrationID string, provider types.ProviderType) error {
-	reg := h.IntegrationRuntime.Registry()
-
-	spec, ok := reg.Config(provider)
-	if !ok || spec.Active == nil || !*spec.Active {
-		return nil
-	}
-
-	meta, ok := reg.ProviderMetadataCatalog()[provider]
-	if !ok {
-		meta = spec.ToProviderMetadata()
-	}
-
-	entry := buildIntegrationProviderMetadata(provider, spec, meta, reg)
-	return h.DBClient.Integration.UpdateOneID(integrationID).
-		SetProviderMetadata(entry).
-		Exec(ctx)
-}

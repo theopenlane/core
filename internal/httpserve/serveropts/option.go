@@ -275,7 +275,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithAuthOptions(getAuthOptions(s)...).
 			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)
 
-		if rt := s.Config.Handler.IntegrationRuntime; rt != nil {
+		if rt := s.Config.Handler.IntegrationsRuntime; rt != nil {
 			r = r.WithIntegrationMetadataSource(rt.Registry())
 		}
 

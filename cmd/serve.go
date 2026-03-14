@@ -281,7 +281,7 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationRuntime(dbClient),
+		serveropts.WithIntegrationsRuntime(dbClient),
 	)
 
 	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {

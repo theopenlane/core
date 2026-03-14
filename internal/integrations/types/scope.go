@@ -7,59 +7,59 @@ import (
 )
 
 const (
-	// ScopeVariablePayload identifies the provider payload variable in scope expressions
+	// ScopeVariablePayload identifies the payload variable in scope expressions
 	ScopeVariablePayload = "payload"
-	// ScopeVariableResource identifies the provider resource variable in scope expressions
+	// ScopeVariableResource identifies the resource variable in scope expressions
 	ScopeVariableResource = "resource"
-	// ScopeVariableProvider identifies the provider kind variable in scope expressions
-	ScopeVariableProvider = "provider"
+	// ScopeVariableDefinition identifies the definition slug variable in scope expressions (named "provider" for CEL expression compatibility)
+	ScopeVariableDefinition = "provider"
 	// ScopeVariableOperation identifies the operation name variable in scope expressions
 	ScopeVariableOperation = "operation"
 	// ScopeVariableConfig identifies operation config values in scope expressions
 	ScopeVariableConfig = "config"
-	// ScopeVariableIntegrationConfig identifies integration-level config values in scope expressions
-	ScopeVariableIntegrationConfig = "integration_config"
+	// ScopeVariableInstallationConfig identifies installation-level config values in scope expressions (named "integration_config" for CEL expression compatibility)
+	ScopeVariableInstallationConfig = "integration_config"
 	// ScopeVariableProviderState identifies persisted provider state values in scope expressions
 	ScopeVariableProviderState = "provider_state"
-	// ScopeVariableOrgID identifies the integration owner id in scope expressions
+	// ScopeVariableOrgID identifies the installation owner id in scope expressions
 	ScopeVariableOrgID = "org_id"
-	// ScopeVariableIntegrationID identifies the installed integration id in scope expressions
-	ScopeVariableIntegrationID = "integration_id"
+	// ScopeVariableInstallationID identifies the installation id in scope expressions (named "integration_id" for CEL expression compatibility)
+	ScopeVariableInstallationID = "integration_id"
 )
 
 // ScopeVars contains standard variables available to integration scope CEL expressions
 type ScopeVars struct {
-	// Payload contains provider payload data for filtering
+	// Payload contains payload data for filtering
 	Payload json.RawMessage
-	// Resource contains provider resource identity values
+	// Resource contains resource identity values
 	Resource string
-	// Provider contains provider kind values
-	Provider ProviderType
+	// DefinitionID identifies the definition by canonical ID (exposed as "provider" in CEL for compatibility)
+	DefinitionID DefinitionID
 	// Operation contains operation name values
 	Operation OperationName
 	// Config contains operation config values
 	Config json.RawMessage
-	// IntegrationConfig contains integration-level config values
-	IntegrationConfig json.RawMessage
-	// ProviderState contains integration provider state values
+	// InstallationConfig contains installation-level config values (exposed as "integration_config" in CEL for compatibility)
+	InstallationConfig json.RawMessage
+	// ProviderState contains installation provider state values
 	ProviderState json.RawMessage
-	// OrgID contains integration owner id values
+	// OrgID contains installation owner id values
 	OrgID string
-	// IntegrationID contains installed integration id values
-	IntegrationID string
+	// InstallationID contains installed integration id values (exposed as "integration_id" in CEL for compatibility)
+	InstallationID string
 }
 
 // CELVars converts scope vars into CEL variable bindings
 func (v ScopeVars) CELVars() map[string]any {
 	return map[string]any{
-		ScopeVariablePayload:           jsonx.DecodeAnyOrNil(v.Payload),
-		ScopeVariableResource:          v.Resource,
-		ScopeVariableProvider:          string(v.Provider),
-		ScopeVariableOperation:         string(v.Operation),
-		ScopeVariableConfig:            jsonx.DecodeAnyOrNil(v.Config),
-		ScopeVariableIntegrationConfig: jsonx.DecodeAnyOrNil(v.IntegrationConfig),
-		ScopeVariableProviderState:     jsonx.DecodeAnyOrNil(v.ProviderState),
-		ScopeVariableOrgID:             v.OrgID,
-		ScopeVariableIntegrationID:     v.IntegrationID,
+		ScopeVariablePayload:            jsonx.DecodeAnyOrNil(v.Payload),
+		ScopeVariableResource:           v.Resource,
+		ScopeVariableDefinition:         string(v.DefinitionID),
+		ScopeVariableOperation:          string(v.Operation),
+		ScopeVariableConfig:             jsonx.DecodeAnyOrNil(v.Config),
+		ScopeVariableInstallationConfig: jsonx.DecodeAnyOrNil(v.InstallationConfig),
+		ScopeVariableProviderState:      jsonx.DecodeAnyOrNil(v.ProviderState),
+		ScopeVariableOrgID:              v.OrgID,
+		ScopeVariableInstallationID:     v.InstallationID,
 	}
 }

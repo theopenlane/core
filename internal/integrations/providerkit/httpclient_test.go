@@ -1,3 +1,5 @@
+//go:build test
+
 package providerkit
 
 import (
@@ -7,8 +9,6 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
-
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestNewAuthenticatedClient_ClonesHeaders(t *testing.T) {
@@ -123,75 +123,6 @@ func TestAuthenticatedClientGetJSON_HTTPError(t *testing.T) {
 	}
 	if httpErr.StatusCode != http.StatusUnauthorized {
 		t.Fatalf("expected status 401, got %d", httpErr.StatusCode)
-	}
-}
-
-func TestAuthenticatedClientFromClient(t *testing.T) {
-	client := &AuthenticatedClient{BearerToken: "token"}
-
-	if AuthenticatedClientFromClient(types.NewClientInstance(client)) == nil {
-		t.Fatalf("expected client to be unwrapped")
-	}
-
-	if AuthenticatedClientFromClient(types.NewClientInstance("not-a-client")) != nil {
-		t.Fatalf("expected nil for non-matching type")
-	}
-}
-
-func TestResolveAuthenticatedClient_FromPooled(t *testing.T) {
-	pooled := &AuthenticatedClient{
-		BaseURL:     "https://api.example.com",
-		BearerToken: "existing-token",
-		Headers:     map[string]string{"X-Custom": "value"},
-	}
-
-	input := types.OperationInput{
-		Client: types.NewClientInstance(pooled),
-	}
-
-	client, err := ResolveAuthenticatedClient(input, nil, "", nil)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if client.BearerToken != "existing-token" {
-		t.Fatalf("expected pooled token, got %q", client.BearerToken)
-	}
-}
-
-func TestResolveAuthenticatedClient_FromPooled_AppliesBaseURL(t *testing.T) {
-	pooled := &AuthenticatedClient{
-		BearerToken: "token",
-	}
-
-	input := types.OperationInput{
-		Client: types.NewClientInstance(pooled),
-	}
-
-	client, err := ResolveAuthenticatedClient(input, nil, "https://api.example.com", nil)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if client.BaseURL != "https://api.example.com" {
-		t.Fatalf("expected base URL to be applied, got %q", client.BaseURL)
-	}
-}
-
-func TestResolveAuthenticatedClient_FromCredential(t *testing.T) {
-	extract := func(types.CredentialSet) (string, error) {
-		return "extracted-token", nil
-	}
-
-	input := types.OperationInput{}
-
-	client, err := ResolveAuthenticatedClient(input, extract, "https://api.example.com", nil)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if client.BearerToken != "extracted-token" {
-		t.Fatalf("expected extracted token, got %q", client.BearerToken)
-	}
-	if client.BaseURL != "https://api.example.com" {
-		t.Fatalf("expected base URL, got %q", client.BaseURL)
 	}
 }
 

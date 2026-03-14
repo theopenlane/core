@@ -5,44 +5,35 @@ import (
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const defaultAuthStateStoreMaxEntries = 4096
 
-// AuthState captures the temporary state required to complete an OAuth flow callback.
+// AuthState captures the temporary state required to complete a definition auth flow callback
 type AuthState struct {
 	// State is the unique CSRF token identifying this authorization session
 	State string
-	// Provider identifies which provider is handling the authorization
-	Provider types.ProviderType
-	// OrgID identifies the organization initiating the flow
-	OrgID string
-	// IntegrationID identifies the integration record being activated
-	IntegrationID string
-	// Scopes contains the authorization scopes requested from the provider
-	Scopes []string
-	// Metadata carries additional provider-specific configuration
-	Metadata json.RawMessage
-	// LabelOverrides customizes UI labels presented during authorization
-	LabelOverrides map[string]string
+	// DefinitionID identifies which definition is handling the authorization
+	DefinitionID types.DefinitionID
+	// InstallationID identifies the installation record being activated
+	InstallationID string
+	// CallbackState holds the opaque state payload returned by the definition's AuthStartFunc
+	CallbackState json.RawMessage
 	// CreatedAt records when the session was initiated
 	CreatedAt time.Time
 	// ExpiresAt specifies when the session becomes invalid
 	ExpiresAt time.Time
-	// AuthSession holds the provider-specific authorization state
-	AuthSession types.AuthSession
 }
 
-// AuthStateStore persists callback state until the provider callback is completed.
-// This is intentionally ephemeral and scoped to OAuth authorization state lifecycle.
+// AuthStateStore persists callback state until the definition auth callback is completed.
+// This is intentionally ephemeral and scoped to the definition auth flow lifecycle.
 type AuthStateStore interface {
 	Save(state AuthState) error
 	Take(token string) (AuthState, error)
 }
 
-// InMemoryAuthStateStore stores OAuth callback state in process memory and is safe for concurrent use
+// InMemoryAuthStateStore stores definition auth callback state in process memory and is safe for concurrent use
 type InMemoryAuthStateStore struct {
 	// mu protects concurrent access to the sessions map
 	mu sync.Mutex
@@ -54,7 +45,7 @@ type InMemoryAuthStateStore struct {
 	now func() time.Time
 }
 
-// NewInMemoryAuthStateStore returns an in-memory authorization state store
+// NewInMemoryAuthStateStore returns an in-memory definition authorization state store
 func NewInMemoryAuthStateStore() *InMemoryAuthStateStore {
 	return &InMemoryAuthStateStore{
 		sessions:   map[string]AuthState{},
@@ -63,14 +54,10 @@ func NewInMemoryAuthStateStore() *InMemoryAuthStateStore {
 	}
 }
 
-// Save records the provided authorization state.
+// Save records the provided definition authorization state
 func (m *InMemoryAuthStateStore) Save(state AuthState) error {
 	if state.State == "" {
-		return integrations.ErrStateRequired
-	}
-
-	if state.AuthSession == nil {
-		return integrations.ErrAuthSessionInvalid
+		return ErrAuthStateTokenRequired
 	}
 
 	clone := state
@@ -87,13 +74,13 @@ func (m *InMemoryAuthStateStore) Save(state AuthState) error {
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
+
 	m.purgeExpiredLocked(now)
 
 	if _, exists := m.sessions[token]; !exists && len(m.sessions) >= m.maxEntries {
-		return integrations.ErrAuthorizationStateStoreFull
+		return ErrAuthStateStoreFull
 	}
 
-	clone.State = token
 	m.sessions[token] = clone
 
 	return nil
@@ -102,23 +89,24 @@ func (m *InMemoryAuthStateStore) Save(state AuthState) error {
 // Take retrieves and deletes authorization state associated with the given token
 func (m *InMemoryAuthStateStore) Take(token string) (AuthState, error) {
 	if token == "" {
-		return AuthState{}, integrations.ErrStateRequired
+		return AuthState{}, ErrAuthStateTokenRequired
 	}
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	now := m.now()
+
 	session, ok := m.sessions[token]
 	if !ok {
 		m.purgeExpiredLocked(now)
-		return AuthState{}, integrations.ErrAuthorizationStateNotFound
+		return AuthState{}, ErrAuthStateNotFound
 	}
 
 	if !session.ExpiresAt.IsZero() && now.After(session.ExpiresAt) {
 		delete(m.sessions, token)
 		m.purgeExpiredLocked(now)
-		return AuthState{}, integrations.ErrAuthorizationStateExpired
+		return AuthState{}, ErrAuthStateExpired
 	}
 
 	delete(m.sessions, token)

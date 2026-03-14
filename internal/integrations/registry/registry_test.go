@@ -1,109 +1,135 @@
-package registry_test
+package registry
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
-	"github.com/theopenlane/core/internal/integrations/providers/catalog"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/spec"
-	"github.com/theopenlane/core/internal/integrations/types"
+	generated "github.com/theopenlane/core/internal/ent/generated"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
-func TestNewRegistry(t *testing.T) {
-	ctx := context.Background()
+// TestRegistryRegisterAndResolveDefinition verifies one definition can be registered and resolved
+func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
+	t.Parallel()
 
-	r, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-	require.NotNil(t, r)
+	reg := New()
+
+	definition := integrationtypes.Definition{
+		Spec: integrationtypes.DefinitionSpec{
+			ID:          integrationtypes.DefinitionID("def_01HZY6PZQK2T64B7J9QX4N5Z6A"),
+			Slug:        "github_app",
+			Version:     "v1",
+			Family:      "github",
+			DisplayName: "GitHub App",
+			Active:      true,
+			Visible:     true,
+		},
+		Clients: []integrationtypes.ClientRegistration{
+			{
+				Name: "rest",
+				Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
+					return "ok", nil
+				},
+			},
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:  "health.default",
+				Topic: gala.TopicName("integration.github_app.health.default"),
+				Handle: func(context.Context, *generated.Integration, integrationtypes.CredentialSet, any, json.RawMessage) (json.RawMessage, error) {
+					return json.RawMessage(`{"ok":true}`), nil
+				},
+			},
+		},
+	}
+
+	if err := reg.Register(definition); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+
+	byID, ok := reg.Definition(definition.Spec.ID)
+	if !ok {
+		t.Fatalf("Definition() did not find %q", definition.Spec.ID)
+	}
+
+	if byID.Spec.DisplayName != definition.Spec.DisplayName {
+		t.Fatalf("Definition() display name = %q, want %q", byID.Spec.DisplayName, definition.Spec.DisplayName)
+	}
+
+	client, err := reg.Client(definition.Spec.ID, "rest")
+	if err != nil {
+		t.Fatalf("Client() error = %v", err)
+	}
+
+	if client.Name != "rest" {
+		t.Fatalf("Client() name = %q, want rest", client.Name)
+	}
+
+	operation, err := reg.Operation(definition.Spec.ID, "health.default")
+	if err != nil {
+		t.Fatalf("Operation() error = %v", err)
+	}
+
+	if operation.Topic != gala.TopicName("integration.github_app.health.default") {
+		t.Fatalf("Operation() topic = %q", operation.Topic)
+	}
+
+	if got := len(reg.Catalog()); got != 1 {
+		t.Fatalf("Catalog() len = %d, want 1", got)
+	}
+
+	if got := len(reg.Listeners()); got != 1 {
+		t.Fatalf("Listeners() len = %d, want 1", got)
+	}
 }
 
-func TestRegistry_Provider(t *testing.T) {
-	ctx := context.Background()
+// TestRegistryRejectsDuplicateOperationTopic verifies operation topics remain unique across definitions
+func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
+	t.Parallel()
 
-	r, err := registry.NewRegistry(ctx, catalog.Builders(catalog.Config{}))
-	require.NoError(t, err)
+	reg := New()
+	first := integrationtypes.Definition{
+		Spec: integrationtypes.DefinitionSpec{
+			ID:          integrationtypes.DefinitionID("def_first"),
+			Slug:        "first",
+			Version:     "v1",
+			DisplayName: "First",
+			Active:      true,
+			Visible:     true,
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:  "health.default",
+				Topic: gala.TopicName("integration.shared.topic"),
+			},
+		},
+	}
+	second := integrationtypes.Definition{
+		Spec: integrationtypes.DefinitionSpec{
+			ID:          integrationtypes.DefinitionID("def_second"),
+			Slug:        "second",
+			Version:     "v1",
+			DisplayName: "Second",
+			Active:      true,
+			Visible:     true,
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:  "collect.default",
+				Topic: gala.TopicName("integration.shared.topic"),
+			},
+		},
+	}
 
-	_, ok := r.Provider(types.ProviderType("github"))
-	assert.True(t, ok)
+	if err := reg.Register(first); err != nil {
+		t.Fatalf("Register(first) error = %v", err)
+	}
 
-	_, ok = r.Provider(types.ProviderType("nonexistent"))
-	assert.False(t, ok)
-}
-
-func TestRegistry_Config(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, catalog.Builders(catalog.Config{}))
-	require.NoError(t, err)
-
-	providerSpec, ok := r.Config(types.ProviderType("slack"))
-	assert.True(t, ok)
-	assert.Equal(t, "slack", providerSpec.Name)
-}
-
-func TestRegistry_ProviderMetadataCatalog(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, catalog.Builders(catalog.Config{}))
-	require.NoError(t, err)
-
-	providerCatalog := r.ProviderMetadataCatalog()
-	assert.NotEmpty(t, providerCatalog)
-}
-
-func TestRegistry_MintCredential_ProviderNotFound(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-
-	_, err = r.MintCredential(ctx, types.CredentialMintRequest{
-		Provider: types.ProviderType("nonexistent"),
-	})
-
-	assert.ErrorIs(t, err, registry.ErrProviderNotFound)
-}
-
-func TestRegistry_UpsertProvider_ProviderTypeRequired(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-
-	err = r.UpsertProvider(ctx, spec.ProviderSpec{}, nil)
-	assert.ErrorIs(t, err, registry.ErrProviderTypeRequired)
-}
-
-func TestRegistry_ResolveOperation_ProviderNotFound(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-
-	_, err = r.ResolveOperation(types.ProviderType("nonexistent"), types.OperationHealthDefault, "")
-	assert.ErrorIs(t, err, registry.ErrOperationNotRegistered)
-}
-
-func TestRegistry_ResolveOperation_CriteriaRequired(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-
-	_, err = r.ResolveOperation(types.ProviderType("slack"), "", "")
-	assert.ErrorIs(t, err, registry.ErrOperationCriteriaRequired)
-}
-
-func TestRegistry_ResolveOperation_ProviderUnknown(t *testing.T) {
-	ctx := context.Background()
-
-	r, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-
-	_, err = r.ResolveOperation(types.ProviderUnknown, types.OperationHealthDefault, "")
-	assert.ErrorIs(t, err, registry.ErrProviderTypeRequired)
+	err := reg.Register(second)
+	if !errors.Is(err, ErrOperationTopicAlreadyRegistered) {
+		t.Fatalf("Register(second) error = %v, want %v", err, ErrOperationTopicAlreadyRegistered)
+	}
 }

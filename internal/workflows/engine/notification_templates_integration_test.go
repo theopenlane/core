@@ -3,63 +3,123 @@
 package engine_test
 
 import (
-	"context"
 	"encoding/json"
 
 	"github.com/oklog/ulid/v2"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	teamsprovider "github.com/theopenlane/core/internal/integrations/providers/microsoftteams"
-	slackprovider "github.com/theopenlane/core/internal/integrations/providers/slack"
-	"github.com/theopenlane/core/internal/integrations/types"
+	v2operations "github.com/theopenlane/core/internal/integrations/operations"
+	v2types "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
-// integrationOpsSpy captures integration operation requests for assertions
-type integrationOpsSpy struct {
-	// calls stores recorded operation requests
-	calls []types.OperationRequest
-}
+const (
+	testSlackDefinitionID = "def_01K0SLACK000000000000000001"
+	testTeamsDefinitionID = "def_01K0MSTEAMS00000000000000001"
+	testSlackMessageTopic = gala.TopicName("test.slack.message.send")
+	testTeamsMessageTopic = gala.TopicName("test.microsoft_teams.message.send")
+)
 
-// notificationIntegrationRegistryStub provides notification operation descriptors for test providers
-type notificationIntegrationRegistryStub struct{}
+// notificationV2RegistryStub implements registry.DefinitionRegistry for notification tests
+type notificationV2RegistryStub struct{}
 
-// ResolveOperation returns notification operation descriptors for test providers.
-func (notificationIntegrationRegistryStub) ResolveOperation(provider types.ProviderType, operationName types.OperationName, operationKind types.OperationKind) (types.OperationDescriptor, error) {
-	if operationName != "" && operationName != types.OperationName("message.send") {
-		return types.OperationDescriptor{}, engine.ErrIntegrationOperationCriteriaRequired
-	}
-	if operationKind != "" && operationKind != types.OperationKindNotify {
-		return types.OperationDescriptor{}, engine.ErrIntegrationOperationCriteriaRequired
-	}
-
-	switch provider {
-	case slackprovider.TypeSlack:
-		return types.OperationDescriptor{
-			Provider: slackprovider.TypeSlack,
-			Name:     types.OperationName("message.send"),
-			Kind:     types.OperationKindNotify,
-		}, nil
-	case teamsprovider.TypeMicrosoftTeams:
-		return types.OperationDescriptor{
-			Provider: teamsprovider.TypeMicrosoftTeams,
-			Name:     types.OperationName("message.send"),
-			Kind:     types.OperationKindNotify,
-		}, nil
+func (notificationV2RegistryStub) Definition(id v2types.DefinitionID) (v2types.Definition, bool) {
+	switch string(id) {
+	case testSlackDefinitionID:
+		return notificationTestSlackDefinition(), true
+	case testTeamsDefinitionID:
+		return notificationTestTeamsDefinition(), true
 	default:
-		return types.OperationDescriptor{}, engine.ErrIntegrationProviderRequired
+		return v2types.Definition{}, false
 	}
 }
 
-// Run records the operation request and returns an ok result
-func (s *integrationOpsSpy) Run(_ context.Context, req types.OperationRequest) (types.OperationResult, error) {
-	s.calls = append(s.calls, req)
-	return types.OperationResult{Status: types.OperationStatusOK, Summary: "ok"}, nil
+func (notificationV2RegistryStub) Client(v2types.DefinitionID, v2types.ClientName) (v2types.ClientRegistration, error) {
+	return v2types.ClientRegistration{}, nil
+}
+
+func (notificationV2RegistryStub) Operation(id v2types.DefinitionID, name v2types.OperationName) (v2types.OperationRegistration, error) {
+	def, ok := notificationV2RegistryStub{}.Definition(id)
+	if !ok {
+		return v2types.OperationRegistration{}, engine.ErrIntegrationOperationCriteriaRequired
+	}
+	for _, op := range def.Operations {
+		if op.Name == name {
+			return op, nil
+		}
+	}
+	return v2types.OperationRegistration{}, engine.ErrIntegrationOperationCriteriaRequired
+}
+
+func (notificationV2RegistryStub) OperationFromString(definitionID, name string) (v2types.OperationRegistration, error) {
+	return notificationV2RegistryStub{}.Operation(v2types.DefinitionID(definitionID), v2types.OperationName(name))
+}
+
+func (notificationV2RegistryStub) Catalog() []v2types.DefinitionSpec {
+	return []v2types.DefinitionSpec{
+		notificationTestSlackDefinition().Spec,
+		notificationTestTeamsDefinition().Spec,
+	}
+}
+
+func (notificationV2RegistryStub) Listeners() []v2types.OperationRegistration {
+	slack := notificationTestSlackDefinition()
+	teams := notificationTestTeamsDefinition()
+	return []v2types.OperationRegistration{slack.Operations[0], teams.Operations[0]}
+}
+
+func notificationTestSlackDefinition() v2types.Definition {
+	return v2types.Definition{
+		Spec: v2types.DefinitionSpec{
+			ID:   testSlackDefinitionID,
+			Slug: "slack",
+		},
+		Operations: []v2types.OperationRegistration{
+			{
+				Name:  "message.send",
+				Topic: testSlackMessageTopic,
+			},
+		},
+	}
+}
+
+func notificationTestTeamsDefinition() v2types.Definition {
+	return v2types.Definition{
+		Spec: v2types.DefinitionSpec{
+			ID:   testTeamsDefinitionID,
+			Slug: "microsoft_teams",
+		},
+		Operations: []v2types.OperationRegistration{
+			{
+				Name:  "message.send",
+				Topic: testTeamsMessageTopic,
+			},
+		},
+	}
+}
+
+// registerNotificationTestTopics registers noop listeners for test notification topics in the gala registry
+func registerNotificationTestTopics(registry *gala.Registry) {
+	_, _ = gala.RegisterListeners(registry, gala.Definition[v2operations.Envelope]{
+		Topic: gala.Topic[v2operations.Envelope]{Name: testSlackMessageTopic},
+		Name:  "test.noop.slack.message.send",
+		Handle: func(gala.HandlerContext, v2operations.Envelope) error {
+			return nil
+		},
+	})
+	_, _ = gala.RegisterListeners(registry, gala.Definition[v2operations.Envelope]{
+		Topic: gala.Topic[v2operations.Envelope]{Name: testTeamsMessageTopic},
+		Name:  "test.noop.teams.message.send",
+		Handle: func(gala.HandlerContext, v2operations.Envelope) error {
+			return nil
+		},
+	})
 }
 
 // TestExecuteNotificationWithTemplateIntegration verifies template based integration dispatch
@@ -68,10 +128,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 
 	wfEngine := s.Engine()
 
-	opsSpy := &integrationOpsSpy{}
-	err := wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
-		Registry:   notificationIntegrationRegistryStub{},
-		Operations: opsSpy,
+	runStore, err := v2operations.NewRunStore(s.client)
+	s.Require().NoError(err)
+
+	registerNotificationTestTopics(s.galaRuntime.Registry())
+
+	dispatcher, err := v2operations.NewDispatcher(notificationV2RegistryStub{}, s.client, runStore, s.galaRuntime)
+	s.Require().NoError(err)
+
+	err = wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
+		Registry:   notificationV2RegistryStub{},
+		Dispatcher: dispatcher,
 	})
 	s.Require().NoError(err)
 
@@ -80,7 +147,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 	integrationRecord, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Slack").
-		SetKind(string(slackprovider.TypeSlack)).
+		SetDefinitionSlug("slack").
+		SetDefinitionID(testSlackDefinitionID).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
@@ -154,16 +222,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 	s.Require().Len(notifications, 1)
 	s.Equal(template.ID, notifications[0].TemplateID)
 
-	s.Require().Len(opsSpy.calls, 1)
-	call := opsSpy.calls[0]
-	s.Equal(orgID, call.OrgID)
-	s.Equal(integrationRecord.ID, call.IntegrationID)
-	s.Equal(slackprovider.TypeSlack, call.Provider)
-	s.Equal(types.OperationName("message.send"), call.Name)
-	config, err := jsonx.ToMap(call.Config)
+	runs, err := s.client.IntegrationRun.Query().
+		Where(integrationrun.IntegrationIDEQ(integrationRecord.ID)).
+		All(seedCtx)
 	s.Require().NoError(err)
-	s.Equal("C12345", config["channel"])
-	s.Equal("Hello https://example.com/review", config["text"])
+	s.Require().Len(runs, 1)
+	s.Equal("message.send", runs[0].OperationName)
+	s.Equal("C12345", runs[0].OperationConfig["channel"])
+	s.Equal("Hello https://example.com/review", runs[0].OperationConfig["text"])
 }
 
 // TestNotificationTemplateIntegrationFromMutation verifies mutation-driven notification integration execution
@@ -172,10 +238,17 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 
 	wfEngine := s.Engine()
 
-	opsSpy := &integrationOpsSpy{}
-	err := wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
-		Registry:   notificationIntegrationRegistryStub{},
-		Operations: opsSpy,
+	runStore, err := v2operations.NewRunStore(s.client)
+	s.Require().NoError(err)
+
+	registerNotificationTestTopics(s.galaRuntime.Registry())
+
+	dispatcher, err := v2operations.NewDispatcher(notificationV2RegistryStub{}, s.client, runStore, s.galaRuntime)
+	s.Require().NoError(err)
+
+	err = wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
+		Registry:   notificationV2RegistryStub{},
+		Dispatcher: dispatcher,
 	})
 	s.Require().NoError(err)
 
@@ -184,7 +257,8 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 	integrationRecord, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Slack").
-		SetKind(string(slackprovider.TypeSlack)).
+		SetDefinitionSlug("slack").
+		SetDefinitionID(testSlackDefinitionID).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
@@ -280,14 +354,10 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 	s.Require().NoError(err)
 	s.Require().Len(notifications, 1)
 
-	s.Require().Len(opsSpy.calls, 1)
-	call := opsSpy.calls[0]
-	s.Equal(orgID, call.OrgID)
-	s.Equal(integrationRecord.ID, call.IntegrationID)
-	s.Equal(slackprovider.TypeSlack, call.Provider)
-	s.Equal(types.OperationName("message.send"), call.Name)
-	config, err := jsonx.ToMap(call.Config)
+	runs, err := s.client.IntegrationRun.Query().
+		Where(integrationrun.IntegrationIDEQ(integrationRecord.ID)).
+		All(seedCtx)
 	s.Require().NoError(err)
-	s.Equal("C12345", config["channel"])
-	s.Equal("Created CTRL-PLACEHOLDER", config["text"])
+	s.Require().Len(runs, 1)
+	s.Equal("message.send", runs[0].OperationName)
 }

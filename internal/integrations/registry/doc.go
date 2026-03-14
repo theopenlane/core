@@ -1,2 +1,2 @@
-// Package registry loads provider specs and builds the integration provider registry.
+// Package registry stores definition registrations for the greenfield integration runtime
 package registry

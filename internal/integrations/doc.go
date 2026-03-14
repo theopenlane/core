@@ -1,3 +1,2 @@
-// Package integrations provides shared types, errors, and event definitions for the
-// integration subsystem. Provider-specific logic lives in the providers subpackages.
-package integrations
+// Package integrationsv2 contains the clean-slate definition and registry model for integrations
+package integrationsv2

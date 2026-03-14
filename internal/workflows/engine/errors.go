@@ -43,30 +43,22 @@ var (
 	ErrIntegrationFailed = errors.New("integration operation failed")
 	// ErrExecutorNotAvailable is returned when the executor is not available
 	ErrExecutorNotAvailable = errors.New("executor is nil")
-	// ErrIntegrationStoreRequired is returned when an integration store dependency is missing
-	ErrIntegrationStoreRequired = errors.New("integration store required")
+	// ErrIntegrationStoreRequired is returned when an integration installation store dependency is missing
+	ErrIntegrationStoreRequired = errors.New("integration installation store required")
 	// ErrIntegrationRegistryRequired is returned when an integration registry dependency is missing
 	ErrIntegrationRegistryRequired = errors.New("integration registry required")
-	// ErrIntegrationOperationsRequired is returned when integration operations are not configured
-	ErrIntegrationOperationsRequired = errors.New("integration operations required")
-	// ErrIntegrationRunIDRequired indicates the integration run identifier is missing
-	ErrIntegrationRunIDRequired = errors.New("integration run id required")
-	// ErrIntegrationRecordMissing indicates the integration record is missing for a run
-	ErrIntegrationRecordMissing = errors.New("integration record missing for run")
-	// ErrIntegrationProviderUnknown indicates the integration provider could not be resolved
-	ErrIntegrationProviderUnknown = errors.New("integration provider unknown")
-	// ErrIntegrationOperationNameRequired indicates the run operation name is missing
-	ErrIntegrationOperationNameRequired = errors.New("integration operation name required")
-	// ErrIntegrationOperationCriteriaRequired indicates operation name or operation kind is required
-	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation criteria required")
-	// ErrIntegrationOperationFailed indicates the operation failed to execute successfully
-	ErrIntegrationOperationFailed = errors.New("integration operation failed")
-	// ErrIntegrationAlertPayloadsMissing indicates alert payloads are missing from operation output
-	ErrIntegrationAlertPayloadsMissing = errors.New("integration alert payloads missing")
+	// ErrIntegrationOperationsRequired is returned when integration dispatcher is not configured
+	ErrIntegrationOperationsRequired = errors.New("integration dispatcher required")
+	// ErrIntegrationOperationCriteriaRequired indicates operation name is required
+	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation name required")
 	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation
 	ErrIntegrationScopeConditionFalse = errors.New("integration scope condition false")
 	// ErrIntegrationActionQueued indicates the integration action was queued for async processing
 	ErrIntegrationActionQueued = errors.New("integration action queued")
+	// ErrInstallationRequired indicates the integration action requires an installation ID or definition ID
+	ErrInstallationRequired = errors.New("integration action requires installation_id or definition_id")
+	// ErrInstallationNotFound indicates no matching installation record was found
+	ErrInstallationNotFound = errors.New("installation not found")
 	// ErrObjectNil is returned when the workflow object is nil
 	ErrObjectNil = errors.New("object is nil")
 	// ErrProposalChangesModified is returned when proposal changes are modified after approval

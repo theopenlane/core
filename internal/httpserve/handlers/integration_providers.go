@@ -1,71 +1,72 @@
 package handlers
 
 import (
-	"encoding/json"
-
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/utils/rout"
 )
 
-// ListIntegrationProviders returns declarative metadata about available third-party providers
+// ListIntegrationProviders returns declarative metadata about available third-party integration definitions
 func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
-	reg := h.IntegrationRuntime.Registry()
-	catalog := reg.ProviderMetadataCatalog()
-	result := make([]types.IntegrationProviderMetadata, 0, len(catalog))
+	reg := h.IntegrationsRuntime.Registry()
+	specs := reg.Catalog()
+	entries := make([]DefinitionCatalogEntry, 0, len(specs))
 
-	for providerType, meta := range catalog {
-		providerSpec, ok := reg.Config(providerType)
+	for _, spec := range specs {
+		def, ok := reg.Definition(spec.ID)
 		if !ok {
 			continue
 		}
 
-		result = append(result, buildIntegrationProviderMetadata(providerType, providerSpec, meta, reg))
+		entries = append(entries, buildDefinitionCatalogEntry(def))
 	}
 
-	resp := IntegrationProvidersResponse{
+	return h.Success(ctx, IntegrationProvidersResponse{
 		Reply:     rout.Reply{Success: true},
-		Schema:    keystore.Schema(),
-		Providers: result,
-	}
-
-	return h.Success(ctx, resp)
+		Providers: entries,
+	})
 }
 
-// environmentCredentials returns the provider-specific operator config as raw JSON for API responses.
-// Returns nil when the spec carries no provider config.
-func environmentCredentials(providerSpec spec.ProviderSpec) json.RawMessage {
-	if len(providerSpec.ProviderConfig) == 0 {
-		return nil
+// buildDefinitionCatalogEntry constructs one catalog entry from a v2 definition
+func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
+	spec := def.Spec
+	entry := DefinitionCatalogEntry{
+		ID:          string(spec.ID),
+		Slug:        spec.Slug,
+		Version:     spec.Version,
+		Family:      spec.Family,
+		DisplayName: spec.DisplayName,
+		Description: spec.Description,
+		Category:    spec.Category,
+		DocsURL:     spec.DocsURL,
+		LogoURL:     spec.LogoURL,
+		Tags:        spec.Tags,
+		Labels:      spec.Labels,
+		Active:      spec.Active,
+		Visible:     spec.Visible,
+		HasAuth:     def.Auth != nil,
 	}
 
-	return jsonx.CloneRawMessage(providerSpec.ProviderConfig)
-}
+	if def.Credentials != nil {
+		entry.CredentialSchema = jsonx.CloneRawMessage(def.Credentials.Schema)
+	}
 
-// buildIntegrationProviderMetadata constructs provider metadata for API responses.
-// It starts from the pre-built catalog metadata and augments it with environment credentials
-// and operation descriptors derived from the live registry.
-func buildIntegrationProviderMetadata(providerType types.ProviderType, providerSpec spec.ProviderSpec, meta types.IntegrationProviderMetadata, reg *registry.Registry) types.IntegrationProviderMetadata {
-	entry := meta
-	entry.EnvironmentCredentials = environmentCredentials(providerSpec)
+	if def.OperatorConfig != nil {
+		entry.OperatorConfig = jsonx.CloneRawMessage(def.OperatorConfig.Schema)
+	}
 
-	if reg != nil {
-		if descriptors := reg.OperationDescriptors(providerType); len(descriptors) > 0 {
-			entry.Operations = make([]types.OperationMetadata, 0, len(descriptors))
-			for _, descriptor := range descriptors {
-				entry.Operations = append(entry.Operations, types.OperationMetadata{
-					Name:         string(descriptor.Name),
-					Kind:         string(descriptor.Kind),
-					Description:  descriptor.Description,
-					Client:       string(descriptor.Client),
-					ConfigSchema: jsonx.CloneRawMessage(descriptor.ConfigSchema),
-				})
-			}
+	if len(def.Operations) > 0 {
+		entry.Operations = make([]DefinitionOperationEntry, 0, len(def.Operations))
+		for _, op := range def.Operations {
+			entry.Operations = append(entry.Operations, DefinitionOperationEntry{
+				Name:         string(op.Name),
+				Kind:         string(op.Kind),
+				Description:  op.Description,
+				Client:       string(op.Client),
+				ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
+			})
 		}
 	}
 

@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"context"
+	"net/http"
 	"testing"
 
 	"github.com/samber/lo"

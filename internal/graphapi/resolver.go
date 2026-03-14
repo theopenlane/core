@@ -17,7 +17,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -53,12 +53,12 @@ type Resolver struct {
 	trustCenterSettings
 }
 
-// integrationMetadataSource exposes provider metadata needed by workflow metadata resolvers
+// integrationMetadataSource exposes definition metadata needed by workflow metadata resolvers
 type integrationMetadataSource interface {
-	// ProviderMetadataCatalog returns provider metadata catalog
-	ProviderMetadataCatalog() map[integrationtypes.ProviderType]integrationtypes.IntegrationProviderMetadata
-	// OperationDescriptors returns operation descriptors for a provider
-	OperationDescriptors(provider integrationtypes.ProviderType) []integrationtypes.OperationDescriptor
+	// Catalog returns all registered definition specs in stable id order
+	Catalog() []types.DefinitionSpec
+	// Definition returns one definition by canonical identifier
+	Definition(id types.DefinitionID) (types.Definition, bool)
 }
 
 // trustCenterSettings holds the settings for trust center domains

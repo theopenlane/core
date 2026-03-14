@@ -322,11 +322,11 @@ func validateIntegrationActionParams(params json.RawMessage) error {
 		return err
 	}
 
-	if input.OperationName == "" && input.OperationKind == "" {
+	if input.OperationName == "" {
 		return ErrIntegrationOperationRequired
 	}
 
-	if input.IntegrationID == "" && input.Provider == "" {
+	if input.InstallationID == "" && input.DefinitionID == "" {
 		return ErrIntegrationConfigRequired
 	}
 	if input.ScopeExpression == "" && (len(input.ScopePayload) > 0 || input.ScopeResource != "") {

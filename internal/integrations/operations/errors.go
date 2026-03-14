@@ -3,12 +3,22 @@ package operations
 import "errors"
 
 var (
-	// ErrOperationConfigInvalid indicates operation config failed JSON schema validation
-	ErrOperationConfigInvalid = errors.New("operations: operation config invalid")
-	// ErrOperationTemplateRequired indicates the operation requires a stored template configuration
-	ErrOperationTemplateRequired = errors.New("operations: operation template required")
-	// ErrOperationTemplateOverridesNotAllowed indicates overrides are not permitted for a template
-	ErrOperationTemplateOverridesNotAllowed = errors.New("operations: operation template overrides not allowed")
-	// ErrOperationTemplateOverrideNotAllowed indicates a provided override key is not permitted
-	ErrOperationTemplateOverrideNotAllowed = errors.New("operations: operation template override not allowed")
+	// ErrRegistryRequired indicates the definition registry dependency is missing
+	ErrRegistryRequired = errors.New("integrationsv2/operations: registry required")
+	// ErrDBClientRequired indicates the database client dependency is missing
+	ErrDBClientRequired = errors.New("integrationsv2/operations: db client required")
+	// ErrCredentialResolverRequired indicates the credential resolver dependency is missing
+	ErrCredentialResolverRequired = errors.New("integrationsv2/operations: credential resolver required")
+	// ErrClientServiceRequired indicates the client service dependency is missing
+	ErrClientServiceRequired = errors.New("integrationsv2/operations: client service required")
+	// ErrRunStoreRequired indicates the run store dependency is missing
+	ErrRunStoreRequired = errors.New("integrationsv2/operations: run store required")
+	// ErrGalaRequired indicates the gala dependency is missing
+	ErrGalaRequired = errors.New("integrationsv2/operations: gala required")
+	// ErrInstallationIDRequired indicates the installation identifier is missing
+	ErrInstallationIDRequired = errors.New("integrationsv2/operations: installation id required")
+	// ErrOperationNameRequired indicates the operation identifier is missing
+	ErrOperationNameRequired = errors.New("integrationsv2/operations: operation name required")
+	// ErrRunIDRequired indicates the run identifier is missing
+	ErrRunIDRequired = errors.New("integrationsv2/operations: run id required")
 )

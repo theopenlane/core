@@ -12,13 +12,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 const (
@@ -38,18 +39,18 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	rec, resp := suite.startOAuthFlow(t, user.UserCtx, models.OAuthFlowRequest{Provider: "github"})
+	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, startRec.Code)
 	assert.True(t, resp.Success)
 	assert.NotEmpty(t, resp.AuthURL)
 	assert.NotEmpty(t, resp.State)
 
 	u, err := url.Parse(resp.AuthURL)
 	require.NoError(t, err)
-	assert.Equal(t, resp.State, u.Query().Get("state"))
+	assert.NotEmpty(t, u.Query().Get("state"))
 
-	cookies := cookieMap(rec.Result().Cookies())
+	cookies := cookieMap(startRec.Result().Cookies())
 	require.Contains(t, cookies, stateCookieName)
 	require.Contains(t, cookies, orgCookieName)
 	require.Contains(t, cookies, userCookieName)
@@ -68,7 +69,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(models.OAuthFlowRequest{Provider: "invalid"})
+	body, err := json.Marshal(handlers.OAuthV2FlowRequest{DefinitionID: "def_invalid_000000000000000000"})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -86,7 +87,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 	op := suite.createImpersonationOperation("StartIntegrationOAuthUnauthorized", "Start integration OAuth flow")
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, op, suite.h.StartOAuthFlow)
 
-	body, err := json.Marshal(models.OAuthFlowRequest{Provider: "github"})
+	body, err := json.Marshal(handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -110,13 +111,19 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, models.OAuthFlowRequest{Provider: "github"})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
+
+	// OAuth state is embedded in the auth URL, not the session key (startResp.State)
+	authURL, err := url.Parse(startResp.AuthURL)
+	require.NoError(t, err)
+	oauthState := authURL.Query().Get("state")
+	require.NotEmpty(t, oauthState)
 
 	callbackReq := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := callbackReq.URL.Query()
 	query.Set("code", "test-code")
-	query.Set("state", resp.State)
+	query.Set("state", oauthState)
 	callbackReq.URL.RawQuery = query.Encode()
 
 	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
@@ -145,13 +152,18 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, models.OAuthFlowRequest{Provider: "github"})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
+
+	authURL, err := url.Parse(startResp.AuthURL)
+	require.NoError(t, err)
+	oauthState := authURL.Query().Get("state")
+	require.NotEmpty(t, oauthState)
 
 	callbackReq := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := callbackReq.URL.Query()
 	query.Set("code", "test-code")
-	query.Set("state", resp.State+"-tampered")
+	query.Set("state", oauthState+"-tampered")
 	callbackReq.URL.RawQuery = query.Encode()
 
 	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
@@ -161,7 +173,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusInternalServerError, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
@@ -189,28 +201,28 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
 
-	originalRuntime := suite.h.IntegrationRuntime
-	rt, err := integrationruntime.New(integrationruntime.Config{
-		Registry:           originalRuntime.Registry(),
-		DB:                 suite.db,
-		SuccessRedirectURL: "https://console.openlane.io/integrations",
-	})
-	require.NoError(t, err)
-	suite.h.IntegrationRuntime = rt
-	defer func() {
-		suite.h.IntegrationRuntime = originalRuntime
-	}()
+	// swap in a runtime with SuccessRedirectURL configured
+	original := suite.h.IntegrationsRuntime
+	rt := suite.buildIntegrationOAuthRuntime(t, "https://console.openlane.io/integrations")
+	suite.h.IntegrationsRuntime = rt
+
+	defer func() { suite.h.IntegrationsRuntime = original }()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, models.OAuthFlowRequest{Provider: "github"})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
+
+	authURL, err := url.Parse(startResp.AuthURL)
+	require.NoError(t, err)
+	oauthState := authURL.Query().Get("state")
+	require.NotEmpty(t, oauthState)
 
 	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := req.URL.Query()
 	query.Set("code", "test-code")
-	query.Set("state", resp.State)
+	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
 	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
@@ -222,39 +234,8 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 
 	assert.Equal(t, http.StatusFound, rec.Code)
 	location := rec.Header().Get("Location")
-	assert.Contains(t, location, "provider=github")
+	assert.Contains(t, location, "provider=test-oauth")
 	assert.Contains(t, location, "status=success")
-}
-
-func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context, request models.OAuthFlowRequest) (*httptest.ResponseRecorder, models.OAuthFlowResponse) {
-	t.Helper()
-
-	body, err := json.Marshal(request)
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
-	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-
-	req.AddCookie(&http.Cookie{Name: auth.AccessTokenCookie, Value: "access"})
-	req.AddCookie(&http.Cookie{Name: auth.RefreshTokenCookie, Value: "refresh"})
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req.WithContext(ctx))
-
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	var resp models.OAuthFlowResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-
-	return rec, resp
-}
-
-func cookieMap(cookies []*http.Cookie) map[string]*http.Cookie {
-	out := make(map[string]*http.Cookie, len(cookies))
-	for _, cookie := range cookies {
-		out[cookie.Name] = cookie
-	}
-	return out
 }
 
 func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
@@ -266,7 +247,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	body, err := json.Marshal(models.OAuthFlowRequest{Provider: ""})
+	body, err := json.Marshal(handlers.OAuthV2FlowRequest{DefinitionID: ""})
 	require.NoError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
@@ -306,12 +287,16 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, models.OAuthFlowRequest{Provider: "github"})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
+
+	authURL, err := url.Parse(startResp.AuthURL)
+	require.NoError(t, err)
+	oauthState := authURL.Query().Get("state")
 
 	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := req.URL.Query()
-	query.Set("state", resp.State)
+	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
 	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
@@ -336,15 +321,19 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	startRec, resp := suite.startOAuthFlow(t, user.UserCtx, models.OAuthFlowRequest{Provider: "github"})
+	startRec, startResp := suite.startOAuthFlow(t, user.UserCtx, handlers.OAuthV2FlowRequest{DefinitionID: testOAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
+
+	authURL, err := url.Parse(startResp.AuthURL)
+	require.NoError(t, err)
+	oauthState := authURL.Query().Get("state")
 
 	cookies[orgCookieName].Value = "invalid-org-id"
 
 	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := req.URL.Query()
 	query.Set("code", "test-code")
-	query.Set("state", resp.State)
+	query.Set("state", oauthState)
 	req.URL.RawQuery = query.Encode()
 
 	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
@@ -355,4 +344,35 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context, request handlers.OAuthV2FlowRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
+	t.Helper()
+
+	body, err := json.Marshal(request)
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	req.AddCookie(&http.Cookie{Name: auth.AccessTokenCookie, Value: "access"})
+	req.AddCookie(&http.Cookie{Name: auth.RefreshTokenCookie, Value: "refresh"})
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(ctx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp openapi.OAuthFlowResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+
+	return rec, resp
+}
+
+func cookieMap(cookies []*http.Cookie) map[string]*http.Cookie {
+	out := make(map[string]*http.Cookie, len(cookies))
+	for _, cookie := range cookies {
+		out[cookie.Name] = cookie
+	}
+
+	return out
 }

@@ -1,208 +1,296 @@
 package registry
 
 import (
-	"context"
+	"sort"
+	"sync"
 
-	"github.com/samber/lo"
-
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/providers"
-	"github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
-// Registry exposes loaded provider specs and runtime providers to callers
+// DefinitionRegistry is the read contract consumed by runtime services
+type DefinitionRegistry interface {
+	// Definition returns one definition by canonical identifier
+	Definition(id types.DefinitionID) (types.Definition, bool)
+	// Client returns one client registration for a definition
+	Client(id types.DefinitionID, name types.ClientName) (types.ClientRegistration, error)
+	// Operation returns one operation registration for a definition
+	Operation(id types.DefinitionID, name types.OperationName) (types.OperationRegistration, error)
+	// OperationFromString returns one operation registration using raw string identifiers
+	OperationFromString(definitionID string, name string) (types.OperationRegistration, error)
+	// Catalog returns all definition specs in stable id order
+	Catalog() []types.DefinitionSpec
+	// Listeners returns all operation registrations in stable topic order
+	Listeners() []types.OperationRegistration
+}
+
+// Registry is the in-memory index of registered definitions
 type Registry struct {
-	configs        map[types.ProviderType]spec.ProviderSpec
-	providers      map[types.ProviderType]types.Provider
-	clients        map[types.ProviderType][]types.ClientDescriptor
-	operations     map[types.ProviderType][]types.OperationDescriptor
-	mappingCatalog *mappingCatalog
+	mu                     sync.RWMutex
+	definitionsByID        map[types.DefinitionID]types.Definition
+	clientsByDefinition    map[types.DefinitionID]map[types.ClientName]types.ClientRegistration
+	operationsByDefinition map[types.DefinitionID]map[types.OperationName]types.OperationRegistration
+	operationsByTopic      map[gala.TopicName]types.OperationRegistration
+	webhooksByDefinition   map[types.DefinitionID][]types.WebhookRegistration
 }
 
-// NewRegistry builds the provider registry from the supplied builders.
-// Each builder contributes its static spec via Spec() and a runtime instance via Build().
-func NewRegistry(ctx context.Context, builders []providers.Builder) (*Registry, error) {
-	instance := &Registry{
-		configs:        make(map[types.ProviderType]spec.ProviderSpec, len(builders)),
-		providers:      map[types.ProviderType]types.Provider{},
-		clients:        map[types.ProviderType][]types.ClientDescriptor{},
-		operations:     map[types.ProviderType][]types.OperationDescriptor{},
-		mappingCatalog: newMappingCatalog(),
-	}
+type definitionSpecs []types.DefinitionSpec
 
-	for _, builder := range builders {
-		providerSpec := builder.Spec()
-		providerType := providerSpec.ProviderType()
-		instance.configs[providerType] = providerSpec
+type operationRegistrations []types.OperationRegistration
 
-		provider, buildErr := builder.Build(ctx, providerSpec)
-		if buildErr != nil || provider == nil {
-			logx.FromContext(ctx).Warn().Err(buildErr).Str("provider", string(providerType)).Msg("provider build failed, marking inactive")
-			instance.markProviderInactive(providerType, providerSpec)
-
-			continue
-		}
-
-		instance.applyProviderArtifacts(providerType, provider)
-	}
-
-	instance.rebuildMappingCatalog()
-
-	return instance, nil
-}
-
-// markProviderInactive updates one provider spec to inactive in the registry config map
-func (r *Registry) markProviderInactive(providerType types.ProviderType, providerSpec spec.ProviderSpec) {
-	providerSpec.Active = lo.ToPtr(false)
-	r.configs[providerType] = providerSpec
-}
-
-// applyProviderArtifacts stores one provider instance and refreshes derived client and operation descriptors
-func (r *Registry) applyProviderArtifacts(providerType types.ProviderType, provider types.Provider) {
-	r.providers[providerType] = provider
-
-	if clientProvider, ok := provider.(types.ClientProvider); ok {
-		if descriptors := providerkit.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
-			r.clients[providerType] = descriptors
-		} else {
-			delete(r.clients, providerType)
-		}
-	} else {
-		delete(r.clients, providerType)
-	}
-
-	if operationProvider, ok := provider.(types.OperationProvider); ok {
-		if descriptors := providerkit.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(descriptors) > 0 {
-			r.operations[providerType] = descriptors
-		} else {
-			delete(r.operations, providerType)
-		}
-	} else {
-		delete(r.operations, providerType)
+// New constructs an empty registry
+func New() *Registry {
+	return &Registry{
+		definitionsByID:        map[types.DefinitionID]types.Definition{},
+		clientsByDefinition:    map[types.DefinitionID]map[types.ClientName]types.ClientRegistration{},
+		operationsByDefinition: map[types.DefinitionID]map[types.OperationName]types.OperationRegistration{},
+		operationsByTopic:      map[gala.TopicName]types.OperationRegistration{},
+		webhooksByDefinition:   map[types.DefinitionID][]types.WebhookRegistration{},
 	}
 }
 
-// rebuildMappingCatalog reconstructs provider default mapping registrations from the current provider map
-func (r *Registry) rebuildMappingCatalog() {
-	r.mappingCatalog = newMappingCatalog()
-
-	for providerType, provider := range r.providers {
-		mappingProvider, ok := provider.(types.MappingProvider)
-		if !ok {
-			continue
-		}
-
-		r.mappingCatalog.registerProvider(providerType, mappingProvider.DefaultMappings())
-	}
-}
-
-// Provider returns a registered provider instance
-func (r *Registry) Provider(provider types.ProviderType) (types.Provider, bool) {
-	value, ok := r.providers[provider]
-
-	return value, ok
-}
-
-// Config returns the raw provider specification for declarative handlers
-func (r *Registry) Config(provider types.ProviderType) (spec.ProviderSpec, bool) {
-	providerSpec, ok := r.configs[provider]
-
-	return providerSpec, ok
-}
-
-// ProviderAuthKind returns the declared auth kind for the given provider type.
-// Returns AuthKindUnknown when the provider is not registered.
-func (r *Registry) ProviderAuthKind(provider types.ProviderType) types.AuthKind {
-	providerSpec, ok := r.configs[provider]
-	if !ok {
-		return types.AuthKindUnknown
+// Register adds one definition to the registry
+func (r *Registry) Register(def types.Definition) error {
+	if r == nil {
+		return ErrRegistryNil
 	}
 
-	return providerSpec.AuthType.Normalize()
-}
-
-// ProviderMetadataCatalog returns a copy of all provider metadata entries
-func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.IntegrationProviderMetadata {
-	return lo.MapEntries(r.configs, func(key types.ProviderType, providerSpec spec.ProviderSpec) (types.ProviderType, types.IntegrationProviderMetadata) {
-		return key, providerSpec.ToProviderMetadata()
-	})
-}
-
-// ClientDescriptorCatalog returns a copy of all provider client descriptors
-func (r *Registry) ClientDescriptorCatalog() map[types.ProviderType][]types.ClientDescriptor {
-	return lo.MapEntries(r.clients, func(provider types.ProviderType, descriptors []types.ClientDescriptor) (types.ProviderType, []types.ClientDescriptor) {
-		copied := make([]types.ClientDescriptor, len(descriptors))
-		copy(copied, descriptors)
-
-		return provider, copied
-	})
-}
-
-// OperationDescriptors returns the registered operation descriptors for a provider
-func (r *Registry) OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor {
-	descriptors := r.operations[provider]
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, len(descriptors))
-	copy(out, descriptors)
-
-	return out
-}
-
-// OperationDescriptorCatalog returns a copy of all provider operation descriptors
-func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.OperationDescriptor {
-	return lo.MapEntries(r.operations, func(provider types.ProviderType, descriptors []types.OperationDescriptor) (types.ProviderType, []types.OperationDescriptor) {
-		copied := make([]types.OperationDescriptor, len(descriptors))
-		copy(copied, descriptors)
-
-		return provider, copied
-	})
-}
-
-// MintCredential calls the registered provider's Mint method without accessing the credential store
-func (r *Registry) MintCredential(ctx context.Context, request types.CredentialMintRequest) (types.CredentialSet, error) {
-	provider, ok := r.providers[request.Provider]
-	if !ok {
-		return types.CredentialSet{}, ErrProviderNotFound
-	}
-
-	return provider.Mint(ctx, request)
-}
-
-// UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests)
-func (r *Registry) UpsertProvider(ctx context.Context, providerSpec spec.ProviderSpec, builder providers.Builder) error {
-	providerType := providerSpec.ProviderType()
-	if providerType == types.ProviderUnknown {
-		return ErrProviderTypeRequired
-	}
-
-	if builder == nil || builder.Type() != providerType {
-		return ErrBuilderMismatch
-	}
-
-	r.configs[providerType] = providerSpec
-
-	provider, err := builder.Build(ctx, providerSpec)
+	definitionID, err := validateDefinition(def)
 	if err != nil {
-		return ErrProviderBuildFailed
+		return err
 	}
 
-	if provider == nil {
-		return ErrProviderNil
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if _, exists := r.definitionsByID[definitionID]; exists {
+		return ErrDefinitionAlreadyRegistered
 	}
 
-	r.applyProviderArtifacts(providerType, provider)
-	r.rebuildMappingCatalog()
+	clientIndex := make(map[types.ClientName]types.ClientRegistration, len(def.Clients))
+	for _, client := range def.Clients {
+		if _, exists := clientIndex[client.Name]; exists {
+			return ErrClientAlreadyRegistered
+		}
+
+		clientIndex[client.Name] = client
+	}
+
+	operationIndex := make(map[types.OperationName]types.OperationRegistration, len(def.Operations))
+	for _, operation := range def.Operations {
+		if _, exists := operationIndex[operation.Name]; exists {
+			return ErrOperationAlreadyRegistered
+		}
+
+		if existing, exists := r.operationsByTopic[operation.Topic]; exists && existing.Name != operation.Name {
+			return ErrOperationTopicAlreadyRegistered
+		}
+
+		operationIndex[operation.Name] = operation
+	}
+
+	webhookNames := make(map[string]struct{}, len(def.Webhooks))
+	for _, webhook := range def.Webhooks {
+		name := webhook.Name
+		if name == "" {
+			return ErrWebhookNameRequired
+		}
+
+		if _, exists := webhookNames[name]; exists {
+			return ErrWebhookAlreadyRegistered
+		}
+
+		webhookNames[name] = struct{}{}
+	}
+
+	r.definitionsByID[definitionID] = def
+	r.clientsByDefinition[definitionID] = clientIndex
+	r.operationsByDefinition[definitionID] = operationIndex
+
+	for _, operation := range def.Operations {
+		r.operationsByTopic[operation.Topic] = operation
+	}
+
+	r.webhooksByDefinition[definitionID] = append([]types.WebhookRegistration(nil), def.Webhooks...)
 
 	return nil
 }
 
-// DefaultMapping returns the mapping override for a provider, schema, and variant.
-// It checks for an exact variant match first, then falls back to the empty-variant default.
-func (r *Registry) DefaultMapping(provider types.ProviderType, schema types.MappingSchema, variant string) (types.MappingOverride, bool) {
-	return r.mappingCatalog.resolve(provider, schema, variant)
+// Definition returns one definition by canonical identifier
+func (r *Registry) Definition(id types.DefinitionID) (types.Definition, bool) {
+	if r == nil {
+		return types.Definition{}, false
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	definition, ok := r.definitionsByID[types.DefinitionID(id)]
+
+	return definition, ok
+}
+
+// Client returns one client registration for a definition
+func (r *Registry) Client(id types.DefinitionID, name types.ClientName) (types.ClientRegistration, error) {
+	if r == nil {
+		return types.ClientRegistration{}, ErrRegistryNil
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	clientIndex, ok := r.clientsByDefinition[types.DefinitionID(id)]
+	if !ok {
+		return types.ClientRegistration{}, ErrDefinitionNotFound
+	}
+
+	client, ok := clientIndex[name]
+	if !ok {
+		return types.ClientRegistration{}, ErrClientNotFound
+	}
+
+	return client, nil
+}
+
+// Operation returns one operation registration for a definition
+func (r *Registry) Operation(id types.DefinitionID, name types.OperationName) (types.OperationRegistration, error) {
+	if r == nil {
+		return types.OperationRegistration{}, ErrRegistryNil
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	operationIndex, ok := r.operationsByDefinition[types.DefinitionID(id)]
+	if !ok {
+		return types.OperationRegistration{}, ErrDefinitionNotFound
+	}
+
+	operation, ok := operationIndex[name]
+	if !ok {
+		return types.OperationRegistration{}, ErrOperationNotFound
+	}
+
+	return operation, nil
+}
+
+// OperationFromString returns one operation registration for a definition using a raw string identifier
+func (r *Registry) OperationFromString(definitionID string, name string) (types.OperationRegistration, error) {
+	return r.Operation(types.DefinitionID(definitionID), types.OperationName(name))
+}
+
+// Catalog returns all definition specs in stable id order
+func (r *Registry) Catalog() []types.DefinitionSpec {
+	if r == nil {
+		return nil
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	out := make([]types.DefinitionSpec, 0, len(r.definitionsByID))
+	for _, definition := range r.definitionsByID {
+		out = append(out, definition.Spec)
+	}
+
+	sort.Sort(definitionSpecs(out))
+
+	return out
+}
+
+// Listeners returns all operation registrations in stable topic order
+func (r *Registry) Listeners() []types.OperationRegistration {
+	if r == nil {
+		return nil
+	}
+
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	out := make([]types.OperationRegistration, 0, len(r.operationsByTopic))
+	for _, operation := range r.operationsByTopic {
+		out = append(out, operation)
+	}
+
+	sort.Sort(operationRegistrations(out))
+
+	return out
+}
+
+// validateDefinition checks the minimal invariants for one definition
+func validateDefinition(def types.Definition) (types.DefinitionID, error) {
+	definitionID := def.Spec.ID
+	if string(definitionID) == "" {
+		return "", ErrDefinitionIDRequired
+	}
+
+	if def.Spec.Slug == "" {
+		return "", ErrDefinitionSlugRequired
+	}
+
+	if def.Spec.Version == "" {
+		return "", ErrDefinitionVersionRequired
+	}
+
+	clientNames := make(map[types.ClientName]struct{}, len(def.Clients))
+	for _, client := range def.Clients {
+		if client.Name == "" {
+			return "", ErrClientNameRequired
+		}
+
+		if _, exists := clientNames[client.Name]; exists {
+			return "", ErrClientAlreadyRegistered
+		}
+
+		clientNames[client.Name] = struct{}{}
+	}
+
+	operationNames := make(map[types.OperationName]struct{}, len(def.Operations))
+	for _, operation := range def.Operations {
+		if operation.Name == "" {
+			return "", ErrOperationNameRequired
+		}
+
+		if operation.Topic == "" {
+			return "", ErrOperationTopicRequired
+		}
+
+		if _, exists := operationNames[operation.Name]; exists {
+			return "", ErrOperationAlreadyRegistered
+		}
+
+		operationNames[operation.Name] = struct{}{}
+	}
+
+	return definitionID, nil
+}
+
+// Len returns the number of definition specs in the slice
+func (s definitionSpecs) Len() int {
+	return len(s)
+}
+
+// Less reports whether the left definition spec sorts before the right one
+func (s definitionSpecs) Less(i int, j int) bool {
+	return string(s[i].ID) < string(s[j].ID)
+}
+
+// Swap exchanges two definition specs in the slice
+func (s definitionSpecs) Swap(i int, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+// Len returns the number of operation registrations in the slice
+func (s operationRegistrations) Len() int {
+	return len(s)
+}
+
+// Less reports whether the left operation registration sorts before the right one
+func (s operationRegistrations) Less(i int, j int) bool {
+	return string(s[i].Topic) < string(s[j].Topic)
+}
+
+// Swap exchanges two operation registrations in the slice
+func (s operationRegistrations) Swap(i int, j int) {
+	s[i], s[j] = s[j], s[i]
 }

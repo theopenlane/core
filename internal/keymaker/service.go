@@ -4,64 +4,66 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"maps"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// defaultSessionTTL is the duration that OAuth sessions remain valid if no custom TTL is configured
+// stateTokenEntropyBytes is the number of random bytes used for CSRF state token generation
+const stateTokenEntropyBytes = 16
+
+// defaultSessionTTL is the duration that auth sessions remain valid if no custom TTL is configured
 const defaultSessionTTL = 15 * time.Minute
 
-// ProviderResolver exposes provider lookups. registry.Registry satisfies this interface
-type ProviderResolver interface {
-	Provider(provider types.ProviderType) (types.Provider, bool)
-	// ProviderAuthKind returns the declared auth kind for the given provider type
-	ProviderAuthKind(provider types.ProviderType) types.AuthKind
+// AuthResolver resolves definitions for auth flow dispatch.
+// registry.Registry and registry.DefinitionRegistry both satisfy this interface.
+type AuthResolver interface {
+	Definition(id types.DefinitionID) (types.Definition, bool)
 }
 
-// CredentialWriter persists credential payloads produced during activation
+// CredentialWriter persists credential payloads produced during definition auth activation.
+// keystore.Store satisfies this interface.
 type CredentialWriter interface {
-	SaveCredential(ctx context.Context, orgID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet) (types.CredentialSet, error)
-	SaveCredentialForIntegration(ctx context.Context, orgID string, integrationID string, provider types.ProviderType, authKind types.AuthKind, credential types.CredentialSet) (types.CredentialSet, error)
+	SaveInstallationCredential(ctx context.Context, installationID string, credential types.CredentialSet) error
 }
 
-// ServiceOptions configure optional service behaviors
-type ServiceOptions struct {
-	// SessionTTL controls how long OAuth sessions remain valid
+// Options configures optional Service behaviors
+type Options struct {
+	// SessionTTL controls how long definition auth sessions remain valid
 	SessionTTL time.Duration
 	// Now overrides the time source; primarily used for tests
 	Now func() time.Time
 }
 
-// Service orchestrates activation flows by brokering providers, sessions, and keystore writes
+// Service orchestrates auth flows for integrationsv2 definitions
 type Service struct {
-	// providers resolves provider instances by type
-	providers ProviderResolver
-	// keystore persists credential payloads after activation
-	keystore CredentialWriter
-	// authStates stores temporary OAuth authorization state until callback completion.
+	// definitions resolves definition instances by ID
+	definitions AuthResolver
+	// writer persists credential payloads after activation
+	writer CredentialWriter
+	// authStates stores temporary authorization state until callback completion
 	authStates AuthStateStore
-	// sessionTTL controls the lifetime of pending OAuth sessions
+	// sessionTTL controls the lifetime of pending auth sessions
 	sessionTTL time.Duration
 	// now returns the current time, overridable for testing
 	now func() time.Time
 }
 
 // NewService constructs a Service from the supplied dependencies
-func NewService(providers ProviderResolver, keystore CredentialWriter, authStates AuthStateStore, opts ServiceOptions) (*Service, error) {
-	if providers == nil {
-		return nil, integrations.ErrProviderRegistryUninitialized
+func NewService(definitions AuthResolver, writer CredentialWriter, authStates AuthStateStore, opts Options) (*Service, error) {
+	if definitions == nil {
+		return nil, ErrDefinitionResolverRequired
 	}
 
-	if keystore == nil {
-		return nil, integrations.ErrKeystoreRequired
+	if writer == nil {
+		return nil, ErrCredentialWriterRequired
 	}
 
 	if authStates == nil {
-		return nil, integrations.ErrAuthStateStoreRequired
+		return nil, ErrAuthStateStoreRequired
 	}
 
 	ttl := opts.SessionTTL
@@ -75,131 +77,111 @@ func NewService(providers ProviderResolver, keystore CredentialWriter, authState
 	}
 
 	return &Service{
-		providers:  providers,
-		keystore:   keystore,
-		authStates: authStates,
-		sessionTTL: ttl,
-		now:        nowFn,
+		definitions: definitions,
+		writer:      writer,
+		authStates:  authStates,
+		sessionTTL:  ttl,
+		now:         nowFn,
 	}, nil
 }
 
-// BeginRequest carries the information required to start an OAuth/OIDC activation flow
+// BeginRequest carries the information required to start a definition auth flow
 type BeginRequest struct {
-	// OrgID identifies the organization initiating the flow
-	OrgID string
-	// IntegrationID identifies the integration record being activated
-	IntegrationID string
-	// Provider specifies which provider to use for authorization
-	Provider types.ProviderType
-	// RedirectURI overrides the default callback URL if specified
-	RedirectURI string
-	// Scopes requests specific authorization scopes from the provider
-	Scopes []string
-	// Metadata carries additional provider-specific configuration
-	Metadata json.RawMessage
-	// LabelOverrides customizes UI labels presented during authorization
-	LabelOverrides map[string]string
-	// State optionally supplies a custom CSRF token
+	// DefinitionID identifies which definition to use for authorization
+	DefinitionID types.DefinitionID
+	// InstallationID identifies the installation record being activated
+	InstallationID string
+	// State optionally supplies a custom CSRF token; one is generated if empty
 	State string
+	// Input carries optional definition-specific input to the auth start function
+	Input json.RawMessage
 }
 
-// BeginResponse returns the authorization URL/state pair for the caller to redirect the user
+// BeginResponse returns the authorization URL and session state token
 type BeginResponse struct {
-	// Provider identifies which provider is handling the authorization
-	Provider types.ProviderType
-	// State contains the CSRF token that must be validated during callback
+	// DefinitionID identifies which definition is handling the authorization
+	DefinitionID types.DefinitionID
+	// State contains the CSRF token that must be presented during callback
 	State string
-	// AuthURL is the provider authorization URL where the user should be redirected
+	// AuthURL is the authorization URL where the user should be redirected
 	AuthURL string
 }
 
-// CompleteRequest carries the state/code pair received from the provider callback
+// CompleteRequest carries the state token and callback input from the auth provider
 type CompleteRequest struct {
-	// State is the CSRF token returned by the provider that identifies the session
+	// State is the CSRF token that identifies the session
 	State string
-	// Code is the authorization code exchanged for credentials
-	Code string
+	// Input carries opaque callback data (typically the authorization code and provider state)
+	Input json.RawMessage
 }
 
 // CompleteResult reports the persisted credential and related identifiers
 type CompleteResult struct {
-	// Provider identifies which provider issued the credential
-	Provider types.ProviderType
-	// OrgID identifies the organization that owns the credential
-	OrgID string
-	// IntegrationID identifies the integration record containing the credential
-	IntegrationID string
+	// DefinitionID identifies which definition issued the credential
+	DefinitionID types.DefinitionID
+	// InstallationID identifies the installation record containing the credential
+	InstallationID string
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
 }
 
-// BeginAuthorization starts an OAuth/OIDC transaction with the requested provider
-func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (BeginResponse, error) {
-	if req.OrgID == "" {
-		return BeginResponse{}, integrations.ErrOrgIDRequired
+// BeginAuth starts an auth transaction for the requested definition
+func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginResponse, error) {
+	if req.DefinitionID == "" {
+		return BeginResponse{}, ErrDefinitionIDRequired
 	}
 
-	if req.Provider == types.ProviderUnknown {
-		return BeginResponse{}, types.ErrProviderTypeRequired
+	if req.InstallationID == "" {
+		return BeginResponse{}, ErrInstallationIDRequired
 	}
 
-	provider, ok := s.providers.Provider(req.Provider)
+	def, ok := s.definitions.Definition(req.DefinitionID)
 	if !ok {
-		return BeginResponse{}, integrations.ErrProviderNotFound
+		return BeginResponse{}, ErrDefinitionNotFound
 	}
 
-	authCtx := types.AuthContext{
-		OrgID:          req.OrgID,
-		IntegrationID:  req.IntegrationID,
-		RedirectURI:    req.RedirectURI,
-		State:          req.State,
-		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       jsonx.CloneRawMessage(req.Metadata),
-		LabelOverrides: maps.Clone(req.LabelOverrides),
+	if def.Auth == nil || def.Auth.Start == nil {
+		return BeginResponse{}, ErrDefinitionAuthRequired
 	}
 
-	session, err := provider.BeginAuth(ctx, authCtx)
+	result, err := def.Auth.Start(ctx, jsonx.CloneRawMessage(req.Input))
 	if err != nil {
-		return BeginResponse{}, fmt.Errorf("keymaker: begin auth: %w", err)
+		return BeginResponse{}, fmt.Errorf("keymaker: begin definition auth: %w", err)
 	}
 
-	state := session.State()
-	if state == "" {
-		return BeginResponse{}, integrations.ErrStateRequired
+	stateToken := req.State
+	if stateToken == "" {
+		stateToken, err = auth.GenerateOAuthState(stateTokenEntropyBytes)
+		if err != nil {
+			return BeginResponse{}, fmt.Errorf("keymaker: generate state token: %w", err)
+		}
 	}
 
 	authState := AuthState{
-		State:          state,
-		Provider:       req.Provider,
-		OrgID:          req.OrgID,
-		IntegrationID:  req.IntegrationID,
-		Scopes:         append([]string(nil), req.Scopes...),
-		Metadata:       jsonx.CloneRawMessage(req.Metadata),
-		LabelOverrides: maps.Clone(req.LabelOverrides),
-		AuthSession:    session,
+		State:          stateToken,
+		DefinitionID:   req.DefinitionID,
+		InstallationID: req.InstallationID,
+		CallbackState:  jsonx.CloneRawMessage(result.State),
 		CreatedAt:      s.now(),
 	}
 
 	authState.ExpiresAt = authState.CreatedAt.Add(s.sessionTTL)
 
 	if err := s.authStates.Save(authState); err != nil {
-		return BeginResponse{}, fmt.Errorf("keymaker: save auth session: %w", err)
+		return BeginResponse{}, fmt.Errorf("keymaker: save definition auth session: %w", err)
 	}
 
 	return BeginResponse{
-		Provider: req.Provider,
-		State:    state,
-		AuthURL:  session.AuthURL(),
+		DefinitionID: req.DefinitionID,
+		State:        stateToken,
+		AuthURL:      result.URL,
 	}, nil
 }
 
-// CompleteAuthorization finalizes an OAuth/OIDC transaction and persists the resulting credential
-func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest) (CompleteResult, error) {
+// CompleteAuth finalizes a definition auth transaction and persists the resulting credential
+func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (CompleteResult, error) {
 	if req.State == "" {
-		return CompleteResult{}, integrations.ErrStateRequired
-	}
-	if req.Code == "" {
-		return CompleteResult{}, integrations.ErrAuthorizationCodeRequired
+		return CompleteResult{}, ErrAuthStateTokenRequired
 	}
 
 	authState, err := s.authStates.Take(req.State)
@@ -208,33 +190,30 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 	}
 
 	if s.now().After(authState.ExpiresAt) {
-		return CompleteResult{}, integrations.ErrAuthorizationStateExpired
+		return CompleteResult{}, ErrAuthStateExpired
 	}
 
-	credential, err := authState.AuthSession.Finish(ctx, req.Code)
+	def, ok := s.definitions.Definition(authState.DefinitionID)
+	if !ok {
+		return CompleteResult{}, ErrDefinitionNotFound
+	}
+
+	if def.Auth == nil || def.Auth.Complete == nil {
+		return CompleteResult{}, ErrDefinitionAuthRequired
+	}
+
+	completeResult, err := def.Auth.Complete(ctx, jsonx.CloneRawMessage(authState.CallbackState), jsonx.CloneRawMessage(req.Input))
 	if err != nil {
-		return CompleteResult{}, fmt.Errorf("keymaker: finish auth: %w", err)
+		return CompleteResult{}, fmt.Errorf("keymaker: complete definition auth: %w", err)
 	}
 
-	authKind := s.providers.ProviderAuthKind(authState.Provider)
-
-	saveFn := func() (types.CredentialSet, error) {
-		if authState.IntegrationID != "" {
-			return s.keystore.SaveCredentialForIntegration(ctx, authState.OrgID, authState.IntegrationID, authState.Provider, authKind, credential)
-		}
-
-		return s.keystore.SaveCredential(ctx, authState.OrgID, authState.Provider, authKind, credential)
-	}
-
-	saved, err := saveFn()
-	if err != nil {
-		return CompleteResult{}, fmt.Errorf("keymaker: save credential: %w", err)
+	if err := s.writer.SaveInstallationCredential(ctx, authState.InstallationID, completeResult.Credential); err != nil {
+		return CompleteResult{}, fmt.Errorf("keymaker: save definition credential: %w", err)
 	}
 
 	return CompleteResult{
-		Provider:      authState.Provider,
-		OrgID:         authState.OrgID,
-		IntegrationID: authState.IntegrationID,
-		Credential:    saved,
+		DefinitionID:   authState.DefinitionID,
+		InstallationID: authState.InstallationID,
+		Credential:     completeResult.Credential,
 	}, nil
 }

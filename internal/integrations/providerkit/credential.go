@@ -3,14 +3,14 @@ package providerkit
 import (
 	"strings"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // OAuthTokenFromCredential extracts a usable access token from the credential set.
 // Returns ErrOAuthTokenMissing if all OAuth fields are empty, or ErrAccessTokenEmpty
 // if the access token specifically is missing.
-func OAuthTokenFromCredential(credential types.CredentialSet) (string, error) {
+func OAuthTokenFromCredential(credential models.CredentialSet) (string, error) {
 	if credential.OAuthAccessToken == "" &&
 		credential.OAuthRefreshToken == "" &&
 		credential.OAuthTokenType == "" &&
@@ -28,7 +28,7 @@ func OAuthTokenFromCredential(credential types.CredentialSet) (string, error) {
 // APITokenFromCredential extracts a raw API token from the credential set's ProviderData.
 // The token is expected to be stored under the "apiToken" key in the JSON object.
 // Returns ErrAPITokenMissing if the key is absent or the value is empty.
-func APITokenFromCredential(credential types.CredentialSet) (string, error) {
+func APITokenFromCredential(credential models.CredentialSet) (string, error) {
 	metadata, err := jsonx.ToRawMap(credential.ProviderData)
 	if err != nil {
 		return "", ErrAPITokenMissing

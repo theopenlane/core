@@ -9,7 +9,7 @@ import (
 	"github.com/google/cel-go/common/decls"
 	celtypes "github.com/google/cel-go/common/types"
 
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/celx"
 )
 
@@ -67,7 +67,7 @@ func (e *IntegrationScopeEvaluator) Validate(expr string) error {
 }
 
 // EvaluateConditionWithVars evaluates a CEL expression against the provided scope variables
-func (e *IntegrationScopeEvaluator) EvaluateConditionWithVars(ctx context.Context, expr string, vars integrationtypes.ScopeVars) (bool, error) {
+func (e *IntegrationScopeEvaluator) EvaluateConditionWithVars(ctx context.Context, expr string, vars types.ScopeVars) (bool, error) {
 	if expr == "" {
 		return e.emptyExpressionResult, nil
 	}
@@ -108,15 +108,15 @@ func buildIntegrationScopeEnv() (*cel.Env, error) {
 
 	return celx.NewEnv(cfg,
 		cel.VariableDecls(
-			decls.NewVariable(integrationtypes.ScopeVariablePayload, celtypes.DynType),
-			decls.NewVariable(integrationtypes.ScopeVariableResource, celtypes.StringType),
-			decls.NewVariable(integrationtypes.ScopeVariableProvider, celtypes.StringType),
-			decls.NewVariable(integrationtypes.ScopeVariableOperation, celtypes.StringType),
-			decls.NewVariable(integrationtypes.ScopeVariableConfig, celtypes.DynType),
-			decls.NewVariable(integrationtypes.ScopeVariableIntegrationConfig, celtypes.DynType),
-			decls.NewVariable(integrationtypes.ScopeVariableProviderState, celtypes.DynType),
-			decls.NewVariable(integrationtypes.ScopeVariableOrgID, celtypes.StringType),
-			decls.NewVariable(integrationtypes.ScopeVariableIntegrationID, celtypes.StringType),
+			decls.NewVariable(types.ScopeVariablePayload, celtypes.DynType),
+			decls.NewVariable(types.ScopeVariableResource, celtypes.StringType),
+			decls.NewVariable(types.ScopeVariableDefinition, celtypes.StringType),
+			decls.NewVariable(types.ScopeVariableOperation, celtypes.StringType),
+			decls.NewVariable(types.ScopeVariableConfig, celtypes.DynType),
+			decls.NewVariable(types.ScopeVariableInstallationConfig, celtypes.DynType),
+			decls.NewVariable(types.ScopeVariableProviderState, celtypes.DynType),
+			decls.NewVariable(types.ScopeVariableOrgID, celtypes.StringType),
+			decls.NewVariable(types.ScopeVariableInstallationID, celtypes.StringType),
 		),
 	)
 }

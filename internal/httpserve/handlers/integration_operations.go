@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/types"
+	v2types "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -97,13 +98,13 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
-		OrgID:         caller.OrganizationID,
-		Provider:      providerType,
-		IntegrationID: integrationID,
-		Operation:     operationName,
-		Config:        configDoc,
-		Force:         req.Body.Force,
-		RunType:       enums.IntegrationRunTypeManual,
+		OrgID:          caller.OrganizationID,
+		DefinitionID:   req.Provider,
+		InstallationID: integrationID,
+		Operation:      v2types.OperationName(req.Body.Operation),
+		Config:         configDoc,
+		Force:          req.Body.Force,
+		RunType:        enums.IntegrationRunTypeManual,
 	})
 	if err != nil {
 		switch integrationHTTPStatus(err) {

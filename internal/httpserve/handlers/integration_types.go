@@ -4,10 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/invopop/jsonschema"
 	"github.com/theopenlane/utils/rout"
 
-	integrationsv2types "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -35,11 +33,13 @@ func (b *IntegrationConfigBody) UnmarshalJSON(data []byte) error {
 	return (*json.RawMessage)(b).UnmarshalJSON(data)
 }
 
-
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
 type IntegrationConfigPayload struct {
-	// Provider is the provider key.
-	Provider string `param:"provider" description:"Integration provider key" example:"github"`
+	// Provider is the definition slug.
+	Provider string `param:"provider" description:"Integration definition slug" example:"github_app"`
+	// InstallationID is the optional existing installation to update credentials on.
+	// When omitted a new installation is created.
+	InstallationID string `json:"installationId,omitempty"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
 	Body IntegrationConfigBody `json:"body"`
 }
@@ -56,10 +56,10 @@ type IntegrationOperationBody struct {
 
 // IntegrationOperationPayload is the request type for running an integration operation.
 type IntegrationOperationPayload struct {
-	// Provider is the provider key.
-	Provider string `param:"provider" description:"Integration provider key" example:"github"`
-	// IntegrationID scopes the operation to a specific integration record.
-	IntegrationID string `query:"integration_id,omitempty" description:"Optional integration ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+	// Provider is the definition slug.
+	Provider string `param:"provider" description:"Integration definition slug" example:"github_app"`
+	// IntegrationID scopes the operation to a specific installation record.
+	IntegrationID string `query:"integration_id,omitempty" description:"Optional installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// Body holds the operation name and optional configuration.
 	Body IntegrationOperationBody `json:"body"`
 }
@@ -67,15 +67,17 @@ type IntegrationOperationPayload struct {
 // IntegrationConfigResponse is the response after successfully configuring a provider.
 type IntegrationConfigResponse struct {
 	rout.Reply
-	// Provider is the configured provider key.
+	// Provider is the configured definition slug.
 	Provider string `json:"provider"`
+	// InstallationID is the installation record ID that was created or updated.
+	InstallationID string `json:"installationId"`
 }
 
 // IntegrationTokenResponse is the response containing a refreshed integration access token.
 // Token fields are flattened directly onto the response.
 type IntegrationTokenResponse struct {
 	rout.Reply
-	// Provider is the integration provider key.
+	// Provider is the integration definition slug.
 	Provider string `json:"provider"`
 	// AccessToken is the OAuth access token.
 	AccessToken string `json:"accessToken"`
@@ -86,7 +88,7 @@ type IntegrationTokenResponse struct {
 // IntegrationOperationResponse is the response after executing or queuing a provider operation.
 type IntegrationOperationResponse struct {
 	rout.Reply
-	// Provider is the integration provider key.
+	// Provider is the integration definition slug.
 	Provider string `json:"provider"`
 	// Operation is the operation identifier that was executed.
 	Operation string `json:"operation"`
@@ -98,27 +100,113 @@ type IntegrationOperationResponse struct {
 	Details json.RawMessage `json:"details,omitempty"`
 }
 
-// IntegrationProvidersResponse is the response listing available integration providers.
+// DefinitionCatalogEntry is the API response shape for one registered integration definition.
+type DefinitionCatalogEntry struct {
+	// ID is the canonical definition identifier
+	ID string `json:"id"`
+	// Slug is the human-readable definition alias
+	Slug string `json:"slug"`
+	// Version is the definition version
+	Version string `json:"version"`
+	// Family is the optional grouping label
+	Family string `json:"family,omitempty"`
+	// DisplayName is the UI-facing name
+	DisplayName string `json:"displayName"`
+	// Description is the user-facing description
+	Description string `json:"description,omitempty"`
+	// Category is the catalog category
+	Category string `json:"category,omitempty"`
+	// DocsURL links to documentation
+	DocsURL string `json:"docsUrl,omitempty"`
+	// LogoURL links to a catalog logo asset
+	LogoURL string `json:"logoUrl,omitempty"`
+	// Tags are optional catalog labels
+	Tags []string `json:"tags,omitempty"`
+	// Labels stores arbitrary metadata
+	Labels map[string]string `json:"labels,omitempty"`
+	// Active indicates whether the definition is enabled
+	Active bool `json:"active"`
+	// Visible indicates whether the definition is visible in catalog surfaces
+	Visible bool `json:"visible"`
+	// HasAuth indicates whether the definition exposes an auth flow
+	HasAuth bool `json:"hasAuth"`
+	// CredentialSchema is the JSON schema for credential fields
+	CredentialSchema json.RawMessage `json:"credentialSchema,omitempty"`
+	// OperatorConfig is the JSON schema for operator config
+	OperatorConfig json.RawMessage `json:"operatorConfig,omitempty"`
+	// Operations lists the operations the definition exposes
+	Operations []DefinitionOperationEntry `json:"operations,omitempty"`
+}
+
+// DefinitionOperationEntry describes one operation exposed by a definition.
+type DefinitionOperationEntry struct {
+	// Name is the operation identifier
+	Name string `json:"name"`
+	// Kind is the operation kind
+	Kind string `json:"kind,omitempty"`
+	// Description is the operation description
+	Description string `json:"description,omitempty"`
+	// Client is the client used by the operation
+	Client string `json:"client,omitempty"`
+	// ConfigSchema is the JSON schema for operation config
+	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
+}
+
+// IntegrationProvidersResponse is the response listing available integration definitions.
 type IntegrationProvidersResponse struct {
 	rout.Reply
-	// Schema is the JSON schema for provider specification objects; used by the UI to
-	// construct available provider cards, surface connect/configure buttons, and build
-	// documentation links.
-	Schema *jsonschema.Schema `json:"schema,omitempty"`
-	// Providers is the list of available integration providers.
-	Providers []integrationsv2types.IntegrationProviderMetadata `json:"providers"`
+	// Providers is the list of available integration definitions.
+	Providers []DefinitionCatalogEntry `json:"providers"`
+}
+
+// OAuthV2FlowRequest is the request type for starting a v2 OAuth auth flow.
+type OAuthV2FlowRequest struct {
+	// DefinitionID is the integration definition identifier.
+	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
+	// InstallationID is the optional existing installation to start the auth flow for.
+	// When omitted a new installation is created.
+	InstallationID string `json:"installationId,omitempty"`
+}
+
+// Validate validates the OAuthV2FlowRequest.
+func (r *OAuthV2FlowRequest) Validate() error {
+	if r.DefinitionID == "" {
+		return rout.NewMissingRequiredFieldError("definitionId")
+	}
+
+	return nil
+}
+
+// ExampleOAuthV2FlowRequest is an example v2 OAuth flow request for OpenAPI documentation.
+var ExampleOAuthV2FlowRequest = OAuthV2FlowRequest{
+	DefinitionID: "def_01K0SLACK000000000000000001",
+}
+
+// RefreshInstallationCredentialRequest is the v2 request for refreshing an installation's OAuth tokens.
+type RefreshInstallationCredentialRequest struct {
+	// InstallationID is the installation to refresh credentials for.
+	InstallationID string `param:"id" json:"installationId" description:"Installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// Validate validates the RefreshInstallationCredentialRequest.
+func (r *RefreshInstallationCredentialRequest) Validate() error {
+	if r.InstallationID == "" {
+		return rout.NewMissingRequiredFieldError("installationId")
+	}
+
+	return nil
 }
 
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	Provider: "google",
+	Provider: "google_workspace",
 	Body:     IntegrationConfigBody(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
 // ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.
 var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
-	Provider: "github",
+	Provider: "github_app",
 	Body: IntegrationOperationBody{
-		Operation: "health",
+		Operation: "health.default",
 	},
 }

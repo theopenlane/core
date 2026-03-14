@@ -28,7 +28,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
+	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -82,10 +82,8 @@ type Config struct {
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
 	// Slack contains settings for Slack notifications
 	Slack Slack `json:"slack" koanf:"slack"`
-	// IntegrationProviders contains provider spec overrides keyed by provider name.
-	IntegrationProviders map[string]integrationspec.ProviderSpec `json:"integrationproviders" koanf:"integrationproviders"`
-	// IntegrationSuccessRedirectURL is the URL to redirect to after successful integration authentication.
-	IntegrationSuccessRedirectURL string `json:"integrationsuccessredirecturl" koanf:"integrationsuccessredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
+	// Integrations contains operator-level credentials for all v2 integration definitions
+	Integrations catalog.Config `json:"integrations" koanf:"integrations"`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
 	// CampaignWebhook contains webhook configuration for campaign-related email providers

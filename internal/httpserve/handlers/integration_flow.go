@@ -1,32 +1,23 @@
 package handlers
 
 import (
-	"context"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
-	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -36,69 +27,62 @@ var (
 	oauthUserIDCookieName = "oauth_user_id"
 )
 
-// StartOAuthFlow initiates the OAuth flow for a third-party integration.
+// StartOAuthFlow initiates the v2 OAuth flow for an integration definition.
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleOAuthFlowRequest, openapi.ExampleOAuthFlowResponse, openapiCtx.Registry)
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleOAuthV2FlowRequest, openapi.OAuthFlowResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
 
-	userCtx := ctx.Request().Context()
-	caller, ok := auth.CallerFromContext(userCtx)
+	requestCtx := ctx.Request().Context()
+
+	caller, ok := auth.CallerFromContext(requestCtx)
 	if !ok || caller == nil {
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	providerType, err := parseProviderType(in.Provider)
-	if err != nil {
-		return h.BadRequest(ctx, err, openapiCtx)
-	}
+	definitionID := types.DefinitionID(in.DefinitionID)
 
-	spec, specOk := h.IntegrationRuntime.Registry().Config(providerType)
-	if !specOk {
+	def, ok := h.IntegrationsRuntime.Registry().Definition(definitionID)
+	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if !lo.FromPtr(spec.Active) {
+	if !def.Spec.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
-	if !spec.SupportsInteractiveAuthFlow() {
+	if def.Auth == nil || def.Auth.Start == nil {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	integrationID, err := h.resolveOAuthIntegrationID(userCtx, caller.OrganizationID, providerType, in.IntegrationID)
-	if err != nil {
-		switch {
-		case errors.Is(err, ErrIntegrationIDRequired),
-			errors.Is(err, ErrIntegrationNotFound),
-			errors.Is(err, keystore.ErrIntegrationAmbiguous):
-			return h.BadRequest(ctx, err, openapiCtx)
-		default:
-			logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to resolve oauth integration scope")
+	installationID := in.InstallationID
+	if installationID == "" {
+		name := def.Spec.DisplayName
+		if name == "" {
+			name = def.Spec.Slug
+		}
+
+		rec, err := h.IntegrationsRuntime.Installations().Create(requestCtx, installation.CreateParams{
+			OwnerID:    caller.OrganizationID,
+			Name:       name,
+			Definition: def.Spec,
+		})
+		if err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(definitionID)).Msg("failed to create installation for oauth flow")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
+
+		installationID = rec.ID
 	}
 
-	state, err := h.generateOAuthState(caller.OrganizationID, string(providerType))
-	if err != nil {
-		logx.FromContext(userCtx).Error().Err(err).Msg("error generating oauth state")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	scopes := mergeRequestedScopes(spec, in.Scopes)
-
-	begin, err := h.IntegrationRuntime.Keymaker().BeginAuthorization(userCtx, keymaker.BeginRequest{
-		OrgID:         caller.OrganizationID,
-		IntegrationID: integrationID,
-		Provider:      providerType,
-		Scopes:        scopes,
-		State:         state,
+	begin, err := h.IntegrationsRuntime.Keymaker().BeginAuth(requestCtx, keymaker.BeginRequest{
+		DefinitionID:   definitionID,
+		InstallationID: installationID,
 	})
 	if err != nil {
-		logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to begin OAuth flow")
+		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(definitionID)).Msg("failed to begin oauth flow")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
@@ -111,16 +95,20 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	})
 	sessions.CopyCookiesFromRequest(ctx.Request(), ctx.Response().Writer, cfg, auth.AccessTokenCookie, auth.RefreshTokenCookie)
 
-	out := openapi.OAuthFlowResponse{
+	return h.Success(ctx, openapi.OAuthFlowResponse{
 		Reply:   rout.Reply{Success: true},
 		AuthURL: begin.AuthURL,
 		State:   begin.State,
-	}
-
-	return h.Success(ctx, out)
+	})
 }
 
-// HandleOAuthCallback processes the OAuth callback and stores integration tokens.
+// oauthCallbackInput is the JSON payload passed to keymaker.CompleteAuth as the opaque callback input.
+type oauthCallbackInput struct {
+	Code  string `json:"code"`
+	State string `json:"state"`
+}
+
+// HandleOAuthCallback processes the OAuth callback and persists the resulting credential.
 func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.OAuthCallbackRequest{}, openapi.ExampleOAuthCallbackResponse, openapiCtx.Registry)
 	if err != nil {
@@ -134,14 +122,8 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	reqCtx := ctx.Request().Context()
 
 	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
-	if err != nil {
+	if err != nil || stateCookie.Value == "" {
 		logx.FromContext(reqCtx).Error().Err(err).Str("state_fingerprint", stateFingerprint(in.State)).Msg("oauth state cookie not found")
-
-		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
-	}
-
-	if stateCookie.Value == "" || stateCookie.Value != in.State {
-		logx.FromContext(reqCtx).Error().Str("state_fingerprint", stateFingerprint(in.State)).Bool("cookie_state_present", stateCookie.Value != "").Msg("oauth state cookie mismatch")
 
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
@@ -166,53 +148,46 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	}
 
 	if callbackCaller.OrganizationID != orgCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("cookieOrgID", orgCookie.Value).Str("userOrgID", callbackCaller.OrganizationID).Msg("oauth organization cookie mismatch")
+		logx.FromContext(reqCtx).Error().Str("cookie_org_id", orgCookie.Value).Str("user_org_id", callbackCaller.OrganizationID).Msg("oauth organization cookie mismatch")
+
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
 	if callbackCaller.SubjectID != userCookie.Value {
-		logx.FromContext(reqCtx).Error().Str("cookieUserID", userCookie.Value).Str("userID", callbackCaller.SubjectID).Msg("oauth user cookie mismatch")
+		logx.FromContext(reqCtx).Error().Str("cookie_user_id", userCookie.Value).Str("user_id", callbackCaller.SubjectID).Msg("oauth user cookie mismatch")
+
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
-	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	callbackInput, err := json.Marshal(oauthCallbackInput{Code: in.Code, State: in.State})
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to marshal oauth callback input")
 
-	result, err := h.IntegrationRuntime.Keymaker().CompleteAuthorization(systemCtx, keymaker.CompleteRequest{
-		State: in.State,
-		Code:  in.Code,
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	result, err := h.IntegrationsRuntime.Keymaker().CompleteAuth(reqCtx, keymaker.CompleteRequest{
+		State: stateCookie.Value,
+		Input: callbackInput,
 	})
 	if err != nil {
 		switch {
-		case errors.Is(err, integrations.ErrAuthorizationStateNotFound),
-			errors.Is(err, integrations.ErrAuthorizationStateExpired),
-			errors.Is(err, integrations.ErrAuthorizationCodeRequired):
-			return h.BadRequest(ctx, err, openapiCtx)
+		case errors.Is(err, keymaker.ErrAuthStateNotFound),
+			errors.Is(err, keymaker.ErrAuthStateExpired),
+			errors.Is(err, keymaker.ErrAuthStateTokenRequired):
+			return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 		default:
 			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to complete oauth callback")
 
-			return h.InternalServerError(ctx, err, openapiCtx)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
-	}
-
-	integrationID := result.IntegrationID
-	if integrationID == "" {
-		integrationRecord, ensureErr := h.IntegrationRuntime.Store().EnsureIntegration(systemCtx, result.OrgID, result.Provider)
-		if ensureErr != nil {
-			logx.FromContext(reqCtx).Error().Err(ensureErr).Str("org_id", result.OrgID).Str("provider", string(result.Provider)).Msg("failed to ensure integration record")
-
-			return h.InternalServerError(ctx, ensureErr, openapiCtx)
-		}
-		integrationID = integrationRecord.ID
-	}
-
-	if err := h.updateIntegrationProviderMetadata(systemCtx, integrationID, result.Provider); err != nil {
-		logx.FromContext(reqCtx).Warn().Err(err).Str("provider", string(result.Provider)).Msg("failed to update integration provider metadata")
 	}
 
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationRuntime.SuccessRedirectURL(), result.Provider)
+	def, _ := h.IntegrationsRuntime.Registry().Definition(result.DefinitionID)
+	redirectURL := buildV2IntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), def.Spec.Slug)
 	if redirectURL == "" {
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
@@ -220,7 +195,96 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	return ctx.Redirect(http.StatusFound, redirectURL)
 }
 
+// RefreshIntegrationTokenHandler handles requests to refresh an installation's OAuth credential.
+func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, RefreshInstallationCredentialRequest{}, IntegrationTokenResponse{}, openapiCtx.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapiCtx)
+	}
+
+	reqCtx := ctx.Request().Context()
+
+	caller, ok := auth.CallerFromContext(reqCtx)
+	if !ok || caller == nil {
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
+	}
+
+	rec, err := h.IntegrationsRuntime.Installations().Get(reqCtx, in.InstallationID)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
+
+		return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+	}
+
+	current, ok, err := h.IntegrationsRuntime.CredentialStore().LoadCredential(reqCtx, rec)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("failed to load credential")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if !ok {
+		return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+	}
+
+	def, defOk := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(rec.DefinitionID))
+	if !defOk || def.Auth == nil || def.Auth.Refresh == nil {
+		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
+	}
+
+	refreshed, err := def.Auth.Refresh(reqCtx, current)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("credential refresh failed")
+
+		return h.InternalServerError(ctx, wrapTokenError("refresh", def.Spec.Slug, err), openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.CredentialStore().SaveInstallationCredential(reqCtx, in.InstallationID, refreshed); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("failed to save refreshed credential")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if refreshed.OAuthAccessToken == "" {
+		return h.BadRequest(ctx, wrapTokenError("find access", def.Spec.Slug, ErrIntegrationNotFound), openapiCtx)
+	}
+
+	resp := IntegrationTokenResponse{
+		Reply:       rout.Reply{Success: true},
+		Provider:    def.Spec.Slug,
+		AccessToken: refreshed.OAuthAccessToken,
+	}
+
+	if refreshed.OAuthExpiry != nil && !refreshed.OAuthExpiry.IsZero() {
+		expiry := refreshed.OAuthExpiry.UTC()
+		resp.ExpiresAt = &expiry
+	}
+
+	return h.Success(ctx, resp)
+}
+
+// buildV2IntegrationRedirectURL appends provider and status query params to the base redirect URL.
+func buildV2IntegrationRedirectURL(baseURL, slug string) string {
+	if strings.TrimSpace(baseURL) == "" {
+		return ""
+	}
+
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return baseURL
+	}
+
+	q := u.Query()
+	q.Set("provider", strings.ToLower(slug))
+	q.Set("status", "success")
+	q.Set("message", fmt.Sprintf("Successfully connected %s integration", strings.ToLower(slug)))
+	u.RawQuery = q.Encode()
+
+	return u.String()
+}
+
 // generateOAuthState creates a secure state parameter containing org ID and provider.
+// Used by v1 flows (GitHub App, etc.) that manage their own state encoding.
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	randomPart, err := auth.GenerateOAuthState(stateLength)
 	if err != nil {
@@ -237,6 +301,8 @@ func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
 }
 
+// buildIntegrationRedirectURL appends provider and status query params to the base redirect URL.
+// Used by v1 flows (GitHub App) that operate on ProviderType.
 func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) string {
 	if strings.TrimSpace(baseURL) == "" {
 		return ""
@@ -247,11 +313,10 @@ func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) st
 		return baseURL
 	}
 
-	q := u.Query()
-
 	providerName := strings.ToLower(string(provider))
 
-	q.Set("provider", strings.ToLower(string(provider)))
+	q := u.Query()
+	q.Set("provider", providerName)
 	q.Set("status", "success")
 	q.Set("message", fmt.Sprintf("Successfully connected %s integration", providerName))
 	u.RawQuery = q.Encode()
@@ -259,75 +324,8 @@ func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) st
 	return u.String()
 }
 
-// RefreshIntegrationToken refreshes an expired OAuth token if refresh token is available.
-func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string, integrationID string) (*IntegrationTokenResponse, error) {
-	providerType, err := parseProviderType(provider)
-	if err != nil {
-		return nil, err
-	}
-	if err := h.validateIntegrationProvider(providerType); err != nil {
-		return nil, err
-	}
-
-	var payload models.CredentialSet
-	if integrationID != "" {
-		payload, err = h.IntegrationRuntime.Broker().MintForIntegration(ctx, orgID, providerType, integrationID)
-	} else {
-		payload, err = h.IntegrationRuntime.Broker().Mint(ctx, orgID, providerType)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	return integrationTokenFromPayload(string(providerType), payload)
-}
-
-// RefreshIntegrationTokenHandler is the HTTP handler for refreshing integration tokens.
-func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleRefreshIntegrationTokenRequest, IntegrationTokenResponse{}, openapiCtx.Registry)
-	if err != nil {
-		return h.InvalidInput(ctx, err, openapiCtx)
-	}
-
-	userCtx := ctx.Request().Context()
-	refreshCaller, refreshOk := auth.CallerFromContext(userCtx)
-	if !refreshOk || refreshCaller == nil {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
-	}
-
-	tokenData, err := h.RefreshIntegrationToken(userCtx, refreshCaller.OrganizationID, in.Provider, in.IntegrationID)
-	if err != nil {
-		switch integrationHTTPStatus(err) {
-		case http.StatusBadRequest:
-			return h.BadRequest(ctx, err, openapiCtx)
-		default:
-			return h.InternalServerError(ctx, wrapTokenError("refresh", in.Provider, err), openapiCtx)
-		}
-	}
-
-	tokenData.Reply = rout.Reply{Success: true}
-
-	return h.Success(ctx, tokenData)
-}
-
-func integrationTokenFromPayload(provider string, payload models.CredentialSet) (*IntegrationTokenResponse, error) {
-	if payload.OAuthAccessToken == "" {
-		return nil, wrapTokenError("find access", provider, keystore.ErrCredentialNotFound)
-	}
-
-	var expiresAt *time.Time
-	if payload.OAuthExpiry != nil && !payload.OAuthExpiry.IsZero() {
-		expiry := payload.OAuthExpiry.UTC()
-		expiresAt = &expiry
-	}
-
-	return &IntegrationTokenResponse{
-		Provider:    provider,
-		AccessToken: payload.OAuthAccessToken,
-		ExpiresAt:   expiresAt,
-	}, nil
-}
-
+// parseProviderType converts a raw provider string to a typed ProviderType.
+// Used by v1 flows (GitHub App, disconnect) that still operate on named provider types.
 func parseProviderType(provider string) (types.ProviderType, error) {
 	pt := types.ProviderTypeFromString(provider)
 	if pt == types.ProviderUnknown {
@@ -335,71 +333,6 @@ func parseProviderType(provider string) (types.ProviderType, error) {
 	}
 
 	return pt, nil
-}
-
-// resolveOAuthIntegrationID resolves which integration record should receive OAuth credentials.
-func (h *Handler) resolveOAuthIntegrationID(ctx context.Context, orgID string, provider types.ProviderType, requestedIntegrationID string) (string, error) {
-	if requestedIntegrationID != "" {
-		if h.DBClient == nil {
-			return "", errDBClientNotConfigured
-		}
-
-		record, err := h.DBClient.Integration.Query().
-			Where(
-				integration.IDEQ(requestedIntegrationID),
-				integration.OwnerIDEQ(orgID),
-				integration.KindEQ(string(provider)),
-			).
-			Only(ctx)
-		if err != nil {
-			if ent.IsNotFound(err) {
-				return "", ErrIntegrationNotFound
-			}
-			return "", err
-		}
-
-		return record.ID, nil
-	}
-
-	record, err := h.IntegrationRuntime.Store().EnsureIntegration(ctx, orgID, provider)
-	if err != nil {
-		if errors.Is(err, keystore.ErrIntegrationAmbiguous) {
-			return "", ErrIntegrationIDRequired
-		}
-		return "", err
-	}
-
-	return record.ID, nil
-}
-
-// mergeRequestedScopes combines the provider's default scopes with any caller-requested scopes,
-// deduplicating by lowercase value. Provider defaults are listed first.
-func mergeRequestedScopes(provSpec integrationspec.ProviderSpec, requested []string) []string {
-	seen := map[string]struct{}{}
-	result := make([]string, 0)
-
-	add := func(scopes []string) {
-		for _, scope := range scopes {
-			trimmed := strings.TrimSpace(scope)
-			if trimmed == "" {
-				continue
-			}
-			lower := strings.ToLower(trimmed)
-			if _, ok := seen[lower]; ok {
-				continue
-			}
-			seen[lower] = struct{}{}
-			result = append(result, trimmed)
-		}
-	}
-
-	if provSpec.OAuth != nil {
-		add(provSpec.OAuth.Scopes)
-	}
-
-	add(requested)
-
-	return result
 }
 
 // getOauthCookieConfig returns the cookie configuration for OAuth cookies.

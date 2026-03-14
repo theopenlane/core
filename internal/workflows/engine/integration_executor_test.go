@@ -2,14 +2,12 @@ package engine
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/types"
+	v2types "github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestIntegrationOperationContextWithoutTimeout(t *testing.T) {
@@ -47,32 +45,23 @@ func TestIntegrationOperationContextWithTimeout(t *testing.T) {
 	}
 }
 
-func TestIntegrationRunOperationKind(t *testing.T) {
-	if got := integrationRunOperationKind(enums.IntegrationRunTypeEvent, types.OperationKindNotify); got != enums.IntegrationOperationKindPush {
-		t.Fatalf("expected notify to map to push, got %q", got)
-	}
-
-	if got := integrationRunOperationKind(enums.IntegrationRunTypeEvent, types.OperationKindCollectFindings); got != enums.IntegrationOperationKindPull {
-		t.Fatalf("expected collect findings to map to pull, got %q", got)
-	}
-
-	if got := integrationRunOperationKind(enums.IntegrationRunTypeWebhook, types.OperationKindCollectFindings); got != enums.IntegrationOperationKindWebhook {
-		t.Fatalf("expected webhook run type to map to webhook, got %q", got)
-	}
-}
-
-func TestEvaluateIntegrationScope(t *testing.T) {
+func TestEvaluateInstallationScope(t *testing.T) {
 	evaluator, err := NewIntegrationScopeEvaluator()
 	if err != nil {
 		t.Fatalf("failed to create scope evaluator: %v", err)
 	}
 
-	integrationRecord := &ent.Integration{ID: "int_123"}
+	record := &ent.Integration{
+		ID:             "int_123",
+		DefinitionSlug: "github_app",
+	}
 
-	allowed, err := evaluateIntegrationScope(context.Background(), evaluator, IntegrationQueueRequest{
+	opName := v2types.OperationName("vulnerability.collect")
+
+	allowed, err := evaluateInstallationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
-		ScopeExpression: "provider == 'githubapp'",
-	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
+		ScopeExpression: "provider == 'github_app'",
+	}, record, opName, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -80,10 +69,10 @@ func TestEvaluateIntegrationScope(t *testing.T) {
 		t.Fatalf("expected scope condition to allow execution")
 	}
 
-	allowed, err = evaluateIntegrationScope(context.Background(), evaluator, IntegrationQueueRequest{
+	allowed, err = evaluateInstallationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
 		ScopeExpression: "provider == 'slack'",
-	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
+	}, record, opName, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -91,112 +80,11 @@ func TestEvaluateIntegrationScope(t *testing.T) {
 		t.Fatalf("expected scope condition to reject execution")
 	}
 
-	_, err = evaluateIntegrationScope(context.Background(), evaluator, IntegrationQueueRequest{
+	_, err = evaluateInstallationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",
 		ScopeExpression: "provider =",
-	}, integrationRecord, types.ProviderType("githubapp"), types.OperationVulnerabilitiesCollect, nil, nil)
+	}, record, opName, nil)
 	if !errors.Is(err, ErrCELCompilationFailed) {
 		t.Fatalf("expected ErrCELCompilationFailed, got %v", err)
-	}
-}
-
-func TestShouldEnsurePayloads(t *testing.T) {
-	if shouldEnsurePayloads(nil) {
-		t.Fatalf("expected false when no contracts are present")
-	}
-
-	if shouldEnsurePayloads([]types.IngestContract{
-		{Schema: types.MappingSchemaVulnerability},
-		{Schema: types.MappingSchemaDirectoryAccount},
-	}) {
-		t.Fatalf("expected false when contracts do not require payloads")
-	}
-
-	if !shouldEnsurePayloads([]types.IngestContract{
-		{Schema: types.MappingSchemaVulnerability, EnsurePayloads: true},
-	}) {
-		t.Fatalf("expected true when any contract requires payloads")
-	}
-}
-
-func TestExtractIngestBatchesLegacyAlerts(t *testing.T) {
-	details := map[string]any{
-		"alerts": []map[string]any{
-			{
-				"alertType": "dependabot",
-				"resource":  "repo",
-				"payload": map[string]any{
-					"id": 1,
-				},
-			},
-		},
-	}
-
-	raw, err := json.Marshal(details)
-	if err != nil {
-		t.Fatalf("marshal details: %v", err)
-	}
-
-	batches, err := extractIngestBatches(raw, []types.IngestContract{
-		{Schema: types.MappingSchemaVulnerability},
-	})
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-	if len(batches) != 1 {
-		t.Fatalf("expected one ingest batch, got %d", len(batches))
-	}
-	if batches[0].Schema != types.MappingSchemaVulnerability {
-		t.Fatalf("expected vulnerability schema, got %q", batches[0].Schema)
-	}
-	if len(batches[0].Envelopes) != 1 {
-		t.Fatalf("expected one envelope, got %d", len(batches[0].Envelopes))
-	}
-}
-
-func TestExtractIngestBatchesStructured(t *testing.T) {
-	details := map[string]any{
-		"ingest_batches": []map[string]any{
-			{
-				"schema": "Vulnerability",
-				"envelopes": []map[string]any{
-					{
-						"alertType": "dependabot",
-						"resource":  "repo",
-						"payload": map[string]any{
-							"id": 1,
-						},
-					},
-				},
-			},
-			{
-				"schema": "DirectoryAccount",
-				"envelopes": []map[string]any{
-					{
-						"alertType": "directory_account",
-						"resource":  "user@example.com",
-						"payload": map[string]any{
-							"id": "u_1",
-						},
-					},
-				},
-			},
-		},
-	}
-
-	raw, err := json.Marshal(details)
-	if err != nil {
-		t.Fatalf("marshal details: %v", err)
-	}
-
-	batches, err := extractIngestBatches(raw, []types.IngestContract{
-		{Schema: types.MappingSchemaVulnerability},
-		{Schema: types.MappingSchemaDirectoryAccount},
-	})
-	if err != nil {
-		t.Fatalf("expected no error, got %v", err)
-	}
-	if len(batches) != 2 {
-		t.Fatalf("expected two ingest batches, got %d", len(batches))
 	}
 }

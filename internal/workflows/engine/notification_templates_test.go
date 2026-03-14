@@ -78,18 +78,18 @@ func TestOperationNameForChannel(t *testing.T) {
 	require.Error(t, err)
 }
 
-// TestProviderForNotificationChannel verifies channel to provider mapping
-func TestProviderForNotificationChannel(t *testing.T) {
-	provider, err := providerForNotificationChannel(enums.ChannelSlack)
+// TestDefinitionIDForNotificationChannel verifies channel to definition ID mapping
+func TestDefinitionIDForNotificationChannel(t *testing.T) {
+	id, err := definitionIDForNotificationChannel(enums.ChannelSlack)
 	require.NoError(t, err)
-	require.Equal(t, "slack", string(provider))
+	require.Equal(t, "def_01K0SLACK000000000000000001", string(id))
 
-	_, err = providerForNotificationChannel(enums.ChannelInvalid)
+	_, err = definitionIDForNotificationChannel(enums.ChannelInvalid)
 	require.Error(t, err)
 }
 
-// TestIntegrationIDForRecord verifies integration id extraction from records
-func TestIntegrationIDForRecord(t *testing.T) {
-	require.Equal(t, "", integrationIDForRecord(nil))
-	require.Equal(t, "int_123", integrationIDForRecord(&generated.Integration{ID: "int_123"}))
+// TestInstallationIDForRecord verifies installation id extraction from records
+func TestInstallationIDForRecord(t *testing.T) {
+	require.Equal(t, "", installationIDForRecord(nil))
+	require.Equal(t, "int_123", installationIDForRecord(&generated.Integration{ID: "int_123"}))
 }

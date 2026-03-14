@@ -77,14 +77,12 @@ type WebhookActionParams struct {
 
 // IntegrationActionParams defines params for INTEGRATION actions
 type IntegrationActionParams struct {
-	// IntegrationID is the explicit integration identifier for the operation
-	IntegrationID string `json:"integration_id,omitempty"`
-	// Provider overrides the integration identifier when set
-	Provider string `json:"provider"`
-	// OperationName identifies the explicit integration operation name
+	// InstallationID is the explicit installation identifier for the operation
+	InstallationID string `json:"installation_id,omitempty"`
+	// DefinitionID identifies the integration definition when no installation ID is set
+	DefinitionID string `json:"definition_id,omitempty"`
+	// OperationName identifies the integration operation to execute
 	OperationName string `json:"operation_name,omitempty"`
-	// OperationKind identifies the integration operation kind when operation name is omitted
-	OperationKind string `json:"operation_kind,omitempty"`
 	// Config holds the integration-specific configuration payload as a JSON object document
 	Config json.RawMessage `json:"config,omitempty"`
 	// ScopeExpression is an optional CEL expression gate for this integration action
@@ -93,9 +91,9 @@ type IntegrationActionParams struct {
 	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
 	// ScopeResource is optional resource identity data exposed to scope expression evaluation
 	ScopeResource string `json:"scope_resource,omitempty"`
-	// Force requests a refresh for the provider
+	// Force requests a credential refresh for the installation
 	Force bool `json:"force_refresh"`
-	// ClientForce requests a client-side refresh for the provider
+	// ClientForce requests a client cache bypass for the installation
 	ClientForce bool `json:"client_force"`
 }
 

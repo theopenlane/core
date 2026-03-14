@@ -1,26 +1,25 @@
 package graphapi
 
 import (
-	"cmp"
 	"encoding/json"
 	"slices"
 
 	"github.com/theopenlane/core/common/enums"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // integrationScopeVariableNames lists CEL variables exposed to integration scope expressions
 var integrationScopeVariableNames = []string{
-	integrationtypes.ScopeVariablePayload,
-	integrationtypes.ScopeVariableResource,
-	integrationtypes.ScopeVariableProvider,
-	integrationtypes.ScopeVariableOperation,
-	integrationtypes.ScopeVariableConfig,
-	integrationtypes.ScopeVariableIntegrationConfig,
-	integrationtypes.ScopeVariableProviderState,
-	integrationtypes.ScopeVariableOrgID,
-	integrationtypes.ScopeVariableIntegrationID,
+	"payload",
+	"resource",
+	"provider",
+	"operation",
+	"config",
+	"integration_config",
+	"provider_state",
+	"org_id",
+	"integration_id",
 }
 
 // workflowMetadataExtensionsDocument is the serialized shape for workflow metadata extensions
@@ -59,8 +58,6 @@ type integrationProviderExtensionsDocument struct {
 	DisplayName string `json:"display_name"`
 	// Category is the provider category
 	Category string `json:"category"`
-	// AuthKind is the provider auth kind
-	AuthKind string `json:"auth_kind"`
 	// CredentialsSchema is the provider credentials schema
 	CredentialsSchema json.RawMessage `json:"credentials_schema,omitempty"`
 	// Operations lists provider operation descriptors
@@ -79,8 +76,6 @@ type integrationOperationExtensionsDocument struct {
 	Client string `json:"client,omitempty"`
 	// ConfigSchema is the operation config schema
 	ConfigSchema json.RawMessage `json:"config_schema,omitempty"`
-	// OutputSchema is the operation output schema
-	OutputSchema json.RawMessage `json:"output_schema,omitempty"`
 }
 
 // workflowMetadataExtensions builds extensible workflow metadata payloads for non-object schema surfaces
@@ -88,7 +83,7 @@ func workflowMetadataExtensions(source integrationMetadataSource) map[string]any
 	doc := workflowMetadataExtensionsDocument{
 		Integrations: integrationWorkflowExtensionsDocument{
 			ActionContract: integrationActionContractDocument{
-				TargetSelector:    []string{"integration_id", "provider"},
+				TargetSelector:    []string{"installation_id", "definition_slug"},
 				OperationSelector: []string{"operation_name", "operation_kind"},
 				ScopeFields:       []string{"scope_expression", "scope_payload", "scope_resource"},
 				ScopeVariables:    append([]string(nil), integrationScopeVariableNames...),
@@ -112,44 +107,53 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 		return []integrationProviderExtensionsDocument{}
 	}
 
-	catalog := source.ProviderMetadataCatalog()
-	providers := make([]integrationtypes.ProviderType, 0, len(catalog))
-	for provider := range catalog {
-		providers = append(providers, provider)
-	}
-	slices.SortFunc(providers, cmp.Compare)
+	specs := source.Catalog()
+	entries := make([]integrationProviderExtensionsDocument, 0, len(specs))
 
-	providerEntries := make([]integrationProviderExtensionsDocument, 0, len(providers))
-	for _, provider := range providers {
-		meta := catalog[provider]
+	for _, spec := range specs {
+		def, ok := source.Definition(spec.ID)
+		if !ok {
+			continue
+		}
+
 		entry := integrationProviderExtensionsDocument{
-			Provider:          string(provider),
-			DisplayName:       meta.DisplayName,
-			Category:          meta.Category,
-			AuthKind:          string(meta.AuthType),
-			CredentialsSchema: jsonx.CloneRawMessage(meta.CredentialsSchema),
+			Provider:    spec.Slug,
+			DisplayName: spec.DisplayName,
+			Category:    spec.Category,
 		}
 
-		descriptors := source.OperationDescriptors(provider)
-		slices.SortFunc(descriptors, func(a, b integrationtypes.OperationDescriptor) int {
-			return cmp.Compare(a.Name, b.Name)
+		if def.Credentials != nil {
+			entry.CredentialsSchema = jsonx.CloneRawMessage(def.Credentials.Schema)
+		}
+
+		operations := buildOperationEntries(def.Operations)
+		slices.SortFunc(operations, func(a, b integrationOperationExtensionsDocument) int {
+			if a.Name < b.Name {
+				return -1
+			}
+			if a.Name > b.Name {
+				return 1
+			}
+			return 0
 		})
-
-		operations := make([]integrationOperationExtensionsDocument, 0, len(descriptors))
-		for _, descriptor := range descriptors {
-			operations = append(operations, integrationOperationExtensionsDocument{
-				Name:         string(descriptor.Name),
-				Kind:         string(descriptor.Kind),
-				Description:  descriptor.Description,
-				Client:       string(descriptor.Client),
-				ConfigSchema: jsonx.CloneRawMessage(descriptor.ConfigSchema),
-				OutputSchema: jsonx.CloneRawMessage(descriptor.OutputSchema),
-			})
-		}
 		entry.Operations = operations
-
-		providerEntries = append(providerEntries, entry)
+		entries = append(entries, entry)
 	}
 
-	return providerEntries
+	return entries
+}
+
+// buildOperationEntries converts operation registrations to extension documents
+func buildOperationEntries(ops []types.OperationRegistration) []integrationOperationExtensionsDocument {
+	entries := make([]integrationOperationExtensionsDocument, 0, len(ops))
+	for _, op := range ops {
+		entries = append(entries, integrationOperationExtensionsDocument{
+			Name:         string(op.Name),
+			Kind:         string(op.Kind),
+			Description:  op.Description,
+			Client:       string(op.Client),
+			ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
+		})
+	}
+	return entries
 }

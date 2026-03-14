@@ -12,8 +12,6 @@ import (
 
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
-
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
@@ -60,79 +58,6 @@ func (c *AuthenticatedClient) GetJSONWithParams(ctx context.Context, path string
 func (c *AuthenticatedClient) PostJSON(ctx context.Context, path string, body, out any) error {
 	endpoint := buildEndpointURL(c.BaseURL, path, nil)
 	return httpJSON(ctx, http.MethodPost, endpoint, c.BearerToken, c.Headers, body, out)
-}
-
-// clone returns a deep copy of the client for safe mutation
-func (c *AuthenticatedClient) clone() *AuthenticatedClient {
-	if c == nil {
-		return nil
-	}
-
-	return &AuthenticatedClient{
-		BaseURL:     c.BaseURL,
-		BearerToken: c.BearerToken,
-		Headers:     maps.Clone(c.Headers),
-	}
-}
-
-// AuthenticatedClientFromClient attempts to unwrap an AuthenticatedClient from a wrapped client value
-func AuthenticatedClientFromClient(value types.ClientInstance) *AuthenticatedClient {
-	client, ok := types.ClientInstanceAs[*AuthenticatedClient](value)
-	if !ok {
-		return nil
-	}
-
-	return client
-}
-
-// ResolveAuthenticatedClient returns a resolved HTTP client for operation execution.
-// If a pooled client is present, it is cloned and reused; otherwise a new one is built
-// from the credential token extractor and supplied base URL/headers.
-func ResolveAuthenticatedClient(input types.OperationInput, extract func(types.CredentialSet) (string, error), baseURL string, headers map[string]string) (*AuthenticatedClient, error) {
-	if pooled := AuthenticatedClientFromClient(input.Client); pooled != nil {
-		client := pooled.clone()
-		if client == nil {
-			return nil, ErrClientResolutionFailed
-		}
-
-		if strings.TrimSpace(client.BaseURL) == "" && strings.TrimSpace(baseURL) != "" {
-			client.BaseURL = strings.TrimSpace(baseURL)
-		}
-
-		if len(client.Headers) == 0 && len(headers) > 0 {
-			client.Headers = maps.Clone(headers)
-		}
-
-		return client, nil
-	}
-
-	token, err := extract(input.Credential)
-	if err != nil {
-		return nil, err
-	}
-
-	return NewAuthenticatedClient(baseURL, token, headers), nil
-}
-
-// HealthCheckRunner creates a health check operation function using a generic pattern.
-// It resolves an authenticated client, issues a GET to endpoint, and calls resultFn to
-// build the summary and detail payload.
-func HealthCheckRunner[T any](extract func(types.CredentialSet) (string, error), endpoint string, failureMsg string, resultFn func(T) (string, any)) types.OperationFunc {
-	return func(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-		client, err := ResolveAuthenticatedClient(input, extract, "", nil)
-		if err != nil {
-			return types.OperationResult{}, err
-		}
-
-		var resp T
-		if err := client.GetJSON(ctx, endpoint, &resp); err != nil {
-			return OperationFailure(failureMsg, err, nil)
-		}
-
-		summary, details := resultFn(resp)
-
-		return OperationSuccess(summary, details), nil
-	}
 }
 
 func httpJSON(ctx context.Context, method string, endpoint string, bearer string, headers map[string]string, body any, out any) error {

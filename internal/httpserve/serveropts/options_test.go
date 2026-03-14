@@ -37,8 +37,8 @@ func TestWithIntegrationRuntime_NilDB(t *testing.T) {
 
 	WithIntegrationRuntime(nil).apply(so)
 
-	if so.Config.Handler.IntegrationRuntime != nil {
-		t.Fatalf("expected integration runtime to remain nil when DB is nil")
+	if so.Config.Handler.IntegrationsRuntime != nil {
+		t.Fatalf("expected integrations v2 runtime to remain nil when DB is nil")
 	}
 }
 
@@ -54,7 +54,7 @@ func TestWithIntegrationRuntime_NilDBAlwaysSkips(t *testing.T) {
 
 	WithIntegrationRuntime(nil).apply(so)
 
-	if so.Config.Handler.IntegrationRuntime != nil {
-		t.Fatalf("expected integration runtime to remain nil when DB is nil")
+	if so.Config.Handler.IntegrationsRuntime != nil {
+		t.Fatalf("expected integrations v2 runtime to remain nil when DB is nil")
 	}
 }

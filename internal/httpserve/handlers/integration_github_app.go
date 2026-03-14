@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providers/github"
 	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/internal/integrations/types"
+	v2types "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -340,14 +341,13 @@ func (h *Handler) queueGitHubVulnerabilityBackfill(ctx context.Context, orgID, i
 		return
 	}
 
-	operationName := types.OperationVulnerabilitiesCollect
 	if _, err := h.WorkflowEngine.QueueIntegrationOperation(context.WithoutCancel(ctx), engine.IntegrationQueueRequest{
-		OrgID:         orgID,
-		Provider:      github.TypeGitHubApp,
-		IntegrationID: integrationID,
-		Operation:     operationName,
-		Force:         true,
-		RunType:       enums.IntegrationRunTypeEvent,
+		OrgID:          orgID,
+		DefinitionID:   "github_app",
+		InstallationID: integrationID,
+		Operation:      v2types.OperationName("vulnerability.collect"),
+		Force:          true,
+		RunType:        enums.IntegrationRunTypeEvent,
 	}); err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Str("integration_id", integrationID).Msg("failed to queue github vulnerability backfill operation")
 	}
