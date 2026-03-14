@@ -8,10 +8,14 @@ import (
 
 	"entgo.io/ent"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
+
+// templateVarPattern matches dot-prefixed Go template variable references, e.g. {{ .Foo }} or {{ .User.Name }}.
+var templateVarPattern = regexp.MustCompile(`{{\s*\.([A-Za-z][A-Za-z0-9_.]*)\s*}}`)
 
 // tmplURLExpr matches Go template expressions of the form {{ .URLS.<Name> }}.
 // Only .URLS.* references are matched; arbitrary template expressions are left
@@ -60,6 +64,99 @@ func SanitizeBodyHTML(p *bluemonday.Policy, content string) string {
 	}
 
 	return sanitized
+}
+
+// extractTemplateVarNames scans the provided template strings for {{ .VarName }} references
+// and returns a deduplicated slice of top-level variable names. Dotted paths like {{ .User.Name }}
+// yield the top-level key "User" only.
+func extractTemplateVarNames(templates ...string) []string {
+	seen := map[string]struct{}{}
+
+	for _, tmpl := range templates {
+		for _, match := range templateVarPattern.FindAllStringSubmatch(tmpl, -1) {
+			if len(match) < 2 {
+				continue
+			}
+
+			top, _, _ := strings.Cut(match[1], ".")
+			seen[top] = struct{}{}
+		}
+	}
+
+	return lo.Keys(seen)
+}
+
+// mergeTemplateVarsIntoSchema adds discovered variable names as string-typed properties
+// into a JSON Schema map. Existing properties are preserved; only absent keys are added.
+func mergeTemplateVarsIntoSchema(schema map[string]any, vars []string) map[string]any {
+	if schema == nil {
+		schema = map[string]any{}
+	}
+
+	if _, ok := schema["type"]; !ok {
+		schema["type"] = "object"
+	}
+
+	props, _ := schema["properties"].(map[string]any)
+	if props == nil {
+		props = map[string]any{}
+	}
+
+	for _, v := range vars {
+		if _, exists := props[v]; !exists {
+			props[v] = map[string]any{"type": "string"}
+		}
+	}
+
+	schema["properties"] = props
+
+	return schema
+}
+
+// HookExtractEmailTemplateVariables parses template content fields on create and update,
+// extracts Go template variable references, and merges them as properties into jsonconfig.
+// Existing jsonconfig properties are preserved; only newly discovered variables are added.
+func HookExtractEmailTemplateVariables() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
+			var templates []string
+
+			if v, exists := m.SubjectTemplate(); exists {
+				templates = append(templates, v)
+			}
+
+			if v, exists := m.PreheaderTemplate(); exists {
+				templates = append(templates, v)
+			}
+
+			if v, exists := m.BodyTemplate(); exists {
+				templates = append(templates, v)
+			}
+
+			if v, exists := m.TextTemplate(); exists {
+				templates = append(templates, v)
+			}
+
+			vars := extractTemplateVarNames(templates...)
+			if len(vars) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			var jsonconfig map[string]any
+
+			if v, exists := m.Jsonconfig(); exists {
+				jsonconfig = v
+			} else if !m.Op().Is(ent.OpCreate) {
+				if old, err := m.OldJsonconfig(ctx); err == nil {
+					jsonconfig = old
+				}
+			}
+
+			m.SetJsonconfig(mergeTemplateVarsIntoSchema(jsonconfig, vars))
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
 // HookEmailTemplateSanitize sanitizes HTML template content fields on create and update
