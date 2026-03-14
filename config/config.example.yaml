@@ -273,7 +273,12 @@ integrationproviders:
             vendor: aws
         logoUrl: ""
         name: aws
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: true
     awsauditmanager:
         active: true
@@ -397,7 +402,12 @@ integrationproviders:
             vendor: aws
         logoUrl: ""
         name: awsauditmanager
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: false
     awssecurityhub:
         active: true
@@ -507,7 +517,12 @@ integrationproviders:
             vendor: aws
         logoUrl: ""
         name: awssecurityhub
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: false
     azureentraid:
         active: false
@@ -556,7 +571,6 @@ integrationproviders:
             tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
         persistence:
             storeRefreshToken: true
-        schemaVersion: v1
         userInfo:
             authStyle: Bearer
             emailPath: mail
@@ -614,7 +628,12 @@ integrationproviders:
             vendor: microsoft
         logoUrl: https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256
         name: azuresecuritycenter
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: true
     buildkite:
         active: false
@@ -659,7 +678,12 @@ integrationproviders:
             vendor: buildkite
         logoUrl: ""
         name: buildkite
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: true
     cloudflare:
         active: true
@@ -715,7 +739,12 @@ integrationproviders:
             vendor: cloudflare
         logoUrl: https://developers.cloudflare.com/resources/logo/favicon.ico
         name: cloudflare
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: true
     gcpscc:
         active: true
@@ -831,19 +860,19 @@ integrationproviders:
         description: Collect Google Cloud Security Command Center findings and settings using workload identity or service-account based access.
         displayName: Google Cloud SCC
         docsUrl: https://docs.theopenlane.io/docs/platform/integrations/gcp_scc/overview
-        googleWorkloadIdentity:
-            scopes:
-                - https://www.googleapis.com/auth/cloud-platform
-            subjectTokenType: urn:ietf:params:oauth:token-type:id_token
-            tokenLifetime: 3600000000000
         labels:
             product: security-command-center
             vendor: google
         logoUrl: ""
         name: gcpscc
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         persistence:
             storeRefreshToken: false
-        schemaVersion: v1
         visible: true
     github:
         active: true
@@ -870,7 +899,6 @@ integrationproviders:
             tokenUrl: https://github.com/login/oauth/access_token
         persistence:
             storeRefreshToken: true
-        schemaVersion: v1
         userInfo:
             authStyle: token
             emailPath: email
@@ -889,11 +917,14 @@ integrationproviders:
         description: Install the Openlane GitHub App to collect repository metadata and security alerts (Dependabot, code scanning, and secret scanning) for exposure management.
         displayName: GitHub App
         docsUrl: https://docs.theopenlane.io/docs/platform/integrations/github_app/overview
-        githubApp:
-            baseUrl: https://api.github.com
         logoUrl: ""
         name: githubapp
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: true
     googleworkspace:
         active: true
@@ -962,7 +993,6 @@ integrationproviders:
             tokenUrl: https://oauth2.googleapis.com/token
         persistence:
             storeRefreshToken: true
-        schemaVersion: v1
         userInfo:
             authStyle: Bearer
             emailPath: email
@@ -1013,7 +1043,6 @@ integrationproviders:
             tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
         persistence:
             storeRefreshToken: true
-        schemaVersion: v1
         userInfo:
             authStyle: Bearer
             emailPath: mail
@@ -1046,7 +1075,6 @@ integrationproviders:
             tokenUrl: ""
         persistence:
             storeRefreshToken: true
-        schemaVersion: v1
         userInfo:
             authStyle: Bearer
             emailPath: email
@@ -1086,7 +1114,34 @@ integrationproviders:
             vendor: okta
         logoUrl: ""
         name: okta
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+        visible: true
+    scim:
+        active: true
+        authType: none
+        category: identity
+        description: Enable SCIM 2.0 push-based provisioning so external identity providers can sync users and groups into Openlane.
+        displayName: SCIM 2.0
+        docsUrl: https://docs.theopenlane.io/docs/platform/integrations/scim/overview
+        labels:
+            protocol: scim2
+        logoUrl: ""
+        name: scim
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
+        tags:
+            - scim
+            - provisioning
+            - identity
         visible: true
     slack:
         active: true
@@ -1113,7 +1168,6 @@ integrationproviders:
             tokenUrl: https://slack.com/api/oauth.v2.access
         persistence:
             storeRefreshToken: true
-        schemaVersion: v1
         userInfo:
             authStyle: Bearer
             emailPath: user.email
@@ -1176,7 +1230,12 @@ integrationproviders:
             vendor: vercel
         logoUrl: ""
         name: vercel
-        schemaVersion: v1
+        oauth:
+            authUrl: ""
+            clientId: ""
+            clientSecret: ""
+            scopes: null
+            tokenUrl: ""
         visible: true
 integrationsuccessredirecturl: ""
 jobqueue:
