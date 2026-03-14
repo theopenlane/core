@@ -14,6 +14,6 @@ import (
 // key identifies the NotificationTemplate record. recipient provides the To address and Recipient template variables.
 // dataBuilder defines typed template data overrides; pass nil to use only the base config and recipient data.
 // opts are applied to the ComposeRequest before dispatch and carry per-call extras (tags, attachments, etc.).
-func sendEmail(ctx context.Context, client *generated.Client, ownerID string, key emailruntime.TemplateKey, recipient compose.Recipient, dataBuilder *emailruntime.TemplateData, opts ...emailruntime.SendOption) error {
+func sendEmail(ctx context.Context, client *generated.Client, ownerID string, key string, recipient compose.Recipient, dataBuilder *emailruntime.TemplateData, opts ...emailruntime.SendOption) error {
 	return emailruntime.Send(ctx, client, ownerID, key, recipient, dataBuilder, opts...)
 }
