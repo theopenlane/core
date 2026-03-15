@@ -12,7 +12,6 @@ import (
 	"ariga.io/entcache"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"entgo.io/ent"
@@ -136,6 +135,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/newman/compose"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/iam/entfga"
