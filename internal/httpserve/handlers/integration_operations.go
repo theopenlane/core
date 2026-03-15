@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -41,7 +42,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.resolveIntegrationDefinition(req.Provider)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(req.Provider))
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -64,12 +65,17 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
 	if integrationID != "" {
-		installationRec, err := h.loadOwnedIntegration(requestCtx, caller.OrganizationID, integrationID)
+		installationRec, err := h.DBClient.Integration.Query().
+			Where(
+				integration.OwnerIDEQ(caller.OrganizationID),
+				integration.IDEQ(integrationID),
+			).
+			Only(requestCtx)
 		if err != nil {
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		if err := validateInstallationDefinition(installationRec, def); err != nil {
+		if installationRec.DefinitionID != string(def.Spec.ID) {
 			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 
@@ -83,15 +89,29 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		)
 
 		if integrationID != "" {
-			installationRec, err = h.loadOwnedIntegration(requestCtx, caller.OrganizationID, integrationID)
+			installationRec, err = h.DBClient.Integration.Query().
+				Where(
+					integration.OwnerIDEQ(caller.OrganizationID),
+					integration.IDEQ(integrationID),
+				).
+				Only(requestCtx)
 		} else {
-			installationRec, err = h.loadOwnedIntegrationByDefinition(requestCtx, caller.OrganizationID, def.Spec.ID)
+			installationRec, err = h.DBClient.Integration.Query().
+				Where(
+					integration.OwnerIDEQ(caller.OrganizationID),
+					integration.DefinitionIDEQ(string(def.Spec.ID)),
+				).
+				Only(requestCtx)
 		}
 		if err != nil {
+			if ent.IsNotSingular(err) {
+				return h.BadRequest(ctx, ErrIntegrationIDRequired, openapiCtx)
+			}
+
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		if err := validateInstallationDefinition(installationRec, def); err != nil {
+		if installationRec.DefinitionID != string(def.Spec.ID) {
 			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 

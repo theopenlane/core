@@ -452,7 +452,7 @@ func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, 
 
 	record, err := h.DBClient.Integration.Query().
 		Where(
-			integration.DefinitionSlugEQ(githubAppSlug),
+			integration.DefinitionIDEQ(githubAppDefinitionID),
 			func(s *sql.Selector) {
 				s.Where(sqljson.ValueEQ(integration.FieldProviderState, installationID, sqljson.Path("providers", githubAppSlug, "installationId")))
 			},

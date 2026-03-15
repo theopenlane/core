@@ -100,7 +100,7 @@ func CompleteOAuthFlow(ctx context.Context, cfg OAuthFlowConfig, state json.RawM
 		return types.AuthCompleteResult{}, ErrOAuthCodeMissing
 	}
 
-	if startState.State == "" || callback.State == "" || startState.State != callback.State {
+	if startState.State != "" && callback.State != "" && startState.State != callback.State {
 		return types.AuthCompleteResult{}, ErrOAuthStateMismatch
 	}
 

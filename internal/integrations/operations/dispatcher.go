@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -89,7 +88,6 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		return DispatchResult{}, err
 	}
 
-	runStartedAt := time.Now()
 	receipt := d.gala.EmitWithHeaders(ctx, operation.Topic, Envelope{
 		RunID:          runRecord.ID,
 		InstallationID: installationRecord.ID,
@@ -108,15 +106,6 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		},
 	})
 	if receipt.Err != nil {
-		completeErr := d.runs.Complete(ctx, runRecord.ID, runStartedAt, RunResult{
-			Status:  enums.IntegrationRunStatusFailed,
-			Summary: "failed to dispatch integration operation",
-			Error:   receipt.Err.Error(),
-		})
-		if completeErr != nil {
-			return DispatchResult{}, errors.Join(receipt.Err, completeErr)
-		}
-
 		return DispatchResult{}, receipt.Err
 	}
 

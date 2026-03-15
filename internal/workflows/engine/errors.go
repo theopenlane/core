@@ -57,6 +57,8 @@ var (
 	ErrIntegrationActionQueued = errors.New("integration action queued")
 	// ErrInstallationRequired indicates the integration action requires an installation ID or definition ID
 	ErrInstallationRequired = errors.New("integration action requires installation_id or definition_id")
+	// ErrInstallationIDRequired indicates the integration action must specify installation_id when definition_id is ambiguous
+	ErrInstallationIDRequired = errors.New("integration action requires installation_id when multiple installations exist for definition_id")
 	// ErrInstallationNotFound indicates no matching installation record was found
 	ErrInstallationNotFound = errors.New("installation not found")
 	// ErrInstallationDefinitionMismatch indicates the requested definition does not match the resolved installation

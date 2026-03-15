@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -10,6 +9,8 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -27,19 +28,27 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
-	if strings.TrimSpace(in.Provider) == "" {
+	if in.Provider == "" {
 		return h.BadRequest(ctx, rout.MissingField("provider"), openapi)
 	}
 
-	def, ok := h.resolveIntegrationDefinition(in.Provider)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(in.Provider))
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 	}
 
 	integrationID := in.IntegrationID
 	if integrationID == "" {
-		record, err := h.loadOwnedIntegrationByDefinition(userCtx, caller.OrganizationID, def.Spec.ID)
+		record, err := h.DBClient.Integration.Query().
+			Where(
+				integration.OwnerIDEQ(caller.OrganizationID),
+				integration.DefinitionIDEQ(string(def.Spec.ID)),
+			).
+			Only(userCtx)
 		if err != nil {
+			if ent.IsNotSingular(err) {
+				return h.BadRequest(ctx, ErrIntegrationIDRequired, openapi)
+			}
 			if ent.IsNotFound(err) {
 				return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", def.Spec.Slug, ErrIntegrationNotFound)), openapi)
 			}
@@ -47,11 +56,16 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		}
 		integrationID = record.ID
 	} else {
-		record, err := h.loadOwnedIntegration(userCtx, caller.OrganizationID, integrationID)
+		record, err := h.DBClient.Integration.Query().
+			Where(
+				integration.OwnerIDEQ(caller.OrganizationID),
+				integration.IDEQ(integrationID),
+			).
+			Only(userCtx)
 		if err != nil {
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapi)
 		}
-		if err := validateInstallationDefinition(record, def); err != nil {
+		if record.DefinitionID != string(def.Spec.ID) {
 			return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 		}
 	}

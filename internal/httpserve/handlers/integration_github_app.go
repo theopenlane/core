@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
@@ -162,8 +164,11 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	// Find or create the integration record for this org.
 	integrationRecord, err := h.DBClient.Integration.Query().
 		Where(
-			integration.OwnerID(orgID),
-			integration.DefinitionSlugEQ(githubAppSlug),
+			integration.OwnerIDEQ(orgID),
+			integration.DefinitionIDEQ(githubAppDefinitionID),
+			func(s *sql.Selector) {
+				s.Where(sqljson.ValueEQ(integration.FieldProviderState, in.InstallationID, sqljson.Path("providers", githubAppSlug, "installationId")))
+			},
 		).
 		Only(reqCtx)
 	if err != nil {
@@ -225,6 +230,14 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	if err := h.updateGitHubAppIntegrationMetadata(reqCtx, integrationRecord, authResult.Credential.ProviderData); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to update github app integration metadata")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	if err := h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
+		SetStatus(enums.IntegrationStatusConnected).
+		Exec(reqCtx); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to update github app integration status")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}

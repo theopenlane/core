@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/logx"
@@ -43,9 +44,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	definitionID := types.DefinitionID(in.DefinitionID)
-
-	def, ok := h.resolveIntegrationDefinition(in.DefinitionID)
+	def, ok := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(in.DefinitionID))
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -59,19 +58,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	}
 
 	userInputProvided := len(in.UserInput) > 0
-	normalizedUserInput := json.RawMessage(nil)
-	if userInputProvided {
-		if def.UserInput == nil || len(def.UserInput.Schema) == 0 {
-			return h.BadRequest(ctx, rout.MissingField("userInputSchema"), openapiCtx)
-		}
-
-		normalized, err := normalizeUserInput(requestCtx, def.UserInput, json.RawMessage(in.UserInput))
-		if err != nil {
-			return h.BadRequest(ctx, err, openapiCtx)
-		}
-
-		normalizedUserInput = normalized
-	}
+	userInput := json.RawMessage(in.UserInput)
 
 	var (
 		installationID      string
@@ -80,14 +67,19 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	)
 
 	if in.InstallationID != "" {
-		rec, err := h.loadOwnedIntegration(requestCtx, caller.OrganizationID, in.InstallationID)
+		rec, err := h.DBClient.Integration.Query().
+			Where(
+				integration.OwnerIDEQ(caller.OrganizationID),
+				integration.IDEQ(in.InstallationID),
+			).
+			Only(requestCtx)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
 
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		if err := validateInstallationDefinition(rec, def); err != nil {
+		if rec.DefinitionID != string(def.Spec.ID) {
 			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 
@@ -108,12 +100,12 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 			SetFamily(def.Spec.Family).
 			SetStatus(enums.IntegrationStatusPending)
 		if userInputProvided {
-			create.SetConfig(types.IntegrationConfig{ClientConfig: normalizedUserInput})
+			create.SetConfig(types.IntegrationConfig{ClientConfig: userInput})
 		}
 
 		rec, err := create.Save(requestCtx)
 		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(definitionID)).Msg("failed to create installation for oauth flow")
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", in.DefinitionID).Msg("failed to create installation for oauth flow")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
@@ -125,7 +117,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	if userInputProvided && !createdInstallation {
 		config := installationRec.Config
-		config.ClientConfig = normalizedUserInput
+		config.ClientConfig = userInput
 
 		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(config).Exec(requestCtx); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist integration user input")
@@ -257,6 +249,14 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
+	}
+
+	if err := h.DBClient.Integration.UpdateOneID(result.InstallationID).
+		SetStatus(enums.IntegrationStatusConnected).
+		Exec(reqCtx); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", result.InstallationID).Msg("failed to update integration status after oauth callback")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	cfg := h.getOauthCookieConfig()

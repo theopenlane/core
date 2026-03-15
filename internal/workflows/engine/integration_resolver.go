@@ -54,8 +54,12 @@ func (r *installationResolver) Resolve(ctx context.Context, criteria installatio
 		q = q.Where(integration.DefinitionIDEQ(string(defID)))
 	}
 
-	record, err := q.First(ctx)
+	record, err := q.Only(ctx)
 	if err != nil {
+		if ent.IsNotSingular(err) {
+			return installationResolution{}, ErrInstallationIDRequired
+		}
+
 		if ent.IsNotFound(err) {
 			return installationResolution{}, ErrInstallationNotFound
 		}
