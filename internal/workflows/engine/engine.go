@@ -35,7 +35,7 @@ type WorkflowEngine struct {
 	// integrationDispatcher enqueues integration operation execution requests
 	integrationDispatcher *operations.Dispatcher
 	// integrationExecutor executes queued integration operations
-	integrationExecutor *registry.Executor
+	integrationExecutor *operations.Executor
 	// integrationListenersRegistered tracks whether integration listeners are registered.
 	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing

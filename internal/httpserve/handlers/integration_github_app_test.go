@@ -2,83 +2,59 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"net/url"
 	"testing"
 
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
 	"github.com/theopenlane/core/internal/ent/hooks"
-	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/integrations/definition"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/utils/rout"
 )
 
-// newGitHubAppRuntimeForTest builds a minimal integration runtime backed by a registry
-// containing the given GitHub App provider spec. If spec.Name is empty, no provider is registered.
-func newGitHubAppRuntimeForTest(t *testing.T, provSpec integrationspec.ProviderSpec) *integrationruntime.Runtime {
+// newGitHubAppRuntimeForTest builds a minimal integration runtime for unit tests.
+// Pass a non-nil cfg to register the GitHub App definition. Pass nil for tests that
+// need to verify behaviour when no definition is registered.
+func newGitHubAppRuntimeForTest(t *testing.T, cfg *githubapp.Config) *integrationsruntime.Runtime {
 	t.Helper()
 
-	ctx := context.Background()
-	reg, err := registry.NewRegistry(ctx, nil)
-	require.NoError(t, err)
-
-	if provSpec.Name != "" {
-		var appCfg githubprovider.AppConfig
-		if err := jsonx.UnmarshalIfPresent(provSpec.ProviderConfig, &appCfg); err != nil {
-			t.Fatalf("failed to decode github app config from provider spec: %v", err)
-		}
-		require.NoError(t, reg.UpsertProvider(ctx, provSpec, githubprovider.AppBuilder(appCfg)))
+	reg := registry.New()
+	if cfg != nil {
+		require.NoError(t, definition.RegisterAll(context.Background(), reg, githubapp.Builder(*cfg)))
 	}
 
-	return integrationruntime.NewFromRegistry(reg)
+	return integrationsruntime.NewForTesting(reg, "")
 }
 
 // TestValidateGitHubAppConfig verifies required configuration errors and success cases.
 func TestValidateGitHubAppConfig(t *testing.T) {
 	cases := []struct {
 		name    string
-		spec    integrationspec.ProviderSpec
+		cfg     *githubapp.Config
 		wantErr error
 	}{
 		{
-			name: "provider disabled",
-			spec: integrationspec.ProviderSpec{
-				Name:     string(githubprovider.TypeGitHubApp),
-				Active:   lo.ToPtr(false),
-				AuthType: types.AuthKindGitHubApp,
-			},
+			name:    "provider not configured",
+			cfg:     nil,
 			wantErr: ErrProviderDisabled,
 		},
 		{
-			name: "missing credentials",
-			spec: integrationspec.ProviderSpec{
-				Name:           string(githubprovider.TypeGitHubApp),
-				Active:         lo.ToPtr(true),
-				AuthType:       types.AuthKindGitHubApp,
-				ProviderConfig: json.RawMessage(`{"appslug":"openlane"}`),
-			},
+			name:    "missing app slug",
+			cfg:     &githubapp.Config{},
 			wantErr: errGitHubAppNotConfigured,
 		},
 		{
 			name: "valid",
-			spec: integrationspec.ProviderSpec{
-				Name:           string(githubprovider.TypeGitHubApp),
-				Active:         lo.ToPtr(true),
-				AuthType:       types.AuthKindGitHubApp,
-				ProviderConfig: json.RawMessage(`{"appslug":"openlane","appid":"12345","privatekey":"private-key","webhooksecret":"secret"}`),
-			},
+			cfg:  &githubapp.Config{AppSlug: "openlane"},
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, tc.spec)}
+			h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, tc.cfg)}
 			err := h.validateGitHubAppConfig()
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
@@ -91,13 +67,8 @@ func TestValidateGitHubAppConfig(t *testing.T) {
 
 // TestGitHubAppInstallURL verifies install URL construction.
 func TestGitHubAppInstallURL(t *testing.T) {
-	spec := integrationspec.ProviderSpec{
-		Name:           string(githubprovider.TypeGitHubApp),
-		Active:         lo.ToPtr(true),
-		AuthType:       types.AuthKindGitHubApp,
-		ProviderConfig: json.RawMessage(`{"appslug":"openlane"}`),
-	}
-	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, spec)}
+	cfg := &githubapp.Config{AppSlug: "openlane"}
+	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, cfg)}
 
 	installURL, err := h.githubAppInstallURL("state-value")
 	assert.NoError(t, err)
@@ -109,18 +80,13 @@ func TestGitHubAppInstallURL(t *testing.T) {
 	assert.Equal(t, "state-value", parsed.Query().Get("state"))
 }
 
-// TestGitHubAppInstallURLMissingSlug verifies missing slug errors use field helpers.
+// TestGitHubAppInstallURLMissingSlug verifies that an unregistered definition returns provider disabled.
 func TestGitHubAppInstallURLMissingSlug(t *testing.T) {
-	// no provider registered → gitHubAppSpec returns ok=false → MissingField("appSlug")
-	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, integrationspec.ProviderSpec{})}
+	// no provider registered → Definition() returns !ok → ErrProviderDisabled
+	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, nil)}
 
 	_, err := h.githubAppInstallURL("state")
-	assert.Error(t, err)
-
-	var fieldErr *rout.FieldError
-	assert.ErrorAs(t, err, &fieldErr)
-	assert.Equal(t, "appSlug", fieldErr.Field)
-	assert.ErrorIs(t, err, rout.ErrMissingField)
+	assert.ErrorIs(t, err, ErrProviderDisabled)
 }
 
 // TestRenderGitHubAppInstallSlackMessage verifies Slack notification message formatting.

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Executor handles queued operation events
@@ -97,7 +98,7 @@ func (e *Executor) ExecuteOperation(ctx context.Context, installation *ent.Integ
 		}
 	}
 
-	return operation.Handle(ctx, installation, credential, client, cloneRawMessage(config))
+	return operation.Handle(ctx, installation, credential, client, jsonx.CloneRawMessage(config))
 }
 
 // Handle processes one queued operation event
@@ -150,7 +151,7 @@ func (e *Executor) Handle(ctx context.Context, envelope Envelope) error {
 		}
 	}
 
-	response, err := operation.Handle(ctx, installationRecord, credential, client, cloneRawMessage(envelope.Config))
+	response, err := operation.Handle(ctx, installationRecord, credential, client, jsonx.CloneRawMessage(envelope.Config))
 	if err != nil {
 		_ = e.runs.Complete(ctx, envelope.RunID, startedAt, RunResult{
 			Status: enums.IntegrationRunStatusFailed,

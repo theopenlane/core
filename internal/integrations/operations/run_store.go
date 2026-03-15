@@ -3,6 +3,7 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"maps"
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
@@ -129,10 +130,5 @@ func cloneMap(value map[string]any) map[string]any {
 		return map[string]any{}
 	}
 
-	out := make(map[string]any, len(value))
-	for key, item := range value {
-		out[key] = item
-	}
-
-	return out
+	return maps.Clone(value)
 }

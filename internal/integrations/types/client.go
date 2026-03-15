@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/internal/ent/generated"
 )
 
 // ClientName identifies a named client within one definition

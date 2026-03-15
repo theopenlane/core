@@ -3,6 +3,8 @@ package catalog
 import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/definitions/awsassets"
+	"github.com/theopenlane/core/internal/integrations/definitions/awsauditmanager"
+	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/definitions/azuresecuritycenter"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
@@ -46,6 +48,8 @@ func Builders(cfg Config) []definition.Builder {
 		githubapp.Builder(cfg.GitHubApp),
 		githuboauth.Builder(cfg.GitHubOAuth),
 		awsassets.Builder(),
+		awsauditmanager.Builder(),
+		awssecurityhub.Builder(),
 		scim.Builder(),
 		slack.Builder(cfg.Slack),
 		okta.Builder(),

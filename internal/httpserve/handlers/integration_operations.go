@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
@@ -10,8 +11,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
-	v2types "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -40,12 +41,13 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	providerType := types.ProviderTypeFromString(req.Provider)
-	if providerType == types.ProviderUnknown {
+	def, ok := h.resolveIntegrationDefinition(req.Provider)
+	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
-	if err := h.validateIntegrationProvider(providerType); err != nil {
-		return h.BadRequest(ctx, err, openapiCtx)
+
+	if !def.Spec.Active {
+		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
 	operationName := types.OperationName(req.Body.Operation)
@@ -54,54 +56,70 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	}
 	integrationID := req.IntegrationID
 
-	if h.WorkflowEngine == nil && operationName != types.OperationHealthDefault {
+	if h.WorkflowEngine == nil && operationName != "health.default" {
 		return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
 	}
 
 	queueCtx := context.WithoutCancel(requestCtx)
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
-	if operationName == types.OperationHealthDefault {
-		result, err := h.IntegrationRuntime.Operations().Run(queueCtx, types.OperationRequest{
-			OrgID:         caller.OrganizationID,
-			IntegrationID: integrationID,
-			Provider:      providerType,
-			Name:          operationName,
-			Config:        configDoc,
-			Force:         req.Body.Force,
-		})
+	if integrationID != "" {
+		installationRec, err := h.loadOwnedIntegration(requestCtx, caller.OrganizationID, integrationID)
 		if err != nil {
-			return h.BadRequest(ctx, err, openapiCtx)
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		out := IntegrationOperationResponse{
-			Reply:     rout.Reply{Success: result.Status == types.OperationStatusOK},
-			Provider:  string(providerType),
-			Operation: string(operationName),
-			Status:    string(result.Status),
-			Summary:   result.Summary,
-			Details:   jsonx.CloneRawMessage(result.Details),
+		if err := validateInstallationDefinition(installationRec, def); err != nil {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 
-		if out.Status == "" {
-			out.Status = string(types.OperationStatusUnknown)
+		integrationID = installationRec.ID
+	}
+
+	if operationName == "health.default" {
+		var (
+			installationRec *ent.Integration
+			err             error
+		)
+
+		if integrationID != "" {
+			installationRec, err = h.loadOwnedIntegration(requestCtx, caller.OrganizationID, integrationID)
+		} else {
+			installationRec, err = h.loadOwnedIntegrationByDefinition(requestCtx, caller.OrganizationID, def.Spec.ID)
 		}
-		if out.Summary == "" {
-			out.Summary = "Health check completed"
+		if err != nil {
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		if result.Status != types.OperationStatusOK {
+		if err := validateInstallationDefinition(installationRec, def); err != nil {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+		}
+
+		credential, _, err := h.IntegrationsRuntime.CredentialStore().LoadCredential(requestCtx, installationRec)
+		if err != nil {
+			return h.InternalServerError(ctx, wrapIntegrationError("load credential for", err), openapiCtx)
+		}
+
+		output, err := h.IntegrationsRuntime.Executor().ExecuteOperation(queueCtx, installationRec, operationName, credential, configDoc)
+		if err != nil {
 			return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
 		}
 
-		return h.Success(ctx, out)
+		return h.Success(ctx, IntegrationOperationResponse{
+			Reply:     rout.Reply{Success: true},
+			Provider:  def.Spec.Slug,
+			Operation: string(operationName),
+			Status:    "ok",
+			Summary:   "Health check completed",
+			Details:   output,
+		})
 	}
 
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
 		OrgID:          caller.OrganizationID,
-		DefinitionID:   req.Provider,
+		DefinitionID:   string(def.Spec.ID),
 		InstallationID: integrationID,
-		Operation:      v2types.OperationName(req.Body.Operation),
+		Operation:      operationName,
 		Config:         configDoc,
 		Force:          req.Body.Force,
 		RunType:        enums.IntegrationRunTypeManual,
@@ -110,6 +128,11 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		switch integrationHTTPStatus(err) {
 		case http.StatusBadRequest:
 			return h.BadRequest(ctx, err, openapiCtx)
+		case http.StatusNotFound:
+			if errors.Is(err, engine.ErrInstallationNotFound) {
+				return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+			}
+			return h.NotFound(ctx, err, openapiCtx)
 		default:
 			return h.InternalServerError(ctx, err, openapiCtx)
 		}
@@ -126,7 +149,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	out := IntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
-		Provider:  string(providerType),
+		Provider:  def.Spec.Slug,
 		Operation: string(operationName),
 		Status:    "queued",
 		Summary:   "Integration operation queued",

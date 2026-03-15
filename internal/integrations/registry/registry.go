@@ -67,6 +67,12 @@ func (r *Registry) Register(def types.Definition) error {
 		return ErrDefinitionAlreadyRegistered
 	}
 
+	for _, existing := range r.definitionsByID {
+		if existing.Spec.Slug == def.Spec.Slug {
+			return ErrDefinitionSlugAlreadyRegistered
+		}
+	}
+
 	clientIndex := make(map[types.ClientName]types.ClientRegistration, len(def.Clients))
 	for _, client := range def.Clients {
 		if _, exists := clientIndex[client.Name]; exists {

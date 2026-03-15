@@ -7,7 +7,7 @@ import (
 	"time"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	v2types "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestIntegrationOperationContextWithoutTimeout(t *testing.T) {
@@ -56,7 +56,7 @@ func TestEvaluateInstallationScope(t *testing.T) {
 		DefinitionSlug: "github_app",
 	}
 
-	opName := v2types.OperationName("vulnerability.collect")
+	opName := types.OperationName("vulnerability.collect")
 
 	allowed, err := evaluateInstallationScope(context.Background(), evaluator, IntegrationQueueRequest{
 		OrgID:           "org_123",

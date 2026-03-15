@@ -14,6 +14,7 @@ import (
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	v2definition "github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -201,12 +202,8 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
 
-	// swap in a runtime with SuccessRedirectURL configured
-	original := suite.h.IntegrationsRuntime
-	rt := suite.buildIntegrationOAuthRuntime(t, "https://console.openlane.io/integrations")
-	suite.h.IntegrationsRuntime = rt
-
-	defer func() { suite.h.IntegrationsRuntime = original }()
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{v2definition.BuilderFunc(buildTestOAuthDefinition)}, "https://console.openlane.io/integrations")
+	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})

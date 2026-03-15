@@ -74,6 +74,8 @@ func integrationHTTPStatus(err error) int {
 		return http.StatusBadRequest
 	case errors.Is(err, keystore.ErrCredentialNotFound):
 		return http.StatusBadRequest
+	case errors.Is(err, engine.ErrInstallationNotFound):
+		return http.StatusNotFound
 	case errors.Is(err, engine.ErrIntegrationProviderRequired):
 		return http.StatusBadRequest
 	case errors.Is(err, engine.ErrIntegrationOperationCriteriaRequired):
@@ -147,4 +149,3 @@ func wrapIntegrationError(operation string, err error) error {
 func wrapTokenError(operation, provider string, err error) error {
 	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
 }
-

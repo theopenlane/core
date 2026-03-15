@@ -24,7 +24,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
-	"github.com/theopenlane/core/internal/integrations"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -100,7 +100,7 @@ type Handler struct {
 	// ObjectStore handles file storage operations
 	ObjectStore *objects.Service
 	// IntegrationsRuntime holds the integrationsv2 runtime components.
-	IntegrationsRuntime *integrations.Runtime
+	IntegrationsRuntime *integrationsruntime.Runtime
 	// Gala is the shared event runtime for asynchronous dispatch.
 	Gala *gala.Gala
 	// WorkflowEngine orchestrates workflow execution.

@@ -31,6 +31,8 @@ type Config struct {
 	DefinitionBuilders []definition.Builder
 	// CredentialStore provides both credential read and write access for installations
 	CredentialStore types.CredentialStore
+	// AuthStateStore persists pending OAuth state across auth start and callback completion.
+	AuthStateStore keymaker.AuthStateStore
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
 	// SuccessRedirectURL is the URL to redirect to after a successful integration auth flow
@@ -96,6 +98,16 @@ func (r *Runtime) SuccessRedirectURL() string {
 	return r.successRedirectURL
 }
 
+// NewForTesting constructs a Runtime backed only by the supplied registry.
+// Calling methods that require DB, Gala, or CredentialStore will panic.
+// Use only in unit tests that exercise registry lookup without executing operations.
+func NewForTesting(reg *registry.Registry, successRedirectURL string) *Runtime {
+	injector := do.New()
+	do.ProvideValue(injector, reg)
+
+	return &Runtime{injector: injector, successRedirectURL: successRedirectURL}
+}
+
 // New wires the integrationsv2 runtime
 func New(config Config) (*Runtime, error) {
 	if config.DB == nil {
@@ -108,6 +120,10 @@ func New(config Config) (*Runtime, error) {
 
 	if config.CredentialStore == nil {
 		return nil, ErrCredentialStoreRequired
+	}
+
+	if config.AuthStateStore == nil {
+		return nil, ErrAuthStateStoreRequired
 	}
 
 	injector := do.New()
@@ -216,11 +232,12 @@ func (serviceProviders) provideExecutor(i do.Injector) (*operations.Executor, er
 }
 
 // provideKeymaker builds the keymaker auth flow service for the runtime
-func (serviceProviders) provideKeymaker(i do.Injector) (*keymaker.Service, error) {
+func (p serviceProviders) provideKeymaker(i do.Injector) (*keymaker.Service, error) {
 	return keymaker.NewService(
 		do.MustInvoke[*registry.Registry](i),
 		do.MustInvoke[keymaker.CredentialWriter](i),
-		keymaker.NewInMemoryAuthStateStore(),
+		entInstallationResolver{db: do.MustInvoke[*ent.Client](i)},
+		p.config.AuthStateStore,
 		keymaker.Options{},
 	)
 }

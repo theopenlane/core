@@ -4,10 +4,12 @@ package handlers_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
-	"strings"
+	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
@@ -15,12 +17,16 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
+	v2definition "github.com/theopenlane/core/internal/integrations/definition"
+	v2types "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+const configTestProviderID = "def_test_gcpscc"
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
@@ -29,35 +35,24 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	op.OperationID = "ConfigureIntegrationProviderSuccess"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	credFields := map[string]any{
-		"projectId":           "sample-project",
-		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
-		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	}
-
-	credJSON, err := json.Marshal(credFields)
-	require.NoError(t, err)
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "gcpscc",
-		Body:     handlers.IntegrationConfigBody(credJSON),
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		Provider: configTestProviderID,
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+		UserInput: handlers.IntegrationConfigBody(
+			mustMarshalJSON(t, map[string]any{"label": "Production"}),
+		),
 	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
 
 	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	require.Equal(t, http.StatusOK, rec.Code)
 
@@ -68,17 +63,42 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 
 	stored := suite.db.Integration.Query().
 		Where(
-			integration.OwnerID(testUser.OrganizationID),
-			integration.Kind("gcpscc"),
+			integration.OwnerIDEQ(testUser.OrganizationID),
+			integration.DefinitionIDEQ(configTestProviderID),
 		).
-		WithSecrets().
 		OnlyX(testUser.UserCtx)
 
-	require.NotNil(t, stored)
-	assert.Len(t, stored.Edges.Secrets, 1)
+	credential, ok, err := suite.h.IntegrationsRuntime.CredentialStore().LoadCredential(testUser.UserCtx, stored)
+	require.NoError(t, err)
+	require.True(t, ok)
+	assert.Contains(t, string(credential.ProviderData), "projectId")
+	assert.Equal(t, "Production", decodeClientConfigLabel(t, stored.Config.ClientConfig))
+}
 
-	credential := stored.Edges.Secrets[0]
-	assert.Contains(t, string(credential.CredentialSet.ProviderData), "projectId")
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinitionID() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderByID"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		Provider: configTestProviderID,
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
 }
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() {
@@ -88,153 +108,21 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	op.OperationID = "ConfigureIntegrationProviderInvalid"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	// missing required projectId field
-	credFields := map[string]any{
-		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
-	}
-
-	credJSON, err := json.Marshal(credFields)
-	require.NoError(t, err)
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "gcpscc",
-		Body:     handlers.IntegrationConfigBody(credJSON),
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		Provider: configTestProviderID,
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
 
 	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-
-	var resp struct {
-		Success bool   `json:"success"`
-		Error   string `json:"error"`
-	}
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.False(t, resp.Success)
-	assert.True(t, strings.TrimSpace(resp.Error) != "")
-}
-
-func (suite *HandlerTestSuite) TestConfigureIntegrationProviderMissingProvider() {
-	t := suite.T()
-
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderMissingProvider"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
-
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
-	defer restore()
-
-	reqCtx := echocontext.NewTestEchoContext().Request().Context()
-	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
-
-	credFields := map[string]any{
-		"projectId":           "sample-project",
-		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
-		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	}
-
-	credJSON, err := json.Marshal(credFields)
-	require.NoError(t, err)
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "",
-		Body:     handlers.IntegrationConfigBody(credJSON),
-	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-}
-
-func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnknownProvider() {
-	t := suite.T()
-
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderUnknown"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
-
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
-	defer restore()
-
-	reqCtx := echocontext.NewTestEchoContext().Request().Context()
-	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
-
-	credFields := map[string]any{
-		"projectId":           "sample-project",
-		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
-		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	}
-
-	credJSON, err := json.Marshal(credFields)
-	require.NoError(t, err)
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "unknown_provider",
-		Body:     handlers.IntegrationConfigBody(credJSON),
-	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/unknown_provider/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-}
-
-func (suite *HandlerTestSuite) TestConfigureIntegrationProviderEmptyPayload() {
-	t := suite.T()
-
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderEmpty"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
-
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
-	defer restore()
-
-	reqCtx := echocontext.NewTestEchoContext().Request().Context()
-	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "gcpscc",
-		Body:     handlers.IntegrationConfigBody(`{}`),
-	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	require.Equal(t, http.StatusBadRequest, rec.Code)
 }
@@ -246,30 +134,17 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	op.OperationID = "ConfigureIntegrationProviderUnauthorized"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
 	defer restore()
 
-	credFields := map[string]any{
-		"projectId":           "sample-project",
-		"serviceAccountEmail": "svc@example.iam.gserviceaccount.com",
-		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	}
-
-	credJSON, err := json.Marshal(credFields)
-	require.NoError(t, err)
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "gcpscc",
-		Body:     handlers.IntegrationConfigBody(credJSON),
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		Provider: configTestProviderID,
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
 	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
 
 	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusUnauthorized, rec.Code)
@@ -282,73 +157,183 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	op.OperationID = "ConfigureIntegrationProviderUpdate"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withIntegrationRegistry(t, map[types.ProviderType]integrationspec.ProviderSpec{
-		types.ProviderType("gcpscc"): gcpSCCSpec(),
-	})
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
-	initialFields := map[string]any{
-		"projectId":           "initial-project",
-		"serviceAccountEmail": "initial@example.iam.gserviceaccount.com",
-		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	}
-
-	credJSON, err := json.Marshal(initialFields)
-	require.NoError(t, err)
-
-	body, err := json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "gcpscc",
-		Body:     handlers.IntegrationConfigBody(credJSON),
+	first := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
+		Provider: configTestProviderID,
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "initial-project", "serviceAccountEmail": "initial@example.iam.gserviceaccount.com"})),
 	})
-	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	updatedFields := map[string]any{
-		"projectId":           "updated-project",
-		"serviceAccountEmail": "updated@example.iam.gserviceaccount.com",
-		"audience":            "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
-	}
-
-	credJSON, err = json.Marshal(updatedFields)
-	require.NoError(t, err)
-
-	body, err = json.Marshal(handlers.IntegrationConfigPayload{
-		Provider: "gcpscc",
-		Body:     handlers.IntegrationConfigBody(credJSON),
+	second := performIntegrationConfigRequest(t, suite, testUser.UserCtx, configTestProviderID, handlers.IntegrationConfigPayload{
+		Provider:       configTestProviderID,
+		InstallationID: first.InstallationID,
+		Body:           handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "updated-project", "serviceAccountEmail": "updated@example.iam.gserviceaccount.com"})),
 	})
+
+	assert.Equal(t, first.InstallationID, second.InstallationID)
+
+	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
+	credential, ok, err := suite.h.IntegrationsRuntime.CredentialStore().LoadCredential(testUser.UserCtx, stored)
 	require.NoError(t, err)
+	require.True(t, ok)
 
-	req = httptest.NewRequest(http.MethodPost, "/v1/integrations/gcpscc/config", bytes.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(testUser.UserCtx)
-
-	rec = httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	stored := suite.db.Integration.Query().
-		Where(
-			integration.OwnerID(testUser.OrganizationID),
-			integration.Kind("gcpscc"),
-		).
-		WithSecrets().
-		OnlyX(testUser.UserCtx)
-
-	require.NotNil(t, stored)
-	assert.Len(t, stored.Edges.Secrets, 1)
-
-	credential := stored.Edges.Secrets[0]
-	providerData, err := jsonx.ToMap(credential.CredentialSet.ProviderData)
+	providerData, err := jsonx.ToMap(credential.ProviderData)
 	require.NoError(t, err)
 	assert.Equal(t, "updated-project", providerData["projectId"])
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallationDefinitionMismatch() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderMismatch"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{
+		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
+		configTestDefinitionBuilder("def_test_other", "other", false),
+	}, "")
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	other := performIntegrationConfigRequest(t, suite, testUser.UserCtx, "def_test_other", handlers.IntegrationConfigPayload{
+		Provider: "def_test_other",
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "other-project", "serviceAccountEmail": "other@example.iam.gserviceaccount.com"})),
+	})
+
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		Provider:       configTestProviderID,
+		InstallationID: other.InstallationID,
+		Body:           handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoesNotPersistCredential() {
+	t := suite.T()
+
+	op := openapi3.NewOperation()
+	op.OperationID = "ConfigureIntegrationProviderHealthFailure"
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
+
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", true)}, "")
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
+		Provider: configTestProviderID,
+		Body:     handlers.IntegrationConfigBody(mustMarshalJSON(t, map[string]any{"projectId": "sample-project", "serviceAccountEmail": "svc@example.iam.gserviceaccount.com"})),
+	})
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+configTestProviderID+"/config", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+	require.Equal(t, http.StatusBadRequest, rec.Code)
+
+	count, err := suite.db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(testUser.OrganizationID),
+			integration.DefinitionIDEQ(configTestProviderID),
+		).
+		Count(testUser.UserCtx)
+	require.NoError(t, err)
+	assert.Zero(t, count)
+}
+
+func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) v2definition.Builder {
+	return v2definition.BuilderFunc(func(_ context.Context) (v2types.Definition, error) {
+		healthHandler := func(context.Context, *ent.Integration, v2types.CredentialSet, any, json.RawMessage) (json.RawMessage, error) {
+			if failHealth {
+				return nil, errors.New("health failed")
+			}
+
+			return json.RawMessage(`{"ok":true}`), nil
+		}
+
+		return v2types.Definition{
+			Spec: v2types.DefinitionSpec{
+				ID:          v2types.DefinitionID(definitionID),
+				Slug:        slug,
+				Version:     "v1",
+				DisplayName: "Config Test",
+				Active:      true,
+				Visible:     true,
+			},
+			UserInput: &v2types.UserInputRegistration{
+				Schema: json.RawMessage(`{"type":"object","properties":{"label":{"type":"string"}}}`),
+			},
+			Credentials: &v2types.CredentialRegistration{
+				Schema: json.RawMessage(`{"type":"object","required":["projectId","serviceAccountEmail"],"properties":{"projectId":{"type":"string"},"serviceAccountEmail":{"type":"string"}}}`),
+			},
+			Operations: []v2types.OperationRegistration{
+				{
+					Name:        "health.default",
+					Kind:        v2types.OperationKindHealth,
+					Description: "Validate the config test installation",
+					Topic:       gala.TopicName("integration." + slug + ".health.default"),
+					Handle:      healthHandler,
+				},
+			},
+		}, nil
+	})
+}
+
+func performIntegrationConfigRequest(t *testing.T, suite *HandlerTestSuite, ctx context.Context, provider string, payload handlers.IntegrationConfigPayload) handlers.IntegrationConfigResponse {
+	t.Helper()
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+provider+"/config", bytes.NewReader(mustMarshalConfigPayload(t, payload)))
+	req.Header.Set("Content-Type", "application/json")
+	suite.e.ServeHTTP(rec, req.WithContext(ctx))
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationConfigResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+
+	return resp
+}
+
+func mustMarshalConfigPayload(t *testing.T, payload handlers.IntegrationConfigPayload) []byte {
+	t.Helper()
+
+	body, err := json.Marshal(payload)
+	require.NoError(t, err)
+
+	return body
+}
+
+func mustMarshalJSON(t *testing.T, value any) []byte {
+	t.Helper()
+
+	body, err := json.Marshal(value)
+	require.NoError(t, err)
+
+	return body
+}
+
+func decodeClientConfigLabel(t *testing.T, raw json.RawMessage) string {
+	t.Helper()
+
+	document, err := jsonx.ToMap(raw)
+	require.NoError(t, err)
+
+	label, _ := document["label"].(string)
+
+	return label
 }

@@ -59,6 +59,8 @@ var (
 	ErrInstallationRequired = errors.New("integration action requires installation_id or definition_id")
 	// ErrInstallationNotFound indicates no matching installation record was found
 	ErrInstallationNotFound = errors.New("installation not found")
+	// ErrInstallationDefinitionMismatch indicates the requested definition does not match the resolved installation
+	ErrInstallationDefinitionMismatch = errors.New("installation definition mismatch")
 	// ErrObjectNil is returned when the workflow object is nil
 	ErrObjectNil = errors.New("object is nil")
 	// ErrProposalChangesModified is returned when proposal changes are modified after approval

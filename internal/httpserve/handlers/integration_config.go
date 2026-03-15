@@ -10,9 +10,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -28,8 +25,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	requestCtx := ctx.Request().Context()
 
-	definitionID := types.DefinitionID(payload.Provider)
-	if string(definitionID) == "" {
+	if strings.TrimSpace(payload.Provider) == "" {
 		return h.BadRequest(ctx, rout.MissingField("provider"), openapiCtx)
 	}
 
@@ -38,7 +34,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(definitionID)
+	def, ok := h.resolveIntegrationDefinition(payload.Provider)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -65,39 +61,40 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		attrs["serviceAccountKey"] = trimmed
 	}
 
-	result, err := jsonx.ValidateSchema(def.Credentials.Schema, attrs)
-	if err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
-	}
-
-	if fieldErrs := jsonschemautil.FieldErrorsFromResult(result); len(fieldErrs) > 0 {
-		return h.BadRequest(ctx, fieldErrs[0], openapiCtx)
-	}
-
 	providerData, err := json.Marshal(attrs)
 	if err != nil {
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
-	credential := types.CredentialSet{ProviderData: providerData}
+	userInputProvided := len(payload.UserInput) > 0
+	normalizedUserInput := json.RawMessage(nil)
+	if userInputProvided {
+		if def.UserInput == nil || len(def.UserInput.Schema) == 0 {
+			return h.BadRequest(ctx, rout.MissingField("userInputSchema"), openapiCtx)
+		}
+
+		normalizedUserInput, err = normalizeUserInput(requestCtx, def.UserInput, json.RawMessage(payload.UserInput))
+		if err != nil {
+			return h.BadRequest(ctx, err, openapiCtx)
+		}
+	}
 
 	var (
 		installationID  string
 		installationRec *ent.Integration
+		created         bool
 	)
 
 	switch {
 	case payload.InstallationID != "":
 		// Caller is updating credentials on an existing installation.
-		rec, err := h.DBClient.Integration.Get(requestCtx, payload.InstallationID)
+		rec, err := h.loadOwnedIntegration(requestCtx, caller.OrganizationID, payload.InstallationID)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", payload.InstallationID).Msg("installation not found")
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
-
-		if err := h.IntegrationsRuntime.CredentialStore().SaveCredential(requestCtx, rec, credential); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", payload.InstallationID).Msg("failed to save credential")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		if err := validateInstallationDefinition(rec, def); err != nil {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 
 		installationID = rec.ID
@@ -120,29 +117,65 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 			SetStatus(enums.IntegrationStatusPending).
 			Save(requestCtx)
 		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(definitionID)).Msg("failed to create installation")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-		}
-
-		if err := h.IntegrationsRuntime.CredentialStore().SaveCredential(requestCtx, rec, credential); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", rec.ID).Msg("failed to save credential")
-			// Best-effort cleanup — installation was created but credential save failed.
-			_ = h.DBClient.Integration.DeleteOneID(rec.ID).Exec(requestCtx)
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(def.Spec.ID)).Msg("failed to create installation")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
 		installationID = rec.ID
 		installationRec = rec
+		created = true
+	}
+
+	previousConfig := installationRec.Config
+	if userInputProvided {
+		nextConfig := installationRec.Config
+		nextConfig.ClientConfig = normalizedUserInput
+		installationRec.Config = nextConfig
+	}
+
+	credential, err := normalizeCredential(requestCtx, def.Credentials, installationRec, providerData)
+	if err != nil {
+		if created {
+			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
+		}
+
+		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
 	if _, err := h.IntegrationsRuntime.Executor().ExecuteOperation(requestCtx, installationRec, "health.default", credential, nil); err != nil {
+		if created {
+			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
+		}
+
 		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationID).Msg("provider health check failed")
 		return h.BadRequest(ctx, wrapIntegrationError("validate", ErrProviderHealthCheckFailed), openapiCtx)
 	}
 
+	if userInputProvided {
+		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(installationRec.Config).Exec(requestCtx); err != nil {
+			if created {
+				_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
+			}
+
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist integration user input")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+	}
+
+	if err := h.IntegrationsRuntime.CredentialStore().SaveCredential(requestCtx, installationRec, credential); err != nil {
+		if created {
+			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
+		} else if userInputProvided {
+			_ = h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(previousConfig).Exec(requestCtx)
+		}
+
+		logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to save credential")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
 	return h.Success(ctx, IntegrationConfigResponse{
 		Reply:          rout.Reply{Success: true},
-		Provider:       payload.Provider,
+		Provider:       def.Spec.Slug,
 		InstallationID: installationID,
 	})
 }

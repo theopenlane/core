@@ -10,6 +10,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Service resolves and caches buildable clients for installations
@@ -83,7 +84,7 @@ func (s *Service) Build(ctx context.Context, installation *ent.Integration, name
 	client, err := registration.Build(ctx, types.ClientBuildRequest{
 		Installation: installation,
 		Credential:   credential,
-		Config:       cloneRawMessage(config),
+		Config:       jsonx.CloneRawMessage(config),
 	})
 	if err != nil {
 		return nil, err
@@ -139,13 +140,4 @@ func buildCacheKey(installationID string, name types.ClientName, credential type
 	_, _ = digest.Write(config)
 
 	return installationID + ":" + string(name) + ":" + hex.EncodeToString(digest.Sum(nil))
-}
-
-// cloneRawMessage copies one JSON payload
-func cloneRawMessage(value json.RawMessage) json.RawMessage {
-	if len(value) == 0 {
-		return nil
-	}
-
-	return append(json.RawMessage(nil), value...)
 }

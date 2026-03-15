@@ -9,6 +9,13 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
+const (
+	// DefinitionID is the canonical opaque identifier for the GitHub App definition
+	DefinitionID = "def_01K0GHAPP000000000000000001"
+	// DefinitionSlug is the human-readable slug for the GitHub App definition
+	DefinitionSlug = "github_app"
+)
+
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
 	Label            string `json:"label,omitempty"            jsonschema:"title=Installation Label"`

@@ -1,21 +1,17 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 
@@ -27,11 +23,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/providers/github"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
@@ -169,7 +163,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
 			Reply:     rout.Reply{Success: true},
 			Persisted: githubWebhookPersistedMap(githubWebhookPersistedRegistration{}),
-		}, openapi)
+		})
 	}
 
 	req := ctx.Request()
@@ -207,15 +201,15 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.BadRequest(ctx, ErrGitHubWebhookEventHeaderMissing, openapi)
 	}
 
-	appCfg, ok := h.gitHubAppConfig()
-	if !ok || appCfg.WebhookSecret == "" {
-		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "missing_webhook_secret")
+	def, defOk := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(githubAppDefinitionID))
+	if !defOk || len(def.Webhooks) == 0 {
+		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "webhook_not_configured")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
-	webhookSecret := appCfg.WebhookSecret
 
-	if !validateGitHubWebhookSignature(webhookSecret, req.Header.Get(githubWebhookSignatureHeader), payload) {
+	req.Body = io.NopCloser(bytes.NewReader(payload))
+	if err := def.Webhooks[0].Verify(req.Context(), req); err != nil {
 		recordGitHubWebhookResponse(eventType, http.StatusBadRequest, "invalid_signature")
 
 		return h.BadRequest(ctx, ErrGitHubWebhookSignatureInvalid, openapi)
@@ -240,14 +234,14 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "ping_accepted")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	if installationID == "" {
 		logx.FromContext(req.Context()).Info().Str("event", eventType).Msg("github webhook missing installation id")
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "missing_installation_id")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	integrationRecord, err := h.findGitHubAppIntegrationByInstallationID(allowCtx, installationID)
@@ -262,7 +256,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		logx.FromContext(req.Context()).Info().Str("installation_id", installationID).Msg("no integration configured for github app installation")
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "integration_not_configured")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	if deliveryID := req.Header.Get(githubWebhookDeliveryHeader); deliveryID != "" {
@@ -276,7 +270,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		if duplicate {
 			recordGitHubWebhookResponse(eventType, http.StatusOK, "duplicate_delivery_ignored")
 
-			return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+			return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 		}
 	}
 
@@ -290,48 +284,28 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 	if repo == "" {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "missing_repository")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	alertType, ok := githubAlertTypeFromEvent(eventType)
 	if !ok {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "unsupported_event_type")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
-	alerts := []types.AlertEnvelope{
-		{
-			AlertType: alertType,
-			Resource:  repo,
-			Action:    envelope.Action,
-			Payload:   envelope.Alert,
-		},
-	}
+	h.queueGitHubVulnerabilityBackfill(req.Context(), integrationRecord.OwnerID, integrationRecord.ID)
 
-	if h.Gala != nil {
-		opEnvelope := integrations.NewIntegrationOperationEnvelope(integrations.IntegrationOperationRequestedPayload{
-			OrgID:     integrationRecord.OwnerID,
-			Provider:  string(github.TypeGitHubApp),
-			Operation: string(types.OperationVulnerabilitiesCollect),
-			RunType:   enums.IntegrationRunTypeWebhook,
-		})
-		receipt := h.Gala.EmitWithHeaders(req.Context(), integrations.IntegrationOperationRequestedTopic.Name, opEnvelope, opEnvelope.Headers())
-		if receipt.Err != nil {
-			logx.FromContext(req.Context()).Warn().Err(receipt.Err).Msg("failed to emit integration ingest event")
-		}
-	}
-
-	githubAppWebhookAlertsQueuedCounter.WithLabelValues(metricEventType, alertType).Add(float64(len(alerts)))
+	githubAppWebhookAlertsQueuedCounter.WithLabelValues(metricEventType, alertType).Add(1)
 	recordGitHubWebhookResponse(eventType, http.StatusOK, "alerts_queued")
 
 	return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
 		Reply: rout.Reply{Success: true},
 		Persisted: githubWebhookPersistedMap(githubWebhookPersistedQueue{
-			Queued: len(alerts),
-			Total:  len(alerts),
+			Queued: 1,
+			Total:  1,
 		}),
-	}, openapi)
+	})
 }
 
 // handleGitHubInstallationWebhook sends a Slack notification when an installation is created
@@ -339,19 +313,19 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 	if envelope.Action != "created" {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_action_ignored")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	if integrationRecord == nil {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "integration_not_configured")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	if !hooks.SlackNotificationsEnabled() {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_skipped")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	githubOrg := ""
@@ -366,13 +340,13 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 	if err != nil {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_failed")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	if err := hooks.SendSlackNotification(ctx.Request().Context(), message); err != nil {
 		recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_failed")
 
-		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}}, openapi)
+		return h.Success(ctx, apimodels.GitHubAppWebhookResponse{Reply: rout.Reply{Success: true}})
 	}
 
 	recordGitHubWebhookResponse(eventType, http.StatusOK, "installation_notification_sent")
@@ -380,7 +354,7 @@ func (h *Handler) handleGitHubInstallationWebhook(ctx echo.Context, openapi *Ope
 	return h.Success(ctx, apimodels.GitHubAppWebhookResponse{
 		Reply:     rout.Reply{Success: true},
 		Persisted: githubWebhookPersistedMap(githubWebhookPersistedNotification{Notified: true}),
-	}, openapi)
+	})
 }
 
 // githubWebhookEnvelope captures GitHub webhook fields required for alert processing
@@ -470,53 +444,29 @@ func githubAlertTypeFromEvent(eventType string) (string, bool) {
 	}
 }
 
-// validateGitHubWebhookSignature checks the webhook signature using the shared secret
-func validateGitHubWebhookSignature(secret string, signatureHeader string, payload []byte) bool {
-	if secret == "" {
-		return false
-	}
-
-	if signatureHeader == "" {
-		return false
-	}
-
-	const prefix = "sha256="
-	if !strings.HasPrefix(signatureHeader, prefix) {
-		return false
-	}
-
-	provided := signatureHeader[len(prefix):]
-	mac := hmac.New(sha256.New, []byte(secret))
-	_, _ = mac.Write(payload)
-	expected := hex.EncodeToString(mac.Sum(nil))
-
-	return hmac.Equal([]byte(expected), []byte(provided))
-}
-
 // findGitHubAppIntegrationByInstallationID locates the integration record for an installation ID
 func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, installationID string) (*ent.Integration, error) {
 	if installationID == "" {
 		return nil, nil
 	}
 
-	query := h.DBClient.Integration.Query().
+	record, err := h.DBClient.Integration.Query().
 		Where(
-			integration.KindEQ(string(github.TypeGitHubApp)),
+			integration.DefinitionSlugEQ(githubAppSlug),
 			func(s *sql.Selector) {
-				s.Where(sqljson.ValueEQ(integration.FieldProviderState, installationID, sqljson.Path("providers", string(github.TypeGitHubApp), "installationId")))
+				s.Where(sqljson.ValueEQ(integration.FieldProviderState, installationID, sqljson.Path("providers", githubAppSlug, "installationId")))
 			},
-		)
-	record, err := query.Only(ctx)
+		).
+		Only(ctx)
 	if err != nil {
-		if ent.IsNotSingular(err) {
+		switch {
+		case ent.IsNotSingular(err):
 			return nil, errGitHubAppIntegrationAmbiguous
-		}
-
-		if ent.IsNotFound(err) {
+		case ent.IsNotFound(err):
 			return nil, nil
+		default:
+			return nil, err
 		}
-
-		return nil, err
 	}
 
 	return record, nil
@@ -545,7 +495,7 @@ func (h *Handler) markGitHubWebhookVerifiedAt(ctx context.Context, installationI
 	}
 
 	nextState := integrationRecord.ProviderState
-	if _, err := nextState.MergeProviderData(string(github.TypeGitHubApp), statePatch); err != nil {
+	if _, err := nextState.MergeProviderData(githubAppSlug, statePatch); err != nil {
 		return ErrInvalidStateFormat
 	}
 
@@ -574,7 +524,7 @@ func (h *Handler) registerGitHubWebhookDelivery(ctx context.Context, integration
 	createErr := h.DBClient.IntegrationWebhook.Create().
 		SetOwnerID(integrationRecord.OwnerID).
 		SetIntegrationID(integrationRecord.ID).
-		SetProvider(string(github.TypeGitHubApp)).
+		SetProvider(githubAppSlug).
 		SetExternalEventID(deliveryID).
 		Exec(ctx)
 	if createErr != nil {

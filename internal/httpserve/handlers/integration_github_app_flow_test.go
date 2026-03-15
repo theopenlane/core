@@ -13,16 +13,13 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations/providers/github"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -62,25 +59,15 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 
 	privateKey := testRSAPrivateKeyPEM(t)
 
-	appCfgJSON, err := json.Marshal(github.AppConfig{
+	cfg := githubapp.Config{
 		BaseURL:       mockGitHubAPI.URL + "/api/v3",
 		AppID:         "123",
 		AppSlug:       "openlane",
 		PrivateKey:    privateKey,
 		WebhookSecret: "secret",
-	})
-	require.NoError(t, err)
+	}
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, integrationspec.ProviderSpec{
-		Name:               string(github.TypeGitHubApp),
-		DisplayName:        "GitHub App",
-		Category:           "code",
-		AuthType:           types.AuthKindGitHubApp,
-		Active:             lo.ToPtr(true),
-		Visible:            lo.ToPtr(true),
-		SuccessRedirectURL: "https://console.openlane.io/integrations",
-		ProviderConfig:     appCfgJSON,
-	})
+	restore := suite.withGitHubAppIntegrationRuntime(t, cfg, "https://console.openlane.io/integrations")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -113,7 +100,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 
 	assert.Equal(t, http.StatusFound, callbackRec.Code)
 	location := callbackRec.Header().Get("Location")
-	assert.Contains(t, location, "provider=githubapp")
+	assert.Contains(t, location, "provider=github_app")
 	assert.Contains(t, location, "status=success")
 }
 
@@ -151,25 +138,15 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	defer mockGitHubAPI.Close()
 
 	privateKey := testRSAPrivateKeyPEM(t)
-	appCfgJSON2, err := json.Marshal(github.AppConfig{
+	cfg := githubapp.Config{
 		BaseURL:       mockGitHubAPI.URL + "/api/v3",
 		AppID:         "123",
 		AppSlug:       "openlane",
 		PrivateKey:    privateKey,
 		WebhookSecret: "secret",
-	})
-	require.NoError(t, err)
+	}
 
-	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, integrationspec.ProviderSpec{
-		Name:               string(github.TypeGitHubApp),
-		DisplayName:        "GitHub App",
-		Category:           "code",
-		AuthType:           types.AuthKindGitHubApp,
-		Active:             lo.ToPtr(true),
-		Visible:            lo.ToPtr(true),
-		SuccessRedirectURL: "https://console.openlane.io/integrations",
-		ProviderConfig:     appCfgJSON2,
-	})
+	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, cfg, "https://console.openlane.io/integrations")
 	defer restoreRuntime()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -202,7 +179,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 
 	require.Equal(t, http.StatusFound, callbackRec.Code)
 	location := callbackRec.Header().Get("Location")
-	require.Contains(t, location, "provider=githubapp")
+	require.Contains(t, location, "provider=github_app")
 	require.Contains(t, location, "status=success")
 	require.Equal(t, int32(1), accessTokenCalls.Load())
 	require.Equal(t, int32(1), repoLookupCalls.Load())
@@ -210,12 +187,12 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	integrationRecord, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(user.OrganizationID),
-			integration.KindEQ(string(github.TypeGitHubApp)),
+			integration.DefinitionIDEQ(githubapp.DefinitionID),
 		).
 		Only(user.UserCtx)
 	require.NoError(t, err)
 
-	providerState, err := jsonx.ToMap(integrationRecord.ProviderState.ProviderData(string(github.TypeGitHubApp)))
+	providerState, err := jsonx.ToMap(integrationRecord.ProviderState.ProviderData(githubapp.DefinitionSlug))
 	require.NoError(t, err)
 	require.Equal(t, "123", providerState["appId"])
 	require.Equal(t, "12345678", providerState["installationId"])

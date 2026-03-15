@@ -1,17 +1,12 @@
 package types
 
+import "github.com/theopenlane/core/internal/integrations/schema"
+
 // MappingSchema identifies one normalized ingest schema
 type MappingSchema string
 
-// MappingOverride is one definition-level mapping customization
-type MappingOverride struct {
-	// Version is the schema version for the mapping
-	Version string `json:"version,omitempty"`
-	// FilterExpr is the CEL expression used to filter source records
-	FilterExpr string `json:"filterExpr,omitempty"`
-	// MapExpr is the CEL expression used to map source records into target shape
-	MapExpr string `json:"mapExpr,omitempty"`
-}
+// MappingOverride is one mapping customization; canonical definition is in the schema package
+type MappingOverride = schema.MappingOverride
 
 // MappingRegistration declares one default mapping shipped with a definition
 type MappingRegistration struct {

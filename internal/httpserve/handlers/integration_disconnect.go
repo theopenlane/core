@@ -10,7 +10,6 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -28,44 +27,55 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
-	provider := strings.TrimSpace(in.Provider)
-	providerType, err := parseProviderType(provider)
-	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+	if strings.TrimSpace(in.Provider) == "" {
+		return h.BadRequest(ctx, rout.MissingField("provider"), openapi)
+	}
+
+	def, ok := h.resolveIntegrationDefinition(in.Provider)
+	if !ok {
+		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 	}
 
 	integrationID := in.IntegrationID
 	if integrationID == "" {
-		record, err := h.DBClient.Integration.Query().
-			Where(
-				integration.OwnerID(caller.OrganizationID),
-				integration.Kind(string(providerType)),
-			).
-			Only(userCtx)
+		record, err := h.loadOwnedIntegrationByDefinition(userCtx, caller.OrganizationID, def.Spec.ID)
 		if err != nil {
 			if ent.IsNotFound(err) {
-				return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", providerType, ErrIntegrationNotFound)), openapi)
+				return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", def.Spec.Slug, ErrIntegrationNotFound)), openapi)
 			}
 			return h.InternalServerError(ctx, wrapIntegrationError("find", err), openapi)
 		}
 		integrationID = record.ID
-	}
-
-	deletedProvider, deletedID, err := h.IntegrationRuntime.Store().DeleteIntegration(userCtx, caller.OrganizationID, integrationID)
-	if err != nil {
-		switch {
-		case ent.IsNotFound(err):
-			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", providerType, ErrIntegrationNotFound)), openapi)
-		default:
-			return h.InternalServerError(ctx, wrapIntegrationError("delete", err), openapi)
+	} else {
+		record, err := h.loadOwnedIntegration(userCtx, caller.OrganizationID, integrationID)
+		if err != nil {
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapi)
+		}
+		if err := validateInstallationDefinition(record, def); err != nil {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapi)
 		}
 	}
 
-	displayName := string(deletedProvider)
+	if err := h.IntegrationsRuntime.CredentialStore().DeleteCredential(userCtx, integrationID); err != nil {
+		return h.InternalServerError(ctx, wrapIntegrationError("delete credentials for", err), openapi)
+	}
+
+	if err := h.DBClient.Integration.DeleteOneID(integrationID).Exec(userCtx); err != nil {
+		if ent.IsNotFound(err) {
+			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", def.Spec.Slug, ErrIntegrationNotFound)), openapi)
+		}
+		return h.InternalServerError(ctx, wrapIntegrationError("delete", err), openapi)
+	}
+
+	displayName := def.Spec.DisplayName
+	if displayName == "" {
+		displayName = def.Spec.Slug
+	}
+
 	out := models.DeleteIntegrationResponse{
 		Reply:     rout.Reply{Success: true},
 		Message:   fmt.Sprintf("%s integration disconnected", displayName),
-		DeletedID: deletedID,
+		DeletedID: integrationID,
 	}
 
 	return h.Success(ctx, out)

@@ -12,7 +12,7 @@ import (
 	auditmanagertypes "github.com/aws/aws-sdk-go-v2/service/auditmanager/types"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/providers/awskit"
+	"github.com/theopenlane/core/internal/integrations/definitions/awskit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -44,7 +44,6 @@ type assessmentSummary struct {
 	ComplianceType  string    `json:"complianceType,omitempty"`
 	Status          string    `json:"status,omitempty"`
 	DelegationCount int32     `json:"delegationCount,omitempty"`
-	TotalEvidence   int64     `json:"totalEvidence,omitempty"`
 	CreationTime    time.Time `json:"creationTime,omitempty"`
 	LastUpdated     time.Time `json:"lastUpdated,omitempty"`
 }
@@ -172,18 +171,11 @@ collectLoop:
 
 			item := resp.AssessmentMetadata[i]
 			s := assessmentSummary{
-				ID:             awssdk.ToString(item.Id),
-				Name:           awssdk.ToString(item.Name),
-				ComplianceType: awssdk.ToString(item.ComplianceType),
-				Status:         string(item.Status),
-			}
-
-			if item.DelegationCount != nil {
-				s.DelegationCount = *item.DelegationCount
-			}
-
-			if item.TotalEvidence != nil {
-				s.TotalEvidence = *item.TotalEvidence
+				ID:              awssdk.ToString(item.Id),
+				Name:            awssdk.ToString(item.Name),
+				ComplianceType:  awssdk.ToString(item.ComplianceType),
+				Status:          string(item.Status),
+				DelegationCount: int32(len(item.Delegations)),
 			}
 
 			if item.CreationTime != nil {

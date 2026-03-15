@@ -19,7 +19,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
-	oldtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -36,32 +35,29 @@ const (
 
 // sccCredentialMetadata captures the persisted SCC credential metadata supplied during activation
 type sccCredentialMetadata struct {
-	ProjectID                oldtypes.TrimmedString `json:"projectId,omitempty"`
-	OrganizationID           oldtypes.TrimmedString `json:"organizationId,omitempty"`
-	ProjectScope             oldtypes.LowerString   `json:"projectScope,omitempty"`
-	ProjectIDs               []string               `json:"projectIds,omitempty"`
-	WorkloadIdentityProvider oldtypes.TrimmedString `json:"workloadIdentityProvider,omitempty"`
-	Audience                 oldtypes.TrimmedString `json:"audience,omitempty"`
-	ServiceAccountEmail      oldtypes.TrimmedString `json:"serviceAccountEmail,omitempty"`
-	SourceID                 oldtypes.TrimmedString `json:"sourceId,omitempty"`
-	SourceIDs                []string               `json:"sourceIds,omitempty"`
-	Scopes                   []string               `json:"scopes,omitempty"`
-	TokenLifetime            oldtypes.TrimmedString `json:"tokenLifetime,omitempty"`
-	FindingFilter            oldtypes.TrimmedString `json:"findingFilter,omitempty"`
-	ServiceAccountKey        string                 `json:"serviceAccountKey,omitempty"`
+	ProjectID                string   `json:"projectId,omitempty"`
+	OrganizationID           string   `json:"organizationId,omitempty"`
+	ProjectScope             string   `json:"projectScope,omitempty"`
+	ProjectIDs               []string `json:"projectIds,omitempty"`
+	WorkloadIdentityProvider string   `json:"workloadIdentityProvider,omitempty"`
+	Audience                 string   `json:"audience,omitempty"`
+	ServiceAccountEmail      string   `json:"serviceAccountEmail,omitempty"`
+	SourceID                 string   `json:"sourceId,omitempty"`
+	SourceIDs                []string `json:"sourceIds,omitempty"`
+	Scopes                   []string `json:"scopes,omitempty"`
+	TokenLifetime            string   `json:"tokenLifetime,omitempty"`
+	FindingFilter            string   `json:"findingFilter,omitempty"`
+	ServiceAccountKey        string   `json:"serviceAccountKey,omitempty"`
 }
 
-// applyDefaults fills in fallback values and normalizes fields
+// applyDefaults fills in fallback values for missing optional fields
 func (m sccCredentialMetadata) applyDefaults() sccCredentialMetadata {
 	normalized := m
 	if normalized.ProjectScope == "" {
-		normalized.ProjectScope = oldtypes.LowerString(projectScopeAll)
+		normalized.ProjectScope = projectScopeAll
 	}
 
-	normalized.ProjectIDs = oldtypes.NormalizeStringSlice(normalized.ProjectIDs)
-	normalized.SourceIDs = oldtypes.NormalizeStringSlice(normalized.SourceIDs)
 	normalized.ServiceAccountKey = normalizeServiceAccountKey(normalized.ServiceAccountKey)
-	normalized.Scopes = oldtypes.NormalizeStringSlice(normalized.Scopes)
 
 	return normalized
 }
@@ -124,7 +120,7 @@ func buildSCCClient(ctx context.Context, req types.ClientBuildRequest) (any, err
 
 	opts := append([]option.ClientOption{}, clientOpts...)
 	if meta.ProjectID != "" {
-		opts = append(opts, option.WithQuotaProject(meta.ProjectID.String()))
+		opts = append(opts, option.WithQuotaProject(meta.ProjectID))
 	}
 
 	client, err := cloudscc.NewClient(ctx, opts...)
@@ -188,14 +184,12 @@ func runFindingsCollectOperation(ctx context.Context, _ *generated.Integration, 
 	if err := jsonx.UnmarshalIfPresent(config, &cfg); err != nil {
 		return nil, err
 	}
-	cfg.SourceIDs = oldtypes.NormalizeStringSlice(cfg.SourceIDs)
-
 	sources, err := resolveSecurityCenterSources(meta, cfg)
 	if err != nil {
 		return nil, err
 	}
 
-	filter := lo.CoalesceOrEmpty(cfg.Filter, meta.FindingFilter.String())
+	filter := lo.CoalesceOrEmpty(cfg.Filter, meta.FindingFilter)
 
 	pageSize := cfg.PageSize
 	if pageSize <= 0 {
@@ -459,7 +453,7 @@ func resolveSecurityCenterSources(meta sccCredentialMetadata, cfg sccFindingsCon
 	if len(raw) == 0 {
 		raw = append(raw, meta.SourceIDs...)
 		if len(raw) == 0 && meta.SourceID != "" {
-			raw = append(raw, meta.SourceID.String())
+			raw = append(raw, meta.SourceID)
 		}
 	}
 

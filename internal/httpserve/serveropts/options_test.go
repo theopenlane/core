@@ -25,7 +25,7 @@ func TestWithGeneratedKeys(t *testing.T) {
 	}
 }
 
-func TestWithIntegrationRuntime_NilDB(t *testing.T) {
+func TestWithIntegrationsRuntime_NilDB(t *testing.T) {
 	t.Parallel()
 
 	so := &ServerOptions{
@@ -35,26 +35,9 @@ func TestWithIntegrationRuntime_NilDB(t *testing.T) {
 		},
 	}
 
-	WithIntegrationRuntime(nil).apply(so)
+	WithIntegrationsRuntime(nil).apply(so)
 
 	if so.Config.Handler.IntegrationsRuntime != nil {
-		t.Fatalf("expected integrations v2 runtime to remain nil when DB is nil")
-	}
-}
-
-func TestWithIntegrationRuntime_NilDBAlwaysSkips(t *testing.T) {
-	t.Parallel()
-
-	so := &ServerOptions{
-		Config: serverconfig.Config{
-			Settings:      coreconfig.Config{},
-			SessionConfig: &sessions.SessionConfig{},
-		},
-	}
-
-	WithIntegrationRuntime(nil).apply(so)
-
-	if so.Config.Handler.IntegrationsRuntime != nil {
-		t.Fatalf("expected integrations v2 runtime to remain nil when DB is nil")
+		t.Fatalf("expected integrations runtime to remain nil when DB is nil")
 	}
 }

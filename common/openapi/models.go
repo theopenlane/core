@@ -2157,7 +2157,6 @@ type DeleteIntegrationResponse struct {
 	DeletedID string `json:"deletedId,omitempty"`
 }
 
-
 // GetIntegrationTokenRequest is the request for getting integration tokens
 type GetIntegrationTokenRequest struct {
 	// Provider is the provider value.
@@ -2603,18 +2602,17 @@ var ExampleProductCatalogReply = ProductCatalogReply{
 		}},
 }
 
-
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
 type DisconnectIntegrationRequest struct {
 	// Provider is the provider value.
-	Provider string `param:"provider" description:"Integration provider key" example:"github"`
+	Provider string `param:"provider" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
 	// IntegrationID is the integrationid value.
 	IntegrationID string `query:"integration_id,omitempty" description:"Specific integration ID to delete"`
 }
 
 // ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
 var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
-	Provider: "github",
+	Provider: "def_01K0GHAPP000000000000000001",
 }
 
 // =========

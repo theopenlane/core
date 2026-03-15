@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/schema"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )

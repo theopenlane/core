@@ -34,7 +34,7 @@ type IntegrationDeps struct {
 	// Dispatcher enqueues integration operation execution requests
 	Dispatcher *operations.Dispatcher
 	// Executor executes queued integration operations
-	Executor *types.Executor
+	Executor *operations.Executor
 }
 
 // IntegrationWorkflowMeta ties an integration run back to a workflow action
@@ -60,7 +60,7 @@ type IntegrationQueueRequest struct {
 	// DefinitionID identifies the integration definition when no installation ID is set
 	DefinitionID string
 	// Operation identifies the operation to execute
-	Operation v2types.OperationName
+	Operation types.OperationName
 	// Config carries the operation configuration payload as a JSON object document
 	Config json.RawMessage
 	// ScopeExpression is an optional CEL expression gate for command execution
@@ -150,10 +150,10 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 	// via the executor and emits workflow action completed when workflow meta is present.
 	for _, op := range e.integrationRegistry.Listeners() {
 		operation := op // capture for closure
-		if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[v2operations.Envelope]{
-			Topic: gala.Topic[v2operations.Envelope]{Name: operation.Topic},
+		if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[operations.Envelope]{
+			Topic: gala.Topic[operations.Envelope]{Name: operation.Topic},
 			Name:  fmt.Sprintf("engine.integrationsv2.%s", operation.Topic),
-			Handle: func(ctx gala.HandlerContext, envelope v2operations.Envelope) error {
+			Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
 				return e.handleIntegrationOperation(ctx, envelope)
 			},
 		}); err != nil {
@@ -211,9 +211,9 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		runType = enums.IntegrationRunTypeEvent
 	}
 
-	var workflowMeta *v2operations.WorkflowMeta
+	var workflowMeta *operations.WorkflowMeta
 	if req.WorkflowMeta != nil {
-		workflowMeta = &v2operations.WorkflowMeta{
+		workflowMeta = &operations.WorkflowMeta{
 			InstanceID:  req.WorkflowMeta.InstanceID,
 			ActionKey:   req.WorkflowMeta.ActionKey,
 			ActionIndex: req.WorkflowMeta.ActionIndex,
@@ -222,7 +222,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		}
 	}
 
-	result, err := e.integrationDispatcher.Dispatch(allowCtx, v2operations.DispatchRequest{
+	result, err := e.integrationDispatcher.Dispatch(allowCtx, operations.DispatchRequest{
 		InstallationID: installationRecord.ID,
 		Operation:      req.Operation,
 		Config:         jsonx.CloneRawMessage(req.Config),
@@ -245,7 +245,20 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 // resolveInstallation looks up an installation record by explicit ID or by owner + definition ID
 func (e *WorkflowEngine) resolveInstallation(ctx context.Context, orgID, installationID, definitionID string) (*ent.Integration, error) {
 	if installationID != "" {
-		return e.client.Integration.Get(ctx, installationID)
+		record, err := e.client.Integration.Get(ctx, installationID)
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil, ErrInstallationNotFound
+			}
+
+			return nil, err
+		}
+
+		if definitionID != "" && record.DefinitionID != definitionID {
+			return nil, ErrInstallationDefinitionMismatch
+		}
+
+		return record, nil
 	}
 
 	if definitionID != "" {
@@ -255,7 +268,7 @@ func (e *WorkflowEngine) resolveInstallation(ctx context.Context, orgID, install
 
 		resolution, err := e.integrationResolver.Resolve(ctx, installationResolveCriteria{
 			OwnerID:      orgID,
-			DefinitionID: mo.Some(v2types.DefinitionID(definitionID)),
+			DefinitionID: mo.Some(types.DefinitionID(definitionID)),
 		})
 		if err != nil {
 			return nil, err
@@ -278,7 +291,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		return errors.Join(ErrUnmarshalParams, err)
 	}
 
-	operationName := v2types.OperationName(params.OperationName)
+	operationName := types.OperationName(params.OperationName)
 	if operationName == "" {
 		return ErrIntegrationOperationCriteriaRequired
 	}
@@ -328,7 +341,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 }
 
 // handleIntegrationOperation executes an integration operation and emits workflow action completed when applicable
-func (e *WorkflowEngine) handleIntegrationOperation(ctx gala.HandlerContext, envelope v2operations.Envelope) error {
+func (e *WorkflowEngine) handleIntegrationOperation(ctx gala.HandlerContext, envelope operations.Envelope) error {
 	if e.integrationExecutor == nil {
 		return ErrIntegrationOperationsRequired
 	}
@@ -345,7 +358,7 @@ func (e *WorkflowEngine) handleIntegrationOperation(ctx gala.HandlerContext, env
 }
 
 // emitWorkflowActionCompleted emits a completion event after an integration run finishes
-func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelope v2operations.Envelope, execErr error) {
+func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelope operations.Envelope, execErr error) {
 	if e.gala == nil || envelope.WorkflowMeta == nil {
 		return
 	}
@@ -372,7 +385,7 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 }
 
 // evaluateInstallationScope evaluates optional scope expressions before queueing integration runs
-func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeEvaluator, req IntegrationQueueRequest, installationRecord *ent.Integration, operationName v2types.OperationName, operationConfig json.RawMessage) (bool, error) {
+func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeEvaluator, req IntegrationQueueRequest, installationRecord *ent.Integration, operationName types.OperationName, operationConfig json.RawMessage) (bool, error) {
 	if evaluator == nil || req.ScopeExpression == "" {
 		return true, nil
 	}
@@ -387,10 +400,10 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		return false, err
 	}
 
-	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, v2types.ScopeVars{
+	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, types.ScopeVars{
 		Payload:            req.ScopePayload,
 		Resource:           req.ScopeResource,
-		DefinitionID:       v2types.DefinitionID(installationRecord.DefinitionID),
+		DefinitionID:       types.DefinitionID(installationRecord.DefinitionID),
 		Operation:          operationName,
 		Config:             operationConfig,
 		InstallationConfig: installationConfigRaw,

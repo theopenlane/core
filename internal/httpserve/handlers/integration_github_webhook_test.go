@@ -13,7 +13,6 @@ import (
 	"testing"
 
 	"github.com/prometheus/client_golang/prometheus/testutil"
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
@@ -21,10 +20,18 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 )
+
+// fullGitHubAppConfig returns a Config with all required GitHub App fields populated.
+func fullGitHubAppConfig() githubapp.Config {
+	return githubapp.Config{
+		AppID:         "123",
+		AppSlug:       "openlane",
+		PrivateKey:    "private-key",
+		WebhookSecret: "secret",
+	}
+}
 
 // githubWebhookSignature returns a GitHub-compatible HMAC signature for webhook tests
 func githubWebhookSignature(secret string, payload []byte) string {
@@ -33,19 +40,10 @@ func githubWebhookSignature(secret string, payload []byte) string {
 	return "sha256=" + hex.EncodeToString(mac.Sum(nil))
 }
 
-// fullGitHubAppSpec returns a ProviderSpec with all required GitHub App fields populated.
-func fullGitHubAppSpec() integrationspec.ProviderSpec {
-	return integrationspec.ProviderSpec{
-		Name:     string(githubprovider.TypeGitHubApp),
-		Active:   lo.ToPtr(true),
-		AuthType: types.AuthKindGitHubApp,
-		ProviderConfig: json.RawMessage(`{"appid":"123","appslug":"openlane","privatekey":"private-key","webhooksecret":"secret"}`),
-	}
-}
-
 // TestGitHubIntegrationWebhookHandlerMissingEventHeader verifies the missing event header response
 func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
-	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, fullGitHubAppSpec())}
+	cfg := fullGitHubAppConfig()
+	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, &cfg)}
 
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
 	req.Header.Set("Content-Type", "application/json")
@@ -69,7 +67,8 @@ func TestGitHubIntegrationWebhookHandlerMissingEventHeader(t *testing.T) {
 
 // TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics verifies empty payload metrics and status
 func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
-	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, fullGitHubAppSpec())}
+	cfg := fullGitHubAppConfig()
+	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, &cfg)}
 
 	req := httptest.NewRequest(http.MethodPost, "/", http.NoBody)
 	req.Header.Set(githubWebhookEventHeader, "dependabot_alert")
@@ -88,7 +87,8 @@ func TestGitHubIntegrationWebhookHandlerEmptyPayloadMetrics(t *testing.T) {
 
 // TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID verifies ping payloads are accepted without installation IDs
 func TestGitHubIntegrationWebhookHandlerPingAcceptedWithoutInstallationID(t *testing.T) {
-	h := &Handler{IntegrationRuntime: newGitHubAppRuntimeForTest(t, fullGitHubAppSpec())}
+	cfg := fullGitHubAppConfig()
+	h := &Handler{IntegrationsRuntime: newGitHubAppRuntimeForTest(t, &cfg)}
 
 	payload := []byte(`{"zen":"keep it logically awesome"}`)
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(string(payload)))

@@ -7,14 +7,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/url"
-	"strings"
 	"testing"
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -32,7 +29,6 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -42,13 +38,9 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	v2definition "github.com/theopenlane/core/internal/integrations/definition"
-	"github.com/theopenlane/core/internal/integrations/providers"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	IntegrationsRuntime "github.com/theopenlane/core/internal/integrations/runtime"
-	integrationruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
-	"github.com/theopenlane/core/internal/integrations/types"
 	v2types "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -256,7 +248,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
-	suite.configureIntegrationRuntime(ctx)
 	suite.configureIntegrationOAuthRuntime(ctx)
 	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
 		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
@@ -394,43 +385,6 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	return h
 }
 
-func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) {
-	providerType := types.ProviderType("github")
-	spec := integrationspec.ProviderSpec{
-		Name:        "github",
-		DisplayName: "GitHub",
-		Category:    "code",
-		AuthType:    types.AuthKindOAuth2,
-		Active:      lo.ToPtr(true),
-		OAuth: &integrationspec.OAuthSpec{
-			ClientID:     "test-client",
-			ClientSecret: "test-secret",
-			AuthURL:      "https://example.com/oauth/authorize",
-			TokenURL:     "https://example.com/oauth/token",
-			Scopes:       []string{"repo"},
-			RedirectURI:  "https://example.com/oauth/callback",
-		},
-	}
-
-	builder := providers.BuilderFunc{
-		ProviderType: providerType,
-		BuildFunc: func(context.Context, integrationspec.ProviderSpec) (types.Provider, error) {
-			return &testOAuthProvider{provider: providerType}, nil
-		},
-	}
-
-	reg, err := registry.NewRegistry(ctx, nil)
-	assert.NoError(suite.T(), err)
-	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
-
-	rt, err := integrationruntime.New(integrationruntime.Config{
-		Registry: reg,
-		DB:       suite.db,
-	})
-	assert.NoError(suite.T(), err)
-	suite.h.IntegrationRuntime = rt
-}
-
 // testOAuthDefinitionID is the canonical ID for the test OAuth definition.
 const testOAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
@@ -449,6 +403,7 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		CredentialStore:       credStore,
+		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
 		DefinitionBuilders:    []v2definition.Builder{v2definition.BuilderFunc(buildTestOAuthDefinition)},
 		SkipExecutorListeners: true,
 	})
@@ -462,6 +417,7 @@ func buildTestOAuthDefinition(context.Context) (v2types.Definition, error) {
 		Spec: v2types.DefinitionSpec{
 			ID:          testOAuthDefinitionID,
 			Slug:        "test-oauth",
+			Version:     "v1",
 			DisplayName: "Test OAuth",
 			Active:      true,
 		},
@@ -502,75 +458,6 @@ func testOAuthComplete(_ context.Context, callbackState json.RawMessage, input j
 			OAuthAccessToken: "test-access-token",
 			OAuthExpiry:      &expiry,
 		},
-	}, nil
-}
-
-type testOAuthProvider struct {
-	provider types.ProviderType
-}
-
-func (p *testOAuthProvider) Type() types.ProviderType {
-	return p.provider
-}
-
-func (p *testOAuthProvider) Capabilities() types.ProviderCapabilities {
-	return types.ProviderCapabilities{
-		SupportsRefreshTokens: true,
-	}
-}
-
-func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
-	state := strings.TrimSpace(input.State)
-	if state == "" {
-		state = "state"
-	}
-	values := url.Values{}
-	values.Set("state", state)
-	if len(input.Scopes) > 0 {
-		values.Set("scope", strings.Join(input.Scopes, " "))
-	}
-
-	authURL := fmt.Sprintf("https://example.com/oauth/authorize?%s", values.Encode())
-	return &testAuthSession{
-		provider: p.provider,
-		state:    state,
-		authURL:  authURL,
-	}, nil
-}
-
-func (p *testOAuthProvider) Mint(_ context.Context, _ types.CredentialMintRequest) (models.CredentialSet, error) {
-	expiry := time.Now().Add(time.Hour)
-	return models.CredentialSet{
-		OAuthAccessToken:  "minted-access-token",
-		OAuthRefreshToken: "minted-refresh-token",
-		OAuthExpiry:       &expiry,
-	}, nil
-}
-
-type testAuthSession struct {
-	provider types.ProviderType
-	state    string
-	authURL  string
-}
-
-func (s *testAuthSession) ProviderType() types.ProviderType {
-	return s.provider
-}
-
-func (s *testAuthSession) State() string {
-	return s.state
-}
-
-func (s *testAuthSession) AuthURL() string {
-	return s.authURL
-}
-
-func (s *testAuthSession) Finish(context.Context, string) (models.CredentialSet, error) {
-	expiry := time.Now().Add(time.Hour)
-	return models.CredentialSet{
-		OAuthAccessToken:  "test-access-token",
-		OAuthRefreshToken: "test-refresh-token",
-		OAuthExpiry:       &expiry,
 	}, nil
 }
 

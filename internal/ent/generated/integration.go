@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/schema"
 )
 
 // Integration is the model entity for the Integration schema.

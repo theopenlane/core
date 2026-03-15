@@ -44,6 +44,8 @@ type Service struct {
 	definitions AuthResolver
 	// writer persists credential payloads after activation
 	writer CredentialWriter
+	// installations resolves and validates installation records referenced by auth flows
+	installations InstallationResolver
 	// authStates stores temporary authorization state until callback completion
 	authStates AuthStateStore
 	// sessionTTL controls the lifetime of pending auth sessions
@@ -53,13 +55,17 @@ type Service struct {
 }
 
 // NewService constructs a Service from the supplied dependencies
-func NewService(definitions AuthResolver, writer CredentialWriter, authStates AuthStateStore, opts Options) (*Service, error) {
+func NewService(definitions AuthResolver, writer CredentialWriter, installations InstallationResolver, authStates AuthStateStore, opts Options) (*Service, error) {
 	if definitions == nil {
 		return nil, ErrDefinitionResolverRequired
 	}
 
 	if writer == nil {
 		return nil, ErrCredentialWriterRequired
+	}
+
+	if installations == nil {
+		return nil, ErrInstallationResolverRequired
 	}
 
 	if authStates == nil {
@@ -77,11 +83,12 @@ func NewService(definitions AuthResolver, writer CredentialWriter, authStates Au
 	}
 
 	return &Service{
-		definitions: definitions,
-		writer:      writer,
-		authStates:  authStates,
-		sessionTTL:  ttl,
-		now:         nowFn,
+		definitions:   definitions,
+		writer:        writer,
+		installations: installations,
+		authStates:    authStates,
+		sessionTTL:    ttl,
+		now:           nowFn,
 	}, nil
 }
 
@@ -144,6 +151,10 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		return BeginResponse{}, ErrDefinitionAuthRequired
 	}
 
+	if err := s.validateInstallation(ctx, req.InstallationID, req.DefinitionID); err != nil {
+		return BeginResponse{}, err
+	}
+
 	result, err := def.Auth.Start(ctx, jsonx.CloneRawMessage(req.Input))
 	if err != nil {
 		return BeginResponse{}, fmt.Errorf("keymaker: begin definition auth: %w", err)
@@ -202,6 +213,10 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, ErrDefinitionAuthRequired
 	}
 
+	if err := s.validateInstallation(ctx, authState.InstallationID, authState.DefinitionID); err != nil {
+		return CompleteResult{}, err
+	}
+
 	completeResult, err := def.Auth.Complete(ctx, jsonx.CloneRawMessage(authState.CallbackState), jsonx.CloneRawMessage(req.Input))
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: complete definition auth: %w", err)
@@ -216,4 +231,26 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		InstallationID: authState.InstallationID,
 		Credential:     completeResult.Credential,
 	}, nil
+}
+
+func (s *Service) validateInstallation(ctx context.Context, installationID string, definitionID types.DefinitionID) error {
+	installation, err := s.installations.ResolveInstallation(ctx, installationID)
+	if err != nil {
+		return err
+	}
+
+	if installation.DefinitionID != definitionID {
+		return ErrInstallationDefinitionMismatch
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return nil
+	}
+
+	if installation.OwnerID != caller.OrganizationID {
+		return ErrInstallationOwnerMismatch
+	}
+
+	return nil
 }

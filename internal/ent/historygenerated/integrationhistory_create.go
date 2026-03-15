@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/schema"
 
 	"github.com/theopenlane/entx/history"
 )

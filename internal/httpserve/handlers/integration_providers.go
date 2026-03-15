@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -57,17 +58,20 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 		entry.OperatorConfig = jsonx.CloneRawMessage(def.OperatorConfig.Schema)
 	}
 
+	if def.UserInput != nil {
+		entry.UserInputSchema = jsonx.CloneRawMessage(def.UserInput.Schema)
+	}
+
 	if len(def.Operations) > 0 {
-		entry.Operations = make([]DefinitionOperationEntry, 0, len(def.Operations))
-		for _, op := range def.Operations {
-			entry.Operations = append(entry.Operations, DefinitionOperationEntry{
+		entry.Operations = lo.Map(def.Operations, func(op types.OperationRegistration, _ int) DefinitionOperationEntry {
+			return DefinitionOperationEntry{
 				Name:         string(op.Name),
 				Kind:         string(op.Kind),
 				Description:  op.Description,
 				Client:       string(op.Client),
 				ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
-			})
-		}
+			}
+		})
 	}
 
 	return entry

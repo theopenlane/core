@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"slices"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -52,7 +54,7 @@ type integrationActionContractDocument struct {
 
 // integrationProviderExtensionsDocument captures workflow metadata for one provider
 type integrationProviderExtensionsDocument struct {
-	// Provider is the provider identifier
+	// Provider is the canonical definition identifier
 	Provider string `json:"provider"`
 	// DisplayName is the provider display name
 	DisplayName string `json:"display_name"`
@@ -60,6 +62,8 @@ type integrationProviderExtensionsDocument struct {
 	Category string `json:"category"`
 	// CredentialsSchema is the provider credentials schema
 	CredentialsSchema json.RawMessage `json:"credentials_schema,omitempty"`
+	// UserInputSchema is the installation-scoped provider schema
+	UserInputSchema json.RawMessage `json:"user_input_schema,omitempty"`
 	// Operations lists provider operation descriptors
 	Operations []integrationOperationExtensionsDocument `json:"operations"`
 }
@@ -83,7 +87,7 @@ func workflowMetadataExtensions(source integrationMetadataSource) map[string]any
 	doc := workflowMetadataExtensionsDocument{
 		Integrations: integrationWorkflowExtensionsDocument{
 			ActionContract: integrationActionContractDocument{
-				TargetSelector:    []string{"installation_id", "definition_slug"},
+				TargetSelector:    []string{"installation_id", "definition_id"},
 				OperationSelector: []string{"operation_name", "operation_kind"},
 				ScopeFields:       []string{"scope_expression", "scope_payload", "scope_resource"},
 				ScopeVariables:    append([]string(nil), integrationScopeVariableNames...),
@@ -117,13 +121,17 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 		}
 
 		entry := integrationProviderExtensionsDocument{
-			Provider:    spec.Slug,
+			Provider:    string(spec.ID),
 			DisplayName: spec.DisplayName,
 			Category:    spec.Category,
 		}
 
 		if def.Credentials != nil {
 			entry.CredentialsSchema = jsonx.CloneRawMessage(def.Credentials.Schema)
+		}
+
+		if def.UserInput != nil {
+			entry.UserInputSchema = jsonx.CloneRawMessage(def.UserInput.Schema)
 		}
 
 		operations := buildOperationEntries(def.Operations)
@@ -145,15 +153,13 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 
 // buildOperationEntries converts operation registrations to extension documents
 func buildOperationEntries(ops []types.OperationRegistration) []integrationOperationExtensionsDocument {
-	entries := make([]integrationOperationExtensionsDocument, 0, len(ops))
-	for _, op := range ops {
-		entries = append(entries, integrationOperationExtensionsDocument{
+	return lo.Map(ops, func(op types.OperationRegistration, _ int) integrationOperationExtensionsDocument {
+		return integrationOperationExtensionsDocument{
 			Name:         string(op.Name),
 			Kind:         string(op.Kind),
 			Description:  op.Description,
 			Client:       string(op.Client),
 			ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
-		})
-	}
-	return entries
+		}
+	})
 }

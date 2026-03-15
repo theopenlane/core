@@ -1,10 +1,12 @@
 package serveropts
 
 import (
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	IntegrationsRuntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -34,6 +36,7 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 			DB:                    dbClient,
 			Gala:                  galaInstance,
 			CredentialStore:       credStore,
+			AuthStateStore:        integrationAuthStateStore(s.Config.Handler.RedisClient),
 			CatalogConfig:         s.Config.Settings.Integrations,
 			SuccessRedirectURL:    s.Config.Settings.IntegrationSuccessRedirectURL,
 			SkipExecutorListeners: wf != nil,
@@ -58,8 +61,10 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 	})
 }
 
-// WithIntegrationRuntime is a no-op retained for call-site compatibility during the migration.
-// All integration functionality is now provided by WithIntegrationsRuntime.
-func WithIntegrationRuntime(_ *ent.Client) ServerOption {
-	return newApplyFunc(func(*ServerOptions) {})
+func integrationAuthStateStore(redisClient *redis.Client) keymaker.AuthStateStore {
+	if redisClient != nil {
+		return keymaker.NewRedisAuthStateStore(redisClient)
+	}
+
+	return keymaker.NewInMemoryAuthStateStore()
 }

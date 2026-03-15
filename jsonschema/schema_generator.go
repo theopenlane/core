@@ -19,8 +19,6 @@ import (
 	"github.com/theopenlane/utils/envparse"
 
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/internal/integrations/providers/catalog"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 
@@ -246,28 +244,7 @@ func buildDefaultConfig() *config.Config {
 	defaults.SetDefaults(cfg)
 	initializeStripeWebhookSecrets(cfg)
 	initializeRateLimitOptions(cfg)
-	initializeIntegrationProviders(cfg)
 	return cfg
-}
-
-// initializeIntegrationProviders seeds the integration providers map from the embedded provider specs
-// so the schema generator walks into all operator-configurable ProviderSpec sub-types and produces
-// env vars for every runtime-configurable field regardless of auth kind. Only pointer-to-struct fields
-// with a koanf tag are initialized — read-only metadata fields (credentialsSchema, display names, etc.)
-// are excluded because they carry no koanf tag and are not operator-configurable.
-func initializeIntegrationProviders(cfg *config.Config) {
-	builders := catalog.Builders(catalog.Config{})
-
-	if cfg.IntegrationProviders == nil {
-		cfg.IntegrationProviders = make(map[string]integrationspec.ProviderSpec, len(builders))
-	}
-
-	for _, builder := range builders {
-		provSpec := builder.Spec()
-		if _, exists := cfg.IntegrationProviders[provSpec.Name]; !exists {
-			cfg.IntegrationProviders[provSpec.Name] = integrationspec.ProviderStubFromSpec(provSpec)
-		}
-	}
 }
 
 // initializeStripeWebhookSecrets ensures the stripe webhook secrets map includes entries for the current and discard API versions

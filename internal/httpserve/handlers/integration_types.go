@@ -35,13 +35,15 @@ func (b *IntegrationConfigBody) UnmarshalJSON(data []byte) error {
 
 // IntegrationConfigPayload is the request type for configuring a non-OAuth provider.
 type IntegrationConfigPayload struct {
-	// Provider is the definition slug.
-	Provider string `param:"provider" description:"Integration definition slug" example:"github_app"`
+	// Provider is the canonical definition ID.
+	Provider string `param:"provider" description:"Integration definition ID" example:"def_01K0GWKSP000000000000000001"`
 	// InstallationID is the optional existing installation to update credentials on.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
 	// Body holds the provider-specific credential fields as a raw JSON object.
 	Body IntegrationConfigBody `json:"body"`
+	// UserInput holds optional installation-scoped provider configuration.
+	UserInput IntegrationConfigBody `json:"userInput,omitempty"`
 }
 
 // IntegrationOperationBody is the request body for triggering a provider operation.
@@ -56,8 +58,8 @@ type IntegrationOperationBody struct {
 
 // IntegrationOperationPayload is the request type for running an integration operation.
 type IntegrationOperationPayload struct {
-	// Provider is the definition slug.
-	Provider string `param:"provider" description:"Integration definition slug" example:"github_app"`
+	// Provider is the canonical definition ID.
+	Provider string `param:"provider" description:"Integration definition ID" example:"def_01K0GHAPP000000000000000001"`
 	// IntegrationID scopes the operation to a specific installation record.
 	IntegrationID string `query:"integration_id,omitempty" description:"Optional installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	// Body holds the operation name and optional configuration.
@@ -134,6 +136,8 @@ type DefinitionCatalogEntry struct {
 	CredentialSchema json.RawMessage `json:"credentialSchema,omitempty"`
 	// OperatorConfig is the JSON schema for operator config
 	OperatorConfig json.RawMessage `json:"operatorConfig,omitempty"`
+	// UserInputSchema is the JSON schema for installation-scoped user input
+	UserInputSchema json.RawMessage `json:"userInputSchema,omitempty"`
 	// Operations lists the operations the definition exposes
 	Operations []DefinitionOperationEntry `json:"operations,omitempty"`
 }
@@ -161,11 +165,13 @@ type IntegrationProvidersResponse struct {
 
 // OAuthV2FlowRequest is the request type for starting a v2 OAuth auth flow.
 type OAuthV2FlowRequest struct {
-	// DefinitionID is the integration definition identifier.
+	// DefinitionID is the canonical integration definition identifier.
 	DefinitionID string `json:"definitionId" description:"Integration definition ID" example:"def_01K0SLACK000000000000000001"`
 	// InstallationID is the optional existing installation to start the auth flow for.
 	// When omitted a new installation is created.
 	InstallationID string `json:"installationId,omitempty"`
+	// UserInput holds optional installation-scoped provider configuration.
+	UserInput IntegrationConfigBody `json:"userInput,omitempty"`
 }
 
 // Validate validates the OAuthV2FlowRequest.
@@ -199,13 +205,13 @@ func (r *RefreshInstallationCredentialRequest) Validate() error {
 
 // ExampleIntegrationConfigPayload is an example configuration payload for OpenAPI documentation.
 var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
-	Provider: "google_workspace",
+	Provider: "def_01K0GWKSP000000000000000001",
 	Body:     IntegrationConfigBody(`{"serviceAccountKey":"{\"type\":\"service_account\",\"project_id\":\"my-project\"}"}`),
 }
 
 // ExampleIntegrationOperationPayload is an example operation payload for OpenAPI documentation.
 var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
-	Provider: "github_app",
+	Provider: "def_01K0GHAPP000000000000000001",
 	Body: IntegrationOperationBody{
 		Operation: "health.default",
 	},

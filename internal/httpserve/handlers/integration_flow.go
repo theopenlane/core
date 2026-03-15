@@ -15,7 +15,9 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/logx"
@@ -43,7 +45,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 
 	definitionID := types.DefinitionID(in.DefinitionID)
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(definitionID)
+	def, ok := h.resolveIntegrationDefinition(in.DefinitionID)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
@@ -56,18 +58,60 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
-	installationID := in.InstallationID
-	if installationID == "" {
+	userInputProvided := len(in.UserInput) > 0
+	normalizedUserInput := json.RawMessage(nil)
+	if userInputProvided {
+		if def.UserInput == nil || len(def.UserInput.Schema) == 0 {
+			return h.BadRequest(ctx, rout.MissingField("userInputSchema"), openapiCtx)
+		}
+
+		normalized, err := normalizeUserInput(requestCtx, def.UserInput, json.RawMessage(in.UserInput))
+		if err != nil {
+			return h.BadRequest(ctx, err, openapiCtx)
+		}
+
+		normalizedUserInput = normalized
+	}
+
+	var (
+		installationID      string
+		installationRec     *ent.Integration
+		createdInstallation bool
+	)
+
+	if in.InstallationID != "" {
+		rec, err := h.loadOwnedIntegration(requestCtx, caller.OrganizationID, in.InstallationID)
+		if err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
+
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		}
+
+		if err := validateInstallationDefinition(rec, def); err != nil {
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+		}
+
+		installationID = rec.ID
+		installationRec = rec
+	} else {
 		name := def.Spec.DisplayName
 		if name == "" {
 			name = def.Spec.Slug
 		}
 
-		rec, err := h.IntegrationsRuntime.Installations().Create(requestCtx, installation.CreateParams{
-			OwnerID:    caller.OrganizationID,
-			Name:       name,
-			Definition: def.Spec,
-		})
+		create := h.DBClient.Integration.Create().
+			SetOwnerID(caller.OrganizationID).
+			SetName(name).
+			SetDefinitionID(string(def.Spec.ID)).
+			SetDefinitionVersion(def.Spec.Version).
+			SetDefinitionSlug(def.Spec.Slug).
+			SetFamily(def.Spec.Family).
+			SetStatus(enums.IntegrationStatusPending)
+		if userInputProvided {
+			create.SetConfig(types.IntegrationConfig{ClientConfig: normalizedUserInput})
+		}
+
+		rec, err := create.Save(requestCtx)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(definitionID)).Msg("failed to create installation for oauth flow")
 
@@ -75,16 +119,43 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		}
 
 		installationID = rec.ID
+		installationRec = rec
+		createdInstallation = true
+	}
+
+	if userInputProvided && !createdInstallation {
+		config := installationRec.Config
+		config.ClientConfig = normalizedUserInput
+
+		if err := h.DBClient.Integration.UpdateOneID(installationRec.ID).SetConfig(config).Exec(requestCtx); err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to persist integration user input")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		installationRec.Config = config
 	}
 
 	begin, err := h.IntegrationsRuntime.Keymaker().BeginAuth(requestCtx, keymaker.BeginRequest{
-		DefinitionID:   definitionID,
+		DefinitionID:   def.Spec.ID,
 		InstallationID: installationID,
 	})
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(definitionID)).Msg("failed to begin oauth flow")
+		if createdInstallation {
+			_ = h.DBClient.Integration.DeleteOneID(installationID).Exec(requestCtx)
+		}
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		switch {
+		case errors.Is(err, keymaker.ErrInstallationNotFound),
+			errors.Is(err, keymaker.ErrInstallationOwnerMismatch):
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		case errors.Is(err, keymaker.ErrInstallationDefinitionMismatch):
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+		default:
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(def.Spec.ID)).Msg("failed to begin oauth flow")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
 	}
 
 	cfg := h.getOauthCookieConfig()
@@ -176,6 +247,11 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 			errors.Is(err, keymaker.ErrAuthStateExpired),
 			errors.Is(err, keymaker.ErrAuthStateTokenRequired):
 			return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
+		case errors.Is(err, keymaker.ErrInstallationNotFound),
+			errors.Is(err, keymaker.ErrInstallationOwnerMismatch):
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		case errors.Is(err, keymaker.ErrInstallationDefinitionMismatch):
+			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		default:
 			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to complete oauth callback")
 
@@ -209,7 +285,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	rec, err := h.IntegrationsRuntime.Installations().Get(reqCtx, in.InstallationID)
+	rec, err := h.DBClient.Integration.Get(reqCtx, in.InstallationID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
 
@@ -283,6 +359,29 @@ func buildV2IntegrationRedirectURL(baseURL, slug string) string {
 	return u.String()
 }
 
+// buildIntegrationRedirectURL appends provider and status query params to the base redirect URL.
+// Used by v1 flows (GitHub App) that operate on a provider name string.
+func buildIntegrationRedirectURL(baseURL, provider string) string {
+	if strings.TrimSpace(baseURL) == "" {
+		return ""
+	}
+
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return baseURL
+	}
+
+	providerName := strings.ToLower(provider)
+
+	q := u.Query()
+	q.Set("provider", providerName)
+	q.Set("status", "success")
+	q.Set("message", fmt.Sprintf("Successfully connected %s integration", providerName))
+	u.RawQuery = q.Encode()
+
+	return u.String()
+}
+
 // generateOAuthState creates a secure state parameter containing org ID and provider.
 // Used by v1 flows (GitHub App, etc.) that manage their own state encoding.
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
@@ -299,40 +398,6 @@ func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	stateData := buildStatePayload(orgID, provider, randomBytes)
 
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
-}
-
-// buildIntegrationRedirectURL appends provider and status query params to the base redirect URL.
-// Used by v1 flows (GitHub App) that operate on ProviderType.
-func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) string {
-	if strings.TrimSpace(baseURL) == "" {
-		return ""
-	}
-
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return baseURL
-	}
-
-	providerName := strings.ToLower(string(provider))
-
-	q := u.Query()
-	q.Set("provider", providerName)
-	q.Set("status", "success")
-	q.Set("message", fmt.Sprintf("Successfully connected %s integration", providerName))
-	u.RawQuery = q.Encode()
-
-	return u.String()
-}
-
-// parseProviderType converts a raw provider string to a typed ProviderType.
-// Used by v1 flows (GitHub App, disconnect) that still operate on named provider types.
-func parseProviderType(provider string) (types.ProviderType, error) {
-	pt := types.ProviderTypeFromString(provider)
-	if pt == types.ProviderUnknown {
-		return types.ProviderUnknown, ErrInvalidProvider
-	}
-
-	return pt, nil
 }
 
 // getOauthCookieConfig returns the cookie configuration for OAuth cookies.

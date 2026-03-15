@@ -13,6 +13,8 @@ var (
 	ErrDefinitionVersionRequired = errors.New("integrationsv2/registry: definition version required")
 	// ErrDefinitionAlreadyRegistered indicates the definition ID is already present
 	ErrDefinitionAlreadyRegistered = errors.New("integrationsv2/registry: definition already registered")
+	// ErrDefinitionSlugAlreadyRegistered indicates another definition already owns the slug
+	ErrDefinitionSlugAlreadyRegistered = errors.New("integrationsv2/registry: definition slug already registered")
 	// ErrDefinitionNotFound indicates the requested definition does not exist
 	ErrDefinitionNotFound = errors.New("integrationsv2/registry: definition not found")
 	// ErrClientNameRequired indicates a client registration is missing its name

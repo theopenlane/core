@@ -15,7 +15,6 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -23,20 +22,19 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/integrations/providers/github"
-	integrationspec "github.com/theopenlane/core/internal/integrations/spec"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
 // defaultGitHubAppSpec returns a fully-configured GitHub App provider spec for flow tests.
-func defaultGitHubAppSpec() integrationspec.ProviderSpec {
-	return integrationspec.ProviderSpec{
-		Name:           string(github.TypeGitHubApp),
-		Active:         lo.ToPtr(true),
-		AuthType:       types.AuthKindGitHubApp,
-		ProviderConfig: json.RawMessage(`{"appid":"123","appslug":"openlane","privatekey":"private-key","webhooksecret":"secret"}`),
+func defaultGitHubAppSpec() githubapp.Config {
+	return githubapp.Config{
+		AppID:         "123",
+		AppSlug:       "openlane",
+		PrivateKey:    "private-key",
+		WebhookSecret: "secret",
 	}
 }
 
@@ -44,7 +42,7 @@ func defaultGitHubAppSpec() integrationspec.ProviderSpec {
 func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
@@ -53,10 +51,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetKind(string(github.TypeGitHubApp)).
+		SetDefinitionID(githubapp.DefinitionID).
+		SetDefinitionSlug(githubapp.DefinitionSlug).
 		SetProviderState(func() types.IntegrationProviderState {
 			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
+			_, mergeErr := doc.MergeProviderData(githubapp.DefinitionSlug, []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
 		}()).
@@ -78,7 +77,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	require.NoError(t, err)
-	providerState, err := jsonx.ToMap(updated.ProviderState.ProviderData(string(github.TypeGitHubApp)))
+	providerState, err := jsonx.ToMap(updated.ProviderState.ProviderData(githubapp.DefinitionSlug))
 	require.NoError(t, err)
 	require.NotNil(t, providerState)
 	webhookVerifiedAt, ok := providerState["webhookVerifiedAt"].(string)
@@ -96,7 +95,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
@@ -105,10 +104,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetKind(string(github.TypeGitHubApp)).
+		SetDefinitionID(githubapp.DefinitionID).
+		SetDefinitionSlug(githubapp.DefinitionSlug).
 		SetProviderState(func() types.IntegrationProviderState {
 			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
+			_, mergeErr := doc.MergeProviderData(githubapp.DefinitionSlug, []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
 		}()).
@@ -131,7 +131,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	require.NoError(t, err)
 
-	providerState, err := jsonx.ToMap(updated.ProviderState.ProviderData(string(github.TypeGitHubApp)))
+	providerState, err := jsonx.ToMap(updated.ProviderState.ProviderData(githubapp.DefinitionSlug))
 	require.NoError(t, err)
 	_, hasVerifiedAt := providerState["webhookVerifiedAt"]
 	assert.False(t, hasVerifiedAt)
@@ -144,7 +144,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 func (suite *HandlerTestSuite) TestGitHubWebhookPingUnknownInstallationAccepted() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
@@ -166,7 +166,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUnknownInstallationAccepted(
 	count, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(user.OrganizationID),
-			integration.KindEQ(string(github.TypeGitHubApp)),
+			integration.DefinitionIDEQ(githubapp.DefinitionID),
 		).
 		Count(user.UserCtx)
 	require.NoError(t, err)
@@ -177,7 +177,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUnknownInstallationAccepted(
 func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplatedSlackNotification() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
@@ -191,10 +191,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	_, err = suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetKind(string(github.TypeGitHubApp)).
+		SetDefinitionID(githubapp.DefinitionID).
+		SetDefinitionSlug(githubapp.DefinitionSlug).
 		SetProviderState(func() types.IntegrationProviderState {
 			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
+			_, mergeErr := doc.MergeProviderData(githubapp.DefinitionSlug, []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
 		}()).
@@ -240,7 +241,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstallationDoesNotNotify() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
@@ -249,10 +250,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstal
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetKind(string(github.TypeGitHubApp)).
+		SetDefinitionID(githubapp.DefinitionID).
+		SetDefinitionSlug(githubapp.DefinitionSlug).
 		SetProviderState(func() types.IntegrationProviderState {
 			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
+			_, mergeErr := doc.MergeProviderData(githubapp.DefinitionSlug, []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
 		}()).
@@ -287,7 +289,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedUnknownInstal
 func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
@@ -296,10 +298,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetKind(string(github.TypeGitHubApp)).
+		SetDefinitionID(githubapp.DefinitionID).
+		SetDefinitionSlug(githubapp.DefinitionSlug).
 		SetProviderState(func() types.IntegrationProviderState {
 			doc := types.IntegrationProviderState{}
-			_, mergeErr := doc.MergeProviderData(string(github.TypeGitHubApp), []byte(`{"appId":"123","installationId":"456"}`))
+			_, mergeErr := doc.MergeProviderData(githubapp.DefinitionSlug, []byte(`{"appId":"123","installationId":"456"}`))
 			require.NoError(t, mergeErr)
 			return doc
 		}()).
@@ -336,7 +339,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	dedupeCount, err := suite.db.IntegrationWebhook.Query().
 		Where(
 			integrationwebhook.OwnerIDEQ(user.OrganizationID),
-			integrationwebhook.ProviderEQ(string(github.TypeGitHubApp)),
+			integrationwebhook.ProviderEQ(githubapp.DefinitionSlug),
 			integrationwebhook.ExternalEventIDEQ(deliveryID),
 		).
 		Count(user.UserCtx)

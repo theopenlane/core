@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"strings"
+	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -79,7 +80,7 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 	runRecord, err := d.runs.CreatePending(ctx, installationRecord, DispatchRequest{
 		InstallationID: req.InstallationID,
 		Operation:      req.Operation,
-		Config:         cloneRawMessage(req.Config),
+		Config:         jsonx.CloneRawMessage(req.Config),
 		Force:          req.Force,
 		ClientForce:    req.ClientForce,
 		RunType:        runType,
@@ -88,12 +89,13 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		return DispatchResult{}, err
 	}
 
+	runStartedAt := time.Now()
 	receipt := d.gala.EmitWithHeaders(ctx, operation.Topic, Envelope{
 		RunID:          runRecord.ID,
 		InstallationID: installationRecord.ID,
 		DefinitionID:   installationRecord.DefinitionID,
 		Operation:      string(req.Operation),
-		Config:         cloneRawMessage(req.Config),
+		Config:         jsonx.CloneRawMessage(req.Config),
 		Force:          req.Force,
 		ClientForce:    req.ClientForce,
 		WorkflowMeta:   req.WorkflowMeta,
@@ -106,6 +108,15 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		},
 	})
 	if receipt.Err != nil {
+		completeErr := d.runs.Complete(ctx, runRecord.ID, runStartedAt, RunResult{
+			Status:  enums.IntegrationRunStatusFailed,
+			Summary: "failed to dispatch integration operation",
+			Error:   receipt.Err.Error(),
+		})
+		if completeErr != nil {
+			return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+		}
+
 		return DispatchResult{}, receipt.Err
 	}
 
@@ -144,13 +155,4 @@ func validateConfig(schema json.RawMessage, value json.RawMessage) error {
 	}
 
 	return errors.New(strings.Join(messages, "; "))
-}
-
-// cloneRawMessage copies one JSON payload
-func cloneRawMessage(value json.RawMessage) json.RawMessage {
-	if len(value) == 0 {
-		return nil
-	}
-
-	return append(json.RawMessage(nil), value...)
 }

@@ -133,3 +133,39 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 		t.Fatalf("Register(second) error = %v, want %v", err, ErrOperationTopicAlreadyRegistered)
 	}
 }
+
+func TestRegistryRejectsDuplicateSlug(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	first := integrationtypes.Definition{
+		Spec: integrationtypes.DefinitionSpec{
+			ID:          "def_first",
+			Slug:        "shared_slug",
+			Version:     "v1",
+			DisplayName: "First",
+			Active:      true,
+			Visible:     true,
+		},
+	}
+	second := integrationtypes.Definition{
+		Spec: integrationtypes.DefinitionSpec{
+			ID:          "def_second",
+			Slug:        "shared_slug",
+			Version:     "v1",
+			DisplayName: "Second",
+			Active:      true,
+			Visible:     true,
+		},
+	}
+
+	if err := reg.Register(first); err != nil {
+		t.Fatalf("Register(first) error = %v", err)
+	}
+
+	err := reg.Register(second)
+	if !errors.Is(err, ErrDefinitionSlugAlreadyRegistered) {
+		t.Fatalf("Register(second) error = %v, want %v", err, ErrDefinitionSlugAlreadyRegistered)
+	}
+}

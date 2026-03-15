@@ -35,7 +35,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	}
 
 	writer := &fakeInstallationWriter{}
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, writer, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{def: def}, writer, matchingInstallationResolver(installationID, definitionID), NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -90,19 +90,25 @@ func TestNewServiceValidatesDependencies(t *testing.T) {
 
 	writer := &fakeInstallationWriter{}
 	resolver := &fakeDefinitionResolver{}
+	installations := &fakeInstallationResolver{}
 	store := NewInMemoryAuthStateStore()
 
-	_, err := NewService(nil, writer, store, Options{})
+	_, err := NewService(nil, writer, installations, store, Options{})
 	if !errors.Is(err, ErrDefinitionResolverRequired) {
 		t.Fatalf("expected ErrDefinitionResolverRequired, got %v", err)
 	}
 
-	_, err = NewService(resolver, nil, store, Options{})
+	_, err = NewService(resolver, nil, installations, store, Options{})
 	if !errors.Is(err, ErrCredentialWriterRequired) {
 		t.Fatalf("expected ErrCredentialWriterRequired, got %v", err)
 	}
 
-	_, err = NewService(resolver, writer, nil, Options{})
+	_, err = NewService(resolver, writer, nil, store, Options{})
+	if !errors.Is(err, ErrInstallationResolverRequired) {
+		t.Fatalf("expected ErrInstallationResolverRequired, got %v", err)
+	}
+
+	_, err = NewService(resolver, writer, installations, nil, Options{})
 	if !errors.Is(err, ErrAuthStateStoreRequired) {
 		t.Fatalf("expected ErrAuthStateStoreRequired, got %v", err)
 	}
@@ -111,7 +117,7 @@ func TestNewServiceValidatesDependencies(t *testing.T) {
 func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 	t.Parallel()
 
-	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, &fakeInstallationResolver{}, NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -130,7 +136,7 @@ func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 func TestService_BeginAuthDefinitionNotFound(t *testing.T) {
 	t.Parallel()
 
-	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, &fakeInstallationResolver{}, NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -151,7 +157,7 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 		Spec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth", Version: "1.0"},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, matchingInstallationResolver("i", "no-auth"), NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -177,7 +183,7 @@ func TestService_BeginAuthUsesCustomStateToken(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, matchingInstallationResolver("i1", "d1"), NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -193,6 +199,38 @@ func TestService_BeginAuthUsesCustomStateToken(t *testing.T) {
 
 	if begin.State != "custom-csrf-token" {
 		t.Fatalf("expected custom state token, got %q", begin.State)
+	}
+}
+
+func TestService_BeginAuthInstallationDefinitionMismatch(t *testing.T) {
+	t.Parallel()
+
+	def := types.Definition{
+		Spec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
+		Auth: &types.AuthRegistration{
+			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+				return types.AuthStartResult{URL: "https://example.com"}, nil
+			},
+		},
+	}
+
+	svc, err := NewService(
+		&fakeDefinitionResolver{def: def},
+		&fakeInstallationWriter{},
+		matchingInstallationResolver("i1", "other-definition"),
+		NewInMemoryAuthStateStore(),
+		Options{},
+	)
+	if err != nil {
+		t.Fatalf("NewService error: %v", err)
+	}
+
+	_, err = svc.BeginAuth(context.Background(), BeginRequest{
+		DefinitionID:   "d1",
+		InstallationID: "i1",
+	})
+	if !errors.Is(err, ErrInstallationDefinitionMismatch) {
+		t.Fatalf("expected ErrInstallationDefinitionMismatch, got %v", err)
 	}
 }
 
@@ -217,6 +255,7 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 	svc, err := NewService(
 		&fakeDefinitionResolver{def: def},
 		&fakeInstallationWriter{},
+		matchingInstallationResolver("install-2", "slack"),
 		NewInMemoryAuthStateStore(),
 		Options{SessionTTL: time.Minute, Now: clock},
 	)
@@ -243,7 +282,7 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 func TestService_CompleteAuthStateTokenRequired(t *testing.T) {
 	t.Parallel()
 
-	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, &fakeInstallationResolver{}, NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -272,7 +311,7 @@ func TestService_CompleteAuthSaveError(t *testing.T) {
 	}
 
 	writer := &fakeInstallationWriter{err: errors.New("db unavailable")}
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, writer, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{def: def}, writer, matchingInstallationResolver("install-3", "okta"), NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -314,7 +353,7 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, NewInMemoryAuthStateStore(), Options{})
+	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, matchingInstallationResolver("i1", "az"), NewInMemoryAuthStateStore(), Options{})
 	if err != nil {
 		t.Fatalf("NewService error: %v", err)
 	}
@@ -339,6 +378,42 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 	}
 }
 
+func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	installations := matchingInstallationResolver("i1", "az")
+
+	def := types.Definition{
+		Spec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
+		Auth: &types.AuthRegistration{
+			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
+				return types.AuthStartResult{URL: "https://login.microsoftonline.com"}, nil
+			},
+			Complete: func(_ context.Context, state json.RawMessage, _ json.RawMessage) (types.AuthCompleteResult, error) {
+				return types.AuthCompleteResult{Credential: types.CredentialSet{OAuthAccessToken: string(state)}}, nil
+			},
+		},
+	}
+
+	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, installations, NewInMemoryAuthStateStore(), Options{})
+	if err != nil {
+		t.Fatalf("NewService error: %v", err)
+	}
+
+	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1"})
+	if err != nil {
+		t.Fatalf("BeginAuth error: %v", err)
+	}
+
+	installations.installation.DefinitionID = "changed"
+
+	_, err = svc.CompleteAuth(ctx, CompleteRequest{State: begin.State, Input: json.RawMessage(`{"code":"c1"}`)})
+	if !errors.Is(err, ErrInstallationDefinitionMismatch) {
+		t.Fatalf("expected ErrInstallationDefinitionMismatch, got %v", err)
+	}
+}
+
 // fakeDefinitionResolver satisfies AuthResolver for tests
 type fakeDefinitionResolver struct {
 	def types.Definition
@@ -358,6 +433,19 @@ type installationSave struct {
 	credential     types.CredentialSet
 }
 
+type fakeInstallationResolver struct {
+	installation InstallationRecord
+	err          error
+}
+
+func (f *fakeInstallationResolver) ResolveInstallation(context.Context, string) (InstallationRecord, error) {
+	if f.err != nil {
+		return InstallationRecord{}, f.err
+	}
+
+	return f.installation, nil
+}
+
 // fakeInstallationWriter satisfies CredentialWriter for tests
 type fakeInstallationWriter struct {
 	saves []installationSave
@@ -367,4 +455,14 @@ type fakeInstallationWriter struct {
 func (f *fakeInstallationWriter) SaveInstallationCredential(_ context.Context, installationID string, credential types.CredentialSet) error {
 	f.saves = append(f.saves, installationSave{installationID: installationID, credential: credential})
 	return f.err
+}
+
+func matchingInstallationResolver(installationID string, definitionID types.DefinitionID) *fakeInstallationResolver {
+	return &fakeInstallationResolver{
+		installation: InstallationRecord{
+			ID:           installationID,
+			OwnerID:      "org-1",
+			DefinitionID: definitionID,
+		},
+	}
 }
