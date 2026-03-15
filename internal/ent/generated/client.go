@@ -138,6 +138,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/newman/compose"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/iam/entfga"
