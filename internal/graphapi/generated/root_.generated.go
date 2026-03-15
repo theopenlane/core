@@ -5140,6 +5140,7 @@ type ComplexityRoot struct {
 		TaskSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		Template                        func(childComplexity int, id string) int
+		TemplateContexts                func(childComplexity int) int
 		TemplateSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Templates                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TfaSetting                      func(childComplexity int, id *string) int
@@ -6357,6 +6358,13 @@ type ComplexityRoot struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
+	}
+
+	TemplateContextEntry struct {
+		Context     func(childComplexity int) int
+		Description func(childComplexity int) int
+		Label       func(childComplexity int) int
+		Schema      func(childComplexity int) int
 	}
 
 	TemplateCreatePayload struct {
@@ -39433,6 +39441,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.Template(childComplexity, args["id"].(string)), true
 
+	case "Query.templateContexts":
+		if e.ComplexityRoot.Query.TemplateContexts == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.TemplateContexts(childComplexity), true
+
 	case "Query.templateSearch":
 		if e.ComplexityRoot.Query.TemplateSearch == nil {
 			break
@@ -46049,6 +46064,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateConnection.TotalCount(childComplexity), true
+
+	case "TemplateContextEntry.context":
+		if e.ComplexityRoot.TemplateContextEntry.Context == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateContextEntry.Context(childComplexity), true
+
+	case "TemplateContextEntry.description":
+		if e.ComplexityRoot.TemplateContextEntry.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateContextEntry.Description(childComplexity), true
+
+	case "TemplateContextEntry.label":
+		if e.ComplexityRoot.TemplateContextEntry.Label == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateContextEntry.Label(childComplexity), true
+
+	case "TemplateContextEntry.schema":
+		if e.ComplexityRoot.TemplateContextEntry.Schema == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateContextEntry.Schema(childComplexity), true
 
 	case "TemplateCreatePayload.template":
 		if e.ComplexityRoot.TemplateCreatePayload.Template == nil {
@@ -152102,6 +152145,38 @@ type TemplateBulkUpdatePayload {
     IDs of the updated templates
     """
     updatedIDs: [ID!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/templatecontext.graphql", Input: `extend type Query {
+    """
+    Returns all registered template data contexts with their JSON schemas.
+    Used by UI tooling to populate the variable picker when composing email templates.
+    """
+    templateContexts: [TemplateContextEntry!]!
+}
+
+"""
+TemplateContextEntry describes a registered template data context, including its
+human-readable label, description, and reflected JSON Schema for UI tooling.
+"""
+type TemplateContextEntry {
+    """
+    The template context enum value identifying this context.
+    """
+    context: EmailTemplateTemplateContext!
+    """
+    Human-readable name for this context.
+    """
+    label: String!
+    """
+    Describes when this context is used.
+    """
+    description: String!
+    """
+    JSON Schema describing the template data shape for this context.
+    For UI tooling only — not used for runtime validation.
+    """
+    schema: Map!
 }
 `, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {

@@ -35371,6 +35371,20 @@ type TemplateConnection struct {
 	TotalCount int64 `json:"totalCount"`
 }
 
+// TemplateContextEntry describes a registered template data context, including its
+// human-readable label, description, and reflected JSON Schema for UI tooling.
+type TemplateContextEntry struct {
+	// The template context enum value identifying this context.
+	Context enums.TemplateContext `json:"context"`
+	// Human-readable name for this context.
+	Label string `json:"label"`
+	// Describes when this context is used.
+	Description string `json:"description"`
+	// JSON Schema describing the template data shape for this context.
+	// For UI tooling only — not used for runtime validation.
+	Schema map[string]any `json:"schema"`
+}
+
 // Return response for createTemplate mutation
 type TemplateCreatePayload struct {
 	// Created template

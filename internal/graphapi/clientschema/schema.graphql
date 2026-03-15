@@ -66986,6 +66986,11 @@ type Query {
 		id: ID!
 	): Template!
 	"""
+	Returns all registered template data contexts with their JSON schemas.
+	Used by UI tooling to populate the variable picker when composing email templates.
+	"""
+	templateContexts: [TemplateContextEntry!]!
+	"""
 	Look up tfaSetting for the current user
 	"""
 	tfaSetting(
@@ -79995,6 +80000,29 @@ type TemplateConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
+}
+"""
+TemplateContextEntry describes a registered template data context, including its
+human-readable label, description, and reflected JSON Schema for UI tooling.
+"""
+type TemplateContextEntry {
+	"""
+	The template context enum value identifying this context.
+	"""
+	context: EmailTemplateTemplateContext!
+	"""
+	Human-readable name for this context.
+	"""
+	label: String!
+	"""
+	Describes when this context is used.
+	"""
+	description: String!
+	"""
+	JSON Schema describing the template data shape for this context.
+	For UI tooling only — not used for runtime validation.
+	"""
+	schema: Map!
 }
 """
 Return response for createTemplate mutation
