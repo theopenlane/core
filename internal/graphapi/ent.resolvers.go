@@ -3430,6 +3430,7 @@ type controlResolver struct{ *Resolver }
 type evidenceResolver struct{ *Resolver }
 type groupResolver struct{ *Resolver }
 type identityHolderResolver struct{ *Resolver }
+type integrationResolver struct{ *Resolver }
 type internalPolicyResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
 type platformResolver struct{ *Resolver }

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/integrations/webhooks"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
@@ -53,6 +54,16 @@ func (r *Runtime) Injector() do.Injector {
 // Registry returns the definition registry
 func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
+}
+
+// Catalog returns all registered definition specs in stable id order.
+func (r *Runtime) Catalog() []types.DefinitionSpec {
+	return do.MustInvoke[*registry.Registry](r.injector).Catalog()
+}
+
+// Definition returns one definition by canonical identifier.
+func (r *Runtime) Definition(id string) (types.Definition, bool) {
+	return do.MustInvoke[*registry.Registry](r.injector).Definition(id)
 }
 
 // Dispatch enqueues one integration operation through the runtime-managed dispatcher.
@@ -129,7 +140,7 @@ func New(config Config) (*Runtime, error) {
 	})
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(
-			do.MustInvoke[*registry.Registry](i).Definition,
+			rt.Definition,
 			rt.PersistAuthCompletion,
 			func(ctx context.Context, installationID string) (keymaker.InstallationRecord, error) {
 				record, err := rt.ResolveInstallation(ctx, "", installationID, "")

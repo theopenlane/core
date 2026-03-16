@@ -276,7 +276,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)
 
 		if rt := s.Config.Handler.IntegrationsRuntime; rt != nil {
-			r = r.WithIntegrationMetadataSource(rt.Registry())
+			r = r.WithIntegrationsRuntime(rt)
 		}
 
 		// add pool to the resolver to manage the number of goroutines

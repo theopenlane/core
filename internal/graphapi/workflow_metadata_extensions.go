@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -81,7 +82,7 @@ type integrationOperationExtensionsDocument struct {
 }
 
 // workflowMetadataExtensions builds extensible workflow metadata payloads for non-object schema surfaces
-func workflowMetadataExtensions(source integrationMetadataSource) map[string]any {
+func workflowMetadataExtensions(rt *integrationsruntime.Runtime) map[string]any {
 	doc := workflowMetadataExtensionsDocument{
 		Integrations: integrationWorkflowExtensionsDocument{
 			ActionContract: integrationActionContractDocument{
@@ -91,7 +92,7 @@ func workflowMetadataExtensions(source integrationMetadataSource) map[string]any
 				ScopeVariables:    append([]string(nil), integrationScopeVariableNames...),
 				RunTypes:          append([]string(nil), enums.IntegrationRunTypes...),
 			},
-			Providers: integrationWorkflowProviders(source),
+			Providers: integrationWorkflowProviders(rt),
 		},
 	}
 
@@ -104,16 +105,16 @@ func workflowMetadataExtensions(source integrationMetadataSource) map[string]any
 }
 
 // integrationWorkflowProviders builds provider metadata for integration workflow extensions
-func integrationWorkflowProviders(source integrationMetadataSource) []integrationProviderExtensionsDocument {
-	if source == nil {
+func integrationWorkflowProviders(rt *integrationsruntime.Runtime) []integrationProviderExtensionsDocument {
+	if rt == nil {
 		return []integrationProviderExtensionsDocument{}
 	}
 
-	specs := source.Catalog()
+	specs := rt.Catalog()
 	entries := make([]integrationProviderExtensionsDocument, 0, len(specs))
 
 	for _, spec := range specs {
-		def, ok := source.Definition(spec.ID)
+		def, ok := rt.Definition(spec.ID)
 		if !ok {
 			continue
 		}

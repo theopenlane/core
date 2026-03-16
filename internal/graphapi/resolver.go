@@ -17,7 +17,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/internal/integrations/types"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -36,29 +36,21 @@ const (
 
 // Resolver provides a graph response resolver
 type Resolver struct {
-	db                *ent.Client
-	pool              *gala.Pool
-	extensionsEnabled bool
-	uploader          *objects.Service
-	isDevelopment     bool
-	complexityLimit   int
-	maxResultLimit    *int
-	workflowsConfig   workflows.Config
-	integrationSource integrationMetadataSource
+	db                  *ent.Client
+	pool                *gala.Pool
+	extensionsEnabled   bool
+	uploader            *objects.Service
+	isDevelopment       bool
+	complexityLimit     int
+	maxResultLimit      *int
+	workflowsConfig     workflows.Config
+	integrationsRuntime *integrationsruntime.Runtime
 
 	// subscription settings
 	subscriptionSettings
 
 	// trust center settings
 	trustCenterSettings
-}
-
-// integrationMetadataSource exposes definition metadata needed by workflow metadata resolvers
-type integrationMetadataSource interface {
-	// Catalog returns all registered definition specs in stable id order
-	Catalog() []types.DefinitionSpec
-	// Definition returns one definition by canonical identifier
-	Definition(id string) (types.Definition, bool)
 }
 
 // trustCenterSettings holds the settings for trust center domains

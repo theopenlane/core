@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -78,9 +79,9 @@ func (r Resolver) WithWorkflowsConfig(cfg workflows.Config) *Resolver {
 	return &r
 }
 
-// WithIntegrationMetadataSource sets integration metadata source for workflow metadata resolver surfaces
-func (r Resolver) WithIntegrationMetadataSource(source integrationMetadataSource) *Resolver {
-	r.integrationSource = source
+// WithIntegrationsRuntime sets the integrations runtime for GraphQL integration surfaces.
+func (r Resolver) WithIntegrationsRuntime(rt *integrationsruntime.Runtime) *Resolver {
+	r.integrationsRuntime = rt
 
 	return &r
 }
