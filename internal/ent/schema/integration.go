@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -220,13 +219,6 @@ func (i Integration) Policy() ent.Policy {
 func (Integration) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
-	}
-}
-
-// Interceptors of the Integration
-func (Integration) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorIntegrationWebhookURLs(),
 	}
 }
 

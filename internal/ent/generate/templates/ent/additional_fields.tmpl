@@ -9,8 +9,4 @@
 		// Base64 is the base64 representation of the file when using database storage
 		Base64 string `json:"base64,omitempty"`
 	{{- end }}
-	{{- if eq $.Name "Integration" }}
-		// WebhookURLs lists fully-qualified inbound webhook URLs keyed by webhook contract name
-		WebhookURLs map[string]any `json:"webhookURLs,omitempty"`
-	{{- end }}
 {{ end }}

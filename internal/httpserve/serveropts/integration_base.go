@@ -1,12 +1,9 @@
 package serveropts
 
 import (
-	"reflect"
-
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	integrationregistry "github.com/theopenlane/core/internal/integrations/registry"
 	runtime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -48,7 +45,6 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 		}
 
 		s.Config.Handler.IntegrationsRuntime = rt
-		setIntegrationRegistry(dbClient, rt.Registry())
 
 		if wf == nil {
 			return
@@ -60,20 +56,4 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 			log.Panic().Err(err).Msg("failed to wire integration deps into workflow engine")
 		}
 	})
-}
-
-func setIntegrationRegistry(dbClient *ent.Client, reg *integrationregistry.Registry) {
-	if dbClient == nil || reg == nil {
-		return
-	}
-
-	field := reflect.ValueOf(dbClient).Elem().FieldByName("IntegrationRegistry")
-	if !field.IsValid() || !field.CanSet() {
-		return
-	}
-
-	value := reflect.ValueOf(reg)
-	if value.Type().AssignableTo(field.Type()) {
-		field.Set(value)
-	}
 }
