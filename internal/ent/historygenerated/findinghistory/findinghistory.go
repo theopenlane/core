@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -57,16 +58,14 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
-	// FieldFindingSeverityLevelName holds the string denoting the finding_severity_level_name field in the database.
-	FieldFindingSeverityLevelName = "finding_severity_level_name"
-	// FieldFindingSeverityLevelID holds the string denoting the finding_severity_level_id field in the database.
-	FieldFindingSeverityLevelID = "finding_severity_level_id"
 	// FieldFindingStatusName holds the string denoting the finding_status_name field in the database.
 	FieldFindingStatusName = "finding_status_name"
 	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
 	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
+	// FieldSecurityLevel holds the string denoting the security_level field in the database.
+	FieldSecurityLevel = "security_level"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
 	FieldExternalOwnerID = "external_owner_id"
 	// FieldSource holds the string denoting the source field in the database.
@@ -165,11 +164,10 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
-	FieldFindingSeverityLevelName,
-	FieldFindingSeverityLevelID,
 	FieldFindingStatusName,
 	FieldFindingStatusID,
 	FieldExternalID,
+	FieldSecurityLevel,
 	FieldExternalOwnerID,
 	FieldSource,
 	FieldResourceName,
@@ -260,6 +258,16 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("findinghistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+// SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
+func SecurityLevelValidator(sl enums.SecurityLevel) error {
+	switch sl.String() {
+	case "NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("findinghistory: invalid enum value for security_level field: %q", sl)
 	}
 }
 
@@ -361,16 +369,6 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
-// ByFindingSeverityLevelName orders the results by the finding_severity_level_name field.
-func ByFindingSeverityLevelName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFindingSeverityLevelName, opts...).ToFunc()
-}
-
-// ByFindingSeverityLevelID orders the results by the finding_severity_level_id field.
-func ByFindingSeverityLevelID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFindingSeverityLevelID, opts...).ToFunc()
-}
-
 // ByFindingStatusName orders the results by the finding_status_name field.
 func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFindingStatusName, opts...).ToFunc()
@@ -384,6 +382,11 @@ func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// BySecurityLevel orders the results by the security_level field.
+func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityLevel, opts...).ToFunc()
 }
 
 // ByExternalOwnerID orders the results by the external_owner_id field.
@@ -536,4 +539,11 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.SecurityLevel must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SecurityLevel)(nil)
+	// enums.SecurityLevel must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SecurityLevel)(nil)
 )

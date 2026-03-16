@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -251,34 +252,6 @@ func (_c *FindingCreate) SetNillableScopeID(v *string) *FindingCreate {
 	return _c
 }
 
-// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
-func (_c *FindingCreate) SetFindingSeverityLevelName(v string) *FindingCreate {
-	_c.mutation.SetFindingSeverityLevelName(v)
-	return _c
-}
-
-// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
-func (_c *FindingCreate) SetNillableFindingSeverityLevelName(v *string) *FindingCreate {
-	if v != nil {
-		_c.SetFindingSeverityLevelName(*v)
-	}
-	return _c
-}
-
-// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
-func (_c *FindingCreate) SetFindingSeverityLevelID(v string) *FindingCreate {
-	_c.mutation.SetFindingSeverityLevelID(v)
-	return _c
-}
-
-// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
-func (_c *FindingCreate) SetNillableFindingSeverityLevelID(v *string) *FindingCreate {
-	if v != nil {
-		_c.SetFindingSeverityLevelID(*v)
-	}
-	return _c
-}
-
 // SetFindingStatusName sets the "finding_status_name" field.
 func (_c *FindingCreate) SetFindingStatusName(v string) *FindingCreate {
 	_c.mutation.SetFindingStatusName(v)
@@ -317,6 +290,20 @@ func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
 func (_c *FindingCreate) SetNillableExternalID(v *string) *FindingCreate {
 	if v != nil {
 		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_c *FindingCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
 	}
 	return _c
 }
@@ -843,11 +830,6 @@ func (_c *FindingCreate) SetScope(v *CustomTypeEnum) *FindingCreate {
 	return _c.SetScopeID(v.ID)
 }
 
-// SetFindingSeverityLevel sets the "finding_severity_level" edge to the CustomTypeEnum entity.
-func (_c *FindingCreate) SetFindingSeverityLevel(v *CustomTypeEnum) *FindingCreate {
-	return _c.SetFindingSeverityLevelID(v.ID)
-}
-
 // SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
 func (_c *FindingCreate) SetFindingStatus(v *CustomTypeEnum) *FindingCreate {
 	return _c.SetFindingStatusID(v.ID)
@@ -1242,6 +1224,11 @@ func (_c *FindingCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Finding.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1330,10 +1317,6 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
-	if value, ok := _c.mutation.FindingSeverityLevelName(); ok {
-		_spec.SetField(finding.FieldFindingSeverityLevelName, field.TypeString, value)
-		_node.FindingSeverityLevelName = value
-	}
 	if value, ok := _c.mutation.FindingStatusName(); ok {
 		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
 		_node.FindingStatusName = value
@@ -1341,6 +1324,10 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+		_node.SecurityLevel = value
 	}
 	if value, ok := _c.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -1589,24 +1576,6 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ScopeID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.FindingSeverityLevelIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   finding.FindingSeverityLevelTable,
-			Columns: []string{finding.FindingSeverityLevelColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Finding
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.FindingSeverityLevelID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FindingStatusIDs(); len(nodes) > 0 {

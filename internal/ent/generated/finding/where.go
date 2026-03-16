@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -141,16 +142,6 @@ func ScopeName(v string) predicate.Finding {
 // ScopeID applies equality check predicate on the "scope_id" field. It's identical to ScopeIDEQ.
 func ScopeID(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldScopeID, v))
-}
-
-// FindingSeverityLevelName applies equality check predicate on the "finding_severity_level_name" field. It's identical to FindingSeverityLevelNameEQ.
-func FindingSeverityLevelName(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelID applies equality check predicate on the "finding_severity_level_id" field. It's identical to FindingSeverityLevelIDEQ.
-func FindingSeverityLevelID(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelID, v))
 }
 
 // FindingStatusName applies equality check predicate on the "finding_status_name" field. It's identical to FindingStatusNameEQ.
@@ -1308,156 +1299,6 @@ func ScopeIDContainsFold(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldContainsFold(FieldScopeID, v))
 }
 
-// FindingSeverityLevelNameEQ applies the EQ predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameNEQ applies the NEQ predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameNEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldNEQ(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameIn applies the In predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldIn(FieldFindingSeverityLevelName, vs...))
-}
-
-// FindingSeverityLevelNameNotIn applies the NotIn predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameNotIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldNotIn(FieldFindingSeverityLevelName, vs...))
-}
-
-// FindingSeverityLevelNameGT applies the GT predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameGT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGT(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameGTE applies the GTE predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameGTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGTE(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameLT applies the LT predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameLT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLT(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameLTE applies the LTE predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameLTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLTE(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameContains applies the Contains predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameContains(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContains(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameHasPrefix applies the HasPrefix predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameHasPrefix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasPrefix(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameHasSuffix applies the HasSuffix predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameHasSuffix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasSuffix(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameIsNil applies the IsNil predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameIsNil() predicate.Finding {
-	return predicate.Finding(sql.FieldIsNull(FieldFindingSeverityLevelName))
-}
-
-// FindingSeverityLevelNameNotNil applies the NotNil predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameNotNil() predicate.Finding {
-	return predicate.Finding(sql.FieldNotNull(FieldFindingSeverityLevelName))
-}
-
-// FindingSeverityLevelNameEqualFold applies the EqualFold predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameEqualFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEqualFold(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelNameContainsFold applies the ContainsFold predicate on the "finding_severity_level_name" field.
-func FindingSeverityLevelNameContainsFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContainsFold(FieldFindingSeverityLevelName, v))
-}
-
-// FindingSeverityLevelIDEQ applies the EQ predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDNEQ applies the NEQ predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDNEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldNEQ(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDIn applies the In predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldIn(FieldFindingSeverityLevelID, vs...))
-}
-
-// FindingSeverityLevelIDNotIn applies the NotIn predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDNotIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldNotIn(FieldFindingSeverityLevelID, vs...))
-}
-
-// FindingSeverityLevelIDGT applies the GT predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDGT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGT(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDGTE applies the GTE predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDGTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGTE(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDLT applies the LT predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDLT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLT(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDLTE applies the LTE predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDLTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLTE(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDContains applies the Contains predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDContains(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContains(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDHasPrefix applies the HasPrefix predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDHasPrefix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasPrefix(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDHasSuffix applies the HasSuffix predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDHasSuffix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasSuffix(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDIsNil applies the IsNil predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDIsNil() predicate.Finding {
-	return predicate.Finding(sql.FieldIsNull(FieldFindingSeverityLevelID))
-}
-
-// FindingSeverityLevelIDNotNil applies the NotNil predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDNotNil() predicate.Finding {
-	return predicate.Finding(sql.FieldNotNull(FieldFindingSeverityLevelID))
-}
-
-// FindingSeverityLevelIDEqualFold applies the EqualFold predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDEqualFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEqualFold(FieldFindingSeverityLevelID, v))
-}
-
-// FindingSeverityLevelIDContainsFold applies the ContainsFold predicate on the "finding_severity_level_id" field.
-func FindingSeverityLevelIDContainsFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContainsFold(FieldFindingSeverityLevelID, v))
-}
-
 // FindingStatusNameEQ applies the EQ predicate on the "finding_status_name" field.
 func FindingStatusNameEQ(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldFindingStatusName, v))
@@ -1681,6 +1522,46 @@ func ExternalIDEqualFold(v string) predicate.Finding {
 // ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
 func ExternalIDContainsFold(v string) predicate.Finding {
 	return predicate.Finding(sql.FieldContainsFold(FieldExternalID, v))
+}
+
+// SecurityLevelEQ applies the EQ predicate on the "security_level" field.
+func SecurityLevelEQ(v enums.SecurityLevel) predicate.Finding {
+	vc := v
+	return predicate.Finding(sql.FieldEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelNEQ applies the NEQ predicate on the "security_level" field.
+func SecurityLevelNEQ(v enums.SecurityLevel) predicate.Finding {
+	vc := v
+	return predicate.Finding(sql.FieldNEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelIn applies the In predicate on the "security_level" field.
+func SecurityLevelIn(vs ...enums.SecurityLevel) predicate.Finding {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Finding(sql.FieldIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelNotIn applies the NotIn predicate on the "security_level" field.
+func SecurityLevelNotIn(vs ...enums.SecurityLevel) predicate.Finding {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Finding(sql.FieldNotIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelIsNil applies the IsNil predicate on the "security_level" field.
+func SecurityLevelIsNil() predicate.Finding {
+	return predicate.Finding(sql.FieldIsNull(FieldSecurityLevel))
+}
+
+// SecurityLevelNotNil applies the NotNil predicate on the "security_level" field.
+func SecurityLevelNotNil() predicate.Finding {
+	return predicate.Finding(sql.FieldNotNull(FieldSecurityLevel))
 }
 
 // ExternalOwnerIDEQ applies the EQ predicate on the "external_owner_id" field.
@@ -3616,35 +3497,6 @@ func HasScope() predicate.Finding {
 func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.Finding {
 	return predicate.Finding(func(s *sql.Selector) {
 		step := newScopeStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Finding
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasFindingSeverityLevel applies the HasEdge predicate on the "finding_severity_level" edge.
-func HasFindingSeverityLevel() predicate.Finding {
-	return predicate.Finding(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, FindingSeverityLevelTable, FindingSeverityLevelColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Finding
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasFindingSeverityLevelWith applies the HasEdge predicate on the "finding_severity_level" edge with a given conditions (other predicates).
-func HasFindingSeverityLevelWith(preds ...predicate.CustomTypeEnum) predicate.Finding {
-	return predicate.Finding(func(s *sql.Selector) {
-		step := newFindingSeverityLevelStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.CustomTypeEnum
 		step.Edge.Schema = schemaConfig.Finding

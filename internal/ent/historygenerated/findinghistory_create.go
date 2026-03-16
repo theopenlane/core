@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
 	"github.com/theopenlane/entx/history"
@@ -266,34 +267,6 @@ func (_c *FindingHistoryCreate) SetNillableScopeID(v *string) *FindingHistoryCre
 	return _c
 }
 
-// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
-func (_c *FindingHistoryCreate) SetFindingSeverityLevelName(v string) *FindingHistoryCreate {
-	_c.mutation.SetFindingSeverityLevelName(v)
-	return _c
-}
-
-// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
-func (_c *FindingHistoryCreate) SetNillableFindingSeverityLevelName(v *string) *FindingHistoryCreate {
-	if v != nil {
-		_c.SetFindingSeverityLevelName(*v)
-	}
-	return _c
-}
-
-// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
-func (_c *FindingHistoryCreate) SetFindingSeverityLevelID(v string) *FindingHistoryCreate {
-	_c.mutation.SetFindingSeverityLevelID(v)
-	return _c
-}
-
-// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
-func (_c *FindingHistoryCreate) SetNillableFindingSeverityLevelID(v *string) *FindingHistoryCreate {
-	if v != nil {
-		_c.SetFindingSeverityLevelID(*v)
-	}
-	return _c
-}
-
 // SetFindingStatusName sets the "finding_status_name" field.
 func (_c *FindingHistoryCreate) SetFindingStatusName(v string) *FindingHistoryCreate {
 	_c.mutation.SetFindingStatusName(v)
@@ -332,6 +305,20 @@ func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
 func (_c *FindingHistoryCreate) SetNillableExternalID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_c *FindingHistoryCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingHistoryCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
 	}
 	return _c
 }
@@ -910,6 +897,11 @@ func (_c *FindingHistoryCreate) check() error {
 	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`historygenerated: missing required field "FindingHistory.display_id"`)}
 	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := findinghistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "FindingHistory.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1022,14 +1014,6 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
 	}
-	if value, ok := _c.mutation.FindingSeverityLevelName(); ok {
-		_spec.SetField(findinghistory.FieldFindingSeverityLevelName, field.TypeString, value)
-		_node.FindingSeverityLevelName = value
-	}
-	if value, ok := _c.mutation.FindingSeverityLevelID(); ok {
-		_spec.SetField(findinghistory.FieldFindingSeverityLevelID, field.TypeString, value)
-		_node.FindingSeverityLevelID = value
-	}
 	if value, ok := _c.mutation.FindingStatusName(); ok {
 		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
 		_node.FindingStatusName = value
@@ -1041,6 +1025,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)
+		_node.SecurityLevel = value
 	}
 	if value, ok := _c.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(findinghistory.FieldExternalOwnerID, field.TypeString, value)

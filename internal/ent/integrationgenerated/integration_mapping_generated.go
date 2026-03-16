@@ -87,6 +87,7 @@ const (
 	IntegrationMappingVulnerabilityScopeID = "scopeID"
 	IntegrationMappingVulnerabilityScopeName = "scopeName"
 	IntegrationMappingVulnerabilityScore = "score"
+	IntegrationMappingVulnerabilitySecurityLevel = "securityLevel"
 	IntegrationMappingVulnerabilitySeverity = "severity"
 	IntegrationMappingVulnerabilitySource = "source"
 	IntegrationMappingVulnerabilitySourceUpdatedAt = "sourceUpdatedAt"
@@ -96,8 +97,6 @@ const (
 	IntegrationMappingVulnerabilityTags = "tags"
 	IntegrationMappingVulnerabilityValidated = "validated"
 	IntegrationMappingVulnerabilityVector = "vector"
-	IntegrationMappingVulnerabilityVulnerabilitySeverityLevelID = "vulnerabilitySeverityLevelID"
-	IntegrationMappingVulnerabilityVulnerabilitySeverityLevelName = "vulnerabilitySeverityLevelName"
 	IntegrationMappingVulnerabilityVulnerabilityStatusID = "vulnerabilityStatusID"
 	IntegrationMappingVulnerabilityVulnerabilityStatusName = "vulnerabilityStatusName"
 )
@@ -555,6 +554,13 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				UpsertKey: false,
 			},
 			{
+				InputKey: "securityLevel",
+				EntField: "security_level",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+			},
+			{
 				InputKey: "severity",
 				EntField: "severity",
 				Type: "string",
@@ -618,20 +624,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				UpsertKey: false,
 			},
 			{
-				InputKey: "vulnerabilitySeverityLevelID",
-				EntField: "vulnerability_severity_level_id",
-				Type: "string",
-				Required: false,
-				UpsertKey: false,
-			},
-			{
-				InputKey: "vulnerabilitySeverityLevelName",
-				EntField: "vulnerability_severity_level_name",
-				Type: "string",
-				Required: false,
-				UpsertKey: false,
-			},
-			{
 				InputKey: "vulnerabilityStatusID",
 				EntField: "vulnerability_status_id",
 				Type: "string",
@@ -674,6 +666,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"scopeID": {},
 			"scopeName": {},
 			"score": {},
+			"securityLevel": {},
 			"severity": {},
 			"source": {},
 			"sourceUpdatedAt": {},
@@ -683,8 +676,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"tags": {},
 			"validated": {},
 			"vector": {},
-			"vulnerabilitySeverityLevelID": {},
-			"vulnerabilitySeverityLevelName": {},
 			"vulnerabilityStatusID": {},
 			"vulnerabilityStatusName": {},
 		},

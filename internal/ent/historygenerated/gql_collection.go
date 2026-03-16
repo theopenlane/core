@@ -5500,16 +5500,6 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldScopeID)
 				fieldSeen[findinghistory.FieldScopeID] = struct{}{}
 			}
-		case "findingSeverityLevelName":
-			if _, ok := fieldSeen[findinghistory.FieldFindingSeverityLevelName]; !ok {
-				selectedFields = append(selectedFields, findinghistory.FieldFindingSeverityLevelName)
-				fieldSeen[findinghistory.FieldFindingSeverityLevelName] = struct{}{}
-			}
-		case "findingSeverityLevelID":
-			if _, ok := fieldSeen[findinghistory.FieldFindingSeverityLevelID]; !ok {
-				selectedFields = append(selectedFields, findinghistory.FieldFindingSeverityLevelID)
-				fieldSeen[findinghistory.FieldFindingSeverityLevelID] = struct{}{}
-			}
 		case "findingStatusName":
 			if _, ok := fieldSeen[findinghistory.FieldFindingStatusName]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldFindingStatusName)
@@ -5524,6 +5514,11 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[findinghistory.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldExternalID)
 				fieldSeen[findinghistory.FieldExternalID] = struct{}{}
+			}
+		case "securityLevel":
+			if _, ok := fieldSeen[findinghistory.FieldSecurityLevel]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldSecurityLevel)
+				fieldSeen[findinghistory.FieldSecurityLevel] = struct{}{}
 			}
 		case "externalOwnerID":
 			if _, ok := fieldSeen[findinghistory.FieldExternalOwnerID]; !ok {
@@ -14819,16 +14814,6 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldScopeID)
 				fieldSeen[vulnerabilityhistory.FieldScopeID] = struct{}{}
 			}
-		case "vulnerabilitySeverityLevelName":
-			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelName]; !ok {
-				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilitySeverityLevelName)
-				fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelName] = struct{}{}
-			}
-		case "vulnerabilitySeverityLevelID":
-			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelID]; !ok {
-				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilitySeverityLevelID)
-				fieldSeen[vulnerabilityhistory.FieldVulnerabilitySeverityLevelID] = struct{}{}
-			}
 		case "vulnerabilityStatusName":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldVulnerabilityStatusName]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldVulnerabilityStatusName)
@@ -14843,6 +14828,11 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldExternalOwnerID)
 				fieldSeen[vulnerabilityhistory.FieldExternalOwnerID] = struct{}{}
+			}
+		case "securityLevel":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldSecurityLevel]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldSecurityLevel)
+				fieldSeen[vulnerabilityhistory.FieldSecurityLevel] = struct{}{}
 			}
 		case "externalID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldExternalID]; !ok {

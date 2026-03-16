@@ -13555,14 +13555,6 @@ type FindingHistory implements Node {
 	"""
 	scopeID: String
 	"""
-	the severity_level of the finding
-	"""
-	findingSeverityLevelName: String
-	"""
-	the severity_level of the finding
-	"""
-	findingSeverityLevelID: String
-	"""
 	the status of the finding
 	"""
 	findingStatusName: String
@@ -13574,6 +13566,10 @@ type FindingHistory implements Node {
 	external identifier from the integration source for the finding
 	"""
 	externalID: String
+	"""
+	incoming source severity
+	"""
+	securityLevel: FindingHistorySecurityLevel
 	"""
 	the owner of the finding
 	"""
@@ -13778,9 +13774,20 @@ enum FindingHistoryOrderField {
 	created_at
 	updated_at
 	external_id
+	security_level
 	external_owner_id
 	category
 	severity
+}
+"""
+FindingHistorySecurityLevel is enum for the field security_level
+"""
+enum FindingHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+	NONE
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
 }
 """
 FindingHistoryWhereInput is used for filtering FindingHistory objects.
@@ -14051,42 +14058,6 @@ input FindingHistoryWhereInput {
 	scopeIDEqualFold: String
 	scopeIDContainsFold: String
 	"""
-	finding_severity_level_name field predicates
-	"""
-	findingSeverityLevelName: String
-	findingSeverityLevelNameNEQ: String
-	findingSeverityLevelNameIn: [String!]
-	findingSeverityLevelNameNotIn: [String!]
-	findingSeverityLevelNameGT: String
-	findingSeverityLevelNameGTE: String
-	findingSeverityLevelNameLT: String
-	findingSeverityLevelNameLTE: String
-	findingSeverityLevelNameContains: String
-	findingSeverityLevelNameHasPrefix: String
-	findingSeverityLevelNameHasSuffix: String
-	findingSeverityLevelNameIsNil: Boolean
-	findingSeverityLevelNameNotNil: Boolean
-	findingSeverityLevelNameEqualFold: String
-	findingSeverityLevelNameContainsFold: String
-	"""
-	finding_severity_level_id field predicates
-	"""
-	findingSeverityLevelID: String
-	findingSeverityLevelIDNEQ: String
-	findingSeverityLevelIDIn: [String!]
-	findingSeverityLevelIDNotIn: [String!]
-	findingSeverityLevelIDGT: String
-	findingSeverityLevelIDGTE: String
-	findingSeverityLevelIDLT: String
-	findingSeverityLevelIDLTE: String
-	findingSeverityLevelIDContains: String
-	findingSeverityLevelIDHasPrefix: String
-	findingSeverityLevelIDHasSuffix: String
-	findingSeverityLevelIDIsNil: Boolean
-	findingSeverityLevelIDNotNil: Boolean
-	findingSeverityLevelIDEqualFold: String
-	findingSeverityLevelIDContainsFold: String
-	"""
 	finding_status_name field predicates
 	"""
 	findingStatusName: String
@@ -14140,6 +14111,15 @@ input FindingHistoryWhereInput {
 	externalIDNotNil: Boolean
 	externalIDEqualFold: String
 	externalIDContainsFold: String
+	"""
+	security_level field predicates
+	"""
+	securityLevel: FindingHistorySecurityLevel
+	securityLevelNEQ: FindingHistorySecurityLevel
+	securityLevelIn: [FindingHistorySecurityLevel!]
+	securityLevelNotIn: [FindingHistorySecurityLevel!]
+	securityLevelIsNil: Boolean
+	securityLevelNotNil: Boolean
 	"""
 	external_owner_id field predicates
 	"""
@@ -29682,6 +29662,7 @@ enum SLADefinitionHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	sla_days
 }
 """
 SLADefinitionHistoryWhereInput is used for filtering SLADefinitionHistory objects.
@@ -38418,14 +38399,6 @@ type VulnerabilityHistory implements Node {
 	"""
 	scopeID: String
 	"""
-	the severity_level of the vulnerability
-	"""
-	vulnerabilitySeverityLevelName: String
-	"""
-	the severity_level of the vulnerability
-	"""
-	vulnerabilitySeverityLevelID: String
-	"""
 	the status of the vulnerability
 	"""
 	vulnerabilityStatusName: String
@@ -38437,6 +38410,10 @@ type VulnerabilityHistory implements Node {
 	owner of the vulnerability
 	"""
 	externalOwnerID: String
+	"""
+	incoming source severity
+	"""
+	securityLevel: VulnerabilityHistorySecurityLevel
 	"""
 	external identifier from the integration source for the vulnerability
 	"""
@@ -38609,10 +38586,21 @@ enum VulnerabilityHistoryOrderField {
 	created_at
 	updated_at
 	external_owner_id
+	security_level
 	external_id
 	cve_id
 	category
 	severity
+}
+"""
+VulnerabilityHistorySecurityLevel is enum for the field security_level
+"""
+enum VulnerabilityHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+	NONE
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
 }
 """
 VulnerabilityHistoryWhereInput is used for filtering VulnerabilityHistory objects.
@@ -38883,42 +38871,6 @@ input VulnerabilityHistoryWhereInput {
 	scopeIDEqualFold: String
 	scopeIDContainsFold: String
 	"""
-	vulnerability_severity_level_name field predicates
-	"""
-	vulnerabilitySeverityLevelName: String
-	vulnerabilitySeverityLevelNameNEQ: String
-	vulnerabilitySeverityLevelNameIn: [String!]
-	vulnerabilitySeverityLevelNameNotIn: [String!]
-	vulnerabilitySeverityLevelNameGT: String
-	vulnerabilitySeverityLevelNameGTE: String
-	vulnerabilitySeverityLevelNameLT: String
-	vulnerabilitySeverityLevelNameLTE: String
-	vulnerabilitySeverityLevelNameContains: String
-	vulnerabilitySeverityLevelNameHasPrefix: String
-	vulnerabilitySeverityLevelNameHasSuffix: String
-	vulnerabilitySeverityLevelNameIsNil: Boolean
-	vulnerabilitySeverityLevelNameNotNil: Boolean
-	vulnerabilitySeverityLevelNameEqualFold: String
-	vulnerabilitySeverityLevelNameContainsFold: String
-	"""
-	vulnerability_severity_level_id field predicates
-	"""
-	vulnerabilitySeverityLevelID: String
-	vulnerabilitySeverityLevelIDNEQ: String
-	vulnerabilitySeverityLevelIDIn: [String!]
-	vulnerabilitySeverityLevelIDNotIn: [String!]
-	vulnerabilitySeverityLevelIDGT: String
-	vulnerabilitySeverityLevelIDGTE: String
-	vulnerabilitySeverityLevelIDLT: String
-	vulnerabilitySeverityLevelIDLTE: String
-	vulnerabilitySeverityLevelIDContains: String
-	vulnerabilitySeverityLevelIDHasPrefix: String
-	vulnerabilitySeverityLevelIDHasSuffix: String
-	vulnerabilitySeverityLevelIDIsNil: Boolean
-	vulnerabilitySeverityLevelIDNotNil: Boolean
-	vulnerabilitySeverityLevelIDEqualFold: String
-	vulnerabilitySeverityLevelIDContainsFold: String
-	"""
 	vulnerability_status_name field predicates
 	"""
 	vulnerabilityStatusName: String
@@ -38972,6 +38924,15 @@ input VulnerabilityHistoryWhereInput {
 	externalOwnerIDNotNil: Boolean
 	externalOwnerIDEqualFold: String
 	externalOwnerIDContainsFold: String
+	"""
+	security_level field predicates
+	"""
+	securityLevel: VulnerabilityHistorySecurityLevel
+	securityLevelNEQ: VulnerabilityHistorySecurityLevel
+	securityLevelIn: [VulnerabilityHistorySecurityLevel!]
+	securityLevelNotIn: [VulnerabilityHistorySecurityLevel!]
+	securityLevelIsNil: Boolean
+	securityLevelNotNil: Boolean
 	"""
 	external_id field predicates
 	"""

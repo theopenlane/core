@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
@@ -245,46 +246,6 @@ func (_u *FindingHistoryUpdate) ClearScopeID() *FindingHistoryUpdate {
 	return _u
 }
 
-// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
-func (_u *FindingHistoryUpdate) SetFindingSeverityLevelName(v string) *FindingHistoryUpdate {
-	_u.mutation.SetFindingSeverityLevelName(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
-func (_u *FindingHistoryUpdate) SetNillableFindingSeverityLevelName(v *string) *FindingHistoryUpdate {
-	if v != nil {
-		_u.SetFindingSeverityLevelName(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelName clears the value of the "finding_severity_level_name" field.
-func (_u *FindingHistoryUpdate) ClearFindingSeverityLevelName() *FindingHistoryUpdate {
-	_u.mutation.ClearFindingSeverityLevelName()
-	return _u
-}
-
-// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
-func (_u *FindingHistoryUpdate) SetFindingSeverityLevelID(v string) *FindingHistoryUpdate {
-	_u.mutation.SetFindingSeverityLevelID(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
-func (_u *FindingHistoryUpdate) SetNillableFindingSeverityLevelID(v *string) *FindingHistoryUpdate {
-	if v != nil {
-		_u.SetFindingSeverityLevelID(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelID clears the value of the "finding_severity_level_id" field.
-func (_u *FindingHistoryUpdate) ClearFindingSeverityLevelID() *FindingHistoryUpdate {
-	_u.mutation.ClearFindingSeverityLevelID()
-	return _u
-}
-
 // SetFindingStatusName sets the "finding_status_name" field.
 func (_u *FindingHistoryUpdate) SetFindingStatusName(v string) *FindingHistoryUpdate {
 	_u.mutation.SetFindingStatusName(v)
@@ -342,6 +303,26 @@ func (_u *FindingHistoryUpdate) SetNillableExternalID(v *string) *FindingHistory
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingHistoryUpdate) ClearExternalID() *FindingHistoryUpdate {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingHistoryUpdate) SetSecurityLevel(v enums.SecurityLevel) *FindingHistoryUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingHistoryUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingHistoryUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingHistoryUpdate) ClearSecurityLevel() *FindingHistoryUpdate {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -1115,6 +1096,16 @@ func (_u *FindingHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingHistoryUpdate) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := findinghistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "FindingHistory.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1122,6 +1113,9 @@ func (_u *FindingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) 
 }
 
 func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(findinghistory.Table, findinghistory.Columns, sqlgraph.NewFieldSpec(findinghistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1216,18 +1210,6 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(findinghistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FindingSeverityLevelName(); ok {
-		_spec.SetField(findinghistory.FieldFindingSeverityLevelName, field.TypeString, value)
-	}
-	if _u.mutation.FindingSeverityLevelNameCleared() {
-		_spec.ClearField(findinghistory.FieldFindingSeverityLevelName, field.TypeString)
-	}
-	if value, ok := _u.mutation.FindingSeverityLevelID(); ok {
-		_spec.SetField(findinghistory.FieldFindingSeverityLevelID, field.TypeString, value)
-	}
-	if _u.mutation.FindingSeverityLevelIDCleared() {
-		_spec.ClearField(findinghistory.FieldFindingSeverityLevelID, field.TypeString)
-	}
 	if value, ok := _u.mutation.FindingStatusName(); ok {
 		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
 	}
@@ -1245,6 +1227,12 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(findinghistory.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(findinghistory.FieldExternalOwnerID, field.TypeString, value)
@@ -1731,46 +1719,6 @@ func (_u *FindingHistoryUpdateOne) ClearScopeID() *FindingHistoryUpdateOne {
 	return _u
 }
 
-// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
-func (_u *FindingHistoryUpdateOne) SetFindingSeverityLevelName(v string) *FindingHistoryUpdateOne {
-	_u.mutation.SetFindingSeverityLevelName(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
-func (_u *FindingHistoryUpdateOne) SetNillableFindingSeverityLevelName(v *string) *FindingHistoryUpdateOne {
-	if v != nil {
-		_u.SetFindingSeverityLevelName(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelName clears the value of the "finding_severity_level_name" field.
-func (_u *FindingHistoryUpdateOne) ClearFindingSeverityLevelName() *FindingHistoryUpdateOne {
-	_u.mutation.ClearFindingSeverityLevelName()
-	return _u
-}
-
-// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
-func (_u *FindingHistoryUpdateOne) SetFindingSeverityLevelID(v string) *FindingHistoryUpdateOne {
-	_u.mutation.SetFindingSeverityLevelID(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
-func (_u *FindingHistoryUpdateOne) SetNillableFindingSeverityLevelID(v *string) *FindingHistoryUpdateOne {
-	if v != nil {
-		_u.SetFindingSeverityLevelID(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelID clears the value of the "finding_severity_level_id" field.
-func (_u *FindingHistoryUpdateOne) ClearFindingSeverityLevelID() *FindingHistoryUpdateOne {
-	_u.mutation.ClearFindingSeverityLevelID()
-	return _u
-}
-
 // SetFindingStatusName sets the "finding_status_name" field.
 func (_u *FindingHistoryUpdateOne) SetFindingStatusName(v string) *FindingHistoryUpdateOne {
 	_u.mutation.SetFindingStatusName(v)
@@ -1828,6 +1776,26 @@ func (_u *FindingHistoryUpdateOne) SetNillableExternalID(v *string) *FindingHist
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingHistoryUpdateOne) ClearExternalID() *FindingHistoryUpdateOne {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingHistoryUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *FindingHistoryUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingHistoryUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingHistoryUpdateOne) ClearSecurityLevel() *FindingHistoryUpdateOne {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -2614,6 +2582,16 @@ func (_u *FindingHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := findinghistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "FindingHistory.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -2621,6 +2599,9 @@ func (_u *FindingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder
 }
 
 func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(findinghistory.Table, findinghistory.Columns, sqlgraph.NewFieldSpec(findinghistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -2732,18 +2713,6 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(findinghistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FindingSeverityLevelName(); ok {
-		_spec.SetField(findinghistory.FieldFindingSeverityLevelName, field.TypeString, value)
-	}
-	if _u.mutation.FindingSeverityLevelNameCleared() {
-		_spec.ClearField(findinghistory.FieldFindingSeverityLevelName, field.TypeString)
-	}
-	if value, ok := _u.mutation.FindingSeverityLevelID(); ok {
-		_spec.SetField(findinghistory.FieldFindingSeverityLevelID, field.TypeString, value)
-	}
-	if _u.mutation.FindingSeverityLevelIDCleared() {
-		_spec.ClearField(findinghistory.FieldFindingSeverityLevelID, field.TypeString)
-	}
 	if value, ok := _u.mutation.FindingStatusName(); ok {
 		_spec.SetField(findinghistory.FieldFindingStatusName, field.TypeString, value)
 	}
@@ -2761,6 +2730,12 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(findinghistory.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(findinghistory.FieldExternalOwnerID, field.TypeString, value)

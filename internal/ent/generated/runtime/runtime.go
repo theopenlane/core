@@ -2961,7 +2961,7 @@ func init() {
 	findingMixinHooks8 := findingMixin[8].Hooks()
 	findingMixinHooks9 := findingMixin[9].Hooks()
 	findingMixinHooks10 := findingMixin[10].Hooks()
-	findingMixinHooks11 := findingMixin[11].Hooks()
+	findingHooks := schema.Finding{}.Hooks()
 
 	finding.Hooks[1] = findingMixinHooks0[0]
 
@@ -2989,7 +2989,7 @@ func init() {
 
 	finding.Hooks[13] = findingMixinHooks10[0]
 
-	finding.Hooks[14] = findingMixinHooks11[0]
+	finding.Hooks[14] = findingHooks[0]
 	findingMixinInters1 := findingMixin[1].Interceptors()
 	findingMixinInters5 := findingMixin[5].Interceptors()
 	finding.Interceptors[0] = findingMixinInters1[0]
@@ -3034,23 +3034,23 @@ func init() {
 	// finding.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	finding.DefaultSystemOwned = findingDescSystemOwned.Default.(bool)
 	// findingDescCategories is the schema descriptor for categories field.
-	findingDescCategories := findingFields[7].Descriptor()
+	findingDescCategories := findingFields[8].Descriptor()
 	// finding.DefaultCategories holds the default value on creation for the categories field.
 	finding.DefaultCategories = findingDescCategories.Default.([]string)
 	// findingDescOpen is the schema descriptor for open field.
-	findingDescOpen := findingFields[15].Descriptor()
+	findingDescOpen := findingFields[16].Descriptor()
 	// finding.DefaultOpen holds the default value on creation for the open field.
 	finding.DefaultOpen = findingDescOpen.Default.(bool)
 	// findingDescReferences is the schema descriptor for references field.
-	findingDescReferences := findingFields[24].Descriptor()
+	findingDescReferences := findingFields[25].Descriptor()
 	// finding.DefaultReferences holds the default value on creation for the references field.
 	finding.DefaultReferences = findingDescReferences.Default.([]string)
 	// findingDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findingDescStepsToReproduce := findingFields[25].Descriptor()
+	findingDescStepsToReproduce := findingFields[26].Descriptor()
 	// finding.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	finding.DefaultStepsToReproduce = findingDescStepsToReproduce.Default.([]string)
 	// findingDescTargets is the schema descriptor for targets field.
-	findingDescTargets := findingFields[26].Descriptor()
+	findingDescTargets := findingFields[27].Descriptor()
 	// finding.DefaultTargets holds the default value on creation for the targets field.
 	finding.DefaultTargets = findingDescTargets.Default.([]string)
 	// findingDescID is the schema descriptor for id field.
@@ -8443,7 +8443,7 @@ func init() {
 	vulnerabilityMixinHooks8 := vulnerabilityMixin[8].Hooks()
 	vulnerabilityMixinHooks9 := vulnerabilityMixin[9].Hooks()
 	vulnerabilityMixinHooks10 := vulnerabilityMixin[10].Hooks()
-	vulnerabilityMixinHooks11 := vulnerabilityMixin[11].Hooks()
+	vulnerabilityHooks := schema.Vulnerability{}.Hooks()
 
 	vulnerability.Hooks[1] = vulnerabilityMixinHooks0[0]
 
@@ -8471,7 +8471,7 @@ func init() {
 
 	vulnerability.Hooks[13] = vulnerabilityMixinHooks10[0]
 
-	vulnerability.Hooks[14] = vulnerabilityMixinHooks11[0]
+	vulnerability.Hooks[14] = vulnerabilityHooks[0]
 	vulnerabilityMixinInters1 := vulnerabilityMixin[1].Interceptors()
 	vulnerabilityMixinInters5 := vulnerabilityMixin[5].Interceptors()
 	vulnerability.Interceptors[0] = vulnerabilityMixinInters1[0]
@@ -8516,23 +8516,23 @@ func init() {
 	// vulnerability.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerability.DefaultSystemOwned = vulnerabilityDescSystemOwned.Default.(bool)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.
-	vulnerabilityDescExternalID := vulnerabilityFields[1].Descriptor()
+	vulnerabilityDescExternalID := vulnerabilityFields[2].Descriptor()
 	// vulnerability.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	vulnerability.ExternalIDValidator = vulnerabilityDescExternalID.Validators[0].(func(string) error)
 	// vulnerabilityDescOpen is the schema descriptor for open field.
-	vulnerabilityDescOpen := vulnerabilityFields[16].Descriptor()
+	vulnerabilityDescOpen := vulnerabilityFields[17].Descriptor()
 	// vulnerability.DefaultOpen holds the default value on creation for the open field.
 	vulnerability.DefaultOpen = vulnerabilityDescOpen.Default.(bool)
 	// vulnerabilityDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityDescBlocking := vulnerabilityFields[17].Descriptor()
+	vulnerabilityDescBlocking := vulnerabilityFields[18].Descriptor()
 	// vulnerability.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerability.DefaultBlocking = vulnerabilityDescBlocking.Default.(bool)
 	// vulnerabilityDescReferences is the schema descriptor for references field.
-	vulnerabilityDescReferences := vulnerabilityFields[21].Descriptor()
+	vulnerabilityDescReferences := vulnerabilityFields[22].Descriptor()
 	// vulnerability.DefaultReferences holds the default value on creation for the references field.
 	vulnerability.DefaultReferences = vulnerabilityDescReferences.Default.([]string)
 	// vulnerabilityDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityDescImpacts := vulnerabilityFields[22].Descriptor()
+	vulnerabilityDescImpacts := vulnerabilityFields[23].Descriptor()
 	// vulnerability.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerability.DefaultImpacts = vulnerabilityDescImpacts.Default.([]string)
 	// vulnerabilityDescID is the schema descriptor for id field.

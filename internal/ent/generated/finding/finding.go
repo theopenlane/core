@@ -3,11 +3,14 @@
 package finding
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -47,16 +50,14 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
-	// FieldFindingSeverityLevelName holds the string denoting the finding_severity_level_name field in the database.
-	FieldFindingSeverityLevelName = "finding_severity_level_name"
-	// FieldFindingSeverityLevelID holds the string denoting the finding_severity_level_id field in the database.
-	FieldFindingSeverityLevelID = "finding_severity_level_id"
 	// FieldFindingStatusName holds the string denoting the finding_status_name field in the database.
 	FieldFindingStatusName = "finding_status_name"
 	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
 	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
+	// FieldSecurityLevel holds the string denoting the security_level field in the database.
+	FieldSecurityLevel = "security_level"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
 	FieldExternalOwnerID = "external_owner_id"
 	// FieldSource holds the string denoting the source field in the database.
@@ -141,8 +142,6 @@ const (
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
 	EdgeScope = "scope"
-	// EdgeFindingSeverityLevel holds the string denoting the finding_severity_level edge name in mutations.
-	EdgeFindingSeverityLevel = "finding_severity_level"
 	// EdgeFindingStatus holds the string denoting the finding_status edge name in mutations.
 	EdgeFindingStatus = "finding_status"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
@@ -227,13 +226,6 @@ const (
 	ScopeInverseTable = "custom_type_enums"
 	// ScopeColumn is the table column denoting the scope relation/edge.
 	ScopeColumn = "scope_id"
-	// FindingSeverityLevelTable is the table that holds the finding_severity_level relation/edge.
-	FindingSeverityLevelTable = "findings"
-	// FindingSeverityLevelInverseTable is the table name for the CustomTypeEnum entity.
-	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
-	FindingSeverityLevelInverseTable = "custom_type_enums"
-	// FindingSeverityLevelColumn is the table column denoting the finding_severity_level relation/edge.
-	FindingSeverityLevelColumn = "finding_severity_level_id"
 	// FindingStatusTable is the table that holds the finding_status relation/edge.
 	FindingStatusTable = "findings"
 	// FindingStatusInverseTable is the table name for the CustomTypeEnum entity.
@@ -385,11 +377,10 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
-	FieldFindingSeverityLevelName,
-	FieldFindingSeverityLevelID,
 	FieldFindingStatusName,
 	FieldFindingStatusID,
 	FieldExternalID,
+	FieldSecurityLevel,
 	FieldExternalOwnerID,
 	FieldSource,
 	FieldResourceName,
@@ -506,6 +497,16 @@ var (
 	DefaultID func() string
 )
 
+// SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
+func SecurityLevelValidator(sl enums.SecurityLevel) error {
+	switch sl.String() {
+	case "NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("finding: invalid enum value for security_level field: %q", sl)
+	}
+}
+
 // OrderOption defines the ordering options for the Finding queries.
 type OrderOption func(*sql.Selector)
 
@@ -589,16 +590,6 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
-// ByFindingSeverityLevelName orders the results by the finding_severity_level_name field.
-func ByFindingSeverityLevelName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFindingSeverityLevelName, opts...).ToFunc()
-}
-
-// ByFindingSeverityLevelID orders the results by the finding_severity_level_id field.
-func ByFindingSeverityLevelID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFindingSeverityLevelID, opts...).ToFunc()
-}
-
 // ByFindingStatusName orders the results by the finding_status_name field.
 func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFindingStatusName, opts...).ToFunc()
@@ -612,6 +603,11 @@ func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// BySecurityLevel orders the results by the security_level field.
+func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityLevel, opts...).ToFunc()
 }
 
 // ByExternalOwnerID orders the results by the external_owner_id field.
@@ -819,13 +815,6 @@ func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByFindingSeverityLevelField orders the results by finding_severity_level field.
-func ByFindingSeverityLevelField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFindingSeverityLevelStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1143,13 +1132,6 @@ func newScopeStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 	)
 }
-func newFindingSeverityLevelStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FindingSeverityLevelInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, FindingSeverityLevelTable, FindingSeverityLevelColumn),
-	)
-}
 func newFindingStatusStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1290,3 +1272,10 @@ func newControlMappingsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, true, ControlMappingsTable, ControlMappingsColumn),
 	)
 }
+
+var (
+	// enums.SecurityLevel must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SecurityLevel)(nil)
+	// enums.SecurityLevel must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SecurityLevel)(nil)
+)

@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
 	"github.com/theopenlane/entx/history"
@@ -60,16 +61,14 @@ type FindingHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the finding
 	ScopeID string `json:"scope_id,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelName string `json:"finding_severity_level_name,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelID string `json:"finding_severity_level_id,omitempty"`
 	// the status of the finding
 	FindingStatusName string `json:"finding_status_name,omitempty"`
 	// the status of the finding
 	FindingStatusID string `json:"finding_status_id,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
+	// incoming source severity
+	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -162,7 +161,7 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case findinghistory.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingSeverityLevelName, findinghistory.FieldFindingSeverityLevelID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldStatus, findinghistory.FieldExternalURI:
+		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldStatus, findinghistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case findinghistory.FieldHistoryTime, findinghistory.FieldCreatedAt, findinghistory.FieldUpdatedAt, findinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -305,18 +304,6 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
-		case findinghistory.FieldFindingSeverityLevelName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_severity_level_name", values[i])
-			} else if value.Valid {
-				_m.FindingSeverityLevelName = value.String
-			}
-		case findinghistory.FieldFindingSeverityLevelID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_severity_level_id", values[i])
-			} else if value.Valid {
-				_m.FindingSeverityLevelID = value.String
-			}
 		case findinghistory.FieldFindingStatusName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_status_name", values[i])
@@ -334,6 +321,12 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
 			} else if value.Valid {
 				_m.ExternalID = value.String
+			}
+		case findinghistory.FieldSecurityLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_level", values[i])
+			} else if value.Valid {
+				_m.SecurityLevel = enums.SecurityLevel(value.String)
 			}
 		case findinghistory.FieldExternalOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -665,12 +658,6 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
-	builder.WriteString("finding_severity_level_name=")
-	builder.WriteString(_m.FindingSeverityLevelName)
-	builder.WriteString(", ")
-	builder.WriteString("finding_severity_level_id=")
-	builder.WriteString(_m.FindingSeverityLevelID)
-	builder.WriteString(", ")
 	builder.WriteString("finding_status_name=")
 	builder.WriteString(_m.FindingStatusName)
 	builder.WriteString(", ")
@@ -679,6 +666,9 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	builder.WriteString("security_level=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
 	builder.WriteString(", ")
 	builder.WriteString("external_owner_id=")
 	builder.WriteString(_m.ExternalOwnerID)

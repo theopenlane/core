@@ -2652,9 +2652,9 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "finding_severity_level_name", Type: field.TypeString, Nullable: true},
 		{Name: "finding_status_name", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "security_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "resource_name", Type: field.TypeString, Nullable: true},
@@ -2693,7 +2693,6 @@ var (
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "finding_severity_level_id", Type: field.TypeString, Nullable: true},
 		{Name: "finding_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_findings", Type: field.TypeString, Nullable: true},
@@ -2719,38 +2718,32 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_custom_type_enums_finding_severity_level",
+				Symbol:     "findings_custom_type_enums_finding_status",
 				Columns:    []*schema.Column{FindingsColumns[55]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_custom_type_enums_finding_status",
-				Columns:    []*schema.Column{FindingsColumns[56]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "findings_organizations_findings",
-				Columns:    []*schema.Column{FindingsColumns[57]},
+				Columns:    []*schema.Column{FindingsColumns[56]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "findings_remediations_findings",
-				Columns:    []*schema.Column{FindingsColumns[58]},
+				Columns:    []*schema.Column{FindingsColumns[57]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "findings_reviews_findings",
-				Columns:    []*schema.Column{FindingsColumns[59]},
+				Columns:    []*schema.Column{FindingsColumns[58]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "findings_vulnerabilities_findings",
-				Columns:    []*schema.Column{FindingsColumns[60]},
+				Columns:    []*schema.Column{FindingsColumns[59]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2759,12 +2752,12 @@ var (
 			{
 				Name:    "finding_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FindingsColumns[7], FindingsColumns[57]},
+				Columns: []*schema.Column{FindingsColumns[7], FindingsColumns[56]},
 			},
 			{
 				Name:    "finding_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{FindingsColumns[57]},
+				Columns: []*schema.Column{FindingsColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2772,7 +2765,7 @@ var (
 			{
 				Name:    "finding_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FindingsColumns[16], FindingsColumns[17], FindingsColumns[57]},
+				Columns: []*schema.Column{FindingsColumns[15], FindingsColumns[17], FindingsColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7833,9 +7826,9 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "vulnerability_severity_level_name", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_status_name", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "security_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"}},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "cve_id", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
@@ -7870,7 +7863,6 @@ var (
 		{Name: "review_vulnerabilities", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "vulnerability_severity_level_id", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_status_id", Type: field.TypeString, Nullable: true},
 	}
 	// VulnerabilitiesTable holds the schema information for the "vulnerabilities" table.
@@ -7916,14 +7908,8 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "vulnerabilities_custom_type_enums_vulnerability_severity_level",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[51]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "vulnerabilities_custom_type_enums_vulnerability_status",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[52]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[51]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -13340,11 +13326,10 @@ func init() {
 	FindingsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	FindingsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	FindingsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	FindingsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
-	FindingsTable.ForeignKeys[4].RefTable = OrganizationsTable
-	FindingsTable.ForeignKeys[5].RefTable = RemediationsTable
-	FindingsTable.ForeignKeys[6].RefTable = ReviewsTable
-	FindingsTable.ForeignKeys[7].RefTable = VulnerabilitiesTable
+	FindingsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	FindingsTable.ForeignKeys[4].RefTable = RemediationsTable
+	FindingsTable.ForeignKeys[5].RefTable = ReviewsTable
+	FindingsTable.ForeignKeys[6].RefTable = VulnerabilitiesTable
 	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
@@ -13690,7 +13675,6 @@ func init() {
 	VulnerabilitiesTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
 	VulnerabilitiesTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
 	VulnerabilitiesTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
-	VulnerabilitiesTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
 	WorkflowAssignmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	WorkflowAssignmentsTable.ForeignKeys[1].RefTable = WorkflowInstancesTable

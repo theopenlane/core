@@ -1309,10 +1309,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "finding_severity_level": {
-	ObjectType:      "finding_severity_level",
-	SkipEditCheck:   true,
-	CheckViewAccess: false,
 }, "finding_status": {
 	ObjectType:      "finding_status",
 	SkipEditCheck:   true,
@@ -4165,10 +4161,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "scope": {
 	ObjectType:      "scope",
-	SkipEditCheck:   true,
-	CheckViewAccess: false,
-}, "vulnerability_severity_level": {
-	ObjectType:      "vulnerability_severity_level",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "vulnerability_status": {

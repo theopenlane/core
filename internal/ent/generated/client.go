@@ -11489,25 +11489,6 @@ func (c *FindingClient) QueryScope(_m *Finding) *CustomTypeEnumQuery {
 	return query
 }
 
-// QueryFindingSeverityLevel queries the finding_severity_level edge of a Finding.
-func (c *FindingClient) QueryFindingSeverityLevel(_m *Finding) *CustomTypeEnumQuery {
-	query := (&CustomTypeEnumClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(finding.Table, finding.FieldID, id),
-			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingSeverityLevelTable, finding.FindingSeverityLevelColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Finding
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryFindingStatus queries the finding_status edge of a Finding.
 func (c *FindingClient) QueryFindingStatus(_m *Finding) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
@@ -33650,25 +33631,6 @@ func (c *VulnerabilityClient) QueryScope(_m *Vulnerability) *CustomTypeEnumQuery
 			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.ScopeTable, vulnerability.ScopeColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Vulnerability
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryVulnerabilitySeverityLevel queries the vulnerability_severity_level edge of a Vulnerability.
-func (c *VulnerabilityClient) QueryVulnerabilitySeverityLevel(_m *Vulnerability) *CustomTypeEnumQuery {
-	query := (&CustomTypeEnumClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
-			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.VulnerabilitySeverityLevelTable, vulnerability.VulnerabilitySeverityLevelColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum

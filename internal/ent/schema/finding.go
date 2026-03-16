@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -54,6 +56,13 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
+			),
+		field.Enum("security_level").
+			Comment("incoming source severity").
+			GoType(enums.SecurityLevel("")).
+			Optional().
+			Annotations(
+				entgql.OrderField("security_level"),
 			),
 		field.String("external_owner_id").
 			Comment("the owner of the finding").
@@ -271,7 +280,6 @@ func (f Finding) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
-			newCustomEnumMixin(f, withEnumFieldName("severity_level")),
 			newCustomEnumMixin(f, withEnumFieldName("status")),
 		},
 	}.getMixins(f)

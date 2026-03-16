@@ -13471,6 +13471,20 @@ var (
 			}
 		},
 	}
+	// FindingOrderFieldSecurityLevel orders Finding by security_level.
+	FindingOrderFieldSecurityLevel = &FindingOrderField{
+		Value: func(_m *Finding) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: finding.FieldSecurityLevel,
+		toTerm: finding.BySecurityLevel,
+		toCursor: func(_m *Finding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// FindingOrderFieldExternalOwnerID orders Finding by external_owner_id.
 	FindingOrderFieldExternalOwnerID = &FindingOrderField{
 		Value: func(_m *Finding) (ent.Value, error) {
@@ -13525,6 +13539,8 @@ func (f FindingOrderField) String() string {
 		str = "updated_at"
 	case FindingOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case FindingOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case FindingOrderFieldCategory.column:
@@ -13553,6 +13569,8 @@ func (f *FindingOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingOrderFieldUpdatedAt
 	case "external_id":
 		*f = *FindingOrderFieldExternalID
+	case "security_level":
+		*f = *FindingOrderFieldSecurityLevel
 	case "external_owner_id":
 		*f = *FindingOrderFieldExternalOwnerID
 	case "category":
@@ -28090,6 +28108,20 @@ var (
 			}
 		},
 	}
+	// SLADefinitionOrderFieldSLADays orders SLADefinition by sla_days.
+	SLADefinitionOrderFieldSLADays = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.SLADays, nil
+		},
+		column: sladefinition.FieldSLADays,
+		toTerm: sladefinition.BySLADays,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SLADays,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -28100,6 +28132,8 @@ func (f SLADefinitionOrderField) String() string {
 		str = "created_at"
 	case SLADefinitionOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SLADefinitionOrderFieldSLADays.column:
+		str = "sla_days"
 	}
 	return str
 }
@@ -28120,6 +28154,8 @@ func (f *SLADefinitionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SLADefinitionOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SLADefinitionOrderFieldUpdatedAt
+	case "sla_days":
+		*f = *SLADefinitionOrderFieldSLADays
 	default:
 		return fmt.Errorf("%s is not a valid SLADefinitionOrderField", str)
 	}
@@ -37458,6 +37494,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityOrderFieldSecurityLevel orders Vulnerability by security_level.
+	VulnerabilityOrderFieldSecurityLevel = &VulnerabilityOrderField{
+		Value: func(_m *Vulnerability) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: vulnerability.FieldSecurityLevel,
+		toTerm: vulnerability.BySecurityLevel,
+		toCursor: func(_m *Vulnerability) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// VulnerabilityOrderFieldExternalID orders Vulnerability by external_id.
 	VulnerabilityOrderFieldExternalID = &VulnerabilityOrderField{
 		Value: func(_m *Vulnerability) (ent.Value, error) {
@@ -37526,6 +37576,8 @@ func (f VulnerabilityOrderField) String() string {
 		str = "updated_at"
 	case VulnerabilityOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
+	case VulnerabilityOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case VulnerabilityOrderFieldExternalID.column:
 		str = "external_id"
 	case VulnerabilityOrderFieldCveID.column:
@@ -37556,6 +37608,8 @@ func (f *VulnerabilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityOrderFieldUpdatedAt
 	case "external_owner_id":
 		*f = *VulnerabilityOrderFieldExternalOwnerID
+	case "security_level":
+		*f = *VulnerabilityOrderFieldSecurityLevel
 	case "external_id":
 		*f = *VulnerabilityOrderFieldExternalID
 	case "cve_id":

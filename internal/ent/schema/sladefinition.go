@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -45,6 +46,7 @@ func (SLADefinition) Fields() []ent.Field {
 			Comment("remediation service level agreement in days for the severity level").
 			Positive().
 			Annotations(
+				entgql.OrderField("sla_days"),
 				entx.FieldSearchable(),
 			),
 	}

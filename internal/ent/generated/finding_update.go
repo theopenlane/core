@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -264,46 +265,6 @@ func (_u *FindingUpdate) ClearScopeID() *FindingUpdate {
 	return _u
 }
 
-// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
-func (_u *FindingUpdate) SetFindingSeverityLevelName(v string) *FindingUpdate {
-	_u.mutation.SetFindingSeverityLevelName(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
-func (_u *FindingUpdate) SetNillableFindingSeverityLevelName(v *string) *FindingUpdate {
-	if v != nil {
-		_u.SetFindingSeverityLevelName(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelName clears the value of the "finding_severity_level_name" field.
-func (_u *FindingUpdate) ClearFindingSeverityLevelName() *FindingUpdate {
-	_u.mutation.ClearFindingSeverityLevelName()
-	return _u
-}
-
-// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
-func (_u *FindingUpdate) SetFindingSeverityLevelID(v string) *FindingUpdate {
-	_u.mutation.SetFindingSeverityLevelID(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
-func (_u *FindingUpdate) SetNillableFindingSeverityLevelID(v *string) *FindingUpdate {
-	if v != nil {
-		_u.SetFindingSeverityLevelID(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelID clears the value of the "finding_severity_level_id" field.
-func (_u *FindingUpdate) ClearFindingSeverityLevelID() *FindingUpdate {
-	_u.mutation.ClearFindingSeverityLevelID()
-	return _u
-}
-
 // SetFindingStatusName sets the "finding_status_name" field.
 func (_u *FindingUpdate) SetFindingStatusName(v string) *FindingUpdate {
 	_u.mutation.SetFindingStatusName(v)
@@ -361,6 +322,26 @@ func (_u *FindingUpdate) SetNillableExternalID(v *string) *FindingUpdate {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdate) ClearExternalID() *FindingUpdate {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingUpdate) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingUpdate) ClearSecurityLevel() *FindingUpdate {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -1142,11 +1123,6 @@ func (_u *FindingUpdate) SetScope(v *CustomTypeEnum) *FindingUpdate {
 	return _u.SetScopeID(v.ID)
 }
 
-// SetFindingSeverityLevel sets the "finding_severity_level" edge to the CustomTypeEnum entity.
-func (_u *FindingUpdate) SetFindingSeverityLevel(v *CustomTypeEnum) *FindingUpdate {
-	return _u.SetFindingSeverityLevelID(v.ID)
-}
-
 // SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) SetFindingStatus(v *CustomTypeEnum) *FindingUpdate {
 	return _u.SetFindingStatusID(v.ID)
@@ -1514,12 +1490,6 @@ func (_u *FindingUpdate) ClearEnvironment() *FindingUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdate) ClearScope() *FindingUpdate {
 	_u.mutation.ClearScope()
-	return _u
-}
-
-// ClearFindingSeverityLevel clears the "finding_severity_level" edge to the CustomTypeEnum entity.
-func (_u *FindingUpdate) ClearFindingSeverityLevel() *FindingUpdate {
-	_u.mutation.ClearFindingSeverityLevel()
 	return _u
 }
 
@@ -1970,6 +1940,16 @@ func (_u *FindingUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingUpdate) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1977,6 +1957,9 @@ func (_u *FindingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Findin
 }
 
 func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(finding.Table, finding.Columns, sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -2053,12 +2036,6 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(finding.FieldScopeName, field.TypeString)
 	}
-	if value, ok := _u.mutation.FindingSeverityLevelName(); ok {
-		_spec.SetField(finding.FieldFindingSeverityLevelName, field.TypeString, value)
-	}
-	if _u.mutation.FindingSeverityLevelNameCleared() {
-		_spec.ClearField(finding.FieldFindingSeverityLevelName, field.TypeString)
-	}
 	if value, ok := _u.mutation.FindingStatusName(); ok {
 		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
 	}
@@ -2070,6 +2047,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(finding.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -2517,37 +2500,6 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Finding
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FindingSeverityLevelCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   finding.FindingSeverityLevelTable,
-			Columns: []string{finding.FindingSeverityLevelColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Finding
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FindingSeverityLevelIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   finding.FindingSeverityLevelTable,
-			Columns: []string{finding.FindingSeverityLevelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -3757,46 +3709,6 @@ func (_u *FindingUpdateOne) ClearScopeID() *FindingUpdateOne {
 	return _u
 }
 
-// SetFindingSeverityLevelName sets the "finding_severity_level_name" field.
-func (_u *FindingUpdateOne) SetFindingSeverityLevelName(v string) *FindingUpdateOne {
-	_u.mutation.SetFindingSeverityLevelName(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelName sets the "finding_severity_level_name" field if the given value is not nil.
-func (_u *FindingUpdateOne) SetNillableFindingSeverityLevelName(v *string) *FindingUpdateOne {
-	if v != nil {
-		_u.SetFindingSeverityLevelName(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelName clears the value of the "finding_severity_level_name" field.
-func (_u *FindingUpdateOne) ClearFindingSeverityLevelName() *FindingUpdateOne {
-	_u.mutation.ClearFindingSeverityLevelName()
-	return _u
-}
-
-// SetFindingSeverityLevelID sets the "finding_severity_level_id" field.
-func (_u *FindingUpdateOne) SetFindingSeverityLevelID(v string) *FindingUpdateOne {
-	_u.mutation.SetFindingSeverityLevelID(v)
-	return _u
-}
-
-// SetNillableFindingSeverityLevelID sets the "finding_severity_level_id" field if the given value is not nil.
-func (_u *FindingUpdateOne) SetNillableFindingSeverityLevelID(v *string) *FindingUpdateOne {
-	if v != nil {
-		_u.SetFindingSeverityLevelID(*v)
-	}
-	return _u
-}
-
-// ClearFindingSeverityLevelID clears the value of the "finding_severity_level_id" field.
-func (_u *FindingUpdateOne) ClearFindingSeverityLevelID() *FindingUpdateOne {
-	_u.mutation.ClearFindingSeverityLevelID()
-	return _u
-}
-
 // SetFindingStatusName sets the "finding_status_name" field.
 func (_u *FindingUpdateOne) SetFindingStatusName(v string) *FindingUpdateOne {
 	_u.mutation.SetFindingStatusName(v)
@@ -3854,6 +3766,26 @@ func (_u *FindingUpdateOne) SetNillableExternalID(v *string) *FindingUpdateOne {
 // ClearExternalID clears the value of the "external_id" field.
 func (_u *FindingUpdateOne) ClearExternalID() *FindingUpdateOne {
 	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetSecurityLevel sets the "security_level" field.
+func (_u *FindingUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *FindingUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *FindingUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *FindingUpdateOne) ClearSecurityLevel() *FindingUpdateOne {
+	_u.mutation.ClearSecurityLevel()
 	return _u
 }
 
@@ -4635,11 +4567,6 @@ func (_u *FindingUpdateOne) SetScope(v *CustomTypeEnum) *FindingUpdateOne {
 	return _u.SetScopeID(v.ID)
 }
 
-// SetFindingSeverityLevel sets the "finding_severity_level" edge to the CustomTypeEnum entity.
-func (_u *FindingUpdateOne) SetFindingSeverityLevel(v *CustomTypeEnum) *FindingUpdateOne {
-	return _u.SetFindingSeverityLevelID(v.ID)
-}
-
 // SetFindingStatus sets the "finding_status" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) SetFindingStatus(v *CustomTypeEnum) *FindingUpdateOne {
 	return _u.SetFindingStatusID(v.ID)
@@ -5007,12 +4934,6 @@ func (_u *FindingUpdateOne) ClearEnvironment() *FindingUpdateOne {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FindingUpdateOne) ClearScope() *FindingUpdateOne {
 	_u.mutation.ClearScope()
-	return _u
-}
-
-// ClearFindingSeverityLevel clears the "finding_severity_level" edge to the CustomTypeEnum entity.
-func (_u *FindingUpdateOne) ClearFindingSeverityLevel() *FindingUpdateOne {
-	_u.mutation.ClearFindingSeverityLevel()
 	return _u
 }
 
@@ -5476,6 +5397,16 @@ func (_u *FindingUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *FindingUpdateOne) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := finding.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "Finding.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *FindingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -5483,6 +5414,9 @@ func (_u *FindingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Fin
 }
 
 func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(finding.Table, finding.Columns, sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -5576,12 +5510,6 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(finding.FieldScopeName, field.TypeString)
 	}
-	if value, ok := _u.mutation.FindingSeverityLevelName(); ok {
-		_spec.SetField(finding.FieldFindingSeverityLevelName, field.TypeString, value)
-	}
-	if _u.mutation.FindingSeverityLevelNameCleared() {
-		_spec.ClearField(finding.FieldFindingSeverityLevelName, field.TypeString)
-	}
 	if value, ok := _u.mutation.FindingStatusName(); ok {
 		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
 	}
@@ -5593,6 +5521,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(finding.FieldSecurityLevel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(finding.FieldExternalOwnerID, field.TypeString, value)
@@ -6040,37 +5974,6 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Finding
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FindingSeverityLevelCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   finding.FindingSeverityLevelTable,
-			Columns: []string{finding.FindingSeverityLevelColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Finding
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FindingSeverityLevelIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   finding.FindingSeverityLevelTable,
-			Columns: []string{finding.FindingSeverityLevelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

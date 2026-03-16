@@ -11592,10 +11592,6 @@ input CreateFindingInput {
   """
   scopeName: String
   """
-  the severity_level of the finding
-  """
-  findingSeverityLevelName: String
-  """
   the status of the finding
   """
   findingStatusName: String
@@ -11603,6 +11599,10 @@ input CreateFindingInput {
   external identifier from the integration source for the finding
   """
   externalID: String
+  """
+  incoming source severity
+  """
+  securityLevel: FindingSecurityLevel
   """
   the owner of the finding
   """
@@ -11753,7 +11753,6 @@ input CreateFindingInput {
   viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
-  findingSeverityLevelID: ID
   findingStatusID: ID
   integrationIDs: [ID!]
   vulnerabilityIDs: [ID!]
@@ -14931,10 +14930,6 @@ input CreateVulnerabilityInput {
   """
   scopeName: String
   """
-  the severity_level of the vulnerability
-  """
-  vulnerabilitySeverityLevelName: String
-  """
   the status of the vulnerability
   """
   vulnerabilityStatusName: String
@@ -14942,6 +14937,10 @@ input CreateVulnerabilityInput {
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  incoming source severity
+  """
+  securityLevel: VulnerabilitySecurityLevel
   """
   external identifier from the integration source for the vulnerability
   """
@@ -15060,7 +15059,6 @@ input CreateVulnerabilityInput {
   viewerIDs: [ID!]
   environmentID: ID
   scopeID: ID
-  vulnerabilitySeverityLevelID: ID
   vulnerabilityStatusID: ID
   integrationIDs: [ID!]
   findingIDs: [ID!]
@@ -26465,14 +26463,6 @@ type Finding implements Node {
   """
   scopeID: ID
   """
-  the severity_level of the finding
-  """
-  findingSeverityLevelName: String
-  """
-  the severity_level of the finding
-  """
-  findingSeverityLevelID: ID
-  """
   the status of the finding
   """
   findingStatusName: String
@@ -26484,6 +26474,10 @@ type Finding implements Node {
   external identifier from the integration source for the finding
   """
   externalID: String
+  """
+  incoming source severity
+  """
+  securityLevel: FindingSecurityLevel
   """
   the owner of the finding
   """
@@ -26724,7 +26718,6 @@ type Finding implements Node {
   ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
-  findingSeverityLevel: CustomTypeEnum
   findingStatus: CustomTypeEnum
   integrations(
     """
@@ -27631,9 +27624,20 @@ enum FindingOrderField {
   created_at
   updated_at
   external_id
+  security_level
   external_owner_id
   category
   severity
+}
+"""
+FindingSecurityLevel is enum for the field security_level
+"""
+enum FindingSecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 FindingWhereInput is used for filtering Finding objects.
@@ -27868,42 +27872,6 @@ input FindingWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
-  finding_severity_level_name field predicates
-  """
-  findingSeverityLevelName: String
-  findingSeverityLevelNameNEQ: String
-  findingSeverityLevelNameIn: [String!]
-  findingSeverityLevelNameNotIn: [String!]
-  findingSeverityLevelNameGT: String
-  findingSeverityLevelNameGTE: String
-  findingSeverityLevelNameLT: String
-  findingSeverityLevelNameLTE: String
-  findingSeverityLevelNameContains: String
-  findingSeverityLevelNameHasPrefix: String
-  findingSeverityLevelNameHasSuffix: String
-  findingSeverityLevelNameIsNil: Boolean
-  findingSeverityLevelNameNotNil: Boolean
-  findingSeverityLevelNameEqualFold: String
-  findingSeverityLevelNameContainsFold: String
-  """
-  finding_severity_level_id field predicates
-  """
-  findingSeverityLevelID: ID
-  findingSeverityLevelIDNEQ: ID
-  findingSeverityLevelIDIn: [ID!]
-  findingSeverityLevelIDNotIn: [ID!]
-  findingSeverityLevelIDGT: ID
-  findingSeverityLevelIDGTE: ID
-  findingSeverityLevelIDLT: ID
-  findingSeverityLevelIDLTE: ID
-  findingSeverityLevelIDContains: ID
-  findingSeverityLevelIDHasPrefix: ID
-  findingSeverityLevelIDHasSuffix: ID
-  findingSeverityLevelIDIsNil: Boolean
-  findingSeverityLevelIDNotNil: Boolean
-  findingSeverityLevelIDEqualFold: ID
-  findingSeverityLevelIDContainsFold: ID
-  """
   finding_status_name field predicates
   """
   findingStatusName: String
@@ -27957,6 +27925,15 @@ input FindingWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: FindingSecurityLevel
+  securityLevelNEQ: FindingSecurityLevel
+  securityLevelIn: [FindingSecurityLevel!]
+  securityLevelNotIn: [FindingSecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_owner_id field predicates
   """
@@ -28414,11 +28391,6 @@ input FindingWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
-  """
-  finding_severity_level edge predicates
-  """
-  hasFindingSeverityLevel: Boolean
-  hasFindingSeverityLevelWith: [CustomTypeEnumWhereInput!]
   """
   finding_status edge predicates
   """
@@ -57302,6 +57274,7 @@ Properties by which SLADefinition connections can be ordered.
 enum SLADefinitionOrderField {
   created_at
   updated_at
+  sla_days
 }
 """
 SLADefinitionWhereInput is used for filtering SLADefinition objects.
@@ -71515,11 +71488,6 @@ input UpdateFindingInput {
   scopeName: String
   clearScopeName: Boolean
   """
-  the severity_level of the finding
-  """
-  findingSeverityLevelName: String
-  clearFindingSeverityLevelName: Boolean
-  """
   the status of the finding
   """
   findingStatusName: String
@@ -71529,6 +71497,11 @@ input UpdateFindingInput {
   """
   externalID: String
   clearExternalID: Boolean
+  """
+  incoming source severity
+  """
+  securityLevel: FindingSecurityLevel
+  clearSecurityLevel: Boolean
   """
   the owner of the finding
   """
@@ -71726,8 +71699,6 @@ input UpdateFindingInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
-  findingSeverityLevelID: ID
-  clearFindingSeverityLevel: Boolean
   findingStatusID: ID
   clearFindingStatus: Boolean
   addIntegrationIDs: [ID!]
@@ -76280,11 +76251,6 @@ input UpdateVulnerabilityInput {
   scopeName: String
   clearScopeName: Boolean
   """
-  the severity_level of the vulnerability
-  """
-  vulnerabilitySeverityLevelName: String
-  clearVulnerabilitySeverityLevelName: Boolean
-  """
   the status of the vulnerability
   """
   vulnerabilityStatusName: String
@@ -76294,6 +76260,11 @@ input UpdateVulnerabilityInput {
   """
   externalOwnerID: String
   clearExternalOwnerID: Boolean
+  """
+  incoming source severity
+  """
+  securityLevel: VulnerabilitySecurityLevel
+  clearSecurityLevel: Boolean
   """
   external identifier from the integration source for the vulnerability
   """
@@ -76448,8 +76419,6 @@ input UpdateVulnerabilityInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
-  vulnerabilitySeverityLevelID: ID
-  clearVulnerabilitySeverityLevel: Boolean
   vulnerabilityStatusID: ID
   clearVulnerabilityStatus: Boolean
   addIntegrationIDs: [ID!]
@@ -78165,14 +78134,6 @@ type Vulnerability implements Node {
   """
   scopeID: ID
   """
-  the severity_level of the vulnerability
-  """
-  vulnerabilitySeverityLevelName: String
-  """
-  the severity_level of the vulnerability
-  """
-  vulnerabilitySeverityLevelID: ID
-  """
   the status of the vulnerability
   """
   vulnerabilityStatusName: String
@@ -78184,6 +78145,10 @@ type Vulnerability implements Node {
   owner of the vulnerability
   """
   externalOwnerID: String
+  """
+  incoming source severity
+  """
+  securityLevel: VulnerabilitySecurityLevel
   """
   external identifier from the integration source for the vulnerability
   """
@@ -78392,7 +78357,6 @@ type Vulnerability implements Node {
   ): GroupConnection!
   environment: CustomTypeEnum
   scope: CustomTypeEnum
-  vulnerabilitySeverityLevel: CustomTypeEnum
   vulnerabilityStatus: CustomTypeEnum
   integrations(
     """
@@ -78910,10 +78874,21 @@ enum VulnerabilityOrderField {
   created_at
   updated_at
   external_owner_id
+  security_level
   external_id
   cve_id
   category
   severity
+}
+"""
+VulnerabilitySecurityLevel is enum for the field security_level
+"""
+enum VulnerabilitySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 VulnerabilityWhereInput is used for filtering Vulnerability objects.
@@ -79148,42 +79123,6 @@ input VulnerabilityWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
-  vulnerability_severity_level_name field predicates
-  """
-  vulnerabilitySeverityLevelName: String
-  vulnerabilitySeverityLevelNameNEQ: String
-  vulnerabilitySeverityLevelNameIn: [String!]
-  vulnerabilitySeverityLevelNameNotIn: [String!]
-  vulnerabilitySeverityLevelNameGT: String
-  vulnerabilitySeverityLevelNameGTE: String
-  vulnerabilitySeverityLevelNameLT: String
-  vulnerabilitySeverityLevelNameLTE: String
-  vulnerabilitySeverityLevelNameContains: String
-  vulnerabilitySeverityLevelNameHasPrefix: String
-  vulnerabilitySeverityLevelNameHasSuffix: String
-  vulnerabilitySeverityLevelNameIsNil: Boolean
-  vulnerabilitySeverityLevelNameNotNil: Boolean
-  vulnerabilitySeverityLevelNameEqualFold: String
-  vulnerabilitySeverityLevelNameContainsFold: String
-  """
-  vulnerability_severity_level_id field predicates
-  """
-  vulnerabilitySeverityLevelID: ID
-  vulnerabilitySeverityLevelIDNEQ: ID
-  vulnerabilitySeverityLevelIDIn: [ID!]
-  vulnerabilitySeverityLevelIDNotIn: [ID!]
-  vulnerabilitySeverityLevelIDGT: ID
-  vulnerabilitySeverityLevelIDGTE: ID
-  vulnerabilitySeverityLevelIDLT: ID
-  vulnerabilitySeverityLevelIDLTE: ID
-  vulnerabilitySeverityLevelIDContains: ID
-  vulnerabilitySeverityLevelIDHasPrefix: ID
-  vulnerabilitySeverityLevelIDHasSuffix: ID
-  vulnerabilitySeverityLevelIDIsNil: Boolean
-  vulnerabilitySeverityLevelIDNotNil: Boolean
-  vulnerabilitySeverityLevelIDEqualFold: ID
-  vulnerabilitySeverityLevelIDContainsFold: ID
-  """
   vulnerability_status_name field predicates
   """
   vulnerabilityStatusName: String
@@ -79237,6 +79176,15 @@ input VulnerabilityWhereInput {
   externalOwnerIDNotNil: Boolean
   externalOwnerIDEqualFold: String
   externalOwnerIDContainsFold: String
+  """
+  security_level field predicates
+  """
+  securityLevel: VulnerabilitySecurityLevel
+  securityLevelNEQ: VulnerabilitySecurityLevel
+  securityLevelIn: [VulnerabilitySecurityLevel!]
+  securityLevelNotIn: [VulnerabilitySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   external_id field predicates
   """
@@ -79607,11 +79555,6 @@ input VulnerabilityWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
-  """
-  vulnerability_severity_level edge predicates
-  """
-  hasVulnerabilitySeverityLevel: Boolean
-  hasVulnerabilitySeverityLevelWith: [CustomTypeEnumWhereInput!]
   """
   vulnerability_status edge predicates
   """

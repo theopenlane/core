@@ -9403,76 +9403,75 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
-	Tags                     []string
-	InternalNotes            *string
-	SystemInternalID         *string
-	EnvironmentName          *string
-	ScopeName                *string
-	FindingSeverityLevelName *string
-	FindingStatusName        *string
-	ExternalID               *string
-	ExternalOwnerID          *string
-	Source                   *string
-	ResourceName             *string
-	DisplayName              *string
-	State                    *string
-	Category                 *string
-	Categories               []string
-	FindingClass             *string
-	Severity                 *string
-	NumericSeverity          *float64
-	Score                    *float64
-	Impact                   *float64
-	Exploitability           *float64
-	Priority                 *string
-	Open                     *bool
-	BlocksProduction         *bool
-	Production               *bool
-	Public                   *bool
-	Validated                *bool
-	AssessmentID             *string
-	Description              *string
-	Recommendation           *string
-	RecommendedActions       *string
-	References               []string
-	StepsToReproduce         []string
-	Targets                  []string
-	TargetDetails            map[string]interface{}
-	Vector                   *string
-	RemediationSLA           *int
-	Status                   *string
-	EventTime                *models.DateTime
-	ReportedAt               *models.DateTime
-	SourceUpdatedAt          *models.DateTime
-	ExternalURI              *string
-	Metadata                 map[string]interface{}
-	RawPayload               map[string]interface{}
-	OwnerID                  *string
-	BlockedGroupIDs          []string
-	EditorIDs                []string
-	ViewerIDs                []string
-	EnvironmentID            *string
-	ScopeID                  *string
-	FindingSeverityLevelID   *string
-	FindingStatusID          *string
-	IntegrationIDs           []string
-	VulnerabilityIDs         []string
-	ActionPlanIDs            []string
-	ControlIDs               []string
-	SubcontrolIDs            []string
-	RiskIDs                  []string
-	ProgramIDs               []string
-	AssetIDs                 []string
-	EntityIDs                []string
-	ScanIDs                  []string
-	TaskIDs                  []string
-	DirectoryAccountIDs      []string
-	IdentityHolderIDs        []string
-	RemediationIDs           []string
-	ReviewIDs                []string
-	CommentIDs               []string
-	FileIDs                  []string
-	WorkflowObjectRefIDs     []string
+	Tags                 []string
+	InternalNotes        *string
+	SystemInternalID     *string
+	EnvironmentName      *string
+	ScopeName            *string
+	FindingStatusName    *string
+	ExternalID           *string
+	SecurityLevel        *enums.SecurityLevel
+	ExternalOwnerID      *string
+	Source               *string
+	ResourceName         *string
+	DisplayName          *string
+	State                *string
+	Category             *string
+	Categories           []string
+	FindingClass         *string
+	Severity             *string
+	NumericSeverity      *float64
+	Score                *float64
+	Impact               *float64
+	Exploitability       *float64
+	Priority             *string
+	Open                 *bool
+	BlocksProduction     *bool
+	Production           *bool
+	Public               *bool
+	Validated            *bool
+	AssessmentID         *string
+	Description          *string
+	Recommendation       *string
+	RecommendedActions   *string
+	References           []string
+	StepsToReproduce     []string
+	Targets              []string
+	TargetDetails        map[string]interface{}
+	Vector               *string
+	RemediationSLA       *int
+	Status               *string
+	EventTime            *models.DateTime
+	ReportedAt           *models.DateTime
+	SourceUpdatedAt      *models.DateTime
+	ExternalURI          *string
+	Metadata             map[string]interface{}
+	RawPayload           map[string]interface{}
+	OwnerID              *string
+	BlockedGroupIDs      []string
+	EditorIDs            []string
+	ViewerIDs            []string
+	EnvironmentID        *string
+	ScopeID              *string
+	FindingStatusID      *string
+	IntegrationIDs       []string
+	VulnerabilityIDs     []string
+	ActionPlanIDs        []string
+	ControlIDs           []string
+	SubcontrolIDs        []string
+	RiskIDs              []string
+	ProgramIDs           []string
+	AssetIDs             []string
+	EntityIDs            []string
+	ScanIDs              []string
+	TaskIDs              []string
+	DirectoryAccountIDs  []string
+	IdentityHolderIDs    []string
+	RemediationIDs       []string
+	ReviewIDs            []string
+	CommentIDs           []string
+	FileIDs              []string
+	WorkflowObjectRefIDs []string
 }
 
 // Mutate applies the CreateFindingInput on the FindingMutation builder.
@@ -9492,14 +9491,14 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
-	if v := i.FindingSeverityLevelName; v != nil {
-		m.SetFindingSeverityLevelName(*v)
-	}
 	if v := i.FindingStatusName; v != nil {
 		m.SetFindingStatusName(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
+	}
+	if v := i.SecurityLevel; v != nil {
+		m.SetSecurityLevel(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -9627,9 +9626,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
 	}
-	if v := i.FindingSeverityLevelID; v != nil {
-		m.SetFindingSeverityLevelID(*v)
-	}
 	if v := i.FindingStatusID; v != nil {
 		m.SetFindingStatusID(*v)
 	}
@@ -9697,170 +9693,168 @@ func (c *FindingCreate) SetInput(i CreateFindingInput) *FindingCreate {
 
 // UpdateFindingInput represents a mutation input for updating findings.
 type UpdateFindingInput struct {
-	ClearTags                     bool
-	Tags                          []string
-	AppendTags                    []string
-	ClearInternalNotes            bool
-	InternalNotes                 *string
-	ClearSystemInternalID         bool
-	SystemInternalID              *string
-	ClearEnvironmentName          bool
-	EnvironmentName               *string
-	ClearScopeName                bool
-	ScopeName                     *string
-	ClearFindingSeverityLevelName bool
-	FindingSeverityLevelName      *string
-	ClearFindingStatusName        bool
-	FindingStatusName             *string
-	ClearExternalID               bool
-	ExternalID                    *string
-	ClearExternalOwnerID          bool
-	ExternalOwnerID               *string
-	ClearSource                   bool
-	Source                        *string
-	ClearResourceName             bool
-	ResourceName                  *string
-	ClearDisplayName              bool
-	DisplayName                   *string
-	ClearState                    bool
-	State                         *string
-	ClearCategory                 bool
-	Category                      *string
-	ClearCategories               bool
-	Categories                    []string
-	AppendCategories              []string
-	ClearFindingClass             bool
-	FindingClass                  *string
-	ClearSeverity                 bool
-	Severity                      *string
-	ClearNumericSeverity          bool
-	NumericSeverity               *float64
-	ClearScore                    bool
-	Score                         *float64
-	ClearImpact                   bool
-	Impact                        *float64
-	ClearExploitability           bool
-	Exploitability                *float64
-	ClearPriority                 bool
-	Priority                      *string
-	ClearOpen                     bool
-	Open                          *bool
-	ClearBlocksProduction         bool
-	BlocksProduction              *bool
-	ClearProduction               bool
-	Production                    *bool
-	ClearPublic                   bool
-	Public                        *bool
-	ClearValidated                bool
-	Validated                     *bool
-	ClearAssessmentID             bool
-	AssessmentID                  *string
-	ClearDescription              bool
-	Description                   *string
-	ClearRecommendation           bool
-	Recommendation                *string
-	ClearRecommendedActions       bool
-	RecommendedActions            *string
-	ClearReferences               bool
-	References                    []string
-	AppendReferences              []string
-	ClearStepsToReproduce         bool
-	StepsToReproduce              []string
-	AppendStepsToReproduce        []string
-	ClearTargets                  bool
-	Targets                       []string
-	AppendTargets                 []string
-	ClearTargetDetails            bool
-	TargetDetails                 map[string]interface{}
-	ClearVector                   bool
-	Vector                        *string
-	ClearRemediationSLA           bool
-	RemediationSLA                *int
-	ClearStatus                   bool
-	Status                        *string
-	ClearEventTime                bool
-	EventTime                     *models.DateTime
-	ClearReportedAt               bool
-	ReportedAt                    *models.DateTime
-	ClearSourceUpdatedAt          bool
-	SourceUpdatedAt               *models.DateTime
-	ClearExternalURI              bool
-	ExternalURI                   *string
-	ClearMetadata                 bool
-	Metadata                      map[string]interface{}
-	ClearRawPayload               bool
-	RawPayload                    map[string]interface{}
-	ClearBlockedGroups            bool
-	AddBlockedGroupIDs            []string
-	RemoveBlockedGroupIDs         []string
-	ClearEditors                  bool
-	AddEditorIDs                  []string
-	RemoveEditorIDs               []string
-	ClearViewers                  bool
-	AddViewerIDs                  []string
-	RemoveViewerIDs               []string
-	ClearEnvironment              bool
-	EnvironmentID                 *string
-	ClearScope                    bool
-	ScopeID                       *string
-	ClearFindingSeverityLevel     bool
-	FindingSeverityLevelID        *string
-	ClearFindingStatus            bool
-	FindingStatusID               *string
-	ClearIntegrations             bool
-	AddIntegrationIDs             []string
-	RemoveIntegrationIDs          []string
-	ClearVulnerabilities          bool
-	AddVulnerabilityIDs           []string
-	RemoveVulnerabilityIDs        []string
-	ClearActionPlans              bool
-	AddActionPlanIDs              []string
-	RemoveActionPlanIDs           []string
-	ClearControls                 bool
-	AddControlIDs                 []string
-	RemoveControlIDs              []string
-	ClearSubcontrols              bool
-	AddSubcontrolIDs              []string
-	RemoveSubcontrolIDs           []string
-	ClearRisks                    bool
-	AddRiskIDs                    []string
-	RemoveRiskIDs                 []string
-	ClearPrograms                 bool
-	AddProgramIDs                 []string
-	RemoveProgramIDs              []string
-	ClearAssets                   bool
-	AddAssetIDs                   []string
-	RemoveAssetIDs                []string
-	ClearEntities                 bool
-	AddEntityIDs                  []string
-	RemoveEntityIDs               []string
-	ClearScans                    bool
-	AddScanIDs                    []string
-	RemoveScanIDs                 []string
-	ClearTasks                    bool
-	AddTaskIDs                    []string
-	RemoveTaskIDs                 []string
-	ClearDirectoryAccounts        bool
-	AddDirectoryAccountIDs        []string
-	RemoveDirectoryAccountIDs     []string
-	ClearIdentityHolders          bool
-	AddIdentityHolderIDs          []string
-	RemoveIdentityHolderIDs       []string
-	ClearRemediations             bool
-	AddRemediationIDs             []string
-	RemoveRemediationIDs          []string
-	ClearReviews                  bool
-	AddReviewIDs                  []string
-	RemoveReviewIDs               []string
-	ClearComments                 bool
-	AddCommentIDs                 []string
-	RemoveCommentIDs              []string
-	ClearFiles                    bool
-	AddFileIDs                    []string
-	RemoveFileIDs                 []string
-	ClearWorkflowObjectRefs       bool
-	AddWorkflowObjectRefIDs       []string
-	RemoveWorkflowObjectRefIDs    []string
+	ClearTags                  bool
+	Tags                       []string
+	AppendTags                 []string
+	ClearInternalNotes         bool
+	InternalNotes              *string
+	ClearSystemInternalID      bool
+	SystemInternalID           *string
+	ClearEnvironmentName       bool
+	EnvironmentName            *string
+	ClearScopeName             bool
+	ScopeName                  *string
+	ClearFindingStatusName     bool
+	FindingStatusName          *string
+	ClearExternalID            bool
+	ExternalID                 *string
+	ClearSecurityLevel         bool
+	SecurityLevel              *enums.SecurityLevel
+	ClearExternalOwnerID       bool
+	ExternalOwnerID            *string
+	ClearSource                bool
+	Source                     *string
+	ClearResourceName          bool
+	ResourceName               *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearState                 bool
+	State                      *string
+	ClearCategory              bool
+	Category                   *string
+	ClearCategories            bool
+	Categories                 []string
+	AppendCategories           []string
+	ClearFindingClass          bool
+	FindingClass               *string
+	ClearSeverity              bool
+	Severity                   *string
+	ClearNumericSeverity       bool
+	NumericSeverity            *float64
+	ClearScore                 bool
+	Score                      *float64
+	ClearImpact                bool
+	Impact                     *float64
+	ClearExploitability        bool
+	Exploitability             *float64
+	ClearPriority              bool
+	Priority                   *string
+	ClearOpen                  bool
+	Open                       *bool
+	ClearBlocksProduction      bool
+	BlocksProduction           *bool
+	ClearProduction            bool
+	Production                 *bool
+	ClearPublic                bool
+	Public                     *bool
+	ClearValidated             bool
+	Validated                  *bool
+	ClearAssessmentID          bool
+	AssessmentID               *string
+	ClearDescription           bool
+	Description                *string
+	ClearRecommendation        bool
+	Recommendation             *string
+	ClearRecommendedActions    bool
+	RecommendedActions         *string
+	ClearReferences            bool
+	References                 []string
+	AppendReferences           []string
+	ClearStepsToReproduce      bool
+	StepsToReproduce           []string
+	AppendStepsToReproduce     []string
+	ClearTargets               bool
+	Targets                    []string
+	AppendTargets              []string
+	ClearTargetDetails         bool
+	TargetDetails              map[string]interface{}
+	ClearVector                bool
+	Vector                     *string
+	ClearRemediationSLA        bool
+	RemediationSLA             *int
+	ClearStatus                bool
+	Status                     *string
+	ClearEventTime             bool
+	EventTime                  *models.DateTime
+	ClearReportedAt            bool
+	ReportedAt                 *models.DateTime
+	ClearSourceUpdatedAt       bool
+	SourceUpdatedAt            *models.DateTime
+	ClearExternalURI           bool
+	ExternalURI                *string
+	ClearMetadata              bool
+	Metadata                   map[string]interface{}
+	ClearRawPayload            bool
+	RawPayload                 map[string]interface{}
+	ClearBlockedGroups         bool
+	AddBlockedGroupIDs         []string
+	RemoveBlockedGroupIDs      []string
+	ClearEditors               bool
+	AddEditorIDs               []string
+	RemoveEditorIDs            []string
+	ClearViewers               bool
+	AddViewerIDs               []string
+	RemoveViewerIDs            []string
+	ClearEnvironment           bool
+	EnvironmentID              *string
+	ClearScope                 bool
+	ScopeID                    *string
+	ClearFindingStatus         bool
+	FindingStatusID            *string
+	ClearIntegrations          bool
+	AddIntegrationIDs          []string
+	RemoveIntegrationIDs       []string
+	ClearVulnerabilities       bool
+	AddVulnerabilityIDs        []string
+	RemoveVulnerabilityIDs     []string
+	ClearActionPlans           bool
+	AddActionPlanIDs           []string
+	RemoveActionPlanIDs        []string
+	ClearControls              bool
+	AddControlIDs              []string
+	RemoveControlIDs           []string
+	ClearSubcontrols           bool
+	AddSubcontrolIDs           []string
+	RemoveSubcontrolIDs        []string
+	ClearRisks                 bool
+	AddRiskIDs                 []string
+	RemoveRiskIDs              []string
+	ClearPrograms              bool
+	AddProgramIDs              []string
+	RemoveProgramIDs           []string
+	ClearAssets                bool
+	AddAssetIDs                []string
+	RemoveAssetIDs             []string
+	ClearEntities              bool
+	AddEntityIDs               []string
+	RemoveEntityIDs            []string
+	ClearScans                 bool
+	AddScanIDs                 []string
+	RemoveScanIDs              []string
+	ClearTasks                 bool
+	AddTaskIDs                 []string
+	RemoveTaskIDs              []string
+	ClearDirectoryAccounts     bool
+	AddDirectoryAccountIDs     []string
+	RemoveDirectoryAccountIDs  []string
+	ClearIdentityHolders       bool
+	AddIdentityHolderIDs       []string
+	RemoveIdentityHolderIDs    []string
+	ClearRemediations          bool
+	AddRemediationIDs          []string
+	RemoveRemediationIDs       []string
+	ClearReviews               bool
+	AddReviewIDs               []string
+	RemoveReviewIDs            []string
+	ClearComments              bool
+	AddCommentIDs              []string
+	RemoveCommentIDs           []string
+	ClearFiles                 bool
+	AddFileIDs                 []string
+	RemoveFileIDs              []string
+	ClearWorkflowObjectRefs    bool
+	AddWorkflowObjectRefIDs    []string
+	RemoveWorkflowObjectRefIDs []string
 }
 
 // Mutate applies the UpdateFindingInput on the FindingMutation builder.
@@ -9898,12 +9892,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
-	if i.ClearFindingSeverityLevelName {
-		m.ClearFindingSeverityLevelName()
-	}
-	if v := i.FindingSeverityLevelName; v != nil {
-		m.SetFindingSeverityLevelName(*v)
-	}
 	if i.ClearFindingStatusName {
 		m.ClearFindingStatusName()
 	}
@@ -9915,6 +9903,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
+	}
+	if i.ClearSecurityLevel {
+		m.ClearSecurityLevel()
+	}
+	if v := i.SecurityLevel; v != nil {
+		m.SetSecurityLevel(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -10182,12 +10176,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
-	}
-	if i.ClearFindingSeverityLevel {
-		m.ClearFindingSeverityLevel()
-	}
-	if v := i.FindingSeverityLevelID; v != nil {
-		m.SetFindingSeverityLevelID(*v)
 	}
 	if i.ClearFindingStatus {
 		m.ClearFindingStatus()
@@ -27071,65 +27059,64 @@ func (c *UserSettingUpdateOne) SetInput(i UpdateUserSettingInput) *UserSettingUp
 
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
-	Tags                           []string
-	InternalNotes                  *string
-	SystemInternalID               *string
-	EnvironmentName                *string
-	ScopeName                      *string
-	VulnerabilitySeverityLevelName *string
-	VulnerabilityStatusName        *string
-	ExternalOwnerID                *string
-	ExternalID                     string
-	CveID                          *string
-	Source                         *string
-	DisplayName                    *string
-	Category                       *string
-	Severity                       *string
-	Score                          *float64
-	Impact                         *float64
-	Exploitability                 *float64
-	Priority                       *string
-	Status                         *string
-	Summary                        *string
-	Description                    *string
-	Vector                         *string
-	RemediationSLA                 *int
-	Open                           *bool
-	Blocking                       *bool
-	Production                     *bool
-	Public                         *bool
-	Validated                      *bool
-	References                     []string
-	Impacts                        []string
-	PublishedAt                    *models.DateTime
-	DiscoveredAt                   *models.DateTime
-	SourceUpdatedAt                *models.DateTime
-	ExternalURI                    *string
-	Metadata                       map[string]interface{}
-	RawPayload                     map[string]interface{}
-	OwnerID                        *string
-	BlockedGroupIDs                []string
-	EditorIDs                      []string
-	ViewerIDs                      []string
-	EnvironmentID                  *string
-	ScopeID                        *string
-	VulnerabilitySeverityLevelID   *string
-	VulnerabilityStatusID          *string
-	IntegrationIDs                 []string
-	FindingIDs                     []string
-	ActionPlanIDs                  []string
-	ControlIDs                     []string
-	SubcontrolIDs                  []string
-	RiskIDs                        []string
-	ProgramIDs                     []string
-	AssetIDs                       []string
-	EntityIDs                      []string
-	ScanIDs                        []string
-	TaskIDs                        []string
-	RemediationIDs                 []string
-	ReviewIDs                      []string
-	CommentIDs                     []string
-	FileIDs                        []string
+	Tags                    []string
+	InternalNotes           *string
+	SystemInternalID        *string
+	EnvironmentName         *string
+	ScopeName               *string
+	VulnerabilityStatusName *string
+	ExternalOwnerID         *string
+	SecurityLevel           *enums.SecurityLevel
+	ExternalID              string
+	CveID                   *string
+	Source                  *string
+	DisplayName             *string
+	Category                *string
+	Severity                *string
+	Score                   *float64
+	Impact                  *float64
+	Exploitability          *float64
+	Priority                *string
+	Status                  *string
+	Summary                 *string
+	Description             *string
+	Vector                  *string
+	RemediationSLA          *int
+	Open                    *bool
+	Blocking                *bool
+	Production              *bool
+	Public                  *bool
+	Validated               *bool
+	References              []string
+	Impacts                 []string
+	PublishedAt             *models.DateTime
+	DiscoveredAt            *models.DateTime
+	SourceUpdatedAt         *models.DateTime
+	ExternalURI             *string
+	Metadata                map[string]interface{}
+	RawPayload              map[string]interface{}
+	OwnerID                 *string
+	BlockedGroupIDs         []string
+	EditorIDs               []string
+	ViewerIDs               []string
+	EnvironmentID           *string
+	ScopeID                 *string
+	VulnerabilityStatusID   *string
+	IntegrationIDs          []string
+	FindingIDs              []string
+	ActionPlanIDs           []string
+	ControlIDs              []string
+	SubcontrolIDs           []string
+	RiskIDs                 []string
+	ProgramIDs              []string
+	AssetIDs                []string
+	EntityIDs               []string
+	ScanIDs                 []string
+	TaskIDs                 []string
+	RemediationIDs          []string
+	ReviewIDs               []string
+	CommentIDs              []string
+	FileIDs                 []string
 }
 
 // Mutate applies the CreateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -27149,14 +27136,14 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
-	if v := i.VulnerabilitySeverityLevelName; v != nil {
-		m.SetVulnerabilitySeverityLevelName(*v)
-	}
 	if v := i.VulnerabilityStatusName; v != nil {
 		m.SetVulnerabilityStatusName(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
+	}
+	if v := i.SecurityLevel; v != nil {
+		m.SetSecurityLevel(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.CveID; v != nil {
@@ -27258,9 +27245,6 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
 	}
-	if v := i.VulnerabilitySeverityLevelID; v != nil {
-		m.SetVulnerabilitySeverityLevelID(*v)
-	}
 	if v := i.VulnerabilityStatusID; v != nil {
 		m.SetVulnerabilityStatusID(*v)
 	}
@@ -27319,142 +27303,140 @@ func (c *VulnerabilityCreate) SetInput(i CreateVulnerabilityInput) *Vulnerabilit
 
 // UpdateVulnerabilityInput represents a mutation input for updating vulnerabilities.
 type UpdateVulnerabilityInput struct {
-	ClearTags                           bool
-	Tags                                []string
-	AppendTags                          []string
-	ClearInternalNotes                  bool
-	InternalNotes                       *string
-	ClearSystemInternalID               bool
-	SystemInternalID                    *string
-	ClearEnvironmentName                bool
-	EnvironmentName                     *string
-	ClearScopeName                      bool
-	ScopeName                           *string
-	ClearVulnerabilitySeverityLevelName bool
-	VulnerabilitySeverityLevelName      *string
-	ClearVulnerabilityStatusName        bool
-	VulnerabilityStatusName             *string
-	ClearExternalOwnerID                bool
-	ExternalOwnerID                     *string
-	ExternalID                          *string
-	ClearCveID                          bool
-	CveID                               *string
-	ClearSource                         bool
-	Source                              *string
-	ClearDisplayName                    bool
-	DisplayName                         *string
-	ClearCategory                       bool
-	Category                            *string
-	ClearSeverity                       bool
-	Severity                            *string
-	ClearScore                          bool
-	Score                               *float64
-	ClearImpact                         bool
-	Impact                              *float64
-	ClearExploitability                 bool
-	Exploitability                      *float64
-	ClearPriority                       bool
-	Priority                            *string
-	ClearStatus                         bool
-	Status                              *string
-	ClearSummary                        bool
-	Summary                             *string
-	ClearDescription                    bool
-	Description                         *string
-	ClearVector                         bool
-	Vector                              *string
-	ClearRemediationSLA                 bool
-	RemediationSLA                      *int
-	ClearOpen                           bool
-	Open                                *bool
-	ClearBlocking                       bool
-	Blocking                            *bool
-	ClearProduction                     bool
-	Production                          *bool
-	ClearPublic                         bool
-	Public                              *bool
-	ClearValidated                      bool
-	Validated                           *bool
-	ClearReferences                     bool
-	References                          []string
-	AppendReferences                    []string
-	ClearImpacts                        bool
-	Impacts                             []string
-	AppendImpacts                       []string
-	ClearPublishedAt                    bool
-	PublishedAt                         *models.DateTime
-	ClearDiscoveredAt                   bool
-	DiscoveredAt                        *models.DateTime
-	ClearSourceUpdatedAt                bool
-	SourceUpdatedAt                     *models.DateTime
-	ClearExternalURI                    bool
-	ExternalURI                         *string
-	ClearMetadata                       bool
-	Metadata                            map[string]interface{}
-	ClearRawPayload                     bool
-	RawPayload                          map[string]interface{}
-	ClearBlockedGroups                  bool
-	AddBlockedGroupIDs                  []string
-	RemoveBlockedGroupIDs               []string
-	ClearEditors                        bool
-	AddEditorIDs                        []string
-	RemoveEditorIDs                     []string
-	ClearViewers                        bool
-	AddViewerIDs                        []string
-	RemoveViewerIDs                     []string
-	ClearEnvironment                    bool
-	EnvironmentID                       *string
-	ClearScope                          bool
-	ScopeID                             *string
-	ClearVulnerabilitySeverityLevel     bool
-	VulnerabilitySeverityLevelID        *string
-	ClearVulnerabilityStatus            bool
-	VulnerabilityStatusID               *string
-	ClearIntegrations                   bool
-	AddIntegrationIDs                   []string
-	RemoveIntegrationIDs                []string
-	ClearFindings                       bool
-	AddFindingIDs                       []string
-	RemoveFindingIDs                    []string
-	ClearActionPlans                    bool
-	AddActionPlanIDs                    []string
-	RemoveActionPlanIDs                 []string
-	ClearControls                       bool
-	AddControlIDs                       []string
-	RemoveControlIDs                    []string
-	ClearSubcontrols                    bool
-	AddSubcontrolIDs                    []string
-	RemoveSubcontrolIDs                 []string
-	ClearRisks                          bool
-	AddRiskIDs                          []string
-	RemoveRiskIDs                       []string
-	ClearPrograms                       bool
-	AddProgramIDs                       []string
-	RemoveProgramIDs                    []string
-	ClearAssets                         bool
-	AddAssetIDs                         []string
-	RemoveAssetIDs                      []string
-	ClearEntities                       bool
-	AddEntityIDs                        []string
-	RemoveEntityIDs                     []string
-	ClearScans                          bool
-	AddScanIDs                          []string
-	RemoveScanIDs                       []string
-	ClearTasks                          bool
-	AddTaskIDs                          []string
-	RemoveTaskIDs                       []string
-	ClearRemediations                   bool
-	AddRemediationIDs                   []string
-	RemoveRemediationIDs                []string
-	ClearReviews                        bool
-	AddReviewIDs                        []string
-	RemoveReviewIDs                     []string
-	ClearComments                       bool
-	AddCommentIDs                       []string
-	RemoveCommentIDs                    []string
-	ClearFiles                          bool
-	AddFileIDs                          []string
-	RemoveFileIDs                       []string
+	ClearTags                    bool
+	Tags                         []string
+	AppendTags                   []string
+	ClearInternalNotes           bool
+	InternalNotes                *string
+	ClearSystemInternalID        bool
+	SystemInternalID             *string
+	ClearEnvironmentName         bool
+	EnvironmentName              *string
+	ClearScopeName               bool
+	ScopeName                    *string
+	ClearVulnerabilityStatusName bool
+	VulnerabilityStatusName      *string
+	ClearExternalOwnerID         bool
+	ExternalOwnerID              *string
+	ClearSecurityLevel           bool
+	SecurityLevel                *enums.SecurityLevel
+	ExternalID                   *string
+	ClearCveID                   bool
+	CveID                        *string
+	ClearSource                  bool
+	Source                       *string
+	ClearDisplayName             bool
+	DisplayName                  *string
+	ClearCategory                bool
+	Category                     *string
+	ClearSeverity                bool
+	Severity                     *string
+	ClearScore                   bool
+	Score                        *float64
+	ClearImpact                  bool
+	Impact                       *float64
+	ClearExploitability          bool
+	Exploitability               *float64
+	ClearPriority                bool
+	Priority                     *string
+	ClearStatus                  bool
+	Status                       *string
+	ClearSummary                 bool
+	Summary                      *string
+	ClearDescription             bool
+	Description                  *string
+	ClearVector                  bool
+	Vector                       *string
+	ClearRemediationSLA          bool
+	RemediationSLA               *int
+	ClearOpen                    bool
+	Open                         *bool
+	ClearBlocking                bool
+	Blocking                     *bool
+	ClearProduction              bool
+	Production                   *bool
+	ClearPublic                  bool
+	Public                       *bool
+	ClearValidated               bool
+	Validated                    *bool
+	ClearReferences              bool
+	References                   []string
+	AppendReferences             []string
+	ClearImpacts                 bool
+	Impacts                      []string
+	AppendImpacts                []string
+	ClearPublishedAt             bool
+	PublishedAt                  *models.DateTime
+	ClearDiscoveredAt            bool
+	DiscoveredAt                 *models.DateTime
+	ClearSourceUpdatedAt         bool
+	SourceUpdatedAt              *models.DateTime
+	ClearExternalURI             bool
+	ExternalURI                  *string
+	ClearMetadata                bool
+	Metadata                     map[string]interface{}
+	ClearRawPayload              bool
+	RawPayload                   map[string]interface{}
+	ClearBlockedGroups           bool
+	AddBlockedGroupIDs           []string
+	RemoveBlockedGroupIDs        []string
+	ClearEditors                 bool
+	AddEditorIDs                 []string
+	RemoveEditorIDs              []string
+	ClearViewers                 bool
+	AddViewerIDs                 []string
+	RemoveViewerIDs              []string
+	ClearEnvironment             bool
+	EnvironmentID                *string
+	ClearScope                   bool
+	ScopeID                      *string
+	ClearVulnerabilityStatus     bool
+	VulnerabilityStatusID        *string
+	ClearIntegrations            bool
+	AddIntegrationIDs            []string
+	RemoveIntegrationIDs         []string
+	ClearFindings                bool
+	AddFindingIDs                []string
+	RemoveFindingIDs             []string
+	ClearActionPlans             bool
+	AddActionPlanIDs             []string
+	RemoveActionPlanIDs          []string
+	ClearControls                bool
+	AddControlIDs                []string
+	RemoveControlIDs             []string
+	ClearSubcontrols             bool
+	AddSubcontrolIDs             []string
+	RemoveSubcontrolIDs          []string
+	ClearRisks                   bool
+	AddRiskIDs                   []string
+	RemoveRiskIDs                []string
+	ClearPrograms                bool
+	AddProgramIDs                []string
+	RemoveProgramIDs             []string
+	ClearAssets                  bool
+	AddAssetIDs                  []string
+	RemoveAssetIDs               []string
+	ClearEntities                bool
+	AddEntityIDs                 []string
+	RemoveEntityIDs              []string
+	ClearScans                   bool
+	AddScanIDs                   []string
+	RemoveScanIDs                []string
+	ClearTasks                   bool
+	AddTaskIDs                   []string
+	RemoveTaskIDs                []string
+	ClearRemediations            bool
+	AddRemediationIDs            []string
+	RemoveRemediationIDs         []string
+	ClearReviews                 bool
+	AddReviewIDs                 []string
+	RemoveReviewIDs              []string
+	ClearComments                bool
+	AddCommentIDs                []string
+	RemoveCommentIDs             []string
+	ClearFiles                   bool
+	AddFileIDs                   []string
+	RemoveFileIDs                []string
 }
 
 // Mutate applies the UpdateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -27492,12 +27474,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
-	if i.ClearVulnerabilitySeverityLevelName {
-		m.ClearVulnerabilitySeverityLevelName()
-	}
-	if v := i.VulnerabilitySeverityLevelName; v != nil {
-		m.SetVulnerabilitySeverityLevelName(*v)
-	}
 	if i.ClearVulnerabilityStatusName {
 		m.ClearVulnerabilityStatusName()
 	}
@@ -27509,6 +27485,12 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
+	}
+	if i.ClearSecurityLevel {
+		m.ClearSecurityLevel()
+	}
+	if v := i.SecurityLevel; v != nil {
+		m.SetSecurityLevel(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -27719,12 +27701,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
-	}
-	if i.ClearVulnerabilitySeverityLevel {
-		m.ClearVulnerabilitySeverityLevel()
-	}
-	if v := i.VulnerabilitySeverityLevelID; v != nil {
-		m.SetVulnerabilitySeverityLevelID(*v)
 	}
 	if i.ClearVulnerabilityStatus {
 		m.ClearVulnerabilityStatus()

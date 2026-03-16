@@ -8957,14 +8957,6 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
-	if findingSeverityLevelName, exists := m.FindingSeverityLevelName(); exists {
-		create = create.SetFindingSeverityLevelName(findingSeverityLevelName)
-	}
-
-	if findingSeverityLevelID, exists := m.FindingSeverityLevelID(); exists {
-		create = create.SetFindingSeverityLevelID(findingSeverityLevelID)
-	}
-
 	if findingStatusName, exists := m.FindingStatusName(); exists {
 		create = create.SetFindingStatusName(findingStatusName)
 	}
@@ -8975,6 +8967,10 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if externalID, exists := m.ExternalID(); exists {
 		create = create.SetExternalID(externalID)
+	}
+
+	if securityLevel, exists := m.SecurityLevel(); exists {
+		create = create.SetSecurityLevel(securityLevel)
 	}
 
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -9248,18 +9244,6 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(finding.ScopeID)
 		}
 
-		if findingSeverityLevelName, exists := m.FindingSeverityLevelName(); exists {
-			create = create.SetFindingSeverityLevelName(findingSeverityLevelName)
-		} else {
-			create = create.SetFindingSeverityLevelName(finding.FindingSeverityLevelName)
-		}
-
-		if findingSeverityLevelID, exists := m.FindingSeverityLevelID(); exists {
-			create = create.SetFindingSeverityLevelID(findingSeverityLevelID)
-		} else {
-			create = create.SetFindingSeverityLevelID(finding.FindingSeverityLevelID)
-		}
-
 		if findingStatusName, exists := m.FindingStatusName(); exists {
 			create = create.SetFindingStatusName(findingStatusName)
 		} else {
@@ -9276,6 +9260,12 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetExternalID(externalID)
 		} else {
 			create = create.SetExternalID(finding.ExternalID)
+		}
+
+		if securityLevel, exists := m.SecurityLevel(); exists {
+			create = create.SetSecurityLevel(securityLevel)
+		} else {
+			create = create.SetSecurityLevel(finding.SecurityLevel)
 		}
 
 		if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -9545,11 +9535,10 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(finding.EnvironmentID).
 			SetScopeName(finding.ScopeName).
 			SetScopeID(finding.ScopeID).
-			SetFindingSeverityLevelName(finding.FindingSeverityLevelName).
-			SetFindingSeverityLevelID(finding.FindingSeverityLevelID).
 			SetFindingStatusName(finding.FindingStatusName).
 			SetFindingStatusID(finding.FindingStatusID).
 			SetExternalID(finding.ExternalID).
+			SetSecurityLevel(finding.SecurityLevel).
 			SetExternalOwnerID(finding.ExternalOwnerID).
 			SetSource(finding.Source).
 			SetResourceName(finding.ResourceName).
@@ -24894,14 +24883,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetScopeID(scopeID)
 	}
 
-	if vulnerabilitySeverityLevelName, exists := m.VulnerabilitySeverityLevelName(); exists {
-		create = create.SetVulnerabilitySeverityLevelName(vulnerabilitySeverityLevelName)
-	}
-
-	if vulnerabilitySeverityLevelID, exists := m.VulnerabilitySeverityLevelID(); exists {
-		create = create.SetVulnerabilitySeverityLevelID(vulnerabilitySeverityLevelID)
-	}
-
 	if vulnerabilityStatusName, exists := m.VulnerabilityStatusName(); exists {
 		create = create.SetVulnerabilityStatusName(vulnerabilityStatusName)
 	}
@@ -24912,6 +24893,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
 		create = create.SetExternalOwnerID(externalOwnerID)
+	}
+
+	if securityLevel, exists := m.SecurityLevel(); exists {
+		create = create.SetSecurityLevel(securityLevel)
 	}
 
 	if externalID, exists := m.ExternalID(); exists {
@@ -25153,18 +25138,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetScopeID(vulnerability.ScopeID)
 		}
 
-		if vulnerabilitySeverityLevelName, exists := m.VulnerabilitySeverityLevelName(); exists {
-			create = create.SetVulnerabilitySeverityLevelName(vulnerabilitySeverityLevelName)
-		} else {
-			create = create.SetVulnerabilitySeverityLevelName(vulnerability.VulnerabilitySeverityLevelName)
-		}
-
-		if vulnerabilitySeverityLevelID, exists := m.VulnerabilitySeverityLevelID(); exists {
-			create = create.SetVulnerabilitySeverityLevelID(vulnerabilitySeverityLevelID)
-		} else {
-			create = create.SetVulnerabilitySeverityLevelID(vulnerability.VulnerabilitySeverityLevelID)
-		}
-
 		if vulnerabilityStatusName, exists := m.VulnerabilityStatusName(); exists {
 			create = create.SetVulnerabilityStatusName(vulnerabilityStatusName)
 		} else {
@@ -25181,6 +25154,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetExternalOwnerID(externalOwnerID)
 		} else {
 			create = create.SetExternalOwnerID(vulnerability.ExternalOwnerID)
+		}
+
+		if securityLevel, exists := m.SecurityLevel(); exists {
+			create = create.SetSecurityLevel(securityLevel)
+		} else {
+			create = create.SetSecurityLevel(vulnerability.SecurityLevel)
 		}
 
 		if externalID, exists := m.ExternalID(); exists {
@@ -25402,11 +25381,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetEnvironmentID(vulnerability.EnvironmentID).
 			SetScopeName(vulnerability.ScopeName).
 			SetScopeID(vulnerability.ScopeID).
-			SetVulnerabilitySeverityLevelName(vulnerability.VulnerabilitySeverityLevelName).
-			SetVulnerabilitySeverityLevelID(vulnerability.VulnerabilitySeverityLevelID).
 			SetVulnerabilityStatusName(vulnerability.VulnerabilityStatusName).
 			SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
+			SetSecurityLevel(vulnerability.SecurityLevel).
 			SetExternalID(vulnerability.ExternalID).
 			SetCveID(vulnerability.CveID).
 			SetSource(vulnerability.Source).

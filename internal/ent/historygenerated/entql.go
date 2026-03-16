@@ -1114,66 +1114,65 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "FindingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			findinghistory.FieldHistoryTime:              {Type: field.TypeTime, Column: findinghistory.FieldHistoryTime},
-			findinghistory.FieldRef:                      {Type: field.TypeString, Column: findinghistory.FieldRef},
-			findinghistory.FieldOperation:                {Type: field.TypeEnum, Column: findinghistory.FieldOperation},
-			findinghistory.FieldCreatedAt:                {Type: field.TypeTime, Column: findinghistory.FieldCreatedAt},
-			findinghistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: findinghistory.FieldUpdatedAt},
-			findinghistory.FieldCreatedBy:                {Type: field.TypeString, Column: findinghistory.FieldCreatedBy},
-			findinghistory.FieldUpdatedBy:                {Type: field.TypeString, Column: findinghistory.FieldUpdatedBy},
-			findinghistory.FieldDeletedAt:                {Type: field.TypeTime, Column: findinghistory.FieldDeletedAt},
-			findinghistory.FieldDeletedBy:                {Type: field.TypeString, Column: findinghistory.FieldDeletedBy},
-			findinghistory.FieldDisplayID:                {Type: field.TypeString, Column: findinghistory.FieldDisplayID},
-			findinghistory.FieldTags:                     {Type: field.TypeJSON, Column: findinghistory.FieldTags},
-			findinghistory.FieldOwnerID:                  {Type: field.TypeString, Column: findinghistory.FieldOwnerID},
-			findinghistory.FieldSystemOwned:              {Type: field.TypeBool, Column: findinghistory.FieldSystemOwned},
-			findinghistory.FieldInternalNotes:            {Type: field.TypeString, Column: findinghistory.FieldInternalNotes},
-			findinghistory.FieldSystemInternalID:         {Type: field.TypeString, Column: findinghistory.FieldSystemInternalID},
-			findinghistory.FieldEnvironmentName:          {Type: field.TypeString, Column: findinghistory.FieldEnvironmentName},
-			findinghistory.FieldEnvironmentID:            {Type: field.TypeString, Column: findinghistory.FieldEnvironmentID},
-			findinghistory.FieldScopeName:                {Type: field.TypeString, Column: findinghistory.FieldScopeName},
-			findinghistory.FieldScopeID:                  {Type: field.TypeString, Column: findinghistory.FieldScopeID},
-			findinghistory.FieldFindingSeverityLevelName: {Type: field.TypeString, Column: findinghistory.FieldFindingSeverityLevelName},
-			findinghistory.FieldFindingSeverityLevelID:   {Type: field.TypeString, Column: findinghistory.FieldFindingSeverityLevelID},
-			findinghistory.FieldFindingStatusName:        {Type: field.TypeString, Column: findinghistory.FieldFindingStatusName},
-			findinghistory.FieldFindingStatusID:          {Type: field.TypeString, Column: findinghistory.FieldFindingStatusID},
-			findinghistory.FieldExternalID:               {Type: field.TypeString, Column: findinghistory.FieldExternalID},
-			findinghistory.FieldExternalOwnerID:          {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
-			findinghistory.FieldSource:                   {Type: field.TypeString, Column: findinghistory.FieldSource},
-			findinghistory.FieldResourceName:             {Type: field.TypeString, Column: findinghistory.FieldResourceName},
-			findinghistory.FieldDisplayName:              {Type: field.TypeString, Column: findinghistory.FieldDisplayName},
-			findinghistory.FieldState:                    {Type: field.TypeString, Column: findinghistory.FieldState},
-			findinghistory.FieldCategory:                 {Type: field.TypeString, Column: findinghistory.FieldCategory},
-			findinghistory.FieldCategories:               {Type: field.TypeJSON, Column: findinghistory.FieldCategories},
-			findinghistory.FieldFindingClass:             {Type: field.TypeString, Column: findinghistory.FieldFindingClass},
-			findinghistory.FieldSeverity:                 {Type: field.TypeString, Column: findinghistory.FieldSeverity},
-			findinghistory.FieldNumericSeverity:          {Type: field.TypeFloat64, Column: findinghistory.FieldNumericSeverity},
-			findinghistory.FieldScore:                    {Type: field.TypeFloat64, Column: findinghistory.FieldScore},
-			findinghistory.FieldImpact:                   {Type: field.TypeFloat64, Column: findinghistory.FieldImpact},
-			findinghistory.FieldExploitability:           {Type: field.TypeFloat64, Column: findinghistory.FieldExploitability},
-			findinghistory.FieldPriority:                 {Type: field.TypeString, Column: findinghistory.FieldPriority},
-			findinghistory.FieldOpen:                     {Type: field.TypeBool, Column: findinghistory.FieldOpen},
-			findinghistory.FieldBlocksProduction:         {Type: field.TypeBool, Column: findinghistory.FieldBlocksProduction},
-			findinghistory.FieldProduction:               {Type: field.TypeBool, Column: findinghistory.FieldProduction},
-			findinghistory.FieldPublic:                   {Type: field.TypeBool, Column: findinghistory.FieldPublic},
-			findinghistory.FieldValidated:                {Type: field.TypeBool, Column: findinghistory.FieldValidated},
-			findinghistory.FieldAssessmentID:             {Type: field.TypeString, Column: findinghistory.FieldAssessmentID},
-			findinghistory.FieldDescription:              {Type: field.TypeString, Column: findinghistory.FieldDescription},
-			findinghistory.FieldRecommendation:           {Type: field.TypeString, Column: findinghistory.FieldRecommendation},
-			findinghistory.FieldRecommendedActions:       {Type: field.TypeString, Column: findinghistory.FieldRecommendedActions},
-			findinghistory.FieldReferences:               {Type: field.TypeJSON, Column: findinghistory.FieldReferences},
-			findinghistory.FieldStepsToReproduce:         {Type: field.TypeJSON, Column: findinghistory.FieldStepsToReproduce},
-			findinghistory.FieldTargets:                  {Type: field.TypeJSON, Column: findinghistory.FieldTargets},
-			findinghistory.FieldTargetDetails:            {Type: field.TypeJSON, Column: findinghistory.FieldTargetDetails},
-			findinghistory.FieldVector:                   {Type: field.TypeString, Column: findinghistory.FieldVector},
-			findinghistory.FieldRemediationSLA:           {Type: field.TypeInt, Column: findinghistory.FieldRemediationSLA},
-			findinghistory.FieldStatus:                   {Type: field.TypeString, Column: findinghistory.FieldStatus},
-			findinghistory.FieldEventTime:                {Type: field.TypeTime, Column: findinghistory.FieldEventTime},
-			findinghistory.FieldReportedAt:               {Type: field.TypeTime, Column: findinghistory.FieldReportedAt},
-			findinghistory.FieldSourceUpdatedAt:          {Type: field.TypeTime, Column: findinghistory.FieldSourceUpdatedAt},
-			findinghistory.FieldExternalURI:              {Type: field.TypeString, Column: findinghistory.FieldExternalURI},
-			findinghistory.FieldMetadata:                 {Type: field.TypeJSON, Column: findinghistory.FieldMetadata},
-			findinghistory.FieldRawPayload:               {Type: field.TypeJSON, Column: findinghistory.FieldRawPayload},
+			findinghistory.FieldHistoryTime:        {Type: field.TypeTime, Column: findinghistory.FieldHistoryTime},
+			findinghistory.FieldRef:                {Type: field.TypeString, Column: findinghistory.FieldRef},
+			findinghistory.FieldOperation:          {Type: field.TypeEnum, Column: findinghistory.FieldOperation},
+			findinghistory.FieldCreatedAt:          {Type: field.TypeTime, Column: findinghistory.FieldCreatedAt},
+			findinghistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: findinghistory.FieldUpdatedAt},
+			findinghistory.FieldCreatedBy:          {Type: field.TypeString, Column: findinghistory.FieldCreatedBy},
+			findinghistory.FieldUpdatedBy:          {Type: field.TypeString, Column: findinghistory.FieldUpdatedBy},
+			findinghistory.FieldDeletedAt:          {Type: field.TypeTime, Column: findinghistory.FieldDeletedAt},
+			findinghistory.FieldDeletedBy:          {Type: field.TypeString, Column: findinghistory.FieldDeletedBy},
+			findinghistory.FieldDisplayID:          {Type: field.TypeString, Column: findinghistory.FieldDisplayID},
+			findinghistory.FieldTags:               {Type: field.TypeJSON, Column: findinghistory.FieldTags},
+			findinghistory.FieldOwnerID:            {Type: field.TypeString, Column: findinghistory.FieldOwnerID},
+			findinghistory.FieldSystemOwned:        {Type: field.TypeBool, Column: findinghistory.FieldSystemOwned},
+			findinghistory.FieldInternalNotes:      {Type: field.TypeString, Column: findinghistory.FieldInternalNotes},
+			findinghistory.FieldSystemInternalID:   {Type: field.TypeString, Column: findinghistory.FieldSystemInternalID},
+			findinghistory.FieldEnvironmentName:    {Type: field.TypeString, Column: findinghistory.FieldEnvironmentName},
+			findinghistory.FieldEnvironmentID:      {Type: field.TypeString, Column: findinghistory.FieldEnvironmentID},
+			findinghistory.FieldScopeName:          {Type: field.TypeString, Column: findinghistory.FieldScopeName},
+			findinghistory.FieldScopeID:            {Type: field.TypeString, Column: findinghistory.FieldScopeID},
+			findinghistory.FieldFindingStatusName:  {Type: field.TypeString, Column: findinghistory.FieldFindingStatusName},
+			findinghistory.FieldFindingStatusID:    {Type: field.TypeString, Column: findinghistory.FieldFindingStatusID},
+			findinghistory.FieldExternalID:         {Type: field.TypeString, Column: findinghistory.FieldExternalID},
+			findinghistory.FieldSecurityLevel:      {Type: field.TypeEnum, Column: findinghistory.FieldSecurityLevel},
+			findinghistory.FieldExternalOwnerID:    {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
+			findinghistory.FieldSource:             {Type: field.TypeString, Column: findinghistory.FieldSource},
+			findinghistory.FieldResourceName:       {Type: field.TypeString, Column: findinghistory.FieldResourceName},
+			findinghistory.FieldDisplayName:        {Type: field.TypeString, Column: findinghistory.FieldDisplayName},
+			findinghistory.FieldState:              {Type: field.TypeString, Column: findinghistory.FieldState},
+			findinghistory.FieldCategory:           {Type: field.TypeString, Column: findinghistory.FieldCategory},
+			findinghistory.FieldCategories:         {Type: field.TypeJSON, Column: findinghistory.FieldCategories},
+			findinghistory.FieldFindingClass:       {Type: field.TypeString, Column: findinghistory.FieldFindingClass},
+			findinghistory.FieldSeverity:           {Type: field.TypeString, Column: findinghistory.FieldSeverity},
+			findinghistory.FieldNumericSeverity:    {Type: field.TypeFloat64, Column: findinghistory.FieldNumericSeverity},
+			findinghistory.FieldScore:              {Type: field.TypeFloat64, Column: findinghistory.FieldScore},
+			findinghistory.FieldImpact:             {Type: field.TypeFloat64, Column: findinghistory.FieldImpact},
+			findinghistory.FieldExploitability:     {Type: field.TypeFloat64, Column: findinghistory.FieldExploitability},
+			findinghistory.FieldPriority:           {Type: field.TypeString, Column: findinghistory.FieldPriority},
+			findinghistory.FieldOpen:               {Type: field.TypeBool, Column: findinghistory.FieldOpen},
+			findinghistory.FieldBlocksProduction:   {Type: field.TypeBool, Column: findinghistory.FieldBlocksProduction},
+			findinghistory.FieldProduction:         {Type: field.TypeBool, Column: findinghistory.FieldProduction},
+			findinghistory.FieldPublic:             {Type: field.TypeBool, Column: findinghistory.FieldPublic},
+			findinghistory.FieldValidated:          {Type: field.TypeBool, Column: findinghistory.FieldValidated},
+			findinghistory.FieldAssessmentID:       {Type: field.TypeString, Column: findinghistory.FieldAssessmentID},
+			findinghistory.FieldDescription:        {Type: field.TypeString, Column: findinghistory.FieldDescription},
+			findinghistory.FieldRecommendation:     {Type: field.TypeString, Column: findinghistory.FieldRecommendation},
+			findinghistory.FieldRecommendedActions: {Type: field.TypeString, Column: findinghistory.FieldRecommendedActions},
+			findinghistory.FieldReferences:         {Type: field.TypeJSON, Column: findinghistory.FieldReferences},
+			findinghistory.FieldStepsToReproduce:   {Type: field.TypeJSON, Column: findinghistory.FieldStepsToReproduce},
+			findinghistory.FieldTargets:            {Type: field.TypeJSON, Column: findinghistory.FieldTargets},
+			findinghistory.FieldTargetDetails:      {Type: field.TypeJSON, Column: findinghistory.FieldTargetDetails},
+			findinghistory.FieldVector:             {Type: field.TypeString, Column: findinghistory.FieldVector},
+			findinghistory.FieldRemediationSLA:     {Type: field.TypeInt, Column: findinghistory.FieldRemediationSLA},
+			findinghistory.FieldStatus:             {Type: field.TypeString, Column: findinghistory.FieldStatus},
+			findinghistory.FieldEventTime:          {Type: field.TypeTime, Column: findinghistory.FieldEventTime},
+			findinghistory.FieldReportedAt:         {Type: field.TypeTime, Column: findinghistory.FieldReportedAt},
+			findinghistory.FieldSourceUpdatedAt:    {Type: field.TypeTime, Column: findinghistory.FieldSourceUpdatedAt},
+			findinghistory.FieldExternalURI:        {Type: field.TypeString, Column: findinghistory.FieldExternalURI},
+			findinghistory.FieldMetadata:           {Type: field.TypeJSON, Column: findinghistory.FieldMetadata},
+			findinghistory.FieldRawPayload:         {Type: field.TypeJSON, Column: findinghistory.FieldRawPayload},
 		},
 	}
 	graph.Nodes[25] = &sqlgraph.Node{
@@ -2897,58 +2896,57 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "VulnerabilityHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vulnerabilityhistory.FieldHistoryTime:                    {Type: field.TypeTime, Column: vulnerabilityhistory.FieldHistoryTime},
-			vulnerabilityhistory.FieldRef:                            {Type: field.TypeString, Column: vulnerabilityhistory.FieldRef},
-			vulnerabilityhistory.FieldOperation:                      {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldOperation},
-			vulnerabilityhistory.FieldCreatedAt:                      {Type: field.TypeTime, Column: vulnerabilityhistory.FieldCreatedAt},
-			vulnerabilityhistory.FieldUpdatedAt:                      {Type: field.TypeTime, Column: vulnerabilityhistory.FieldUpdatedAt},
-			vulnerabilityhistory.FieldCreatedBy:                      {Type: field.TypeString, Column: vulnerabilityhistory.FieldCreatedBy},
-			vulnerabilityhistory.FieldUpdatedBy:                      {Type: field.TypeString, Column: vulnerabilityhistory.FieldUpdatedBy},
-			vulnerabilityhistory.FieldDeletedAt:                      {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDeletedAt},
-			vulnerabilityhistory.FieldDeletedBy:                      {Type: field.TypeString, Column: vulnerabilityhistory.FieldDeletedBy},
-			vulnerabilityhistory.FieldDisplayID:                      {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayID},
-			vulnerabilityhistory.FieldTags:                           {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldTags},
-			vulnerabilityhistory.FieldOwnerID:                        {Type: field.TypeString, Column: vulnerabilityhistory.FieldOwnerID},
-			vulnerabilityhistory.FieldSystemOwned:                    {Type: field.TypeBool, Column: vulnerabilityhistory.FieldSystemOwned},
-			vulnerabilityhistory.FieldInternalNotes:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldInternalNotes},
-			vulnerabilityhistory.FieldSystemInternalID:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldSystemInternalID},
-			vulnerabilityhistory.FieldEnvironmentName:                {Type: field.TypeString, Column: vulnerabilityhistory.FieldEnvironmentName},
-			vulnerabilityhistory.FieldEnvironmentID:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldEnvironmentID},
-			vulnerabilityhistory.FieldScopeName:                      {Type: field.TypeString, Column: vulnerabilityhistory.FieldScopeName},
-			vulnerabilityhistory.FieldScopeID:                        {Type: field.TypeString, Column: vulnerabilityhistory.FieldScopeID},
-			vulnerabilityhistory.FieldVulnerabilitySeverityLevelName: {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilitySeverityLevelName},
-			vulnerabilityhistory.FieldVulnerabilitySeverityLevelID:   {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilitySeverityLevelID},
-			vulnerabilityhistory.FieldVulnerabilityStatusName:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusName},
-			vulnerabilityhistory.FieldVulnerabilityStatusID:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusID},
-			vulnerabilityhistory.FieldExternalOwnerID:                {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
-			vulnerabilityhistory.FieldExternalID:                     {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
-			vulnerabilityhistory.FieldCveID:                          {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
-			vulnerabilityhistory.FieldSource:                         {Type: field.TypeString, Column: vulnerabilityhistory.FieldSource},
-			vulnerabilityhistory.FieldDisplayName:                    {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayName},
-			vulnerabilityhistory.FieldCategory:                       {Type: field.TypeString, Column: vulnerabilityhistory.FieldCategory},
-			vulnerabilityhistory.FieldSeverity:                       {Type: field.TypeString, Column: vulnerabilityhistory.FieldSeverity},
-			vulnerabilityhistory.FieldScore:                          {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldScore},
-			vulnerabilityhistory.FieldImpact:                         {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldImpact},
-			vulnerabilityhistory.FieldExploitability:                 {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldExploitability},
-			vulnerabilityhistory.FieldPriority:                       {Type: field.TypeString, Column: vulnerabilityhistory.FieldPriority},
-			vulnerabilityhistory.FieldStatus:                         {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
-			vulnerabilityhistory.FieldSummary:                        {Type: field.TypeString, Column: vulnerabilityhistory.FieldSummary},
-			vulnerabilityhistory.FieldDescription:                    {Type: field.TypeString, Column: vulnerabilityhistory.FieldDescription},
-			vulnerabilityhistory.FieldVector:                         {Type: field.TypeString, Column: vulnerabilityhistory.FieldVector},
-			vulnerabilityhistory.FieldRemediationSLA:                 {Type: field.TypeInt, Column: vulnerabilityhistory.FieldRemediationSLA},
-			vulnerabilityhistory.FieldOpen:                           {Type: field.TypeBool, Column: vulnerabilityhistory.FieldOpen},
-			vulnerabilityhistory.FieldBlocking:                       {Type: field.TypeBool, Column: vulnerabilityhistory.FieldBlocking},
-			vulnerabilityhistory.FieldProduction:                     {Type: field.TypeBool, Column: vulnerabilityhistory.FieldProduction},
-			vulnerabilityhistory.FieldPublic:                         {Type: field.TypeBool, Column: vulnerabilityhistory.FieldPublic},
-			vulnerabilityhistory.FieldValidated:                      {Type: field.TypeBool, Column: vulnerabilityhistory.FieldValidated},
-			vulnerabilityhistory.FieldReferences:                     {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldReferences},
-			vulnerabilityhistory.FieldImpacts:                        {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldImpacts},
-			vulnerabilityhistory.FieldPublishedAt:                    {Type: field.TypeTime, Column: vulnerabilityhistory.FieldPublishedAt},
-			vulnerabilityhistory.FieldDiscoveredAt:                   {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDiscoveredAt},
-			vulnerabilityhistory.FieldSourceUpdatedAt:                {Type: field.TypeTime, Column: vulnerabilityhistory.FieldSourceUpdatedAt},
-			vulnerabilityhistory.FieldExternalURI:                    {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalURI},
-			vulnerabilityhistory.FieldMetadata:                       {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldMetadata},
-			vulnerabilityhistory.FieldRawPayload:                     {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
+			vulnerabilityhistory.FieldHistoryTime:             {Type: field.TypeTime, Column: vulnerabilityhistory.FieldHistoryTime},
+			vulnerabilityhistory.FieldRef:                     {Type: field.TypeString, Column: vulnerabilityhistory.FieldRef},
+			vulnerabilityhistory.FieldOperation:               {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldOperation},
+			vulnerabilityhistory.FieldCreatedAt:               {Type: field.TypeTime, Column: vulnerabilityhistory.FieldCreatedAt},
+			vulnerabilityhistory.FieldUpdatedAt:               {Type: field.TypeTime, Column: vulnerabilityhistory.FieldUpdatedAt},
+			vulnerabilityhistory.FieldCreatedBy:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldCreatedBy},
+			vulnerabilityhistory.FieldUpdatedBy:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldUpdatedBy},
+			vulnerabilityhistory.FieldDeletedAt:               {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDeletedAt},
+			vulnerabilityhistory.FieldDeletedBy:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldDeletedBy},
+			vulnerabilityhistory.FieldDisplayID:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayID},
+			vulnerabilityhistory.FieldTags:                    {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldTags},
+			vulnerabilityhistory.FieldOwnerID:                 {Type: field.TypeString, Column: vulnerabilityhistory.FieldOwnerID},
+			vulnerabilityhistory.FieldSystemOwned:             {Type: field.TypeBool, Column: vulnerabilityhistory.FieldSystemOwned},
+			vulnerabilityhistory.FieldInternalNotes:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldInternalNotes},
+			vulnerabilityhistory.FieldSystemInternalID:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldSystemInternalID},
+			vulnerabilityhistory.FieldEnvironmentName:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldEnvironmentName},
+			vulnerabilityhistory.FieldEnvironmentID:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldEnvironmentID},
+			vulnerabilityhistory.FieldScopeName:               {Type: field.TypeString, Column: vulnerabilityhistory.FieldScopeName},
+			vulnerabilityhistory.FieldScopeID:                 {Type: field.TypeString, Column: vulnerabilityhistory.FieldScopeID},
+			vulnerabilityhistory.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusName},
+			vulnerabilityhistory.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerabilityhistory.FieldVulnerabilityStatusID},
+			vulnerabilityhistory.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
+			vulnerabilityhistory.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldSecurityLevel},
+			vulnerabilityhistory.FieldExternalID:              {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
+			vulnerabilityhistory.FieldCveID:                   {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
+			vulnerabilityhistory.FieldSource:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldSource},
+			vulnerabilityhistory.FieldDisplayName:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayName},
+			vulnerabilityhistory.FieldCategory:                {Type: field.TypeString, Column: vulnerabilityhistory.FieldCategory},
+			vulnerabilityhistory.FieldSeverity:                {Type: field.TypeString, Column: vulnerabilityhistory.FieldSeverity},
+			vulnerabilityhistory.FieldScore:                   {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldScore},
+			vulnerabilityhistory.FieldImpact:                  {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldImpact},
+			vulnerabilityhistory.FieldExploitability:          {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldExploitability},
+			vulnerabilityhistory.FieldPriority:                {Type: field.TypeString, Column: vulnerabilityhistory.FieldPriority},
+			vulnerabilityhistory.FieldStatus:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
+			vulnerabilityhistory.FieldSummary:                 {Type: field.TypeString, Column: vulnerabilityhistory.FieldSummary},
+			vulnerabilityhistory.FieldDescription:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldDescription},
+			vulnerabilityhistory.FieldVector:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldVector},
+			vulnerabilityhistory.FieldRemediationSLA:          {Type: field.TypeInt, Column: vulnerabilityhistory.FieldRemediationSLA},
+			vulnerabilityhistory.FieldOpen:                    {Type: field.TypeBool, Column: vulnerabilityhistory.FieldOpen},
+			vulnerabilityhistory.FieldBlocking:                {Type: field.TypeBool, Column: vulnerabilityhistory.FieldBlocking},
+			vulnerabilityhistory.FieldProduction:              {Type: field.TypeBool, Column: vulnerabilityhistory.FieldProduction},
+			vulnerabilityhistory.FieldPublic:                  {Type: field.TypeBool, Column: vulnerabilityhistory.FieldPublic},
+			vulnerabilityhistory.FieldValidated:               {Type: field.TypeBool, Column: vulnerabilityhistory.FieldValidated},
+			vulnerabilityhistory.FieldReferences:              {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldReferences},
+			vulnerabilityhistory.FieldImpacts:                 {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldImpacts},
+			vulnerabilityhistory.FieldPublishedAt:             {Type: field.TypeTime, Column: vulnerabilityhistory.FieldPublishedAt},
+			vulnerabilityhistory.FieldDiscoveredAt:            {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDiscoveredAt},
+			vulnerabilityhistory.FieldSourceUpdatedAt:         {Type: field.TypeTime, Column: vulnerabilityhistory.FieldSourceUpdatedAt},
+			vulnerabilityhistory.FieldExternalURI:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalURI},
+			vulnerabilityhistory.FieldMetadata:                {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldMetadata},
+			vulnerabilityhistory.FieldRawPayload:              {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
 		},
 	}
 	graph.Nodes[71] = &sqlgraph.Node{
@@ -7773,16 +7771,6 @@ func (f *FindingHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldScopeID))
 }
 
-// WhereFindingSeverityLevelName applies the entql string predicate on the finding_severity_level_name field.
-func (f *FindingHistoryFilter) WhereFindingSeverityLevelName(p entql.StringP) {
-	f.Where(p.Field(findinghistory.FieldFindingSeverityLevelName))
-}
-
-// WhereFindingSeverityLevelID applies the entql string predicate on the finding_severity_level_id field.
-func (f *FindingHistoryFilter) WhereFindingSeverityLevelID(p entql.StringP) {
-	f.Where(p.Field(findinghistory.FieldFindingSeverityLevelID))
-}
-
 // WhereFindingStatusName applies the entql string predicate on the finding_status_name field.
 func (f *FindingHistoryFilter) WhereFindingStatusName(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldFindingStatusName))
@@ -7796,6 +7784,11 @@ func (f *FindingHistoryFilter) WhereFindingStatusID(p entql.StringP) {
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(findinghistory.FieldExternalID))
+}
+
+// WhereSecurityLevel applies the entql string predicate on the security_level field.
+func (f *FindingHistoryFilter) WhereSecurityLevel(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldSecurityLevel))
 }
 
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
@@ -15538,16 +15531,6 @@ func (f *VulnerabilityHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldScopeID))
 }
 
-// WhereVulnerabilitySeverityLevelName applies the entql string predicate on the vulnerability_severity_level_name field.
-func (f *VulnerabilityHistoryFilter) WhereVulnerabilitySeverityLevelName(p entql.StringP) {
-	f.Where(p.Field(vulnerabilityhistory.FieldVulnerabilitySeverityLevelName))
-}
-
-// WhereVulnerabilitySeverityLevelID applies the entql string predicate on the vulnerability_severity_level_id field.
-func (f *VulnerabilityHistoryFilter) WhereVulnerabilitySeverityLevelID(p entql.StringP) {
-	f.Where(p.Field(vulnerabilityhistory.FieldVulnerabilitySeverityLevelID))
-}
-
 // WhereVulnerabilityStatusName applies the entql string predicate on the vulnerability_status_name field.
 func (f *VulnerabilityHistoryFilter) WhereVulnerabilityStatusName(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldVulnerabilityStatusName))
@@ -15561,6 +15544,11 @@ func (f *VulnerabilityHistoryFilter) WhereVulnerabilityStatusID(p entql.StringP)
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldExternalOwnerID))
+}
+
+// WhereSecurityLevel applies the entql string predicate on the security_level field.
+func (f *VulnerabilityHistoryFilter) WhereSecurityLevel(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSecurityLevel))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -53,16 +54,14 @@ type Finding struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the finding
 	ScopeID string `json:"scope_id,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelName string `json:"finding_severity_level_name,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelID string `json:"finding_severity_level_id,omitempty"`
 	// the status of the finding
 	FindingStatusName string `json:"finding_status_name,omitempty"`
 	// the status of the finding
 	FindingStatusID string `json:"finding_status_id,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
+	// incoming source severity
+	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -158,8 +157,6 @@ type FindingEdges struct {
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
 	Scope *CustomTypeEnum `json:"scope,omitempty"`
-	// FindingSeverityLevel holds the value of the finding_severity_level edge.
-	FindingSeverityLevel *CustomTypeEnum `json:"finding_severity_level,omitempty"`
 	// FindingStatus holds the value of the finding_status edge.
 	FindingStatus *CustomTypeEnum `json:"finding_status,omitempty"`
 	// integration that produced the finding
@@ -202,9 +199,9 @@ type FindingEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [26]map[string]int
 
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
@@ -290,23 +287,12 @@ func (e FindingEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "scope"}
 }
 
-// FindingSeverityLevelOrErr returns the FindingSeverityLevel value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e FindingEdges) FindingSeverityLevelOrErr() (*CustomTypeEnum, error) {
-	if e.FindingSeverityLevel != nil {
-		return e.FindingSeverityLevel, nil
-	} else if e.loadedTypes[6] {
-		return nil, &NotFoundError{label: customtypeenum.Label}
-	}
-	return nil, &NotLoadedError{edge: "finding_severity_level"}
-}
-
 // FindingStatusOrErr returns the FindingStatus value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FindingEdges) FindingStatusOrErr() (*CustomTypeEnum, error) {
 	if e.FindingStatus != nil {
 		return e.FindingStatus, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "finding_status"}
@@ -315,7 +301,7 @@ func (e FindingEdges) FindingStatusOrErr() (*CustomTypeEnum, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[7] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -324,7 +310,7 @@ func (e FindingEdges) IntegrationsOrErr() ([]*Integration, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[8] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -333,7 +319,7 @@ func (e FindingEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[9] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -342,7 +328,7 @@ func (e FindingEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[10] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -351,7 +337,7 @@ func (e FindingEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[11] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -360,7 +346,7 @@ func (e FindingEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[12] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -369,7 +355,7 @@ func (e FindingEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[13] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -378,7 +364,7 @@ func (e FindingEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[14] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -387,7 +373,7 @@ func (e FindingEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -396,7 +382,7 @@ func (e FindingEdges) EntitiesOrErr() ([]*Entity, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -405,7 +391,7 @@ func (e FindingEdges) ScansOrErr() ([]*Scan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -414,7 +400,7 @@ func (e FindingEdges) TasksOrErr() ([]*Task, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -423,7 +409,7 @@ func (e FindingEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -432,7 +418,7 @@ func (e FindingEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[20] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -441,7 +427,7 @@ func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[21] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -450,7 +436,7 @@ func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[22] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -459,7 +445,7 @@ func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[23] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -468,7 +454,7 @@ func (e FindingEdges) FilesOrErr() ([]*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[24] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -477,7 +463,7 @@ func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[25] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -498,7 +484,7 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case finding.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldOwnerID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingSeverityLevelName, finding.FieldFindingSeverityLevelID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldStatus, finding.FieldExternalURI:
+		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldOwnerID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldStatus, finding.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -629,18 +615,6 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
-		case finding.FieldFindingSeverityLevelName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_severity_level_name", values[i])
-			} else if value.Valid {
-				_m.FindingSeverityLevelName = value.String
-			}
-		case finding.FieldFindingSeverityLevelID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_severity_level_id", values[i])
-			} else if value.Valid {
-				_m.FindingSeverityLevelID = value.String
-			}
 		case finding.FieldFindingStatusName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_status_name", values[i])
@@ -658,6 +632,12 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
 			} else if value.Valid {
 				_m.ExternalID = value.String
+			}
+		case finding.FieldSecurityLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_level", values[i])
+			} else if value.Valid {
+				_m.SecurityLevel = enums.SecurityLevel(value.String)
 			}
 		case finding.FieldExternalOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -956,11 +936,6 @@ func (_m *Finding) QueryScope() *CustomTypeEnumQuery {
 	return NewFindingClient(_m.config).QueryScope(_m)
 }
 
-// QueryFindingSeverityLevel queries the "finding_severity_level" edge of the Finding entity.
-func (_m *Finding) QueryFindingSeverityLevel() *CustomTypeEnumQuery {
-	return NewFindingClient(_m.config).QueryFindingSeverityLevel(_m)
-}
-
 // QueryFindingStatus queries the "finding_status" edge of the Finding entity.
 func (_m *Finding) QueryFindingStatus() *CustomTypeEnumQuery {
 	return NewFindingClient(_m.config).QueryFindingStatus(_m)
@@ -1136,12 +1111,6 @@ func (_m *Finding) String() string {
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
-	builder.WriteString("finding_severity_level_name=")
-	builder.WriteString(_m.FindingSeverityLevelName)
-	builder.WriteString(", ")
-	builder.WriteString("finding_severity_level_id=")
-	builder.WriteString(_m.FindingSeverityLevelID)
-	builder.WriteString(", ")
 	builder.WriteString("finding_status_name=")
 	builder.WriteString(_m.FindingStatusName)
 	builder.WriteString(", ")
@@ -1150,6 +1119,9 @@ func (_m *Finding) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	builder.WriteString("security_level=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
 	builder.WriteString(", ")
 	builder.WriteString("external_owner_id=")
 	builder.WriteString(_m.ExternalOwnerID)

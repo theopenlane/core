@@ -11128,6 +11128,20 @@ var (
 			}
 		},
 	}
+	// FindingHistoryOrderFieldSecurityLevel orders FindingHistory by security_level.
+	FindingHistoryOrderFieldSecurityLevel = &FindingHistoryOrderField{
+		Value: func(_m *FindingHistory) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: findinghistory.FieldSecurityLevel,
+		toTerm: findinghistory.BySecurityLevel,
+		toCursor: func(_m *FindingHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// FindingHistoryOrderFieldExternalOwnerID orders FindingHistory by external_owner_id.
 	FindingHistoryOrderFieldExternalOwnerID = &FindingHistoryOrderField{
 		Value: func(_m *FindingHistory) (ent.Value, error) {
@@ -11184,6 +11198,8 @@ func (f FindingHistoryOrderField) String() string {
 		str = "updated_at"
 	case FindingHistoryOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingHistoryOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case FindingHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case FindingHistoryOrderFieldCategory.column:
@@ -11214,6 +11230,8 @@ func (f *FindingHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingHistoryOrderFieldUpdatedAt
 	case "external_id":
 		*f = *FindingHistoryOrderFieldExternalID
+	case "security_level":
+		*f = *FindingHistoryOrderFieldSecurityLevel
 	case "external_owner_id":
 		*f = *FindingHistoryOrderFieldExternalOwnerID
 	case "category":
@@ -21794,6 +21812,20 @@ var (
 			}
 		},
 	}
+	// SLADefinitionHistoryOrderFieldSLADays orders SLADefinitionHistory by sla_days.
+	SLADefinitionHistoryOrderFieldSLADays = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.SLADays, nil
+		},
+		column: sladefinitionhistory.FieldSLADays,
+		toTerm: sladefinitionhistory.BySLADays,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SLADays,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -21806,6 +21838,8 @@ func (f SLADefinitionHistoryOrderField) String() string {
 		str = "created_at"
 	case SLADefinitionHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SLADefinitionHistoryOrderFieldSLADays.column:
+		str = "sla_days"
 	}
 	return str
 }
@@ -21828,6 +21862,8 @@ func (f *SLADefinitionHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SLADefinitionHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SLADefinitionHistoryOrderFieldUpdatedAt
+	case "sla_days":
+		*f = *SLADefinitionHistoryOrderFieldSLADays
 	default:
 		return fmt.Errorf("%s is not a valid SLADefinitionHistoryOrderField", str)
 	}
@@ -29089,6 +29125,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityHistoryOrderFieldSecurityLevel orders VulnerabilityHistory by security_level.
+	VulnerabilityHistoryOrderFieldSecurityLevel = &VulnerabilityHistoryOrderField{
+		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: vulnerabilityhistory.FieldSecurityLevel,
+		toTerm: vulnerabilityhistory.BySecurityLevel,
+		toCursor: func(_m *VulnerabilityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 	// VulnerabilityHistoryOrderFieldExternalID orders VulnerabilityHistory by external_id.
 	VulnerabilityHistoryOrderFieldExternalID = &VulnerabilityHistoryOrderField{
 		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
@@ -29159,6 +29209,8 @@ func (f VulnerabilityHistoryOrderField) String() string {
 		str = "updated_at"
 	case VulnerabilityHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
+	case VulnerabilityHistoryOrderFieldSecurityLevel.column:
+		str = "security_level"
 	case VulnerabilityHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case VulnerabilityHistoryOrderFieldCveID.column:
@@ -29191,6 +29243,8 @@ func (f *VulnerabilityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityHistoryOrderFieldUpdatedAt
 	case "external_owner_id":
 		*f = *VulnerabilityHistoryOrderFieldExternalOwnerID
+	case "security_level":
+		*f = *VulnerabilityHistoryOrderFieldSecurityLevel
 	case "external_id":
 		*f = *VulnerabilityHistoryOrderFieldExternalID
 	case "cve_id":

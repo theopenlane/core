@@ -1239,63 +1239,62 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Finding",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			finding.FieldCreatedAt:                {Type: field.TypeTime, Column: finding.FieldCreatedAt},
-			finding.FieldUpdatedAt:                {Type: field.TypeTime, Column: finding.FieldUpdatedAt},
-			finding.FieldCreatedBy:                {Type: field.TypeString, Column: finding.FieldCreatedBy},
-			finding.FieldUpdatedBy:                {Type: field.TypeString, Column: finding.FieldUpdatedBy},
-			finding.FieldDeletedAt:                {Type: field.TypeTime, Column: finding.FieldDeletedAt},
-			finding.FieldDeletedBy:                {Type: field.TypeString, Column: finding.FieldDeletedBy},
-			finding.FieldDisplayID:                {Type: field.TypeString, Column: finding.FieldDisplayID},
-			finding.FieldTags:                     {Type: field.TypeJSON, Column: finding.FieldTags},
-			finding.FieldOwnerID:                  {Type: field.TypeString, Column: finding.FieldOwnerID},
-			finding.FieldSystemOwned:              {Type: field.TypeBool, Column: finding.FieldSystemOwned},
-			finding.FieldInternalNotes:            {Type: field.TypeString, Column: finding.FieldInternalNotes},
-			finding.FieldSystemInternalID:         {Type: field.TypeString, Column: finding.FieldSystemInternalID},
-			finding.FieldEnvironmentName:          {Type: field.TypeString, Column: finding.FieldEnvironmentName},
-			finding.FieldEnvironmentID:            {Type: field.TypeString, Column: finding.FieldEnvironmentID},
-			finding.FieldScopeName:                {Type: field.TypeString, Column: finding.FieldScopeName},
-			finding.FieldScopeID:                  {Type: field.TypeString, Column: finding.FieldScopeID},
-			finding.FieldFindingSeverityLevelName: {Type: field.TypeString, Column: finding.FieldFindingSeverityLevelName},
-			finding.FieldFindingSeverityLevelID:   {Type: field.TypeString, Column: finding.FieldFindingSeverityLevelID},
-			finding.FieldFindingStatusName:        {Type: field.TypeString, Column: finding.FieldFindingStatusName},
-			finding.FieldFindingStatusID:          {Type: field.TypeString, Column: finding.FieldFindingStatusID},
-			finding.FieldExternalID:               {Type: field.TypeString, Column: finding.FieldExternalID},
-			finding.FieldExternalOwnerID:          {Type: field.TypeString, Column: finding.FieldExternalOwnerID},
-			finding.FieldSource:                   {Type: field.TypeString, Column: finding.FieldSource},
-			finding.FieldResourceName:             {Type: field.TypeString, Column: finding.FieldResourceName},
-			finding.FieldDisplayName:              {Type: field.TypeString, Column: finding.FieldDisplayName},
-			finding.FieldState:                    {Type: field.TypeString, Column: finding.FieldState},
-			finding.FieldCategory:                 {Type: field.TypeString, Column: finding.FieldCategory},
-			finding.FieldCategories:               {Type: field.TypeJSON, Column: finding.FieldCategories},
-			finding.FieldFindingClass:             {Type: field.TypeString, Column: finding.FieldFindingClass},
-			finding.FieldSeverity:                 {Type: field.TypeString, Column: finding.FieldSeverity},
-			finding.FieldNumericSeverity:          {Type: field.TypeFloat64, Column: finding.FieldNumericSeverity},
-			finding.FieldScore:                    {Type: field.TypeFloat64, Column: finding.FieldScore},
-			finding.FieldImpact:                   {Type: field.TypeFloat64, Column: finding.FieldImpact},
-			finding.FieldExploitability:           {Type: field.TypeFloat64, Column: finding.FieldExploitability},
-			finding.FieldPriority:                 {Type: field.TypeString, Column: finding.FieldPriority},
-			finding.FieldOpen:                     {Type: field.TypeBool, Column: finding.FieldOpen},
-			finding.FieldBlocksProduction:         {Type: field.TypeBool, Column: finding.FieldBlocksProduction},
-			finding.FieldProduction:               {Type: field.TypeBool, Column: finding.FieldProduction},
-			finding.FieldPublic:                   {Type: field.TypeBool, Column: finding.FieldPublic},
-			finding.FieldValidated:                {Type: field.TypeBool, Column: finding.FieldValidated},
-			finding.FieldAssessmentID:             {Type: field.TypeString, Column: finding.FieldAssessmentID},
-			finding.FieldDescription:              {Type: field.TypeString, Column: finding.FieldDescription},
-			finding.FieldRecommendation:           {Type: field.TypeString, Column: finding.FieldRecommendation},
-			finding.FieldRecommendedActions:       {Type: field.TypeString, Column: finding.FieldRecommendedActions},
-			finding.FieldReferences:               {Type: field.TypeJSON, Column: finding.FieldReferences},
-			finding.FieldStepsToReproduce:         {Type: field.TypeJSON, Column: finding.FieldStepsToReproduce},
-			finding.FieldTargets:                  {Type: field.TypeJSON, Column: finding.FieldTargets},
-			finding.FieldTargetDetails:            {Type: field.TypeJSON, Column: finding.FieldTargetDetails},
-			finding.FieldVector:                   {Type: field.TypeString, Column: finding.FieldVector},
-			finding.FieldRemediationSLA:           {Type: field.TypeInt, Column: finding.FieldRemediationSLA},
-			finding.FieldStatus:                   {Type: field.TypeString, Column: finding.FieldStatus},
-			finding.FieldEventTime:                {Type: field.TypeTime, Column: finding.FieldEventTime},
-			finding.FieldReportedAt:               {Type: field.TypeTime, Column: finding.FieldReportedAt},
-			finding.FieldSourceUpdatedAt:          {Type: field.TypeTime, Column: finding.FieldSourceUpdatedAt},
-			finding.FieldExternalURI:              {Type: field.TypeString, Column: finding.FieldExternalURI},
-			finding.FieldMetadata:                 {Type: field.TypeJSON, Column: finding.FieldMetadata},
-			finding.FieldRawPayload:               {Type: field.TypeJSON, Column: finding.FieldRawPayload},
+			finding.FieldCreatedAt:          {Type: field.TypeTime, Column: finding.FieldCreatedAt},
+			finding.FieldUpdatedAt:          {Type: field.TypeTime, Column: finding.FieldUpdatedAt},
+			finding.FieldCreatedBy:          {Type: field.TypeString, Column: finding.FieldCreatedBy},
+			finding.FieldUpdatedBy:          {Type: field.TypeString, Column: finding.FieldUpdatedBy},
+			finding.FieldDeletedAt:          {Type: field.TypeTime, Column: finding.FieldDeletedAt},
+			finding.FieldDeletedBy:          {Type: field.TypeString, Column: finding.FieldDeletedBy},
+			finding.FieldDisplayID:          {Type: field.TypeString, Column: finding.FieldDisplayID},
+			finding.FieldTags:               {Type: field.TypeJSON, Column: finding.FieldTags},
+			finding.FieldOwnerID:            {Type: field.TypeString, Column: finding.FieldOwnerID},
+			finding.FieldSystemOwned:        {Type: field.TypeBool, Column: finding.FieldSystemOwned},
+			finding.FieldInternalNotes:      {Type: field.TypeString, Column: finding.FieldInternalNotes},
+			finding.FieldSystemInternalID:   {Type: field.TypeString, Column: finding.FieldSystemInternalID},
+			finding.FieldEnvironmentName:    {Type: field.TypeString, Column: finding.FieldEnvironmentName},
+			finding.FieldEnvironmentID:      {Type: field.TypeString, Column: finding.FieldEnvironmentID},
+			finding.FieldScopeName:          {Type: field.TypeString, Column: finding.FieldScopeName},
+			finding.FieldScopeID:            {Type: field.TypeString, Column: finding.FieldScopeID},
+			finding.FieldFindingStatusName:  {Type: field.TypeString, Column: finding.FieldFindingStatusName},
+			finding.FieldFindingStatusID:    {Type: field.TypeString, Column: finding.FieldFindingStatusID},
+			finding.FieldExternalID:         {Type: field.TypeString, Column: finding.FieldExternalID},
+			finding.FieldSecurityLevel:      {Type: field.TypeEnum, Column: finding.FieldSecurityLevel},
+			finding.FieldExternalOwnerID:    {Type: field.TypeString, Column: finding.FieldExternalOwnerID},
+			finding.FieldSource:             {Type: field.TypeString, Column: finding.FieldSource},
+			finding.FieldResourceName:       {Type: field.TypeString, Column: finding.FieldResourceName},
+			finding.FieldDisplayName:        {Type: field.TypeString, Column: finding.FieldDisplayName},
+			finding.FieldState:              {Type: field.TypeString, Column: finding.FieldState},
+			finding.FieldCategory:           {Type: field.TypeString, Column: finding.FieldCategory},
+			finding.FieldCategories:         {Type: field.TypeJSON, Column: finding.FieldCategories},
+			finding.FieldFindingClass:       {Type: field.TypeString, Column: finding.FieldFindingClass},
+			finding.FieldSeverity:           {Type: field.TypeString, Column: finding.FieldSeverity},
+			finding.FieldNumericSeverity:    {Type: field.TypeFloat64, Column: finding.FieldNumericSeverity},
+			finding.FieldScore:              {Type: field.TypeFloat64, Column: finding.FieldScore},
+			finding.FieldImpact:             {Type: field.TypeFloat64, Column: finding.FieldImpact},
+			finding.FieldExploitability:     {Type: field.TypeFloat64, Column: finding.FieldExploitability},
+			finding.FieldPriority:           {Type: field.TypeString, Column: finding.FieldPriority},
+			finding.FieldOpen:               {Type: field.TypeBool, Column: finding.FieldOpen},
+			finding.FieldBlocksProduction:   {Type: field.TypeBool, Column: finding.FieldBlocksProduction},
+			finding.FieldProduction:         {Type: field.TypeBool, Column: finding.FieldProduction},
+			finding.FieldPublic:             {Type: field.TypeBool, Column: finding.FieldPublic},
+			finding.FieldValidated:          {Type: field.TypeBool, Column: finding.FieldValidated},
+			finding.FieldAssessmentID:       {Type: field.TypeString, Column: finding.FieldAssessmentID},
+			finding.FieldDescription:        {Type: field.TypeString, Column: finding.FieldDescription},
+			finding.FieldRecommendation:     {Type: field.TypeString, Column: finding.FieldRecommendation},
+			finding.FieldRecommendedActions: {Type: field.TypeString, Column: finding.FieldRecommendedActions},
+			finding.FieldReferences:         {Type: field.TypeJSON, Column: finding.FieldReferences},
+			finding.FieldStepsToReproduce:   {Type: field.TypeJSON, Column: finding.FieldStepsToReproduce},
+			finding.FieldTargets:            {Type: field.TypeJSON, Column: finding.FieldTargets},
+			finding.FieldTargetDetails:      {Type: field.TypeJSON, Column: finding.FieldTargetDetails},
+			finding.FieldVector:             {Type: field.TypeString, Column: finding.FieldVector},
+			finding.FieldRemediationSLA:     {Type: field.TypeInt, Column: finding.FieldRemediationSLA},
+			finding.FieldStatus:             {Type: field.TypeString, Column: finding.FieldStatus},
+			finding.FieldEventTime:          {Type: field.TypeTime, Column: finding.FieldEventTime},
+			finding.FieldReportedAt:         {Type: field.TypeTime, Column: finding.FieldReportedAt},
+			finding.FieldSourceUpdatedAt:    {Type: field.TypeTime, Column: finding.FieldSourceUpdatedAt},
+			finding.FieldExternalURI:        {Type: field.TypeString, Column: finding.FieldExternalURI},
+			finding.FieldMetadata:           {Type: field.TypeJSON, Column: finding.FieldMetadata},
+			finding.FieldRawPayload:         {Type: field.TypeJSON, Column: finding.FieldRawPayload},
 		},
 	}
 	graph.Nodes[31] = &sqlgraph.Node{
@@ -3449,55 +3448,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Vulnerability",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			vulnerability.FieldCreatedAt:                      {Type: field.TypeTime, Column: vulnerability.FieldCreatedAt},
-			vulnerability.FieldUpdatedAt:                      {Type: field.TypeTime, Column: vulnerability.FieldUpdatedAt},
-			vulnerability.FieldCreatedBy:                      {Type: field.TypeString, Column: vulnerability.FieldCreatedBy},
-			vulnerability.FieldUpdatedBy:                      {Type: field.TypeString, Column: vulnerability.FieldUpdatedBy},
-			vulnerability.FieldDeletedAt:                      {Type: field.TypeTime, Column: vulnerability.FieldDeletedAt},
-			vulnerability.FieldDeletedBy:                      {Type: field.TypeString, Column: vulnerability.FieldDeletedBy},
-			vulnerability.FieldDisplayID:                      {Type: field.TypeString, Column: vulnerability.FieldDisplayID},
-			vulnerability.FieldTags:                           {Type: field.TypeJSON, Column: vulnerability.FieldTags},
-			vulnerability.FieldOwnerID:                        {Type: field.TypeString, Column: vulnerability.FieldOwnerID},
-			vulnerability.FieldSystemOwned:                    {Type: field.TypeBool, Column: vulnerability.FieldSystemOwned},
-			vulnerability.FieldInternalNotes:                  {Type: field.TypeString, Column: vulnerability.FieldInternalNotes},
-			vulnerability.FieldSystemInternalID:               {Type: field.TypeString, Column: vulnerability.FieldSystemInternalID},
-			vulnerability.FieldEnvironmentName:                {Type: field.TypeString, Column: vulnerability.FieldEnvironmentName},
-			vulnerability.FieldEnvironmentID:                  {Type: field.TypeString, Column: vulnerability.FieldEnvironmentID},
-			vulnerability.FieldScopeName:                      {Type: field.TypeString, Column: vulnerability.FieldScopeName},
-			vulnerability.FieldScopeID:                        {Type: field.TypeString, Column: vulnerability.FieldScopeID},
-			vulnerability.FieldVulnerabilitySeverityLevelName: {Type: field.TypeString, Column: vulnerability.FieldVulnerabilitySeverityLevelName},
-			vulnerability.FieldVulnerabilitySeverityLevelID:   {Type: field.TypeString, Column: vulnerability.FieldVulnerabilitySeverityLevelID},
-			vulnerability.FieldVulnerabilityStatusName:        {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusName},
-			vulnerability.FieldVulnerabilityStatusID:          {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusID},
-			vulnerability.FieldExternalOwnerID:                {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
-			vulnerability.FieldExternalID:                     {Type: field.TypeString, Column: vulnerability.FieldExternalID},
-			vulnerability.FieldCveID:                          {Type: field.TypeString, Column: vulnerability.FieldCveID},
-			vulnerability.FieldSource:                         {Type: field.TypeString, Column: vulnerability.FieldSource},
-			vulnerability.FieldDisplayName:                    {Type: field.TypeString, Column: vulnerability.FieldDisplayName},
-			vulnerability.FieldCategory:                       {Type: field.TypeString, Column: vulnerability.FieldCategory},
-			vulnerability.FieldSeverity:                       {Type: field.TypeString, Column: vulnerability.FieldSeverity},
-			vulnerability.FieldScore:                          {Type: field.TypeFloat64, Column: vulnerability.FieldScore},
-			vulnerability.FieldImpact:                         {Type: field.TypeFloat64, Column: vulnerability.FieldImpact},
-			vulnerability.FieldExploitability:                 {Type: field.TypeFloat64, Column: vulnerability.FieldExploitability},
-			vulnerability.FieldPriority:                       {Type: field.TypeString, Column: vulnerability.FieldPriority},
-			vulnerability.FieldStatus:                         {Type: field.TypeString, Column: vulnerability.FieldStatus},
-			vulnerability.FieldSummary:                        {Type: field.TypeString, Column: vulnerability.FieldSummary},
-			vulnerability.FieldDescription:                    {Type: field.TypeString, Column: vulnerability.FieldDescription},
-			vulnerability.FieldVector:                         {Type: field.TypeString, Column: vulnerability.FieldVector},
-			vulnerability.FieldRemediationSLA:                 {Type: field.TypeInt, Column: vulnerability.FieldRemediationSLA},
-			vulnerability.FieldOpen:                           {Type: field.TypeBool, Column: vulnerability.FieldOpen},
-			vulnerability.FieldBlocking:                       {Type: field.TypeBool, Column: vulnerability.FieldBlocking},
-			vulnerability.FieldProduction:                     {Type: field.TypeBool, Column: vulnerability.FieldProduction},
-			vulnerability.FieldPublic:                         {Type: field.TypeBool, Column: vulnerability.FieldPublic},
-			vulnerability.FieldValidated:                      {Type: field.TypeBool, Column: vulnerability.FieldValidated},
-			vulnerability.FieldReferences:                     {Type: field.TypeJSON, Column: vulnerability.FieldReferences},
-			vulnerability.FieldImpacts:                        {Type: field.TypeJSON, Column: vulnerability.FieldImpacts},
-			vulnerability.FieldPublishedAt:                    {Type: field.TypeTime, Column: vulnerability.FieldPublishedAt},
-			vulnerability.FieldDiscoveredAt:                   {Type: field.TypeTime, Column: vulnerability.FieldDiscoveredAt},
-			vulnerability.FieldSourceUpdatedAt:                {Type: field.TypeTime, Column: vulnerability.FieldSourceUpdatedAt},
-			vulnerability.FieldExternalURI:                    {Type: field.TypeString, Column: vulnerability.FieldExternalURI},
-			vulnerability.FieldMetadata:                       {Type: field.TypeJSON, Column: vulnerability.FieldMetadata},
-			vulnerability.FieldRawPayload:                     {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
+			vulnerability.FieldCreatedAt:               {Type: field.TypeTime, Column: vulnerability.FieldCreatedAt},
+			vulnerability.FieldUpdatedAt:               {Type: field.TypeTime, Column: vulnerability.FieldUpdatedAt},
+			vulnerability.FieldCreatedBy:               {Type: field.TypeString, Column: vulnerability.FieldCreatedBy},
+			vulnerability.FieldUpdatedBy:               {Type: field.TypeString, Column: vulnerability.FieldUpdatedBy},
+			vulnerability.FieldDeletedAt:               {Type: field.TypeTime, Column: vulnerability.FieldDeletedAt},
+			vulnerability.FieldDeletedBy:               {Type: field.TypeString, Column: vulnerability.FieldDeletedBy},
+			vulnerability.FieldDisplayID:               {Type: field.TypeString, Column: vulnerability.FieldDisplayID},
+			vulnerability.FieldTags:                    {Type: field.TypeJSON, Column: vulnerability.FieldTags},
+			vulnerability.FieldOwnerID:                 {Type: field.TypeString, Column: vulnerability.FieldOwnerID},
+			vulnerability.FieldSystemOwned:             {Type: field.TypeBool, Column: vulnerability.FieldSystemOwned},
+			vulnerability.FieldInternalNotes:           {Type: field.TypeString, Column: vulnerability.FieldInternalNotes},
+			vulnerability.FieldSystemInternalID:        {Type: field.TypeString, Column: vulnerability.FieldSystemInternalID},
+			vulnerability.FieldEnvironmentName:         {Type: field.TypeString, Column: vulnerability.FieldEnvironmentName},
+			vulnerability.FieldEnvironmentID:           {Type: field.TypeString, Column: vulnerability.FieldEnvironmentID},
+			vulnerability.FieldScopeName:               {Type: field.TypeString, Column: vulnerability.FieldScopeName},
+			vulnerability.FieldScopeID:                 {Type: field.TypeString, Column: vulnerability.FieldScopeID},
+			vulnerability.FieldVulnerabilityStatusName: {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusName},
+			vulnerability.FieldVulnerabilityStatusID:   {Type: field.TypeString, Column: vulnerability.FieldVulnerabilityStatusID},
+			vulnerability.FieldExternalOwnerID:         {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
+			vulnerability.FieldSecurityLevel:           {Type: field.TypeEnum, Column: vulnerability.FieldSecurityLevel},
+			vulnerability.FieldExternalID:              {Type: field.TypeString, Column: vulnerability.FieldExternalID},
+			vulnerability.FieldCveID:                   {Type: field.TypeString, Column: vulnerability.FieldCveID},
+			vulnerability.FieldSource:                  {Type: field.TypeString, Column: vulnerability.FieldSource},
+			vulnerability.FieldDisplayName:             {Type: field.TypeString, Column: vulnerability.FieldDisplayName},
+			vulnerability.FieldCategory:                {Type: field.TypeString, Column: vulnerability.FieldCategory},
+			vulnerability.FieldSeverity:                {Type: field.TypeString, Column: vulnerability.FieldSeverity},
+			vulnerability.FieldScore:                   {Type: field.TypeFloat64, Column: vulnerability.FieldScore},
+			vulnerability.FieldImpact:                  {Type: field.TypeFloat64, Column: vulnerability.FieldImpact},
+			vulnerability.FieldExploitability:          {Type: field.TypeFloat64, Column: vulnerability.FieldExploitability},
+			vulnerability.FieldPriority:                {Type: field.TypeString, Column: vulnerability.FieldPriority},
+			vulnerability.FieldStatus:                  {Type: field.TypeString, Column: vulnerability.FieldStatus},
+			vulnerability.FieldSummary:                 {Type: field.TypeString, Column: vulnerability.FieldSummary},
+			vulnerability.FieldDescription:             {Type: field.TypeString, Column: vulnerability.FieldDescription},
+			vulnerability.FieldVector:                  {Type: field.TypeString, Column: vulnerability.FieldVector},
+			vulnerability.FieldRemediationSLA:          {Type: field.TypeInt, Column: vulnerability.FieldRemediationSLA},
+			vulnerability.FieldOpen:                    {Type: field.TypeBool, Column: vulnerability.FieldOpen},
+			vulnerability.FieldBlocking:                {Type: field.TypeBool, Column: vulnerability.FieldBlocking},
+			vulnerability.FieldProduction:              {Type: field.TypeBool, Column: vulnerability.FieldProduction},
+			vulnerability.FieldPublic:                  {Type: field.TypeBool, Column: vulnerability.FieldPublic},
+			vulnerability.FieldValidated:               {Type: field.TypeBool, Column: vulnerability.FieldValidated},
+			vulnerability.FieldReferences:              {Type: field.TypeJSON, Column: vulnerability.FieldReferences},
+			vulnerability.FieldImpacts:                 {Type: field.TypeJSON, Column: vulnerability.FieldImpacts},
+			vulnerability.FieldPublishedAt:             {Type: field.TypeTime, Column: vulnerability.FieldPublishedAt},
+			vulnerability.FieldDiscoveredAt:            {Type: field.TypeTime, Column: vulnerability.FieldDiscoveredAt},
+			vulnerability.FieldSourceUpdatedAt:         {Type: field.TypeTime, Column: vulnerability.FieldSourceUpdatedAt},
+			vulnerability.FieldExternalURI:             {Type: field.TypeString, Column: vulnerability.FieldExternalURI},
+			vulnerability.FieldMetadata:                {Type: field.TypeJSON, Column: vulnerability.FieldMetadata},
+			vulnerability.FieldRawPayload:              {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
 		},
 	}
 	graph.Nodes[97] = &sqlgraph.Node{
@@ -7561,18 +7559,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   finding.ScopeTable,
 			Columns: []string{finding.ScopeColumn},
-			Bidi:    false,
-		},
-		"Finding",
-		"CustomTypeEnum",
-	)
-	graph.MustAddE(
-		"finding_severity_level",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   finding.FindingSeverityLevelTable,
-			Columns: []string{finding.FindingSeverityLevelColumn},
 			Bidi:    false,
 		},
 		"Finding",
@@ -15937,18 +15923,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   vulnerability.ScopeTable,
 			Columns: []string{vulnerability.ScopeColumn},
-			Bidi:    false,
-		},
-		"Vulnerability",
-		"CustomTypeEnum",
-	)
-	graph.MustAddE(
-		"vulnerability_severity_level",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   vulnerability.VulnerabilitySeverityLevelTable,
-			Columns: []string{vulnerability.VulnerabilitySeverityLevelColumn},
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -26144,16 +26118,6 @@ func (f *FindingFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldScopeID))
 }
 
-// WhereFindingSeverityLevelName applies the entql string predicate on the finding_severity_level_name field.
-func (f *FindingFilter) WhereFindingSeverityLevelName(p entql.StringP) {
-	f.Where(p.Field(finding.FieldFindingSeverityLevelName))
-}
-
-// WhereFindingSeverityLevelID applies the entql string predicate on the finding_severity_level_id field.
-func (f *FindingFilter) WhereFindingSeverityLevelID(p entql.StringP) {
-	f.Where(p.Field(finding.FieldFindingSeverityLevelID))
-}
-
 // WhereFindingStatusName applies the entql string predicate on the finding_status_name field.
 func (f *FindingFilter) WhereFindingStatusName(p entql.StringP) {
 	f.Where(p.Field(finding.FieldFindingStatusName))
@@ -26167,6 +26131,11 @@ func (f *FindingFilter) WhereFindingStatusID(p entql.StringP) {
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldExternalID))
+}
+
+// WhereSecurityLevel applies the entql string predicate on the security_level field.
+func (f *FindingFilter) WhereSecurityLevel(p entql.StringP) {
+	f.Where(p.Field(finding.FieldSecurityLevel))
 }
 
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
@@ -26427,20 +26396,6 @@ func (f *FindingFilter) WhereHasScope() {
 // WhereHasScopeWith applies a predicate to check if query has an edge scope with a given conditions (other predicates).
 func (f *FindingFilter) WhereHasScopeWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("scope", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasFindingSeverityLevel applies a predicate to check if query has an edge finding_severity_level.
-func (f *FindingFilter) WhereHasFindingSeverityLevel() {
-	f.Where(entql.HasEdge("finding_severity_level"))
-}
-
-// WhereHasFindingSeverityLevelWith applies a predicate to check if query has an edge finding_severity_level with a given conditions (other predicates).
-func (f *FindingFilter) WhereHasFindingSeverityLevelWith(preds ...predicate.CustomTypeEnum) {
-	f.Where(entql.HasEdgeWith("finding_severity_level", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -45316,16 +45271,6 @@ func (f *VulnerabilityFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldScopeID))
 }
 
-// WhereVulnerabilitySeverityLevelName applies the entql string predicate on the vulnerability_severity_level_name field.
-func (f *VulnerabilityFilter) WhereVulnerabilitySeverityLevelName(p entql.StringP) {
-	f.Where(p.Field(vulnerability.FieldVulnerabilitySeverityLevelName))
-}
-
-// WhereVulnerabilitySeverityLevelID applies the entql string predicate on the vulnerability_severity_level_id field.
-func (f *VulnerabilityFilter) WhereVulnerabilitySeverityLevelID(p entql.StringP) {
-	f.Where(p.Field(vulnerability.FieldVulnerabilitySeverityLevelID))
-}
-
 // WhereVulnerabilityStatusName applies the entql string predicate on the vulnerability_status_name field.
 func (f *VulnerabilityFilter) WhereVulnerabilityStatusName(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldVulnerabilityStatusName))
@@ -45339,6 +45284,11 @@ func (f *VulnerabilityFilter) WhereVulnerabilityStatusID(p entql.StringP) {
 // WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
 func (f *VulnerabilityFilter) WhereExternalOwnerID(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldExternalOwnerID))
+}
+
+// WhereSecurityLevel applies the entql string predicate on the security_level field.
+func (f *VulnerabilityFilter) WhereSecurityLevel(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldSecurityLevel))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -45559,20 +45509,6 @@ func (f *VulnerabilityFilter) WhereHasScope() {
 // WhereHasScopeWith applies a predicate to check if query has an edge scope with a given conditions (other predicates).
 func (f *VulnerabilityFilter) WhereHasScopeWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("scope", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasVulnerabilitySeverityLevel applies a predicate to check if query has an edge vulnerability_severity_level.
-func (f *VulnerabilityFilter) WhereHasVulnerabilitySeverityLevel() {
-	f.Where(entql.HasEdge("vulnerability_severity_level"))
-}
-
-// WhereHasVulnerabilitySeverityLevelWith applies a predicate to check if query has an edge vulnerability_severity_level with a given conditions (other predicates).
-func (f *VulnerabilityFilter) WhereHasVulnerabilitySeverityLevelWith(preds ...predicate.CustomTypeEnum) {
-	f.Where(entql.HasEdgeWith("vulnerability_severity_level", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

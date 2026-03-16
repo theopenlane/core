@@ -6741,12 +6741,12 @@ type CreateFindingInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the finding
 	ScopeName *string `json:"scopeName,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelName *string `json:"findingSeverityLevelName,omitempty"`
 	// the status of the finding
 	FindingStatusName *string `json:"findingStatusName,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
+	// incoming source severity
+	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -6818,33 +6818,32 @@ type CreateFindingInput struct {
 	// raw metadata payload for the finding from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload             map[string]any `json:"rawPayload,omitempty"`
-	OwnerID                *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs        []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs              []string       `json:"editorIDs,omitempty"`
-	ViewerIDs              []string       `json:"viewerIDs,omitempty"`
-	EnvironmentID          *string        `json:"environmentID,omitempty"`
-	ScopeID                *string        `json:"scopeID,omitempty"`
-	FindingSeverityLevelID *string        `json:"findingSeverityLevelID,omitempty"`
-	FindingStatusID        *string        `json:"findingStatusID,omitempty"`
-	IntegrationIDs         []string       `json:"integrationIDs,omitempty"`
-	VulnerabilityIDs       []string       `json:"vulnerabilityIDs,omitempty"`
-	ActionPlanIDs          []string       `json:"actionPlanIDs,omitempty"`
-	ControlIDs             []string       `json:"controlIDs,omitempty"`
-	SubcontrolIDs          []string       `json:"subcontrolIDs,omitempty"`
-	RiskIDs                []string       `json:"riskIDs,omitempty"`
-	ProgramIDs             []string       `json:"programIDs,omitempty"`
-	AssetIDs               []string       `json:"assetIDs,omitempty"`
-	EntityIDs              []string       `json:"entityIDs,omitempty"`
-	ScanIDs                []string       `json:"scanIDs,omitempty"`
-	TaskIDs                []string       `json:"taskIDs,omitempty"`
-	DirectoryAccountIDs    []string       `json:"directoryAccountIDs,omitempty"`
-	IdentityHolderIDs      []string       `json:"identityHolderIDs,omitempty"`
-	RemediationIDs         []string       `json:"remediationIDs,omitempty"`
-	ReviewIDs              []string       `json:"reviewIDs,omitempty"`
-	CommentIDs             []string       `json:"commentIDs,omitempty"`
-	FileIDs                []string       `json:"fileIDs,omitempty"`
-	WorkflowObjectRefIDs   []string       `json:"workflowObjectRefIDs,omitempty"`
+	RawPayload           map[string]any `json:"rawPayload,omitempty"`
+	OwnerID              *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs      []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs            []string       `json:"editorIDs,omitempty"`
+	ViewerIDs            []string       `json:"viewerIDs,omitempty"`
+	EnvironmentID        *string        `json:"environmentID,omitempty"`
+	ScopeID              *string        `json:"scopeID,omitempty"`
+	FindingStatusID      *string        `json:"findingStatusID,omitempty"`
+	IntegrationIDs       []string       `json:"integrationIDs,omitempty"`
+	VulnerabilityIDs     []string       `json:"vulnerabilityIDs,omitempty"`
+	ActionPlanIDs        []string       `json:"actionPlanIDs,omitempty"`
+	ControlIDs           []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs        []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs              []string       `json:"riskIDs,omitempty"`
+	ProgramIDs           []string       `json:"programIDs,omitempty"`
+	AssetIDs             []string       `json:"assetIDs,omitempty"`
+	EntityIDs            []string       `json:"entityIDs,omitempty"`
+	ScanIDs              []string       `json:"scanIDs,omitempty"`
+	TaskIDs              []string       `json:"taskIDs,omitempty"`
+	DirectoryAccountIDs  []string       `json:"directoryAccountIDs,omitempty"`
+	IdentityHolderIDs    []string       `json:"identityHolderIDs,omitempty"`
+	RemediationIDs       []string       `json:"remediationIDs,omitempty"`
+	ReviewIDs            []string       `json:"reviewIDs,omitempty"`
+	CommentIDs           []string       `json:"commentIDs,omitempty"`
+	FileIDs              []string       `json:"fileIDs,omitempty"`
+	WorkflowObjectRefIDs []string       `json:"workflowObjectRefIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -8921,12 +8920,12 @@ type CreateVulnerabilityInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the vulnerability
 	ScopeName *string `json:"scopeName,omitempty"`
-	// the severity_level of the vulnerability
-	VulnerabilitySeverityLevelName *string `json:"vulnerabilitySeverityLevelName,omitempty"`
 	// the status of the vulnerability
 	VulnerabilityStatusName *string `json:"vulnerabilityStatusName,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// incoming source severity
+	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID string `json:"externalID"`
 	// CVE identifier for the vulnerability when applicable
@@ -8982,30 +8981,29 @@ type CreateVulnerabilityInput struct {
 	// raw metadata payload for the vulnerability from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload                   map[string]any `json:"rawPayload,omitempty"`
-	OwnerID                      *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs              []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                    []string       `json:"editorIDs,omitempty"`
-	ViewerIDs                    []string       `json:"viewerIDs,omitempty"`
-	EnvironmentID                *string        `json:"environmentID,omitempty"`
-	ScopeID                      *string        `json:"scopeID,omitempty"`
-	VulnerabilitySeverityLevelID *string        `json:"vulnerabilitySeverityLevelID,omitempty"`
-	VulnerabilityStatusID        *string        `json:"vulnerabilityStatusID,omitempty"`
-	IntegrationIDs               []string       `json:"integrationIDs,omitempty"`
-	FindingIDs                   []string       `json:"findingIDs,omitempty"`
-	ActionPlanIDs                []string       `json:"actionPlanIDs,omitempty"`
-	ControlIDs                   []string       `json:"controlIDs,omitempty"`
-	SubcontrolIDs                []string       `json:"subcontrolIDs,omitempty"`
-	RiskIDs                      []string       `json:"riskIDs,omitempty"`
-	ProgramIDs                   []string       `json:"programIDs,omitempty"`
-	AssetIDs                     []string       `json:"assetIDs,omitempty"`
-	EntityIDs                    []string       `json:"entityIDs,omitempty"`
-	ScanIDs                      []string       `json:"scanIDs,omitempty"`
-	TaskIDs                      []string       `json:"taskIDs,omitempty"`
-	RemediationIDs               []string       `json:"remediationIDs,omitempty"`
-	ReviewIDs                    []string       `json:"reviewIDs,omitempty"`
-	CommentIDs                   []string       `json:"commentIDs,omitempty"`
-	FileIDs                      []string       `json:"fileIDs,omitempty"`
+	RawPayload            map[string]any `json:"rawPayload,omitempty"`
+	OwnerID               *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string       `json:"editorIDs,omitempty"`
+	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
+	EnvironmentID         *string        `json:"environmentID,omitempty"`
+	ScopeID               *string        `json:"scopeID,omitempty"`
+	VulnerabilityStatusID *string        `json:"vulnerabilityStatusID,omitempty"`
+	IntegrationIDs        []string       `json:"integrationIDs,omitempty"`
+	FindingIDs            []string       `json:"findingIDs,omitempty"`
+	ActionPlanIDs         []string       `json:"actionPlanIDs,omitempty"`
+	ControlIDs            []string       `json:"controlIDs,omitempty"`
+	SubcontrolIDs         []string       `json:"subcontrolIDs,omitempty"`
+	RiskIDs               []string       `json:"riskIDs,omitempty"`
+	ProgramIDs            []string       `json:"programIDs,omitempty"`
+	AssetIDs              []string       `json:"assetIDs,omitempty"`
+	EntityIDs             []string       `json:"entityIDs,omitempty"`
+	ScanIDs               []string       `json:"scanIDs,omitempty"`
+	TaskIDs               []string       `json:"taskIDs,omitempty"`
+	RemediationIDs        []string       `json:"remediationIDs,omitempty"`
+	ReviewIDs             []string       `json:"reviewIDs,omitempty"`
+	CommentIDs            []string       `json:"commentIDs,omitempty"`
+	FileIDs               []string       `json:"fileIDs,omitempty"`
 }
 
 // CreateWorkflowDefinitionInput is used for create WorkflowDefinition object.
@@ -16071,16 +16069,14 @@ type Finding struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the finding
 	ScopeID *string `json:"scopeID,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelName *string `json:"findingSeverityLevelName,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelID *string `json:"findingSeverityLevelID,omitempty"`
 	// the status of the finding
 	FindingStatusName *string `json:"findingStatusName,omitempty"`
 	// the status of the finding
 	FindingStatusID *string `json:"findingStatusID,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
+	// incoming source severity
+	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -16152,34 +16148,33 @@ type Finding struct {
 	// raw metadata payload for the finding from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload           map[string]any               `json:"rawPayload,omitempty"`
-	Owner                *Organization                `json:"owner,omitempty"`
-	BlockedGroups        *GroupConnection             `json:"blockedGroups"`
-	Editors              *GroupConnection             `json:"editors"`
-	Viewers              *GroupConnection             `json:"viewers"`
-	Environment          *CustomTypeEnum              `json:"environment,omitempty"`
-	Scope                *CustomTypeEnum              `json:"scope,omitempty"`
-	FindingSeverityLevel *CustomTypeEnum              `json:"findingSeverityLevel,omitempty"`
-	FindingStatus        *CustomTypeEnum              `json:"findingStatus,omitempty"`
-	Integrations         *IntegrationConnection       `json:"integrations"`
-	Vulnerabilities      *VulnerabilityConnection     `json:"vulnerabilities"`
-	ActionPlans          *ActionPlanConnection        `json:"actionPlans"`
-	Controls             *ControlConnection           `json:"controls"`
-	Subcontrols          *SubcontrolConnection        `json:"subcontrols"`
-	Risks                *RiskConnection              `json:"risks"`
-	Programs             *ProgramConnection           `json:"programs"`
-	Assets               *AssetConnection             `json:"assets"`
-	Entities             *EntityConnection            `json:"entities"`
-	Scans                *ScanConnection              `json:"scans"`
-	Tasks                *TaskConnection              `json:"tasks"`
-	DirectoryAccounts    *DirectoryAccountConnection  `json:"directoryAccounts"`
-	IdentityHolders      *IdentityHolderConnection    `json:"identityHolders"`
-	Remediations         *RemediationConnection       `json:"remediations"`
-	Reviews              *ReviewConnection            `json:"reviews"`
-	Comments             *NoteConnection              `json:"comments"`
-	Files                *FileConnection              `json:"files"`
-	WorkflowObjectRefs   *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
-	ControlMappings      *FindingControlConnection    `json:"controlMappings"`
+	RawPayload         map[string]any               `json:"rawPayload,omitempty"`
+	Owner              *Organization                `json:"owner,omitempty"`
+	BlockedGroups      *GroupConnection             `json:"blockedGroups"`
+	Editors            *GroupConnection             `json:"editors"`
+	Viewers            *GroupConnection             `json:"viewers"`
+	Environment        *CustomTypeEnum              `json:"environment,omitempty"`
+	Scope              *CustomTypeEnum              `json:"scope,omitempty"`
+	FindingStatus      *CustomTypeEnum              `json:"findingStatus,omitempty"`
+	Integrations       *IntegrationConnection       `json:"integrations"`
+	Vulnerabilities    *VulnerabilityConnection     `json:"vulnerabilities"`
+	ActionPlans        *ActionPlanConnection        `json:"actionPlans"`
+	Controls           *ControlConnection           `json:"controls"`
+	Subcontrols        *SubcontrolConnection        `json:"subcontrols"`
+	Risks              *RiskConnection              `json:"risks"`
+	Programs           *ProgramConnection           `json:"programs"`
+	Assets             *AssetConnection             `json:"assets"`
+	Entities           *EntityConnection            `json:"entities"`
+	Scans              *ScanConnection              `json:"scans"`
+	Tasks              *TaskConnection              `json:"tasks"`
+	DirectoryAccounts  *DirectoryAccountConnection  `json:"directoryAccounts"`
+	IdentityHolders    *IdentityHolderConnection    `json:"identityHolders"`
+	Remediations       *RemediationConnection       `json:"remediations"`
+	Reviews            *ReviewConnection            `json:"reviews"`
+	Comments           *NoteConnection              `json:"comments"`
+	Files              *FileConnection              `json:"files"`
+	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	ControlMappings    *FindingControlConnection    `json:"controlMappings"`
 }
 
 func (Finding) IsNode() {}
@@ -16679,38 +16674,6 @@ type FindingWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
-	// finding_severity_level_name field predicates
-	FindingSeverityLevelName             *string  `json:"findingSeverityLevelName,omitempty"`
-	FindingSeverityLevelNameNeq          *string  `json:"findingSeverityLevelNameNEQ,omitempty"`
-	FindingSeverityLevelNameIn           []string `json:"findingSeverityLevelNameIn,omitempty"`
-	FindingSeverityLevelNameNotIn        []string `json:"findingSeverityLevelNameNotIn,omitempty"`
-	FindingSeverityLevelNameGt           *string  `json:"findingSeverityLevelNameGT,omitempty"`
-	FindingSeverityLevelNameGte          *string  `json:"findingSeverityLevelNameGTE,omitempty"`
-	FindingSeverityLevelNameLt           *string  `json:"findingSeverityLevelNameLT,omitempty"`
-	FindingSeverityLevelNameLte          *string  `json:"findingSeverityLevelNameLTE,omitempty"`
-	FindingSeverityLevelNameContains     *string  `json:"findingSeverityLevelNameContains,omitempty"`
-	FindingSeverityLevelNameHasPrefix    *string  `json:"findingSeverityLevelNameHasPrefix,omitempty"`
-	FindingSeverityLevelNameHasSuffix    *string  `json:"findingSeverityLevelNameHasSuffix,omitempty"`
-	FindingSeverityLevelNameIsNil        *bool    `json:"findingSeverityLevelNameIsNil,omitempty"`
-	FindingSeverityLevelNameNotNil       *bool    `json:"findingSeverityLevelNameNotNil,omitempty"`
-	FindingSeverityLevelNameEqualFold    *string  `json:"findingSeverityLevelNameEqualFold,omitempty"`
-	FindingSeverityLevelNameContainsFold *string  `json:"findingSeverityLevelNameContainsFold,omitempty"`
-	// finding_severity_level_id field predicates
-	FindingSeverityLevelID             *string  `json:"findingSeverityLevelID,omitempty"`
-	FindingSeverityLevelIdneq          *string  `json:"findingSeverityLevelIDNEQ,omitempty"`
-	FindingSeverityLevelIDIn           []string `json:"findingSeverityLevelIDIn,omitempty"`
-	FindingSeverityLevelIDNotIn        []string `json:"findingSeverityLevelIDNotIn,omitempty"`
-	FindingSeverityLevelIdgt           *string  `json:"findingSeverityLevelIDGT,omitempty"`
-	FindingSeverityLevelIdgte          *string  `json:"findingSeverityLevelIDGTE,omitempty"`
-	FindingSeverityLevelIdlt           *string  `json:"findingSeverityLevelIDLT,omitempty"`
-	FindingSeverityLevelIdlte          *string  `json:"findingSeverityLevelIDLTE,omitempty"`
-	FindingSeverityLevelIDContains     *string  `json:"findingSeverityLevelIDContains,omitempty"`
-	FindingSeverityLevelIDHasPrefix    *string  `json:"findingSeverityLevelIDHasPrefix,omitempty"`
-	FindingSeverityLevelIDHasSuffix    *string  `json:"findingSeverityLevelIDHasSuffix,omitempty"`
-	FindingSeverityLevelIDIsNil        *bool    `json:"findingSeverityLevelIDIsNil,omitempty"`
-	FindingSeverityLevelIDNotNil       *bool    `json:"findingSeverityLevelIDNotNil,omitempty"`
-	FindingSeverityLevelIDEqualFold    *string  `json:"findingSeverityLevelIDEqualFold,omitempty"`
-	FindingSeverityLevelIDContainsFold *string  `json:"findingSeverityLevelIDContainsFold,omitempty"`
 	// finding_status_name field predicates
 	FindingStatusName             *string  `json:"findingStatusName,omitempty"`
 	FindingStatusNameNeq          *string  `json:"findingStatusNameNEQ,omitempty"`
@@ -16759,6 +16722,13 @@ type FindingWhereInput struct {
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// security_level field predicates
+	SecurityLevel       *enums.SecurityLevel  `json:"securityLevel,omitempty"`
+	SecurityLevelNeq    *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`
+	SecurityLevelIn     []enums.SecurityLevel `json:"securityLevelIn,omitempty"`
+	SecurityLevelNotIn  []enums.SecurityLevel `json:"securityLevelNotIn,omitempty"`
+	SecurityLevelIsNil  *bool                 `json:"securityLevelIsNil,omitempty"`
+	SecurityLevelNotNil *bool                 `json:"securityLevelNotNil,omitempty"`
 	// external_owner_id field predicates
 	ExternalOwnerID             *string  `json:"externalOwnerID,omitempty"`
 	ExternalOwnerIdneq          *string  `json:"externalOwnerIDNEQ,omitempty"`
@@ -17146,9 +17116,6 @@ type FindingWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
-	// finding_severity_level edge predicates
-	HasFindingSeverityLevel     *bool                       `json:"hasFindingSeverityLevel,omitempty"`
-	HasFindingSeverityLevelWith []*CustomTypeEnumWhereInput `json:"hasFindingSeverityLevelWith,omitempty"`
 	// finding_status edge predicates
 	HasFindingStatus     *bool                       `json:"hasFindingStatus,omitempty"`
 	HasFindingStatusWith []*CustomTypeEnumWhereInput `json:"hasFindingStatusWith,omitempty"`
@@ -39682,15 +39649,15 @@ type UpdateFindingInput struct {
 	// the scope of the finding
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
-	// the severity_level of the finding
-	FindingSeverityLevelName      *string `json:"findingSeverityLevelName,omitempty"`
-	ClearFindingSeverityLevelName *bool   `json:"clearFindingSeverityLevelName,omitempty"`
 	// the status of the finding
 	FindingStatusName      *string `json:"findingStatusName,omitempty"`
 	ClearFindingStatusName *bool   `json:"clearFindingStatusName,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
+	// incoming source severity
+	SecurityLevel      *enums.SecurityLevel `json:"securityLevel,omitempty"`
+	ClearSecurityLevel *bool                `json:"clearSecurityLevel,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
@@ -39816,8 +39783,6 @@ type UpdateFindingInput struct {
 	ClearEnvironment           *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string        `json:"scopeID,omitempty"`
 	ClearScope                 *bool          `json:"clearScope,omitempty"`
-	FindingSeverityLevelID     *string        `json:"findingSeverityLevelID,omitempty"`
-	ClearFindingSeverityLevel  *bool          `json:"clearFindingSeverityLevel,omitempty"`
 	FindingStatusID            *string        `json:"findingStatusID,omitempty"`
 	ClearFindingStatus         *bool          `json:"clearFindingStatus,omitempty"`
 	AddIntegrationIDs          []string       `json:"addIntegrationIDs,omitempty"`
@@ -43303,15 +43268,15 @@ type UpdateVulnerabilityInput struct {
 	// the scope of the vulnerability
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
-	// the severity_level of the vulnerability
-	VulnerabilitySeverityLevelName      *string `json:"vulnerabilitySeverityLevelName,omitempty"`
-	ClearVulnerabilitySeverityLevelName *bool   `json:"clearVulnerabilitySeverityLevelName,omitempty"`
 	// the status of the vulnerability
 	VulnerabilityStatusName      *string `json:"vulnerabilityStatusName,omitempty"`
 	ClearVulnerabilityStatusName *bool   `json:"clearVulnerabilityStatusName,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
+	// incoming source severity
+	SecurityLevel      *enums.SecurityLevel `json:"securityLevel,omitempty"`
+	ClearSecurityLevel *bool                `json:"clearSecurityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID *string `json:"externalID,omitempty"`
 	// CVE identifier for the vulnerability when applicable
@@ -43395,70 +43360,68 @@ type UpdateVulnerabilityInput struct {
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload                      map[string]any `json:"rawPayload,omitempty"`
-	ClearRawPayload                 *bool          `json:"clearRawPayload,omitempty"`
-	AddBlockedGroupIDs              []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs           []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups              *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                    []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs                 []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors                    *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs                    []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs                 []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers                    *bool          `json:"clearViewers,omitempty"`
-	EnvironmentID                   *string        `json:"environmentID,omitempty"`
-	ClearEnvironment                *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                         *string        `json:"scopeID,omitempty"`
-	ClearScope                      *bool          `json:"clearScope,omitempty"`
-	VulnerabilitySeverityLevelID    *string        `json:"vulnerabilitySeverityLevelID,omitempty"`
-	ClearVulnerabilitySeverityLevel *bool          `json:"clearVulnerabilitySeverityLevel,omitempty"`
-	VulnerabilityStatusID           *string        `json:"vulnerabilityStatusID,omitempty"`
-	ClearVulnerabilityStatus        *bool          `json:"clearVulnerabilityStatus,omitempty"`
-	AddIntegrationIDs               []string       `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs            []string       `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations               *bool          `json:"clearIntegrations,omitempty"`
-	AddFindingIDs                   []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs                []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings                   *bool          `json:"clearFindings,omitempty"`
-	AddActionPlanIDs                []string       `json:"addActionPlanIDs,omitempty"`
-	RemoveActionPlanIDs             []string       `json:"removeActionPlanIDs,omitempty"`
-	ClearActionPlans                *bool          `json:"clearActionPlans,omitempty"`
-	AddControlIDs                   []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs                []string       `json:"removeControlIDs,omitempty"`
-	ClearControls                   *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs                []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs             []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols                *bool          `json:"clearSubcontrols,omitempty"`
-	AddRiskIDs                      []string       `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs                   []string       `json:"removeRiskIDs,omitempty"`
-	ClearRisks                      *bool          `json:"clearRisks,omitempty"`
-	AddProgramIDs                   []string       `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs                []string       `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                   *bool          `json:"clearPrograms,omitempty"`
-	AddAssetIDs                     []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs                  []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets                     *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs                    []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs                 []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities                   *bool          `json:"clearEntities,omitempty"`
-	AddScanIDs                      []string       `json:"addScanIDs,omitempty"`
-	RemoveScanIDs                   []string       `json:"removeScanIDs,omitempty"`
-	ClearScans                      *bool          `json:"clearScans,omitempty"`
-	AddTaskIDs                      []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs                   []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks                      *bool          `json:"clearTasks,omitempty"`
-	AddRemediationIDs               []string       `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs            []string       `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations               *bool          `json:"clearRemediations,omitempty"`
-	AddReviewIDs                    []string       `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs                 []string       `json:"removeReviewIDs,omitempty"`
-	ClearReviews                    *bool          `json:"clearReviews,omitempty"`
-	AddCommentIDs                   []string       `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs                []string       `json:"removeCommentIDs,omitempty"`
-	ClearComments                   *bool          `json:"clearComments,omitempty"`
-	AddFileIDs                      []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                   []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles                      *bool          `json:"clearFiles,omitempty"`
+	RawPayload               map[string]any `json:"rawPayload,omitempty"`
+	ClearRawPayload          *bool          `json:"clearRawPayload,omitempty"`
+	AddBlockedGroupIDs       []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs    []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups       *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs             []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs          []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors             *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs             []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs          []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers             *bool          `json:"clearViewers,omitempty"`
+	EnvironmentID            *string        `json:"environmentID,omitempty"`
+	ClearEnvironment         *bool          `json:"clearEnvironment,omitempty"`
+	ScopeID                  *string        `json:"scopeID,omitempty"`
+	ClearScope               *bool          `json:"clearScope,omitempty"`
+	VulnerabilityStatusID    *string        `json:"vulnerabilityStatusID,omitempty"`
+	ClearVulnerabilityStatus *bool          `json:"clearVulnerabilityStatus,omitempty"`
+	AddIntegrationIDs        []string       `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs     []string       `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations        *bool          `json:"clearIntegrations,omitempty"`
+	AddFindingIDs            []string       `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs         []string       `json:"removeFindingIDs,omitempty"`
+	ClearFindings            *bool          `json:"clearFindings,omitempty"`
+	AddActionPlanIDs         []string       `json:"addActionPlanIDs,omitempty"`
+	RemoveActionPlanIDs      []string       `json:"removeActionPlanIDs,omitempty"`
+	ClearActionPlans         *bool          `json:"clearActionPlans,omitempty"`
+	AddControlIDs            []string       `json:"addControlIDs,omitempty"`
+	RemoveControlIDs         []string       `json:"removeControlIDs,omitempty"`
+	ClearControls            *bool          `json:"clearControls,omitempty"`
+	AddSubcontrolIDs         []string       `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs      []string       `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols         *bool          `json:"clearSubcontrols,omitempty"`
+	AddRiskIDs               []string       `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs            []string       `json:"removeRiskIDs,omitempty"`
+	ClearRisks               *bool          `json:"clearRisks,omitempty"`
+	AddProgramIDs            []string       `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs         []string       `json:"removeProgramIDs,omitempty"`
+	ClearPrograms            *bool          `json:"clearPrograms,omitempty"`
+	AddAssetIDs              []string       `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs           []string       `json:"removeAssetIDs,omitempty"`
+	ClearAssets              *bool          `json:"clearAssets,omitempty"`
+	AddEntityIDs             []string       `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs          []string       `json:"removeEntityIDs,omitempty"`
+	ClearEntities            *bool          `json:"clearEntities,omitempty"`
+	AddScanIDs               []string       `json:"addScanIDs,omitempty"`
+	RemoveScanIDs            []string       `json:"removeScanIDs,omitempty"`
+	ClearScans               *bool          `json:"clearScans,omitempty"`
+	AddTaskIDs               []string       `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs            []string       `json:"removeTaskIDs,omitempty"`
+	ClearTasks               *bool          `json:"clearTasks,omitempty"`
+	AddRemediationIDs        []string       `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs     []string       `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations        *bool          `json:"clearRemediations,omitempty"`
+	AddReviewIDs             []string       `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs          []string       `json:"removeReviewIDs,omitempty"`
+	ClearReviews             *bool          `json:"clearReviews,omitempty"`
+	AddCommentIDs            []string       `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs         []string       `json:"removeCommentIDs,omitempty"`
+	ClearComments            *bool          `json:"clearComments,omitempty"`
+	AddFileIDs               []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs            []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles               *bool          `json:"clearFiles,omitempty"`
 }
 
 // UpdateWorkflowDefinitionInput is used for update WorkflowDefinition object.
@@ -44313,16 +44276,14 @@ type Vulnerability struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the vulnerability
 	ScopeID *string `json:"scopeID,omitempty"`
-	// the severity_level of the vulnerability
-	VulnerabilitySeverityLevelName *string `json:"vulnerabilitySeverityLevelName,omitempty"`
-	// the severity_level of the vulnerability
-	VulnerabilitySeverityLevelID *string `json:"vulnerabilitySeverityLevelID,omitempty"`
 	// the status of the vulnerability
 	VulnerabilityStatusName *string `json:"vulnerabilityStatusName,omitempty"`
 	// the status of the vulnerability
 	VulnerabilityStatusID *string `json:"vulnerabilityStatusID,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
+	// incoming source severity
+	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID string `json:"externalID"`
 	// CVE identifier for the vulnerability when applicable
@@ -44378,30 +44339,29 @@ type Vulnerability struct {
 	// raw metadata payload for the vulnerability from the source system
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// raw payload received from the integration for auditing and troubleshooting
-	RawPayload                 map[string]any         `json:"rawPayload,omitempty"`
-	Owner                      *Organization          `json:"owner,omitempty"`
-	BlockedGroups              *GroupConnection       `json:"blockedGroups"`
-	Editors                    *GroupConnection       `json:"editors"`
-	Viewers                    *GroupConnection       `json:"viewers"`
-	Environment                *CustomTypeEnum        `json:"environment,omitempty"`
-	Scope                      *CustomTypeEnum        `json:"scope,omitempty"`
-	VulnerabilitySeverityLevel *CustomTypeEnum        `json:"vulnerabilitySeverityLevel,omitempty"`
-	VulnerabilityStatus        *CustomTypeEnum        `json:"vulnerabilityStatus,omitempty"`
-	Integrations               *IntegrationConnection `json:"integrations"`
-	Findings                   *FindingConnection     `json:"findings"`
-	ActionPlans                *ActionPlanConnection  `json:"actionPlans"`
-	Controls                   *ControlConnection     `json:"controls"`
-	Subcontrols                *SubcontrolConnection  `json:"subcontrols"`
-	Risks                      *RiskConnection        `json:"risks"`
-	Programs                   *ProgramConnection     `json:"programs"`
-	Assets                     *AssetConnection       `json:"assets"`
-	Entities                   *EntityConnection      `json:"entities"`
-	Scans                      *ScanConnection        `json:"scans"`
-	Tasks                      *TaskConnection        `json:"tasks"`
-	Remediations               *RemediationConnection `json:"remediations"`
-	Reviews                    *ReviewConnection      `json:"reviews"`
-	Comments                   *NoteConnection        `json:"comments"`
-	Files                      *FileConnection        `json:"files"`
+	RawPayload          map[string]any         `json:"rawPayload,omitempty"`
+	Owner               *Organization          `json:"owner,omitempty"`
+	BlockedGroups       *GroupConnection       `json:"blockedGroups"`
+	Editors             *GroupConnection       `json:"editors"`
+	Viewers             *GroupConnection       `json:"viewers"`
+	Environment         *CustomTypeEnum        `json:"environment,omitempty"`
+	Scope               *CustomTypeEnum        `json:"scope,omitempty"`
+	VulnerabilityStatus *CustomTypeEnum        `json:"vulnerabilityStatus,omitempty"`
+	Integrations        *IntegrationConnection `json:"integrations"`
+	Findings            *FindingConnection     `json:"findings"`
+	ActionPlans         *ActionPlanConnection  `json:"actionPlans"`
+	Controls            *ControlConnection     `json:"controls"`
+	Subcontrols         *SubcontrolConnection  `json:"subcontrols"`
+	Risks               *RiskConnection        `json:"risks"`
+	Programs            *ProgramConnection     `json:"programs"`
+	Assets              *AssetConnection       `json:"assets"`
+	Entities            *EntityConnection      `json:"entities"`
+	Scans               *ScanConnection        `json:"scans"`
+	Tasks               *TaskConnection        `json:"tasks"`
+	Remediations        *RemediationConnection `json:"remediations"`
+	Reviews             *ReviewConnection      `json:"reviews"`
+	Comments            *NoteConnection        `json:"comments"`
+	Files               *FileConnection        `json:"files"`
 }
 
 func (Vulnerability) IsNode() {}
@@ -44700,38 +44660,6 @@ type VulnerabilityWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
-	// vulnerability_severity_level_name field predicates
-	VulnerabilitySeverityLevelName             *string  `json:"vulnerabilitySeverityLevelName,omitempty"`
-	VulnerabilitySeverityLevelNameNeq          *string  `json:"vulnerabilitySeverityLevelNameNEQ,omitempty"`
-	VulnerabilitySeverityLevelNameIn           []string `json:"vulnerabilitySeverityLevelNameIn,omitempty"`
-	VulnerabilitySeverityLevelNameNotIn        []string `json:"vulnerabilitySeverityLevelNameNotIn,omitempty"`
-	VulnerabilitySeverityLevelNameGt           *string  `json:"vulnerabilitySeverityLevelNameGT,omitempty"`
-	VulnerabilitySeverityLevelNameGte          *string  `json:"vulnerabilitySeverityLevelNameGTE,omitempty"`
-	VulnerabilitySeverityLevelNameLt           *string  `json:"vulnerabilitySeverityLevelNameLT,omitempty"`
-	VulnerabilitySeverityLevelNameLte          *string  `json:"vulnerabilitySeverityLevelNameLTE,omitempty"`
-	VulnerabilitySeverityLevelNameContains     *string  `json:"vulnerabilitySeverityLevelNameContains,omitempty"`
-	VulnerabilitySeverityLevelNameHasPrefix    *string  `json:"vulnerabilitySeverityLevelNameHasPrefix,omitempty"`
-	VulnerabilitySeverityLevelNameHasSuffix    *string  `json:"vulnerabilitySeverityLevelNameHasSuffix,omitempty"`
-	VulnerabilitySeverityLevelNameIsNil        *bool    `json:"vulnerabilitySeverityLevelNameIsNil,omitempty"`
-	VulnerabilitySeverityLevelNameNotNil       *bool    `json:"vulnerabilitySeverityLevelNameNotNil,omitempty"`
-	VulnerabilitySeverityLevelNameEqualFold    *string  `json:"vulnerabilitySeverityLevelNameEqualFold,omitempty"`
-	VulnerabilitySeverityLevelNameContainsFold *string  `json:"vulnerabilitySeverityLevelNameContainsFold,omitempty"`
-	// vulnerability_severity_level_id field predicates
-	VulnerabilitySeverityLevelID             *string  `json:"vulnerabilitySeverityLevelID,omitempty"`
-	VulnerabilitySeverityLevelIdneq          *string  `json:"vulnerabilitySeverityLevelIDNEQ,omitempty"`
-	VulnerabilitySeverityLevelIDIn           []string `json:"vulnerabilitySeverityLevelIDIn,omitempty"`
-	VulnerabilitySeverityLevelIDNotIn        []string `json:"vulnerabilitySeverityLevelIDNotIn,omitempty"`
-	VulnerabilitySeverityLevelIdgt           *string  `json:"vulnerabilitySeverityLevelIDGT,omitempty"`
-	VulnerabilitySeverityLevelIdgte          *string  `json:"vulnerabilitySeverityLevelIDGTE,omitempty"`
-	VulnerabilitySeverityLevelIdlt           *string  `json:"vulnerabilitySeverityLevelIDLT,omitempty"`
-	VulnerabilitySeverityLevelIdlte          *string  `json:"vulnerabilitySeverityLevelIDLTE,omitempty"`
-	VulnerabilitySeverityLevelIDContains     *string  `json:"vulnerabilitySeverityLevelIDContains,omitempty"`
-	VulnerabilitySeverityLevelIDHasPrefix    *string  `json:"vulnerabilitySeverityLevelIDHasPrefix,omitempty"`
-	VulnerabilitySeverityLevelIDHasSuffix    *string  `json:"vulnerabilitySeverityLevelIDHasSuffix,omitempty"`
-	VulnerabilitySeverityLevelIDIsNil        *bool    `json:"vulnerabilitySeverityLevelIDIsNil,omitempty"`
-	VulnerabilitySeverityLevelIDNotNil       *bool    `json:"vulnerabilitySeverityLevelIDNotNil,omitempty"`
-	VulnerabilitySeverityLevelIDEqualFold    *string  `json:"vulnerabilitySeverityLevelIDEqualFold,omitempty"`
-	VulnerabilitySeverityLevelIDContainsFold *string  `json:"vulnerabilitySeverityLevelIDContainsFold,omitempty"`
 	// vulnerability_status_name field predicates
 	VulnerabilityStatusName             *string  `json:"vulnerabilityStatusName,omitempty"`
 	VulnerabilityStatusNameNeq          *string  `json:"vulnerabilityStatusNameNEQ,omitempty"`
@@ -44780,6 +44708,13 @@ type VulnerabilityWhereInput struct {
 	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
 	ExternalOwnerIDEqualFold    *string  `json:"externalOwnerIDEqualFold,omitempty"`
 	ExternalOwnerIDContainsFold *string  `json:"externalOwnerIDContainsFold,omitempty"`
+	// security_level field predicates
+	SecurityLevel       *enums.SecurityLevel  `json:"securityLevel,omitempty"`
+	SecurityLevelNeq    *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`
+	SecurityLevelIn     []enums.SecurityLevel `json:"securityLevelIn,omitempty"`
+	SecurityLevelNotIn  []enums.SecurityLevel `json:"securityLevelNotIn,omitempty"`
+	SecurityLevelIsNil  *bool                 `json:"securityLevelIsNil,omitempty"`
+	SecurityLevelNotNil *bool                 `json:"securityLevelNotNil,omitempty"`
 	// external_id field predicates
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIdneq          *string  `json:"externalIDNEQ,omitempty"`
@@ -45090,9 +45025,6 @@ type VulnerabilityWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
-	// vulnerability_severity_level edge predicates
-	HasVulnerabilitySeverityLevel     *bool                       `json:"hasVulnerabilitySeverityLevel,omitempty"`
-	HasVulnerabilitySeverityLevelWith []*CustomTypeEnumWhereInput `json:"hasVulnerabilitySeverityLevelWith,omitempty"`
 	// vulnerability_status edge predicates
 	HasVulnerabilityStatus     *bool                       `json:"hasVulnerabilityStatus,omitempty"`
 	HasVulnerabilityStatusWith []*CustomTypeEnumWhereInput `json:"hasVulnerabilityStatusWith,omitempty"`
@@ -49532,6 +49464,7 @@ const (
 	FindingOrderFieldCreatedAt       FindingOrderField = "created_at"
 	FindingOrderFieldUpdatedAt       FindingOrderField = "updated_at"
 	FindingOrderFieldExternalID      FindingOrderField = "external_id"
+	FindingOrderFieldSecurityLevel   FindingOrderField = "security_level"
 	FindingOrderFieldExternalOwnerID FindingOrderField = "external_owner_id"
 	FindingOrderFieldCategory        FindingOrderField = "category"
 	FindingOrderFieldSeverity        FindingOrderField = "severity"
@@ -49541,6 +49474,7 @@ var AllFindingOrderField = []FindingOrderField{
 	FindingOrderFieldCreatedAt,
 	FindingOrderFieldUpdatedAt,
 	FindingOrderFieldExternalID,
+	FindingOrderFieldSecurityLevel,
 	FindingOrderFieldExternalOwnerID,
 	FindingOrderFieldCategory,
 	FindingOrderFieldSeverity,
@@ -49548,7 +49482,7 @@ var AllFindingOrderField = []FindingOrderField{
 
 func (e FindingOrderField) IsValid() bool {
 	switch e {
-	case FindingOrderFieldCreatedAt, FindingOrderFieldUpdatedAt, FindingOrderFieldExternalID, FindingOrderFieldExternalOwnerID, FindingOrderFieldCategory, FindingOrderFieldSeverity:
+	case FindingOrderFieldCreatedAt, FindingOrderFieldUpdatedAt, FindingOrderFieldExternalID, FindingOrderFieldSecurityLevel, FindingOrderFieldExternalOwnerID, FindingOrderFieldCategory, FindingOrderFieldSeverity:
 		return true
 	}
 	return false
@@ -51741,16 +51675,18 @@ type SLADefinitionOrderField string
 const (
 	SLADefinitionOrderFieldCreatedAt SLADefinitionOrderField = "created_at"
 	SLADefinitionOrderFieldUpdatedAt SLADefinitionOrderField = "updated_at"
+	SLADefinitionOrderFieldSLADays   SLADefinitionOrderField = "sla_days"
 )
 
 var AllSLADefinitionOrderField = []SLADefinitionOrderField{
 	SLADefinitionOrderFieldCreatedAt,
 	SLADefinitionOrderFieldUpdatedAt,
+	SLADefinitionOrderFieldSLADays,
 }
 
 func (e SLADefinitionOrderField) IsValid() bool {
 	switch e {
-	case SLADefinitionOrderFieldCreatedAt, SLADefinitionOrderFieldUpdatedAt:
+	case SLADefinitionOrderFieldCreatedAt, SLADefinitionOrderFieldUpdatedAt, SLADefinitionOrderFieldSLADays:
 		return true
 	}
 	return false
@@ -53168,6 +53104,7 @@ const (
 	VulnerabilityOrderFieldCreatedAt       VulnerabilityOrderField = "created_at"
 	VulnerabilityOrderFieldUpdatedAt       VulnerabilityOrderField = "updated_at"
 	VulnerabilityOrderFieldExternalOwnerID VulnerabilityOrderField = "external_owner_id"
+	VulnerabilityOrderFieldSecurityLevel   VulnerabilityOrderField = "security_level"
 	VulnerabilityOrderFieldExternalID      VulnerabilityOrderField = "external_id"
 	VulnerabilityOrderFieldCveID           VulnerabilityOrderField = "cve_id"
 	VulnerabilityOrderFieldCategory        VulnerabilityOrderField = "category"
@@ -53178,6 +53115,7 @@ var AllVulnerabilityOrderField = []VulnerabilityOrderField{
 	VulnerabilityOrderFieldCreatedAt,
 	VulnerabilityOrderFieldUpdatedAt,
 	VulnerabilityOrderFieldExternalOwnerID,
+	VulnerabilityOrderFieldSecurityLevel,
 	VulnerabilityOrderFieldExternalID,
 	VulnerabilityOrderFieldCveID,
 	VulnerabilityOrderFieldCategory,
@@ -53186,7 +53124,7 @@ var AllVulnerabilityOrderField = []VulnerabilityOrderField{
 
 func (e VulnerabilityOrderField) IsValid() bool {
 	switch e {
-	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity:
+	case VulnerabilityOrderFieldCreatedAt, VulnerabilityOrderFieldUpdatedAt, VulnerabilityOrderFieldExternalOwnerID, VulnerabilityOrderFieldSecurityLevel, VulnerabilityOrderFieldExternalID, VulnerabilityOrderFieldCveID, VulnerabilityOrderFieldCategory, VulnerabilityOrderFieldSeverity:
 		return true
 	}
 	return false
