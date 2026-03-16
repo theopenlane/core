@@ -278,7 +278,7 @@ func (f Finding) Mixin() []ent.Mixin {
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
-			newCustomEnumMixin(f, withEnumFieldName("status")),
+			newCustomEnumMixin(f, withEnumFieldName("status"), withAutocreate()),
 		},
 	}.getMixins(f)
 }
