@@ -944,26 +944,6 @@ func (_u *FindingUpdate) ClearRemediationSLA() *FindingUpdate {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingUpdate) SetStatus(v string) *FindingUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingUpdate) SetNillableStatus(v *string) *FindingUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingUpdate) ClearStatus() *FindingUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingUpdate) SetEventTime(v models.DateTime) *FindingUpdate {
 	_u.mutation.SetEventTime(v)
@@ -2262,12 +2242,6 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(finding.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)
@@ -4388,26 +4362,6 @@ func (_u *FindingUpdateOne) ClearRemediationSLA() *FindingUpdateOne {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingUpdateOne) SetStatus(v string) *FindingUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingUpdateOne) SetNillableStatus(v *string) *FindingUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingUpdateOne) ClearStatus() *FindingUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingUpdateOne) SetEventTime(v models.DateTime) *FindingUpdateOne {
 	_u.mutation.SetEventTime(v)
@@ -5736,12 +5690,6 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(finding.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(finding.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)

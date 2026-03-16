@@ -148,8 +148,6 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -370,8 +368,6 @@ func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ con
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -592,8 +588,6 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":
@@ -814,8 +808,6 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_vector(ctx, field)
 			case "remediationSLA":
 				return ec.fieldContext_Finding_remediationSLA(ctx, field)
-			case "status":
-				return ec.fieldContext_Finding_status(ctx, field)
 			case "eventTime":
 				return ec.fieldContext_Finding_eventTime(ctx, field)
 			case "reportedAt":

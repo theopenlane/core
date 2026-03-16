@@ -13687,10 +13687,6 @@ type FindingHistory implements Node {
 	"""
 	remediationSLA: Int
 	"""
-	lifecycle status of the finding
-	"""
-	status: String
-	"""
 	timestamp when the finding was last observed by the source
 	"""
 	eventTime: DateTime
@@ -14472,24 +14468,6 @@ input FindingHistoryWhereInput {
 	remediationSLALTE: Int
 	remediationSLAIsNil: Boolean
 	remediationSLANotNil: Boolean
-	"""
-	status field predicates
-	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
-	statusIsNil: Boolean
-	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	event_time field predicates
 	"""
@@ -29603,6 +29581,10 @@ type SLADefinitionHistory implements Node {
 	remediation service level agreement in days for the severity level
 	"""
 	slaDays: Int!
+	"""
+	incoming source severity
+	"""
+	securityLevel: SLADefinitionHistorySecurityLevel
 }
 """
 A connection to a list of items.
@@ -29663,6 +29645,17 @@ enum SLADefinitionHistoryOrderField {
 	created_at
 	updated_at
 	sla_days
+	security_level
+}
+"""
+SLADefinitionHistorySecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+	NONE
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
 }
 """
 SLADefinitionHistoryWhereInput is used for filtering SLADefinitionHistory objects.
@@ -29864,6 +29857,15 @@ input SLADefinitionHistoryWhereInput {
 	slaDaysGTE: Int
 	slaDaysLT: Int
 	slaDaysLTE: Int
+	"""
+	security_level field predicates
+	"""
+	securityLevel: SLADefinitionHistorySecurityLevel
+	securityLevelNEQ: SLADefinitionHistorySecurityLevel
+	securityLevelIn: [SLADefinitionHistorySecurityLevel!]
+	securityLevelNotIn: [SLADefinitionHistorySecurityLevel!]
+	securityLevelIsNil: Boolean
+	securityLevelNotNil: Boolean
 }
 """
 SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
@@ -38455,10 +38457,6 @@ type VulnerabilityHistory implements Node {
 	"""
 	priority: String
 	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String
-	"""
 	short summary of the vulnerability details
 	"""
 	summary: String
@@ -39096,24 +39094,6 @@ input VulnerabilityHistoryWhereInput {
 	priorityNotNil: Boolean
 	priorityEqualFold: String
 	priorityContainsFold: String
-	"""
-	status field predicates
-	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
-	statusIsNil: Boolean
-	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	summary field predicates
 	"""

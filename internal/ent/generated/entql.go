@@ -1288,7 +1288,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			finding.FieldTargetDetails:      {Type: field.TypeJSON, Column: finding.FieldTargetDetails},
 			finding.FieldVector:             {Type: field.TypeString, Column: finding.FieldVector},
 			finding.FieldRemediationSLA:     {Type: field.TypeInt, Column: finding.FieldRemediationSLA},
-			finding.FieldStatus:             {Type: field.TypeString, Column: finding.FieldStatus},
 			finding.FieldEventTime:          {Type: field.TypeTime, Column: finding.FieldEventTime},
 			finding.FieldReportedAt:         {Type: field.TypeTime, Column: finding.FieldReportedAt},
 			finding.FieldSourceUpdatedAt:    {Type: field.TypeTime, Column: finding.FieldSourceUpdatedAt},
@@ -2694,6 +2693,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			sladefinition.FieldSLADefinitionSeverityLevelName: {Type: field.TypeString, Column: sladefinition.FieldSLADefinitionSeverityLevelName},
 			sladefinition.FieldSLADefinitionSeverityLevelID:   {Type: field.TypeString, Column: sladefinition.FieldSLADefinitionSeverityLevelID},
 			sladefinition.FieldSLADays:                        {Type: field.TypeInt, Column: sladefinition.FieldSLADays},
+			sladefinition.FieldSecurityLevel:                  {Type: field.TypeEnum, Column: sladefinition.FieldSecurityLevel},
 		},
 	}
 	graph.Nodes[73] = &sqlgraph.Node{
@@ -3478,7 +3478,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldImpact:                  {Type: field.TypeFloat64, Column: vulnerability.FieldImpact},
 			vulnerability.FieldExploitability:          {Type: field.TypeFloat64, Column: vulnerability.FieldExploitability},
 			vulnerability.FieldPriority:                {Type: field.TypeString, Column: vulnerability.FieldPriority},
-			vulnerability.FieldStatus:                  {Type: field.TypeString, Column: vulnerability.FieldStatus},
 			vulnerability.FieldSummary:                 {Type: field.TypeString, Column: vulnerability.FieldSummary},
 			vulnerability.FieldDescription:             {Type: field.TypeString, Column: vulnerability.FieldDescription},
 			vulnerability.FieldVector:                  {Type: field.TypeString, Column: vulnerability.FieldVector},
@@ -26283,11 +26282,6 @@ func (f *FindingFilter) WhereRemediationSLA(p entql.IntP) {
 	f.Where(p.Field(finding.FieldRemediationSLA))
 }
 
-// WhereStatus applies the entql string predicate on the status field.
-func (f *FindingFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(finding.FieldStatus))
-}
-
 // WhereEventTime applies the entql time.Time predicate on the event_time field.
 func (f *FindingFilter) WhereEventTime(p entql.TimeP) {
 	f.Where(p.Field(finding.FieldEventTime))
@@ -39361,6 +39355,11 @@ func (f *SLADefinitionFilter) WhereSLADays(p entql.IntP) {
 	f.Where(p.Field(sladefinition.FieldSLADays))
 }
 
+// WhereSecurityLevel applies the entql string predicate on the security_level field.
+func (f *SLADefinitionFilter) WhereSecurityLevel(p entql.StringP) {
+	f.Where(p.Field(sladefinition.FieldSecurityLevel))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *SLADefinitionFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -45339,11 +45338,6 @@ func (f *VulnerabilityFilter) WhereExploitability(p entql.Float64P) {
 // WherePriority applies the entql string predicate on the priority field.
 func (f *VulnerabilityFilter) WherePriority(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldPriority))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *VulnerabilityFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(vulnerability.FieldStatus))
 }
 
 // WhereSummary applies the entql string predicate on the summary field.

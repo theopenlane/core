@@ -9439,7 +9439,6 @@ type CreateFindingInput struct {
 	TargetDetails        map[string]interface{}
 	Vector               *string
 	RemediationSLA       *int
-	Status               *string
 	EventTime            *models.DateTime
 	ReportedAt           *models.DateTime
 	SourceUpdatedAt      *models.DateTime
@@ -9582,9 +9581,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemediationSLA; v != nil {
 		m.SetRemediationSLA(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if v := i.EventTime; v != nil {
 		m.SetEventTime(*v)
@@ -9766,8 +9762,6 @@ type UpdateFindingInput struct {
 	Vector                     *string
 	ClearRemediationSLA        bool
 	RemediationSLA             *int
-	ClearStatus                bool
-	Status                     *string
 	ClearEventTime             bool
 	EventTime                  *models.DateTime
 	ClearReportedAt            bool
@@ -10083,12 +10077,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemediationSLA; v != nil {
 		m.SetRemediationSLA(*v)
-	}
-	if i.ClearStatus {
-		m.ClearStatus()
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if i.ClearEventTime {
 		m.ClearEventTime()
@@ -27064,7 +27052,6 @@ type CreateVulnerabilityInput struct {
 	Impact                  *float64
 	Exploitability          *float64
 	Priority                *string
-	Status                  *string
 	Summary                 *string
 	Description             *string
 	Vector                  *string
@@ -27156,9 +27143,6 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if v := i.Summary; v != nil {
 		m.SetSummary(*v)
@@ -27321,8 +27305,6 @@ type UpdateVulnerabilityInput struct {
 	Exploitability               *float64
 	ClearPriority                bool
 	Priority                     *string
-	ClearStatus                  bool
-	Status                       *string
 	ClearSummary                 bool
 	Summary                      *string
 	ClearDescription             bool
@@ -27524,12 +27506,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
-	}
-	if i.ClearStatus {
-		m.ClearStatus()
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
 	}
 	if i.ClearSummary {
 		m.ClearSummary()

@@ -3,11 +3,14 @@
 package sladefinition
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -39,6 +42,8 @@ const (
 	FieldSLADefinitionSeverityLevelID = "sla_definition_severity_level_id"
 	// FieldSLADays holds the string denoting the sla_days field in the database.
 	FieldSLADays = "sla_days"
+	// FieldSecurityLevel holds the string denoting the security_level field in the database.
+	FieldSecurityLevel = "security_level"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeSLADefinitionSeverityLevel holds the string denoting the sla_definition_severity_level edge name in mutations.
@@ -76,6 +81,7 @@ var Columns = []string{
 	FieldSLADefinitionSeverityLevelName,
 	FieldSLADefinitionSeverityLevelID,
 	FieldSLADays,
+	FieldSecurityLevel,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -114,6 +120,16 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+// SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
+func SecurityLevelValidator(sl enums.SecurityLevel) error {
+	switch sl.String() {
+	case "NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("sladefinition: invalid enum value for security_level field: %q", sl)
+	}
+}
 
 // OrderOption defines the ordering options for the SLADefinition queries.
 type OrderOption func(*sql.Selector)
@@ -178,6 +194,11 @@ func BySLADays(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSLADays, opts...).ToFunc()
 }
 
+// BySecurityLevel orders the results by the security_level field.
+func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityLevel, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -205,3 +226,10 @@ func newSLADefinitionSeverityLevelStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, SLADefinitionSeverityLevelTable, SLADefinitionSeverityLevelColumn),
 	)
 }
+
+var (
+	// enums.SecurityLevel must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SecurityLevel)(nil)
+	// enums.SecurityLevel must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SecurityLevel)(nil)
+)

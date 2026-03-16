@@ -674,20 +674,6 @@ func (_c *FindingCreate) SetNillableRemediationSLA(v *int) *FindingCreate {
 	return _c
 }
 
-// SetStatus sets the "status" field.
-func (_c *FindingCreate) SetStatus(v string) *FindingCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *FindingCreate) SetNillableStatus(v *string) *FindingCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
 // SetEventTime sets the "event_time" field.
 func (_c *FindingCreate) SetEventTime(v models.DateTime) *FindingCreate {
 	_c.mutation.SetEventTime(v)
@@ -1444,10 +1430,6 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RemediationSLA(); ok {
 		_spec.SetField(finding.FieldRemediationSLA, field.TypeInt, value)
 		_node.RemediationSLA = value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-		_node.Status = value
 	}
 	if value, ok := _c.mutation.EventTime(); ok {
 		_spec.SetField(finding.FieldEventTime, field.TypeTime, value)

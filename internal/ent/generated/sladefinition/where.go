@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -835,6 +836,46 @@ func SLADaysLT(v int) predicate.SLADefinition {
 // SLADaysLTE applies the LTE predicate on the "sla_days" field.
 func SLADaysLTE(v int) predicate.SLADefinition {
 	return predicate.SLADefinition(sql.FieldLTE(FieldSLADays, v))
+}
+
+// SecurityLevelEQ applies the EQ predicate on the "security_level" field.
+func SecurityLevelEQ(v enums.SecurityLevel) predicate.SLADefinition {
+	vc := v
+	return predicate.SLADefinition(sql.FieldEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelNEQ applies the NEQ predicate on the "security_level" field.
+func SecurityLevelNEQ(v enums.SecurityLevel) predicate.SLADefinition {
+	vc := v
+	return predicate.SLADefinition(sql.FieldNEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelIn applies the In predicate on the "security_level" field.
+func SecurityLevelIn(vs ...enums.SecurityLevel) predicate.SLADefinition {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SLADefinition(sql.FieldIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelNotIn applies the NotIn predicate on the "security_level" field.
+func SecurityLevelNotIn(vs ...enums.SecurityLevel) predicate.SLADefinition {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SLADefinition(sql.FieldNotIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelIsNil applies the IsNil predicate on the "security_level" field.
+func SecurityLevelIsNil() predicate.SLADefinition {
+	return predicate.SLADefinition(sql.FieldIsNull(FieldSecurityLevel))
+}
+
+// SecurityLevelNotNil applies the NotNil predicate on the "security_level" field.
+func SecurityLevelNotNil() predicate.SLADefinition {
+	return predicate.SLADefinition(sql.FieldNotNull(FieldSecurityLevel))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

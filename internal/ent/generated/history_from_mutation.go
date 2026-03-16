@@ -9089,10 +9089,6 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRemediationSLA(remediationSLA)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	if eventTime, exists := m.EventTime(); exists {
 		create = create.SetNillableEventTime(&eventTime)
 	}
@@ -9442,12 +9438,6 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRemediationSLA(finding.RemediationSLA)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(finding.Status)
-		}
-
 		if eventTime, exists := m.EventTime(); exists {
 			create = create.SetNillableEventTime(&eventTime)
 		} else {
@@ -9568,7 +9558,6 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTargetDetails(finding.TargetDetails).
 			SetVector(finding.Vector).
 			SetRemediationSLA(finding.RemediationSLA).
-			SetStatus(finding.Status).
 			SetNillableEventTime(finding.EventTime).
 			SetNillableReportedAt(finding.ReportedAt).
 			SetNillableSourceUpdatedAt(finding.SourceUpdatedAt).
@@ -18691,6 +18680,10 @@ func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetSLADays(slaDays)
 	}
 
+	if securityLevel, exists := m.SecurityLevel(); exists {
+		create = create.SetSecurityLevel(securityLevel)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -18794,6 +18787,12 @@ func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetSLADays(sladefinition.SLADays)
 		}
 
+		if securityLevel, exists := m.SecurityLevel(); exists {
+			create = create.SetSecurityLevel(securityLevel)
+		} else {
+			create = create.SetSecurityLevel(sladefinition.SecurityLevel)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -18841,6 +18840,7 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName).
 			SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID).
 			SetSLADays(sladefinition.SLADays).
+			SetSecurityLevel(sladefinition.SecurityLevel).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -24939,10 +24939,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetPriority(priority)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	if summary, exists := m.Summary(); exists {
 		create = create.SetSummary(summary)
 	}
@@ -25222,12 +25218,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetPriority(vulnerability.Priority)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(vulnerability.Status)
-		}
-
 		if summary, exists := m.Summary(); exists {
 			create = create.SetSummary(summary)
 		} else {
@@ -25395,7 +25385,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetImpact(vulnerability.Impact).
 			SetExploitability(vulnerability.Exploitability).
 			SetPriority(vulnerability.Priority).
-			SetStatus(vulnerability.Status).
 			SetSummary(vulnerability.Summary).
 			SetDescription(vulnerability.Description).
 			SetVector(vulnerability.Vector).

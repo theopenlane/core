@@ -21826,6 +21826,20 @@ var (
 			}
 		},
 	}
+	// SLADefinitionHistoryOrderFieldSecurityLevel orders SLADefinitionHistory by security_level.
+	SLADefinitionHistoryOrderFieldSecurityLevel = &SLADefinitionHistoryOrderField{
+		Value: func(_m *SLADefinitionHistory) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: sladefinitionhistory.FieldSecurityLevel,
+		toTerm: sladefinitionhistory.BySecurityLevel,
+		toCursor: func(_m *SLADefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -21840,6 +21854,8 @@ func (f SLADefinitionHistoryOrderField) String() string {
 		str = "updated_at"
 	case SLADefinitionHistoryOrderFieldSLADays.column:
 		str = "sla_days"
+	case SLADefinitionHistoryOrderFieldSecurityLevel.column:
+		str = "security_level"
 	}
 	return str
 }
@@ -21864,6 +21880,8 @@ func (f *SLADefinitionHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SLADefinitionHistoryOrderFieldUpdatedAt
 	case "sla_days":
 		*f = *SLADefinitionHistoryOrderFieldSLADays
+	case "security_level":
+		*f = *SLADefinitionHistoryOrderFieldSecurityLevel
 	default:
 		return fmt.Errorf("%s is not a valid SLADefinitionHistoryOrderField", str)
 	}

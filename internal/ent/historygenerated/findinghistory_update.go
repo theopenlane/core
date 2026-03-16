@@ -925,26 +925,6 @@ func (_u *FindingHistoryUpdate) ClearRemediationSLA() *FindingHistoryUpdate {
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingHistoryUpdate) SetStatus(v string) *FindingHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingHistoryUpdate) SetNillableStatus(v *string) *FindingHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingHistoryUpdate) ClearStatus() *FindingHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingHistoryUpdate) SetEventTime(v models.DateTime) *FindingHistoryUpdate {
 	_u.mutation.SetEventTime(v)
@@ -1442,12 +1422,6 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(findinghistory.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(findinghistory.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(findinghistory.FieldEventTime, field.TypeTime, value)
@@ -2398,26 +2372,6 @@ func (_u *FindingHistoryUpdateOne) ClearRemediationSLA() *FindingHistoryUpdateOn
 	return _u
 }
 
-// SetStatus sets the "status" field.
-func (_u *FindingHistoryUpdateOne) SetStatus(v string) *FindingHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *FindingHistoryUpdateOne) SetNillableStatus(v *string) *FindingHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *FindingHistoryUpdateOne) ClearStatus() *FindingHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
 // SetEventTime sets the "event_time" field.
 func (_u *FindingHistoryUpdateOne) SetEventTime(v models.DateTime) *FindingHistoryUpdateOne {
 	_u.mutation.SetEventTime(v)
@@ -2945,12 +2899,6 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.RemediationSLACleared() {
 		_spec.ClearField(findinghistory.FieldRemediationSLA, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
-	}
-	if _u.mutation.StatusCleared() {
-		_spec.ClearField(findinghistory.FieldStatus, field.TypeString)
 	}
 	if value, ok := _u.mutation.EventTime(); ok {
 		_spec.SetField(findinghistory.FieldEventTime, field.TypeTime, value)

@@ -279,11 +279,6 @@ func RemediationSLA(v int) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldRemediationSLA, v))
 }
 
-// Status applies equality check predicate on the "status" field. It's identical to StatusEQ.
-func Status(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldStatus, v))
-}
-
 // EventTime applies equality check predicate on the "event_time" field. It's identical to EventTimeEQ.
 func EventTime(v models.DateTime) predicate.Finding {
 	return predicate.Finding(sql.FieldEQ(FieldEventTime, v))
@@ -3012,81 +3007,6 @@ func RemediationSLAIsNil() predicate.Finding {
 // RemediationSLANotNil applies the NotNil predicate on the "remediation_sla" field.
 func RemediationSLANotNil() predicate.Finding {
 	return predicate.Finding(sql.FieldNotNull(FieldRemediationSLA))
-}
-
-// StatusEQ applies the EQ predicate on the "status" field.
-func StatusEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEQ(FieldStatus, v))
-}
-
-// StatusNEQ applies the NEQ predicate on the "status" field.
-func StatusNEQ(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldNEQ(FieldStatus, v))
-}
-
-// StatusIn applies the In predicate on the "status" field.
-func StatusIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldIn(FieldStatus, vs...))
-}
-
-// StatusNotIn applies the NotIn predicate on the "status" field.
-func StatusNotIn(vs ...string) predicate.Finding {
-	return predicate.Finding(sql.FieldNotIn(FieldStatus, vs...))
-}
-
-// StatusGT applies the GT predicate on the "status" field.
-func StatusGT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGT(FieldStatus, v))
-}
-
-// StatusGTE applies the GTE predicate on the "status" field.
-func StatusGTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldGTE(FieldStatus, v))
-}
-
-// StatusLT applies the LT predicate on the "status" field.
-func StatusLT(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLT(FieldStatus, v))
-}
-
-// StatusLTE applies the LTE predicate on the "status" field.
-func StatusLTE(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldLTE(FieldStatus, v))
-}
-
-// StatusContains applies the Contains predicate on the "status" field.
-func StatusContains(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContains(FieldStatus, v))
-}
-
-// StatusHasPrefix applies the HasPrefix predicate on the "status" field.
-func StatusHasPrefix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasPrefix(FieldStatus, v))
-}
-
-// StatusHasSuffix applies the HasSuffix predicate on the "status" field.
-func StatusHasSuffix(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldHasSuffix(FieldStatus, v))
-}
-
-// StatusIsNil applies the IsNil predicate on the "status" field.
-func StatusIsNil() predicate.Finding {
-	return predicate.Finding(sql.FieldIsNull(FieldStatus))
-}
-
-// StatusNotNil applies the NotNil predicate on the "status" field.
-func StatusNotNil() predicate.Finding {
-	return predicate.Finding(sql.FieldNotNull(FieldStatus))
-}
-
-// StatusEqualFold applies the EqualFold predicate on the "status" field.
-func StatusEqualFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldEqualFold(FieldStatus, v))
-}
-
-// StatusContainsFold applies the ContainsFold predicate on the "status" field.
-func StatusContainsFold(v string) predicate.Finding {
-	return predicate.Finding(sql.FieldContainsFold(FieldStatus, v))
 }
 
 // EventTimeEQ applies the EQ predicate on the "event_time" field.

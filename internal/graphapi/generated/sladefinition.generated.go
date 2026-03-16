@@ -74,6 +74,8 @@ func (ec *executionContext) fieldContext_SLADefinitionBulkCreatePayload_slaDefin
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevelID(ctx, field)
 			case "slaDays":
 				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
 			case "owner":
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
@@ -160,6 +162,8 @@ func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_slaDefin
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevelID(ctx, field)
 			case "slaDays":
 				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
 			case "owner":
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
@@ -246,6 +250,8 @@ func (ec *executionContext) fieldContext_SLADefinitionCreatePayload_slaDefinitio
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevelID(ctx, field)
 			case "slaDays":
 				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
 			case "owner":
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":
@@ -332,6 +338,8 @@ func (ec *executionContext) fieldContext_SLADefinitionUpdatePayload_slaDefinitio
 				return ec.fieldContext_SLADefinition_slaDefinitionSeverityLevelID(ctx, field)
 			case "slaDays":
 				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
+			case "securityLevel":
+				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
 			case "owner":
 				return ec.fieldContext_SLADefinition_owner(ctx, field)
 			case "slaDefinitionSeverityLevel":

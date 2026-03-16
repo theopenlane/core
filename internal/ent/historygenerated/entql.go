@@ -1166,7 +1166,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findinghistory.FieldTargetDetails:      {Type: field.TypeJSON, Column: findinghistory.FieldTargetDetails},
 			findinghistory.FieldVector:             {Type: field.TypeString, Column: findinghistory.FieldVector},
 			findinghistory.FieldRemediationSLA:     {Type: field.TypeInt, Column: findinghistory.FieldRemediationSLA},
-			findinghistory.FieldStatus:             {Type: field.TypeString, Column: findinghistory.FieldStatus},
 			findinghistory.FieldEventTime:          {Type: field.TypeTime, Column: findinghistory.FieldEventTime},
 			findinghistory.FieldReportedAt:         {Type: field.TypeTime, Column: findinghistory.FieldReportedAt},
 			findinghistory.FieldSourceUpdatedAt:    {Type: field.TypeTime, Column: findinghistory.FieldSourceUpdatedAt},
@@ -2195,6 +2194,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			sladefinitionhistory.FieldSLADefinitionSeverityLevelName: {Type: field.TypeString, Column: sladefinitionhistory.FieldSLADefinitionSeverityLevelName},
 			sladefinitionhistory.FieldSLADefinitionSeverityLevelID:   {Type: field.TypeString, Column: sladefinitionhistory.FieldSLADefinitionSeverityLevelID},
 			sladefinitionhistory.FieldSLADays:                        {Type: field.TypeInt, Column: sladefinitionhistory.FieldSLADays},
+			sladefinitionhistory.FieldSecurityLevel:                  {Type: field.TypeEnum, Column: sladefinitionhistory.FieldSecurityLevel},
 		},
 	}
 	graph.Nodes[51] = &sqlgraph.Node{
@@ -2929,7 +2929,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldImpact:                  {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldImpact},
 			vulnerabilityhistory.FieldExploitability:          {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldExploitability},
 			vulnerabilityhistory.FieldPriority:                {Type: field.TypeString, Column: vulnerabilityhistory.FieldPriority},
-			vulnerabilityhistory.FieldStatus:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
 			vulnerabilityhistory.FieldSummary:                 {Type: field.TypeString, Column: vulnerabilityhistory.FieldSummary},
 			vulnerabilityhistory.FieldDescription:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldDescription},
 			vulnerabilityhistory.FieldVector:                  {Type: field.TypeString, Column: vulnerabilityhistory.FieldVector},
@@ -7936,11 +7935,6 @@ func (f *FindingHistoryFilter) WhereRemediationSLA(p entql.IntP) {
 	f.Where(p.Field(findinghistory.FieldRemediationSLA))
 }
 
-// WhereStatus applies the entql string predicate on the status field.
-func (f *FindingHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(findinghistory.FieldStatus))
-}
-
 // WhereEventTime applies the entql time.Time predicate on the event_time field.
 func (f *FindingHistoryFilter) WhereEventTime(p entql.TimeP) {
 	f.Where(p.Field(findinghistory.FieldEventTime))
@@ -12431,6 +12425,11 @@ func (f *SLADefinitionHistoryFilter) WhereSLADays(p entql.IntP) {
 	f.Where(p.Field(sladefinitionhistory.FieldSLADays))
 }
 
+// WhereSecurityLevel applies the entql string predicate on the security_level field.
+func (f *SLADefinitionHistoryFilter) WhereSecurityLevel(p entql.StringP) {
+	f.Where(p.Field(sladefinitionhistory.FieldSecurityLevel))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *ScanHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -15599,11 +15598,6 @@ func (f *VulnerabilityHistoryFilter) WhereExploitability(p entql.Float64P) {
 // WherePriority applies the entql string predicate on the priority field.
 func (f *VulnerabilityHistoryFilter) WherePriority(p entql.StringP) {
 	f.Where(p.Field(vulnerabilityhistory.FieldPriority))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *VulnerabilityHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(vulnerabilityhistory.FieldStatus))
 }
 
 // WhereSummary applies the entql string predicate on the summary field.

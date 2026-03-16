@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -201,6 +202,20 @@ func (_c *SLADefinitionHistoryCreate) SetSLADays(v int) *SLADefinitionHistoryCre
 	return _c
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_c *SLADefinitionHistoryCreate) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionHistoryCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *SLADefinitionHistoryCreate) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionHistoryCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *SLADefinitionHistoryCreate) SetID(v string) *SLADefinitionHistoryCreate {
 	_c.mutation.SetID(v)
@@ -306,6 +321,11 @@ func (_c *SLADefinitionHistoryCreate) check() error {
 	if _, ok := _c.mutation.SLADays(); !ok {
 		return &ValidationError{Name: "sla_days", err: errors.New(`historygenerated: missing required field "SLADefinitionHistory.sla_days"`)}
 	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := sladefinitionhistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "SLADefinitionHistory.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -401,6 +421,10 @@ func (_c *SLADefinitionHistoryCreate) createSpec() (*SLADefinitionHistory, *sqlg
 	if value, ok := _c.mutation.SLADays(); ok {
 		_spec.SetField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
 		_node.SLADays = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
+		_node.SecurityLevel = value
 	}
 	return _node, _spec
 }

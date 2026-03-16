@@ -8520,19 +8520,19 @@ func init() {
 	// vulnerability.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	vulnerability.ExternalIDValidator = vulnerabilityDescExternalID.Validators[0].(func(string) error)
 	// vulnerabilityDescOpen is the schema descriptor for open field.
-	vulnerabilityDescOpen := vulnerabilityFields[17].Descriptor()
+	vulnerabilityDescOpen := vulnerabilityFields[16].Descriptor()
 	// vulnerability.DefaultOpen holds the default value on creation for the open field.
 	vulnerability.DefaultOpen = vulnerabilityDescOpen.Default.(bool)
 	// vulnerabilityDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityDescBlocking := vulnerabilityFields[18].Descriptor()
+	vulnerabilityDescBlocking := vulnerabilityFields[17].Descriptor()
 	// vulnerability.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerability.DefaultBlocking = vulnerabilityDescBlocking.Default.(bool)
 	// vulnerabilityDescReferences is the schema descriptor for references field.
-	vulnerabilityDescReferences := vulnerabilityFields[22].Descriptor()
+	vulnerabilityDescReferences := vulnerabilityFields[21].Descriptor()
 	// vulnerability.DefaultReferences holds the default value on creation for the references field.
 	vulnerability.DefaultReferences = vulnerabilityDescReferences.Default.([]string)
 	// vulnerabilityDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityDescImpacts := vulnerabilityFields[23].Descriptor()
+	vulnerabilityDescImpacts := vulnerabilityFields[22].Descriptor()
 	// vulnerability.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerability.DefaultImpacts = vulnerabilityDescImpacts.Default.([]string)
 	// vulnerabilityDescID is the schema descriptor for id field.

@@ -1100,7 +1100,6 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
-		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		SystemInternalID   func(childComplexity int) int
 		SystemOwned        func(childComplexity int) int
@@ -2219,6 +2218,7 @@ type ComplexityRoot struct {
 		SLADays                        func(childComplexity int) int
 		SLADefinitionSeverityLevelID   func(childComplexity int) int
 		SLADefinitionSeverityLevelName func(childComplexity int) int
+		SecurityLevel                  func(childComplexity int) int
 		Tags                           func(childComplexity int) int
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
@@ -2961,7 +2961,6 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
-		Status                  func(childComplexity int) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -9162,13 +9161,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.State(childComplexity), true
-
-	case "FindingHistory.status":
-		if e.ComplexityRoot.FindingHistory.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.FindingHistory.Status(childComplexity), true
 
 	case "FindingHistory.stepsToReproduce":
 		if e.ComplexityRoot.FindingHistory.StepsToReproduce == nil {
@@ -15711,6 +15703,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SLADefinitionHistory.SLADefinitionSeverityLevelName(childComplexity), true
 
+	case "SLADefinitionHistory.securityLevel":
+		if e.ComplexityRoot.SLADefinitionHistory.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionHistory.SecurityLevel(childComplexity), true
+
 	case "SLADefinitionHistory.tags":
 		if e.ComplexityRoot.SLADefinitionHistory.Tags == nil {
 			break
@@ -19644,13 +19643,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.SourceUpdatedAt(childComplexity), true
-
-	case "VulnerabilityHistory.status":
-		if e.ComplexityRoot.VulnerabilityHistory.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.VulnerabilityHistory.Status(childComplexity), true
 
 	case "VulnerabilityHistory.summary":
 		if e.ComplexityRoot.VulnerabilityHistory.Summary == nil {
@@ -34887,10 +34879,6 @@ type FindingHistory implements Node {
   """
   remediationSLA: Int
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   timestamp when the finding was last observed by the source
   """
   eventTime: DateTime
@@ -35672,24 +35660,6 @@ input FindingHistoryWhereInput {
   remediationSLALTE: Int
   remediationSLAIsNil: Boolean
   remediationSLANotNil: Boolean
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   event_time field predicates
   """
@@ -50783,6 +50753,10 @@ type SLADefinitionHistory implements Node {
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
+  """
+  incoming source severity
+  """
+  securityLevel: SLADefinitionHistorySecurityLevel
 }
 """
 A connection to a list of items.
@@ -50843,6 +50817,17 @@ enum SLADefinitionHistoryOrderField {
   created_at
   updated_at
   sla_days
+  security_level
+}
+"""
+SLADefinitionHistorySecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionHistorySecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 SLADefinitionHistoryWhereInput is used for filtering SLADefinitionHistory objects.
@@ -51044,6 +51029,15 @@ input SLADefinitionHistoryWhereInput {
   slaDaysGTE: Int
   slaDaysLT: Int
   slaDaysLTE: Int
+  """
+  security_level field predicates
+  """
+  securityLevel: SLADefinitionHistorySecurityLevel
+  securityLevelNEQ: SLADefinitionHistorySecurityLevel
+  securityLevelIn: [SLADefinitionHistorySecurityLevel!]
+  securityLevelNotIn: [SLADefinitionHistorySecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
 }
 type ScanHistory implements Node {
   id: ID!
@@ -59617,10 +59611,6 @@ type VulnerabilityHistory implements Node {
   """
   priority: String
   """
-  lifecycle status of the vulnerability
-  """
-  status: String
-  """
   short summary of the vulnerability details
   """
   summary: String
@@ -60258,24 +60248,6 @@ input VulnerabilityHistoryWhereInput {
   priorityNotNil: Boolean
   priorityEqualFold: String
   priorityContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   summary field predicates
   """

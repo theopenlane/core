@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 
@@ -205,6 +206,26 @@ func (_u *SLADefinitionHistoryUpdate) AddSLADays(v int) *SLADefinitionHistoryUpd
 	return _u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_u *SLADefinitionHistoryUpdate) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionHistoryUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *SLADefinitionHistoryUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionHistoryUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *SLADefinitionHistoryUpdate) ClearSecurityLevel() *SLADefinitionHistoryUpdate {
+	_u.mutation.ClearSecurityLevel()
+	return _u
+}
+
 // Mutation returns the SLADefinitionHistoryMutation object of the builder.
 func (_u *SLADefinitionHistoryUpdate) Mutation() *SLADefinitionHistoryMutation {
 	return _u.mutation
@@ -252,6 +273,16 @@ func (_u *SLADefinitionHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *SLADefinitionHistoryUpdate) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := sladefinitionhistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "SLADefinitionHistory.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *SLADefinitionHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SLADefinitionHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -259,6 +290,9 @@ func (_u *SLADefinitionHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuil
 }
 
 func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(sladefinitionhistory.Table, sladefinitionhistory.Columns, sqlgraph.NewFieldSpec(sladefinitionhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -334,6 +368,12 @@ func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.AddedSLADays(); ok {
 		_spec.AddField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.SLADefinitionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -530,6 +570,26 @@ func (_u *SLADefinitionHistoryUpdateOne) AddSLADays(v int) *SLADefinitionHistory
 	return _u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_u *SLADefinitionHistoryUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionHistoryUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *SLADefinitionHistoryUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *SLADefinitionHistoryUpdateOne) ClearSecurityLevel() *SLADefinitionHistoryUpdateOne {
+	_u.mutation.ClearSecurityLevel()
+	return _u
+}
+
 // Mutation returns the SLADefinitionHistoryMutation object of the builder.
 func (_u *SLADefinitionHistoryUpdateOne) Mutation() *SLADefinitionHistoryMutation {
 	return _u.mutation
@@ -590,6 +650,16 @@ func (_u *SLADefinitionHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *SLADefinitionHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := sladefinitionhistory.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "SLADefinitionHistory.security_level": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *SLADefinitionHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SLADefinitionHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -597,6 +667,9 @@ func (_u *SLADefinitionHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateB
 }
 
 func (_u *SLADefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SLADefinitionHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(sladefinitionhistory.Table, sladefinitionhistory.Columns, sqlgraph.NewFieldSpec(sladefinitionhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -689,6 +762,12 @@ func (_u *SLADefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SL
 	}
 	if value, ok := _u.mutation.AddedSLADays(); ok {
 		_spec.AddField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.SLADefinitionHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

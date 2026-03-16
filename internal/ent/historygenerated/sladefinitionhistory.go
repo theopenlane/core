@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -50,8 +51,10 @@ type SLADefinitionHistory struct {
 	// the severity_level of the sla_definition
 	SLADefinitionSeverityLevelID string `json:"sla_definition_severity_level_id,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays      int `json:"sla_days,omitempty"`
-	selectValues sql.SelectValues
+	SLADays int `json:"sla_days,omitempty"`
+	// incoming source severity
+	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -65,7 +68,7 @@ func (*SLADefinitionHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case sladefinitionhistory.FieldSLADays:
 			values[i] = new(sql.NullInt64)
-		case sladefinitionhistory.FieldID, sladefinitionhistory.FieldRef, sladefinitionhistory.FieldCreatedBy, sladefinitionhistory.FieldUpdatedBy, sladefinitionhistory.FieldDeletedBy, sladefinitionhistory.FieldDisplayID, sladefinitionhistory.FieldOwnerID, sladefinitionhistory.FieldSLADefinitionSeverityLevelName, sladefinitionhistory.FieldSLADefinitionSeverityLevelID:
+		case sladefinitionhistory.FieldID, sladefinitionhistory.FieldRef, sladefinitionhistory.FieldCreatedBy, sladefinitionhistory.FieldUpdatedBy, sladefinitionhistory.FieldDeletedBy, sladefinitionhistory.FieldDisplayID, sladefinitionhistory.FieldOwnerID, sladefinitionhistory.FieldSLADefinitionSeverityLevelName, sladefinitionhistory.FieldSLADefinitionSeverityLevelID, sladefinitionhistory.FieldSecurityLevel:
 			values[i] = new(sql.NullString)
 		case sladefinitionhistory.FieldHistoryTime, sladefinitionhistory.FieldCreatedAt, sladefinitionhistory.FieldUpdatedAt, sladefinitionhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -182,6 +185,12 @@ func (_m *SLADefinitionHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				_m.SLADays = int(value.Int64)
 			}
+		case sladefinitionhistory.FieldSecurityLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_level", values[i])
+			} else if value.Valid {
+				_m.SecurityLevel = enums.SecurityLevel(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -262,6 +271,9 @@ func (_m *SLADefinitionHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sla_days=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SLADays))
+	builder.WriteString(", ")
+	builder.WriteString("security_level=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
 	builder.WriteByte(')')
 	return builder.String()
 }

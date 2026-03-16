@@ -25,6 +25,8 @@ type CustomEnumMixin struct {
 	WorkflowEdgeEligible bool
 	// GlobalEnum marks the enum as a shared set across schemas
 	GlobalEnum bool
+	// Autocreate will auto-create the enum if it doesn't exist
+	Autocreate bool
 }
 
 // newCustomEnumMixin creates a new CustomEnumMixin with the given schema type and options
@@ -62,6 +64,13 @@ func withWorkflowEnumEdges() customEnumOptions {
 func withGlobalEnum() customEnumOptions {
 	return func(c *CustomEnumMixin) {
 		c.GlobalEnum = true
+	}
+}
+
+// withAutocreate auto-creates the enum if it doesn't already exist
+func withAutocreate() customEnumOptions {
+	return func(c *CustomEnumMixin) {
+		c.Autocreate = true
 	}
 }
 
@@ -120,6 +129,7 @@ func (c CustomEnumMixin) Hooks() []ent.Hook {
 		EdgeFieldName:   c.getEnumEdgeName() + "_id",
 		SchemaFieldName: c.getEnumFieldName(),
 		AllowGlobal:     c.GlobalEnum,
+		Autocreate:      c.Autocreate,
 	}
 	return []ent.Hook{
 		hooks.HookCustomEnums(in),

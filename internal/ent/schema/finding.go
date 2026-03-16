@@ -168,9 +168,6 @@ func (Finding) Fields() []ent.Field {
 		field.Int("remediation_sla").
 			Comment("remediation service level agreement in days").
 			Optional(),
-		field.String("status").
-			Comment("lifecycle status of the finding").
-			Optional(),
 		field.Time("event_time").
 			Comment("timestamp when the finding was last observed by the source").
 			GoType(models.DateTime{}).
@@ -300,7 +297,7 @@ func (Finding) Indexes() []ent.Index {
 // Hooks of the Finding
 func (Finding) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookFindingSeverityLevel(),
+		hooks.HookSeverityLevel(),
 	}
 }
 

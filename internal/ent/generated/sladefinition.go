@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
@@ -44,6 +45,8 @@ type SLADefinition struct {
 	SLADefinitionSeverityLevelID string `json:"sla_definition_severity_level_id,omitempty"`
 	// remediation service level agreement in days for the severity level
 	SLADays int `json:"sla_days,omitempty"`
+	// incoming source severity
+	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SLADefinitionQuery when eager-loading is set.
 	Edges        SLADefinitionEdges `json:"edges"`
@@ -94,7 +97,7 @@ func (*SLADefinition) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case sladefinition.FieldSLADays:
 			values[i] = new(sql.NullInt64)
-		case sladefinition.FieldID, sladefinition.FieldCreatedBy, sladefinition.FieldUpdatedBy, sladefinition.FieldDeletedBy, sladefinition.FieldDisplayID, sladefinition.FieldOwnerID, sladefinition.FieldSLADefinitionSeverityLevelName, sladefinition.FieldSLADefinitionSeverityLevelID:
+		case sladefinition.FieldID, sladefinition.FieldCreatedBy, sladefinition.FieldUpdatedBy, sladefinition.FieldDeletedBy, sladefinition.FieldDisplayID, sladefinition.FieldOwnerID, sladefinition.FieldSLADefinitionSeverityLevelName, sladefinition.FieldSLADefinitionSeverityLevelID, sladefinition.FieldSecurityLevel:
 			values[i] = new(sql.NullString)
 		case sladefinition.FieldCreatedAt, sladefinition.FieldUpdatedAt, sladefinition.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -193,6 +196,12 @@ func (_m *SLADefinition) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SLADays = int(value.Int64)
 			}
+		case sladefinition.FieldSecurityLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_level", values[i])
+			} else if value.Valid {
+				_m.SecurityLevel = enums.SecurityLevel(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -274,6 +283,9 @@ func (_m *SLADefinition) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("sla_days=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SLADays))
+	builder.WriteString(", ")
+	builder.WriteString("security_level=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))
 	builder.WriteByte(')')
 	return builder.String()
 }

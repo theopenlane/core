@@ -7,13 +7,14 @@ import (
 	"strings"
 	"sync"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
 
-	"entgo.io/ent"
 	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -135,6 +136,8 @@ type CustomEnumFilter struct {
 	SchemaFieldName string
 	// AllowGlobal indicates the enum lookup should use global enums with an empty object type
 	AllowGlobal bool
+	// Autocreate will automatically create the enum if it doesn't exist
+	Autocreate bool
 }
 
 // HookCustomEnums ensures that a custom enum value exists for the given object type and field
@@ -184,13 +187,23 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			} else {
 				enum, err = lookupEnum(in.ObjectType)
 			}
-			if err != nil {
-				// if the enum does not exist, return a custom error
-				if generated.IsNotFound(err) {
-					return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
-				}
 
-				return nil, err
+			if err != nil {
+				switch generated.IsNotFound(err) {
+				case true:
+					// if the enum does not exist and autocreate is not set to true, return a custom error
+					if !in.Autocreate {
+						return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+					}
+
+					enum, err = createCustomEnum(ctx, client, in, enumValue)
+					if err != nil {
+						return nil, err
+					}
+
+				default:
+					return nil, err
+				}
 			}
 
 			// set the edge field on the mutation to the enum ID
@@ -201,6 +214,26 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne))
+}
+
+// createCustomEnum creates a new CustomTypeEnum when one doesn't exist and autocreate is enabled
+func createCustomEnum(ctx context.Context, client *generated.Client, in CustomEnumFilter, enumValue string) (*generated.CustomTypeEnum, error) {
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+	}
+
+	objectType := in.ObjectType
+	if in.AllowGlobal {
+		objectType = ""
+	}
+
+	return client.CustomTypeEnum.Create().
+		SetName(enumValue).
+		SetObjectType(objectType).
+		SetField(in.Field).
+		SetOwnerID(orgID).
+		Save(ctx)
 }
 
 // HookCustomTypeEnumDelete checks if the enum(s) being deleted is in use by any other object.

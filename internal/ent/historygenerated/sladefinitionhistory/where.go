@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -980,6 +981,46 @@ func SLADaysLT(v int) predicate.SLADefinitionHistory {
 // SLADaysLTE applies the LTE predicate on the "sla_days" field.
 func SLADaysLTE(v int) predicate.SLADefinitionHistory {
 	return predicate.SLADefinitionHistory(sql.FieldLTE(FieldSLADays, v))
+}
+
+// SecurityLevelEQ applies the EQ predicate on the "security_level" field.
+func SecurityLevelEQ(v enums.SecurityLevel) predicate.SLADefinitionHistory {
+	vc := v
+	return predicate.SLADefinitionHistory(sql.FieldEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelNEQ applies the NEQ predicate on the "security_level" field.
+func SecurityLevelNEQ(v enums.SecurityLevel) predicate.SLADefinitionHistory {
+	vc := v
+	return predicate.SLADefinitionHistory(sql.FieldNEQ(FieldSecurityLevel, vc))
+}
+
+// SecurityLevelIn applies the In predicate on the "security_level" field.
+func SecurityLevelIn(vs ...enums.SecurityLevel) predicate.SLADefinitionHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SLADefinitionHistory(sql.FieldIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelNotIn applies the NotIn predicate on the "security_level" field.
+func SecurityLevelNotIn(vs ...enums.SecurityLevel) predicate.SLADefinitionHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.SLADefinitionHistory(sql.FieldNotIn(FieldSecurityLevel, v...))
+}
+
+// SecurityLevelIsNil applies the IsNil predicate on the "security_level" field.
+func SecurityLevelIsNil() predicate.SLADefinitionHistory {
+	return predicate.SLADefinitionHistory(sql.FieldIsNull(FieldSecurityLevel))
+}
+
+// SecurityLevelNotNil applies the NotNil predicate on the "security_level" field.
+func SecurityLevelNotNil() predicate.SLADefinitionHistory {
+	return predicate.SLADefinitionHistory(sql.FieldNotNull(FieldSecurityLevel))
 }
 
 // And groups predicates with the AND operator between them.

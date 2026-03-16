@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -49,6 +50,8 @@ const (
 	FieldSLADefinitionSeverityLevelID = "sla_definition_severity_level_id"
 	// FieldSLADays holds the string denoting the sla_days field in the database.
 	FieldSLADays = "sla_days"
+	// FieldSecurityLevel holds the string denoting the security_level field in the database.
+	FieldSecurityLevel = "security_level"
 	// Table holds the table name of the sladefinitionhistory in the database.
 	Table = "sla_definition_history"
 )
@@ -71,6 +74,7 @@ var Columns = []string{
 	FieldSLADefinitionSeverityLevelName,
 	FieldSLADefinitionSeverityLevelID,
 	FieldSLADays,
+	FieldSecurityLevel,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -113,6 +117,16 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("sladefinitionhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+// SecurityLevelValidator is a validator for the "security_level" field enum values. It is called by the builders before save.
+func SecurityLevelValidator(sl enums.SecurityLevel) error {
+	switch sl.String() {
+	case "NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL":
+		return nil
+	default:
+		return fmt.Errorf("sladefinitionhistory: invalid enum value for security_level field: %q", sl)
 	}
 }
 
@@ -194,9 +208,21 @@ func BySLADays(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSLADays, opts...).ToFunc()
 }
 
+// BySecurityLevel orders the results by the security_level field.
+func BySecurityLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityLevel, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.SecurityLevel must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SecurityLevel)(nil)
+	// enums.SecurityLevel must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SecurityLevel)(nil)
 )

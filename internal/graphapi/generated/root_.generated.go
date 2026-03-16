@@ -43,7 +43,6 @@ type ResolverRoot interface {
 	WorkflowProposal() WorkflowProposalResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
-	CreateFindingInput() CreateFindingInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
 	CreateNotificationInput() CreateNotificationInputResolver
@@ -51,14 +50,12 @@ type ResolverRoot interface {
 	CreateScanInput() CreateScanInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
-	CreateVulnerabilityInput() CreateVulnerabilityInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateDiscussionInput() UpdateDiscussionInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateEvidenceInput() UpdateEvidenceInputResolver
-	UpdateFindingInput() UpdateFindingInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
 	UpdateInternalPolicyInput() UpdateInternalPolicyInputResolver
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
@@ -71,7 +68,6 @@ type ResolverRoot interface {
 	UpdateTaskInput() UpdateTaskInputResolver
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
-	UpdateVulnerabilityInput() UpdateVulnerabilityInputResolver
 }
 
 type DirectiveRoot struct {
@@ -2199,7 +2195,6 @@ type ComplexityRoot struct {
 		Source             func(childComplexity int) int
 		SourceUpdatedAt    func(childComplexity int) int
 		State              func(childComplexity int) int
-		Status             func(childComplexity int) int
 		StepsToReproduce   func(childComplexity int) int
 		Subcontrols        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		SystemInternalID   func(childComplexity int) int
@@ -5407,6 +5402,7 @@ type ComplexityRoot struct {
 		SLADefinitionSeverityLevel     func(childComplexity int) int
 		SLADefinitionSeverityLevelID   func(childComplexity int) int
 		SLADefinitionSeverityLevelName func(childComplexity int) int
+		SecurityLevel                  func(childComplexity int) int
 		Tags                           func(childComplexity int) int
 		UpdatedAt                      func(childComplexity int) int
 		UpdatedBy                      func(childComplexity int) int
@@ -6971,7 +6967,6 @@ type ComplexityRoot struct {
 		Severity                func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceUpdatedAt         func(childComplexity int) int
-		Status                  func(childComplexity int) int
 		Subcontrols             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary                 func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
@@ -18239,13 +18234,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Finding.State(childComplexity), true
-
-	case "Finding.status":
-		if e.ComplexityRoot.Finding.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Finding.Status(childComplexity), true
 
 	case "Finding.stepsToReproduce":
 		if e.ComplexityRoot.Finding.StepsToReproduce == nil {
@@ -40782,6 +40770,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SLADefinition.SLADefinitionSeverityLevelName(childComplexity), true
 
+	case "SLADefinition.securityLevel":
+		if e.ComplexityRoot.SLADefinition.SecurityLevel == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinition.SecurityLevel(childComplexity), true
+
 	case "SLADefinition.tags":
 		if e.ComplexityRoot.SLADefinition.Tags == nil {
 			break
@@ -48119,13 +48114,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Vulnerability.SourceUpdatedAt(childComplexity), true
-
-	case "Vulnerability.status":
-		if e.ComplexityRoot.Vulnerability.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Vulnerability.Status(childComplexity), true
 
 	case "Vulnerability.subcontrols":
 		if e.ComplexityRoot.Vulnerability.Subcontrols == nil {
@@ -66091,10 +66079,6 @@ input CreateFindingInput {
   """
   externalID: String
   """
-  incoming source severity
-  """
-  securityLevel: FindingSecurityLevel
-  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -66210,10 +66194,6 @@ input CreateFindingInput {
   remediation service level agreement in days
   """
   remediationSLA: Int
-  """
-  lifecycle status of the finding
-  """
-  status: String
   """
   timestamp when the finding was last observed by the source
   """
@@ -69429,10 +69409,6 @@ input CreateVulnerabilityInput {
   """
   externalOwnerID: String
   """
-  incoming source severity
-  """
-  securityLevel: VulnerabilitySecurityLevel
-  """
   external identifier from the integration source for the vulnerability
   """
   externalID: String!
@@ -69472,10 +69448,6 @@ input CreateVulnerabilityInput {
   priority assigned to the vulnerability
   """
   priority: String
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
   """
   short summary of the vulnerability details
   """
@@ -81086,10 +81058,6 @@ type Finding implements Node {
   """
   remediationSLA: Int
   """
-  lifecycle status of the finding
-  """
-  status: String
-  """
   timestamp when the finding was last observed by the source
   """
   eventTime: DateTime
@@ -82777,24 +82745,6 @@ input FindingWhereInput {
   remediationSLALTE: Int
   remediationSLAIsNil: Boolean
   remediationSLANotNil: Boolean
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   event_time field predicates
   """
@@ -111713,6 +111663,10 @@ type SLADefinition implements Node {
   remediation service level agreement in days for the severity level
   """
   slaDays: Int!
+  """
+  incoming source severity
+  """
+  securityLevel: SLADefinitionSecurityLevel
   owner: Organization
   slaDefinitionSeverityLevel: CustomTypeEnum
 }
@@ -111766,6 +111720,17 @@ enum SLADefinitionOrderField {
   created_at
   updated_at
   sla_days
+  security_level
+}
+"""
+SLADefinitionSecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionSecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 """
 SLADefinitionWhereInput is used for filtering SLADefinition objects.
@@ -111931,6 +111896,15 @@ input SLADefinitionWhereInput {
   slaDaysGTE: Int
   slaDaysLT: Int
   slaDaysLTE: Int
+  """
+  security_level field predicates
+  """
+  securityLevel: SLADefinitionSecurityLevel
+  securityLevelNEQ: SLADefinitionSecurityLevel
+  securityLevelIn: [SLADefinitionSecurityLevel!]
+  securityLevelNotIn: [SLADefinitionSecurityLevel!]
+  securityLevelIsNil: Boolean
+  securityLevelNotNil: Boolean
   """
   owner edge predicates
   """
@@ -125989,11 +125963,6 @@ input UpdateFindingInput {
   externalID: String
   clearExternalID: Boolean
   """
-  incoming source severity
-  """
-  securityLevel: FindingSecurityLevel
-  clearSecurityLevel: Boolean
-  """
   the owner of the finding
   """
   externalOwnerID: String
@@ -126142,11 +126111,6 @@ input UpdateFindingInput {
   """
   remediationSLA: Int
   clearRemediationSLA: Boolean
-  """
-  lifecycle status of the finding
-  """
-  status: String
-  clearStatus: Boolean
   """
   timestamp when the finding was last observed by the source
   """
@@ -130752,11 +130716,6 @@ input UpdateVulnerabilityInput {
   externalOwnerID: String
   clearExternalOwnerID: Boolean
   """
-  incoming source severity
-  """
-  securityLevel: VulnerabilitySecurityLevel
-  clearSecurityLevel: Boolean
-  """
   external identifier from the integration source for the vulnerability
   """
   externalID: String
@@ -130805,11 +130764,6 @@ input UpdateVulnerabilityInput {
   """
   priority: String
   clearPriority: Boolean
-  """
-  lifecycle status of the vulnerability
-  """
-  status: String
-  clearStatus: Boolean
   """
   short summary of the vulnerability details
   """
@@ -132681,10 +132635,6 @@ type Vulnerability implements Node {
   """
   priority: String
   """
-  lifecycle status of the vulnerability
-  """
-  status: String
-  """
   short summary of the vulnerability details
   """
   summary: String
@@ -133839,24 +133789,6 @@ input VulnerabilityWhereInput {
   priorityNotNil: Boolean
   priorityEqualFold: String
   priorityContainsFold: String
-  """
-  status field predicates
-  """
-  status: String
-  statusNEQ: String
-  statusIn: [String!]
-  statusNotIn: [String!]
-  statusGT: String
-  statusGTE: String
-  statusLT: String
-  statusLTE: String
-  statusContains: String
-  statusHasPrefix: String
-  statusHasSuffix: String
-  statusIsNil: Boolean
-  statusNotNil: Boolean
-  statusEqualFold: String
-  statusContainsFold: String
   """
   summary field predicates
   """

@@ -26345,11 +26345,6 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, finding.FieldRemediationSLA)
 				fieldSeen[finding.FieldRemediationSLA] = struct{}{}
 			}
-		case "status":
-			if _, ok := fieldSeen[finding.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, finding.FieldStatus)
-				fieldSeen[finding.FieldStatus] = struct{}{}
-			}
 		case "eventTime":
 			if _, ok := fieldSeen[finding.FieldEventTime]; !ok {
 				selectedFields = append(selectedFields, finding.FieldEventTime)
@@ -64265,6 +64260,11 @@ func (_q *SLADefinitionQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, sladefinition.FieldSLADays)
 				fieldSeen[sladefinition.FieldSLADays] = struct{}{}
 			}
+		case "securityLevel":
+			if _, ok := fieldSeen[sladefinition.FieldSecurityLevel]; !ok {
+				selectedFields = append(selectedFields, sladefinition.FieldSecurityLevel)
+				fieldSeen[sladefinition.FieldSecurityLevel] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -80576,11 +80576,6 @@ func (_q *VulnerabilityQuery) collectField(ctx context.Context, oneNode bool, op
 			if _, ok := fieldSeen[vulnerability.FieldPriority]; !ok {
 				selectedFields = append(selectedFields, vulnerability.FieldPriority)
 				fieldSeen[vulnerability.FieldPriority] = struct{}{}
-			}
-		case "status":
-			if _, ok := fieldSeen[vulnerability.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, vulnerability.FieldStatus)
-				fieldSeen[vulnerability.FieldStatus] = struct{}{}
 			}
 		case "summary":
 			if _, ok := fieldSeen[vulnerability.FieldSummary]; !ok {

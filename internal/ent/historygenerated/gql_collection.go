@@ -5665,11 +5665,6 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldRemediationSLA)
 				fieldSeen[findinghistory.FieldRemediationSLA] = struct{}{}
 			}
-		case "status":
-			if _, ok := fieldSeen[findinghistory.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, findinghistory.FieldStatus)
-				fieldSeen[findinghistory.FieldStatus] = struct{}{}
-			}
 		case "eventTime":
 			if _, ok := fieldSeen[findinghistory.FieldEventTime]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldEventTime)
@@ -11044,6 +11039,11 @@ func (_q *SLADefinitionHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, sladefinitionhistory.FieldSLADays)
 				fieldSeen[sladefinitionhistory.FieldSLADays] = struct{}{}
 			}
+		case "securityLevel":
+			if _, ok := fieldSeen[sladefinitionhistory.FieldSecurityLevel]; !ok {
+				selectedFields = append(selectedFields, sladefinitionhistory.FieldSecurityLevel)
+				fieldSeen[sladefinitionhistory.FieldSecurityLevel] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -14883,11 +14883,6 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldPriority]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldPriority)
 				fieldSeen[vulnerabilityhistory.FieldPriority] = struct{}{}
-			}
-		case "status":
-			if _, ok := fieldSeen[vulnerabilityhistory.FieldStatus]; !ok {
-				selectedFields = append(selectedFields, vulnerabilityhistory.FieldStatus)
-				fieldSeen[vulnerabilityhistory.FieldStatus] = struct{}{}
 			}
 		case "summary":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldSummary]; !ok {

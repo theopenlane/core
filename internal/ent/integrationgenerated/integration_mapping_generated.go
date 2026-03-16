@@ -87,11 +87,9 @@ const (
 	IntegrationMappingVulnerabilityScopeID = "scopeID"
 	IntegrationMappingVulnerabilityScopeName = "scopeName"
 	IntegrationMappingVulnerabilityScore = "score"
-	IntegrationMappingVulnerabilitySecurityLevel = "securityLevel"
 	IntegrationMappingVulnerabilitySeverity = "severity"
 	IntegrationMappingVulnerabilitySource = "source"
 	IntegrationMappingVulnerabilitySourceUpdatedAt = "sourceUpdatedAt"
-	IntegrationMappingVulnerabilityStatus = "status"
 	IntegrationMappingVulnerabilitySummary = "summary"
 	IntegrationMappingVulnerabilitySystemInternalID = "systemInternalID"
 	IntegrationMappingVulnerabilityTags = "tags"
@@ -554,13 +552,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				UpsertKey: false,
 			},
 			{
-				InputKey: "securityLevel",
-				EntField: "security_level",
-				Type: "string",
-				Required: false,
-				UpsertKey: false,
-			},
-			{
 				InputKey: "severity",
 				EntField: "severity",
 				Type: "string",
@@ -578,13 +569,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				InputKey: "sourceUpdatedAt",
 				EntField: "source_updated_at",
 				Type: "time.Time",
-				Required: false,
-				UpsertKey: false,
-			},
-			{
-				InputKey: "status",
-				EntField: "status",
-				Type: "string",
 				Required: false,
 				UpsertKey: false,
 			},
@@ -666,11 +650,9 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"scopeID": {},
 			"scopeName": {},
 			"score": {},
-			"securityLevel": {},
 			"severity": {},
 			"source": {},
 			"sourceUpdatedAt": {},
-			"status": {},
 			"summary": {},
 			"systemInternalID": {},
 			"tags": {},

@@ -12570,10 +12570,6 @@ input CreateFindingInput {
 	"""
 	externalID: String
 	"""
-	incoming source severity
-	"""
-	securityLevel: FindingSecurityLevel
-	"""
 	the owner of the finding
 	"""
 	externalOwnerID: String
@@ -12689,10 +12685,6 @@ input CreateFindingInput {
 	remediation service level agreement in days
 	"""
 	remediationSLA: Int
-	"""
-	lifecycle status of the finding
-	"""
-	status: String
 	"""
 	timestamp when the finding was last observed by the source
 	"""
@@ -16043,10 +16035,6 @@ input CreateVulnerabilityInput {
 	"""
 	externalOwnerID: String
 	"""
-	incoming source severity
-	"""
-	securityLevel: VulnerabilitySecurityLevel
-	"""
 	external identifier from the integration source for the vulnerability
 	"""
 	externalID: String!
@@ -16086,10 +16074,6 @@ input CreateVulnerabilityInput {
 	priority assigned to the vulnerability
 	"""
 	priority: String
-	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String
 	"""
 	short summary of the vulnerability details
 	"""
@@ -28539,10 +28523,6 @@ type Finding implements Node {
 	"""
 	remediationSLA: Int
 	"""
-	lifecycle status of the finding
-	"""
-	status: String
-	"""
 	timestamp when the finding was last observed by the source
 	"""
 	eventTime: DateTime
@@ -30324,24 +30304,6 @@ input FindingWhereInput {
 	remediationSLALTE: Int
 	remediationSLAIsNil: Boolean
 	remediationSLANotNil: Boolean
-	"""
-	status field predicates
-	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
-	statusIsNil: Boolean
-	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	event_time field predicates
 	"""
@@ -69618,6 +69580,10 @@ type SLADefinition implements Node {
 	remediation service level agreement in days for the severity level
 	"""
 	slaDays: Int!
+	"""
+	incoming source severity
+	"""
+	securityLevel: SLADefinitionSecurityLevel
 	owner: Organization
 	slaDefinitionSeverityLevel: CustomTypeEnum
 }
@@ -69720,6 +69686,17 @@ enum SLADefinitionOrderField {
 	created_at
 	updated_at
 	sla_days
+	security_level
+}
+"""
+SLADefinitionSecurityLevel is enum for the field security_level
+"""
+enum SLADefinitionSecurityLevel @goModel(model: "github.com/theopenlane/core/common/enums.SecurityLevel") {
+	NONE
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
 }
 """
 Return response for updateSLADefinition mutation
@@ -69894,6 +69871,15 @@ input SLADefinitionWhereInput {
 	slaDaysGTE: Int
 	slaDaysLT: Int
 	slaDaysLTE: Int
+	"""
+	security_level field predicates
+	"""
+	securityLevel: SLADefinitionSecurityLevel
+	securityLevelNEQ: SLADefinitionSecurityLevel
+	securityLevelIn: [SLADefinitionSecurityLevel!]
+	securityLevelNotIn: [SLADefinitionSecurityLevel!]
+	securityLevelIsNil: Boolean
+	securityLevelNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -85121,11 +85107,6 @@ input UpdateFindingInput {
 	externalID: String
 	clearExternalID: Boolean
 	"""
-	incoming source severity
-	"""
-	securityLevel: FindingSecurityLevel
-	clearSecurityLevel: Boolean
-	"""
 	the owner of the finding
 	"""
 	externalOwnerID: String
@@ -85274,11 +85255,6 @@ input UpdateFindingInput {
 	"""
 	remediationSLA: Int
 	clearRemediationSLA: Boolean
-	"""
-	lifecycle status of the finding
-	"""
-	status: String
-	clearStatus: Boolean
 	"""
 	timestamp when the finding was last observed by the source
 	"""
@@ -89937,11 +89913,6 @@ input UpdateVulnerabilityInput {
 	externalOwnerID: String
 	clearExternalOwnerID: Boolean
 	"""
-	incoming source severity
-	"""
-	securityLevel: VulnerabilitySecurityLevel
-	clearSecurityLevel: Boolean
-	"""
 	external identifier from the integration source for the vulnerability
 	"""
 	externalID: String
@@ -89990,11 +89961,6 @@ input UpdateVulnerabilityInput {
 	"""
 	priority: String
 	clearPriority: Boolean
-	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String
-	clearStatus: Boolean
 	"""
 	short summary of the vulnerability details
 	"""
@@ -91973,10 +91939,6 @@ type Vulnerability implements Node {
 	"""
 	priority: String
 	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String
-	"""
 	short summary of the vulnerability details
 	"""
 	summary: String
@@ -93236,24 +93198,6 @@ input VulnerabilityWhereInput {
 	priorityNotNil: Boolean
 	priorityEqualFold: String
 	priorityContainsFold: String
-	"""
-	status field predicates
-	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
-	statusIsNil: Boolean
-	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	summary field predicates
 	"""

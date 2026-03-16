@@ -6745,8 +6745,6 @@ type CreateFindingInput struct {
 	FindingStatusName *string `json:"findingStatusName,omitempty"`
 	// external identifier from the integration source for the finding
 	ExternalID *string `json:"externalID,omitempty"`
-	// incoming source severity
-	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// system that produced the finding, e.g. gcpscc
@@ -6805,8 +6803,6 @@ type CreateFindingInput struct {
 	Vector *string `json:"vector,omitempty"`
 	// remediation service level agreement in days
 	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
-	// lifecycle status of the finding
-	Status *string `json:"status,omitempty"`
 	// timestamp when the finding was last observed by the source
 	EventTime *models.DateTime `json:"eventTime,omitempty"`
 	// timestamp when the finding was first reported by the source
@@ -8924,8 +8920,6 @@ type CreateVulnerabilityInput struct {
 	VulnerabilityStatusName *string `json:"vulnerabilityStatusName,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
-	// incoming source severity
-	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID string `json:"externalID"`
 	// CVE identifier for the vulnerability when applicable
@@ -8946,8 +8940,6 @@ type CreateVulnerabilityInput struct {
 	Exploitability *float64 `json:"exploitability,omitempty"`
 	// priority assigned to the vulnerability
 	Priority *string `json:"priority,omitempty"`
-	// lifecycle status of the vulnerability
-	Status *string `json:"status,omitempty"`
 	// short summary of the vulnerability details
 	Summary *string `json:"summary,omitempty"`
 	// long form description of the vulnerability
@@ -16135,8 +16127,6 @@ type Finding struct {
 	Vector *string `json:"vector,omitempty"`
 	// remediation service level agreement in days
 	RemediationSLA *int64 `json:"remediationSLA,omitempty"`
-	// lifecycle status of the finding
-	Status *string `json:"status,omitempty"`
 	// timestamp when the finding was last observed by the source
 	EventTime *models.DateTime `json:"eventTime,omitempty"`
 	// timestamp when the finding was first reported by the source
@@ -17033,22 +17023,6 @@ type FindingWhereInput struct {
 	RemediationSLALte    *int64  `json:"remediationSLALTE,omitempty"`
 	RemediationSLAIsNil  *bool   `json:"remediationSLAIsNil,omitempty"`
 	RemediationSLANotNil *bool   `json:"remediationSLANotNil,omitempty"`
-	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 	// event_time field predicates
 	EventTime       *models.DateTime   `json:"eventTime,omitempty"`
 	EventTimeNeq    *models.DateTime   `json:"eventTimeNEQ,omitempty"`
@@ -30100,9 +30074,11 @@ type SLADefinition struct {
 	// the severity_level of the sla_definition
 	SLADefinitionSeverityLevelID *string `json:"slaDefinitionSeverityLevelID,omitempty"`
 	// remediation service level agreement in days for the severity level
-	SLADays                    int64           `json:"slaDays"`
-	Owner                      *Organization   `json:"owner,omitempty"`
-	SLADefinitionSeverityLevel *CustomTypeEnum `json:"slaDefinitionSeverityLevel,omitempty"`
+	SLADays int64 `json:"slaDays"`
+	// incoming source severity
+	SecurityLevel              *enums.SecurityLevel `json:"securityLevel,omitempty"`
+	Owner                      *Organization        `json:"owner,omitempty"`
+	SLADefinitionSeverityLevel *CustomTypeEnum      `json:"slaDefinitionSeverityLevel,omitempty"`
 }
 
 func (SLADefinition) IsNode() {}
@@ -30313,6 +30289,13 @@ type SLADefinitionWhereInput struct {
 	SLADaysGte   *int64  `json:"slaDaysGTE,omitempty"`
 	SLADaysLt    *int64  `json:"slaDaysLT,omitempty"`
 	SLADaysLte   *int64  `json:"slaDaysLTE,omitempty"`
+	// security_level field predicates
+	SecurityLevel       *enums.SecurityLevel  `json:"securityLevel,omitempty"`
+	SecurityLevelNeq    *enums.SecurityLevel  `json:"securityLevelNEQ,omitempty"`
+	SecurityLevelIn     []enums.SecurityLevel `json:"securityLevelIn,omitempty"`
+	SecurityLevelNotIn  []enums.SecurityLevel `json:"securityLevelNotIn,omitempty"`
+	SecurityLevelIsNil  *bool                 `json:"securityLevelIsNil,omitempty"`
+	SecurityLevelNotNil *bool                 `json:"securityLevelNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -39655,9 +39638,6 @@ type UpdateFindingInput struct {
 	// external identifier from the integration source for the finding
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
-	// incoming source severity
-	SecurityLevel      *enums.SecurityLevel `json:"securityLevel,omitempty"`
-	ClearSecurityLevel *bool                `json:"clearSecurityLevel,omitempty"`
 	// the owner of the finding
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
@@ -39749,9 +39729,6 @@ type UpdateFindingInput struct {
 	// remediation service level agreement in days
 	RemediationSLA      *int64 `json:"remediationSLA,omitempty"`
 	ClearRemediationSLA *bool  `json:"clearRemediationSLA,omitempty"`
-	// lifecycle status of the finding
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
 	// timestamp when the finding was last observed by the source
 	EventTime      *models.DateTime `json:"eventTime,omitempty"`
 	ClearEventTime *bool            `json:"clearEventTime,omitempty"`
@@ -43274,9 +43251,6 @@ type UpdateVulnerabilityInput struct {
 	// owner of the vulnerability
 	ExternalOwnerID      *string `json:"externalOwnerID,omitempty"`
 	ClearExternalOwnerID *bool   `json:"clearExternalOwnerID,omitempty"`
-	// incoming source severity
-	SecurityLevel      *enums.SecurityLevel `json:"securityLevel,omitempty"`
-	ClearSecurityLevel *bool                `json:"clearSecurityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID *string `json:"externalID,omitempty"`
 	// CVE identifier for the vulnerability when applicable
@@ -43306,9 +43280,6 @@ type UpdateVulnerabilityInput struct {
 	// priority assigned to the vulnerability
 	Priority      *string `json:"priority,omitempty"`
 	ClearPriority *bool   `json:"clearPriority,omitempty"`
-	// lifecycle status of the vulnerability
-	Status      *string `json:"status,omitempty"`
-	ClearStatus *bool   `json:"clearStatus,omitempty"`
 	// short summary of the vulnerability details
 	Summary      *string `json:"summary,omitempty"`
 	ClearSummary *bool   `json:"clearSummary,omitempty"`
@@ -44304,8 +44275,6 @@ type Vulnerability struct {
 	Exploitability *float64 `json:"exploitability,omitempty"`
 	// priority assigned to the vulnerability
 	Priority *string `json:"priority,omitempty"`
-	// lifecycle status of the vulnerability
-	Status *string `json:"status,omitempty"`
 	// short summary of the vulnerability details
 	Summary *string `json:"summary,omitempty"`
 	// long form description of the vulnerability
@@ -44858,22 +44827,6 @@ type VulnerabilityWhereInput struct {
 	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
 	PriorityEqualFold    *string  `json:"priorityEqualFold,omitempty"`
 	PriorityContainsFold *string  `json:"priorityContainsFold,omitempty"`
-	// status field predicates
-	Status             *string  `json:"status,omitempty"`
-	StatusNeq          *string  `json:"statusNEQ,omitempty"`
-	StatusIn           []string `json:"statusIn,omitempty"`
-	StatusNotIn        []string `json:"statusNotIn,omitempty"`
-	StatusGt           *string  `json:"statusGT,omitempty"`
-	StatusGte          *string  `json:"statusGTE,omitempty"`
-	StatusLt           *string  `json:"statusLT,omitempty"`
-	StatusLte          *string  `json:"statusLTE,omitempty"`
-	StatusContains     *string  `json:"statusContains,omitempty"`
-	StatusHasPrefix    *string  `json:"statusHasPrefix,omitempty"`
-	StatusHasSuffix    *string  `json:"statusHasSuffix,omitempty"`
-	StatusIsNil        *bool    `json:"statusIsNil,omitempty"`
-	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
-	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
-	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
 	// summary field predicates
 	Summary             *string  `json:"summary,omitempty"`
 	SummaryNeq          *string  `json:"summaryNEQ,omitempty"`
@@ -51673,20 +51626,22 @@ func (e RiskOrderField) MarshalJSON() ([]byte, error) {
 type SLADefinitionOrderField string
 
 const (
-	SLADefinitionOrderFieldCreatedAt SLADefinitionOrderField = "created_at"
-	SLADefinitionOrderFieldUpdatedAt SLADefinitionOrderField = "updated_at"
-	SLADefinitionOrderFieldSLADays   SLADefinitionOrderField = "sla_days"
+	SLADefinitionOrderFieldCreatedAt     SLADefinitionOrderField = "created_at"
+	SLADefinitionOrderFieldUpdatedAt     SLADefinitionOrderField = "updated_at"
+	SLADefinitionOrderFieldSLADays       SLADefinitionOrderField = "sla_days"
+	SLADefinitionOrderFieldSecurityLevel SLADefinitionOrderField = "security_level"
 )
 
 var AllSLADefinitionOrderField = []SLADefinitionOrderField{
 	SLADefinitionOrderFieldCreatedAt,
 	SLADefinitionOrderFieldUpdatedAt,
 	SLADefinitionOrderFieldSLADays,
+	SLADefinitionOrderFieldSecurityLevel,
 }
 
 func (e SLADefinitionOrderField) IsValid() bool {
 	switch e {
-	case SLADefinitionOrderFieldCreatedAt, SLADefinitionOrderFieldUpdatedAt, SLADefinitionOrderFieldSLADays:
+	case SLADefinitionOrderFieldCreatedAt, SLADefinitionOrderFieldUpdatedAt, SLADefinitionOrderFieldSLADays, SLADefinitionOrderFieldSecurityLevel:
 		return true
 	}
 	return false

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
@@ -166,6 +167,20 @@ func (_c *SLADefinitionCreate) SetSLADays(v int) *SLADefinitionCreate {
 	return _c
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_c *SLADefinitionCreate) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionCreate {
+	_c.mutation.SetSecurityLevel(v)
+	return _c
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_c *SLADefinitionCreate) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionCreate {
+	if v != nil {
+		_c.SetSecurityLevel(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *SLADefinitionCreate) SetID(v string) *SLADefinitionCreate {
 	_c.mutation.SetID(v)
@@ -278,6 +293,11 @@ func (_c *SLADefinitionCreate) check() error {
 			return &ValidationError{Name: "sla_days", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.sla_days": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.SecurityLevel(); ok {
+		if err := sladefinition.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -353,6 +373,10 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.SLADays(); ok {
 		_spec.SetField(sladefinition.FieldSLADays, field.TypeInt, value)
 		_node.SLADays = value
+	}
+	if value, ok := _c.mutation.SecurityLevel(); ok {
+		_spec.SetField(sladefinition.FieldSecurityLevel, field.TypeEnum, value)
+		_node.SecurityLevel = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

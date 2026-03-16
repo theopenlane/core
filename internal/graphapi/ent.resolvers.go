@@ -7,7 +7,6 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/common/enums"
@@ -3205,11 +3204,6 @@ func (r *queryResolver) WorkflowObjectRefs(ctx context.Context, after *entgql.Cu
 	return res, err
 }
 
-// SecurityLevel is the resolver for the securityLevel field.
-func (r *createFindingInputResolver) SecurityLevel(ctx context.Context, obj *generated.CreateFindingInput, data *enums.SecurityLevel) error {
-	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
-}
-
 // Channels is the resolver for the channels field.
 func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *generated.CreateNotificationInput, data []string) error {
 	channels := []enums.Channel{}
@@ -3235,61 +3229,6 @@ func (r *createScanInputResolver) VulnerabilityIDs(ctx context.Context, obj *gen
 	obj.VulnerabilityIDs = data
 
 	return nil
-}
-
-// SecurityLevel is the resolver for the securityLevel field.
-func (r *createVulnerabilityInputResolver) SecurityLevel(ctx context.Context, obj *generated.CreateVulnerabilityInput, data *enums.SecurityLevel) error {
-	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
-}
-
-// SecurityLevel is the resolver for the securityLevel field.
-func (r *updateFindingInputResolver) SecurityLevel(ctx context.Context, obj *generated.UpdateFindingInput, data *enums.SecurityLevel) error {
-	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
-}
-
-// ClearSecurityLevel is the resolver for the clearSecurityLevel field.
-func (r *updateFindingInputResolver) ClearSecurityLevel(ctx context.Context, obj *generated.UpdateFindingInput, data *bool) error {
-	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
-	}
-
-	return &model.BooleanUpdatePayload{
-		Boolean: res,
-	}, nil
-}
-
-// SecurityLevel is the resolver for the securityLevel field.
-func (r *updateVulnerabilityInputResolver) SecurityLevel(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *enums.SecurityLevel) error {
-	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
-}
-
-// ClearSecurityLevel is the resolver for the clearSecurityLevel field.
-func (r *updateVulnerabilityInputResolver) ClearSecurityLevel(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *bool) error {
-	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
-	}
-
-	return &model.BooleanUpdatePayload{
-		Boolean: res,
-	}, nil
 }
 
 // ActionPlan returns gqlgenerated.ActionPlanResolver implementation.
@@ -3357,11 +3296,6 @@ func (r *Resolver) CreateEntityInput() gqlgenerated.CreateEntityInputResolver {
 	return &createEntityInputResolver{r}
 }
 
-// CreateFindingInput returns gqlgenerated.CreateFindingInputResolver implementation.
-func (r *Resolver) CreateFindingInput() gqlgenerated.CreateFindingInputResolver {
-	return &createFindingInputResolver{r}
-}
-
 // CreateGroupInput returns gqlgenerated.CreateGroupInputResolver implementation.
 func (r *Resolver) CreateGroupInput() gqlgenerated.CreateGroupInputResolver {
 	return &createGroupInputResolver{r}
@@ -3397,11 +3331,6 @@ func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputR
 	return &createTrustCenterInputResolver{r}
 }
 
-// CreateVulnerabilityInput returns gqlgenerated.CreateVulnerabilityInputResolver implementation.
-func (r *Resolver) CreateVulnerabilityInput() gqlgenerated.CreateVulnerabilityInputResolver {
-	return &createVulnerabilityInputResolver{r}
-}
-
 // UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
 func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
 	return &updateActionPlanInputResolver{r}
@@ -3430,11 +3359,6 @@ func (r *Resolver) UpdateEntityInput() gqlgenerated.UpdateEntityInputResolver {
 // UpdateEvidenceInput returns gqlgenerated.UpdateEvidenceInputResolver implementation.
 func (r *Resolver) UpdateEvidenceInput() gqlgenerated.UpdateEvidenceInputResolver {
 	return &updateEvidenceInputResolver{r}
-}
-
-// UpdateFindingInput returns gqlgenerated.UpdateFindingInputResolver implementation.
-func (r *Resolver) UpdateFindingInput() gqlgenerated.UpdateFindingInputResolver {
-	return &updateFindingInputResolver{r}
 }
 
 // UpdateGroupInput returns gqlgenerated.UpdateGroupInputResolver implementation.
@@ -3497,11 +3421,6 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 	return &updateTrustCenterInputResolver{r}
 }
 
-// UpdateVulnerabilityInput returns gqlgenerated.UpdateVulnerabilityInputResolver implementation.
-func (r *Resolver) UpdateVulnerabilityInput() gqlgenerated.UpdateVulnerabilityInputResolver {
-	return &updateVulnerabilityInputResolver{r}
-}
-
 type actionPlanResolver struct{ *Resolver }
 type campaignResolver struct{ *Resolver }
 type campaignTargetResolver struct{ *Resolver }
@@ -3519,7 +3438,6 @@ type workflowInstanceResolver struct{ *Resolver }
 type workflowProposalResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
-type createFindingInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
 type createNotificationInputResolver struct{ *Resolver }
@@ -3527,14 +3445,12 @@ type createOrganizationInputResolver struct{ *Resolver }
 type createScanInputResolver struct{ *Resolver }
 type createTrustCenterFAQInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
-type createVulnerabilityInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateDiscussionInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateEvidenceInputResolver struct{ *Resolver }
-type updateFindingInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
 type updateInternalPolicyInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
@@ -3547,4 +3463,744 @@ type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
 type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *findingResolver) Status(ctx context.Context, obj *generated.Finding) (*string, error) {
+	panic(fmt.Errorf("not implemented: Status - status"))
+}
+func (r *vulnerabilityResolver) Status(ctx context.Context, obj *generated.Vulnerability) (*string, error) {
+	panic(fmt.Errorf("not implemented: Status - status"))
+}
+func (r *createFindingInputResolver) SecurityLevel(ctx context.Context, obj *generated.CreateFindingInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+func (r *createFindingInputResolver) Status(ctx context.Context, obj *generated.CreateFindingInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *createVulnerabilityInputResolver) SecurityLevel(ctx context.Context, obj *generated.CreateVulnerabilityInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+func (r *createVulnerabilityInputResolver) Status(ctx context.Context, obj *generated.CreateVulnerabilityInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) Status(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusNeq(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusIn(ctx context.Context, obj *generated.FindingWhereInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusNotIn(ctx context.Context, obj *generated.FindingWhereInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusGt(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusGte(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusLt(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusLte(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusContains(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusHasPrefix(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusHasSuffix(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusIsNil(ctx context.Context, obj *generated.FindingWhereInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusNotNil(ctx context.Context, obj *generated.FindingWhereInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusEqualFold(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *findingWhereInputResolver) StatusContainsFold(ctx context.Context, obj *generated.FindingWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *updateFindingInputResolver) SecurityLevel(ctx context.Context, obj *generated.UpdateFindingInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+func (r *updateFindingInputResolver) ClearSecurityLevel(ctx context.Context, obj *generated.UpdateFindingInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *updateFindingInputResolver) Status(ctx context.Context, obj *generated.UpdateFindingInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *updateFindingInputResolver) ClearStatus(ctx context.Context, obj *generated.UpdateFindingInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *updateVulnerabilityInputResolver) SecurityLevel(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *enums.SecurityLevel) error {
+	panic(fmt.Errorf("not implemented: SecurityLevel - securityLevel"))
+}
+func (r *updateVulnerabilityInputResolver) ClearSecurityLevel(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *updateVulnerabilityInputResolver) Status(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *updateVulnerabilityInputResolver) ClearStatus(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) Status(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusNeq(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusIn(ctx context.Context, obj *generated.VulnerabilityWhereInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusNotIn(ctx context.Context, obj *generated.VulnerabilityWhereInput, data []string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusGt(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusGte(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusLt(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusLte(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusContains(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusHasPrefix(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusHasSuffix(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusIsNil(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusNotNil(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *bool) error {
+	res, err := withTransactionalMutation(ctx).Boolean.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "boolean"})
+	}
+
+	return &model.BooleanUpdatePayload{
+		Boolean: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusEqualFold(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *vulnerabilityWhereInputResolver) StatusContainsFold(ctx context.Context, obj *generated.VulnerabilityWhereInput, data *string) error {
+	res, err := withTransactionalMutation(ctx).String.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "string"})
+	}
+
+	return &model.StringUpdatePayload{
+		String: res,
+	}, nil
+}
+func (r *Resolver) Finding() gqlgenerated.FindingResolver { return &findingResolver{r} }
+func (r *Resolver) Vulnerability() gqlgenerated.VulnerabilityResolver {
+	return &vulnerabilityResolver{r}
+}
+func (r *Resolver) CreateFindingInput() gqlgenerated.CreateFindingInputResolver {
+	return &createFindingInputResolver{r}
+}
+func (r *Resolver) CreateVulnerabilityInput() gqlgenerated.CreateVulnerabilityInputResolver {
+	return &createVulnerabilityInputResolver{r}
+}
+func (r *Resolver) FindingWhereInput() gqlgenerated.FindingWhereInputResolver {
+	return &findingWhereInputResolver{r}
+}
+func (r *Resolver) UpdateFindingInput() gqlgenerated.UpdateFindingInputResolver {
+	return &updateFindingInputResolver{r}
+}
+func (r *Resolver) UpdateVulnerabilityInput() gqlgenerated.UpdateVulnerabilityInputResolver {
+	return &updateVulnerabilityInputResolver{r}
+}
+func (r *Resolver) VulnerabilityWhereInput() gqlgenerated.VulnerabilityWhereInputResolver {
+	return &vulnerabilityWhereInputResolver{r}
+}
+type findingResolver struct{ *Resolver }
+type vulnerabilityResolver struct{ *Resolver }
+type createFindingInputResolver struct{ *Resolver }
+type createVulnerabilityInputResolver struct{ *Resolver }
+type findingWhereInputResolver struct{ *Resolver }
+type updateFindingInputResolver struct{ *Resolver }
 type updateVulnerabilityInputResolver struct{ *Resolver }
+type vulnerabilityWhereInputResolver struct{ *Resolver }
+*/

@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -48,6 +49,15 @@ func (SLADefinition) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("sla_days"),
 				entx.FieldSearchable(),
+			),
+
+		field.Enum("security_level").
+			Comment("incoming source severity").
+			GoType(enums.SecurityLevel("")).
+			Optional().
+			Annotations(
+				entgql.OrderField("security_level"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 	}
 }

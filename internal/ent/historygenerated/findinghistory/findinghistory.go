@@ -124,8 +124,6 @@ const (
 	FieldVector = "vector"
 	// FieldRemediationSLA holds the string denoting the remediation_sla field in the database.
 	FieldRemediationSLA = "remediation_sla"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// FieldEventTime holds the string denoting the event_time field in the database.
 	FieldEventTime = "event_time"
 	// FieldReportedAt holds the string denoting the reported_at field in the database.
@@ -197,7 +195,6 @@ var Columns = []string{
 	FieldTargetDetails,
 	FieldVector,
 	FieldRemediationSLA,
-	FieldStatus,
 	FieldEventTime,
 	FieldReportedAt,
 	FieldSourceUpdatedAt,
@@ -507,11 +504,6 @@ func ByVector(opts ...sql.OrderTermOption) OrderOption {
 // ByRemediationSLA orders the results by the remediation_sla field.
 func ByRemediationSLA(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRemediationSLA, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByEventTime orders the results by the event_time field.

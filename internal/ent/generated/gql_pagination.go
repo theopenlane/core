@@ -28122,6 +28122,20 @@ var (
 			}
 		},
 	}
+	// SLADefinitionOrderFieldSecurityLevel orders SLADefinition by security_level.
+	SLADefinitionOrderFieldSecurityLevel = &SLADefinitionOrderField{
+		Value: func(_m *SLADefinition) (ent.Value, error) {
+			return _m.SecurityLevel, nil
+		},
+		column: sladefinition.FieldSecurityLevel,
+		toTerm: sladefinition.BySecurityLevel,
+		toCursor: func(_m *SLADefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityLevel,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -28134,6 +28148,8 @@ func (f SLADefinitionOrderField) String() string {
 		str = "updated_at"
 	case SLADefinitionOrderFieldSLADays.column:
 		str = "sla_days"
+	case SLADefinitionOrderFieldSecurityLevel.column:
+		str = "security_level"
 	}
 	return str
 }
@@ -28156,6 +28172,8 @@ func (f *SLADefinitionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SLADefinitionOrderFieldUpdatedAt
 	case "sla_days":
 		*f = *SLADefinitionOrderFieldSLADays
+	case "security_level":
+		*f = *SLADefinitionOrderFieldSecurityLevel
 	default:
 		return fmt.Errorf("%s is not a valid SLADefinitionOrderField", str)
 	}

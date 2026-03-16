@@ -689,20 +689,6 @@ func (_c *FindingHistoryCreate) SetNillableRemediationSLA(v *int) *FindingHistor
 	return _c
 }
 
-// SetStatus sets the "status" field.
-func (_c *FindingHistoryCreate) SetStatus(v string) *FindingHistoryCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *FindingHistoryCreate) SetNillableStatus(v *string) *FindingHistoryCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
 // SetEventTime sets the "event_time" field.
 func (_c *FindingHistoryCreate) SetEventTime(v models.DateTime) *FindingHistoryCreate {
 	_c.mutation.SetEventTime(v)
@@ -1145,10 +1131,6 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.RemediationSLA(); ok {
 		_spec.SetField(findinghistory.FieldRemediationSLA, field.TypeInt, value)
 		_node.RemediationSLA = value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
-		_node.Status = value
 	}
 	if value, ok := _c.mutation.EventTime(); ok {
 		_spec.SetField(findinghistory.FieldEventTime, field.TypeTime, value)

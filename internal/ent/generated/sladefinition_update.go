@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -205,6 +206,26 @@ func (_u *SLADefinitionUpdate) AddSLADays(v int) *SLADefinitionUpdate {
 	return _u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_u *SLADefinitionUpdate) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionUpdate {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *SLADefinitionUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionUpdate {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *SLADefinitionUpdate) ClearSecurityLevel() *SLADefinitionUpdate {
+	_u.mutation.ClearSecurityLevel()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *SLADefinitionUpdate) SetOwner(v *Organization) *SLADefinitionUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -286,6 +307,11 @@ func (_u *SLADefinitionUpdate) check() error {
 			return &ValidationError{Name: "sla_days", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.sla_days": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := sladefinition.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -359,6 +385,12 @@ func (_u *SLADefinitionUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if value, ok := _u.mutation.AddedSLADays(); ok {
 		_spec.AddField(sladefinition.FieldSLADays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(sladefinition.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(sladefinition.FieldSecurityLevel, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -617,6 +649,26 @@ func (_u *SLADefinitionUpdateOne) AddSLADays(v int) *SLADefinitionUpdateOne {
 	return _u
 }
 
+// SetSecurityLevel sets the "security_level" field.
+func (_u *SLADefinitionUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionUpdateOne {
+	_u.mutation.SetSecurityLevel(v)
+	return _u
+}
+
+// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
+func (_u *SLADefinitionUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionUpdateOne {
+	if v != nil {
+		_u.SetSecurityLevel(*v)
+	}
+	return _u
+}
+
+// ClearSecurityLevel clears the value of the "security_level" field.
+func (_u *SLADefinitionUpdateOne) ClearSecurityLevel() *SLADefinitionUpdateOne {
+	_u.mutation.ClearSecurityLevel()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *SLADefinitionUpdateOne) SetOwner(v *Organization) *SLADefinitionUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -711,6 +763,11 @@ func (_u *SLADefinitionUpdateOne) check() error {
 			return &ValidationError{Name: "sla_days", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.sla_days": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SecurityLevel(); ok {
+		if err := sladefinition.SecurityLevelValidator(v); err != nil {
+			return &ValidationError{Name: "security_level", err: fmt.Errorf(`generated: validator failed for field "SLADefinition.security_level": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -801,6 +858,12 @@ func (_u *SLADefinitionUpdateOne) sqlSave(ctx context.Context) (_node *SLADefini
 	}
 	if value, ok := _u.mutation.AddedSLADays(); ok {
 		_spec.AddField(sladefinition.FieldSLADays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.SecurityLevel(); ok {
+		_spec.SetField(sladefinition.FieldSecurityLevel, field.TypeEnum, value)
+	}
+	if _u.mutation.SecurityLevelCleared() {
+		_spec.ClearField(sladefinition.FieldSecurityLevel, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
