@@ -58,7 +58,7 @@ mkdir -p "${DOCKER_LAYER_CACHE_DIR}" 2>/dev/null || true
 
 # Tool-specific environment variables
 export GOLANGCI_LINT_CACHE="${HOME}/.cache/golangci-lint"
-export CGO_ENABLED=1
+export CGO_ENABLED=0
 
 # Set resource limits for build processes
 export GOMAXPROCS=${GOMAXPROCS:-$(nproc 2>/dev/null || echo "4")}
