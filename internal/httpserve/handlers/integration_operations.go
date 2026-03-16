@@ -12,10 +12,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/integrations/types"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // integrationOperationQueueDetails captures queue response details for integration operation requests
@@ -42,16 +42,16 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(req.Provider))
+	def, ok := h.IntegrationsRuntime.Registry().Definition(req.Provider)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if !def.Spec.Active {
+	if !def.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
-	operationName := types.OperationName(req.Body.Operation)
+	operationName := req.Body.Operation
 	if operationName == "" {
 		return h.BadRequest(ctx, rout.MissingField("operation"), openapiCtx)
 	}
@@ -65,18 +65,12 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
 	if integrationID != "" {
-		installationRec, err := h.DBClient.Integration.Query().
-			Where(
-				integration.OwnerIDEQ(caller.OrganizationID),
-				integration.IDEQ(integrationID),
-			).
-			Only(requestCtx)
+		installationRec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
 		if err != nil {
+			if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
+				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+			}
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
-		}
-
-		if installationRec.DefinitionID != string(def.Spec.ID) {
-			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 
 		integrationID = installationRec.ID
@@ -89,46 +83,41 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		)
 
 		if integrationID != "" {
-			installationRec, err = h.DBClient.Integration.Query().
-				Where(
-					integration.OwnerIDEQ(caller.OrganizationID),
-					integration.IDEQ(integrationID),
-				).
-				Only(requestCtx)
+			installationRec, err = h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
 		} else {
-			installationRec, err = h.DBClient.Integration.Query().
-				Where(
-					integration.OwnerIDEQ(caller.OrganizationID),
-					integration.DefinitionIDEQ(string(def.Spec.ID)),
-				).
-				Only(requestCtx)
+			installationRec, err = h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, "", def.ID)
 		}
 		if err != nil {
-			if ent.IsNotSingular(err) {
+			if errors.Is(err, integrationsruntime.ErrInstallationIDRequired) {
 				return h.BadRequest(ctx, ErrIntegrationIDRequired, openapiCtx)
+			}
+			if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
+				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 			}
 
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		if installationRec.DefinitionID != string(def.Spec.ID) {
-			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
-		}
-
-		credential, _, err := h.IntegrationsRuntime.CredentialStore().LoadCredential(requestCtx, installationRec)
+		credential, _, err := h.IntegrationsRuntime.LoadCredential(requestCtx, installationRec)
 		if err != nil {
 			return h.InternalServerError(ctx, wrapIntegrationError("load credential for", err), openapiCtx)
 		}
 
-		output, err := h.IntegrationsRuntime.Executor().ExecuteOperation(queueCtx, installationRec, operationName, credential, configDoc)
+		operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
+		if err != nil {
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("operation not registered")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
+
+		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, installationRec, operation, credential, configDoc)
 		if err != nil {
 			return h.BadRequest(ctx, ErrProviderHealthCheckFailed, openapiCtx)
 		}
 
 		return h.Success(ctx, IntegrationOperationResponse{
 			Reply:     rout.Reply{Success: true},
-			Provider:  def.Spec.Slug,
-			Operation: string(operationName),
+			Provider:  def.Slug,
+			Operation: operationName,
 			Status:    "ok",
 			Summary:   "Health check completed",
 			Details:   output,
@@ -137,7 +126,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
 		OrgID:          caller.OrganizationID,
-		DefinitionID:   string(def.Spec.ID),
+		DefinitionID:   def.ID,
 		InstallationID: integrationID,
 		Operation:      operationName,
 		Config:         configDoc,
@@ -169,8 +158,8 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	out := IntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
-		Provider:  def.Spec.Slug,
-		Operation: string(operationName),
+		Provider:  def.Slug,
+		Operation: operationName,
 		Status:    "queued",
 		Summary:   "Integration operation queued",
 		Details:   queueDetails,

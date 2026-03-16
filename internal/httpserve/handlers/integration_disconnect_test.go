@@ -98,7 +98,7 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 		ProviderData: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	require.NoError(t, suite.h.IntegrationsRuntime.CredentialStore().SaveCredential(ctx, rec, credential))
+	require.NoError(t, suite.h.IntegrationsRuntime.SaveCredential(ctx, rec, credential))
 
 	return rec.ID
 }

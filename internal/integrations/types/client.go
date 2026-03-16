@@ -7,9 +7,6 @@ import (
 	generated "github.com/theopenlane/core/internal/ent/generated"
 )
 
-// ClientName identifies a named client within one definition
-type ClientName string
-
 // ClientBuildRequest bundles the inputs for building one installation-scoped client
 type ClientBuildRequest struct {
 	// Installation is the target installation record
@@ -25,8 +22,8 @@ type ClientBuilderFunc func(ctx context.Context, req ClientBuildRequest) (any, e
 
 // ClientRegistration declares one buildable client for a definition
 type ClientRegistration struct {
-	// Name is the stable client identifier within the definition
-	Name ClientName `json:"name"`
+	// Ref is the internal client identity used for operation/runtime lookup
+	Ref ClientID `json:"-"`
 	// Description describes what the client is used for
 	Description string `json:"description,omitempty"`
 	// ConfigSchema is the JSON schema for client-specific configuration

@@ -6,8 +6,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID                    = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	HealthDefaultOperation          = types.NewOperationRef[struct{}]("health.default")
+	VulnerabilitiesCollectOperation = types.NewOperationRef[struct{}]("vulnerabilities.collect")
+)
+
+const Slug = "aws_security_hub"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -17,8 +24,8 @@ type userInput struct {
 	LinkedRegions []string `json:"linkedRegions,omitempty" jsonschema:"title=Linked Regions"`
 }
 
-// credential holds the AWS STS role and optional static key material for one Security Hub installation.
-// Fields are named to match awskit.awsProviderData JSON tags so MetadataFromProviderData decodes them correctly.
+// credential holds the AWS STS role and optional static key material for one Security Hub installation
+// Fields are named to match awskit.awsProviderData JSON tags so MetadataFromProviderData decodes them correctly
 type credential struct {
 	RoleARN         string   `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
 	ExternalID      string   `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy."`
@@ -36,11 +43,13 @@ type credential struct {
 
 // Builder returns the AWS Security Hub definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0AWSSECHUB0000000000001",
-				Slug:        "aws_security_hub",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "aws",
 				DisplayName: "AWS Security Hub",
@@ -55,32 +64,29 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:  providerkit.SchemaFrom[credential](),
-				Persist: types.CredentialPersistModeKeystore,
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "securityhub",
+					Ref:         clientRef.ID(),
 					Description: "AWS Security Hub client",
 					Build:       buildSecurityHubClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate Security Hub access via DescribeHub; confirms the assumed role can reach the hub in the configured home region",
-					Topic:       gala.TopicName("integration.aws_security_hub.health.default"),
-					Client:      "securityhub",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:         "vulnerabilities.collect",
-					Kind:         types.OperationKindCollect,
+					Name:         VulnerabilitiesCollectOperation.Name(),
 					Description:  "Collect AWS Security Hub findings for vulnerability ingestion using server-side filters for severity, record state, and workflow status",
-					Topic:        gala.TopicName("integration.aws_security_hub.vulnerabilities.collect"),
-					Client:       "securityhub",
+					Topic:        VulnerabilitiesCollectOperation.Topic(Slug),
+					ClientRef:    clientRef.ID(),
 					ConfigSchema: providerkit.SchemaFrom[findingsConfig](),
 					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Ingest:       []types.IngestContract{{Schema: "vulnerability", EnsurePayloads: true}},

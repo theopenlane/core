@@ -3,16 +3,6 @@ package operations
 import "errors"
 
 var (
-	// ErrRegistryRequired indicates the definition registry dependency is missing
-	ErrRegistryRequired = errors.New("integrationsv2/operations: registry required")
-	// ErrDBClientRequired indicates the database client dependency is missing
-	ErrDBClientRequired = errors.New("integrationsv2/operations: db client required")
-	// ErrCredentialResolverRequired indicates the credential resolver dependency is missing
-	ErrCredentialResolverRequired = errors.New("integrationsv2/operations: credential resolver required")
-	// ErrClientServiceRequired indicates the client service dependency is missing
-	ErrClientServiceRequired = errors.New("integrationsv2/operations: client service required")
-	// ErrRunStoreRequired indicates the run store dependency is missing
-	ErrRunStoreRequired = errors.New("integrationsv2/operations: run store required")
 	// ErrGalaRequired indicates the gala dependency is missing
 	ErrGalaRequired = errors.New("integrationsv2/operations: gala required")
 	// ErrInstallationIDRequired indicates the installation identifier is missing
@@ -21,4 +11,28 @@ var (
 	ErrOperationNameRequired = errors.New("integrationsv2/operations: operation name required")
 	// ErrRunIDRequired indicates the run identifier is missing
 	ErrRunIDRequired = errors.New("integrationsv2/operations: run id required")
+	// ErrIngestDefinitionNotFound indicates the operation definition could not be resolved for ingest
+	ErrIngestDefinitionNotFound = errors.New("integrationsv2/operations: ingest definition not found")
+	// ErrIngestSchemaNotFound indicates the generated ingest schema contract was not found
+	ErrIngestSchemaNotFound = errors.New("integrationsv2/operations: ingest schema not found")
+	// ErrIngestPayloadsInvalid indicates the operation response could not be decoded into ingest payloads
+	ErrIngestPayloadsInvalid = errors.New("integrationsv2/operations: ingest payloads invalid")
+	// ErrIngestMappingNotFound indicates the definition does not provide a mapping for the emitted payload variant
+	ErrIngestMappingNotFound = errors.New("integrationsv2/operations: ingest mapping not found")
+	// ErrIngestFilterFailed indicates the CEL filter evaluation failed
+	ErrIngestFilterFailed = errors.New("integrationsv2/operations: ingest filter failed")
+	// ErrIngestTransformFailed indicates the CEL map evaluation failed
+	ErrIngestTransformFailed = errors.New("integrationsv2/operations: ingest transform failed")
+	// ErrIngestMappedDocumentInvalid indicates the mapped payload did not satisfy the generated schema contract
+	ErrIngestMappedDocumentInvalid = errors.New("integrationsv2/operations: ingest mapped document invalid")
+	// ErrIngestRequiredKeyMissing indicates the mapped payload omitted a required generated field
+	ErrIngestRequiredKeyMissing = errors.New("integrationsv2/operations: ingest required key missing")
+	// ErrIngestUpsertKeyMissing indicates the mapped payload omitted every generated upsert key
+	ErrIngestUpsertKeyMissing = errors.New("integrationsv2/operations: ingest upsert key missing")
+	// ErrIngestUpsertConflict indicates the generated upsert keys matched more than one record
+	ErrIngestUpsertConflict = errors.New("integrationsv2/operations: ingest upsert conflict")
+	// ErrIngestUnsupportedSchema indicates the runtime does not yet support the requested generated ingest schema
+	ErrIngestUnsupportedSchema = errors.New("integrationsv2/operations: ingest schema unsupported")
+	// ErrIngestPersistFailed indicates the mapped record could not be persisted
+	ErrIngestPersistFailed = errors.New("integrationsv2/operations: ingest persistence failed")
 )

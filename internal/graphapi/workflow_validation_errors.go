@@ -112,7 +112,7 @@ var (
 	// ErrNotificationTemplateBothIDAndKey is returned when both template_id and template_key are set
 	ErrNotificationTemplateBothIDAndKey = errors.New("template_id and template_key cannot both be set")
 	// ErrIntegrationOperationRequired is returned when integration operation is required
-	ErrIntegrationOperationRequired = errors.New("integration action requires operation_name or operation_kind")
+	ErrIntegrationOperationRequired = errors.New("integration action requires operation_name")
 	// ErrIntegrationScopeExpressionRequired is returned when scope payload/resource is set without scope expression
 	ErrIntegrationScopeExpressionRequired = errors.New("integration action requires scope_expression when scope payload or scope resource is provided")
 	// ErrIntegrationScopeExpressionInvalid is returned when integration scope expression fails CEL validation

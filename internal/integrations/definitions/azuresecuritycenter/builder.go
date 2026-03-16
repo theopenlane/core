@@ -6,8 +6,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID                     = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
+	HealthDefaultOperation           = types.NewOperationRef[struct{}]("health.default")
+	SecurityPricingOverviewOperation = types.NewOperationRef[struct{}]("security.pricing_overview")
+)
+
+const Slug = "azure_security_center"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -28,11 +35,13 @@ type credential struct {
 
 // Builder returns the Azure Security Center definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0AZSECC000000000000000001",
-				Slug:        "azure_security_center",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "azure",
 				DisplayName: "Microsoft Defender for Cloud",
@@ -47,32 +56,29 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:  providerkit.SchemaFrom[credential](),
-				Persist: types.CredentialPersistModeKeystore,
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Azure management API client for Defender for Cloud",
 					Build:       buildAzureSecurityClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Azure Security Center pricings API to verify access",
-					Topic:       gala.TopicName("integration.azure_security_center.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "security.pricing_overview",
-					Kind:        types.OperationKindCollect,
+					Name:        SecurityPricingOverviewOperation.Name(),
 					Description: "Collect plan and pricing metadata for Microsoft Defender for Cloud",
-					Topic:       gala.TopicName("integration.azure_security_center.security.pricing_overview"),
-					Client:      "api",
+					Topic:       SecurityPricingOverviewOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      runSecurityPricingOperation,
 				},

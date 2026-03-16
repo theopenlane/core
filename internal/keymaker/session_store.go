@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"sync"
 	"time"
-
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const defaultAuthStateStoreMaxEntries = 4096
@@ -15,7 +13,7 @@ type AuthState struct {
 	// State is the unique CSRF token identifying this authorization session
 	State string
 	// DefinitionID identifies which definition is handling the authorization
-	DefinitionID types.DefinitionID
+	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
 	// CallbackState holds the opaque state payload returned by the definition's AuthStartFunc

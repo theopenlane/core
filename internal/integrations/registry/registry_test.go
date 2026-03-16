@@ -16,10 +16,11 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
+	clientRef := integrationtypes.NewClientRef[string]()
 
 	definition := integrationtypes.Definition{
-		Spec: integrationtypes.DefinitionSpec{
-			ID:          integrationtypes.DefinitionID("def_01HZY6PZQK2T64B7J9QX4N5Z6A"),
+		DefinitionSpec: integrationtypes.DefinitionSpec{
+			ID:          "def_01HZY6PZQK2T64B7J9QX4N5Z6A",
 			Slug:        "github_app",
 			Version:     "v1",
 			Family:      "github",
@@ -29,7 +30,7 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
-				Name: "rest",
+				Ref: clientRef.ID(),
 				Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
 					return "ok", nil
 				},
@@ -50,25 +51,25 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 		t.Fatalf("Register() error = %v", err)
 	}
 
-	byID, ok := reg.Definition(definition.Spec.ID)
+	byID, ok := reg.Definition(definition.ID)
 	if !ok {
-		t.Fatalf("Definition() did not find %q", definition.Spec.ID)
+		t.Fatalf("Definition() did not find %q", definition.ID)
 	}
 
-	if byID.Spec.DisplayName != definition.Spec.DisplayName {
-		t.Fatalf("Definition() display name = %q, want %q", byID.Spec.DisplayName, definition.Spec.DisplayName)
+	if byID.DisplayName != definition.DisplayName {
+		t.Fatalf("Definition() display name = %q, want %q", byID.DisplayName, definition.DisplayName)
 	}
 
-	client, err := reg.Client(definition.Spec.ID, "rest")
+	client, err := reg.Client(definition.ID, clientRef.ID())
 	if err != nil {
 		t.Fatalf("Client() error = %v", err)
 	}
 
-	if client.Name != "rest" {
-		t.Fatalf("Client() name = %q, want rest", client.Name)
+	if client.Ref != clientRef.ID() {
+		t.Fatalf("Client() ref mismatch")
 	}
 
-	operation, err := reg.Operation(definition.Spec.ID, "health.default")
+	operation, err := reg.Operation(definition.ID, "health.default")
 	if err != nil {
 		t.Fatalf("Operation() error = %v", err)
 	}
@@ -92,8 +93,8 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 
 	reg := New()
 	first := integrationtypes.Definition{
-		Spec: integrationtypes.DefinitionSpec{
-			ID:          integrationtypes.DefinitionID("def_first"),
+		DefinitionSpec: integrationtypes.DefinitionSpec{
+			ID:          "def_first",
 			Slug:        "first",
 			Version:     "v1",
 			DisplayName: "First",
@@ -108,8 +109,8 @@ func TestRegistryRejectsDuplicateOperationTopic(t *testing.T) {
 		},
 	}
 	second := integrationtypes.Definition{
-		Spec: integrationtypes.DefinitionSpec{
-			ID:          integrationtypes.DefinitionID("def_second"),
+		DefinitionSpec: integrationtypes.DefinitionSpec{
+			ID:          "def_second",
 			Slug:        "second",
 			Version:     "v1",
 			DisplayName: "Second",
@@ -140,7 +141,7 @@ func TestRegistryRejectsDuplicateSlug(t *testing.T) {
 	reg := New()
 
 	first := integrationtypes.Definition{
-		Spec: integrationtypes.DefinitionSpec{
+		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_first",
 			Slug:        "shared_slug",
 			Version:     "v1",
@@ -150,7 +151,7 @@ func TestRegistryRejectsDuplicateSlug(t *testing.T) {
 		},
 	}
 	second := integrationtypes.Definition{
-		Spec: integrationtypes.DefinitionSpec{
+		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_second",
 			Slug:        "shared_slug",
 			Version:     "v1",

@@ -6,8 +6,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID             = types.NewDefinitionRef("def_01K0AWSAUDITM0000000000001")
+	HealthDefaultOperation   = types.NewOperationRef[struct{}]("health.default")
+	AssessmentsListOperation = types.NewOperationRef[struct{}]("assessments.list")
+)
+
+const Slug = "aws_audit_manager"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -15,10 +22,10 @@ type userInput struct {
 	AssessmentID string `json:"assessmentId,omitempty" jsonschema:"title=Assessment ID,description=Optional assessment ID to scope collection to a single assessment."`
 }
 
-// credential holds the AWS STS role and optional static key material for one Audit Manager installation.
-// Fields are named to match awskit.awsProviderData JSON tags so MetadataFromProviderData decodes them correctly.
+// credential holds the AWS STS role and optional static key material for one Audit Manager installation
+// Fields are named to match awskit.awsProviderData JSON tags so MetadataFromProviderData decodes them correctly
 // Fields from the v1 credential schema that were never implemented (systemsManagerDocument,
-// configAggregatorName, controlTowerRegions) are intentionally omitted.
+// configAggregatorName, controlTowerRegions) are intentionally omitted
 type credential struct {
 	RoleARN         string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
 	ExternalID      string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy."`
@@ -33,11 +40,13 @@ type credential struct {
 
 // Builder returns the AWS Audit Manager definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0AWSAUDITM0000000000001",
-				Slug:        "aws_audit_manager",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "aws",
 				DisplayName: "AWS Audit Manager",
@@ -52,32 +61,29 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:  providerkit.SchemaFrom[credential](),
-				Persist: types.CredentialPersistModeKeystore,
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "auditmanager",
+					Ref:         clientRef.ID(),
 					Description: "AWS Audit Manager client",
 					Build:       buildAuditManagerClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate Audit Manager access via GetAccountStatus; confirms the assumed role can reach Audit Manager and reports enrollment status",
-					Topic:       gala.TopicName("integration.aws_audit_manager.health.default"),
-					Client:      "auditmanager",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:         "assessments.list",
-					Kind:         types.OperationKindCollect,
+					Name:         AssessmentsListOperation.Name(),
 					Description:  "List Audit Manager assessments with their compliance type, status, and evidence counts for compliance posture reporting",
-					Topic:        gala.TopicName("integration.aws_audit_manager.assessments.list"),
-					Client:       "auditmanager",
+					Topic:        AssessmentsListOperation.Topic(Slug),
+					ClientRef:    clientRef.ID(),
 					ConfigSchema: providerkit.SchemaFrom[assessmentsConfig](),
 					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:       runAssessmentsListOperation,

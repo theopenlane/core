@@ -32,9 +32,9 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 
 // buildDefinitionCatalogEntry constructs one catalog entry from a v2 definition
 func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
-	spec := def.Spec
+	spec := def.DefinitionSpec
 	entry := DefinitionCatalogEntry{
-		ID:          string(spec.ID),
+		ID:          spec.ID,
 		Slug:        spec.Slug,
 		Version:     spec.Version,
 		Family:      spec.Family,
@@ -48,6 +48,10 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 		Active:      spec.Active,
 		Visible:     spec.Visible,
 		HasAuth:     def.Auth != nil,
+	}
+
+	if def.Auth != nil && (def.Auth.StartPath != "" || def.Auth.CallbackPath != "" || def.Auth.OAuth != nil) {
+		entry.Auth = def.Auth
 	}
 
 	if def.Credentials != nil {
@@ -65,10 +69,8 @@ func buildDefinitionCatalogEntry(def types.Definition) DefinitionCatalogEntry {
 	if len(def.Operations) > 0 {
 		entry.Operations = lo.Map(def.Operations, func(op types.OperationRegistration, _ int) DefinitionOperationEntry {
 			return DefinitionOperationEntry{
-				Name:         string(op.Name),
-				Kind:         string(op.Kind),
+				Name:         op.Name,
 				Description:  op.Description,
-				Client:       string(op.Client),
 				ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
 			}
 		})

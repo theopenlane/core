@@ -8,22 +8,7 @@ import (
 )
 
 // Builder builds one manifest-backed definition
-type Builder interface {
-	// Build returns one fully-assembled definition
-	Build(ctx context.Context) (types.Definition, error)
-}
-
-// BuilderFunc adapts a function into a definition builder
-type BuilderFunc func(ctx context.Context) (types.Definition, error)
-
-// Build returns one fully-assembled definition
-func (f BuilderFunc) Build(ctx context.Context) (types.Definition, error) {
-	if f == nil {
-		return types.Definition{}, ErrBuilderNil
-	}
-
-	return f(ctx)
-}
+type Builder func(ctx context.Context) (types.Definition, error)
 
 // BuildAll builds every supplied definition in order
 func BuildAll(ctx context.Context, builders ...Builder) ([]types.Definition, error) {
@@ -34,7 +19,7 @@ func BuildAll(ctx context.Context, builders ...Builder) ([]types.Definition, err
 			return nil, ErrBuilderNil
 		}
 
-		definition, err := builder.Build(ctx)
+		definition, err := builder(ctx)
 		if err != nil {
 			return nil, err
 		}

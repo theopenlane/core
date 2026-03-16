@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestMetadataFromProviderData_ValidData verifies provider data decoding preserves explicit values
 func TestMetadataFromProviderData_ValidData(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":         "arn:aws:iam::123456789012:role/MyRole",
@@ -35,6 +36,7 @@ func TestMetadataFromProviderData_ValidData(t *testing.T) {
 	assert.Equal(t, "AQoDYXdzEJr", meta.SessionToken)
 }
 
+// TestMetadataFromProviderData_DefaultSessionName verifies the fallback session name is applied
 func TestMetadataFromProviderData_DefaultSessionName(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn": "arn:aws:iam::123:role/R",
@@ -48,6 +50,7 @@ func TestMetadataFromProviderData_DefaultSessionName(t *testing.T) {
 	assert.Equal(t, "default-session", meta.SessionName)
 }
 
+// TestMetadataFromProviderData_SessionNameFromData verifies provider data can override the session name
 func TestMetadataFromProviderData_SessionNameFromData(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":     "arn:aws:iam::123:role/R",
@@ -62,6 +65,7 @@ func TestMetadataFromProviderData_SessionNameFromData(t *testing.T) {
 	assert.Equal(t, "custom-session", meta.SessionName)
 }
 
+// TestMetadataFromProviderData_RegionFallback verifies the home region is reused when region is omitted
 func TestMetadataFromProviderData_RegionFallback(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"homeRegion": "eu-central-1",
@@ -75,6 +79,7 @@ func TestMetadataFromProviderData_RegionFallback(t *testing.T) {
 	assert.Equal(t, "eu-central-1", meta.HomeRegion)
 }
 
+// TestMetadataFromProviderData_DefaultAccountScope verifies account scope defaults to all
 func TestMetadataFromProviderData_DefaultAccountScope(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"region": "us-east-1",
@@ -87,6 +92,7 @@ func TestMetadataFromProviderData_DefaultAccountScope(t *testing.T) {
 	assert.Equal(t, AccountScopeAll, meta.AccountScope)
 }
 
+// TestMetadataFromProviderData_EmptyInput verifies empty provider data still yields defaults
 func TestMetadataFromProviderData_EmptyInput(t *testing.T) {
 	meta, err := MetadataFromProviderData(nil, "session")
 	require.NoError(t, err)
@@ -95,6 +101,7 @@ func TestMetadataFromProviderData_EmptyInput(t *testing.T) {
 	assert.Equal(t, "session", meta.SessionName)
 }
 
+// TestCredentialsFromMetadata verifies AWS credentials are copied from metadata
 func TestCredentialsFromMetadata(t *testing.T) {
 	meta := Metadata{
 		AccessKeyID:     "AKID",
@@ -109,16 +116,19 @@ func TestCredentialsFromMetadata(t *testing.T) {
 	assert.Equal(t, "TOKEN", creds.SessionToken)
 }
 
+// TestParseDuration_Valid verifies valid durations are parsed
 func TestParseDuration_Valid(t *testing.T) {
 	d := ParseDuration("1h30m")
 	assert.Equal(t, 90*time.Minute, d)
 }
 
+// TestParseDuration_Empty verifies empty durations return zero
 func TestParseDuration_Empty(t *testing.T) {
 	d := ParseDuration("")
 	assert.Equal(t, time.Duration(0), d)
 }
 
+// TestParseDuration_Invalid verifies invalid durations return zero
 func TestParseDuration_Invalid(t *testing.T) {
 	d := ParseDuration("notaduration")
 	assert.Equal(t, time.Duration(0), d)

@@ -3,39 +3,31 @@ package githubapp
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
 
-const (
-	// DefinitionID is the canonical opaque identifier for the GitHub App definition
-	DefinitionID = "def_01K0GHAPP000000000000000001"
-	// DefinitionSlug is the human-readable slug for the GitHub App definition
-	DefinitionSlug = "github_app"
-)
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// Label is the user-defined display label for the installation
+	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
 
-// userInput holds installation-specific configuration collected from the user
-type userInput struct {
-	Label            string `json:"label,omitempty"            jsonschema:"title=Installation Label"`
+	// RepositoryFilter limits repository collection to matching repositories
 	RepositoryFilter string `json:"repositoryFilter,omitempty" jsonschema:"title=Repository Filter Expression"`
-	SecurityOnly     bool   `json:"securityOnly,omitempty"     jsonschema:"title=Collect Security Signals Only"`
-}
 
-// def holds operator config for the GitHub App integration
-type def struct {
-	cfg Config
+	// SecurityOnly limits collection to security-focused data
+	SecurityOnly bool `json:"securityOnly,omitempty" jsonschema:"title=Collect Security Signals Only"`
 }
 
 // Builder returns the GitHub App definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0GHAPP000000000000000001",
-				Slug:        "github_app",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "github",
 				DisplayName: "GitHub App",
@@ -50,60 +42,59 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[userInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
-				Start:    d.startInstallAuth,
-				Complete: d.completeInstallAuth,
+				StartPath:    "/v1/integrations/github/app/install",
+				CallbackPath: "/v1/integrations/github/app/callback",
+				Start:        Auth{Config: cfg}.Start,
+				Complete:     Auth{Config: cfg}.Complete,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "rest",
-					Description: "GitHub REST client",
-					Build:       d.buildRESTClient,
-				},
-				{
-					Name:        "graphql",
+					Ref:         GitHubClient.ID(),
 					Description: "GitHub GraphQL client",
-					Build:       d.buildGraphQLClient,
+					Build:       Client{Config: cfg}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate the GitHub App installation is reachable",
-					Topic:       gala.TopicName("integration.github_app.health.default"),
-					Client:      "rest",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   GitHubClient.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
-					Handle:      d.runHealthOperation,
+					Handle:      HealthCheck{}.Handle(Client{Config: cfg}),
 				},
 				{
-					Name:        "repository.sync",
-					Kind:        types.OperationKindSync,
+					Name:        RepositorySyncOperation.Name(),
 					Description: "Collect repository inventory from the installation",
-					Topic:       gala.TopicName("integration.github_app.repository.sync"),
-					Client:      "rest",
+					Topic:       RepositorySyncOperation.Topic(Slug),
+					ClientRef:   GitHubClient.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      d.runRepositorySyncOperation,
+					Handle:      RepositorySync{}.Handle(Client{Config: cfg}),
 				},
 				{
-					Name:        "vulnerability.collect",
-					Kind:        types.OperationKindCollect,
-					Description: "Collect vulnerability data from the installation",
-					Topic:       gala.TopicName("integration.github_app.vulnerability.collect"),
-					Client:      "rest",
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      d.runVulnerabilityCollectionOperation,
+					Name:         VulnerabilityCollectOperation.Name(),
+					Description:  "Collect vulnerability alerts from the installation",
+					Topic:        VulnerabilityCollectOperation.Topic(Slug),
+					ClientRef:    GitHubClient.ID(),
+					ConfigSchema: providerkit.SchemaFrom[VulnerabilityCollectConfig](),
+					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
+					Ingest: []types.IngestContract{
+						{
+							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
+							EnsurePayloads: true,
+						},
+					},
+					Handle: VulnerabilityCollect{}.Handle(Client{Config: cfg}),
 				},
 			},
 			Mappings: githubAppMappings(),
 			Webhooks: []types.WebhookRegistration{
 				{
-					Name:    "installation.events",
-					Verify:  d.verifyWebhook,
-					Resolve: d.resolveWebhook,
-					Handle:  d.handleWebhook,
+					Name:   "installation.events",
+					Verify: Webhook{Config: cfg}.Verify,
 				},
 			},
 		}, nil

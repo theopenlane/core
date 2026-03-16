@@ -22,19 +22,19 @@ const (
 	maxPageSize        = int32(100)
 )
 
-// findingsConfig holds per-invocation parameters for the vulnerabilities.collect operation.
+// findingsConfig holds per-invocation parameters for the vulnerabilities.collect operation
 // Severity, RecordState, and WorkflowStatus are pushed to the Security Hub server-side
-// filter so that only matching findings are transferred over the wire.
+// filter so that only matching findings are transferred over the wire
 type findingsConfig struct {
-	// Severity filters by ASFF severity label. Valid values: INFORMATIONAL, LOW, MEDIUM, HIGH, CRITICAL.
+	// Severity filters by ASFF severity label. Valid values: INFORMATIONAL, LOW, MEDIUM, HIGH, CRITICAL
 	Severity string `json:"severity,omitempty" jsonschema:"title=Severity Filter,description=ASFF severity label filter (INFORMATIONAL LOW MEDIUM HIGH CRITICAL)."`
-	// RecordState filters by finding record state. Valid values: ACTIVE, ARCHIVED.
+	// RecordState filters by finding record state. Valid values: ACTIVE, ARCHIVED
 	RecordState string `json:"recordState,omitempty" jsonschema:"title=Record State,description=Finding record state filter (ACTIVE ARCHIVED)."`
-	// WorkflowStatus filters by finding workflow status. Valid values: NEW, NOTIFIED, RESOLVED, SUPPRESSED.
+	// WorkflowStatus filters by finding workflow status. Valid values: NEW, NOTIFIED, RESOLVED, SUPPRESSED
 	WorkflowStatus string `json:"workflowStatus,omitempty" jsonschema:"title=Workflow Status,description=Finding workflow status filter (NEW NOTIFIED RESOLVED SUPPRESSED)."`
-	// MaxFindings caps the total number of findings returned; 0 means no limit.
+	// MaxFindings caps the total number of findings returned; 0 means no limit
 	MaxFindings int `json:"maxFindings,omitempty" jsonschema:"title=Max Findings,description=Maximum number of findings to collect. 0 means no limit."`
-	// IncludePayloads controls whether raw finding JSON is included in the output.
+	// IncludePayloads controls whether raw finding JSON is included in the output
 	IncludePayloads bool `json:"includePayloads,omitempty" jsonschema:"title=Include Payloads,description=Include raw finding payloads in the operation output."`
 }
 
@@ -84,9 +84,9 @@ func buildSecurityHubClient(ctx context.Context, req types.ClientBuildRequest) (
 	return securityhub.NewFromConfig(cfg), nil
 }
 
-// runHealthOperation validates Security Hub access by calling DescribeHub.
+// runHealthOperation validates Security Hub access by calling DescribeHub
 // This confirms both that the STS credentials work and that Security Hub is
-// enabled and reachable in the configured home region.
+// enabled and reachable in the configured home region
 func runHealthOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
 	shClient, ok := client.(*securityhub.Client)
 	if !ok {
@@ -119,9 +119,9 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, credentia
 	return jsonx.ToRawMessage(details)
 }
 
-// runVulnerabilitiesCollectOperation collects Security Hub findings using server-side filters.
+// runVulnerabilitiesCollectOperation collects Security Hub findings using server-side filters
 // Severity, record state, and workflow status are applied via the GetFindings Filters field
-// rather than post-fetch client-side filtering. Pagination stops as soon as MaxFindings is reached.
+// rather than post-fetch client-side filtering. Pagination stops as soon as MaxFindings is reached
 func runVulnerabilitiesCollectOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, config json.RawMessage) (json.RawMessage, error) {
 	shClient, ok := client.(*securityhub.Client)
 	if !ok {
@@ -213,9 +213,9 @@ collectLoop:
 	return jsonx.ToRawMessage(result)
 }
 
-// buildSecurityHubFilters constructs a server-side filter from credential metadata and per-invocation config.
+// buildSecurityHubFilters constructs a server-side filter from credential metadata and per-invocation config
 // Account and region scoping come from the credential; severity, record state, and workflow status
-// come from the operation config. All filters are applied server-side via the GetFindings API.
+// come from the operation config. All filters are applied server-side via the GetFindings API
 func buildSecurityHubFilters(meta awskit.Metadata, cfg findingsConfig) *securityhubtypes.AwsSecurityFindingFilters {
 	var filters securityhubtypes.AwsSecurityFindingFilters
 
@@ -255,6 +255,7 @@ func buildSecurityHubFilters(meta awskit.Metadata, cfg findingsConfig) *security
 	return &filters
 }
 
+// toStringFilters converts string values into equality filters
 func toStringFilters(values []string) []securityhubtypes.StringFilter {
 	out := make([]securityhubtypes.StringFilter, 0, len(values))
 

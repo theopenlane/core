@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/definitions/gcpscc"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	"github.com/theopenlane/core/internal/integrations/definitions/githuboauth"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/definitions/oidcgeneric"
@@ -26,8 +25,6 @@ import (
 type Config struct {
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
-	// GitHubOAuth holds OAuth credentials for the GitHub OAuth definition
-	GitHubOAuth githuboauth.Config `json:"githuboauth" koanf:"githuboauth"`
 	// Slack holds OAuth credentials for the Slack definition
 	Slack slack.Config `json:"slack" koanf:"slack"`
 	// GoogleWorkspace holds OAuth credentials for the Google Workspace definition
@@ -46,7 +43,6 @@ type Config struct {
 func Builders(cfg Config) []definition.Builder {
 	return []definition.Builder{
 		githubapp.Builder(cfg.GitHubApp),
-		githuboauth.Builder(cfg.GitHubOAuth),
 		awsassets.Builder(),
 		awsauditmanager.Builder(),
 		awssecurityhub.Builder(),

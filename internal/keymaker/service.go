@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -18,34 +19,30 @@ const stateTokenEntropyBytes = 16
 // defaultSessionTTL is the duration that auth sessions remain valid if no custom TTL is configured
 const defaultSessionTTL = 15 * time.Minute
 
-// AuthResolver resolves definitions for auth flow dispatch.
-// registry.Registry and registry.DefinitionRegistry both satisfy this interface.
-type AuthResolver interface {
-	Definition(id types.DefinitionID) (types.Definition, bool)
+// DefinitionLookupFunc resolves definitions for auth flow dispatch.
+type DefinitionLookupFunc func(id string) (types.Definition, bool)
+
+// SaveCredentialFunc persists credential payloads produced during definition auth activation.
+type SaveCredentialFunc func(ctx context.Context, installationID string, credential types.CredentialSet) error
+
+// InstallationRecord captures the installation fields required by auth validation.
+type InstallationRecord struct {
+	ID           string
+	OwnerID      string
+	DefinitionID string
 }
 
-// CredentialWriter persists credential payloads produced during definition auth activation.
-// keystore.Store satisfies this interface.
-type CredentialWriter interface {
-	SaveInstallationCredential(ctx context.Context, installationID string, credential types.CredentialSet) error
-}
-
-// Options configures optional Service behaviors
-type Options struct {
-	// SessionTTL controls how long definition auth sessions remain valid
-	SessionTTL time.Duration
-	// Now overrides the time source; primarily used for tests
-	Now func() time.Time
-}
+// InstallationLookupFunc resolves one installation used during auth flow validation.
+type InstallationLookupFunc func(ctx context.Context, installationID string) (InstallationRecord, error)
 
 // Service orchestrates auth flows for integrationsv2 definitions
 type Service struct {
-	// definitions resolves definition instances by ID
-	definitions AuthResolver
-	// writer persists credential payloads after activation
-	writer CredentialWriter
-	// installations resolves and validates installation records referenced by auth flows
-	installations InstallationResolver
+	// definitionLookup resolves definition instances by ID
+	definitionLookup DefinitionLookupFunc
+	// saveCredential persists credential payloads after activation
+	saveCredential SaveCredentialFunc
+	// installationLookup resolves and validates installation records referenced by auth flows
+	installationLookup InstallationLookupFunc
 	// authStates stores temporary authorization state until callback completion
 	authStates AuthStateStore
 	// sessionTTL controls the lifetime of pending auth sessions
@@ -55,47 +52,25 @@ type Service struct {
 }
 
 // NewService constructs a Service from the supplied dependencies
-func NewService(definitions AuthResolver, writer CredentialWriter, installations InstallationResolver, authStates AuthStateStore, opts Options) (*Service, error) {
-	if definitions == nil {
-		return nil, ErrDefinitionResolverRequired
-	}
-
-	if writer == nil {
-		return nil, ErrCredentialWriterRequired
-	}
-
-	if installations == nil {
-		return nil, ErrInstallationResolverRequired
-	}
-
-	if authStates == nil {
-		return nil, ErrAuthStateStoreRequired
-	}
-
-	ttl := opts.SessionTTL
-	if ttl <= 0 {
-		ttl = defaultSessionTTL
-	}
-
-	nowFn := opts.Now
-	if nowFn == nil {
-		nowFn = time.Now
+func NewService(definitionLookup DefinitionLookupFunc, saveCredential SaveCredentialFunc, installationLookup InstallationLookupFunc, authStates AuthStateStore, sessionTTL time.Duration) *Service {
+	if sessionTTL <= 0 {
+		sessionTTL = defaultSessionTTL
 	}
 
 	return &Service{
-		definitions:   definitions,
-		writer:        writer,
-		installations: installations,
-		authStates:    authStates,
-		sessionTTL:    ttl,
-		now:           nowFn,
-	}, nil
+		definitionLookup:   definitionLookup,
+		saveCredential:     saveCredential,
+		installationLookup: installationLookup,
+		authStates:         authStates,
+		sessionTTL:         sessionTTL,
+		now:                time.Now,
+	}
 }
 
 // BeginRequest carries the information required to start a definition auth flow
 type BeginRequest struct {
 	// DefinitionID identifies which definition to use for authorization
-	DefinitionID types.DefinitionID
+	DefinitionID string
 	// InstallationID identifies the installation record being activated
 	InstallationID string
 	// State optionally supplies a custom CSRF token; one is generated if empty
@@ -107,7 +82,7 @@ type BeginRequest struct {
 // BeginResponse returns the authorization URL and session state token
 type BeginResponse struct {
 	// DefinitionID identifies which definition is handling the authorization
-	DefinitionID types.DefinitionID
+	DefinitionID string
 	// State contains the CSRF token that must be presented during callback
 	State string
 	// AuthURL is the authorization URL where the user should be redirected
@@ -125,7 +100,7 @@ type CompleteRequest struct {
 // CompleteResult reports the persisted credential and related identifiers
 type CompleteResult struct {
 	// DefinitionID identifies which definition issued the credential
-	DefinitionID types.DefinitionID
+	DefinitionID string
 	// InstallationID identifies the installation record containing the credential
 	InstallationID string
 	// Credential contains the persisted credential payload
@@ -142,12 +117,12 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		return BeginResponse{}, ErrInstallationIDRequired
 	}
 
-	def, ok := s.definitions.Definition(req.DefinitionID)
+	def, ok := s.definitionLookup(req.DefinitionID)
 	if !ok {
 		return BeginResponse{}, ErrDefinitionNotFound
 	}
 
-	if def.Auth == nil || def.Auth.Start == nil {
+	if def.Auth == nil || (def.Auth.Start == nil && def.Auth.OAuth == nil) {
 		return BeginResponse{}, ErrDefinitionAuthRequired
 	}
 
@@ -155,7 +130,7 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 		return BeginResponse{}, err
 	}
 
-	result, err := def.Auth.Start(ctx, jsonx.CloneRawMessage(req.Input))
+	result, err := s.beginDefinitionAuth(ctx, def, jsonx.CloneRawMessage(req.Input))
 	if err != nil {
 		return BeginResponse{}, fmt.Errorf("keymaker: begin definition auth: %w", err)
 	}
@@ -204,12 +179,12 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, ErrAuthStateExpired
 	}
 
-	def, ok := s.definitions.Definition(authState.DefinitionID)
+	def, ok := s.definitionLookup(authState.DefinitionID)
 	if !ok {
 		return CompleteResult{}, ErrDefinitionNotFound
 	}
 
-	if def.Auth == nil || def.Auth.Complete == nil {
+	if def.Auth == nil || (def.Auth.Complete == nil && def.Auth.OAuth == nil) {
 		return CompleteResult{}, ErrDefinitionAuthRequired
 	}
 
@@ -217,12 +192,12 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, err
 	}
 
-	completeResult, err := def.Auth.Complete(ctx, jsonx.CloneRawMessage(authState.CallbackState), jsonx.CloneRawMessage(req.Input))
+	completeResult, err := s.completeDefinitionAuth(ctx, def, jsonx.CloneRawMessage(authState.CallbackState), jsonx.CloneRawMessage(req.Input))
 	if err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: complete definition auth: %w", err)
 	}
 
-	if err := s.writer.SaveInstallationCredential(ctx, authState.InstallationID, completeResult.Credential); err != nil {
+	if err := s.saveCredential(ctx, authState.InstallationID, completeResult.Credential); err != nil {
 		return CompleteResult{}, fmt.Errorf("keymaker: save definition credential: %w", err)
 	}
 
@@ -233,8 +208,8 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 	}, nil
 }
 
-func (s *Service) validateInstallation(ctx context.Context, installationID string, definitionID types.DefinitionID) error {
-	installation, err := s.installations.ResolveInstallation(ctx, installationID)
+func (s *Service) validateInstallation(ctx context.Context, installationID string, definitionID string) error {
+	installation, err := s.installationLookup(ctx, installationID)
 	if err != nil {
 		return err
 	}
@@ -253,4 +228,40 @@ func (s *Service) validateInstallation(ctx context.Context, installationID strin
 	}
 
 	return nil
+}
+
+func (s *Service) beginDefinitionAuth(ctx context.Context, def types.Definition, input json.RawMessage) (types.AuthStartResult, error) {
+	if def.Auth.Start != nil {
+		return def.Auth.Start(ctx, input)
+	}
+
+	return providerkit.StartOAuthFlow(ctx, providerkit.OAuthFlowConfig{
+		ClientID:     def.Auth.OAuth.ClientID,
+		ClientSecret: def.Auth.ClientSecret,
+		AuthURL:      def.Auth.OAuth.AuthURL,
+		TokenURL:     def.Auth.OAuth.TokenURL,
+		DiscoveryURL: def.Auth.DiscoveryURL,
+		RedirectURL:  def.Auth.OAuth.RedirectURI,
+		Scopes:       def.Auth.OAuth.Scopes,
+		AuthParams:   def.Auth.OAuth.AuthParams,
+		TokenParams:  def.Auth.OAuth.TokenParams,
+	})
+}
+
+func (s *Service) completeDefinitionAuth(ctx context.Context, def types.Definition, state json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
+	if def.Auth.Complete != nil {
+		return def.Auth.Complete(ctx, state, input)
+	}
+
+	return providerkit.CompleteOAuthFlow(ctx, providerkit.OAuthFlowConfig{
+		ClientID:     def.Auth.OAuth.ClientID,
+		ClientSecret: def.Auth.ClientSecret,
+		AuthURL:      def.Auth.OAuth.AuthURL,
+		TokenURL:     def.Auth.OAuth.TokenURL,
+		DiscoveryURL: def.Auth.DiscoveryURL,
+		RedirectURL:  def.Auth.OAuth.RedirectURI,
+		Scopes:       def.Auth.OAuth.Scopes,
+		AuthParams:   def.Auth.OAuth.AuthParams,
+		TokenParams:  def.Auth.OAuth.TokenParams,
+	}, state, input)
 }

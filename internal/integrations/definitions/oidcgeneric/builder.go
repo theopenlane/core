@@ -6,27 +6,36 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+// HealthCheck identifies the default health check operation
+type HealthCheck struct{}
+
+// ClaimsInspect identifies the claims inspection operation
+type ClaimsInspect struct{}
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0OIDCGEN00000000000000001")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	ClaimsInspectOperation = types.NewOperationRef[ClaimsInspect]("claims.inspect")
+)
+
+const Slug = "oidc_generic"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
 	Label string `json:"label,omitempty" jsonschema:"title=Installation Label"`
 }
 
-// def holds operator config for the Generic OIDC integration
-type def struct {
-	cfg Config
-}
-
 // Builder returns the Generic OIDC definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0OIDCGEN00000000000000001",
-				Slug:        "oidc_generic",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "oidc",
 				DisplayName: "Generic OIDC",
@@ -44,31 +53,36 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Auth: &types.AuthRegistration{
-				Start:    d.startInstallAuth,
-				Complete: d.completeInstallAuth,
+				StartPath:    "/v1/integrations/oauth/start",
+				CallbackPath: "/v1/integrations/oauth/callback",
+				OAuth: &types.OAuthPublicConfig{
+					ClientID:    cfg.ClientID,
+					RedirectURI: cfg.RedirectURL,
+					Scopes:      oidcGenericScopes,
+				},
+				ClientSecret: cfg.ClientSecret,
+				DiscoveryURL: cfg.DiscoveryURL,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "OIDC userinfo HTTP client",
 					Build:       buildOIDCClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call the configured userinfo endpoint to validate the OIDC token",
-					Topic:       gala.TopicName("integration.oidc_generic.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "claims.inspect",
-					Kind:        types.OperationKindCollect,
+					Name:        ClaimsInspectOperation.Name(),
 					Description: "Expose stored ID token claims for downstream checks",
-					Topic:       gala.TopicName("integration.oidc_generic.claims.inspect"),
+					Topic:       ClaimsInspectOperation.Topic(Slug),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runClaimsInspectOperation,
 				},

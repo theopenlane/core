@@ -23,7 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -201,7 +201,7 @@ func (h *Handler) GitHubIntegrationWebhookHandler(ctx echo.Context, openapi *Ope
 		return h.BadRequest(ctx, ErrGitHubWebhookEventHeaderMissing, openapi)
 	}
 
-	def, defOk := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(githubAppDefinitionID))
+	def, defOk := h.IntegrationsRuntime.Registry().Definition(githubapp.DefinitionID.ID())
 	if !defOk || len(def.Webhooks) == 0 {
 		recordGitHubWebhookResponse(eventType, http.StatusInternalServerError, "webhook_not_configured")
 
@@ -452,7 +452,7 @@ func (h *Handler) findGitHubAppIntegrationByInstallationID(ctx context.Context, 
 
 	record, err := h.DBClient.Integration.Query().
 		Where(
-			integration.DefinitionIDEQ(githubAppDefinitionID),
+			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
 			func(s *sql.Selector) {
 				s.Where(sqljson.ValueEQ(integration.FieldProviderState, installationID, sqljson.Path("providers", githubAppSlug, "installationId")))
 			},

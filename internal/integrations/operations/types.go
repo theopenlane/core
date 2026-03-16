@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // WorkflowMeta carries optional workflow linkage for workflow-triggered operations
@@ -26,7 +25,7 @@ type DispatchRequest struct {
 	// InstallationID is the target installation identifier
 	InstallationID string
 	// Operation is the definition-local operation identifier
-	Operation types.OperationName
+	Operation string
 	// Config is the operation configuration payload
 	Config json.RawMessage
 	// Force requests credential refresh when a future minting layer exists

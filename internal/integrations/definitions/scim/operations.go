@@ -30,13 +30,3 @@ func runDirectorySyncOperation(_ context.Context, _ *generated.Integration, _ ty
 func verifyWebhook(_ context.Context, _ *http.Request) error {
 	return ErrWebhookNotImplemented
 }
-
-// resolveWebhook resolves an inbound SCIM webhook to an integration
-func resolveWebhook(_ context.Context, _ *http.Request) (*generated.Integration, error) {
-	return nil, ErrWebhookNotImplemented
-}
-
-// handleWebhook handles an inbound SCIM webhook request
-func handleWebhook(_ context.Context, _ *http.Request, _ *generated.Integration) error {
-	return ErrWebhookNotImplemented
-}

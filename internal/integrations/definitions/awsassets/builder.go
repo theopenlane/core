@@ -6,8 +6,21 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+// HealthCheck identifies the default health check operation
+type HealthCheck struct{}
+
+// AssetCollect identifies the asset collection operation
+type AssetCollect struct{}
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0AWSAST00000000000000001")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	AssetCollectOperation  = types.NewOperationRef[AssetCollect]("asset.collect")
+)
+
+const Slug = "aws_assets"
 
 // operatorConfig holds operator-owned defaults that apply across all AWS Assets installations
 type operatorConfig struct {
@@ -37,11 +50,13 @@ type credential struct {
 
 // Builder returns the AWS Assets definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0AWSAST00000000000000001",
-				Slug:        "aws_assets",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "aws",
 				DisplayName: "AWS Assets",
@@ -59,32 +74,29 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:  providerkit.SchemaFrom[credential](),
-				Persist: types.CredentialPersistModeKeystore,
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "aws",
+					Ref:         clientRef.ID(),
 					Description: "AWS API client",
 					Build:       buildAWSClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Validate AWS credentials and installation scope",
-					Topic:       gala.TopicName("integration.aws_assets.health.default"),
-					Client:      "aws",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "asset.collect",
-					Kind:        types.OperationKindCollect,
+					Name:        AssetCollectOperation.Name(),
 					Description: "Collect asset inventory from AWS",
-					Topic:       gala.TopicName("integration.aws_assets.asset.collect"),
-					Client:      "aws",
+					Topic:       AssetCollectOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      runAssetCollectionOperation,
 				},

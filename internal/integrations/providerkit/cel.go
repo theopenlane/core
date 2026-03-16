@@ -11,6 +11,7 @@ import (
 	"github.com/google/cel-go/common/decls"
 	celtypes "github.com/google/cel-go/common/types"
 
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/celx"
 )
 
@@ -22,6 +23,10 @@ const (
 
 	// celVarEnvelope is the CEL variable name bound to the alert envelope map
 	celVarEnvelope = "envelope"
+	celVarVariant  = "variant"
+	celVarResource = "resource"
+	celVarAction   = "action"
+	celVarPayload  = "payload"
 )
 
 var (
@@ -29,18 +34,6 @@ var (
 	celEval     *celx.Evaluator
 	celEvalErr  error
 )
-
-// AlertEnvelope wraps a webhook alert payload for CEL filter and map evaluation
-type AlertEnvelope struct {
-	// AlertType identifies the alert category (dependabot, code_scanning, etc.)
-	AlertType string `json:"alertType"`
-	// Resource identifies the alert resource (repo, project, etc.)
-	Resource string `json:"resource,omitempty"`
-	// Action indicates the webhook action (created, resolved, etc.)
-	Action string `json:"action,omitempty"`
-	// Payload is the raw alert payload as received from the provider
-	Payload json.RawMessage `json:"payload,omitempty"`
-}
 
 // getEvaluator returns the shared CEL evaluator, initializing it once on first call
 func getEvaluator() (*celx.Evaluator, error) {
@@ -73,38 +66,43 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 	return celx.NewEnv(cfg,
 		cel.VariableDecls(
 			decls.NewVariable(celVarEnvelope, celtypes.DynType),
+			decls.NewVariable(celVarVariant, celtypes.DynType),
+			decls.NewVariable(celVarResource, celtypes.DynType),
+			decls.NewVariable(celVarAction, celtypes.DynType),
+			decls.NewVariable(celVarPayload, celtypes.DynType),
 		),
 	)
 }
 
-// envelopeToVars converts an AlertEnvelope into the CEL variable map.
-// The payload field is decoded as a map when valid JSON; otherwise it is included as a string.
-func envelopeToVars(envelope AlertEnvelope) map[string]any {
+// envelopeToVars converts a MappingEnvelope into the CEL variable map.
+func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	var payload any
 
 	if len(envelope.Payload) > 0 {
-		var m map[string]any
-		if err := json.Unmarshal(envelope.Payload, &m); err == nil {
-			payload = m
-		} else {
+		if err := json.Unmarshal(envelope.Payload, &payload); err != nil {
 			payload = string(envelope.Payload)
 		}
 	}
 
 	return map[string]any{
 		celVarEnvelope: map[string]any{
-			"alertType": envelope.AlertType,
+			"alertType": envelope.Variant,
+			"variant":   envelope.Variant,
 			"resource":  envelope.Resource,
 			"action":    envelope.Action,
 			"payload":   payload,
 		},
+		celVarVariant:  envelope.Variant,
+		celVarResource: envelope.Resource,
+		celVarAction:   envelope.Action,
+		celVarPayload:  payload,
 	}
 }
 
-// EvalFilter evaluates a CEL filter expression against an AlertEnvelope.
+// EvalFilter evaluates a CEL filter expression against a MappingEnvelope.
 // An empty expr returns true (pass-through). Returns false when the expression excludes the envelope,
 // or a wrapped ErrFilterExprEval on evaluation failure.
-func EvalFilter(ctx context.Context, expr string, envelope AlertEnvelope) (bool, error) {
+func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope) (bool, error) {
 	if expr == "" {
 		return true, nil
 	}
@@ -131,10 +129,10 @@ func EvalFilter(ctx context.Context, expr string, envelope AlertEnvelope) (bool,
 	return value, nil
 }
 
-// EvalMap evaluates a CEL map expression against an AlertEnvelope and returns a JSON payload.
+// EvalMap evaluates a CEL map expression against a MappingEnvelope and returns a JSON payload.
 // An empty expr returns the original envelope.Payload (pass-through).
 // Returns a wrapped ErrMapExprEval on failure.
-func EvalMap(ctx context.Context, expr string, envelope AlertEnvelope) (json.RawMessage, error) {
+func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (json.RawMessage, error) {
 	if expr == "" {
 		return envelope.Payload, nil
 	}

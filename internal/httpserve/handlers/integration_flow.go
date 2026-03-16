@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/logx"
@@ -44,16 +44,16 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(in.DefinitionID))
+	def, ok := h.IntegrationsRuntime.Registry().Definition(in.DefinitionID)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if !def.Spec.Active {
+	if !def.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
-	if def.Auth == nil || def.Auth.Start == nil {
+	if def.Auth == nil || (def.Auth.Start == nil && def.Auth.OAuth == nil) {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
@@ -67,37 +67,31 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	)
 
 	if in.InstallationID != "" {
-		rec, err := h.DBClient.Integration.Query().
-			Where(
-				integration.OwnerIDEQ(caller.OrganizationID),
-				integration.IDEQ(in.InstallationID),
-			).
-			Only(requestCtx)
+		rec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, in.InstallationID, def.ID)
 		if err != nil {
+			if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
+				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+			}
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
 
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 		}
 
-		if rec.DefinitionID != string(def.Spec.ID) {
-			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
-		}
-
 		installationID = rec.ID
 		installationRec = rec
 	} else {
-		name := def.Spec.DisplayName
+		name := def.DisplayName
 		if name == "" {
-			name = def.Spec.Slug
+			name = def.Slug
 		}
 
 		create := h.DBClient.Integration.Create().
 			SetOwnerID(caller.OrganizationID).
 			SetName(name).
-			SetDefinitionID(string(def.Spec.ID)).
-			SetDefinitionVersion(def.Spec.Version).
-			SetDefinitionSlug(def.Spec.Slug).
-			SetFamily(def.Spec.Family).
+			SetDefinitionID(def.ID).
+			SetDefinitionVersion(def.Version).
+			SetDefinitionSlug(def.Slug).
+			SetFamily(def.Family).
 			SetStatus(enums.IntegrationStatusPending)
 		if userInputProvided {
 			create.SetConfig(types.IntegrationConfig{ClientConfig: userInput})
@@ -128,8 +122,8 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		installationRec.Config = config
 	}
 
-	begin, err := h.IntegrationsRuntime.Keymaker().BeginAuth(requestCtx, keymaker.BeginRequest{
-		DefinitionID:   def.Spec.ID,
+	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
+		DefinitionID:   def.ID,
 		InstallationID: installationID,
 	})
 	if err != nil {
@@ -144,7 +138,7 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		case errors.Is(err, keymaker.ErrInstallationDefinitionMismatch):
 			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		default:
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(def.Spec.ID)).Msg("failed to begin oauth flow")
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("failed to begin oauth flow")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
@@ -229,7 +223,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	result, err := h.IntegrationsRuntime.Keymaker().CompleteAuth(reqCtx, keymaker.CompleteRequest{
+	result, err := h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
 		State: stateCookie.Value,
 		Input: callbackInput,
 	})
@@ -263,7 +257,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
 	def, _ := h.IntegrationsRuntime.Registry().Definition(result.DefinitionID)
-	redirectURL := buildV2IntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), def.Spec.Slug)
+	redirectURL := buildV2IntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), def.Slug)
 	if redirectURL == "" {
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
@@ -292,7 +286,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 	}
 
-	current, ok, err := h.IntegrationsRuntime.CredentialStore().LoadCredential(reqCtx, rec)
+	current, ok, err := h.IntegrationsRuntime.LoadCredential(reqCtx, rec)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("failed to load credential")
 
@@ -303,7 +297,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
 	}
 
-	def, defOk := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(rec.DefinitionID))
+	def, defOk := h.IntegrationsRuntime.Registry().Definition(rec.DefinitionID)
 	if !defOk || def.Auth == nil || def.Auth.Refresh == nil {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
@@ -312,22 +306,22 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("credential refresh failed")
 
-		return h.InternalServerError(ctx, wrapTokenError("refresh", def.Spec.Slug, err), openapiCtx)
+		return h.InternalServerError(ctx, wrapTokenError("refresh", def.Slug, err), openapiCtx)
 	}
 
-	if err := h.IntegrationsRuntime.CredentialStore().SaveInstallationCredential(reqCtx, in.InstallationID, refreshed); err != nil {
+	if err := h.IntegrationsRuntime.SaveInstallationCredential(reqCtx, in.InstallationID, refreshed); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("failed to save refreshed credential")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	if refreshed.OAuthAccessToken == "" {
-		return h.BadRequest(ctx, wrapTokenError("find access", def.Spec.Slug, ErrIntegrationNotFound), openapiCtx)
+		return h.BadRequest(ctx, wrapTokenError("find access", def.Slug, ErrIntegrationNotFound), openapiCtx)
 	}
 
 	resp := IntegrationTokenResponse{
 		Reply:       rout.Reply{Success: true},
-		Provider:    def.Spec.Slug,
+		Provider:    def.Slug,
 		AccessToken: refreshed.OAuthAccessToken,
 	}
 

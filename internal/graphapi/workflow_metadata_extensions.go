@@ -60,6 +60,8 @@ type integrationProviderExtensionsDocument struct {
 	DisplayName string `json:"display_name"`
 	// Category is the provider category
 	Category string `json:"category"`
+	// Auth describes the install or auth flow exposed by the definition
+	Auth *types.AuthRegistration `json:"auth,omitempty"`
 	// CredentialsSchema is the provider credentials schema
 	CredentialsSchema json.RawMessage `json:"credentials_schema,omitempty"`
 	// UserInputSchema is the installation-scoped provider schema
@@ -72,12 +74,8 @@ type integrationProviderExtensionsDocument struct {
 type integrationOperationExtensionsDocument struct {
 	// Name is the operation name
 	Name string `json:"name"`
-	// Kind is the operation kind
-	Kind string `json:"kind"`
 	// Description is the operation description
 	Description string `json:"description,omitempty"`
-	// Client is the operation client identifier
-	Client string `json:"client,omitempty"`
 	// ConfigSchema is the operation config schema
 	ConfigSchema json.RawMessage `json:"config_schema,omitempty"`
 }
@@ -88,7 +86,7 @@ func workflowMetadataExtensions(source integrationMetadataSource) map[string]any
 		Integrations: integrationWorkflowExtensionsDocument{
 			ActionContract: integrationActionContractDocument{
 				TargetSelector:    []string{"installation_id", "definition_id"},
-				OperationSelector: []string{"operation_name", "operation_kind"},
+				OperationSelector: []string{"operation_name"},
 				ScopeFields:       []string{"scope_expression", "scope_payload", "scope_resource"},
 				ScopeVariables:    append([]string(nil), integrationScopeVariableNames...),
 				RunTypes:          append([]string(nil), enums.IntegrationRunTypes...),
@@ -121,9 +119,13 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 		}
 
 		entry := integrationProviderExtensionsDocument{
-			Provider:    string(spec.ID),
+			Provider:    spec.ID,
 			DisplayName: spec.DisplayName,
 			Category:    spec.Category,
+		}
+
+		if def.Auth != nil && (def.Auth.StartPath != "" || def.Auth.CallbackPath != "" || def.Auth.OAuth != nil) {
+			entry.Auth = def.Auth
 		}
 
 		if def.Credentials != nil {
@@ -155,10 +157,8 @@ func integrationWorkflowProviders(source integrationMetadataSource) []integratio
 func buildOperationEntries(ops []types.OperationRegistration) []integrationOperationExtensionsDocument {
 	return lo.Map(ops, func(op types.OperationRegistration, _ int) integrationOperationExtensionsDocument {
 		return integrationOperationExtensionsDocument{
-			Name:         string(op.Name),
-			Kind:         string(op.Kind),
+			Name:         op.Name,
 			Description:  op.Description,
-			Client:       string(op.Client),
 			ConfigSchema: jsonx.CloneRawMessage(op.ConfigSchema),
 		}
 	})

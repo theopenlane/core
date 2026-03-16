@@ -34,7 +34,7 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 		rt, err := IntegrationsRuntime.New(IntegrationsRuntime.Config{
 			DB:                    dbClient,
 			Gala:                  galaInstance,
-			CredentialStore:       credStore,
+			Keystore:              credStore,
 			AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
 			CatalogConfig:         s.Config.Settings.Integrations,
 			SuccessRedirectURL:    s.Config.Settings.IntegrationSuccessRedirectURL,
@@ -51,9 +51,7 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 		}
 
 		if err := wf.SetIntegrationDeps(engine.IntegrationDeps{
-			Registry:   rt.Registry(),
-			Dispatcher: rt.Dispatcher(),
-			Executor:   rt.Executor(),
+			Runtime: rt,
 		}); err != nil {
 			log.Panic().Err(err).Msg("failed to wire integrationsv2 deps into workflow engine")
 		}

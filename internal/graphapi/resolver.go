@@ -58,7 +58,7 @@ type integrationMetadataSource interface {
 	// Catalog returns all registered definition specs in stable id order
 	Catalog() []types.DefinitionSpec
 	// Definition returns one definition by canonical identifier
-	Definition(id types.DefinitionID) (types.Definition, bool)
+	Definition(id string) (types.Definition, bool)
 }
 
 // trustCenterSettings holds the settings for trust center domains

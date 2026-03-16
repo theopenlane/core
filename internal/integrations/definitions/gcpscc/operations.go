@@ -18,6 +18,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -30,7 +31,6 @@ const (
 	findingsMaxPageSize   = 1000
 	settingsPageSize      = 10
 	sampleConfigsCapacity = 5
-	defaultSampleSize     = 10
 )
 
 // sccCredentialMetadata captures the persisted SCC credential metadata supplied during activation
@@ -72,25 +72,6 @@ type sccFindingsConfig struct {
 
 type sccHealthDetails struct {
 	Parents []string `json:"parents"`
-}
-
-type sccFindingSample struct {
-	Name     string `json:"name"`
-	Category string `json:"category"`
-	State    string `json:"state"`
-	Severity string `json:"severity"`
-	Source   string `json:"source"`
-}
-
-type sccFindingsDetails struct {
-	Sources          []string           `json:"sources"`
-	SourceCount      int                `json:"sourceCount"`
-	Filter           string             `json:"filter"`
-	TotalFindings    int                `json:"totalFindings"`
-	FindingsBySource map[string]int     `json:"findingsBySource"`
-	SeverityCounts   map[string]int     `json:"severity_counts"`
-	StateCounts      map[string]int     `json:"state_counts"`
-	Samples          []sccFindingSample `json:"samples"`
 }
 
 type sccNotificationConfigSample struct {
@@ -198,14 +179,17 @@ func runFindingsCollectOperation(ctx context.Context, _ *generated.Integration, 
 	if pageSize > findingsMaxPageSize {
 		pageSize = findingsMaxPageSize
 	}
+	if maxFindings := cfg.MaxFindings; maxFindings > 0 && maxFindings < pageSize {
+		pageSize = maxFindings
+	}
 
 	maxFindings := cfg.MaxFindings
-	total := 0
-	samples := make([]sccFindingSample, 0, defaultSampleSize)
-	severityCounts := map[string]int{}
-	stateCounts := map[string]int{}
-	sourceCounts := map[string]int{}
 	marshaler := protojson.MarshalOptions{UseProtoNames: true}
+	envelopes := make([]types.MappingEnvelope, 0)
+	if maxFindings > 0 {
+		envelopes = make([]types.MappingEnvelope, 0, maxFindings)
+	}
+	collected := 0
 
 collectLoop:
 	for _, sourceName := range sources {
@@ -232,52 +216,25 @@ collectLoop:
 				continue
 			}
 
-			if maxFindings > 0 && total >= maxFindings {
+			if maxFindings > 0 && collected >= maxFindings {
 				break collectLoop
 			}
 
-			if _, err := marshaler.Marshal(finding); err != nil {
-				return nil, fmt.Errorf("gcpscc: finding serialization failed for %s: %w", sourceName, err)
+			envelope, err := buildFindingEnvelope(sourceName, finding, marshaler)
+			if err != nil {
+				return nil, err
 			}
 
-			total++
-			sourceCounts[sourceName]++
-
-			if severity := finding.GetSeverity().String(); severity != "" {
-				key := strings.ToLower(severity)
-				if key != "severity_unspecified" {
-					severityCounts[key]++
-				}
-			}
-
-			if state := finding.GetState().String(); state != "" {
-				key := strings.ToLower(state)
-				if key != "state_unspecified" {
-					stateCounts[key]++
-				}
-			}
-
-			if len(samples) < defaultSampleSize {
-				samples = append(samples, sccFindingSample{
-					Name:     finding.GetName(),
-					Category: finding.GetCategory(),
-					State:    finding.GetState().String(),
-					Severity: finding.GetSeverity().String(),
-					Source:   sourceName,
-				})
-			}
+			envelopes = append(envelopes, envelope)
+			collected++
 		}
 	}
 
-	return jsonx.ToRawMessage(sccFindingsDetails{
-		Sources:          sources,
-		SourceCount:      len(sources),
-		Filter:           filter,
-		TotalFindings:    total,
-		FindingsBySource: sourceCounts,
-		SeverityCounts:   severityCounts,
-		StateCounts:      stateCounts,
-		Samples:          samples,
+	return jsonx.ToRawMessage([]types.IngestPayloadSet{
+		{
+			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Envelopes: envelopes,
+		},
 	})
 }
 
@@ -403,6 +360,31 @@ func normalizeServiceAccountKey(value string) string {
 	}
 
 	return trimmed
+}
+
+// buildFindingEnvelope serializes a finding into a mapping envelope
+func buildFindingEnvelope(sourceName string, finding *securitycenterpb.Finding, marshaler protojson.MarshalOptions) (types.MappingEnvelope, error) {
+	rawPayload, err := marshaler.Marshal(finding)
+	if err != nil {
+		return types.MappingEnvelope{}, fmt.Errorf("gcpscc: finding serialization failed for %s: %w", sourceName, err)
+	}
+
+	return types.MappingEnvelope{
+		Resource: resolveFindingResource(sourceName, finding),
+		Payload:  rawPayload,
+	}, nil
+}
+
+// resolveFindingResource chooses the resource identifier used for ingest
+func resolveFindingResource(sourceName string, finding *securitycenterpb.Finding) string {
+	if finding != nil {
+		resource := strings.TrimSpace(finding.GetResourceName())
+		if resource != "" {
+			return resource
+		}
+	}
+
+	return strings.TrimSpace(sourceName)
 }
 
 // resolveSecurityCenterParents chooses the SCC parent resources used for health/settings checks

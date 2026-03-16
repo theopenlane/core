@@ -3,12 +3,16 @@ package runtime
 import "errors"
 
 var (
-	// ErrDBClientRequired indicates the Ent client dependency is missing
-	ErrDBClientRequired = errors.New("integrationsv2/runtime: db client required")
-	// ErrGalaRequired indicates the Gala runtime dependency is missing
-	ErrGalaRequired = errors.New("integrationsv2/runtime: gala required")
-	// ErrCredentialStoreRequired indicates the credential store dependency is missing
-	ErrCredentialStoreRequired = errors.New("integrationsv2/runtime: credential store required")
-	// ErrAuthStateStoreRequired indicates the auth state store dependency is missing
-	ErrAuthStateStoreRequired = errors.New("integrationsv2/runtime: auth state store required")
+	// ErrOwnerIDRequired indicates installation resolution requires an owner id when resolving by definition
+	ErrOwnerIDRequired = errors.New("integrationsv2/runtime: owner id required")
+	// ErrInstallationRequired indicates the installation record dependency is missing
+	ErrInstallationRequired = errors.New("integrationsv2/runtime: installation required")
+	// ErrInstallationIDRequired indicates installation resolution requires an installation id when owner plus definition is ambiguous
+	ErrInstallationIDRequired = errors.New("integrationsv2/runtime: installation id required")
+	// ErrInstallationNotFound indicates no matching installation could be resolved
+	ErrInstallationNotFound = errors.New("integrationsv2/runtime: installation not found")
+	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
+	ErrInstallationDefinitionMismatch = errors.New("integrationsv2/runtime: installation definition mismatch")
+	// ErrCredentialNotFound indicates no credential could be resolved for the installation
+	ErrCredentialNotFound = errors.New("integrationsv2/runtime: credential not found")
 )

@@ -3,7 +3,7 @@ package githubapp
 import "errors"
 
 var (
-	// ErrAPIRequest indicates a GitHub API request failed with a non-2xx status
+	// ErrAPIRequest indicates a GitHub API request failed
 	ErrAPIRequest = errors.New("githubapp: api request failed")
 	// ErrOAuthTokenMissing indicates the OAuth access token is not present in the credential
 	ErrOAuthTokenMissing = errors.New("githubapp: oauth token missing")
@@ -23,12 +23,16 @@ var (
 	ErrInstallationTokenEmpty = errors.New("githubapp: installation token empty")
 	// ErrWebhookSecretMissing indicates the GitHub App webhook secret is missing from operator config
 	ErrWebhookSecretMissing = errors.New("githubapp: webhook secret missing")
-	// ErrRepositoryInvalid indicates a repository identifier is not in owner/repo format
-	ErrRepositoryInvalid = errors.New("githubapp: repository identifier must be owner/repo")
-	// ErrOrganizationRequired indicates an organization login is required for the operation
-	ErrOrganizationRequired = errors.New("githubapp: organization required")
+	// ErrWebhookSignatureMissing indicates the GitHub webhook signature header was not sent
+	ErrWebhookSignatureMissing = errors.New("githubapp: webhook signature missing")
+	// ErrWebhookBodyRead indicates the GitHub webhook body could not be read
+	ErrWebhookBodyRead = errors.New("githubapp: webhook body read failed")
+	// ErrWebhookSignatureMismatch indicates the GitHub webhook signature did not match
+	ErrWebhookSignatureMismatch = errors.New("githubapp: webhook signature mismatch")
 	// ErrAppSlugMissing indicates the GitHub App slug is missing from operator config
 	ErrAppSlugMissing = errors.New("githubapp: app slug missing")
 	// ErrClientType indicates the provided client is not a supported type
 	ErrClientType = errors.New("githubapp: unexpected client type")
+	// ErrIngestPayloadEncode indicates a collected GitHub payload could not be serialized for ingest
+	ErrIngestPayloadEncode = errors.New("githubapp: ingest payload encode failed")
 )

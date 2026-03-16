@@ -6,8 +6,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID              = types.NewDefinitionRef("def_01K0AZENTRAID000000000000001")
+	HealthDefaultOperation    = types.NewOperationRef[struct{}]("health.default")
+	DirectoryInspectOperation = types.NewOperationRef[struct{}]("directory.inspect")
+)
+
+const Slug = "azure_entra_id"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -15,19 +22,15 @@ type userInput struct {
 	TenantID string `json:"tenantId,omitempty" jsonschema:"title=Tenant ID"`
 }
 
-// def holds operator config for the Azure Entra ID integration
-type def struct {
-	cfg Config
-}
-
 // Builder returns the Azure Entra ID definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0AZENTRAID000000000000001",
-				Slug:        "azure_entra_id",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "azure",
 				DisplayName: "Azure Entra ID",
@@ -45,32 +48,38 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Auth: &types.AuthRegistration{
-				Start:    d.startInstallAuth,
-				Complete: d.completeInstallAuth,
+				StartPath:    "/v1/integrations/oauth/start",
+				CallbackPath: "/v1/integrations/oauth/callback",
+				OAuth: &types.OAuthPublicConfig{
+					ClientID:    cfg.ClientID,
+					AuthURL:     azureAuthURL,
+					TokenURL:    azureTokenURL,
+					RedirectURI: cfg.RedirectURL,
+					Scopes:      azureEntraScopes,
+				},
+				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Microsoft Graph API client",
 					Build:       buildGraphClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Microsoft Graph /organization to verify tenant access",
-					Topic:       gala.TopicName("integration.azure_entra_id.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "directory.inspect",
-					Kind:        types.OperationKindCollect,
+					Name:        DirectoryInspectOperation.Name(),
 					Description: "Collect basic tenant metadata via Microsoft Graph",
-					Topic:       gala.TopicName("integration.azure_entra_id.directory.inspect"),
-					Client:      "api",
+					Topic:       DirectoryInspectOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runDirectoryInspectOperation,
 				},

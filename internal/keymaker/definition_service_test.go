@@ -14,11 +14,11 @@ import (
 func TestService_BeginAndComplete(t *testing.T) {
 	ctx := context.Background()
 
-	definitionID := types.DefinitionID("github-oauth")
+	definitionID := "github-oauth"
 	installationID := "install-1"
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: definitionID, Slug: "github-oauth", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: definitionID, Slug: "github-oauth", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{
@@ -35,10 +35,7 @@ func TestService_BeginAndComplete(t *testing.T) {
 	}
 
 	writer := &fakeInstallationWriter{}
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, writer, matchingInstallationResolver(installationID, definitionID), NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, writer.SaveInstallationCredential, matchingInstallationResolver(installationID, definitionID).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{
 		DefinitionID:   definitionID,
@@ -85,44 +82,12 @@ func TestService_BeginAndComplete(t *testing.T) {
 	}
 }
 
-func TestNewServiceValidatesDependencies(t *testing.T) {
-	t.Parallel()
-
-	writer := &fakeInstallationWriter{}
-	resolver := &fakeDefinitionResolver{}
-	installations := &fakeInstallationResolver{}
-	store := NewInMemoryAuthStateStore()
-
-	_, err := NewService(nil, writer, installations, store, Options{})
-	if !errors.Is(err, ErrDefinitionResolverRequired) {
-		t.Fatalf("expected ErrDefinitionResolverRequired, got %v", err)
-	}
-
-	_, err = NewService(resolver, nil, installations, store, Options{})
-	if !errors.Is(err, ErrCredentialWriterRequired) {
-		t.Fatalf("expected ErrCredentialWriterRequired, got %v", err)
-	}
-
-	_, err = NewService(resolver, writer, nil, store, Options{})
-	if !errors.Is(err, ErrInstallationResolverRequired) {
-		t.Fatalf("expected ErrInstallationResolverRequired, got %v", err)
-	}
-
-	_, err = NewService(resolver, writer, installations, nil, Options{})
-	if !errors.Is(err, ErrAuthStateStoreRequired) {
-		t.Fatalf("expected ErrAuthStateStoreRequired, got %v", err)
-	}
-}
-
 func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 	t.Parallel()
 
-	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, &fakeInstallationResolver{}, NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
-	_, err = svc.BeginAuth(context.Background(), BeginRequest{InstallationID: "i"})
+	_, err := svc.BeginAuth(context.Background(), BeginRequest{InstallationID: "i"})
 	if !errors.Is(err, ErrDefinitionIDRequired) {
 		t.Fatalf("expected ErrDefinitionIDRequired, got %v", err)
 	}
@@ -136,12 +101,9 @@ func TestService_BeginAuthRequiresDefinitionAndInstallation(t *testing.T) {
 func TestService_BeginAuthDefinitionNotFound(t *testing.T) {
 	t.Parallel()
 
-	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, &fakeInstallationResolver{}, NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
-	_, err = svc.BeginAuth(context.Background(), BeginRequest{
+	_, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "missing",
 		InstallationID: "install-1",
 	})
@@ -154,15 +116,12 @@ func TestService_BeginAuthNoAuthRegistration(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "no-auth", Slug: "no-auth", Version: "1.0"},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, matchingInstallationResolver("i", "no-auth"), NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, matchingInstallationResolver("i", "no-auth").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
-	_, err = svc.BeginAuth(context.Background(), BeginRequest{
+	_, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "no-auth",
 		InstallationID: "i",
 	})
@@ -175,7 +134,7 @@ func TestService_BeginAuthUsesCustomStateToken(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://example.com"}, nil
@@ -183,10 +142,7 @@ func TestService_BeginAuthUsesCustomStateToken(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, matchingInstallationResolver("i1", "d1"), NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, matchingInstallationResolver("i1", "d1").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
 	begin, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "d1",
@@ -206,7 +162,7 @@ func TestService_BeginAuthInstallationDefinitionMismatch(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "d1", Slug: "d1", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://example.com"}, nil
@@ -214,18 +170,15 @@ func TestService_BeginAuthInstallationDefinitionMismatch(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(
-		&fakeDefinitionResolver{def: def},
-		&fakeInstallationWriter{},
-		matchingInstallationResolver("i1", "other-definition"),
+	svc := NewService(
+		(&fakeDefinitionResolver{def: def}).Definition,
+		(&fakeInstallationWriter{}).SaveInstallationCredential,
+		matchingInstallationResolver("i1", "other-definition").ResolveInstallation,
 		NewInMemoryAuthStateStore(),
-		Options{},
+		0,
 	)
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
 
-	_, err = svc.BeginAuth(context.Background(), BeginRequest{
+	_, err := svc.BeginAuth(context.Background(), BeginRequest{
 		DefinitionID:   "d1",
 		InstallationID: "i1",
 	})
@@ -241,7 +194,7 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 	clock := func() time.Time { return now }
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "slack", Slug: "slack", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "slack", Slug: "slack", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://slack.com/oauth"}, nil
@@ -252,16 +205,14 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(
-		&fakeDefinitionResolver{def: def},
-		&fakeInstallationWriter{},
-		matchingInstallationResolver("install-2", "slack"),
+	svc := NewService(
+		(&fakeDefinitionResolver{def: def}).Definition,
+		(&fakeInstallationWriter{}).SaveInstallationCredential,
+		matchingInstallationResolver("install-2", "slack").ResolveInstallation,
 		NewInMemoryAuthStateStore(),
-		Options{SessionTTL: time.Minute, Now: clock},
+		time.Minute,
 	)
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc.now = clock
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{
 		DefinitionID:   "slack",
@@ -282,12 +233,9 @@ func TestService_CompleteAuthExpired(t *testing.T) {
 func TestService_CompleteAuthStateTokenRequired(t *testing.T) {
 	t.Parallel()
 
-	svc, err := NewService(&fakeDefinitionResolver{}, &fakeInstallationWriter{}, &fakeInstallationResolver{}, NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, (&fakeInstallationResolver{}).ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
-	_, err = svc.CompleteAuth(context.Background(), CompleteRequest{})
+	_, err := svc.CompleteAuth(context.Background(), CompleteRequest{})
 	if !errors.Is(err, ErrAuthStateTokenRequired) {
 		t.Fatalf("expected ErrAuthStateTokenRequired, got %v", err)
 	}
@@ -299,7 +247,7 @@ func TestService_CompleteAuthSaveError(t *testing.T) {
 	ctx := context.Background()
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "okta", Slug: "okta", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "okta", Slug: "okta", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://okta.com"}, nil
@@ -311,10 +259,7 @@ func TestService_CompleteAuthSaveError(t *testing.T) {
 	}
 
 	writer := &fakeInstallationWriter{err: errors.New("db unavailable")}
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, writer, matchingInstallationResolver("install-3", "okta"), NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, writer.SaveInstallationCredential, matchingInstallationResolver("install-3", "okta").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{
 		DefinitionID:   "okta",
@@ -338,7 +283,7 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 	var receivedCallbackState json.RawMessage
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{
@@ -353,10 +298,7 @@ func TestService_CallbackStatePassedToComplete(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, matchingInstallationResolver("i1", "az"), NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, matchingInstallationResolver("i1", "az").ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1"})
 	if err != nil {
@@ -385,7 +327,7 @@ func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
 	installations := matchingInstallationResolver("i1", "az")
 
 	def := types.Definition{
-		Spec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
+		DefinitionSpec: types.DefinitionSpec{ID: "az", Slug: "az", Version: "1.0"},
 		Auth: &types.AuthRegistration{
 			Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 				return types.AuthStartResult{URL: "https://login.microsoftonline.com"}, nil
@@ -396,10 +338,7 @@ func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
 		},
 	}
 
-	svc, err := NewService(&fakeDefinitionResolver{def: def}, &fakeInstallationWriter{}, installations, NewInMemoryAuthStateStore(), Options{})
-	if err != nil {
-		t.Fatalf("NewService error: %v", err)
-	}
+	svc := NewService((&fakeDefinitionResolver{def: def}).Definition, (&fakeInstallationWriter{}).SaveInstallationCredential, installations.ResolveInstallation, NewInMemoryAuthStateStore(), 0)
 
 	begin, err := svc.BeginAuth(ctx, BeginRequest{DefinitionID: "az", InstallationID: "i1"})
 	if err != nil {
@@ -414,20 +353,18 @@ func TestService_CompleteAuthInstallationDefinitionMismatch(t *testing.T) {
 	}
 }
 
-// fakeDefinitionResolver satisfies AuthResolver for tests
 type fakeDefinitionResolver struct {
 	def types.Definition
 }
 
-func (r *fakeDefinitionResolver) Definition(id types.DefinitionID) (types.Definition, bool) {
-	if r.def.Spec.ID == "" || r.def.Spec.ID != id {
+func (r *fakeDefinitionResolver) Definition(id string) (types.Definition, bool) {
+	if r.def.ID == "" || r.def.ID != id {
 		return types.Definition{}, false
 	}
 
 	return r.def, true
 }
 
-// installationSave captures one SaveInstallationCredential call
 type installationSave struct {
 	installationID string
 	credential     types.CredentialSet
@@ -446,7 +383,6 @@ func (f *fakeInstallationResolver) ResolveInstallation(context.Context, string) 
 	return f.installation, nil
 }
 
-// fakeInstallationWriter satisfies CredentialWriter for tests
 type fakeInstallationWriter struct {
 	saves []installationSave
 	err   error
@@ -457,7 +393,7 @@ func (f *fakeInstallationWriter) SaveInstallationCredential(_ context.Context, i
 	return f.err
 }
 
-func matchingInstallationResolver(installationID string, definitionID types.DefinitionID) *fakeInstallationResolver {
+func matchingInstallationResolver(installationID string, definitionID string) *fakeInstallationResolver {
 	return &fakeInstallationResolver{
 		installation: InstallationRecord{
 			ID:           installationID,

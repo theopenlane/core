@@ -8,14 +8,13 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
-	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -24,17 +23,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
-// IntegrationRegistry exposes definition operation descriptors to the engine
-type IntegrationRegistry = registry.DefinitionRegistry
-
 // IntegrationDeps wires integration-specific dependencies into the workflow engine
 type IntegrationDeps struct {
-	// Registry provides access to integration definition and operation descriptors
-	Registry registry.DefinitionRegistry
-	// Dispatcher enqueues integration operation execution requests
-	Dispatcher *operations.Dispatcher
-	// Executor executes queued integration operations
-	Executor *operations.Executor
+	// Runtime provides access to integration definition descriptors and execution.
+	Runtime *integrationsruntime.Runtime
 }
 
 // IntegrationWorkflowMeta ties an integration run back to a workflow action
@@ -60,7 +52,7 @@ type IntegrationQueueRequest struct {
 	// DefinitionID identifies the integration definition when no installation ID is set
 	DefinitionID string
 	// Operation identifies the operation to execute
-	Operation types.OperationName
+	Operation string
 	// Config carries the operation configuration payload as a JSON object document
 	Config json.RawMessage
 	// ScopeExpression is an optional CEL expression gate for command execution
@@ -120,9 +112,8 @@ func logIntegrationScopeSkipped(ctx context.Context, definitionID, operation, in
 
 // SetIntegrationDeps attaches integration dependencies and registers per-operation listeners
 func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
-	if deps.Registry != nil {
-		e.integrationRegistry = deps.Registry
-		e.integrationResolver = newInstallationResolver(e.client)
+	if deps.Runtime != nil {
+		e.integrationRuntime = deps.Runtime
 
 		evaluator, err := NewIntegrationScopeEvaluator()
 		if err != nil {
@@ -131,14 +122,8 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 
 		e.scopeEvaluator = evaluator
 	}
-	if deps.Dispatcher != nil {
-		e.integrationDispatcher = deps.Dispatcher
-	}
-	if deps.Executor != nil {
-		e.integrationExecutor = deps.Executor
-	}
 
-	if e.integrationExecutor == nil || e.integrationRegistry == nil {
+	if e.integrationRuntime == nil {
 		return nil
 	}
 
@@ -148,7 +133,7 @@ func (e *WorkflowEngine) SetIntegrationDeps(deps IntegrationDeps) error {
 
 	// Register one listener per operation topic; each listener executes the operation
 	// via the executor and emits workflow action completed when workflow meta is present.
-	for _, op := range e.integrationRegistry.Listeners() {
+	for _, op := range e.integrationRuntime.Registry().Listeners() {
 		operation := op // capture for closure
 		if _, err := gala.RegisterListeners(e.gala.Registry(), gala.Definition[operations.Envelope]{
 			Topic: gala.Topic[operations.Envelope]{Name: operation.Topic},
@@ -172,7 +157,7 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 
 // queueIntegrationOperation resolves the installation and dispatches the operation
 func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req IntegrationQueueRequest) (IntegrationQueueResult, error) {
-	if e.integrationDispatcher == nil {
+	if e.integrationRuntime == nil {
 		return IntegrationQueueResult{}, ErrIntegrationOperationsRequired
 	}
 
@@ -187,13 +172,24 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 
 	allowCtx := workflows.AllowContext(ctx)
 
-	installationRecord, err := e.resolveInstallation(allowCtx, orgID, req.InstallationID, req.DefinitionID)
+	installationRecord, err := e.integrationRuntime.ResolveInstallation(allowCtx, orgID, req.InstallationID, req.DefinitionID)
 	if err != nil {
-		return IntegrationQueueResult{}, err
+		switch {
+		case errors.Is(err, integrationsruntime.ErrInstallationRequired):
+			return IntegrationQueueResult{}, ErrInstallationRequired
+		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
+			return IntegrationQueueResult{}, ErrInstallationIDRequired
+		case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
+			return IntegrationQueueResult{}, ErrInstallationNotFound
+		case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
+			return IntegrationQueueResult{}, ErrInstallationDefinitionMismatch
+		default:
+			return IntegrationQueueResult{}, err
+		}
 	}
 
-	if e.integrationRegistry != nil {
-		if _, err := e.integrationRegistry.OperationFromString(installationRecord.DefinitionID, string(req.Operation)); err != nil {
+	if e.integrationRuntime != nil {
+		if _, err := e.integrationRuntime.Registry().Operation(installationRecord.DefinitionID, req.Operation); err != nil {
 			return IntegrationQueueResult{}, err
 		}
 	}
@@ -222,7 +218,7 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 		}
 	}
 
-	result, err := e.integrationDispatcher.Dispatch(allowCtx, operations.DispatchRequest{
+	result, err := e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
 		InstallationID: installationRecord.ID,
 		Operation:      req.Operation,
 		Config:         jsonx.CloneRawMessage(req.Config),
@@ -242,47 +238,9 @@ func (e *WorkflowEngine) queueIntegrationOperation(ctx context.Context, req Inte
 	}, nil
 }
 
-// resolveInstallation looks up an installation record by explicit ID or by owner + definition ID
-func (e *WorkflowEngine) resolveInstallation(ctx context.Context, orgID, installationID, definitionID string) (*ent.Integration, error) {
-	if installationID != "" {
-		record, err := e.client.Integration.Get(ctx, installationID)
-		if err != nil {
-			if ent.IsNotFound(err) {
-				return nil, ErrInstallationNotFound
-			}
-
-			return nil, err
-		}
-
-		if definitionID != "" && record.DefinitionID != definitionID {
-			return nil, ErrInstallationDefinitionMismatch
-		}
-
-		return record, nil
-	}
-
-	if definitionID != "" {
-		if e.integrationResolver == nil {
-			return nil, ErrIntegrationRegistryRequired
-		}
-
-		resolution, err := e.integrationResolver.Resolve(ctx, installationResolveCriteria{
-			OwnerID:      orgID,
-			DefinitionID: mo.Some(types.DefinitionID(definitionID)),
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		return resolution.Installation, nil
-	}
-
-	return nil, ErrInstallationRequired
-}
-
 // executeIntegrationAction queues an integration operation from a workflow action
 func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action models.WorkflowAction, instance *ent.WorkflowInstance, obj *workflows.Object) error {
-	if e.integrationDispatcher == nil {
+	if e.integrationRuntime == nil {
 		return ErrIntegrationOperationsRequired
 	}
 
@@ -291,7 +249,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		return errors.Join(ErrUnmarshalParams, err)
 	}
 
-	operationName := types.OperationName(params.OperationName)
+	operationName := params.OperationName
 	if operationName == "" {
 		return ErrIntegrationOperationCriteriaRequired
 	}
@@ -342,13 +300,13 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 
 // handleIntegrationOperation executes an integration operation and emits workflow action completed when applicable
 func (e *WorkflowEngine) handleIntegrationOperation(ctx gala.HandlerContext, envelope operations.Envelope) error {
-	if e.integrationExecutor == nil {
+	if e.integrationRuntime == nil {
 		return ErrIntegrationOperationsRequired
 	}
 
 	systemCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
 
-	execErr := e.integrationExecutor.Handle(systemCtx, envelope)
+	execErr := e.integrationRuntime.HandleOperation(systemCtx, envelope)
 
 	if envelope.WorkflowMeta != nil {
 		e.emitWorkflowActionCompleted(systemCtx, envelope, execErr)
@@ -385,7 +343,7 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 }
 
 // evaluateInstallationScope evaluates optional scope expressions before queueing integration runs
-func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeEvaluator, req IntegrationQueueRequest, installationRecord *ent.Integration, operationName types.OperationName, operationConfig json.RawMessage) (bool, error) {
+func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeEvaluator, req IntegrationQueueRequest, installationRecord *ent.Integration, operationName string, operationConfig json.RawMessage) (bool, error) {
 	if evaluator == nil || req.ScopeExpression == "" {
 		return true, nil
 	}
@@ -403,7 +361,7 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 	return evaluator.EvaluateConditionWithVars(ctx, req.ScopeExpression, types.ScopeVars{
 		Payload:            req.ScopePayload,
 		Resource:           req.ScopeResource,
-		DefinitionID:       types.DefinitionID(installationRecord.DefinitionID),
+		DefinitionID:       installationRecord.DefinitionID,
 		Operation:          operationName,
 		Config:             operationConfig,
 		InstallationConfig: installationConfigRaw,

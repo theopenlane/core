@@ -6,8 +6,21 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+// HealthCheck identifies the default health check operation
+type HealthCheck struct{}
+
+// PoliciesCollect identifies the policy collection operation
+type PoliciesCollect struct{}
+
+var (
+	DefinitionID             = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
+	HealthDefaultOperation   = types.NewOperationRef[HealthCheck]("health.default")
+	PoliciesCollectOperation = types.NewOperationRef[PoliciesCollect]("policies.collect")
+)
+
+const Slug = "okta"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -23,11 +36,13 @@ type credential struct {
 
 // Builder returns the Okta definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0OKTA0000000000000000001",
-				Slug:        "okta",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "okta",
 				DisplayName: "Okta",
@@ -42,33 +57,29 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:   providerkit.SchemaFrom[credential](),
-				Persist:  types.CredentialPersistModeKeystore,
-				Validate: providerkit.ValidateAPIKeyCredential(),
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Okta API client",
 					Build:       buildOktaClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Okta user API to verify API token",
-					Topic:       gala.TopicName("integration.okta.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "policies.collect",
-					Kind:        types.OperationKindCollect,
+					Name:        PoliciesCollectOperation.Name(),
 					Description: "Collect sign-on policy metadata for posture analysis",
-					Topic:       gala.TopicName("integration.okta.policies.collect"),
-					Client:      "api",
+					Topic:       PoliciesCollectOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      runPoliciesCollectOperation,
 				},

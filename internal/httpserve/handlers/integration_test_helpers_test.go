@@ -17,6 +17,10 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
+const githubAppSlug = githubapp.Slug
+
+var githubAppDefinitionID = githubapp.DefinitionID.ID()
+
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
 // built from the given definition builders. Returns a restore function.
 func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []v2definition.Builder, successRedirectURL string) func() {
@@ -36,7 +40,7 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []v2
 	rt, err := IntegrationsRuntime.New(IntegrationsRuntime.Config{
 		DB:                    suite.db,
 		Gala:                  galaInstance,
-		CredentialStore:       credStore,
+		Keystore:              credStore,
 		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
 		DefinitionBuilders:    builders,
 		SkipExecutorListeners: true,
@@ -103,10 +107,10 @@ func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
 		panic(err)
 	}
 
-	return v2definition.BuilderFunc(func(_ context.Context) (v2types.Definition, error) {
+	return v2definition.Builder(func(_ context.Context) (v2types.Definition, error) {
 		return v2types.Definition{
-			Spec: v2types.DefinitionSpec{
-				ID:          v2types.DefinitionID(definitionID),
+			DefinitionSpec: v2types.DefinitionSpec{
+				ID:          definitionID,
 				Slug:        definitionID,
 				Version:     "v1",
 				DisplayName: "Google Cloud SCC",
@@ -125,7 +129,6 @@ func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
 			Operations: []v2types.OperationRegistration{
 				{
 					Name:        "health.default",
-					Kind:        v2types.OperationKindHealth,
 					Description: "Validate the test credential payload",
 					Topic:       gala.TopicName("integration." + definitionID + ".health.default"),
 					Handle: func(context.Context, *ent.Integration, v2types.CredentialSet, any, json.RawMessage) (json.RawMessage, error) {
@@ -141,10 +144,10 @@ func gcpSCCTestDefinitionBuilder(definitionID string) v2definition.Builder {
 // The definition has no credentials schema or auth flow; it only needs to be present in
 // the registry so the handler can resolve the provider by ID.
 func githubTestDefinitionBuilder(definitionID string) v2definition.Builder {
-	return v2definition.BuilderFunc(func(_ context.Context) (v2types.Definition, error) {
+	return v2definition.Builder(func(_ context.Context) (v2types.Definition, error) {
 		return v2types.Definition{
-			Spec: v2types.DefinitionSpec{
-				ID:          v2types.DefinitionID(definitionID),
+			DefinitionSpec: v2types.DefinitionSpec{
+				ID:          definitionID,
 				Slug:        definitionID,
 				Version:     "v1",
 				DisplayName: "GitHub",

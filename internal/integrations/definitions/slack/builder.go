@@ -7,8 +7,16 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	TeamInspectOperation   = types.NewOperationRef[struct{}]("team.inspect")
+	MessageSendOperation   = types.NewOperationRef[struct{}]("message.send")
+)
+
+const Slug = "slack"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -24,19 +32,15 @@ type messageOperationInput struct {
 	UnfurlLinks *bool             `json:"unfurl_links,omitempty" jsonschema:"title=Unfurl Links"`
 }
 
-// def holds operator config for the Slack integration
-type def struct {
-	cfg Config
-}
-
 // Builder returns the Slack definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0SLACK000000000000000001",
-				Slug:        "slack",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "slack",
 				DisplayName: "Slack",
@@ -54,41 +58,46 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Auth: &types.AuthRegistration{
-				Start:    d.startInstallAuth,
-				Complete: d.completeInstallAuth,
+				StartPath:    "/v1/integrations/oauth/start",
+				CallbackPath: "/v1/integrations/oauth/callback",
+				OAuth: &types.OAuthPublicConfig{
+					ClientID:    cfg.ClientID,
+					AuthURL:     slackAuthURL,
+					TokenURL:    slackTokenURL,
+					RedirectURI: cfg.RedirectURL,
+					Scopes:      slackScopes,
+				},
+				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Slack Web API client",
 					Build:       buildSlackClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:       gala.TopicName("integration.slack.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "team.inspect",
-					Kind:        types.OperationKindCollect,
+					Name:        TeamInspectOperation.Name(),
 					Description: "Collect workspace metadata via team.info for posture analysis",
-					Topic:       gala.TopicName("integration.slack.team.inspect"),
-					Client:      "api",
+					Topic:       TeamInspectOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runTeamInspectOperation,
 				},
 				{
-					Name:         "message.send",
-					Kind:         types.OperationKindSync,
+					Name:         MessageSendOperation.Name(),
 					Description:  "Send a Slack message via chat.postMessage",
-					Topic:        gala.TopicName("integration.slack.message.send"),
-					Client:       "api",
+					Topic:        MessageSendOperation.Topic(Slug),
+					ClientRef:    clientRef.ID(),
 					ConfigSchema: providerkit.SchemaFrom[messageOperationInput](),
 					Handle:       runMessageSendOperation,
 				},

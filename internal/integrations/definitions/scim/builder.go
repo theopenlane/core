@@ -6,8 +6,17 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+// DirectorySync identifies the directory synchronization operation
+type DirectorySync struct{}
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
+	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
+)
+
+const Slug = "scim_directory_sync"
 
 // operatorConfig holds operator-owned defaults that apply across all SCIM installations
 type operatorConfig struct {
@@ -32,11 +41,13 @@ type credential struct {
 
 // Builder returns the SCIM definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0SCIM000000000000000001",
-				Slug:        "scim_directory_sync",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "scim",
 				DisplayName: "SCIM Directory Sync",
@@ -54,23 +65,21 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:  providerkit.SchemaFrom[credential](),
-				Persist: types.CredentialPersistModeKeystore,
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "scim",
+					Ref:         clientRef.ID(),
 					Description: "SCIM API client",
 					Build:       buildSCIMClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "directory.sync",
-					Kind:        types.OperationKindSync,
+					Name:        DirectorySyncOperation.Name(),
 					Description: "Synchronize directory state through SCIM",
-					Topic:       gala.TopicName("integration.scim.directory.sync"),
-					Client:      "scim",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      runDirectorySyncOperation,
 				},
@@ -81,10 +90,8 @@ func Builder() definition.Builder {
 			},
 			Webhooks: []types.WebhookRegistration{
 				{
-					Name:    "directory.push",
-					Verify:  verifyWebhook,
-					Resolve: resolveWebhook,
-					Handle:  handleWebhook,
+					Name:   "directory.push",
+					Verify: verifyWebhook,
 				},
 			},
 		}, nil

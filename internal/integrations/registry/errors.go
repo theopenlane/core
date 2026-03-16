@@ -3,8 +3,6 @@ package registry
 import "errors"
 
 var (
-	// ErrRegistryNil indicates the registry receiver is nil
-	ErrRegistryNil = errors.New("integrationsv2/registry: registry is nil")
 	// ErrDefinitionIDRequired indicates a definition is missing its canonical identifier
 	ErrDefinitionIDRequired = errors.New("integrationsv2/registry: definition id required")
 	// ErrDefinitionSlugRequired indicates a definition is missing its slug
@@ -17,8 +15,8 @@ var (
 	ErrDefinitionSlugAlreadyRegistered = errors.New("integrationsv2/registry: definition slug already registered")
 	// ErrDefinitionNotFound indicates the requested definition does not exist
 	ErrDefinitionNotFound = errors.New("integrationsv2/registry: definition not found")
-	// ErrClientNameRequired indicates a client registration is missing its name
-	ErrClientNameRequired = errors.New("integrationsv2/registry: client name required")
+	// ErrClientRequired indicates a client registration is missing its identity
+	ErrClientRequired = errors.New("integrationsv2/registry: client required")
 	// ErrClientAlreadyRegistered indicates a definition already registered the given client name
 	ErrClientAlreadyRegistered = errors.New("integrationsv2/registry: client already registered")
 	// ErrClientNotFound indicates the requested client does not exist

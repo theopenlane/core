@@ -68,7 +68,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 		).
 		OnlyX(testUser.UserCtx)
 
-	credential, ok, err := suite.h.IntegrationsRuntime.CredentialStore().LoadCredential(testUser.UserCtx, stored)
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored)
 	require.NoError(t, err)
 	require.True(t, ok)
 	assert.Contains(t, string(credential.ProviderData), "projectId")
@@ -177,7 +177,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	assert.Equal(t, first.InstallationID, second.InstallationID)
 
 	stored := suite.db.Integration.GetX(testUser.UserCtx, first.InstallationID)
-	credential, ok, err := suite.h.IntegrationsRuntime.CredentialStore().LoadCredential(testUser.UserCtx, stored)
+	credential, ok, err := suite.h.IntegrationsRuntime.LoadCredential(testUser.UserCtx, stored)
 	require.NoError(t, err)
 	require.True(t, ok)
 
@@ -257,7 +257,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 }
 
 func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) v2definition.Builder {
-	return v2definition.BuilderFunc(func(_ context.Context) (v2types.Definition, error) {
+	return v2definition.Builder(func(_ context.Context) (v2types.Definition, error) {
 		healthHandler := func(context.Context, *ent.Integration, v2types.CredentialSet, any, json.RawMessage) (json.RawMessage, error) {
 			if failHealth {
 				return nil, errors.New("health failed")
@@ -267,8 +267,8 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) v2d
 		}
 
 		return v2types.Definition{
-			Spec: v2types.DefinitionSpec{
-				ID:          v2types.DefinitionID(definitionID),
+			DefinitionSpec: v2types.DefinitionSpec{
+				ID:          definitionID,
 				Slug:        slug,
 				Version:     "v1",
 				DisplayName: "Config Test",
@@ -284,7 +284,6 @@ func configTestDefinitionBuilder(definitionID, slug string, failHealth bool) v2d
 			Operations: []v2types.OperationRegistration{
 				{
 					Name:        "health.default",
-					Kind:        v2types.OperationKindHealth,
 					Description: "Validate the config test installation",
 					Topic:       gala.TopicName("integration." + slug + ".health.default"),
 					Handle:      healthHandler,

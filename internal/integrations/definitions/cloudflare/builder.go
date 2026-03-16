@@ -6,8 +6,17 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+// HealthCheck identifies the default health check operation
+type HealthCheck struct{}
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+)
+
+const Slug = "cloudflare"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -24,11 +33,13 @@ type credential struct {
 
 // Builder returns the Cloudflare definition builder
 func Builder() definition.Builder {
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0CFLARE00000000000000001",
-				Slug:        "cloudflare",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "cloudflare",
 				DisplayName: "Cloudflare",
@@ -43,24 +54,21 @@ func Builder() definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:   providerkit.SchemaFrom[credential](),
-				Persist:  types.CredentialPersistModeKeystore,
-				Validate: providerkit.ValidateAPIKeyCredential(),
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Cloudflare REST API client",
 					Build:       buildCloudflareClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify Cloudflare API token via /user/tokens/verify",
-					Topic:       gala.TopicName("integration.cloudflare.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},

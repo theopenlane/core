@@ -54,7 +54,7 @@ func githubBaseEntries(category, externalIDExpr string) []celMapEntry {
 		{key: integrationgenerated.IntegrationMappingVulnerabilityExternalURI, expr: "payload.html_url"},
 		{key: integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt, expr: "payload.updated_at"},
 		{key: integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt, expr: "payload.created_at"},
-		{key: integrationgenerated.IntegrationMappingVulnerabilityOpen, expr: `payload.state == "open"`},
+		{key: integrationgenerated.IntegrationMappingVulnerabilityOpen, expr: `payload.state == "OPEN"`},
 		{key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, expr: "payload"},
 	}
 }
@@ -78,23 +78,6 @@ var (
 			{key: integrationgenerated.IntegrationMappingVulnerabilityCveID, expr: "payload.security_advisory.cve_id"},
 		},
 	)
-
-	mapExprCodeScanning = buildMappingExpr(
-		githubAlertTypeCodeScanning,
-		`"github:" + resource + ":code_scanning:" + (payload.number != 0 ? string(payload.number) : (payload.id != 0 ? string(payload.id) : "unknown"))`,
-		[]celMapEntry{
-			{key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, expr: `payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : payload.rule.severity`},
-			{key: integrationgenerated.IntegrationMappingVulnerabilitySummary, expr: `payload.rule.description != "" ? payload.rule.description : payload.rule.name`},
-		},
-	)
-
-	mapExprSecretScanning = buildMappingExpr(
-		githubAlertTypeSecretScanning,
-		`"github:" + resource + ":secret_scanning:" + (payload.number != 0 ? string(payload.number) : "unknown")`,
-		[]celMapEntry{
-			{key: integrationgenerated.IntegrationMappingVulnerabilitySummary, expr: `payload.secret_type_display_name != "" ? payload.secret_type_display_name : payload.secret_type`},
-		},
-	)
 )
 
 // githubAppMappings returns all built-in ingest mappings for the GitHub App definition
@@ -103,14 +86,6 @@ func githubAppMappings() []types.MappingRegistration {
 		githubAlertTypeDependabot: {
 			FilterExpr: "true",
 			MapExpr:    mapExprDependabot,
-		},
-		githubAlertTypeCodeScanning: {
-			FilterExpr: "true",
-			MapExpr:    mapExprCodeScanning,
-		},
-		githubAlertTypeSecretScanning: {
-			FilterExpr: "true",
-			MapExpr:    mapExprSecretScanning,
 		},
 	}
 

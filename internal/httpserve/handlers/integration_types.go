@@ -6,6 +6,7 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -69,7 +70,7 @@ type IntegrationOperationPayload struct {
 // IntegrationConfigResponse is the response after successfully configuring a provider.
 type IntegrationConfigResponse struct {
 	rout.Reply
-	// Provider is the configured definition slug.
+	// Provider is the configured definition ID.
 	Provider string `json:"provider"`
 	// InstallationID is the installation record ID that was created or updated.
 	InstallationID string `json:"installationId"`
@@ -79,7 +80,7 @@ type IntegrationConfigResponse struct {
 // Token fields are flattened directly onto the response.
 type IntegrationTokenResponse struct {
 	rout.Reply
-	// Provider is the integration definition slug.
+	// Provider is the integration definition ID.
 	Provider string `json:"provider"`
 	// AccessToken is the OAuth access token.
 	AccessToken string `json:"accessToken"`
@@ -90,7 +91,7 @@ type IntegrationTokenResponse struct {
 // IntegrationOperationResponse is the response after executing or queuing a provider operation.
 type IntegrationOperationResponse struct {
 	rout.Reply
-	// Provider is the integration definition slug.
+	// Provider is the integration definition ID.
 	Provider string `json:"provider"`
 	// Operation is the operation identifier that was executed.
 	Operation string `json:"operation"`
@@ -132,6 +133,8 @@ type DefinitionCatalogEntry struct {
 	Visible bool `json:"visible"`
 	// HasAuth indicates whether the definition exposes an auth flow
 	HasAuth bool `json:"hasAuth"`
+	// Auth describes the install or auth flow exposed by the definition
+	Auth *types.AuthRegistration `json:"auth,omitempty"`
 	// CredentialSchema is the JSON schema for credential fields
 	CredentialSchema json.RawMessage `json:"credentialSchema,omitempty"`
 	// OperatorConfig is the JSON schema for operator config
@@ -146,12 +149,8 @@ type DefinitionCatalogEntry struct {
 type DefinitionOperationEntry struct {
 	// Name is the operation identifier
 	Name string `json:"name"`
-	// Kind is the operation kind
-	Kind string `json:"kind,omitempty"`
 	// Description is the operation description
 	Description string `json:"description,omitempty"`
-	// Client is the client used by the operation
-	Client string `json:"client,omitempty"`
 	// ConfigSchema is the JSON schema for operation config
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
 }

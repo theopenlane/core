@@ -35,7 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/schema"
+	integrationtypes "github.com/theopenlane/core/common/openapi"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )

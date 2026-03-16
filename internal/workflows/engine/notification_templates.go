@@ -3,18 +3,19 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"maps"
 	"strings"
 
 	"github.com/samber/lo"
-	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/integrations/operations"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -224,7 +225,7 @@ func (e *WorkflowEngine) dispatchNotificationIntegrations(ctx context.Context, o
 		return nil
 	}
 
-	if e.integrationDispatcher == nil {
+	if e.integrationRuntime == nil {
 		return ErrIntegrationOperationsRequired
 	}
 
@@ -242,7 +243,7 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 	if rendered == nil || len(targets) == 0 {
 		return nil
 	}
-	if e.integrationDispatcher == nil {
+	if e.integrationRuntime == nil {
 		return ErrIntegrationOperationsRequired
 	}
 
@@ -262,7 +263,7 @@ func (e *WorkflowEngine) dispatchNotificationChannelTargets(ctx context.Context,
 			return err
 		}
 
-		_, err = e.integrationDispatcher.Dispatch(ctx, operations.DispatchRequest{
+		_, err = e.integrationRuntime.Dispatch(ctx, operations.DispatchRequest{
 			InstallationID: installationIDForRecord(selection.Installation),
 			Operation:      selection.Operation.Name,
 			Config:         config,
@@ -307,7 +308,7 @@ func (e *WorkflowEngine) dispatchUserNotification(ctx context.Context, ownerID, 
 		return err
 	}
 
-	_, err = e.integrationDispatcher.Dispatch(ctx, operations.DispatchRequest{
+	_, err = e.integrationRuntime.Dispatch(ctx, operations.DispatchRequest{
 		InstallationID: installationIDForRecord(selection.Installation),
 		Operation:      selection.Operation.Name,
 		Config:         config,
@@ -322,14 +323,14 @@ type notificationExecutionTarget struct {
 	// Installation is the resolved installation record
 	Installation *generated.Integration
 	// DefinitionID is the resolved definition identifier
-	DefinitionID types.DefinitionID
+	DefinitionID string
 	// Operation is the resolved operation registration
 	Operation types.OperationRegistration
 }
 
 // resolveNotificationExecutionTarget resolves the installation and operation for notification dispatch
 func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context, ownerID string, template *generated.NotificationTemplate, channel enums.Channel) (notificationExecutionTarget, error) {
-	if e.integrationRegistry == nil {
+	if e.integrationRuntime == nil {
 		return notificationExecutionTarget{}, ErrIntegrationRegistryRequired
 	}
 
@@ -350,33 +351,40 @@ func (e *WorkflowEngine) resolveNotificationExecutionTarget(ctx context.Context,
 		return notificationExecutionTarget{}, err
 	}
 
-	def, ok := e.integrationRegistry.Definition(definitionID)
+	def, ok := e.integrationRuntime.Registry().Definition(definitionID)
 	if !ok {
 		return notificationExecutionTarget{}, ErrIntegrationRegistryRequired
 	}
 
-	operation, err := e.integrationRegistry.Operation(def.Spec.ID, operationName)
+	operation, err := e.integrationRuntime.Registry().Operation(def.ID, operationName)
 	if err != nil {
 		return notificationExecutionTarget{}, err
 	}
 
-	criteria := installationResolveCriteria{
-		OwnerID:      ownerID,
-		DefinitionID: mo.Some(def.Spec.ID),
+	installationID := ""
+	if template != nil {
+		installationID = template.IntegrationID
 	}
 
-	if template != nil && template.IntegrationID != "" {
-		criteria.InstallationID = mo.Some(template.IntegrationID)
-	}
-
-	result, err := e.integrationResolver.Resolve(workflows.AllowContext(ctx), criteria)
+	installation, err := e.integrationRuntime.ResolveInstallation(workflows.AllowContext(ctx), ownerID, installationID, def.ID)
 	if err != nil {
-		return notificationExecutionTarget{}, err
+		switch {
+		case errors.Is(err, integrationsruntime.ErrInstallationRequired):
+			return notificationExecutionTarget{}, ErrInstallationRequired
+		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
+			return notificationExecutionTarget{}, ErrInstallationIDRequired
+		case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
+			return notificationExecutionTarget{}, ErrInstallationNotFound
+		case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
+			return notificationExecutionTarget{}, ErrInstallationDefinitionMismatch
+		default:
+			return notificationExecutionTarget{}, err
+		}
 	}
 
 	return notificationExecutionTarget{
-		Installation: result.Installation,
-		DefinitionID: def.Spec.ID,
+		Installation: installation,
+		DefinitionID: def.ID,
 		Operation:    operation,
 	}, nil
 }
@@ -558,7 +566,7 @@ func readConfigString(config map[string]any, key string) string {
 }
 
 // definitionIDForNotificationChannel maps notification channels to v2 definition IDs
-func definitionIDForNotificationChannel(channel enums.Channel) (types.DefinitionID, error) {
+func definitionIDForNotificationChannel(channel enums.Channel) (string, error) {
 	switch channel {
 	case enums.ChannelSlack:
 		return "def_01K0SLACK000000000000000001", nil
@@ -570,7 +578,7 @@ func definitionIDForNotificationChannel(channel enums.Channel) (types.Definition
 }
 
 // operationNameForChannel maps a notification channel to an operation name
-func operationNameForChannel(channel enums.Channel) (types.OperationName, error) {
+func operationNameForChannel(channel enums.Channel) (string, error) {
 	switch channel {
 	case enums.ChannelSlack, enums.ChannelTeams:
 		return "message.send", nil

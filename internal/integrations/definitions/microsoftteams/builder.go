@@ -6,8 +6,25 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+// HealthCheck identifies the default health check operation
+type HealthCheck struct{}
+
+// TeamsSample identifies the teams sample collection operation
+type TeamsSample struct{}
+
+// MessageSend identifies the Teams message send operation
+type MessageSend struct{}
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
+	TeamsSampleOperation   = types.NewOperationRef[TeamsSample]("teams.sample")
+	MessageSendOperation   = types.NewOperationRef[MessageSend]("message.send")
+)
+
+const Slug = "microsoft_teams"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -24,19 +41,15 @@ type messageOperationInput struct {
 	Subject    string `json:"subject,omitempty"     jsonschema:"title=Subject"`
 }
 
-// def holds operator config for the Microsoft Teams integration
-type def struct {
-	cfg Config
-}
-
 // Builder returns the Microsoft Teams definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0MSTEAMS00000000000000001",
-				Slug:        "microsoft_teams",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "microsoft",
 				DisplayName: "Microsoft Teams",
@@ -54,41 +67,46 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Auth: &types.AuthRegistration{
-				Start:    d.startInstallAuth,
-				Complete: d.completeInstallAuth,
+				StartPath:    "/v1/integrations/oauth/start",
+				CallbackPath: "/v1/integrations/oauth/callback",
+				OAuth: &types.OAuthPublicConfig{
+					ClientID:    cfg.ClientID,
+					AuthURL:     teamsAuthURL,
+					TokenURL:    teamsTokenURL,
+					RedirectURI: cfg.RedirectURL,
+					Scopes:      teamsScopes,
+				},
+				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Microsoft Graph API client",
 					Build:       buildGraphClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Graph /me to verify Teams access",
-					Topic:       gala.TopicName("integration.microsoft_teams.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "teams.sample",
-					Kind:        types.OperationKindCollect,
+					Name:        TeamsSampleOperation.Name(),
 					Description: "Collect a sample of joined teams for the user context",
-					Topic:       gala.TopicName("integration.microsoft_teams.teams.sample"),
-					Client:      "api",
+					Topic:       TeamsSampleOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runTeamsSampleOperation,
 				},
 				{
-					Name:         "message.send",
-					Kind:         types.OperationKindSync,
+					Name:         MessageSendOperation.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        gala.TopicName("integration.microsoft_teams.message.send"),
-					Client:       "api",
+					Topic:        MessageSendOperation.Topic(Slug),
+					ClientRef:    clientRef.ID(),
 					ConfigSchema: providerkit.SchemaFrom[messageOperationInput](),
 					Handle:       runMessageSendOperation,
 				},

@@ -202,7 +202,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
 
-	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{v2definition.BuilderFunc(buildTestOAuthDefinition)}, "https://console.openlane.io/integrations")
+	restore := suite.withDefinitionRuntime(t, []v2definition.Builder{v2definition.Builder(buildTestOAuthDefinition)}, "https://console.openlane.io/integrations")
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)

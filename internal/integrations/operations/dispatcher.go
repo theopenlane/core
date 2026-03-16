@@ -13,42 +13,8 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// Dispatcher validates and enqueues operation execution requests
-type Dispatcher struct {
-	registry registry.DefinitionRegistry
-	db       *ent.Client
-	runs     *RunStore
-	gala     *gala.Gala
-}
-
-// NewDispatcher constructs the operation dispatcher
-func NewDispatcher(reg registry.DefinitionRegistry, db *ent.Client, runs *RunStore, runtime *gala.Gala) (*Dispatcher, error) {
-	if reg == nil {
-		return nil, ErrRegistryRequired
-	}
-
-	if db == nil {
-		return nil, ErrDBClientRequired
-	}
-
-	if runs == nil {
-		return nil, ErrRunStoreRequired
-	}
-
-	if runtime == nil {
-		return nil, ErrGalaRequired
-	}
-
-	return &Dispatcher{
-		registry: reg,
-		db:       db,
-		runs:     runs,
-		gala:     runtime,
-	}, nil
-}
-
-// Dispatch records the run and emits the execution event
-func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (DispatchResult, error) {
+// Dispatch validates and enqueues one operation execution request
+func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
 	if req.InstallationID == "" {
 		return DispatchResult{}, ErrInstallationIDRequired
 	}
@@ -57,12 +23,12 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		return DispatchResult{}, ErrOperationNameRequired
 	}
 
-	installationRecord, err := d.db.Integration.Get(ctx, req.InstallationID)
+	installationRecord, err := db.Integration.Get(ctx, req.InstallationID)
 	if err != nil {
 		return DispatchResult{}, err
 	}
 
-	operation, err := d.registry.OperationFromString(installationRecord.DefinitionID, string(req.Operation))
+	operation, err := reg.Operation(installationRecord.DefinitionID, req.Operation)
 	if err != nil {
 		return DispatchResult{}, err
 	}
@@ -76,7 +42,7 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		runType = enums.IntegrationRunTypeManual
 	}
 
-	runRecord, err := d.runs.CreatePending(ctx, installationRecord, DispatchRequest{
+	runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
 		InstallationID: req.InstallationID,
 		Operation:      req.Operation,
 		Config:         jsonx.CloneRawMessage(req.Config),
@@ -88,11 +54,11 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		return DispatchResult{}, err
 	}
 
-	receipt := d.gala.EmitWithHeaders(ctx, operation.Topic, Envelope{
+	receipt := runtime.EmitWithHeaders(ctx, operation.Topic, Envelope{
 		RunID:          runRecord.ID,
 		InstallationID: installationRecord.ID,
 		DefinitionID:   installationRecord.DefinitionID,
-		Operation:      string(req.Operation),
+		Operation:      req.Operation,
 		Config:         jsonx.CloneRawMessage(req.Config),
 		Force:          req.Force,
 		ClientForce:    req.ClientForce,
@@ -102,7 +68,7 @@ func (d *Dispatcher) Dispatch(ctx context.Context, req DispatchRequest) (Dispatc
 		Properties: map[string]string{
 			"installation_id": installationRecord.ID,
 			"definition_id":   installationRecord.DefinitionID,
-			"operation":       string(req.Operation),
+			"operation":       req.Operation,
 		},
 	})
 	if receipt.Err != nil {
@@ -123,10 +89,8 @@ func validateConfig(schema json.RawMessage, value json.RawMessage) error {
 	}
 
 	var document any = map[string]any{}
-	if len(value) > 0 {
-		if err := json.Unmarshal(value, &document); err != nil {
-			return err
-		}
+	if err := jsonx.UnmarshalIfPresent(value, &document); err != nil {
+		return err
 	}
 
 	result, err := jsonx.ValidateSchema(schema, document)

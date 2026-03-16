@@ -6,8 +6,15 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID           = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
+	HealthDefaultOperation = types.NewOperationRef[struct{}]("health.default")
+	DirectorySyncOperation = types.NewOperationRef[struct{}]("directory.sync")
+)
+
+const Slug = "google_workspace"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -19,19 +26,15 @@ type userInput struct {
 	EnableGroupSync    bool   `json:"enableGroupSync,omitempty"        jsonschema:"title=Sync Groups"`
 }
 
-// def holds operator config for the Google Workspace integration
-type def struct {
-	cfg Config
-}
-
 // Builder returns the Google Workspace definition builder with the supplied operator config applied
 func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0GWKSP000000000000000001",
-				Slug:        "google_workspace",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "google",
 				DisplayName: "Google Workspace",
@@ -49,32 +52,39 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Auth: &types.AuthRegistration{
-				Start:    d.startInstallAuth,
-				Complete: d.completeInstallAuth,
+				StartPath:    "/v1/integrations/oauth/start",
+				CallbackPath: "/v1/integrations/oauth/callback",
+				OAuth: &types.OAuthPublicConfig{
+					ClientID:    cfg.ClientID,
+					AuthURL:     googleAuthURL,
+					TokenURL:    googleTokenURL,
+					RedirectURI: cfg.RedirectURL,
+					Scopes:      googleWorkspaceScopes,
+					AuthParams:  googleWorkspaceAuthParams,
+				},
+				ClientSecret: cfg.ClientSecret,
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "api",
+					Ref:         clientRef.ID(),
 					Description: "Google Workspace Admin SDK client",
 					Build:       buildWorkspaceClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Call Google Admin SDK users.list to verify the workspace token",
-					Topic:       gala.TopicName("integration.google_workspace.health.default"),
-					Client:      "api",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "directory.sync",
-					Kind:        types.OperationKindSync,
+					Name:        DirectorySyncOperation.Name(),
 					Description: "Collect Google Workspace directory users and emit directory account envelopes",
-					Topic:       gala.TopicName("integration.google_workspace.directory.sync"),
-					Client:      "api",
+					Topic:       DirectorySyncOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
 					Handle:      runDirectorySyncOperation,
 				},

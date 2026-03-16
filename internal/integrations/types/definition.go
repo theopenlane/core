@@ -1,17 +1,11 @@
 package types
 
-import (
-	"context"
-	"encoding/json"
-)
-
-// DefinitionID is the immutable opaque identifier for one installable definition
-type DefinitionID string
+import "encoding/json"
 
 // DefinitionSpec describes the catalog-visible metadata for one definition
 type DefinitionSpec struct {
 	// ID is the canonical opaque identifier for the definition
-	ID DefinitionID `json:"id"`
+	ID string `json:"id"`
 	// Slug is the human-readable alias for the definition
 	Slug string `json:"slug"`
 	// Version is the manifest or implementation version for the definition
@@ -40,8 +34,8 @@ type DefinitionSpec struct {
 
 // Definition is the installable and executable integration unit
 type Definition struct {
-	// Spec is the base catalog metadata for the definition
-	Spec DefinitionSpec `json:"spec"`
+	// DefinitionSpec is the base catalog metadata for the definition
+	DefinitionSpec `json:"spec"`
 	// OperatorConfig describes operator-owned configuration for the definition
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition
@@ -60,34 +54,30 @@ type Definition struct {
 	Webhooks []WebhookRegistration `json:"webhooks,omitempty"`
 }
 
-// OperatorConfigFunc normalizes or validates operator-owned configuration
-type OperatorConfigFunc func(ctx context.Context, value json.RawMessage) (json.RawMessage, error)
-
-// UserInputFunc normalizes or validates installation-scoped user input
-type UserInputFunc func(ctx context.Context, value json.RawMessage) (json.RawMessage, error)
-
 // OperatorConfigRegistration describes operator-owned configuration for a definition
 type OperatorConfigRegistration struct {
 	// Schema is the JSON schema used to collect operator-owned configuration
 	Schema json.RawMessage `json:"schema,omitempty"`
-	// Normalize canonicalizes raw operator-owned configuration
-	Normalize OperatorConfigFunc `json:"-"`
-	// Validate verifies that operator-owned configuration is usable
-	Validate OperatorConfigFunc `json:"-"`
 }
 
 // UserInputRegistration describes installation-scoped user input
 type UserInputRegistration struct {
 	// Schema is the JSON schema used to collect installation-scoped user input
 	Schema json.RawMessage `json:"schema,omitempty"`
-	// Normalize canonicalizes raw user input
-	Normalize UserInputFunc `json:"-"`
-	// Validate verifies that user input is usable
-	Validate UserInputFunc `json:"-"`
 }
 
 // AuthRegistration describes how one definition starts and completes auth
 type AuthRegistration struct {
+	// StartPath is the API path used to initiate the auth or install flow
+	StartPath string `json:"startPath,omitempty"`
+	// CallbackPath is the API path used to complete the auth or install flow
+	CallbackPath string `json:"callbackPath,omitempty"`
+	// OAuth holds the public OAuth configuration when the definition uses OAuth-style auth
+	OAuth *OAuthPublicConfig `json:"oauth,omitempty"`
+	// ClientSecret holds the operator-owned client secret for generic OAuth execution
+	ClientSecret string `json:"-"`
+	// DiscoveryURL holds the OIDC discovery issuer URL for generic OAuth execution
+	DiscoveryURL string `json:"-"`
 	// Start initializes an auth flow
 	Start AuthStartFunc `json:"-"`
 	// Complete finalizes an auth flow

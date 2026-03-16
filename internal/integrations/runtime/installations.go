@@ -3,41 +3,61 @@ package runtime
 import (
 	"context"
 
+	"github.com/samber/do/v2"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/iam/auth"
 )
 
-type entInstallationResolver struct {
-	db *ent.Client
-}
-
-func (r entInstallationResolver) ResolveInstallation(ctx context.Context, installationID string) (keymaker.InstallationRecord, error) {
-	if installationID == "" {
-		return keymaker.InstallationRecord{}, keymaker.ErrInstallationIDRequired
-	}
-
-	query := r.db.Integration.Query().Where(integration.IDEQ(installationID))
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if ok && caller != nil && caller.OrganizationID != "" {
-		query = query.Where(integration.OwnerIDEQ(caller.OrganizationID))
-	}
-
-	record, err := query.Only(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return keymaker.InstallationRecord{}, keymaker.ErrInstallationNotFound
+// ResolveInstallation resolves one installation by explicit ID or by owner plus definition.
+func (r *Runtime) ResolveInstallation(ctx context.Context, ownerID, installationID string, definitionID string) (*ent.Integration, error) {
+	db := do.MustInvoke[*ent.Client](r.injector)
+	if installationID != "" {
+		query := db.Integration.Query().Where(integration.IDEQ(installationID))
+		if ownerID != "" {
+			query = query.Where(integration.OwnerIDEQ(ownerID))
 		}
 
-		return keymaker.InstallationRecord{}, err
+		record, err := query.Only(ctx)
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil, ErrInstallationNotFound
+			}
+
+			return nil, err
+		}
+
+		if definitionID != "" && record.DefinitionID != string(definitionID) {
+			return nil, ErrInstallationDefinitionMismatch
+		}
+
+		return record, nil
 	}
 
-	return keymaker.InstallationRecord{
-		ID:           record.ID,
-		OwnerID:      record.OwnerID,
-		DefinitionID: types.DefinitionID(record.DefinitionID),
-	}, nil
+	if definitionID == "" {
+		return nil, ErrInstallationRequired
+	}
+
+	if ownerID == "" {
+		return nil, ErrOwnerIDRequired
+	}
+
+	record, err := db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(ownerID),
+			integration.DefinitionIDEQ(string(definitionID)),
+		).
+		Only(ctx)
+	if err != nil {
+		if ent.IsNotSingular(err) {
+			return nil, ErrInstallationIDRequired
+		}
+
+		if ent.IsNotFound(err) {
+			return nil, ErrInstallationNotFound
+		}
+
+		return nil, err
+	}
+
+	return record, nil
 }

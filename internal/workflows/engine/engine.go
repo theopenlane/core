@@ -16,8 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
@@ -30,12 +29,8 @@ type WorkflowEngine struct {
 	client *generated.Client
 	// gala is the runtime used for workflow and integration event dispatch.
 	gala *gala.Gala
-	// integrationRegistry resolves definition operation descriptors (optional)
-	integrationRegistry registry.DefinitionRegistry
-	// integrationDispatcher enqueues integration operation execution requests
-	integrationDispatcher *operations.Dispatcher
-	// integrationExecutor executes queued integration operations
-	integrationExecutor *operations.Executor
+	// integrationRuntime provides integration definition resolution and execution.
+	integrationRuntime *integrationsruntime.Runtime
 	// integrationListenersRegistered tracks whether integration listeners are registered.
 	integrationListenersRegistered bool
 	// observer is the observability observer for metrics and tracing
@@ -50,8 +45,6 @@ type WorkflowEngine struct {
 	proposalManager *ProposalManager
 	// scopeEvaluator evaluates CEL scope conditions for integration actions; initialized by SetIntegrationDeps
 	scopeEvaluator *IntegrationScopeEvaluator
-	// integrationResolver resolves installation records; initialized by SetIntegrationDeps
-	integrationResolver *installationResolver
 }
 
 // NewWorkflowEngine creates a new workflow engine using the provided configuration options

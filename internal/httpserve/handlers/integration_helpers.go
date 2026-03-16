@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -73,6 +74,12 @@ func integrationHTTPStatus(err error) int {
 	case errors.Is(err, ErrValidateToken):
 		return http.StatusBadRequest
 	case errors.Is(err, keystore.ErrCredentialNotFound):
+		return http.StatusBadRequest
+	case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
+		return http.StatusNotFound
+	case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
+		return http.StatusBadRequest
+	case errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch):
 		return http.StatusBadRequest
 	case errors.Is(err, engine.ErrInstallationNotFound):
 		return http.StatusNotFound

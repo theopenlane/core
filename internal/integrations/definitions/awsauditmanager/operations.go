@@ -24,9 +24,9 @@ const (
 
 // assessmentsConfig holds per-invocation parameters for the assessments.list operation
 type assessmentsConfig struct {
-	// Status filters assessments by enrollment status. Valid values: ACTIVE, INACTIVE. Empty returns all.
+	// Status filters assessments by enrollment status. Valid values: ACTIVE, INACTIVE. Empty returns all
 	Status string `json:"status,omitempty" jsonschema:"title=Status Filter,description=Filter assessments by status (ACTIVE INACTIVE). Empty returns all."`
-	// MaxAssessments caps the total number of assessments returned; 0 means no limit.
+	// MaxAssessments caps the total number of assessments returned; 0 means no limit
 	MaxAssessments int `json:"maxAssessments,omitempty" jsonschema:"title=Max Assessments,description=Maximum number of assessments to return. 0 means no limit."`
 }
 
@@ -87,10 +87,10 @@ func buildAuditManagerClient(ctx context.Context, req types.ClientBuildRequest) 
 	return auditmanager.NewFromConfig(cfg), nil
 }
 
-// runHealthOperation validates Audit Manager access via GetAccountStatus.
+// runHealthOperation validates Audit Manager access via GetAccountStatus
 // This confirms both that the STS credentials work and that Audit Manager is
 // enrolled for the account. An INACTIVE status is reported as a non-error since
-// it indicates successful access to the service.
+// it indicates successful access to the service
 func runHealthOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, _ json.RawMessage) (json.RawMessage, error) {
 	amClient, ok := client.(*auditmanager.Client)
 	if !ok {
@@ -121,9 +121,9 @@ func runHealthOperation(ctx context.Context, _ *generated.Integration, credentia
 }
 
 // runAssessmentsListOperation paginates through all Audit Manager assessments and returns
-// their compliance type, status, and evidence counts for compliance posture reporting.
+// their compliance type, status, and evidence counts for compliance posture reporting
 // The v1 implementation fetched exactly one assessment and returned only connectivity metadata;
-// this implementation performs full collection with optional status filtering.
+// this implementation performs full collection with optional status filtering
 func runAssessmentsListOperation(ctx context.Context, _ *generated.Integration, credential types.CredentialSet, client any, config json.RawMessage) (json.RawMessage, error) {
 	amClient, ok := client.(*auditmanager.Client)
 	if !ok {

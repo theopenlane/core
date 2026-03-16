@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 
 	echo "github.com/theopenlane/echox"
 
@@ -9,7 +10,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -35,12 +36,12 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	def, ok := h.IntegrationsRuntime.Registry().Definition(types.DefinitionID(payload.Provider))
+	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.Provider)
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if !def.Spec.Active {
+	if !def.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
 
@@ -70,18 +71,13 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	switch {
 	case payload.InstallationID != "":
 		// Caller is updating credentials on an existing installation.
-		rec, err := h.DBClient.Integration.Query().
-			Where(
-				integration.OwnerIDEQ(caller.OrganizationID),
-				integration.IDEQ(payload.InstallationID),
-			).
-			Only(requestCtx)
+		rec, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, payload.InstallationID, def.ID)
 		if err != nil {
+			if errors.Is(err, integrationsruntime.ErrInstallationDefinitionMismatch) {
+				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+			}
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", payload.InstallationID).Msg("installation not found")
 			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
-		}
-		if rec.DefinitionID != string(def.Spec.ID) {
-			return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 		}
 
 		installationID = rec.ID
@@ -89,22 +85,22 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	default:
 		// No installation ID provided — create a new installation.
-		name := def.Spec.DisplayName
+		name := def.DisplayName
 		if name == "" {
-			name = def.Spec.Slug
+			name = def.Slug
 		}
 
 		rec, err := h.DBClient.Integration.Create().
 			SetOwnerID(caller.OrganizationID).
 			SetName(name).
-			SetDefinitionID(string(def.Spec.ID)).
-			SetDefinitionVersion(def.Spec.Version).
-			SetDefinitionSlug(def.Spec.Slug).
-			SetFamily(def.Spec.Family).
+			SetDefinitionID(def.ID).
+			SetDefinitionVersion(def.Version).
+			SetDefinitionSlug(def.Slug).
+			SetFamily(def.Family).
 			SetStatus(enums.IntegrationStatusPending).
 			Save(requestCtx)
 		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", string(def.Spec.ID)).Msg("failed to create installation")
+			logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("failed to create installation")
 			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 		}
 
@@ -121,8 +117,13 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	credential := types.CredentialSet{ProviderData: providerData}
+	healthOperation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, "health.default")
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("health operation not registered")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
 
-	if _, err := h.IntegrationsRuntime.Executor().ExecuteOperation(requestCtx, installationRec, "health.default", credential, nil); err != nil {
+	if _, err := h.IntegrationsRuntime.ExecuteOperation(requestCtx, installationRec, healthOperation, credential, nil); err != nil {
 		if created {
 			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
 		}
@@ -142,7 +143,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		}
 	}
 
-	if err := h.IntegrationsRuntime.CredentialStore().SaveCredential(requestCtx, installationRec, credential); err != nil {
+	if err := h.IntegrationsRuntime.SaveCredential(requestCtx, installationRec, credential); err != nil {
 		if created {
 			_ = h.DBClient.Integration.DeleteOneID(installationRec.ID).Exec(requestCtx)
 		} else if userInputProvided {
@@ -168,7 +169,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 
 	return h.Success(ctx, IntegrationConfigResponse{
 		Reply:          rout.Reply{Success: true},
-		Provider:       def.Spec.Slug,
+		Provider:       def.Slug,
 		InstallationID: installationID,
 	})
 }

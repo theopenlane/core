@@ -48,9 +48,9 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 			w.WriteHeader(http.StatusCreated)
 			_, _ = w.Write([]byte(`{"token":"ghs_test_installation_token","expires_at":"2030-01-01T00:00:00Z"}`))
-		case req.Method == http.MethodGet && path == "/installation/repositories":
+		case req.Method == http.MethodPost && req.URL.Path == "/api/graphql":
 			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-			_, _ = w.Write([]byte(`{"total_count":1,"repositories":[{"id":1,"name":"demo","full_name":"acme/demo","private":false}]}`))
+			_, _ = w.Write([]byte(`{"data":{"viewer":{"repositories":{"totalCount":1,"nodes":[{"nameWithOwner":"acme/demo","isPrivate":false,"updatedAt":"2030-01-01T00:00:00Z","url":"https://github.example/acme/demo"}],"pageInfo":{"endCursor":"","hasNextPage":false}}}}}`))
 		default:
 			http.NotFound(w, req)
 		}
@@ -127,10 +127,10 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 			w.WriteHeader(http.StatusCreated)
 			_, _ = w.Write([]byte(`{"token":"ghs_test_installation_token","expires_at":"2030-01-01T00:00:00Z"}`))
-		case req.Method == http.MethodGet && path == "/installation/repositories":
+		case req.Method == http.MethodPost && req.URL.Path == "/api/graphql":
 			repoLookupCalls.Add(1)
 			w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-			_, _ = w.Write([]byte(`{"total_count":1,"repositories":[{"id":1,"name":"demo","full_name":"acme/demo","private":false}]}`))
+			_, _ = w.Write([]byte(`{"data":{"viewer":{"repositories":{"totalCount":1,"nodes":[{"nameWithOwner":"acme/demo","isPrivate":false,"updatedAt":"2030-01-01T00:00:00Z","url":"https://github.example/acme/demo"}],"pageInfo":{"endCursor":"","hasNextPage":false}}}}}`))
 		default:
 			http.NotFound(w, req)
 		}
@@ -187,12 +187,12 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	integrationRecord, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(user.OrganizationID),
-			integration.DefinitionIDEQ(githubapp.DefinitionID),
+			integration.DefinitionIDEQ(githubAppDefinitionID),
 		).
 		Only(user.UserCtx)
 	require.NoError(t, err)
 
-	providerState, err := jsonx.ToMap(integrationRecord.ProviderState.ProviderData(githubapp.DefinitionSlug))
+	providerState, err := jsonx.ToMap(integrationRecord.ProviderState.ProviderData(githubAppSlug))
 	require.NoError(t, err)
 	require.Equal(t, "123", providerState["appId"])
 	require.Equal(t, "12345678", providerState["installationId"])

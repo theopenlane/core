@@ -13,7 +13,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
@@ -26,57 +30,9 @@ const (
 	testTeamsMessageTopic = gala.TopicName("test.microsoft_teams.message.send")
 )
 
-// notificationV2RegistryStub implements registry.DefinitionRegistry for notification tests
-type notificationV2RegistryStub struct{}
-
-func (notificationV2RegistryStub) Definition(id types.DefinitionID) (types.Definition, bool) {
-	switch string(id) {
-	case testSlackDefinitionID:
-		return notificationTestSlackDefinition(), true
-	case testTeamsDefinitionID:
-		return notificationTestTeamsDefinition(), true
-	default:
-		return types.Definition{}, false
-	}
-}
-
-func (notificationV2RegistryStub) Client(types.DefinitionID, types.ClientName) (types.ClientRegistration, error) {
-	return types.ClientRegistration{}, nil
-}
-
-func (notificationV2RegistryStub) Operation(id types.DefinitionID, name types.OperationName) (types.OperationRegistration, error) {
-	def, ok := notificationV2RegistryStub{}.Definition(id)
-	if !ok {
-		return types.OperationRegistration{}, engine.ErrIntegrationOperationCriteriaRequired
-	}
-	for _, op := range def.Operations {
-		if op.Name == name {
-			return op, nil
-		}
-	}
-	return types.OperationRegistration{}, engine.ErrIntegrationOperationCriteriaRequired
-}
-
-func (notificationV2RegistryStub) OperationFromString(definitionID, name string) (types.OperationRegistration, error) {
-	return notificationV2RegistryStub{}.Operation(types.DefinitionID(definitionID), types.OperationName(name))
-}
-
-func (notificationV2RegistryStub) Catalog() []types.DefinitionSpec {
-	return []types.DefinitionSpec{
-		notificationTestSlackDefinition().Spec,
-		notificationTestTeamsDefinition().Spec,
-	}
-}
-
-func (notificationV2RegistryStub) Listeners() []types.OperationRegistration {
-	slack := notificationTestSlackDefinition()
-	teams := notificationTestTeamsDefinition()
-	return []types.OperationRegistration{slack.Operations[0], teams.Operations[0]}
-}
-
 func notificationTestSlackDefinition() types.Definition {
 	return types.Definition{
-		Spec: types.DefinitionSpec{
+		DefinitionSpec: types.DefinitionSpec{
 			ID:   testSlackDefinitionID,
 			Slug: "slack",
 		},
@@ -91,7 +47,7 @@ func notificationTestSlackDefinition() types.Definition {
 
 func notificationTestTeamsDefinition() types.Definition {
 	return types.Definition{
-		Spec: types.DefinitionSpec{
+		DefinitionSpec: types.DefinitionSpec{
 			ID:   testTeamsDefinitionID,
 			Slug: "microsoft_teams",
 		},
@@ -122,24 +78,37 @@ func registerNotificationTestTopics(registry *gala.Registry) {
 	})
 }
 
+func (s *WorkflowEngineTestSuite) newNotificationTestRuntime() *integrationsruntime.Runtime {
+	reg := registry.New()
+	s.Require().NoError(reg.Register(notificationTestSlackDefinition()))
+	s.Require().NoError(reg.Register(notificationTestTeamsDefinition()))
+
+	credStore, err := keystore.NewStore(s.client)
+	s.Require().NoError(err)
+
+	rt, err := integrationsruntime.New(integrationsruntime.Config{
+		DB:                    s.client,
+		Gala:                  s.galaRuntime,
+		Registry:              reg,
+		Keystore:              credStore,
+		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
+		SkipExecutorListeners: true,
+	})
+	s.Require().NoError(err)
+
+	return rt
+}
+
 // TestExecuteNotificationWithTemplateIntegration verifies template based integration dispatch
 func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration() {
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
-
-	runStore, err := operations.NewRunStore(s.client)
-	s.Require().NoError(err)
+	rt := s.newNotificationTestRuntime()
 
 	registerNotificationTestTopics(s.galaRuntime.Registry())
 
-	dispatcher, err := operations.NewDispatcher(notificationV2RegistryStub{}, s.client, runStore, s.galaRuntime)
-	s.Require().NoError(err)
-
-	err = wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
-		Registry:   notificationV2RegistryStub{},
-		Dispatcher: dispatcher,
-	})
+	err := wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt})
 	s.Require().NoError(err)
 
 	seedCtx := s.SeedContext(userID, orgID)
@@ -237,19 +206,11 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
-
-	runStore, err := operations.NewRunStore(s.client)
-	s.Require().NoError(err)
+	rt := s.newNotificationTestRuntime()
 
 	registerNotificationTestTopics(s.galaRuntime.Registry())
 
-	dispatcher, err := operations.NewDispatcher(notificationV2RegistryStub{}, s.client, runStore, s.galaRuntime)
-	s.Require().NoError(err)
-
-	err = wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
-		Registry:   notificationV2RegistryStub{},
-		Dispatcher: dispatcher,
-	})
+	err := wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt})
 	s.Require().NoError(err)
 
 	seedCtx := s.SeedContext(userID, orgID)

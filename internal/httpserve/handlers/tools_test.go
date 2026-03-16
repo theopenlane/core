@@ -402,9 +402,9 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 	rt, err := IntegrationsRuntime.New(IntegrationsRuntime.Config{
 		DB:                    suite.db,
 		Gala:                  galaInstance,
-		CredentialStore:       credStore,
+		Keystore:              credStore,
 		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
-		DefinitionBuilders:    []v2definition.Builder{v2definition.BuilderFunc(buildTestOAuthDefinition)},
+		DefinitionBuilders:    []v2definition.Builder{v2definition.Builder(buildTestOAuthDefinition)},
 		SkipExecutorListeners: true,
 	})
 	assert.NoError(suite.T(), err)
@@ -414,7 +414,7 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 
 func buildTestOAuthDefinition(context.Context) (v2types.Definition, error) {
 	return v2types.Definition{
-		Spec: v2types.DefinitionSpec{
+		DefinitionSpec: v2types.DefinitionSpec{
 			ID:          testOAuthDefinitionID,
 			Slug:        "test-oauth",
 			Version:     "v1",

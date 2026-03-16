@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/schema"
+	integrationtypes "github.com/theopenlane/core/common/openapi"
 
 	"github.com/theopenlane/entx/history"
 )

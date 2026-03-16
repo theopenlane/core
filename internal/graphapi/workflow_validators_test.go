@@ -403,8 +403,8 @@ func TestValidateIntegrationActionParams(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name:    "valid operation kind criteria",
-			params:  json.RawMessage(`{"provider":"slack","operation_kind":"notify"}`),
+			name:    "valid explicit operation name for provider",
+			params:  json.RawMessage(`{"provider":"slack","operation_name":"health.default"}`),
 			wantErr: nil,
 		},
 		{

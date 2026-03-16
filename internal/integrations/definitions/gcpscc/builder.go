@@ -3,11 +3,20 @@ package gcpscc
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 )
+
+var (
+	DefinitionID             = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
+	HealthDefaultOperation   = types.NewOperationRef[struct{}]("health.default")
+	FindingsCollectOperation = types.NewOperationRef[struct{}]("findings.collect")
+	SettingsScanOperation    = types.NewOperationRef[struct{}]("settings.scan")
+)
+
+const Slug = "gcp_scc"
 
 // userInput holds installation-specific configuration collected from the user
 type userInput struct {
@@ -31,24 +40,15 @@ type credential struct {
 	FindingFilter            string   `json:"findingFilter,omitempty"            jsonschema:"title=Findings Filter"`
 }
 
-// def holds operator config for the GCP Security Command Center integration
-type def struct {
-	cfg Config
-}
-
-// buildClient builds the GCP SCC client for one installation
-func (d *def) buildClient(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	return buildSCCClient(ctx, req)
-}
-
 // Builder returns the GCP SCC definition builder with the supplied operator config applied
-func Builder(cfg Config) definition.Builder {
-	d := &def{cfg: cfg}
-	return definition.BuilderFunc(func(_ context.Context) (types.Definition, error) {
+func Builder(_ Config) definition.Builder {
+	return definition.Builder(func(_ context.Context) (types.Definition, error) {
+		clientRef := types.NewClientRef[any]()
+
 		return types.Definition{
-			Spec: types.DefinitionSpec{
-				ID:          "def_01K0GCPSCC00000000000000001",
-				Slug:        "gcp_scc",
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          DefinitionID.ID(),
+				Slug:        Slug,
 				Version:     "v1",
 				Family:      "gcp",
 				DisplayName: "GCP Security Command Center",
@@ -66,45 +66,49 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[userInput](),
 			},
 			Credentials: &types.CredentialRegistration{
-				Schema:  providerkit.SchemaFrom[credential](),
-				Persist: types.CredentialPersistModeKeystore,
+				Schema: providerkit.SchemaFrom[credential](),
 			},
 			Clients: []types.ClientRegistration{
 				{
-					Name:        "securitycenter.v2",
+					Ref:         clientRef.ID(),
 					Description: "Google Cloud Security Command Center v2 client",
-					Build:       d.buildClient,
+					Build:       buildSCCClient,
 				},
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:        "health.default",
-					Kind:        types.OperationKindHealth,
+					Name:        HealthDefaultOperation.Name(),
 					Description: "Verify GCP SCC access by listing findings with a minimal query",
-					Topic:       gala.TopicName("integration.gcp_scc.health.default"),
-					Client:      "securitycenter.v2",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runHealthOperation,
 				},
 				{
-					Name:        "findings.collect",
-					Kind:        types.OperationKindCollect,
-					Description: "Collect GCP Security Command Center findings",
-					Topic:       gala.TopicName("integration.gcp_scc.findings.collect"),
-					Client:      "securitycenter.v2",
-					Policy:      types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
-					Handle:      runFindingsCollectOperation,
+					Name:         FindingsCollectOperation.Name(),
+					Description:  "Collect GCP Security Command Center findings for vulnerability ingestion",
+					Topic:        FindingsCollectOperation.Topic(Slug),
+					ClientRef:    clientRef.ID(),
+					ConfigSchema: providerkit.SchemaFrom[sccFindingsConfig](),
+					Policy:       types.ExecutionPolicy{MaxRetries: 3, Idempotent: true},
+					Ingest: []types.IngestContract{
+						{
+							Schema:         integrationgenerated.IntegrationMappingSchemaVulnerability,
+							EnsurePayloads: true,
+						},
+					},
+					Handle: runFindingsCollectOperation,
 				},
 				{
-					Name:        "settings.scan",
-					Kind:        types.OperationKindCollect,
+					Name:        SettingsScanOperation.Name(),
 					Description: "Scan GCP Security Command Center source and notification settings",
-					Topic:       gala.TopicName("integration.gcp_scc.settings.scan"),
-					Client:      "securitycenter.v2",
+					Topic:       SettingsScanOperation.Topic(Slug),
+					ClientRef:   clientRef.ID(),
 					Policy:      types.ExecutionPolicy{Idempotent: true},
 					Handle:      runSettingsScanOperation,
 				},
 			},
+			Mappings: gcpsccMappings(),
 		}, nil
 	})
 }

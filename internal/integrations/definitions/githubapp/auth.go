@@ -6,7 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"encoding/pem"
-	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -24,34 +24,69 @@ const (
 	jwtIssuedAtBackdateSeconds = 30 * time.Second
 )
 
-// installationCallbackState carries the installation ID received from the GitHub callback
-type installationCallbackState struct {
-	// InstallationID is the GitHub App installation identifier
+// Auth executes the GitHub App install flow
+type Auth struct {
+	// Config holds the operator-supplied GitHub App settings
+	Config Config
+}
+
+// InstallStartInput carries runtime state used to construct the install URL
+type InstallStartInput struct {
+	// State carries caller-provided state through the install redirect
+	State string `json:"state"`
+}
+
+// InstallationCallbackState carries the installation ID received from the GitHub callback
+type InstallationCallbackState struct {
+	// InstallationID is the GitHub installation selected during the callback flow
 	InstallationID string `json:"installationId"`
 }
 
-// appProviderData is the provider-specific data stored in the credential ProviderData field
-type appProviderData struct {
-	// AppID is the GitHub App identifier
+// ProviderData is the provider-specific data stored in the credential ProviderData field
+type ProviderData struct {
+	// AppID is the GitHub App identifier used to mint installation tokens
 	AppID string `json:"appId"`
-	// InstallationID is the GitHub App installation identifier
+
+	// InstallationID is the installation selected for this credential
 	InstallationID string `json:"installationId"`
 }
 
-// startInstallAuth starts the GitHub App install flow by returning the installation URL
-func (d *def) startInstallAuth(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
-	if d.cfg.AppSlug == "" {
+// Start begins the GitHub App install flow by returning the installation URL
+func (a Auth) Start(ctx context.Context, input json.RawMessage) (types.AuthStartResult, error) {
+	if err := ctx.Err(); err != nil {
+		return types.AuthStartResult{}, err
+	}
+
+	var startInput InstallStartInput
+	if err := jsonx.UnmarshalIfPresent(input, &startInput); err != nil {
+		return types.AuthStartResult{}, err
+	}
+
+	if a.Config.AppSlug == "" {
 		return types.AuthStartResult{}, ErrAppSlugMissing
 	}
 
-	return types.AuthStartResult{
-		URL: fmt.Sprintf("https://github.com/apps/%s/installations/new", d.cfg.AppSlug),
-	}, nil
+	installURL := url.URL{
+		Scheme: "https",
+		Host:   "github.com",
+		Path:   "/apps/" + a.Config.AppSlug + "/installations/new",
+	}
+	if startInput.State != "" {
+		query := installURL.Query()
+		query.Set("state", startInput.State)
+		installURL.RawQuery = query.Encode()
+	}
+
+	return types.AuthStartResult{URL: installURL.String()}, nil
 }
 
-// completeInstallAuth completes the GitHub App install flow by minting an installation access token
-func (d *def) completeInstallAuth(ctx context.Context, _ json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
-	var state installationCallbackState
+// Complete finishes the GitHub App install flow by minting an installation access token
+func (a Auth) Complete(ctx context.Context, _ json.RawMessage, input json.RawMessage) (types.AuthCompleteResult, error) {
+	if err := ctx.Err(); err != nil {
+		return types.AuthCompleteResult{}, err
+	}
+
+	var state InstallationCallbackState
 	if err := jsonx.UnmarshalIfPresent(input, &state); err != nil {
 		return types.AuthCompleteResult{}, err
 	}
@@ -60,32 +95,27 @@ func (d *def) completeInstallAuth(ctx context.Context, _ json.RawMessage, input 
 		return types.AuthCompleteResult{}, ErrInstallationIDMissing
 	}
 
-	if d.cfg.AppID == "" {
+	if a.Config.AppID == "" {
 		return types.AuthCompleteResult{}, ErrAppIDMissing
 	}
 
-	privateKey := normalizePrivateKey(d.cfg.PrivateKey)
+	privateKey := normalizePrivateKey(a.Config.PrivateKey)
 	if privateKey == "" {
 		return types.AuthCompleteResult{}, ErrPrivateKeyMissing
 	}
 
-	jwtToken, err := buildAppJWT(d.cfg.AppID, privateKey)
+	jwtToken, err := a.appJWT(privateKey)
 	if err != nil {
 		return types.AuthCompleteResult{}, err
 	}
 
-	baseURL := strings.TrimRight(d.cfg.BaseURL, "/")
-	if baseURL == "" {
-		baseURL = githubAPIBaseURL
-	}
-
-	installationToken, err := requestInstallationToken(ctx, state.InstallationID, jwtToken, baseURL)
+	installationToken, err := a.installationToken(ctx, state.InstallationID, jwtToken)
 	if err != nil {
 		return types.AuthCompleteResult{}, err
 	}
 
-	providerData, err := jsonx.ToRawMessage(appProviderData{
-		AppID:          d.cfg.AppID,
+	providerData, err := jsonx.ToRawMessage(ProviderData{
+		AppID:          a.Config.AppID,
 		InstallationID: state.InstallationID,
 	})
 	if err != nil {
@@ -100,15 +130,15 @@ func (d *def) completeInstallAuth(ctx context.Context, _ json.RawMessage, input 
 	}
 
 	if !installationToken.Expiry.IsZero() {
-		exp := installationToken.Expiry.UTC()
-		credential.OAuthExpiry = &exp
+		expiry := installationToken.Expiry.UTC()
+		credential.OAuthExpiry = &expiry
 	}
 
 	return types.AuthCompleteResult{Credential: credential}, nil
 }
 
-// buildAppJWT signs a GitHub App JWT for authentication
-func buildAppJWT(appID, privateKey string) (string, error) {
+// appJWT signs a short-lived JWT for GitHub App authentication
+func (a Auth) appJWT(privateKey string) (string, error) {
 	key, err := parseRSAPrivateKey(privateKey)
 	if err != nil {
 		return "", err
@@ -116,22 +146,21 @@ func buildAppJWT(appID, privateKey string) (string, error) {
 
 	now := time.Now()
 	claims := jwt.RegisteredClaims{
-		Issuer:    appID,
+		Issuer:    a.Config.AppID,
 		IssuedAt:  jwt.NewNumericDate(now.Add(-jwtIssuedAtBackdateSeconds)),
 		ExpiresAt: jwt.NewNumericDate(now.Add(defaultJWTExpiry)),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-
 	signed, err := token.SignedString(key)
 	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrJWTSigningFailed, err)
+		return "", ErrJWTSigningFailed
 	}
 
 	return signed, nil
 }
 
-// parseRSAPrivateKey parses a PEM-encoded RSA private key
+// parseRSAPrivateKey parses PKCS#1 or PKCS#8 encoded RSA private keys
 func parseRSAPrivateKey(privateKey string) (*rsa.PrivateKey, error) {
 	block, _ := pem.Decode([]byte(privateKey))
 	if block == nil {
@@ -155,25 +184,21 @@ func parseRSAPrivateKey(privateKey string) (*rsa.PrivateKey, error) {
 	return rsaKey, nil
 }
 
-// requestInstallationToken exchanges a GitHub App JWT for an installation access token
-func requestInstallationToken(ctx context.Context, installationID, jwtToken, baseURL string) (*oauth2.Token, error) {
+// installationToken exchanges an app JWT for an installation access token
+func (a Auth) installationToken(ctx context.Context, installationID string, jwtToken string) (*oauth2.Token, error) {
 	if installationID == "" {
 		return nil, ErrInstallationIDMissing
 	}
 
 	installationIDInt, err := strconv.ParseInt(installationID, 10, 64)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
+		return nil, ErrInstallationTokenRequestFailed
 	}
 
-	client, err := newGitHubAPIClient(ctx, jwtToken, baseURL)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
-	}
-
+	client := a.installationTokenClient(ctx, jwtToken)
 	installationToken, _, err := client.Apps.CreateInstallationToken(ctx, installationIDInt, &gh.InstallationTokenOptions{})
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrInstallationTokenRequestFailed, err)
+		return nil, ErrInstallationTokenRequestFailed
 	}
 
 	if installationToken.GetToken() == "" {
@@ -193,7 +218,31 @@ func requestInstallationToken(ctx context.Context, installationID, jwtToken, bas
 	return token, nil
 }
 
-// normalizePrivateKey converts escaped newlines to PEM newlines
+// installationTokenClient builds the GitHub API client used for installation token requests
+func (a Auth) installationTokenClient(ctx context.Context, jwtToken string) *gh.Client {
+	source := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: jwtToken})
+	httpClient := oauth2.NewClient(ctx, source)
+	client := gh.NewClient(httpClient)
+
+	baseURL := strings.TrimRight(a.Config.BaseURL, "/")
+	if baseURL == "" || baseURL == githubAPIBaseURL {
+		return client
+	}
+
+	uploadURL := strings.TrimSuffix(baseURL, "/api/v3")
+	if uploadURL == "" {
+		uploadURL = baseURL
+	}
+
+	enterpriseClient, err := client.WithEnterpriseURLs(baseURL, uploadURL)
+	if err != nil {
+		return client
+	}
+
+	return enterpriseClient
+}
+
+// normalizePrivateKey rewrites escaped newlines into PEM newlines when needed
 func normalizePrivateKey(value string) string {
 	if strings.Contains(value, "\\n") && !strings.Contains(value, "\n") {
 		return strings.ReplaceAll(value, "\\n", "\n")
