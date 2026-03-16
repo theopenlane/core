@@ -5,6 +5,13 @@ import (
 	"encoding/json"
 )
 
+const (
+	// DefaultAuthStartPath is the default relative URL path for auth start requests
+	DefaultAuthStartPath = "/v1/integrations/oauth/start"
+	// DefaultAuthCompletePath is the default relative URL path for auth complete requests
+	DefaultAuthCompletePath = "/v1/integrations/oauth/callback"
+)
+
 // AuthStartResult captures the output of an auth start function
 type AuthStartResult struct {
 	// URL is the third-party URL the user should be sent to

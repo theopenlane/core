@@ -30,8 +30,8 @@ func Builder(cfg Config) definition.Builder {
 				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Auth: &types.AuthRegistration{
-				StartPath:    "/v1/integrations/oauth/start",
-				CallbackPath: "/v1/integrations/oauth/callback",
+				StartPath:    types.DefaultAuthStartPath,
+				CallbackPath: types.DefaultAuthCompletePath,
 				OAuth: &types.OAuthPublicConfig{
 					ClientID:    cfg.ClientID,
 					AuthURL:     azureAuthURL,
