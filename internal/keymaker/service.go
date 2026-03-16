@@ -22,8 +22,8 @@ const defaultSessionTTL = 15 * time.Minute
 // DefinitionLookupFunc resolves definitions for auth flow dispatch.
 type DefinitionLookupFunc func(id string) (types.Definition, bool)
 
-// SaveCredentialFunc persists credential payloads produced during definition auth activation.
-type SaveCredentialFunc func(ctx context.Context, installationID string, credential types.CredentialSet) error
+// PersistAuthResultFunc persists auth completion payloads produced during definition auth activation.
+type PersistAuthResultFunc func(ctx context.Context, installationID string, definition types.Definition, result types.AuthCompleteResult) error
 
 // InstallationRecord captures the installation fields required by auth validation.
 type InstallationRecord struct {
@@ -39,8 +39,8 @@ type InstallationLookupFunc func(ctx context.Context, installationID string) (In
 type Service struct {
 	// definitionLookup resolves definition instances by ID
 	definitionLookup DefinitionLookupFunc
-	// saveCredential persists credential payloads after activation
-	saveCredential SaveCredentialFunc
+	// persistAuthResult persists completion output after activation
+	persistAuthResult PersistAuthResultFunc
 	// installationLookup resolves and validates installation records referenced by auth flows
 	installationLookup InstallationLookupFunc
 	// authStates stores temporary authorization state until callback completion
@@ -52,14 +52,14 @@ type Service struct {
 }
 
 // NewService constructs a Service from the supplied dependencies
-func NewService(definitionLookup DefinitionLookupFunc, saveCredential SaveCredentialFunc, installationLookup InstallationLookupFunc, authStates AuthStateStore, sessionTTL time.Duration) *Service {
+func NewService(definitionLookup DefinitionLookupFunc, persistAuthResult PersistAuthResultFunc, installationLookup InstallationLookupFunc, authStates AuthStateStore, sessionTTL time.Duration) *Service {
 	if sessionTTL <= 0 {
 		sessionTTL = defaultSessionTTL
 	}
 
 	return &Service{
 		definitionLookup:   definitionLookup,
-		saveCredential:     saveCredential,
+		persistAuthResult:  persistAuthResult,
 		installationLookup: installationLookup,
 		authStates:         authStates,
 		sessionTTL:         sessionTTL,
@@ -105,6 +105,8 @@ type CompleteResult struct {
 	InstallationID string
 	// Credential contains the persisted credential payload
 	Credential types.CredentialSet
+	// State contains persisted provider state produced by the auth flow
+	State json.RawMessage
 }
 
 // BeginAuth starts an auth transaction for the requested definition
@@ -164,7 +166,7 @@ func (s *Service) BeginAuth(ctx context.Context, req BeginRequest) (BeginRespons
 	}, nil
 }
 
-// CompleteAuth finalizes a definition auth transaction and persists the resulting credential
+// CompleteAuth finalizes a definition auth transaction and persists the resulting auth result
 func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (CompleteResult, error) {
 	if req.State == "" {
 		return CompleteResult{}, ErrAuthStateTokenRequired
@@ -197,14 +199,15 @@ func (s *Service) CompleteAuth(ctx context.Context, req CompleteRequest) (Comple
 		return CompleteResult{}, fmt.Errorf("keymaker: complete definition auth: %w", err)
 	}
 
-	if err := s.saveCredential(ctx, authState.InstallationID, completeResult.Credential); err != nil {
-		return CompleteResult{}, fmt.Errorf("keymaker: save definition credential: %w", err)
+	if err := s.persistAuthResult(ctx, authState.InstallationID, def, completeResult); err != nil {
+		return CompleteResult{}, fmt.Errorf("keymaker: persist definition auth result: %w", err)
 	}
 
 	return CompleteResult{
 		DefinitionID:   authState.DefinitionID,
 		InstallationID: authState.InstallationID,
 		Credential:     completeResult.Credential,
+		State:          jsonx.CloneRawMessage(completeResult.State),
 	}, nil
 }
 

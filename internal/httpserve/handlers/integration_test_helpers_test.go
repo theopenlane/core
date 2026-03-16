@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -22,7 +21,7 @@ var githubAppDefinitionID = githubapp.DefinitionID.ID()
 
 // withDefinitionRuntime swaps the suite handler's IntegrationsRuntime for a new one
 // built from the given definition builders. Returns a restore function.
-func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []definition.Builder, successRedirectURL string) func() {
+func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []definition.Builder) func() {
 	t.Helper()
 
 	original := suite.h.IntegrationsRuntime
@@ -41,10 +40,8 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []de
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		Keystore:              credStore,
-		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
 		DefinitionBuilders:    builders,
 		SkipExecutorListeners: true,
-		SuccessRedirectURL:    successRedirectURL,
 	})
 	assert.NoError(t, err)
 
@@ -58,9 +55,9 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(t *testing.T, builders []de
 
 // withGitHubAppIntegrationRuntime swaps the suite handler's IntegrationsRuntime for one
 // configured with the GitHub App definition built from cfg. Returns a restore function.
-func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config, successRedirectURL string) func() {
+func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config) func() {
 	t.Helper()
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubapp.Builder(cfg)}, successRedirectURL)
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubapp.Builder(cfg)})
 	suite.h.IntegrationsConfig.GitHubApp = cfg
 
 	return restore

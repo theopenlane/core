@@ -8,6 +8,10 @@ import (
 
 // registerIntegrationOAuthStartHandler registers the OAuth start handler for integrations
 func registerIntegrationOAuthStartHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/oauth/start",
 		Method:      http.MethodPost,
@@ -25,6 +29,10 @@ func registerIntegrationOAuthStartHandler(router *Router) error {
 
 // registerIntegrationOAuthCallbackHandler registers the OAuth callback handler for integrations
 func registerIntegrationOAuthCallbackHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/oauth/callback",
 		Method:      http.MethodGet,
@@ -42,6 +50,10 @@ func registerIntegrationOAuthCallbackHandler(router *Router) error {
 
 // registerRefreshIntegrationTokenHandler registers the handler to refresh integration tokens
 func registerRefreshIntegrationTokenHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/:provider/refresh",
 		Method:      http.MethodPost,
@@ -58,6 +70,10 @@ func registerRefreshIntegrationTokenHandler(router *Router) error {
 }
 
 func registerIntegrationConfigHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:           "/integrations/:provider/config",
 		Method:         http.MethodPost,
@@ -75,6 +91,10 @@ func registerIntegrationConfigHandler(router *Router) error {
 }
 
 func registerIntegrationProvidersHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/providers",
 		Method:      http.MethodGet,
@@ -91,6 +111,10 @@ func registerIntegrationProvidersHandler(router *Router) error {
 }
 
 func registerIntegrationOperationHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/:provider/operations/run",
 		Method:      http.MethodPost,

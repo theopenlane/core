@@ -3,8 +3,7 @@ package operations
 import (
 	"context"
 	"encoding/json"
-	"errors"
-	"strings"
+	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -16,11 +15,11 @@ import (
 // Dispatch validates and enqueues one operation execution request
 func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
 	if req.InstallationID == "" {
-		return DispatchResult{}, ErrInstallationIDRequired
+		return DispatchResult{}, ErrDispatchInputInvalid
 	}
 
 	if req.Operation == "" {
-		return DispatchResult{}, ErrOperationNameRequired
+		return DispatchResult{}, ErrDispatchInputInvalid
 	}
 
 	installationRecord, err := db.Integration.Get(ctx, req.InstallationID)
@@ -34,6 +33,10 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	if err := validateConfig(operation.ConfigSchema, req.Config); err != nil {
+		if err == ErrOperationConfigInvalid {
+			return DispatchResult{}, ErrDispatchInputInvalid
+		}
+
 		return DispatchResult{}, err
 	}
 
@@ -72,6 +75,12 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		},
 	})
 	if receipt.Err != nil {
+		_ = CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
+			Status:  enums.IntegrationRunStatusFailed,
+			Summary: "dispatch failed",
+			Error:   receipt.Err.Error(),
+		})
+
 		return DispatchResult{}, receipt.Err
 	}
 
@@ -90,7 +99,7 @@ func validateConfig(schema json.RawMessage, value json.RawMessage) error {
 
 	var document any = map[string]any{}
 	if err := jsonx.UnmarshalIfPresent(value, &document); err != nil {
-		return err
+		return ErrOperationConfigInvalid
 	}
 
 	result, err := jsonx.ValidateSchema(schema, document)
@@ -102,10 +111,5 @@ func validateConfig(schema json.RawMessage, value json.RawMessage) error {
 		return nil
 	}
 
-	messages := jsonx.ValidationErrorStrings(result)
-	if len(messages) == 0 {
-		return nil
-	}
-
-	return errors.New(strings.Join(messages, "; "))
+	return ErrOperationConfigInvalid
 }

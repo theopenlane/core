@@ -1135,9 +1135,6 @@ data:
         {{- end }}
       {{- end }}
     {{- end }}
-    {{- if .Values.openlane.coreConfiguration.integrationsuccessredirecturl }}
-    integrationsuccessredirecturl: {{ .Values.openlane.coreConfiguration.integrationsuccessredirecturl | quote }}
-    {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:
       {{- if .Values.openlane.coreConfiguration.workflows.enabled }}

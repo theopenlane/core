@@ -27,7 +27,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{
 		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
 		configTestDefinitionBuilder("def_test_other", "other", false),
-	}, "")
+	})
 	defer restore()
 
 	req := httptest.NewRequest(http.MethodGet, "/v1/integrations/providers", nil)

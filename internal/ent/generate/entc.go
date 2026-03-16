@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/entitlements/genfeatures"
 	"github.com/theopenlane/core/internal/genhelpers"
 	"github.com/theopenlane/core/internal/graphapi/directives"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/gala"
@@ -477,6 +478,10 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 		entc.Dependency(
 			entc.DependencyName("Pool"),
 			entc.DependencyType(&gala.Pool{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("IntegrationRegistry"),
+			entc.DependencyType(&registry.Registry{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("EmailVerifier"),

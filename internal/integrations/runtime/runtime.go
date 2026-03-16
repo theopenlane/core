@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -29,12 +30,10 @@ type Config struct {
 	DefinitionBuilders []definition.Builder
 	// Keystore provides credential persistence and installation-scoped client pooling
 	Keystore *keystore.Store
-	// AuthStateStore persists pending OAuth state across auth start and callback completion.
-	AuthStateStore keymaker.AuthStateStore
+	// RedisClient provides the shared Redis client used for ephemeral integration auth state.
+	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
-	// SuccessRedirectURL is the URL to redirect to after a successful integration auth flow
-	SuccessRedirectURL string
 	// SkipExecutorListeners disables automatic Gala listener registration for the executor.
 	// Set this when a workflow engine will register its own listeners that wrap the executor,
 	// to prevent double execution of operations on the same topics.
@@ -43,8 +42,7 @@ type Config struct {
 
 // Runtime bundles the integrations services behind a do injector
 type Runtime struct {
-	injector           do.Injector
-	successRedirectURL string
+	injector do.Injector
 }
 
 // Injector returns the underlying dependency injector
@@ -55,11 +53,6 @@ func (r *Runtime) Injector() do.Injector {
 // Registry returns the definition registry
 func (r *Runtime) Registry() *registry.Registry {
 	return do.MustInvoke[*registry.Registry](r.injector)
-}
-
-// SuccessRedirectURL returns the configured success redirect URL
-func (r *Runtime) SuccessRedirectURL() string {
-	return r.successRedirectURL
 }
 
 // Dispatch enqueues one integration operation through the runtime-managed dispatcher.
@@ -76,7 +69,9 @@ func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) 
 		case errors.Is(err, registry.ErrDefinitionNotFound):
 			return operations.DispatchResult{}, ErrDefinitionNotFound
 		case errors.Is(err, registry.ErrOperationNotFound):
-			return operations.DispatchResult{}, ErrOperationNotFound
+			return operations.DispatchResult{}, operations.ErrDispatchInputInvalid
+		case errors.Is(err, operations.ErrDispatchInputInvalid):
+			return operations.DispatchResult{}, operations.ErrDispatchInputInvalid
 		}
 	}
 
@@ -86,13 +81,12 @@ func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) 
 // NewForTesting constructs a Runtime backed only by the supplied registry.
 // Calling methods that require DB, Gala, or Keystore will panic.
 // Use only in unit tests that exercise registry lookup without executing operations.
-func NewForTesting(reg *registry.Registry, successRedirectURL string) *Runtime {
+func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
 
 	return &Runtime{
-		injector:           injector,
-		successRedirectURL: successRedirectURL,
+		injector: injector,
 	}
 }
 
@@ -100,13 +94,19 @@ func NewForTesting(reg *registry.Registry, successRedirectURL string) *Runtime {
 func New(config Config) (*Runtime, error) {
 	injector := do.New()
 	rt := &Runtime{
-		injector:           injector,
-		successRedirectURL: config.SuccessRedirectURL,
+		injector: injector,
 	}
 
 	do.ProvideValue(injector, config.DB)
 	do.ProvideValue(injector, config.Gala)
 	do.ProvideValue(injector, config.Keystore)
+	do.Provide(injector, func(do.Injector) (keymaker.AuthStateStore, error) {
+		if config.RedisClient != nil {
+			return keymaker.NewRedisAuthStateStore(config.RedisClient), nil
+		}
+
+		return keymaker.NewInMemoryAuthStateStore(), nil
+	})
 
 	do.Provide(injector, func(do.Injector) (*registry.Registry, error) {
 		registryInstance := config.Registry
@@ -130,7 +130,7 @@ func New(config Config) (*Runtime, error) {
 	do.Provide(injector, func(i do.Injector) (*keymaker.Service, error) {
 		return keymaker.NewService(
 			do.MustInvoke[*registry.Registry](i).Definition,
-			config.Keystore.SaveInstallationCredential,
+			rt.PersistAuthCompletion,
 			func(ctx context.Context, installationID string) (keymaker.InstallationRecord, error) {
 				record, err := rt.ResolveInstallation(ctx, "", installationID, "")
 				if err != nil {
@@ -150,7 +150,7 @@ func New(config Config) (*Runtime, error) {
 					DefinitionID: record.DefinitionID,
 				}, nil
 			},
-			config.AuthStateStore,
+			do.MustInvoke[keymaker.AuthStateStore](i),
 			0,
 		), nil
 	})

@@ -8,15 +8,19 @@ import (
 
 // registerIntegrationWebhookHandler registers the generic integration webhook handler
 func registerIntegrationWebhookHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
-		Path:        "/integrations/webhook/:integrationID",
+		Path:        "/integrations/webhook/:integrationID/:webhookName",
 		Method:      http.MethodPost,
 		Name:        "IntegrationWebhook",
-		Description: "Handle one integration webhook delivery",
+		Description: "Handle one installation-scoped integration webhook delivery",
 		Tags:        []string{"webhooks", "integrations"},
 		OperationID: "IntegrationWebhook",
-		Security:    handlers.AllSecurityRequirements(),
-		Middlewares: *authenticatedEndpoint,
+		Security:    handlers.PublicSecurity,
+		Middlewares: *unauthenticatedEndpoint,
 		Handler:     router.Handler.IntegrationWebhookHandler,
 	}
 

@@ -35,6 +35,13 @@ func Builder() definition.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
+					Name:        HealthDefaultOperation.Name(),
+					Description: "Validate SCIM configuration",
+					Topic:       HealthDefaultOperation.Topic(Slug),
+					Policy:      types.ExecutionPolicy{Idempotent: true},
+					Handle:      HealthCheck{}.Handle(),
+				},
+				{
 					Name:        DirectorySyncOperation.Name(),
 					Description: "Synchronize directory state through SCIM",
 					Topic:       DirectorySyncOperation.Topic(Slug),

@@ -626,6 +626,7 @@ func RegisterRoutes(router *Router) error {
 		registerIntegrationOAuthCallbackHandler,
 		registerGitHubAppInstallHandler,
 		registerGitHubAppCallbackHandler,
+		registerGitHubAppWebhookHandler,
 		registerRefreshIntegrationTokenHandler,
 		registerIntegrationProvidersHandler,
 		registerIntegrationConfigHandler,

@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -34,6 +35,9 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleIntegrationOperationPayload, IntegrationOperationResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
+	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
 	}
 
 	requestCtx := ctx.Request().Context()
@@ -59,15 +63,11 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 
 	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("operation not registered")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Msg("invalid integration operation request")
+		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
 	}
 
 	inlineExecution := operationName == "health.default" || operation.Policy.Inline
-	if h.WorkflowEngine == nil && !inlineExecution {
-		return h.InternalServerError(ctx, errIntegrationWorkflowEngineNotConfigured, openapiCtx)
-	}
-
 	queueCtx := context.WithoutCancel(requestCtx)
 	configDoc := jsonx.CloneRawMessage(req.Body.Config)
 
@@ -134,16 +134,55 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		})
 	}
 
-	result, err := h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
-		OrgID:          caller.OrganizationID,
-		DefinitionID:   def.ID,
-		InstallationID: integrationID,
-		Operation:      operationName,
-		Config:         configDoc,
-		Force:          req.Body.Force,
-		RunType:        enums.IntegrationRunTypeManual,
-	})
+	var result engine.IntegrationQueueResult
+
+	if h.WorkflowEngine != nil {
+		result, err = h.WorkflowEngine.QueueIntegrationOperation(queueCtx, engine.IntegrationQueueRequest{
+			OrgID:          caller.OrganizationID,
+			DefinitionID:   def.ID,
+			InstallationID: integrationID,
+			Operation:      operationName,
+			Config:         configDoc,
+			Force:          req.Body.Force,
+			RunType:        enums.IntegrationRunTypeManual,
+		})
+	} else {
+		installationRec, resolveErr := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, def.ID)
+		if resolveErr != nil {
+			switch {
+			case errors.Is(resolveErr, integrationsruntime.ErrInstallationIDRequired):
+				return h.BadRequest(ctx, ErrIntegrationIDRequired, openapiCtx)
+			case errors.Is(resolveErr, integrationsruntime.ErrInstallationDefinitionMismatch):
+				return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+			default:
+				return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+			}
+		}
+
+		dispatchResult, dispatchErr := h.IntegrationsRuntime.Dispatch(queueCtx, operations.DispatchRequest{
+			InstallationID: installationRec.ID,
+			Operation:      operationName,
+			Config:         configDoc,
+			Force:          req.Body.Force,
+			RunType:        enums.IntegrationRunTypeManual,
+		})
+		if dispatchErr != nil {
+			err = dispatchErr
+		} else {
+			result = engine.IntegrationQueueResult{
+				RunID:   dispatchResult.RunID,
+				EventID: dispatchResult.EventID,
+				Status:  dispatchResult.Status,
+			}
+		}
+	}
+
 	if err != nil {
+		if errors.Is(err, operations.ErrDispatchInputInvalid) {
+			logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Str("operation", operationName).Str("integration_id", integrationID).Msg("invalid integration operation request")
+			return h.BadRequest(ctx, err, openapiCtx)
+		}
+
 		switch integrationHTTPStatus(err) {
 		case http.StatusBadRequest:
 			return h.BadRequest(ctx, err, openapiCtx)

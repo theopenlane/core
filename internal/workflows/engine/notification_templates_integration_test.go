@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -93,7 +92,6 @@ func (s *WorkflowEngineTestSuite) newNotificationTestRuntime() *integrationsrunt
 		Gala:                  s.galaRuntime,
 		Registry:              reg,
 		Keystore:              credStore,
-		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
 		SkipExecutorListeners: true,
 	})
 	s.Require().NoError(err)

@@ -69,6 +69,19 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageOperat
 		opts = append(opts, slackgo.MsgOptionText(cfg.Text, false))
 	}
 
+	if hasBlocks {
+		var blocks slackgo.Blocks
+		encoded, err := json.Marshal(cfg.Blocks)
+		if err != nil {
+			return nil, ErrOperationConfigInvalid
+		}
+		if err := json.Unmarshal(encoded, &blocks); err != nil {
+			return nil, ErrOperationConfigInvalid
+		}
+
+		opts = append(opts, slackgo.MsgOptionBlocks(blocks.BlockSet...))
+	}
+
 	if cfg.ThreadTS != "" {
 		opts = append(opts, slackgo.MsgOptionTS(cfg.ThreadTS))
 	}

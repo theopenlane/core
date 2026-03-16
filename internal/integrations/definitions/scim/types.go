@@ -5,6 +5,8 @@ import "github.com/theopenlane/core/internal/integrations/types"
 var (
 	// DefinitionID is the stable identifier for the SCIM Directory Sync integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
+	// HealthDefaultOperation is the operation ref for the SCIM health check
+	HealthDefaultOperation = types.NewOperationRef[HealthCheck]("health.default")
 	// DirectorySyncOperation is the operation ref for the SCIM directory sync operation
 	DirectorySyncOperation = types.NewOperationRef[DirectorySync]("directory.sync")
 )

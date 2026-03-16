@@ -26,7 +26,7 @@ func newGitHubAppRuntimeForTest(t *testing.T, cfg *githubapp.Config) *integratio
 		require.NoError(t, definition.RegisterAll(reg, githubapp.Builder(*cfg)))
 	}
 
-	return integrationsruntime.NewForTesting(reg, "")
+	return integrationsruntime.NewForTesting(reg)
 }
 
 // TestValidateGitHubAppConfig verifies required configuration errors and success cases.

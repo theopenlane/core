@@ -25,7 +25,6 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrations**](#integrations)|`object`|||
-|**integrationsuccessredirecturl**|`string`|IntegrationSuccessRedirectURL is the URL to redirect to after a successful integration auth flow<br/>||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
@@ -1337,4 +1336,3 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**endpointurl**|`string`|||
 
 **Additional Properties:** not allowed  
-

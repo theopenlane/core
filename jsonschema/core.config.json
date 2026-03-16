@@ -1932,10 +1932,6 @@
       "$ref": "#/$defs/catalog.Config",
       "description": "Integrations contains operator-level credentials for all v2 integration definitions"
     },
-    "integrationsuccessredirecturl": {
-      "type": "string",
-      "description": "IntegrationSuccessRedirectURL is the URL to redirect to after a successful integration auth flow"
-    },
     "workflows": {
       "$ref": "#/$defs/workflows.Config",
       "description": "Workflows contains the configuration for the workflows engine"

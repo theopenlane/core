@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 	op.OperationID = "DisconnectIntegration"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -68,7 +68,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 	op.OperationID = "DisconnectIntegrationNotFound"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -144,7 +144,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationWithExplicitID() {
 	op.OperationID = "DisconnectIntegrationWithID"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
@@ -173,7 +173,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFoundWithID() {
 	op.OperationID = "DisconnectIntegrationNotFoundWithID"
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:provider", op, suite.h.DisconnectIntegration)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()

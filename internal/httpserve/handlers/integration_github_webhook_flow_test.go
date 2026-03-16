@@ -27,7 +27,7 @@ import (
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
-const integrationWebhookPath = "/v1/integrations/webhook/:integrationID"
+const githubAppWebhookPath = "/github/app/webhook"
 
 func defaultGitHubAppSpec() githubapp.Config {
 	return githubapp.Config{
@@ -38,42 +38,26 @@ func defaultGitHubAppSpec() githubapp.Config {
 	}
 }
 
-func (suite *HandlerTestSuite) registerIntegrationWebhookRoute() {
-	op := suite.createImpersonationOperation("IntegrationWebhook", "Handle one integration webhook delivery")
-	suite.registerRouteOnce(http.MethodPost, integrationWebhookPath, op, suite.h.IntegrationWebhookHandler)
+func (suite *HandlerTestSuite) registerGitHubAppWebhookRoute() {
+	op := suite.createImpersonationOperation("GitHubAppWebhook", "Handle GitHub App security alert webhooks")
+	suite.registerRouteOnce(http.MethodPost, githubAppWebhookPath, op, suite.h.GitHubAppWebhookHandler)
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookRequiresCaller() {
+func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
-	suite.registerIntegrationWebhookRoute()
-
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/int_123", strings.NewReader(`{}`))
-	req.Header.Set("Content-Type", "application/json")
-	rec := httptest.NewRecorder()
-
-	suite.e.ServeHTTP(rec, req)
-
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
-}
-
-func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
-	t := suite.T()
-
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
-	defer restore()
-
-	suite.registerIntegrationWebhookRoute()
+	suite.registerGitHubAppWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	integrationRecord, err := suite.db.Integration.Create().
+	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
+		SetSystemInternalID("456").
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
 		SetProviderState(func() types.IntegrationProviderState {
@@ -86,7 +70,46 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	require.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
+	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-GitHub-Event", "ping")
+	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
+	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
+	rec := httptest.NewRecorder()
+
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
+	t := suite.T()
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	defer restore()
+
+	suite.registerGitHubAppWebhookRoute()
+
+	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	integrationRecord, err := suite.db.Integration.Create().
+		SetOwnerID(user.OrganizationID).
+		SetName("GitHub App").
+		SetSystemInternalID("456").
+		SetDefinitionID(githubAppDefinitionID).
+		SetDefinitionSlug(githubAppSlug).
+		SetProviderState(func() types.IntegrationProviderState {
+			doc := types.IntegrationProviderState{}
+			_, mergeErr := doc.MergeProviderData(githubAppSlug, []byte(`{"appId":"123","installationId":"456"}`))
+			require.NoError(t, mergeErr)
+			return doc
+		}()).
+		Save(user.UserCtx)
+	require.NoError(t, err)
+
+	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
+	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	req = req.WithContext(user.UserCtx)
@@ -115,10 +138,10 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
-	suite.registerIntegrationWebhookRoute()
+	suite.registerGitHubAppWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -126,6 +149,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
+		SetSystemInternalID("456").
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
 		SetProviderState(func() types.IntegrationProviderState {
@@ -138,7 +162,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	require.NoError(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
+	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("wrong-secret", payload))
 	req = req.WithContext(user.UserCtx)
@@ -163,10 +187,10 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplatedSlackNotification() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
-	suite.registerIntegrationWebhookRoute()
+	suite.registerGitHubAppWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
@@ -176,9 +200,10 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		Exec(user.UserCtx)
 	require.NoError(t, err)
 
-	integrationRecord, err := suite.db.Integration.Create().
+	_, err = suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
+		SetSystemInternalID("456").
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
 		SetProviderState(func() types.IntegrationProviderState {
@@ -199,7 +224,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	})
 
 	payload := []byte(`{"action":"created","installation":{"id":456,"account":{"login":"acme-github-org","type":"Organization"}}}`)
-	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
+	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	req.Header.Set("X-GitHub-Event", "installation")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	req = req.WithContext(user.UserCtx)
@@ -226,17 +251,18 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	t := suite.T()
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec(), "")
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
 
-	suite.registerIntegrationWebhookRoute()
+	suite.registerGitHubAppWebhookRoute()
 
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	integrationRecord, err := suite.db.Integration.Create().
+	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
+		SetSystemInternalID("456").
 		SetDefinitionID(githubAppDefinitionID).
 		SetDefinitionSlug(githubAppSlug).
 		SetProviderState(func() types.IntegrationProviderState {
@@ -251,7 +277,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	payload := []byte(`{"action":"created","installation":{"id":456},"repository":{"full_name":"acme/repo"},"alert":{"number":1}}`)
 	deliveryID := "delivery-dup-1"
 
-	firstReq := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
+	firstReq := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	firstReq.Header.Set("X-GitHub-Event", "dependabot_alert")
 	firstReq.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	firstReq.Header.Set("X-GitHub-Delivery", deliveryID)
@@ -261,7 +287,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 	suite.e.ServeHTTP(firstRec, firstReq)
 	require.Equal(t, http.StatusOK, firstRec.Code)
 
-	secondReq := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhook/"+integrationRecord.ID, strings.NewReader(string(payload)))
+	secondReq := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	secondReq.Header.Set("X-GitHub-Event", "dependabot_alert")
 	secondReq.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
 	secondReq.Header.Set("X-GitHub-Delivery", deliveryID)

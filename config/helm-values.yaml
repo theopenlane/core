@@ -556,8 +556,6 @@ coreConfiguration:
     microsoftteams:
       clientid: ""  # @schema type:string
       redirecturl: ""  # @schema type:string
-  # -- IntegrationSuccessRedirectURL is the URL to redirect to after a successful integration auth flow
-  integrationsuccessredirecturl: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

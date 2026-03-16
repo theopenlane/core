@@ -324,11 +324,6 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		return true, nil
 	}
 
-	installationConfigRaw, err := jsonx.ToRawMessage(installationRecord.Metadata)
-	if err != nil {
-		return false, err
-	}
-
 	providerStateRaw, err := jsonx.ToRawMessage(installationRecord.ProviderState)
 	if err != nil {
 		return false, err
@@ -345,7 +340,7 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		Definition:         definitionValue,
 		Operation:          operationName,
 		Config:             operationConfig,
-		InstallationConfig: installationConfigRaw,
+		InstallationConfig: jsonx.CloneRawMessage(installationRecord.Config.ClientConfig),
 		ProviderState:      providerStateRaw,
 		OrgID:              req.OrgID,
 		InstallationID:     installationRecord.ID,

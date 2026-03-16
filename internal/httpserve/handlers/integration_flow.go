@@ -4,10 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
-	"net/url"
-	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -35,6 +32,9 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleOAuthFlowRequest, openapi.OAuthFlowResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
+	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
 	}
 
 	requestCtx := ctx.Request().Context()
@@ -175,6 +175,9 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	if isRegistrationContext(ctx) {
 		return nil
 	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
+	}
 
 	reqCtx := ctx.Request().Context()
 
@@ -269,13 +272,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, oauthStateCookieName, oauthOrgIDCookieName, oauthUserIDCookieName)
 
-	def, _ := h.IntegrationsRuntime.Registry().Definition(result.DefinitionID)
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), def.Slug)
-	if redirectURL == "" {
-		return h.Success(ctx, rout.Reply{Success: true})
-	}
-
-	return ctx.Redirect(http.StatusFound, redirectURL)
+	return h.Success(ctx, rout.Reply{Success: true})
 }
 
 // RefreshIntegrationTokenHandler handles requests to refresh an installation's OAuth credential.
@@ -283,6 +280,9 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, RefreshInstallationCredentialRequest{}, IntegrationTokenResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
+	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -292,11 +292,18 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
-	rec, err := h.DBClient.Integration.Get(reqCtx, in.InstallationID)
+	rec, err := h.IntegrationsRuntime.ResolveInstallation(reqCtx, caller.OrganizationID, in.InstallationID, "")
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Msg("installation not found")
-
-		return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		switch {
+		case errors.Is(err, integrationsruntime.ErrInstallationNotFound):
+			logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Str("organization_id", caller.OrganizationID).Msg("installation not found for token refresh")
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		case errors.Is(err, integrationsruntime.ErrInstallationIDRequired):
+			return h.BadRequest(ctx, ErrIntegrationIDRequired, openapiCtx)
+		default:
+			logx.FromContext(reqCtx).Error().Err(err).Str("installation_id", in.InstallationID).Str("organization_id", caller.OrganizationID).Msg("failed to resolve installation for token refresh")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+		}
 	}
 
 	current, ok, err := h.IntegrationsRuntime.LoadCredential(reqCtx, rec)
@@ -344,28 +351,6 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context, openapiCtx *O
 	}
 
 	return h.Success(ctx, resp)
-}
-
-// buildIntegrationRedirectURL appends provider and status query params to the base redirect URL.
-func buildIntegrationRedirectURL(baseURL, provider string) string {
-	if strings.TrimSpace(baseURL) == "" {
-		return ""
-	}
-
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return baseURL
-	}
-
-	providerName := strings.ToLower(provider)
-
-	q := u.Query()
-	q.Set("provider", providerName)
-	q.Set("status", "success")
-	q.Set("message", fmt.Sprintf("Successfully connected %s integration", providerName))
-	u.RawQuery = q.Encode()
-
-	return u.String()
 }
 
 // generateOAuthState creates a secure state parameter containing org ID and provider.

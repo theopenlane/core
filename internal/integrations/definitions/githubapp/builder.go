@@ -79,7 +79,7 @@ func Builder(cfg Config) definition.Builder {
 			Mappings: githubAppMappings(),
 			Webhooks: []types.WebhookRegistration{
 				{
-					Name:   "installation.events",
+					Name:   InstallationEventsWebhook.Name(),
 					Verify: app.Verify,
 					Event:  app.Event,
 					Events: []types.WebhookEventRegistration{

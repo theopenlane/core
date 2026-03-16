@@ -40,7 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definition"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -403,7 +402,6 @@ func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime(ctx context.Cont
 		DB:                    suite.db,
 		Gala:                  galaInstance,
 		Keystore:              credStore,
-		AuthStateStore:        keymaker.NewInMemoryAuthStateStore(),
 		DefinitionBuilders:    []definition.Builder{definition.Builder(buildTestOAuthDefinition)},
 		SkipExecutorListeners: true,
 	})
@@ -424,6 +422,7 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 		Auth: &types.AuthRegistration{
 			Start:    testOAuthStart,
 			Complete: testOAuthComplete,
+			Refresh:  testOAuthRefresh,
 		},
 	}, nil
 }
@@ -455,10 +454,23 @@ func testOAuthComplete(_ context.Context, callbackState json.RawMessage, input j
 
 	return types.AuthCompleteResult{
 		Credential: types.CredentialSet{
-			OAuthAccessToken: "test-access-token",
-			OAuthExpiry:      &expiry,
+			OAuthAccessToken:  "test-access-token",
+			OAuthRefreshToken: "test-refresh-token",
+			OAuthExpiry:       &expiry,
 		},
 	}, nil
+}
+
+func testOAuthRefresh(_ context.Context, credential types.CredentialSet) (types.CredentialSet, error) {
+	if credential.OAuthAccessToken == "" {
+		return types.CredentialSet{}, errors.New("missing access token")
+	}
+
+	expiry := time.Now().Add(2 * time.Hour)
+	credential.OAuthAccessToken = "refreshed-access-token"
+	credential.OAuthExpiry = &expiry
+
+	return credential, nil
 }
 
 // mockStripeClient creates a new stripe client with mock backend

@@ -81,6 +81,27 @@ func (r OperationRef[T]) Topic(slug string) gala.TopicName {
 	return gala.TopicName("integration." + slug + "." + r.name)
 }
 
+type webhookKey struct{ _ bool }
+
+// WebhookRef is a handle for one registered webhook contract identity
+type WebhookRef struct {
+	key  *webhookKey `json:"-" yaml:"-"`
+	name string
+}
+
+// NewWebhookRef creates a webhook contract identity handle
+func NewWebhookRef(name string) WebhookRef {
+	return WebhookRef{
+		key:  new(webhookKey),
+		name: name,
+	}
+}
+
+// Name returns the durable webhook identifier
+func (r WebhookRef) Name() string {
+	return r.name
+}
+
 type webhookEventKey struct{ _ bool }
 
 // WebhookEventRef is a typed handle for one registered webhook event identity

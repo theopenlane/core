@@ -34,7 +34,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	op.OperationID = "ConfigureIntegrationProviderSuccess"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -81,7 +81,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 	op.OperationID = "ConfigureIntegrationProviderByID"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -107,7 +107,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	op.OperationID = "ConfigureIntegrationProviderInvalid"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -133,7 +133,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	op.OperationID = "ConfigureIntegrationProviderUnauthorized"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	body := mustMarshalConfigPayload(t, handlers.IntegrationConfigPayload{
@@ -156,7 +156,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 	op.OperationID = "ConfigureIntegrationProviderUpdate"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", false)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -195,7 +195,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 	restore := suite.withDefinitionRuntime(t, []definition.Builder{
 		configTestDefinitionBuilder(configTestProviderID, "gcpscc", false),
 		configTestDefinitionBuilder("def_test_other", "other", false),
-	}, "")
+	})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
@@ -227,7 +227,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 	op.OperationID = "ConfigureIntegrationProviderHealthFailure"
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:provider/config", op, suite.h.ConfigureIntegrationProvider)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", true)}, "")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{configTestDefinitionBuilder(configTestProviderID, "gcpscc", true)})
 	defer restore()
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()

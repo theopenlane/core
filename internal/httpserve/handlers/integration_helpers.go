@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strings"
 
+	echo "github.com/theopenlane/echox"
+
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -18,6 +20,7 @@ const statePayloadParts = 3
 
 var (
 	errIntegrationWorkflowEngineNotConfigured = errors.New("integration workflow engine not configured")
+	errIntegrationsRuntimeNotConfigured       = errors.New("integrations runtime not configured")
 	// errDBClientNotConfigured indicates the database client is missing.
 	errDBClientNotConfigured = errors.New("database client not configured")
 	// errGitHubAppNotConfigured indicates required GitHub App operator credentials are absent from the provider spec.
@@ -98,6 +101,14 @@ func integrationHTTPStatus(err error) int {
 	default:
 		return http.StatusInternalServerError
 	}
+}
+
+func (h *Handler) requireIntegrationsRuntime(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	if h.IntegrationsRuntime != nil {
+		return nil
+	}
+
+	return h.InternalServerError(ctx, errIntegrationsRuntimeNotConfigured, openapiCtx)
 }
 
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.

@@ -8,6 +8,10 @@ import (
 
 // registerGitHubAppInstallHandler registers the GitHub App installation start handler.
 func registerGitHubAppInstallHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/github/app/install",
 		Method:      http.MethodPost,
@@ -25,6 +29,10 @@ func registerGitHubAppInstallHandler(router *Router) error {
 
 // registerGitHubAppCallbackHandler registers the GitHub App installation callback handler.
 func registerGitHubAppCallbackHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
 	config := Config{
 		Path:        "/integrations/github/app/callback",
 		Method:      http.MethodGet,
@@ -38,4 +46,25 @@ func registerGitHubAppCallbackHandler(router *Router) error {
 	}
 
 	return router.AddV1HandlerRoute(config)
+}
+
+// registerGitHubAppWebhookHandler registers the shared GitHub App webhook handler.
+func registerGitHubAppWebhookHandler(router *Router) error {
+	if !integrationsEnabled(router) {
+		return nil
+	}
+
+	config := Config{
+		Path:        "/github/app/webhook",
+		Method:      http.MethodPost,
+		Name:        "GitHubAppWebhook",
+		Description: "Handle GitHub App security alert webhooks",
+		Tags:        []string{"webhooks", "integrations"},
+		OperationID: "GitHubAppWebhook",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *unauthenticatedEndpoint,
+		Handler:     router.Handler.GitHubAppWebhookHandler,
+	}
+
+	return router.AddUnversionedHandlerRoute(config)
 }

@@ -199,7 +199,6 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: ""
-integrationsuccessredirecturl: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:

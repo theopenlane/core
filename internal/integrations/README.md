@@ -269,236 +269,46 @@ One subtle but important rule:
 
 - if a client builder starts depending on more installation state than `credential` and `config`, make sure the keystore cache key and invalidation model still match that behavior
 
-## Copy/Paste Scaffold
+## Template Directory
 
-The following templates are intentionally minimal. They are meant to be copied into a new definition package and then find-and-replaced.
+Literal provider scaffolds live in:
 
-Replace these placeholders first:
+- `internal/integrations/definitions/_template/`
+
+That directory is meant to be copied into a new provider package and then find-and-replaced.
+
+The base template files are:
+
+- `builder.go`
+- `client.go`
+- `operations.go`
+- `errors.go`
+- `config.go`
+
+Optional add-ons are also included there:
+
+- `mappings.go`
+- `schema.go`
+
+Template placeholders to replace first:
 
 - `yourprovider`
 - `Your Provider`
-- `YOUR_PROVIDER`
 - `YourClient`
-- `CollectDefaultOperation`
-
-### `builder.go`
-
-```go
-package yourprovider
-
-import (
-	"github.com/theopenlane/core/internal/integrations/definition"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-)
-
-var (
-	DefinitionID            = types.NewDefinitionRef("def_REPLACE_ME")
-	ProviderClient          = types.NewClientRef[any]()
-	HealthDefaultOperation  = types.NewOperationRef[struct{}]("health.default")
-	CollectDefaultOperation = types.NewOperationRef[struct{}]("collect.default")
-)
-
-const Slug = "yourprovider"
-
-type UserInput struct {
-	Label      string `json:"label,omitempty" jsonschema:"title=Installation Label"`
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to imported records before ingest."`
-}
-
-type CredentialSchema struct {
-	APIToken string `json:"apiToken,omitempty" jsonschema:"title=API Token"`
-}
-
-func Builder() definition.Builder {
-	return definition.Builder(func() (types.Definition, error) {
-		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Slug:        Slug,
-				Version:     "v1",
-				DisplayName: "Your Provider",
-				Category:    "REPLACE_ME",
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
-			},
-			Credentials: &types.CredentialRegistration{
-				Schema: providerkit.SchemaFrom[CredentialSchema](),
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:         ProviderClient.ID(),
-					Description: "Primary Your Provider client",
-					Build:       Client{}.Build,
-				},
-			},
-			Operations: []types.OperationRegistration{
-				{
-					Name:      HealthDefaultOperation.Name(),
-					Topic:     HealthDefaultOperation.Topic(Slug),
-					ClientRef: ProviderClient.ID(),
-					Policy:    types.ExecutionPolicy{Idempotent: true},
-					Handle:    HealthCheck{}.Handle(Client{}),
-				},
-				{
-					Name:      CollectDefaultOperation.Name(),
-					Topic:     CollectDefaultOperation.Topic(Slug),
-					ClientRef: ProviderClient.ID(),
-					Policy:    types.ExecutionPolicy{Idempotent: true},
-					Handle:    Collect{}.Handle(Client{}),
-				},
-			},
-		}, nil
-	})
-}
-```
-
-### `client.go`
-
-```go
-package yourprovider
-
-import (
-	"context"
-
-	"github.com/theopenlane/core/internal/integrations/types"
-)
-
-type YourClient struct{}
-
-type Client struct{}
-
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	_ = ctx
-	_ = req
-
-	if len(req.Credential.ProviderData) == 0 {
-		return nil, ErrCredentialRequired
-	}
-
-	var client YourClient
-
-	return &client, nil
-}
-
-func (Client) FromAny(value any) (*YourClient, error) {
-	client, ok := value.(*YourClient)
-	if !ok {
-		return nil, ErrClientType
-	}
-
-	return client, nil
-}
-```
-
-### `operations.go`
-
-```go
-package yourprovider
-
-import (
-	"context"
-	"encoding/json"
-
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-)
-
-type HealthCheck struct{}
-
-type Collect struct{}
-
-func (h HealthCheck) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		c, err := client.FromAny(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return h.Run(ctx, request.Credential, c)
-	}
-}
-
-func (HealthCheck) Run(ctx context.Context, credential types.CredentialSet, client *YourClient) (json.RawMessage, error) {
-	_ = ctx
-	_ = credential
-	_ = client
-
-	return providerkit.EncodeResult(map[string]any{"ok": true}, ErrResultEncode)
-}
-
-func (c Collect) Handle(client Client) types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		typedClient, err := client.FromAny(request.Client)
-		if err != nil {
-			return nil, err
-		}
-
-		return c.Run(ctx, request.Credential, typedClient)
-	}
-}
-
-func (Collect) Run(ctx context.Context, credential types.CredentialSet, client *YourClient) (json.RawMessage, error) {
-	_ = ctx
-	_ = credential
-	_ = client
-
-	return providerkit.EncodeResult(map[string]any{"items": []any{}}, ErrResultEncode)
-}
-```
-
-### `errors.go`
-
-```go
-package yourprovider
-
-import "errors"
-
-var (
-	ErrClientType         = errors.New("yourprovider: client type invalid")
-	ErrCredentialRequired = errors.New("yourprovider: credential required")
-	ErrResultEncode       = errors.New("yourprovider: result encode failed")
-)
-```
-
-### Optional `mappings.go`
-
-Add this when the provider emits ingest payloads:
-
-```go
-package yourprovider
-
-import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
-	"github.com/theopenlane/core/internal/integrations/types"
-)
-
-func mappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    "{}",
-			},
-		},
-	}
-}
-```
+- `def_REPLACE_ME`
+- `REPLACE_ME`
 
 ## Practical Defaults
 
 If you are starting a new provider and want the smallest sensible shape:
 
-1. Create `builder.go`, `client.go`, `operations.go`, and `errors.go`
-2. Add `UserInput` with at least `label` and `filterExpr`
-3. Add a `health.default` operation first
-4. Register exactly one client unless there is a real need for more
-5. Add `mappings.go` only if the provider emits ingest payloads
-6. Add `auth.go` only if the provider needs OAuth or another install flow
-7. Add `webhook.go` only if the provider receives inbound events
+1. Copy `internal/integrations/definitions/_template/` into a new provider package
+2. Keep `builder.go`, `client.go`, `operations.go`, and `errors.go`
+3. Add `UserInput` with at least `label` and `filterExpr`
+4. Add a `health.default` operation first
+5. Register exactly one client unless there is a real need for more
+6. Add `mappings.go` only if the provider emits ingest payloads
+7. Add `auth.go` only if the provider needs OAuth or another install flow
+8. Add `webhook.go` only if the provider receives inbound events
 
 That shape keeps most providers consistent while leaving room for more complex auth, ingest, or webhook behavior when it is actually needed

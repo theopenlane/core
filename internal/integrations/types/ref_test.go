@@ -46,3 +46,12 @@ func TestOperationRefTopic(t *testing.T) {
 		t.Fatalf("OperationRef.Topic() = %q", ref.Topic("github_app"))
 	}
 }
+
+func TestWebhookRefName(t *testing.T) {
+	t.Parallel()
+
+	ref := NewWebhookRef("installation.events")
+	if ref.Name() != "installation.events" {
+		t.Fatalf("WebhookRef.Name() = %q", ref.Name())
+	}
+}

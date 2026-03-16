@@ -13,6 +13,8 @@ var (
 	RepositorySyncOperation = types.NewOperationRef[RepositorySync]("repository.sync")
 	// VulnerabilityCollectOperation is the operation ref for the vulnerability collection operation
 	VulnerabilityCollectOperation = types.NewOperationRef[VulnerabilityCollect]("vulnerability.collect")
+	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
+	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events
 	PingWebhookEvent = types.NewWebhookEventRef[PingWebhook]("ping")
 	// InstallationCreatedWebhookEvent is the webhook event ref for GitHub installation created events

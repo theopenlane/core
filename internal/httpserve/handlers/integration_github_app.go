@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqljson"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
@@ -17,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -45,6 +42,9 @@ func (h *Handler) StartGitHubAppInstallation(ctx echo.Context, openapiCtx *OpenA
 
 	if isRegistrationContext(ctx) {
 		return nil
+	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
 	}
 
 	userCtx := ctx.Request().Context()
@@ -95,6 +95,9 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 
 	if isRegistrationContext(ctx) {
 		return nil
+	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
 	}
 
 	if err := h.validateGitHubAppConfig(); err != nil {
@@ -153,15 +156,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	}
 
 	// Find or create the integration record for this org.
-	integrationRecord, err := h.DBClient.Integration.Query().
-		Where(
-			integration.OwnerIDEQ(orgID),
-			integration.DefinitionIDEQ(githubapp.DefinitionID.ID()),
-			func(s *sql.Selector) {
-				s.Where(sqljson.ValueEQ(integration.FieldProviderState, in.InstallationID, sqljson.Path("providers", githubAppSlug, "installationId")))
-			},
-		).
-		Only(reqCtx)
+	integrationRecord, err := h.lookupGitHubAppIntegrationByProviderInstallationID(reqCtx, orgID, in.InstallationID)
 	if err != nil {
 		if !ent.IsNotFound(err) {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to query github app integration")
@@ -172,6 +167,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		integrationRecord, err = h.DBClient.Integration.Create().
 			SetOwnerID(orgID).
 			SetName("GitHub App").
+			SetSystemInternalID(in.InstallationID).
 			SetDefinitionID(githubapp.DefinitionID.ID()).
 			SetDefinitionVersion("v1").
 			SetDefinitionSlug(githubAppSlug).
@@ -219,7 +215,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	if err := h.updateGitHubAppIntegrationMetadata(reqCtx, integrationRecord, credential.ProviderData); err != nil {
+	if err := h.updateGitHubAppIntegrationMetadata(reqCtx, integrationRecord, in.InstallationID, credential.ProviderData); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to update github app integration metadata")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -245,12 +241,7 @@ func (h *Handler) GitHubAppInstallCallback(ctx echo.Context, openapiCtx *OpenAPI
 	cfg := h.getOauthCookieConfig()
 	sessions.RemoveCookies(ctx.Response().Writer, cfg, githubAppStateCookieName, githubAppOrgIDCookieName, githubAppUserIDCookieName)
 
-	redirectURL := buildIntegrationRedirectURL(h.IntegrationsRuntime.SuccessRedirectURL(), githubAppSlug)
-	if redirectURL == "" {
-		return h.Success(ctx, openapi.GitHubAppInstallCallbackResponse{Reply: rout.Reply{Success: true}, Message: "GitHub App integration connected"})
-	}
-
-	return h.Redirect(ctx, redirectURL, openapiCtx)
+	return h.Success(ctx, openapi.GitHubAppInstallCallbackResponse{Reply: rout.Reply{Success: true}, Message: "GitHub App integration connected"})
 }
 
 // githubAppInstallURL builds the GitHub App installation URL including the state parameter.
@@ -294,14 +285,15 @@ func (h *Handler) validateGitHubAppConfig() error {
 	return nil
 }
 
-// updateGitHubAppIntegrationMetadata merges GitHub App installation metadata into provider state.
-func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integrationRecord *ent.Integration, providerData json.RawMessage) error {
+// updateGitHubAppIntegrationMetadata persists the GitHub provider installation identifier and merges provider metadata into state.
+func (h *Handler) updateGitHubAppIntegrationMetadata(ctx context.Context, integrationRecord *ent.Integration, providerInstallationID string, providerData json.RawMessage) error {
 	nextState := integrationRecord.ProviderState
 	if _, err := nextState.MergeProviderData(githubAppSlug, providerData); err != nil {
 		return ErrInvalidStateFormat
 	}
 
 	return h.DBClient.Integration.UpdateOneID(integrationRecord.ID).
+		SetSystemInternalID(providerInstallationID).
 		SetProviderState(nextState).
 		Exec(ctx)
 }

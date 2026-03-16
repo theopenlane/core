@@ -10,7 +10,11 @@ import (
 )
 
 // ListIntegrationProviders returns declarative metadata about available third-party integration definitions
-func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
+func (h *Handler) ListIntegrationProviders(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
+	}
+
 	reg := h.IntegrationsRuntime.Registry()
 	specs := reg.Catalog()
 	entries := make([]DefinitionCatalogEntry, 0, len(specs))

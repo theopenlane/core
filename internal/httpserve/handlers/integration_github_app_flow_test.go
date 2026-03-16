@@ -31,8 +31,8 @@ const (
 	githubAppCallbackPath = "/v1/integrations/github/app/callback"
 )
 
-// TestGitHubAppInstallCallback_RedirectsWhenConfigured verifies the GitHub App callback redirects when configured.
-func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigured() {
+// TestGitHubAppInstallCallback_ReturnsSuccess verifies the GitHub App callback returns a success payload.
+func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_ReturnsSuccess() {
 	t := suite.T()
 
 	installOp := suite.createImpersonationOperation("StartGitHubAppInstall", "Start GitHub App install flow")
@@ -67,7 +67,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 		WebhookSecret: "secret",
 	}
 
-	restore := suite.withGitHubAppIntegrationRuntime(t, cfg, "https://console.openlane.io/integrations")
+	restore := suite.withGitHubAppIntegrationRuntime(t, cfg)
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -98,10 +98,12 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_RedirectsWhenConfigu
 	callbackRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusFound, callbackRec.Code)
-	location := callbackRec.Header().Get("Location")
-	assert.Contains(t, location, "provider=github_app")
-	assert.Contains(t, location, "status=success")
+	assert.Equal(t, http.StatusOK, callbackRec.Code)
+
+	var resp openapi.GitHubAppInstallCallbackResponse
+	require.NoError(t, json.Unmarshal(callbackRec.Body.Bytes(), &resp))
+	assert.True(t, resp.Success)
+	assert.Equal(t, "GitHub App integration connected", resp.Message)
 }
 
 // TestGitHubAppInstallCallback_VerifiesInstallationAgainstGitHubAPI verifies callback success requires a valid installation token + health call.
@@ -146,7 +148,7 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 		WebhookSecret: "secret",
 	}
 
-	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, cfg, "https://console.openlane.io/integrations")
+	restoreRuntime := suite.withGitHubAppIntegrationRuntime(t, cfg)
 	defer restoreRuntime()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -177,10 +179,12 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	callbackRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(callbackRec, callbackReq.WithContext(user.UserCtx))
 
-	require.Equal(t, http.StatusFound, callbackRec.Code)
-	location := callbackRec.Header().Get("Location")
-	require.Contains(t, location, "provider=github_app")
-	require.Contains(t, location, "status=success")
+	require.Equal(t, http.StatusOK, callbackRec.Code)
+
+	var resp openapi.GitHubAppInstallCallbackResponse
+	require.NoError(t, json.Unmarshal(callbackRec.Body.Bytes(), &resp))
+	require.True(t, resp.Success)
+	require.Equal(t, "GitHub App integration connected", resp.Message)
 	require.Equal(t, int32(1), accessTokenCalls.Load())
 	require.Equal(t, int32(1), repoLookupCalls.Load())
 
@@ -196,6 +200,8 @@ func (suite *HandlerTestSuite) TestGitHubAppInstallCallback_VerifiesInstallation
 	require.NoError(t, err)
 	require.Equal(t, "123", providerState["appId"])
 	require.Equal(t, "12345678", providerState["installationId"])
+	require.NotNil(t, integrationRecord.SystemInternalID)
+	require.Equal(t, "12345678", *integrationRecord.SystemInternalID)
 }
 
 func testRSAPrivateKeyPEM(t *testing.T) string {

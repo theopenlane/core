@@ -373,7 +373,7 @@ func (suite *HandlerTestSuite) TestSCIMDirectoryUserHandlerCreateUsesRuntimeInge
 		email: ulids.New().String() + "@example.com",
 	})
 
-	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()}, "")
+	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()})
 	defer restore()
 
 	createCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)
@@ -438,7 +438,7 @@ func (suite *HandlerTestSuite) TestSCIMDirectoryGroupHandlerCreateUsesRuntimeIng
 		email: ulids.New().String() + "@example.com",
 	})
 
-	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()}, "")
+	restore := suite.withDefinitionRuntime(suite.T(), []definition.Builder{definitionscim.Builder()})
 	defer restore()
 
 	createCtx := privacy.DecisionContext(scimTestUser.UserCtx, privacy.Allow)

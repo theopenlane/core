@@ -84,8 +84,6 @@ type Config struct {
 	Slack Slack `json:"slack" koanf:"slack"`
 	// Integrations contains operator-level credentials for all v2 integration definitions
 	Integrations catalog.Config `json:"integrations" koanf:"integrations"`
-	// IntegrationSuccessRedirectURL is the URL to redirect to after a successful integration auth flow
-	IntegrationSuccessRedirectURL string `json:"integrationsuccessredirecturl" koanf:"integrationsuccessredirecturl" default:""`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
 	// CampaignWebhook contains webhook configuration for campaign-related email providers

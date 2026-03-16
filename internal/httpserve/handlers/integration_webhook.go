@@ -7,9 +7,10 @@ import (
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -19,7 +20,6 @@ const maxIntegrationWebhookBodyBytes = int64(1024 * 1024)
 
 var (
 	errIntegrationWebhookNotConfigured = errors.New("integration webhook not configured")
-	errIntegrationWebhookAmbiguous     = errors.New("integration webhook ambiguous")
 )
 
 // IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event
@@ -27,53 +27,76 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 	if isRegistrationContext(ctx) {
 		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
 	}
+	if err := h.requireIntegrationsRuntime(ctx, openapiCtx); err != nil {
+		return err
+	}
 
-	var integrationID string
-	if err := echo.PathParamsBinder(ctx).String("integrationID", &integrationID).BindError(); err != nil {
+	var (
+		integrationID string
+		webhookName   string
+	)
+	if err := echo.PathParamsBinder(ctx).
+		String("integrationID", &integrationID).
+		String("webhookName", &webhookName).
+		BindError(); err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
 	if integrationID == "" {
 		return h.BadRequest(ctx, rout.MissingField("integrationID"), openapiCtx)
 	}
+	if webhookName == "" {
+		return h.BadRequest(ctx, rout.MissingField("webhookName"), openapiCtx)
+	}
 
 	req := ctx.Request()
 	requestCtx := req.Context()
-	caller, ok := auth.CallerFromContext(requestCtx)
-	if !ok || caller == nil {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
-	}
-
-	payload, err := io.ReadAll(http.MaxBytesReader(ctx.Response().Writer, req.Body, maxIntegrationWebhookBodyBytes))
+	payload, err := readIntegrationWebhookPayload(ctx)
 	if err != nil {
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-	if len(payload) == 0 {
-		return h.BadRequest(ctx, errPayloadEmpty, openapiCtx)
-	}
-
-	installation, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, caller.OrganizationID, integrationID, "")
-	if err != nil {
-		if errors.Is(err, integrationsruntime.ErrInstallationNotFound) {
-			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
-		}
-
-		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", integrationID).Str("organization_id", caller.OrganizationID).Msg("failed to resolve integration webhook installation")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	definition, ok := h.IntegrationsRuntime.Registry().Definition(installation.DefinitionID)
-	if !ok {
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
-	}
-
-	webhook, err := resolveIntegrationWebhook(definition)
-	if err != nil {
-		if errors.Is(err, errIntegrationWebhookNotConfigured) {
+		if errors.Is(err, errPayloadEmpty) {
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
+
+	installation, err := h.IntegrationsRuntime.ResolveInstallation(requestCtx, "", integrationID, "")
+	if err != nil {
+		if errors.Is(err, integrationsruntime.ErrInstallationNotFound) {
+			return h.NotFound(ctx, wrapIntegrationError("find", ErrIntegrationNotFound), openapiCtx)
+		}
+
+		logx.FromContext(requestCtx).Error().Err(err).Str("integration_id", integrationID).Msg("failed to resolve integration webhook installation")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	webhook, err := h.IntegrationsRuntime.Registry().Webhook(installation.DefinitionID, webhookName)
+	if err != nil {
+		if errors.Is(err, registry.ErrWebhookNotFound) {
+			return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
+		}
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	return h.handleResolvedIntegrationWebhook(ctx, openapiCtx, installation, webhook, payload, false)
+}
+
+func readIntegrationWebhookPayload(ctx echo.Context) ([]byte, error) {
+	payload, err := io.ReadAll(http.MaxBytesReader(ctx.Response().Writer, ctx.Request().Body, maxIntegrationWebhookBodyBytes))
+	if err != nil {
+		return nil, err
+	}
+
+	if len(payload) == 0 {
+		return nil, errPayloadEmpty
+	}
+
+	return payload, nil
+}
+
+func (h *Handler) handleResolvedIntegrationWebhook(ctx echo.Context, openapiCtx *OpenAPIContext, installation *ent.Integration, webhook types.WebhookRegistration, payload []byte, skipVerify bool) error {
+	req := ctx.Request()
+	requestCtx := req.Context()
 
 	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(requestCtx, installation, webhook.Name)
 	if err != nil {
@@ -87,7 +110,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		Request:     req,
 		Payload:     payload,
 	}
-	if webhook.Verify != nil {
+	if !skipVerify && webhook.Verify != nil {
 		if err := webhook.Verify(requestCtx, verifyRequest); err != nil {
 			return h.BadRequest(ctx, err, openapiCtx)
 		}
@@ -144,16 +167,4 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 	}
 
 	return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
-}
-
-func resolveIntegrationWebhook(definition types.Definition) (types.WebhookRegistration, error) {
-	if len(definition.Webhooks) == 0 {
-		return types.WebhookRegistration{}, errIntegrationWebhookNotConfigured
-	}
-
-	if len(definition.Webhooks) > 1 {
-		return types.WebhookRegistration{}, errIntegrationWebhookAmbiguous
-	}
-
-	return definition.Webhooks[0], nil
 }

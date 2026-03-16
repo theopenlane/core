@@ -20,12 +20,14 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 const (
 	integrationStartPath    = "/v1/integrations/oauth/start"
 	integrationCallbackPath = "/v1/integrations/oauth/callback"
+	integrationRefreshPath  = "/v1/integrations/test-oauth/refresh"
 	stateCookieName         = "oauth_state"
 	orgCookieName           = "oauth_org_id"
 	userCookieName          = "oauth_user_id"
@@ -193,7 +195,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured() {
+func (suite *HandlerTestSuite) TestHandleOAuthCallback_ReturnsSuccessResponse() {
 	t := suite.T()
 
 	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRedirect", "Start integration OAuth flow")
@@ -202,7 +204,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRedirect", "Handle integration OAuth callback")
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
 
-	restore := suite.withDefinitionRuntime(t, []definition.Builder{definition.Builder(buildTestOAuthDefinition)}, "https://console.openlane.io/integrations")
+	restore := suite.withDefinitionRuntime(t, []definition.Builder{definition.Builder(buildTestOAuthDefinition)})
 	defer restore()
 
 	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
@@ -229,10 +231,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_RedirectsWhenConfigured()
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusFound, rec.Code)
-	location := rec.Header().Get("Location")
-	assert.Contains(t, location, "provider=test-oauth")
-	assert.Contains(t, location, "status=success")
+	assert.Equal(t, http.StatusOK, rec.Code)
+
+	var out rout.Reply
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &out))
+	assert.True(t, out.Success)
 }
 
 func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
@@ -343,6 +346,72 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
+func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_Success() {
+	t := suite.T()
+
+	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRefreshSuccess", "Start integration OAuth flow")
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+
+	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRefreshSuccess", "Handle integration OAuth callback")
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+
+	refreshOp := suite.createImpersonationOperation("RefreshIntegrationTokenSuccess", "Refresh integration token")
+	suite.registerRouteOnce(http.MethodPost, integrationRefreshPath, refreshOp, suite.h.RefreshIntegrationTokenHandler)
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	installationID := suite.completeOAuthInstallation(t, user.UserCtx)
+
+	body, err := json.Marshal(handlers.RefreshInstallationCredentialRequest{InstallationID: installationID})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, integrationRefreshPath, bytes.NewReader(body))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
+
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var resp handlers.IntegrationTokenResponse
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.True(t, resp.Success)
+	assert.Equal(t, "test-oauth", resp.Provider)
+	assert.Equal(t, "refreshed-access-token", resp.AccessToken)
+	assert.NotNil(t, resp.ExpiresAt)
+}
+
+func (suite *HandlerTestSuite) TestRefreshIntegrationTokenHandler_RejectsCrossOrgInstallation() {
+	t := suite.T()
+
+	startOp := suite.createImpersonationOperation("StartIntegrationOAuthRefreshCrossOrg", "Start integration OAuth flow")
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, startOp, suite.h.StartOAuthFlow)
+
+	callbackOp := suite.createImpersonationOperation("HandleIntegrationOAuthRefreshCrossOrg", "Handle integration OAuth callback")
+	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, callbackOp, suite.h.HandleOAuthCallback)
+
+	refreshOp := suite.createImpersonationOperation("RefreshIntegrationTokenCrossOrg", "Refresh integration token")
+	suite.registerRouteOnce(http.MethodPost, integrationRefreshPath, refreshOp, suite.h.RefreshIntegrationTokenHandler)
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	owner := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	otherUser := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	installationID := suite.completeOAuthInstallation(t, owner.UserCtx)
+
+	body, err := json.Marshal(handlers.RefreshInstallationCredentialRequest{InstallationID: installationID})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, integrationRefreshPath, bytes.NewReader(body))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(otherUser.UserCtx))
+
+	assert.Equal(t, http.StatusNotFound, rec.Code)
+}
+
 func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context, request handlers.OAuthFlowRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
 	t.Helper()
 
@@ -363,6 +432,44 @@ func (suite *HandlerTestSuite) startOAuthFlow(t *testing.T, ctx context.Context,
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 
 	return rec, resp
+}
+
+func (suite *HandlerTestSuite) completeOAuthInstallation(t *testing.T, ctx context.Context) string {
+	t.Helper()
+
+	startRec, startResp := suite.startOAuthFlow(t, ctx, handlers.OAuthFlowRequest{DefinitionID: testOAuthDefinitionID})
+	cookies := cookieMap(startRec.Result().Cookies())
+
+	authURL, err := url.Parse(startResp.AuthURL)
+	require.NoError(t, err)
+	oauthState := authURL.Query().Get("state")
+	require.NotEmpty(t, oauthState)
+
+	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
+	query := req.URL.Query()
+	query.Set("code", "test-code")
+	query.Set("state", oauthState)
+	req.URL.RawQuery = query.Encode()
+
+	for _, name := range []string{stateCookieName, orgCookieName, userCookieName} {
+		req.AddCookie(cookies[name])
+	}
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(ctx))
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	require.NoError(t, err)
+
+	record := suite.db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(orgID),
+			integration.DefinitionIDEQ(testOAuthDefinitionID),
+		).
+		OnlyX(ctx)
+
+	return record.ID
 }
 
 func cookieMap(cookies []*http.Cookie) map[string]*http.Cookie {

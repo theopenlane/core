@@ -20,6 +20,9 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapi)
 	}
+	if err := h.requireIntegrationsRuntime(ctx, openapi); err != nil {
+		return err
+	}
 
 	userCtx := ctx.Request().Context()
 

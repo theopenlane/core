@@ -1,0 +1,6 @@
+extend type Integration {
+    """
+    Fully-qualified inbound webhook URLs keyed by webhook contract name
+    """
+    webhookURLs: Map
+}
